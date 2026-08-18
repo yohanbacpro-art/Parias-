@@ -19,34 +19,34 @@ const TREE = {
   force:  {label:"Force", cls:"br-force", nodes:[
     {id:"poussee", tier:1, nom:"Poussée de force", coutPA:1, coutFAT:8, degBase:4, deDeg:"1d4", desc:"Repousse et déstabilise la cible."},
     {id:"bouclier", tier:2, nom:"Bouclier cinétique", coutPA:2, coutFAT:18, degBase:0, deDeg:"1d1", desc:"Absorbe les prochains dégâts physiques (effet narratif simplifié)."},
-    {id:"fracas", tier:3, nom:"Fracas", coutPA:2, coutFAT:28, degBase:9, deDeg:"1d8", desc:"Dégâts de zone courte portée."},
-    {id:"onde_choc", tier:4, nom:"Onde de choc", coutPA:3, coutFAT:40, degBase:12, deDeg:"1d10", desc:"Repousse et étourdit les ennemis proches."},
+    {id:"fracas", tier:3, nom:"Fracas", coutPA:2, coutFAT:28, degBase:9, deDeg:"1d8", zone:true, desc:"Dégâts de zone : touche tous les ennemis."},
+    {id:"onde_choc", tier:4, nom:"Onde de choc", coutPA:3, coutFAT:40, degBase:12, deDeg:"1d10", zone:true, desc:"Repousse et étourdit tous les ennemis."},
   ]},
   tempete:{label:"Tempête", cls:"br-tempete", nodes:[
     {id:"etincelle", tier:1, nom:"Étincelle", coutPA:1, coutFAT:6, degBase:3, deDeg:"1d4", desc:"Petite attaque à distance."},
     {id:"foudre", tier:2, nom:"Foudre", coutPA:2, coutFAT:25, degBase:9, deDeg:"1d10", desc:"Décharge électrique, chance d'étourdir."},
-    {id:"eclair_enchaine", tier:3, nom:"Éclair enchaîné", coutPA:2, coutFAT:32, degBase:7, deDeg:"1d8", desc:"Touche une deuxième cible proche."},
-    {id:"tempete_ciel", tier:4, nom:"Tempête du ciel", coutPA:3, coutFAT:48, degBase:13, deDeg:"1d10", desc:"Zone + étourdissement."},
+    {id:"eclair_enchaine", tier:3, nom:"Éclair enchaîné", coutPA:2, coutFAT:32, degBase:7, deDeg:"1d8", cibles:2, desc:"Touche la cible puis rebondit sur une seconde."},
+    {id:"tempete_ciel", tier:4, nom:"Tempête du ciel", coutPA:3, coutFAT:48, degBase:13, deDeg:"1d10", zone:true, desc:"Zone + étourdissement sur tous les ennemis."},
   ]},
 };
 
 const YOHAN_STARTING_POWERS = ["poussee","foudre","drain","esprit"];
 
 // Arbre de pouvoirs des Elfes (Eltharion) et Elfes noirs (Anarion) — magie ancienne/élémentaire,
-// distincte de la magie viscérale de l'Onde des Parias. Non encore branché à un personnage
-// jouable (seul Yohan, un Paria, est jouable pour l'instant) : prêt pour un futur PC/compagnon Elfe.
+// distincte de la magie viscérale de l'Onde des Parias. Utilisé en combat par les compagnons
+// elfes (voir COMPANIONS_POOL.arbre === 'elfique'), pas par Yohan : son sang est Paria.
 const TREE_ELFES = {
   lumiere: {label:"Lumière Ancienne", nodes:[
     {id:"eclat", tier:1, nom:"Éclat", coutPA:1, coutFAT:6, degBase:3, deDeg:"1d4", desc:"Rayon de lumière pure, dégâts faibles."},
-    {id:"voile_protecteur", tier:2, nom:"Voile Protecteur", coutPA:2, coutFAT:16, degBase:0, deDeg:"1d1", desc:"Réduit les dégâts subis pendant 2 tours (effet narratif simplifié)."},
+    {id:"voile_protecteur", tier:2, nom:"Voile Protecteur", coutPA:2, coutFAT:16, degBase:0, deDeg:"1d1", garde:3, gardeTours:2, desc:"+3 Défense au groupe pendant 2 tours."},
     {id:"purification", tier:3, nom:"Purification", coutPA:2, coutFAT:26, degBase:7, deDeg:"1d8", desc:"Dégâts accrus contre les créatures corrompues/magiques."},
-    {id:"lumiere_ancienne", tier:4, nom:"Lumière de l'Onde Première", coutPA:3, coutFAT:42, degBase:12, deDeg:"1d10", desc:"Capstone : lumière originelle, dégâts élevés en zone."},
+    {id:"lumiere_ancienne", tier:4, nom:"Lumière de l'Onde Première", coutPA:3, coutFAT:42, degBase:12, deDeg:"1d10", zone:true, desc:"Capstone : lumière originelle, dégâts élevés sur tous les ennemis."},
   ]},
   nature: {label:"Nature Sylvaine", nodes:[
     {id:"racines", tier:1, nom:"Racines", coutPA:1, coutFAT:6, degBase:2, deDeg:"1d4", desc:"Entrave la cible, dégâts faibles."},
-    {id:"croissance", tier:2, nom:"Croissance", coutPA:2, coutFAT:16, degBase:0, deDeg:"1d1", desc:"Soin progressif sur plusieurs tours (effet narratif simplifié)."},
-    {id:"tempete_feuilles", tier:3, nom:"Tempête de Feuilles", coutPA:2, coutFAT:26, degBase:8, deDeg:"1d8", desc:"Dégâts de zone tranchants."},
-    {id:"foret_ancestrale", tier:4, nom:"Forêt Ancestrale", coutPA:3, coutFAT:40, degBase:11, deDeg:"1d10", desc:"Capstone : invoque des racines massives, dégâts élevés + entrave."},
+    {id:"croissance", tier:2, nom:"Croissance", coutPA:2, coutFAT:16, degBase:0, deDeg:"1d1", soinAllie:14, desc:"Soigne l'allié le plus blessé de 14 PV."},
+    {id:"tempete_feuilles", tier:3, nom:"Tempête de Feuilles", coutPA:2, coutFAT:26, degBase:8, deDeg:"1d8", zone:true, desc:"Dégâts de zone tranchants sur tous les ennemis."},
+    {id:"foret_ancestrale", tier:4, nom:"Forêt Ancestrale", coutPA:3, coutFAT:40, degBase:11, deDeg:"1d10", zone:true, desc:"Capstone : racines massives, dégâts élevés + entrave sur tous les ennemis."},
   ]},
   ombre: {label:"Séduction & Ombre (Elfes noirs)", nodes:[
     {id:"charme", tier:1, nom:"Charme", coutPA:1, coutFAT:8, degBase:0, deDeg:"1d1", desc:"Manipule brièvement une cible faible (effet narratif)."},
@@ -57,7 +57,22 @@ const TREE_ELFES = {
   ondes_anciennes: {label:"Mémoire de l'Onde", nodes:[
     {id:"vision", tier:1, nom:"Vision", coutPA:1, coutFAT:6, degBase:0, deDeg:"1d1", desc:"Révèle une information sur l'ennemi (effet narratif)."},
     {id:"resonance", tier:2, nom:"Résonance", coutPA:2, coutFAT:18, degBase:7, deDeg:"1d6", desc:"Dégâts basés sur l'écho de l'Onde originelle."},
-    {id:"rappel", tier:3, nom:"Rappel", coutPA:2, coutFAT:28, degBase:0, deDeg:"1d1", desc:"Réduit la Fatigue d'un allié proche (effet narratif simplifié)."},
+    {id:"rappel", tier:3, nom:"Rappel", coutPA:2, coutFAT:28, degBase:0, deDeg:"1d1", apaise:25, desc:"Retire 25 de Fatigue à l'allié le plus éprouvé."},
     {id:"echo_premier", tier:4, nom:"Écho Premier", coutPA:3, coutFAT:44, degBase:13, deDeg:"1d10", desc:"Capstone : frappe avec la puissance de la collision originelle de l'Onde."},
   ]},
 };
+
+/* Registre des arbres, pour que les compagnons puissent piocher dans le leur.
+ * `onde` = magie viscérale des Parias · `elfique` = magie ancienne d'Eltharion/Anarion. */
+const TREES_BY_KEY = { onde: TREE, elfique: TREE_ELFES };
+
+/* Retrouve un pouvoir par identifiant, quel que soit l'arbre. */
+function powerById(id){
+  for(const tree of Object.values(TREES_BY_KEY)){
+    for(const branch of Object.values(tree)){
+      const found = branch.nodes.find(n => n.id === id);
+      if(found) return found;
+    }
+  }
+  return null;
+}

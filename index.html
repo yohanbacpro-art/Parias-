@@ -310,6 +310,48 @@
   .end-screen.defeat h2{color:var(--rupture);}
   .end-screen p{color:var(--parchment-dim);font-style:italic;margin-bottom:18px;}
 
+  /* ---- illustrations & portraits ---- */
+  .event-illu-wrap{margin:-26px -28px 14px;border-bottom:1px solid var(--line);overflow:hidden;}
+  .event-illu{display:block;width:100%;aspect-ratio:5/2;object-fit:cover;}
+  .pnj-card{display:flex;align-items:center;gap:12px;margin:12px 0 4px;padding:8px 10px;
+    background:#0f0c0a;border:1px solid var(--line);border-left:3px solid var(--gold-dim);border-radius:4px;}
+  .portrait-img{width:56px;height:56px;border-radius:50%;object-fit:cover;flex:0 0 56px;
+    border:1px solid var(--gold-dim);background:#0a0807;}
+  .pnj-nom{font-family:'Cinzel',serif;font-size:13.5px;color:var(--gold);}
+  .pnj-role{font-family:'Inter',sans-serif;font-size:10.5px;color:var(--parchment-dim);letter-spacing:.04em;}
+
+  /* ---- choix d'événement : label + conséquence pressentie ---- */
+  .choix-list button{display:block;width:100%;}
+  .choix-list button .ch-label{display:block;}
+  .choix-list button .ch-detail{display:block;font-family:'Inter',sans-serif;font-size:10.5px;
+    color:var(--parchment-dim);margin-top:3px;letter-spacing:.03em;}
+  .choix-list button.locked{opacity:.42;cursor:not-allowed;}
+  .choix-list button.locked .ch-detail{color:var(--blood-bright);}
+
+  /* ---- combat : groupe et adversaires ---- */
+  .party-list,.foe-list{display:flex;flex-direction:column;gap:8px;margin-bottom:6px;}
+  .fighter{background:#0f0c0a;border:1px solid var(--line);border-radius:5px;padding:8px 10px;cursor:pointer;}
+  .fighter.active{border-color:var(--gold);background:#1c160f;}
+  .fighter.target{border-color:var(--blood-bright);background:#1a1012;}
+  .fighter.down{opacity:.4;cursor:default;}
+  .fighter .f-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+  .fighter .f-nom{font-family:'Cinzel',serif;font-size:12.5px;color:var(--parchment);}
+  .fighter.active .f-nom{color:var(--gold);}
+  .fighter.target .f-nom{color:var(--blood-bright);}
+  .fighter .f-meta{font-family:'Inter',sans-serif;font-size:9.5px;color:var(--parchment-dim);letter-spacing:.04em;}
+  .fighter .f-bar{height:7px;border-radius:3px;background:#0a0807;border:1px solid var(--line);overflow:hidden;margin-top:5px;}
+  .fighter .f-bar i{display:block;height:100%;}
+  .fighter .f-bar.pv i{background:linear-gradient(90deg,#5a1015,var(--blood-bright));}
+  .fighter .f-bar.fat i{background:linear-gradient(90deg,#1c6b64,var(--onde-bright));}
+  .fighter .f-bar.fat.zone-tendue i{background:linear-gradient(90deg,#8a6f1f,var(--warn));}
+  .fighter .f-bar.fat.zone-critique i{background:linear-gradient(90deg,#7a2418,var(--blood-bright));}
+  .fighter .f-bar.fat.zone-rupture i{background:linear-gradient(90deg,#4a0d10,var(--rupture));}
+  .fighter .f-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px;}
+  .f-tag{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.05em;text-transform:uppercase;
+    padding:1px 6px;border-radius:8px;border:1px solid var(--onde-bright);color:var(--onde-bright);}
+  .f-tag.warn{border-color:var(--warn);color:var(--warn);}
+  .foe-hint{font-family:'Inter',sans-serif;font-size:10.5px;color:var(--parchment-dim);margin:-6px 0 10px;}
+
   footer{text-align:center;margin-top:24px;font-family:'Inter',sans-serif;font-size:11px;color:var(--parchment-dim);letter-spacing:.05em;}
 </style>
 </head>
@@ -520,18 +562,13 @@
   <div class="screen" id="screen-combat">
     <div class="grid">
       <div class="panel" id="playerPanel">
-        <h2>Yohan</h2>
-        <div class="stat-row"><span>Points de Vie</span><b id="pvText">—</b></div>
-        <div class="gauge"><div class="gauge-fill pv" id="pvBar" style="width:100%"></div></div>
-        <div class="stat-row"><span>Fatigue magique</span><b id="fatText">—</b></div>
-        <div class="fat-gauge"><div class="fat-fill" id="fatBar" style="width:0%"></div></div>
-        <div class="fat-label"><span>Sûre</span><span>Tendue</span><span>Critique</span><span>Rupture</span></div>
-        <div class="stat-row"><span>Zone actuelle</span><b><span class="fat-zone-name zn-sure" id="fatZoneName">Sûre</span></b></div>
-        <h3>Points d'Action</h3>
+        <h2>Le groupe</h2>
+        <div class="party-list" id="partyList"></div>
+        <h3>Points d'Action — <span id="actorName">Yohan</span></h3>
         <div class="pa-pips" id="paPips"></div>
         <h3>Armes</h3>
         <div class="actions" id="weaponActions"></div>
-        <h3>Pouvoirs de l'Onde</h3>
+        <h3>Pouvoirs</h3>
         <div class="actions" id="powerActions"></div>
         <button class="ghost" id="endTurnBtn" style="margin-top:10px;width:100%;">Terminer le tour</button>
       </div>
@@ -540,7 +577,7 @@
         <h2>L'Affrontement</h2>
         <div id="combatScreen">
           <div class="vs-row">
-            <span class="combatant-name">Yohan</span>
+            <span class="combatant-name" id="vsPartyName">Yohan</span>
             <span class="vs-mark">◆ TOUR <span id="turnCount">1</span> ◆</span>
             <span class="combatant-name enemy" id="vsEnemyName">—</span>
           </div>
@@ -550,16 +587,9 @@
       </div>
 
       <div class="panel" id="enemyPanel">
-        <h2 id="enemyName">Adversaire</h2>
-        <div class="stat-row"><span>Points de Vie</span><b id="ePvText">—</b></div>
-        <div class="gauge"><div class="gauge-fill pv" id="ePvBar" style="width:100%"></div></div>
-        <h3>Profil</h3>
-        <div class="stat-row"><span>Danger</span><b id="eDanger">—</b></div>
-        <div class="stat-row"><span>Défense</span><b id="eDef">—</b></div>
-        <div class="stat-row"><span>Précision</span><b id="ePrec">—</b></div>
-        <div class="stat-row"><span>Dégâts</span><b id="eDeg">—</b></div>
-        <h3>Capacité spéciale</h3>
-        <p id="eSpecial" style="color:var(--parchment-dim);font-size:13px;font-style:italic;">Aucune</p>
+        <h2>Adversaires</h2>
+        <p class="foe-hint">Cliquez un adversaire pour le prendre pour cible.</p>
+        <div class="foe-list" id="foeList"></div>
       </div>
     </div>
   </div>
@@ -568,12 +598,17 @@
 </div>
 
 <script src="src/data/bestiary.js"></script>
+<script src="src/data/portraits.js"></script>
 <script src="src/data/locations.js"></script>
 <script src="src/data/events.js"></script>
 <script src="src/data/contracts.js"></script>
 <script src="src/data/powers.js"></script>
 <script src="src/data/items.js"></script>
 <script src="src/data/lore.js"></script>
+<script src="src/data/events_written.js"></script>
+<script src="src/ui/art.js"></script>
+<script src="src/combat.js"></script>
+<script src="src/events_runner.js"></script>
 <script src="src/game.js"></script>
 </body>
 </html>

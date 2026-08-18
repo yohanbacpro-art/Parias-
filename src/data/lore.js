@@ -16,11 +16,30 @@ const TRAME_CHAPITRES = [
   {seuil:180, titre:"Le Nom Karlsberg Renaît", objectif:"Fin de cette chronique : sur les ruines du Loup, une bannière se relève. Ce que Yohan en a payé lui appartient.", fin:true},
 ];
 
+/* Compagnons — bonus passifs hors combat, et statistiques propres en combat.
+ * `arbre` désigne l'arbre de pouvoirs dans lequel le compagnon puise (voir powers.js). */
 const COMPANIONS_POOL = {
   alycia: {
-    id:"alycia", nom:"Alycia de Callensbourg",
+    id:"alycia", nom:"Alycia de Callensbourg", nomCourt:"Alycia",
     desc:"Paria extrêmement puissante, presque au niveau de Yohan, elle vit cachée. Séductrice, intelligente et manipulatrice, elle œuvre à empêcher l'extinction des Parias — et cherche des hommes assez puissants, compétents ou loyaux pour protéger les derniers survivants. Ses méthodes restent moralement ambiguës ; son aide n'est jamais gratuite.",
-    bonus:{vol:2, fatMax:10}, bonusDesc:"+2 Volonté, +10 Fatigue max (soutien d'une Paria expérimentée)"
+    bonus:{vol:2, fatMax:10}, bonusDesc:"+2 Volonté, +10 Fatigue max (soutien d'une Paria expérimentée)",
+    combat:{
+      arbre:"onde",
+      pouvoirs:["drain","foudre","fracas"],
+      stats:{ pvMax:34, fatMax:110, precision:4, vol:13, agi:11, defenseBase:11, paMax:2 },
+      note:"Frappe fort et se soigne sur ses propres dégâts — mais encaisse mal."
+    }
+  },
+  alarielle: {
+    id:"alarielle", nom:"Princesse Alarielle", nomCourt:"Alarielle",
+    desc:"Convoitée par toutes les grandes lignées elfiques, elle cherche à réparer la faute commise par son peuple lors de la naissance de l'Onde. Contrairement à Tyrion, elle ne hait pas les Parias — elle estime leur devoir quelque chose. Sa magie n'est pas celle du sang : c'est la magie ancienne d'Eltharion, plus lente, plus propre, et qui soigne.",
+    bonus:{prec:1, vol:1}, bonusDesc:"+1 Précision, +1 Volonté (magie ancienne d'Eltharion)",
+    combat:{
+      arbre:"elfique",
+      pouvoirs:["eclat","croissance","voile_protecteur","tempete_feuilles"],
+      stats:{ pvMax:30, fatMax:120, precision:5, vol:14, agi:13, defenseBase:12, paMax:2 },
+      note:"Soutien : soigne le groupe, le protège, et frappe en zone quand il le faut."
+    }
   },
 };
 

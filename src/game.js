@@ -26,7 +26,15 @@ function triggerChapitre(idx){
   let extra = "";
   if(idx===1 && !hero.compagnons.find(c=>c.id==='alycia')){
     hero.compagnons.push(COMPANIONS_POOL.alycia);
-    extra = `<p style="margin-top:10px;color:var(--onde-bright);">Une femme se révèle à Yohan, comme si elle l'observait depuis longtemps : <b>Alycia de Callensbourg</b>. ${COMPANIONS_POOL.alycia.desc}</p>`;
+    extra = artPortraitCard('alycia') +
+      `<p style="margin-top:10px;color:var(--onde-bright);">Une femme se révèle à Yohan, comme si elle l'observait depuis longtemps : <b>Alycia de Callensbourg</b>. ${COMPANIONS_POOL.alycia.desc}</p>
+       <p style="font-family:'Inter',sans-serif;font-size:11.5px;color:var(--parchment-dim);">Elle se bat désormais aux côtés de Yohan — magie de l'Onde, offensive et vorace.</p>`;
+  }
+  if(idx===2 && !hero.compagnons.find(c=>c.id==='alarielle')){
+    hero.compagnons.push(COMPANIONS_POOL.alarielle);
+    extra = artPortraitCard('alarielle') +
+      `<p style="margin-top:10px;color:var(--onde-bright);">Une émissaire d'Eltharion attend Yohan aux abords des ruines : <b>Princesse Alarielle</b>. ${COMPANIONS_POOL.alarielle.desc}</p>
+       <p style="font-family:'Inter',sans-serif;font-size:11.5px;color:var(--parchment-dim);">Elle apporte la magie ancienne des Elfes — soin, protection et frappe en zone. Un arbre de pouvoirs que le sang Paria ne peut pas toucher.</p>`;
   }
   const box = document.getElementById('eventModalBox');
   if(ch.fin){
@@ -62,9 +70,10 @@ function renderQuete(){
     list.innerHTML = "<p class=\"compagnon-empty\">Yohan chemine seul, pour l'instant.</p>";
   } else {
     list.innerHTML = hero.compagnons.map(c=>`<div class="compagnon-card">
-      <div class="cc-nom">${c.nom}</div>
+      ${artPortraitCard(c.id)}
       <div class="cc-desc">${c.desc}</div>
       <div class="cc-bonus">${c.bonusDesc}</div>
+      ${c.combat ? `<div class="cc-bonus" style="color:var(--gold);">Au combat · ${c.combat.note} (${c.combat.stats.pvMax} PV, ${c.combat.stats.paMax} PA)</div>` : ''}
     </div>`).join('');
   }
 }
@@ -86,6 +95,8 @@ let hero = {
   actionsTour: 3,
   suspicion: 5,
   compagnons: [],
+  flags: [],            // marqueurs posés par les événements écrits
+  evenementsVus: [],    // événements écrits déjà joués (évite les répétitions)
 };
 
 /* ============================= NIVEAU & EXPÉRIENCE ============================= */
@@ -181,7 +192,17 @@ function loadHeroFromJSON(json){
   const obj = JSON.parse(json);
   obj.unlocked = new Set(obj.unlocked || YOHAN_STARTING_POWERS);
   obj.crisesDeclenchees = new Set(obj.crisesDeclenchees || []);
+  obj.flags = obj.flags || [];
+  obj.evenementsVus = obj.evenementsVus || [];
+  // Les compagnons sauvegardés avant l'ajout du combat de groupe n'ont pas de bloc `combat`
+  obj.compagnons = (obj.compagnons || []).map(c => COMPANIONS_POOL[c.id] || c);
   hero = obj;
+}
+
+/* Efface la sauvegarde et repart de zéro : mort permanente, ou fin de chronique. */
+function resetGame(){
+  try{ localStorage.removeItem(SAVE_KEY); } catch(e){}
+  try{ location.reload(); } catch(e){}
 }
 
 function hasLocalSave(){
@@ -630,7 +651,8 @@ function triggerExploration(){
   // Sous forte suspicion, la traque peut se manifester directement
   if(hero.suspicion>=60 && Math.random()<0.25){
     const box = document.getElementById('eventModalBox');
-    box.innerHTML = `<span class="event-tag">Traque</span><h3>Ils l'ont retrouvé</h3>
+    box.innerHTML = `${artEventBanner('evt_traque')}<span class="event-tag">Traque</span><h3>Ils l'ont retrouvé</h3>
+      ${artPortraitCard('chasseur_prime')}
       <p class="narrative">${pickVariant(["Une silhouette encapuchonnée se détache de la foule, trop précise dans ses mouvements pour être un simple passant. Un chasseur de primes — et il n'est pas venu discuter.", "Le bruit d'une arme qu'on arme résonne dans le silence. Quelqu'un, enfin, a fini par mettre un nom sur le visage caché de Yohan.", "Ce n'est pas une coïncidence : le chasseur qui lui barre la route connaît exactement qui il traque."])}</p>
       <div style="margin-top:16px;text-align:right;"><button class="primary" id="bhFightBtn">Affronter</button></div>`;
     document.getElementById('eventModal').style.display='flex';
@@ -642,125 +664,20 @@ function triggerExploration(){
     return;
   }
 
+  // Les événements écrits passent en premier, et ne se répètent pas tant que le
+  // catalogue applicable n'est pas épuisé. Ensuite seulement, on retombe sur les
+  // variantes générées de events.js, qui servent de remplissage.
+  const ecrit = pickWrittenEvent(lieu);
+  if(ecrit){ openWrittenEvent(ecrit, lieu); return; }
+
   const pool = lieu ? EVENTS.filter(e => lieu.familles_evenements_compatibles.includes(e.famille)) : EVENTS;
   const list = pool.length ? pool : EVENTS;
   const ev = list[Math.floor(Math.random()*list.length)];
   openEventModal(ev, lieu);
 }
 
-function openCalmModal(){
-  const box = document.getElementById('eventModalBox');
-  box.innerHTML = `<h3>Le temps passe</h3><p style="color:var(--parchment-dim);font-style:italic;">${CALME_TEXTES[Math.floor(Math.random()*CALME_TEXTES.length)]}</p>
-    <div style="margin-top:16px;text-align:right;"><button class="primary" id="closeCalmBtn">Continuer</button></div>`;
-  document.getElementById('eventModal').style.display='flex';
-  document.getElementById('closeCalmBtn').onclick = closeEventModal;
-}
-
 function closeEventModal(){
   document.getElementById('eventModal').style.display='none';
-}
-
-/* ============================= RÉSOLUTION DES ÉVÉNEMENTS ============================= */
-function classifyChoice(label){
-  const l = label.toLowerCase();
-  if(/enquêt|examin|inspect|chercher|questionn|observ|analys/.test(l)) return 'enquete';
-  if(/négoci|marchand|convaincre|persuad|parle|discut|propos/.test(l)) return 'negociation';
-  if(/évit|fuir|ignor|s'éloign|reculer|renonc|laisse/.test(l)) return 'evitement';
-  if(/aid|secour|protég|sauv|défend/.test(l)) return 'aide';
-  if(/menac|intimid|forcer|imposer/.test(l)) return 'intimidation';
-  return 'generique';
-}
-
-function resolveEventChoice(label, ev){
-  const cat = classifyChoice(label);
-  const mult = RARETE_MULT[ev.rarete] || 1;
-  let statUsed, statNom, dc, orGain=0, xpGain=0, fatCost=0, pvCost=0;
-
-  switch(cat){
-    case 'enquete':      statUsed=hero.precision; statNom='Précision'; dc=11; orGain=Math.round(8*mult);  xpGain=Math.round(6*mult); break;
-    case 'negociation':  statUsed=hero.precision; statNom='Précision'; dc=12; orGain=Math.round(15*mult); break;
-    case 'evitement':    statUsed=hero.agi;       statNom='Agilité';   dc=9;  fatCost=5; break;
-    case 'aide':         statUsed=hero.vol;       statNom='Volonté';   dc=12; orGain=Math.round(5*mult);  xpGain=Math.round(8*mult); break;
-    case 'intimidation': statUsed=hero.precision; statNom='Précision'; dc=13; orGain=Math.round(10*mult); pvCost=Math.round(3*mult); break;
-    default:              statUsed=hero.precision; statNom='Précision'; dc=11; orGain=Math.round(6*mult);  xpGain=Math.round(4*mult);
-  }
-
-  const roll = rollDie(20);
-  const total = roll + statUsed;
-  const success = total >= dc;
-  const variants = NARRATIVE_VARIANTS[cat] || NARRATIVE_VARIANTS.generique;
-  const narrative = pickVariant(success ? variants.success : variants.fail);
-
-  if(cat==='intimidation') adjustSuspicion(3); // se faire remarquer, réussite ou non
-  if(cat==='evitement' && success) adjustSuspicion(-2);
-
-  let html = `<p class="narrative ${success?'success':'fail'}">${narrative}</p>`;
-
-  const tags = [];
-  if(success){
-    if(orGain){ hero.or += orGain; tags.push(`<span class="reward-tag">+${orGain} or</span>`); }
-    if(xpGain){ gainXP(xpGain); tags.push(`<span class="reward-tag">+${xpGain} XP</span>`); }
-  } else {
-    if(fatCost){ hero.fat = Math.min(hero.fatMax, hero.fat+fatCost); tags.push(`<span class="reward-tag neg">+${fatCost} Fatigue</span>`); }
-    if(pvCost){ hero.pv = Math.max(1, hero.pv-pvCost); tags.push(`<span class="reward-tag neg">−${pvCost} PV</span>`); }
-  }
-  if(tags.length) html += `<div class="reward-tags">${tags.join('')}</div>`;
-  html += `<p class="mech-line">Jet de ${statNom} : ${roll}+${statUsed} = ${total} (seuil ${dc})</p>`;
-  return html;
-}
-
-function openEventModal(ev, lieu){
-  const box = document.getElementById('eventModalBox');
-  box.innerHTML = `<span class="event-tag">${ev.famille} · ${ev.rarete}${lieu?' · '+lieu.nom:''}</span>
-    <h3>${ev.titre}</h3>
-    ${buildNarrativeBlock(ev, lieu)}
-    <div class="choix-list" id="choixList"></div>`;
-  document.getElementById('eventModal').style.display='flex';
-  const cl = document.getElementById('choixList');
-  ev.choix.forEach((label, idx)=>{
-    const btn = document.createElement('button');
-    btn.textContent = label;
-    btn.onclick = () => {
-      // On se fie à l'indicateur peut_declencher_affrontement (ev.combat), plus fiable
-      // que la famille d'issue seule (certains "traque" ne combattent pas, certains
-      // "escorte"/"enquête" le peuvent).
-      if(idx===0 && ev.combat){
-        const zoneRef = lieu || {danger_range:{min:1,max:3}};
-        const enemy = pickEnemyForZone(zoneRef, ev.rarete);
-        closeEventModal();
-        combatReturnTo = () => { if(lieu) openLieu(lieu); else showScreen('monde'); };
-        startCombat(enemy);
-      } else {
-        const resultHtml = resolveEventChoice(label, ev);
-        cl.innerHTML = `<p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;margin-top:10px;">« ${label} »</p>${resultHtml}
-          <div style="margin-top:14px;text-align:right;"><button class="primary" id="closeEvBtn">Continuer</button></div>`;
-        document.getElementById('closeEvBtn').onclick = () => { renderPersonnage(); closeEventModal(); saveGame(true); };
-      }
-    };
-    cl.appendChild(btn);
-  });
-}
-
-function rarityToDangerRange(rarete, base){
-  // Ajuste la fourchette de Danger de la zone selon la rareté de l'événement
-  if(rarete==="commun") return [base[0], Math.max(base[0],base[0]+1)];
-  if(rarete==="inhabituel") return [base[0], Math.min(6,base[1])];
-  if(rarete==="rare") return [Math.min(6,base[0]+1), Math.min(6,base[1]+1)];
-  return [Math.min(6,base[1]), Math.min(6,base[1]+2)]; // épique
-}
-
-function pickEnemyForZone(lieu, rarete){
-  const [lo,hi] = rarityToDangerRange(rarete, [lieu.danger_range.min, lieu.danger_range.max]);
-  // Les rencontres aléatoires (passer le tour) restent bornées au Danger raisonnable pour le
-  // niveau de Yohan (+1 de marge) — les contrats, choisis consciemment et prévisualisés, n'ont
-  // pas cette limite.
-  const plafondNiveau = dangerRecommande(hero.niveau) + 1;
-  const hiAjuste = Math.min(hi, plafondNiveau);
-  let pool = BESTIARY_FULL.filter(b=>b.danger>=lo && b.danger<=hiAjuste);
-  if(!pool.length) pool = BESTIARY_FULL.filter(b=>b.danger<=hiAjuste);
-  if(!pool.length) pool = BESTIARY_FULL.filter(b=>b.danger<=hi);
-  if(!pool.length) pool = BESTIARY_FULL;
-  return pool[Math.floor(Math.random()*pool.length)];
 }
 
 /* ============================= CONTRATS ============================= */
@@ -1014,7 +931,9 @@ function renderContractStep(){
         <div style="margin-top:14px;"><button class="primary" id="goCombatBtn">Engager le combat</button></div>`;
       document.getElementById('goCombatBtn').onclick = () => {
         combatReturnTo = () => { contractState.stepIndex++; showScreen('contrat'); renderContractStep(); };
-        startCombat(enemy, contractState.mods.defBonus);
+        // Une menace faible ne se présente pas seule sur un contrat rémunéré
+        const escorte = enemy.danger <= 2 ? [enemy, enemy] : [enemy];
+        startCombat(escorte, contractState.mods.defBonus);
       };
     }
     return;
@@ -1045,335 +964,3 @@ function renderContractStep(){
     return;
   }
 }
-
-/* ============================= MOTEUR DE COMBAT ============================= */
-let player, enemy, turnCount, poisonStacks, lastCombatVictory;
-
-function rollDie(sides){ return 1 + Math.floor(Math.random()*sides); }
-function rollDice(notation){ const [n,sides]=notation.split('d').map(Number); let t=0; for(let i=0;i<n;i++)t+=rollDie(sides); return t; }
-
-function fatZone(fat){
-  if(fat<=40) return {name:"Sûre", cls:"", txtCls:"zn-sure", mult:1, failChance:0, contrecoup:false};
-  if(fat<=70) return {name:"Tendue", cls:"zone-tendue", txtCls:"zn-tendue", mult:1.25, failChance:0.10, contrecoup:false};
-  if(fat<=90) return {name:"Critique", cls:"zone-critique", txtCls:"zn-critique", mult:1.5, failChance:0.25, contrecoup:true};
-  return {name:"Rupture", cls:"zone-rupture", txtCls:"zn-rupture", mult:2, failChance:0.45, contrecoup:true};
-}
-
-function startCombat(enemyTemplate, extraDef){
-  player = JSON.parse(JSON.stringify(hero));
-  player.pv = hero.pv>0?hero.pv:hero.pvMax;
-  player.bonusNiveau = bonusDeNiveau(hero.niveau);
-  // Application des bonus d'équipement
-  const armure = hero.equipement.armure ? itemById(hero.equipement.armure) : null;
-  const accessoire = hero.equipement.accessoire ? itemById(hero.equipement.accessoire) : null;
-  if(armure){ player.defenseBase += (armure.def||0); player.agi += (armure.agi||0); }
-  if(accessoire){ player.precision += (accessoire.prec||0); player.vol += (accessoire.vol||0); player.fatMax += (accessoire.fatMax||0); }
-  if(extraDef) player.defenseBase += extraDef;
-  hero.compagnons.forEach(c=>{
-    player.precision += (c.bonus.prec||0);
-    player.fatMax += (c.bonus.fatMax||0);
-    player.vol += (c.bonus.vol||0);
-  });
-  player.pa = player.paMax;
-  player.unlocked = Array.from(hero.unlocked);
-  player.inventaire = JSON.parse(JSON.stringify(hero.inventaire));
-  enemy = JSON.parse(JSON.stringify(enemyTemplate));
-  enemy.paMax = enemy.pa_par_tour || enemy.pa || 2;
-  enemy.pa = enemy.paMax;
-  enemy.pvMax = enemy.pv;
-  enemy.degBase = enemy.attaque_base ? enemy.attaque_base.degats_base : (enemy.degBase||4);
-  enemy.deDeg = enemy.attaque_base ? enemy.attaque_base.de_variance : (enemy.deDeg||"1d4");
-  enemy.special = (enemy.capacites_speciales && enemy.capacites_speciales[0]) ? {nom:enemy.capacites_speciales[0].nom, desc:enemy.capacites_speciales[0].effet} : (enemy.special||null);
-  turnCount = 1; poisonStacks = 0; lastCombatVictory = null;
-
-  showScreen('combat');
-  document.getElementById('endScreen').style.display='none';
-  document.getElementById('combatScreen').style.display='block';
-
-  document.getElementById('vsEnemyName').textContent = enemy.nom;
-  document.getElementById('enemyName').textContent = enemy.nom;
-  document.getElementById('eDanger').textContent = enemy.danger;
-  document.getElementById('eDef').textContent = enemy.defense;
-  document.getElementById('ePrec').textContent = "+"+enemy.precision;
-  document.getElementById('eDeg').textContent = enemy.degBase+" + "+enemy.deDeg;
-  document.getElementById('eSpecial').textContent = enemy.special ? (enemy.special.nom+" — "+enemy.special.desc) : "Aucune";
-
-  document.getElementById('logBox').innerHTML = '';
-  logSystem(`Le combat commence : Yohan affronte ${enemy.nom} (Danger ${enemy.danger}).`);
-  renderCombat();
-  startPlayerTurn();
-}
-
-function startPlayerTurn(){
-  player.pa = player.paMax;
-  document.getElementById('turnCount').textContent = turnCount;
-  applyPoisonIfAny();
-  renderCombat();
-  logSystem(`— Tour ${turnCount} : à Yohan de jouer —`);
-}
-
-document.getElementById('endTurnBtn').onclick = () => {
-  if(enemy.pv<=0 || player.pv<=0) return;
-  enemyTurn();
-};
-
-function enemyTurn(){
-  let paLeft = enemy.paMax;
-  while(paLeft>0 && player.pv>0){
-    const cost = enemy.special && Math.random()<0.35 && paLeft>=2 ? 2 : 1;
-    if(cost>paLeft) break;
-    paLeft -= cost;
-    if(cost===2 && enemy.special) resolveEnemySpecialAttack(); else resolveEnemyBasicAttack();
-    if(player.pv<=0) break;
-  }
-  turnCount++;
-  renderCombat();
-  if(checkEnd()) return;
-  startPlayerTurn();
-}
-
-function checkEnd(){
-  if(enemy.pv<=0){
-    lastCombatVictory=true; hero.pv = player.pv; hero.inventaire = player.inventaire;
-    adjustSuspicion(5); // un combat, même gagné, se remarque
-    const xpGagne = enemy.danger * 12;
-    const leveledUp = gainXP(xpGagne);
-    logSystem(`Victoire ! Yohan gagne ${xpGagne} points d'expérience.`);
-    if(leveledUp){
-      hero.pv = hero.pvMax;
-      logSystem(`Yohan passe au niveau ${hero.niveau} ! PV max augmentés, un nouveau Point de Talent est disponible.`);
-    }
-    showEnd(true, leveledUp);
-    saveGame(true);
-    return true;
-  }
-  if(player.pv<=0){
-    if(player.unlocked.includes('renaissance') && !player.renaissanceUsed){
-      player.renaissanceUsed = true; hero.unlocked.add('renaissance'); // reste débloqué
-      player.pv = 1;
-      logSystem("La Renaissance partielle s'active : Yohan revient à 1 PV.");
-      renderCombat();
-      return false;
-    }
-    adjustSuspicion(5);
-    if(enemy.danger <= 2){
-      // Menace mineure : Yohan survit, blessé — pas de mort permanente pour un simple loup
-      lastCombatVictory=false; hero.pv = Math.max(1, Math.round(hero.pvMax*0.3)); hero.inventaire = player.inventaire;
-      showEnd(false, false, false);
-    } else {
-      // Menace sérieuse (Danger 3+) : mort permanente, fidèle au pilier du monde
-      lastCombatVictory=false;
-      showEnd(false, false, true);
-    }
-    saveGame(true);
-    return true;
-  }
-  return false;
-}
-
-function resetGame(){
-  try{ localStorage.removeItem(SAVE_KEY); } catch(e){}
-  try{ location.reload(); } catch(e){}
-}
-
-function showEnd(victory, leveledUp, permadeath){
-  document.getElementById('combatScreen').style.display='none';
-  const el = document.getElementById('endScreen');
-  el.style.display='block';
-  el.className = 'end-screen '+(victory?'':'defeat');
-  const lvlHtml = leveledUp ? `<p style="color:var(--gold);">Yohan atteint le niveau ${hero.niveau} !</p>` : '';
-  if(victory){
-    el.innerHTML = `<h2>Victoire</h2><p>${enemy.nom} s'effondre.</p>${lvlHtml}<button class="primary" id="afterCombatBtn">Continuer</button>`;
-    document.getElementById('afterCombatBtn').onclick = () => { if(combatReturnTo) combatReturnTo(); else showScreen('monde'); };
-  } else if(permadeath){
-    el.innerHTML = `<h2>Yohan est mort</h2>
-      <p>Face à ${enemy.nom}, le dernier sang connu des Karlsberg s'éteint. Le monde continue, indifférent.</p>
-      <div style="text-align:left;max-width:360px;margin:16px auto;font-family:'Inter',sans-serif;font-size:12.5px;color:var(--parchment-dim);">
-        <div>Niveau atteint : <b style="color:var(--gold);">${hero.niveau}</b></div>
-        <div>Chapitre de la quête : <b style="color:var(--gold);">${TRAME_CHAPITRES[hero.trame.chapitre].titre}</b></div>
-        <div>Or amassé : <b style="color:var(--gold);">${hero.or}</b></div>
-        <div>Compagnons : <b style="color:var(--gold);">${hero.compagnons.map(c=>c.nom).join(', ')||'aucun'}</b></div>
-      </div>
-      <button class="primary" id="afterCombatBtn">Nouvelle partie</button>`;
-    document.getElementById('afterCombatBtn').onclick = resetGame;
-  } else {
-    el.innerHTML = `<h2>Retraite</h2><p>Yohan s'en tire de justesse face à ${enemy.nom}, blessé mais vivant.</p><button class="primary" id="afterCombatBtn">Continuer</button>`;
-    document.getElementById('afterCombatBtn').onclick = () => { if(combatReturnTo) combatReturnTo(); else showScreen('monde'); };
-  }
-}
-
-function spendPA(n){ player.pa -= n; }
-function attemptTouch(atkPrec, defDef){
-  const roll = rollDie(20); const total = roll+atkPrec; const margin = total-defDef;
-  return {hit: total>=defDef, crit: margin>=10, roll, total};
-}
-
-function playerBasicAttack(kind){
-  let cost, deg, deDe, label;
-  if(kind==="pistolet1"||kind==="pistolet2"){
-    const slot = kind==="pistolet1"?"pistolet1Charge":"pistolet2Charge";
-    if(!player[slot]) return;
-    cost=1; deg=6; deDe="1d6"; label="Tir de pistolet"; player[slot]=false;
-  } else if(kind==="epee_legere"){ cost=1; deg=4; deDe="1d4"; label="Attaque légère (épée)"; }
-  else { cost=2; deg=7; deDe="1d4"; label="Attaque lourde (épée)"; }
-  if(player.pa<cost) return;
-  spendPA(cost);
-  const t = attemptTouch(player.precision+(player.bonusNiveau||0), enemy.defense);
-  if(!t.hit){ logHit(label, `Le coup manque sa cible. (jet ${t.total} vs Déf ${enemy.defense})`, 'miss'); }
-  else {
-    let dmg = deg+rollDice(deDe)+(player.bonusNiveau||0); if(t.crit) dmg = Math.round(dmg*1.5);
-    enemy.pv = Math.max(0, enemy.pv-dmg);
-    logHit(label, `${dmg} dégâts${t.crit?' — coup critique !':''} sur ${enemy.nom}.`, t.crit?'crit':'hit');
-    flashEnemy();
-  }
-  renderCombat(); checkEnd();
-}
-
-function playerRecharge(slot){
-  if(player.pa<1 || player[slot]) return;
-  spendPA(1); player[slot]=true;
-  logSystem(`Yohan recharge son pistolet.`);
-  renderCombat();
-}
-
-function getUnlockedActivePowers(){
-  const out = [];
-  Object.values(TREE).forEach(branch=>branch.nodes.forEach(n=>{
-    if(!n.passive && player.unlocked.includes(n.id)) out.push(n);
-  }));
-  return out;
-}
-
-function playerPower(powerId){
-  const all = [];
-  Object.values(TREE).forEach(b=>b.nodes.forEach(n=>all.push(n)));
-  const p = all.find(x=>x.id===powerId);
-  if(!p || player.pa<p.coutPA) return;
-  const zone = fatZone(player.fat);
-  const fatCost = Math.round(p.coutFAT*zone.mult);
-  spendPA(p.coutPA);
-  const echec = Math.random() < zone.failChance;
-  player.fat = Math.min(player.fatMax, player.fat+fatCost);
-  if(echec){
-    let msg = `${p.nom} échoue — le pouvoir se dissipe sans effet (zone ${zone.name}).`;
-    if(zone.contrecoup){ const c=rollDie(6)+2; player.pv=Math.max(0,player.pv-c); msg+=` Contrecoup : Yohan encaisse ${c} dégâts.`; }
-    logHit(p.nom, msg, 'power');
-  } else {
-    const t = attemptTouch(player.vol+(player.bonusNiveau||0), enemy.defense);
-    if(!t.hit){ logHit(p.nom, `Le pouvoir échoue à toucher ${enemy.nom}. (jet ${t.total} vs Déf ${enemy.defense})`, 'miss'); }
-    else {
-      let dmg = p.degBase+rollDice(p.deDeg)+(player.bonusNiveau||0); if(t.crit) dmg=Math.round(dmg*1.5);
-      enemy.pv = Math.max(0, enemy.pv-dmg);
-      let msg = `${dmg} dégâts${t.crit?' — coup critique !':''} sur ${enemy.nom}.`;
-      if(p.vol){ const heal=Math.round(dmg*0.5); player.pv=Math.min(player.pvMax,player.pv+heal); msg+=` Yohan récupère ${heal} PV.`; }
-      logHit(p.nom, msg, 'power');
-      flashEnemy();
-    }
-  }
-  renderCombat(); checkEnd();
-}
-
-function playerConcentrate(){
-  if(player.pa<1) return;
-  spendPA(1); player.fat = Math.max(0, player.fat-5);
-  logSystem(`Yohan se concentre et apaise sa Fatigue (-5).`);
-  renderCombat();
-}
-
-function playerUseItem(uid){
-  const entry = player.inventaire.find(e=>e.uid===uid);
-  if(!entry || entry.qty<1 || player.pa<1) return;
-  const item = itemById(entry.itemId);
-  spendPA(1);
-  entry.qty--;
-  if(entry.qty<=0) player.inventaire = player.inventaire.filter(e=>e.uid!==uid);
-  let msg = `Yohan utilise ${item.nom}.`;
-  if(item.pvHeal){ player.pv = Math.min(player.pvMax, player.pv+item.pvHeal); msg += ` +${item.pvHeal} PV.`; }
-  if(item.fatReduce){ player.fat = Math.max(0, player.fat-item.fatReduce); msg += ` −${item.fatReduce} Fatigue.`; }
-  logHit(item.nom, msg, 'power');
-  renderCombat();
-}
-
-function resolveEnemyBasicAttack(){
-  const t = attemptTouch(enemy.precision, player.defenseBase+Math.floor(player.agi/2));
-  if(!t.hit){ logHit(enemy.nom, `L'attaque manque Yohan.`, 'miss'); }
-  else {
-    let dmg = enemy.degBase+rollDice(enemy.deDeg); if(t.crit) dmg=Math.round(dmg*1.5);
-    player.pv = Math.max(0, player.pv-dmg);
-    logHit(enemy.nom, `${dmg} dégâts${t.crit?' — critique !':''} infligés à Yohan.`, t.crit?'crit':'hit');
-    flashPlayer();
-  }
-}
-
-function resolveEnemySpecialAttack(){
-  const t = attemptTouch(enemy.precision, player.defenseBase+Math.floor(player.agi/2));
-  if(!t.hit){ logHit(enemy.nom, `${enemy.special.nom} manque sa cible.`, 'miss'); return; }
-  let dmg = enemy.degBase+rollDice(enemy.deDeg);
-  player.pv = Math.max(0, player.pv-dmg);
-  let msg = `${enemy.special.nom} inflige ${dmg} dégâts à Yohan.`;
-  if(enemy.special.nom.toLowerCase().includes("venimeux")){ poisonStacks=3; msg+=` Yohan est empoisonné (3 dégâts/tour, 3 tours).`; }
-  if(enemy.special.nom.toLowerCase().includes("esprit")){ const s=rollDie(8); player.vol=Math.max(0,player.vol-1); enemy.pv=Math.min(enemy.pvMax,enemy.pv+s); msg+=` ${enemy.nom} se soigne de ${s} PV.`; }
-  logHit(enemy.nom, msg, 'power');
-  flashPlayer();
-}
-
-function applyPoisonIfAny(){
-  if(poisonStacks>0){
-    player.pv = Math.max(0, player.pv-3); poisonStacks--;
-    logHit("Poison", `Yohan subit 3 dégâts de poison (${poisonStacks} tour(s) restant(s)).`, 'hit');
-  }
-}
-
-function flashEnemy(){ const p=document.getElementById('enemyPanel'); p.classList.remove('shake'); void p.offsetWidth; p.classList.add('shake','flash-red'); }
-function flashPlayer(){ const p=document.getElementById('playerPanel'); p.classList.remove('shake'); void p.offsetWidth; p.classList.add('shake','flash-red'); }
-
-function renderCombat(){
-  if(!player) return;
-  document.getElementById('pvText').textContent = `${player.pv} / ${player.pvMax}`;
-  document.getElementById('pvBar').style.width = (100*player.pv/player.pvMax)+'%';
-  document.getElementById('fatText').textContent = `${player.fat} / ${player.fatMax}`;
-  const zone = fatZone(player.fat);
-  const fatBar = document.getElementById('fatBar');
-  fatBar.style.width = player.fat+'%'; fatBar.className='fat-fill '+zone.cls;
-  const zn = document.getElementById('fatZoneName'); zn.textContent=zone.name; zn.className='fat-zone-name '+zone.txtCls;
-
-  const pips = document.getElementById('paPips'); pips.innerHTML='';
-  for(let i=0;i<player.paMax;i++){ const d=document.createElement('div'); d.className='pip'+(i<player.pa?' filled':''); d.textContent=i+1; pips.appendChild(d); }
-
-  const wa = document.getElementById('weaponActions'); wa.innerHTML='';
-  wa.appendChild(makeActionBtn(`Pistolet 1 ${player.pistolet1Charge?'(chargé)':'(vide)'}`,'1 PA',()=>playerBasicAttack('pistolet1'), player.pa<1||player.pv<=0||!player.pistolet1Charge));
-  if(!player.pistolet1Charge) wa.appendChild(makeActionBtn('Recharger pistolet 1','1 PA',()=>playerRecharge('pistolet1Charge'), player.pa<1));
-  wa.appendChild(makeActionBtn(`Pistolet 2 ${player.pistolet2Charge?'(chargé)':'(vide)'}`,'1 PA',()=>playerBasicAttack('pistolet2'), player.pa<1||player.pv<=0||!player.pistolet2Charge));
-  if(!player.pistolet2Charge) wa.appendChild(makeActionBtn('Recharger pistolet 2','1 PA',()=>playerRecharge('pistolet2Charge'), player.pa<1));
-  wa.appendChild(makeActionBtn('Attaque légère (épée)','1 PA',()=>playerBasicAttack('epee_legere'), player.pa<1));
-  wa.appendChild(makeActionBtn('Attaque lourde (épée)','2 PA',()=>playerBasicAttack('epee_lourde'), player.pa<2));
-  wa.appendChild(makeActionBtn('Se concentrer (−5 Fatigue)','1 PA',()=>playerConcentrate(), player.pa<1));
-  (player.inventaire||[]).filter(e=>{const it=itemById(e.itemId); return it && it.type==='consommable' && e.qty>0;}).forEach(entry=>{
-    const item = itemById(entry.itemId);
-    wa.appendChild(makeActionBtn(`Utiliser : ${item.nom} (×${entry.qty})`, '1 PA', ()=>playerUseItem(entry.uid), player.pa<1));
-  });
-
-  const pa2 = document.getElementById('powerActions'); pa2.innerHTML='';
-  getUnlockedActivePowers().forEach(p=>{
-    const z = fatZone(player.fat);
-    const proj = Math.round(p.coutFAT*z.mult);
-    const disabled = player.pa<p.coutPA || player.pv<=0;
-    pa2.appendChild(makeActionBtn(p.nom, `${p.coutPA} PA · +${proj} FAT`, ()=>playerPower(p.id), disabled, true));
-  });
-
-  if(enemy){
-    document.getElementById('ePvText').textContent = `${enemy.pv} / ${enemy.pvMax}`;
-    document.getElementById('ePvBar').style.width = (100*enemy.pv/enemy.pvMax)+'%';
-  }
-}
-
-function makeActionBtn(label, cost, onClick, disabled, isPower){
-  const b = document.createElement('button');
-  b.className = 'act'+(isPower?' power':'');
-  b.disabled = !!disabled;
-  b.innerHTML = `<span>${label}</span><span class="cost">${cost}</span>`;
-  b.onclick = onClick;
-  return b;
-}
-function logSystem(msg){ const box=document.getElementById('logBox'); const p=document.createElement('p'); p.innerHTML=`<span class="tag system">Système</span>${msg}`; box.appendChild(p); box.scrollTop=box.scrollHeight; }
-function logHit(actor,msg,cls){ const box=document.getElementById('logBox'); const p=document.createElement('p'); p.innerHTML=`<span class="tag">${actor}</span><span class="${cls}">${msg}</span>`; box.appendChild(p); box.scrollTop=box.scrollHeight; }
