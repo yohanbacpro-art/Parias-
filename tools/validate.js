@@ -17,7 +17,7 @@ const fichiers = [
   'src/data/items.js', 'src/data/lore.js', 'src/data/champions.js',
   'src/data/units.js', 'src/data/battles.js',
   'src/data/events_written.js', 'src/data/events_meetings.js', 'src/data/events_trame.js',
-  'src/data/contracts_special.js', 'src/data/romances.js',
+  'src/data/contracts_special.js', 'src/data/romances.js', 'src/data/epilogue.js',
 ];
 
 const ctx = vm.createContext({ console });
@@ -32,11 +32,13 @@ const {
   EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME, CONTRATS_SPECIAUX, EVENTS_ROMANCE,
   TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS,
   UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART,
+  EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_ONDE, EPI_LEGS,
 } = vm.runInContext(`({
   BESTIARY_FULL, PORTRAITS, LOCATIONS, EVENTS, CONTRACTS, ITEM_POOL,
   EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME, CONTRATS_SPECIAUX, EVENTS_ROMANCE,
   TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS,
-  UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART
+  UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART,
+  EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_ONDE, EPI_LEGS
 })`, ctx);
 
 const erreurs = [];
@@ -260,6 +262,54 @@ console.log(`            ${CONTRATS_SPECIAUX.length} contrats spéciaux · ${EVE
 console.log(`            ${nbScenes} scènes, ${nbChoix} choix, ${nbCombats} affrontements, ${nbBatailles} batailles · + ${EVENTS.length} générés`);
 console.log(`Troupes     ${Object.keys(UNIT_TYPES).length} types · ${Object.keys(BATTLES).length} champs de bataille`);
 console.log(`Pouvoirs    ${powerIds.size} · Objets ${itemIds.size} · Portraits ${portrIds.size} · Champions ${champIds.size}`);
+console.log('');
+
+/* ---- Épilogue ---- */
+/* Un verdict conditionné à un marqueur qui n'existe pas ne se déclenche jamais :
+ * la fin serait muette sans que rien ne le signale. */
+const PEUPLES_MONDE = ['humains','parias','khesh','elfes','elfes_noirs','nains','peaux_vertes','hommes_betes'];
+const sectionsEpi = [
+  ['EPI_OUVERTURE', EPI_OUVERTURE], ['EPI_NOM', EPI_NOM],
+  ['EPI_GENS', EPI_GENS], ['EPI_ONDE', EPI_ONDE], ['EPI_LEGS', EPI_LEGS],
+  ...Object.entries(EPI_PEUPLES).map(([id, p]) => [`EPI_PEUPLES.${id}`, p.verdicts]),
+];
+let nbVerdicts = 0;
+for(const [nom, liste] of sectionsEpi){
+  liste.forEach((e, i) => {
+    nbVerdicts++;
+    const ou = `${nom}[${i}]`;
+    const si = e.si || {};
+    [...(si.flags||[]), ...(si.sansFlags||[]), ...(si.unDes||[])].forEach(f => {
+      if(!marqueursPoses.has(f)) err(`${ou} : marqueur « ${f} » jamais posé — ce verdict est inatteignable`);
+    });
+    Object.keys(si.affinite || {}).forEach(q => {
+      if(!affiniteIds.has(q)) err(`${ou} : affinité inconnue « ${q} »`);
+    });
+    if(si.compagnon && !compagnonIds.has(si.compagnon)) err(`${ou} : compagnon inconnu « ${si.compagnon} »`);
+    [...Object.keys(si.tensionMin || {}), ...Object.keys(si.tensionMax || {})].forEach(p => {
+      if(!PEUPLES_MONDE.includes(p)) err(`${ou} : peuple inconnu « ${p} »`);
+    });
+    if(!e.texte) err(`${ou} : verdict sans texte`);
+  });
+}
+/* Chaque section à verdict unique doit avoir un filet, sinon une partie peut
+ * atteindre la fin et n'avoir rien à lire. */
+[['EPI_OUVERTURE', EPI_OUVERTURE], ['EPI_NOM', EPI_NOM], ['EPI_ONDE', EPI_ONDE],
+ ...Object.entries(EPI_PEUPLES).map(([id, p]) => [`EPI_PEUPLES.${id}`, p.verdicts])
+].forEach(([nom, liste]) => {
+  if(!liste.some(e => e.si && e.si.toujours)) err(`${nom} : aucun verdict de repli — la fin peut rester muette`);
+  const dernier = liste[liste.length - 1];
+  if(dernier && !(dernier.si && dernier.si.toujours)) warn(`${nom} : le repli n'est pas en dernière position`);
+});
+PEUPLES_MONDE.forEach(p => { if(!EPI_PEUPLES[p]) err(`Épilogue : aucun verdict pour le peuple « ${p} »`); });
+const legsIds = new Set();
+EPI_LEGS.forEach(l => {
+  if(!l.id) err('EPI_LEGS : legs sans identifiant');
+  else if(legsIds.has(l.id)) err(`EPI_LEGS : identifiant en double « ${l.id} »`);
+  else legsIds.add(l.id);
+  if(!l.effet || !Object.keys(l.effet).length) err(`EPI_LEGS ${l.id} : legs sans effet`);
+});
+console.log(`Épilogue    ${nbVerdicts} verdicts · ${EPI_LEGS.length} legs transmissibles`);
 console.log('');
 
 /* ---- Couverture par lieu ---- */

@@ -7,7 +7,7 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V0.5** — les batailles rangées, le Renom, les campagnes et les attachements.
+**Version actuelle : V0.7** — la sauvegarde à emplacements et l'épilogue qui rend son verdict.
 
 ## Lancer le jeu
 
@@ -18,6 +18,9 @@ Pour éviter les restrictions `file://` (import de sauvegarde), servir le dossie
 ```bash
 python3 -m http.server 8000   # puis http://localhost:8000
 ```
+
+`dist/parias.html` est le même jeu en un seul fichier, à partager par simple
+lien. Il se régénère avec `node tools/build-standalone.js`.
 
 ## Ce qui est jouable
 
@@ -48,10 +51,12 @@ python3 -m http.server 8000   # puis http://localhost:8000
 | Niveaux 1–20, XP, points de talent | ✅ |
 | Suspicion : chasseurs de primes au-delà de 60 | ✅ |
 | Tensions des 8 peuples, chroniques générées | ✅ |
-| Trame principale en 5 chapitres | ✅ |
+| Trame principale en 5 chapitres, 11 jalons écrits | ✅ |
 | **Compagnons combattants** : Alycia (Onde), Alarielle (magie ancienne) | ✅ |
 | **Illustrations** : bandeaux d'événement et portraits, avec blason de repli | ✅ |
-| Sauvegarde locale + export/import fichier | ✅ |
+| **Sauvegarde** : 4 emplacements, métadonnées, migrations, export texte | ✅ |
+| **Épilogue** : une fin assemblée à partir de ce que la partie a fait | ✅ |
+| **Héritage** : ce qu'une chronique achevée transmet à la suivante | ✅ |
 | Arbre de pouvoirs elfique (`TREE_ELFES`) | ✅ joué par Alarielle |
 
 ## Comment l'histoire avance
@@ -136,6 +141,60 @@ scènes s'arrêtent à la porte. Ce qui en découle change quelque chose — Ala
 peut brûler sa convocation et cesser d'être princesse, Éléonore peut lier
 Valombre à Karlsberg.
 
+## La sauvegarde
+
+Quatre emplacements : une **sauvegarde automatique**, écrite à chaque fin de
+tour et après chaque affrontement, et **trois emplacements manuels** que le
+joueur remplit lui-même. Chacun affiche ce qu'il contient avant qu'on le charge
+— chapitre, niveau, Renom, or, saison, lieu, compagnons.
+
+Trois garanties, dans cet ordre d'importance :
+
+1. **Ne jamais écraser du bon avec du mauvais.** Toute écriture est relue et
+   revalidée ; au moindre échec, l'ancienne sauvegarde est remise en place.
+2. **Ne jamais perdre une partie en silence.** Le stockage local est éprouvé
+   pour de vrai au démarrage. Quand le navigateur le refuse — page intégrée,
+   navigation privée, cookies cloisonnés — le jeu le **dit** au lieu de faire
+   semblant d'enregistrer, et renvoie vers l'export en texte.
+3. **Ne jamais casser une vieille sauvegarde.** Chaque enregistrement porte un
+   numéro de version et traverse les migrations avant d'être joué. Les parties
+   d'avant les emplacements sont récupérées automatiquement dans l'emplacement 1.
+
+L'export produit un fichier **et** affiche le texte de la sauvegarde : dans une
+page intégrée ou en `file://`, le téléchargement échoue silencieusement, le
+copier-coller jamais.
+
+`tools/smoke-save.js` éprouve tout cela dans un vrai navigateur, y compris le
+cas du stockage interdit et celui d'une écriture impossible.
+
+## L'épilogue
+
+La chronique ne s'arrête plus sur un compteur : elle rend un **verdict**,
+assemblé à partir de ce que la partie a réellement fait — les marqueurs posés,
+l'état des huit peuples, les liens tissés, les campagnes menées.
+
+Cinq sections, toutes conditionnelles :
+
+- **L'ouverture** — la dernière décision (`voie_empire`, `voie_refuge`,
+  `voie_ordinaire`) croisée avec la manière dont elle a été prise.
+- **Le monde après** — un verdict par peuple, tiré d'abord de ce que la partie a
+  explicitement décidé (Kar-Durak sauvée ou tombée, Horde dispersée ou passée),
+  sinon de la tension où la simulation les a laissés.
+- **Ceux qui restaient** — cumulatif : chaque personne dont Yohan a croisé la
+  route et laissé une trace, compagnes et princes compris.
+- **Ce qui suivait** — le fil de l'Onde, selon ce qu'il en a compris.
+- **Ce qui se transmet** — les legs mérités, et rien d'autre.
+
+Chaque section à verdict unique a un repli : une partie ne peut pas atteindre la
+fin et n'avoir rien à lire. Le validateur le vérifie, et refuse un verdict
+conditionné à un marqueur qui n'existe pas — il serait inatteignable en silence.
+
+**L'héritage.** Une chronique achevée est rangée dans le premier emplacement
+manuel libre — elle reste jouable — et transmet ce qu'elle a mérité : de l'or
+pour un nom reconnu, du Renom pour une réputation d'armes, un point de talent
+pour avoir compris le cycle ou sorti les siens de l'ombre. On garde le legs le
+plus riche jamais obtenu, pas le dernier : recommencer ne fait jamais reculer.
+
 ## Les figures du monde
 
 Neuf combattants nommés vivent hors du bestiaire, dans `src/data/champions.js` :
@@ -184,7 +243,9 @@ personne n'a écrit de porte de sortie.
 
 ```
 index.html            structure + styles + ordre de chargement
-src/game.js           boucle de tour, monde, personnage, contrats, sauvegarde
+src/game.js           boucle de tour, monde, personnage, contrats
+src/save.js           emplacements, métadonnées, migrations, intégrité
+src/epilogue.js       verdict de fin de chronique et héritage
 src/combat.js         moteur de combat de groupe (party vs adversaires)
 src/events_runner.js  déroulement des événements écrits et générés
 src/battle.js         moteur de bataille rangée (fronts, ordres, moral)
@@ -195,19 +256,25 @@ src/data/
   events.js           200 événements générés + variantes narratives
   events_written.js   18 événements de lieu, ramifiés en scènes
   events_meetings.js  8 rencontres avec les figures du Codex
-  events_trame.js     6 jalons de la quête principale
+  events_trame.js     11 jalons de la quête principale
   champions.js        9 combattants nommés (hors bestiaire)
   contracts_special.js 6 campagnes + 3 affaires personnelles
   romances.js         3 arcs relationnels, 7 étapes
-  units.js            7 troupes recrutables + 9 troupes adverses
-  battles.js          6 champs de bataille
+  units.js            7 troupes recrutables + 14 troupes adverses
+  battles.js          12 champs de bataille, dont 6 crises de peuple
+  epilogue.js         verdicts de fin, par voie, par peuple, par personne
   contracts.js        50 contrats (10 archétypes) + habillage narratif
   powers.js           arbres de pouvoirs (Onde, Elfes) + portée des sorts
   items.js            équipement et consommables
   portraits.js        registre des personnages illustrés
   lore.js             prologue, trame, compagnons, codex, calendrier, tensions
 assets/               illustrations à déposer — voir assets/README.md
+dist/parias.html      le jeu en un seul fichier (généré)
 tools/validate.js     contrôle d'intégrité du contenu
+tools/build-standalone.js  fabrique dist/parias.html
+tools/smoke-save.js        éprouve la sauvegarde dans un navigateur
+tools/smoke-epilogue.js    éprouve les fins et l'héritage
+tools/smoke-campagnes.js   éprouve les campagnes majeures et la trame
 ```
 
 Les fichiers de `src/data/` sont des scripts classiques chargés avant `game.js` :
@@ -218,13 +285,24 @@ tout vit dans la portée globale, il n'y a ni bundler ni étape de build.
 ```bash
 node tools/validate.js                       # cohérence du contenu
 for f in src/*.js src/*/*.js; do node --check "$f"; done   # syntaxe
+
+node tools/build-standalone.js               # puis, sur le fichier unique :
+node tools/smoke-save.js                     # emplacements, migrations, stockage refusé
+node tools/smoke-epilogue.js                 # deux fins opposées + héritage
+node tools/smoke-campagnes.js                # campagnes majeures et trame complète
 ```
+
+Les épreuves de navigateur utilisent le Chromium préinstallé
+(`/opt/pw-browsers/chromium`) via `playwright-core`.
 
 `tools/validate.js` vérifie que chaque scène référencée existe, que les créatures,
 champions, objets, pouvoirs, portraits, lieux, troupes et batailles cités sont
 réels, que les marqueurs exigés sont bien posés quelque part, et que chaque
-jalon de trame, contrat spécial ou attachement pose le sien. Il imprime aussi **la couverture par lieu** et échoue si un lieu ne peut
-déclencher aucun événement écrit.
+jalon de trame, contrat spécial ou attachement pose le sien. Il contrôle aussi
+**l'épilogue** : aucun verdict ne doit dépendre d'un marqueur inexistant, et
+chaque section à verdict unique doit avoir un repli. Il imprime enfin **la
+couverture par lieu** et échoue si un lieu ne peut déclencher aucun événement
+écrit.
 
 ## Écrire un événement
 
@@ -285,5 +363,24 @@ requis:{ compagnon:"alycia", affinite:{qui:"alycia", min:4}, sansFlags:["ro_x_fa
 Un choix verrouillé reste visible, grisé, avec la raison affichée — le joueur
 voit ce qu'il rate. Les événements écrits ne se répètent pas tant que ceux
 applicables au lieu ne sont pas tous vus.
+
+## Écrire une fin
+
+`src/data/epilogue.js`. Un verdict est un texte plus une condition ; le moteur
+retient le premier qui tient dans les sections à verdict unique, tous ceux qui
+tiennent dans les sections cumulatives.
+
+```js
+{ si:{ flags:['kardurak_sauve'] }, texte:`Kar-Durak tint. …` },
+{ si:{ tensionMin:{ nains:60 } },  texte:`…` },
+{ si:{ toujours:true },            texte:`…` },   // le repli, toujours en dernier
+```
+
+Conditions reconnues : `flags`, `sansFlags`, `unDes`, `compagnon`, `affinite`,
+`tensionMin`, `tensionMax`, `renomMin`, `suspicionMin`, `suspicionMax`,
+`armeeMin`, `niveauMin`, `toujours`.
+
+Un legs (`EPI_LEGS`) ajoute un `id`, un `nom` et un `effet` (`or`, `renom`,
+`talentPoints`) transmis à la chronique suivante.
 
 Le contenu de jeu provient du **Content Pack V1.4**.

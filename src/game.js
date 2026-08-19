@@ -38,15 +38,11 @@ function triggerChapitre(idx){
   }
   const box = document.getElementById('eventModalBox');
   if(ch.fin){
+    // La chronique ne s'arrête pas sur un compteur : elle rend son verdict.
     box.innerHTML = `<span class="event-tag">Fin de la chronique</span><h3>${ch.titre}</h3><p>${ch.objectif}</p>
-      <div style="text-align:left;max-width:360px;margin:16px 0;font-family:'Inter',sans-serif;font-size:12.5px;color:var(--parchment-dim);">
-        <div>Niveau atteint : <b style="color:var(--gold);">${hero.niveau}</b></div>
-        <div>Or amassé : <b style="color:var(--gold);">${hero.or}</b></div>
-        <div>Compagnons : <b style="color:var(--gold);">${hero.compagnons.map(c=>c.nom).join(', ')||'aucun'}</b></div>
-      </div>
-      <div style="margin-top:16px;text-align:right;"><button class="primary" id="closeChapBtn">Nouvelle chronique</button></div>`;
+      <div style="margin-top:16px;text-align:right;"><button class="primary" id="closeChapBtn">Lire l'épilogue</button></div>`;
     document.getElementById('eventModal').style.display='flex';
-    document.getElementById('closeChapBtn').onclick = resetGame;
+    document.getElementById('closeChapBtn').onclick = ouvrirEpilogue;
     return;
   }
   box.innerHTML = `<span class="event-tag">Chapitre ${idx+1}</span><h3>${ch.titre}</h3><p>${ch.objectif}</p>${extra}
@@ -159,7 +155,7 @@ function showScreen(id){
   document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active', b.dataset.screen===id));
   const cal = document.getElementById('calendarBar');
   if(cal.dataset.gameStarted==='1'){
-    cal.style.display = (id==='combat' || id==='bataille') ? 'none' : 'flex';
+    cal.style.display = (id==='combat' || id==='bataille' || id==='epilogue') ? 'none' : 'flex';
   }
 }
 
@@ -283,8 +279,13 @@ function enterGame(){
 }
 
 initSaveScreen();
+renderHeritageAccueil();
 
 document.getElementById('btnStart').onclick = () => {
+  if(!hero.heritageApplique){
+    hero.heritageApplique = true;
+    appliquerHeritage();
+  }
   prologueIndex = 0;
   renderPrologue();
   showScreen('prologue');

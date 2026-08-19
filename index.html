@@ -407,6 +407,49 @@
   .cr-badge.campagne{border-color:var(--warn);color:var(--warn);}
   .cr-badge.verrou{border-color:var(--line);color:var(--parchment-dim);}
 
+  .epi-panel{max-width:760px;margin:0 auto;}
+  .epi-tag{display:inline-block;font-family:'Inter',sans-serif;font-size:10px;text-transform:uppercase;
+    letter-spacing:.18em;color:var(--parchment-dim);border:1px solid var(--line);
+    border-radius:3px;padding:2px 9px;margin-bottom:14px;}
+  .epi-titre{font-family:'Cinzel',serif;font-size:30px;line-height:1.2;color:var(--gold);
+    margin:0 0 18px;text-wrap:balance;}
+  .epi-ouverture{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:6px;}
+  .epi-texte{font-size:15.5px;line-height:1.78;color:var(--parchment);margin:0 0 14px;max-width:64ch;}
+  .epi-texte:last-child{margin-bottom:0;}
+  .epi-onde{color:var(--onde-bright);font-style:italic;}
+  .epi-section{padding:22px 0;border-bottom:1px solid var(--line);}
+  .epi-section:last-of-type{border-bottom:none;}
+  .epi-h{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--gold-dim);margin:0 0 16px;font-weight:400;}
+  .epi-peuples{display:grid;gap:16px;}
+  .epi-peuple{border-left:2px solid var(--gold-dim);padding-left:14px;}
+  .epi-peuple-nom{font-family:'Cinzel',serif;font-size:14px;color:var(--gold);margin-bottom:5px;}
+  .epi-peuple p{margin:0;font-size:14px;line-height:1.72;color:var(--parchment-dim);max-width:62ch;}
+  .epi-gens{font-size:14.5px;line-height:1.75;color:var(--parchment);margin:0 0 13px;max-width:64ch;}
+  .epi-gens b{color:var(--gold);font-weight:600;}
+  .epi-seul{color:var(--parchment-dim);font-style:italic;}
+  .epi-bilan{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:2px 22px;
+    font-family:'Inter',sans-serif;font-size:12.5px;}
+  .epi-bilan div{display:flex;justify-content:space-between;gap:12px;padding:5px 0;
+    border-bottom:1px dashed rgba(255,255,255,.055);}
+  .epi-bilan span{color:var(--parchment-dim);}
+  .epi-bilan b{color:var(--gold);font-variant-numeric:tabular-nums;}
+  .epi-compagnons{margin:14px 0 0;font-family:'Inter',sans-serif;font-size:12.5px;
+    color:var(--parchment-dim);font-style:italic;}
+  .epi-legs{display:grid;gap:12px;}
+  .epi-leg{border:1px solid var(--gold-dim);border-radius:4px;padding:11px 14px;
+    background:rgba(198,160,74,.05);}
+  .epi-leg-nom{font-family:'Cinzel',serif;font-size:13.5px;color:var(--gold);margin-bottom:4px;}
+  .epi-leg p{margin:0;font-family:'Inter',sans-serif;font-size:12.5px;line-height:1.65;
+    color:var(--parchment-dim);}
+  .epi-fin{padding-top:22px;border-top:1px solid var(--line);margin-top:8px;}
+  .epi-garde{font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;
+    color:var(--parchment-dim);max-width:60ch;margin:0 0 14px;}
+  .epi-boutons{display:flex;gap:10px;flex-wrap:wrap;}
+  .epi-heritage{font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;
+    color:var(--parchment-dim);max-width:520px;margin:14px auto 0;}
+  .epi-heritage b{color:var(--gold);}
+
   .save-warning{background:rgba(140,40,30,.16);border:1px solid var(--blood-bright);
     border-radius:4px;padding:10px 12px;color:var(--parchment);font-family:'Inter',sans-serif;
     font-size:12px;line-height:1.55;margin:0 0 12px;}
@@ -445,7 +488,7 @@
   <header class="hero">
     <div class="eyebrow">Prototype interne</div>
     <h1>PARIAS — Chroniques de Vardhen</h1>
-    <div class="sub" id="heroSub">V0.6 · Le monde, les contrats, l'affrontement et les batailles</div>
+    <div class="sub" id="heroSub">V0.7 · Le monde, les contrats, l'affrontement, les batailles et la fin</div>
   </header>
 
   <nav class="tabs" id="tabs" style="display:none;">
@@ -484,6 +527,7 @@
     <p style="font-family:'Cinzel',serif;font-size:22px;color:var(--gold);font-style:normal;max-width:640px;">Le monde n'existe pas pour le joueur.<br>Le joueur existe dans le monde.</p>
     <button class="primary" id="btnStart">Entrer dans Vardhen</button>
     <div id="saveOptions" style="margin-top:18px;"></div>
+    <div id="heritageAccueil"></div>
   </div>
 
   <!-- PROLOGUE -->
@@ -551,6 +595,11 @@
       </div>
       <input type="file" id="importFileInput" accept="application/json" style="display:none;">
     </div>
+  </div>
+
+  <!-- ÉPILOGUE -->
+  <div class="screen" id="screen-epilogue">
+    <div class="panel epi-panel"><div id="epilogueCorps"></div></div>
   </div>
 
   <!-- QUÊTE PRINCIPALE -->
@@ -782,10 +831,12 @@
 <script src="src/data/events_trame.js"></script>
 <script src="src/data/contracts_special.js"></script>
 <script src="src/data/romances.js"></script>
+<script src="src/data/epilogue.js"></script>
 <script src="src/ui/art.js"></script>
 <script src="src/combat.js"></script>
 <script src="src/battle.js"></script>
 <script src="src/events_runner.js"></script>
+<script src="src/epilogue.js"></script>
 <script src="src/save.js"></script>
 <script src="src/game.js"></script>
 </body>
