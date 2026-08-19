@@ -38,6 +38,12 @@ function conditionsRemplies(req){
   if(req.renomMin     !== undefined && renomActuel() < req.renomMin) return false;
   if(req.compagnon    && !hero.compagnons.some(c=>c.id===req.compagnon)) return false;
   if(req.affinite     && affiniteAvec(req.affinite.qui) < req.affinite.min) return false;
+  // Crise d'un peuple : c'est la simulation du monde qui décide de l'heure,
+  // pas la progression du joueur.
+  if(req.tensionMin){
+    const t = (hero.tensions || {})[req.tensionMin.peuple];
+    if(t === undefined || t < req.tensionMin.n) return false;
+  }
   if(req.flags        && !req.flags.every(f=>hasFlag(f))) return false;
   if(req.sansFlags    && req.sansFlags.some(f=>hasFlag(f))) return false;
   return true;

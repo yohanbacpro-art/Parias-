@@ -100,6 +100,31 @@ const UNIT_TYPES = {
     effectif:90, attaque:10, defense:6, moral:12, portee:0,
     desc:"Le nombre comme doctrine. Effrayant tant que ça avance.",
   },
+  harde_cornes: {
+    id:"harde_cornes", nom:"Harde des Mille Cornes", categorie:"infanterie", ennemi:true,
+    effectif:75, attaque:13, defense:9, moral:17, portee:0,
+    desc:"Ils ne tiennent pas une ligne : ils déferlent. Et ils ne reculent jamais les premiers.",
+  },
+  sylvains: {
+    id:"sylvains", nom:"Archers Sylvains", categorie:"archers", ennemi:true,
+    effectif:40, attaque:16, defense:9, moral:13, portee:1,
+    desc:"Trois siècles d'entraînement chacun. On ne les voit qu'après le premier trait.",
+  },
+  khesh_rivaux: {
+    id:"khesh_rivaux", nom:"Lances des Dragons de Sable", categorie:"cavalerie", ennemi:true,
+    effectif:40, attaque:17, defense:11, moral:16, portee:0,
+    desc:"La garde de Khal-Vaene. Rapides, disciplinées, et convaincues d'avoir raison.",
+  },
+  chasseurs_ordre: {
+    id:"chasseurs_ordre", nom:"Ordre des Chasseurs", categorie:"infanterie", ennemi:true,
+    effectif:45, attaque:16, defense:15, moral:18, portee:0,
+    desc:"Formés pour une seule chose : prendre un Paria vivant. Ils savent attendre que la Fatigue monte.",
+  },
+  troll_guerre: {
+    id:"troll_guerre", nom:"Trolls de guerre", categorie:"infanterie", ennemi:true,
+    effectif:25, attaque:22, defense:17, moral:14, portee:0,
+    desc:"Vingt-cinq créatures qui valent chacune dix hommes, et qu'aucune pique n'arrête vraiment.",
+  },
   elfes_noirs: {
     id:"elfes_noirs", nom:"Lames de la Cour Noire", categorie:"archers", ennemi:true,
     effectif:35, attaque:17, defense:10, moral:14, portee:1,

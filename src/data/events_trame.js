@@ -243,7 +243,69 @@ const EVENTS_TRAME = [
   }
 },
 
-/* ══════════ 4 · la dette des Elfes ══════════ */
+
+/* ══════════ 4 · ceux qu'on tenait cachés ══════════ */
+{
+  id:"TR_07_SANS_NOM", titre:"Ceux qui n'ont plus de nom", famille:"PARIA", rarete:"épique",
+  image:"tr_sans_nom",
+  requis:{ flags:["cause_parias","tr_03_fait"], sangMin:78, sansFlags:["tr_07_fait"] },
+  scenes:{
+    start:{
+      pnj:"alycia",
+      texte:[
+        "Ils sont sept, et ils attendent depuis l'aube à l'orée du camp sans oser franchir la ligne des feux.",
+        "Alycia les a fait venir sans prévenir. « Voilà ce que ta décision a produit », dit-elle. « Sept sur trente-trois qui ont accepté de sortir. Les autres attendent de voir ce qui arrive à ceux-là. »",
+        "Aucun ne donne son nom. Le plus âgé a peut-être cinquante ans et tient ses mains croisées d'une façon que Yohan reconnaît immédiatement : c'est la posture de quelqu'un qui a passé sa vie à empêcher ses doigts de trembler devant témoins."
+      ],
+      choix:[
+        {label:"Les prendre comme ils sont, sans rien exiger", detail:"Ils deviennent une unité · les Sans-Nom",
+         suite:"prend", effets:{sang:16, xp:60, renom:6, flags:["tr_07_fait","sans_nom_leves"]}},
+        {label:"Leur demander d'abord s'ils veulent se battre", detail:"Jet de Volonté (13) · personne ne le leur a demandé",
+         test:{stat:"vol", dc:13}, reussite:"demande_ok", echec:"demande_ko"},
+        {label:"Les renvoyer se cacher", detail:"Sept porteurs visibles, c'est sept cibles",
+         suite:"renvoie", effets:{sang:6, xp:30, suspicion:-10, flags:["tr_07_fait","sans_nom_caches"]}},
+      ]
+    },
+    prend:{
+      texte:[
+        "Yohan ne leur demande rien : ni leur nom, ni d'où ils viennent, ni ce qu'ils savent faire. Il leur indique où dormir et à quelle heure on mange.",
+        "C'est exactement ce qu'il fallait. Le plus âgé desserre les mains vers le milieu du repas et ne les recroise plus.",
+        "Le camp entier comprend en une soirée ce qu'ils sont, et le camp entier décide en une soirée de ne pas en parler. C'est peut-être ça, une maison."
+      ],
+      fin:true
+    },
+    demande_ok:{
+      pnj:"alycia",
+      texte:[
+        "« Est-ce que vous voulez vous battre ? » demande Yohan. « Pas est-ce que vous pouvez. Est-ce que vous voulez. »",
+        "Le silence dure très longtemps. Puis le plus âgé répond, et sa voix ne tremble pas du tout : « Non. Aucun de nous. » Un temps. « Mais nous voulons cesser de courir, et il n'y a pas d'autre chemin pour ça. »",
+        "Alycia détourne les yeux. C'est la seule fois où Yohan la verra faire ça."
+      ],
+      effets:{sang:20, xp:70, renom:8, flags:["tr_07_fait","sans_nom_leves","sans_nom_consentants"]},
+      fin:true
+    },
+    demande_ko:{
+      texte:[
+        "La question sort mal — trop solennelle, presque cérémonieuse — et sept personnes qui ont passé leur vie à se faire discrètes n'ont aucune idée de comment on répond à ça devant témoins.",
+        "Ils hochent la tête tous ensemble, ce qui ne veut rien dire, et Yohan sait que ça ne veut rien dire.",
+        "Ils restent. Il ne saura jamais s'ils l'ont choisi."
+      ],
+      effets:{sang:12, xp:40, flags:["tr_07_fait","sans_nom_leves"]},
+      fin:true
+    },
+    renvoie:{
+      pnj:"alycia",
+      texte:[
+        "« Renvoyez-les. Sept porteurs visibles autour de moi, ce sont sept cibles, et je suis déjà la plus grosse. »",
+        "Alycia ne discute pas — c'est même exactement l'argument qu'elle aurait employé six mois plus tôt.",
+        "Ce qu'elle dit à la place, très bas, en les regardant repartir : « Ils ont mis quatre ans à accepter de sortir. »"
+      ],
+      fin:true
+    }
+  }
+},
+
+/* ══════════ 5 · la dette des Elfes ══════════ */
 {
   id:"TR_04_DETTE", titre:"Ce que son peuple doit", famille:"ONDE", rarete:"épique",
   image:"tr_dette",
@@ -335,7 +397,7 @@ const EVENTS_TRAME = [
   }
 },
 
-/* ══════════ 5 · la bannière ══════════ */
+/* ══════════ 6 · la bannière ══════════ */
 {
   id:"TR_05_BANNIERE", titre:"La bannière qu'il faut coudre", famille:"POLITIQUE", rarete:"épique",
   image:"tr_banniere",
@@ -392,7 +454,156 @@ const EVENTS_TRAME = [
   }
 },
 
-/* ══════════ 6 · le prix du nom ══════════ */
+
+/* ══════════ 7 · le Roi de Cendre ══════════ */
+{
+  id:"TR_08_ROI_CENDRE", titre:"Une audience qu'on ne refuse pas", famille:"POLITIQUE", rarete:"épique",
+  image:"tr_roi_cendre",
+  requis:{ sangMin:118, flags:["tr_05_fait"], sansFlags:["tr_08_fait"] },
+  scenes:{
+    start:{
+      pnj:"leopold",
+      texte:[
+        "L'escorte impériale est arrivée sans armes tirées et avec un sauf-conduit signé de la main du Roi de Cendre lui-même. Refuser aurait été plus dangereux que venir.",
+        "Léopold IV reçoit dans une pièce de travail, pas dans une salle du trône. Il a l'air fatigué de la manière dont on l'est à cinquante ans quand on tient un empire qui se défait.",
+        "« Karlsberg. » Il ne se lève pas non plus. « Vous savez ce qui m'intéresse chez vous ? Ce n'est pas votre sang. C'est que vous ayez une armée et que vous ne l'ayez pointée sur aucune de mes villes. »"
+      ],
+      choix:[
+        {label:"Demander une reconnaissance officielle de la maison", detail:"Jet de Précision (15) · énorme, et il pourrait dire oui",
+         test:{stat:"precision", dc:15}, reussite:"reco_ok", echec:"reco_ko"},
+        {label:"Lui demander pourquoi Astrah a trahi Karlsberg", detail:"Jet de Volonté (14) · trois générations plus tard",
+         test:{stat:"vol", dc:14}, reussite:"trahison_ok", echec:"trahison_ko"},
+        {label:"Écouter ce qu'il propose", detail:"Il n'a pas fait venir Yohan pour l'admirer",
+         suite:"propose"},
+      ]
+    },
+    propose:{
+      pnj:"leopold",
+      texte:[
+        "« Lucius lève une armée sous les couleurs de mon grand-père », dit Léopold sans détour. « La moitié de mes maisons attend de voir qui gagne avant de choisir. Je n'ai pas les moyens d'une guerre sur deux fronts. »",
+        "Il pousse un feuillet sur la table. « Une charge de marche : vous tenez le nord, vous répondez de ce qui s'y passe, et l'Empire ne vous cherche pas. Ce n'est pas une amnistie. C'est un arrangement. »",
+        "« Et si Lucius l'emporte », ajoute-t-il, « vous et moi aurons exactement le même problème. »"
+      ],
+      choix:[
+        {label:"Accepter la charge de marche", detail:"L'Empire cesse de chasser · Karlsberg lui doit quelque chose",
+         suite:"charge", effets:{sang:20, xp:80, renom:15, suspicion:-25,
+           flags:["tr_08_fait","charge_de_marche"]}},
+        {label:"Refuser : Karlsberg ne relèvera de personne", detail:"L'acte de fondation dit « de son propre chef »",
+         suite:"refuse", effets:{sang:16, xp:70, flags:["tr_08_fait","karlsberg_independante"]}},
+      ]
+    },
+    charge:{
+      texte:[
+        "Yohan signe. C'est un morceau de papier qui dit qu'un Paria répond du nord au nom d'un Empire qui a rasé sa maison — et c'est le premier document officiel portant le nom Karlsberg depuis la Purge.",
+        "Léopold le contresigne sans commentaire. Au moment où Yohan sort, il ajoute, sans lever la tête : « Mon grand-père a eu tort. Je ne le dirai pas deux fois, et je le nierai si on me cite. »"
+      ],
+      fin:true
+    },
+    refuse:{
+      pnj:"leopold",
+      texte:[
+        "« L'acte de fondation de ma maison dit qu'elle tient ses terres de son propre chef et non d'une couronne », dit Yohan. « Je ne signerai pas le contraire. »",
+        "Léopold reprend le feuillet, le relit comme s'il ne l'avait pas écrit, et le repose.",
+        "« Vous savez que je peux vous faire arrêter dans cette pièce. » Un temps. « Vous savez aussi que je ne le ferai pas, parce que Lucius est un problème plus urgent que votre fierté. Sortez. Tenez le nord quand même. Nous ne l'aurons jamais dit. »"
+      ],
+      fin:true
+    },
+    reco_ok:{
+      pnj:"leopold",
+      texte:[
+        "Yohan ne demande pas une grâce : il demande une ligne dans un registre. Que la Maison Karlsberg existe en droit, comme les quarante autres, sans mention particulière.",
+        "Léopold le regarde très longtemps. « Vous demandez la seule chose que je peux donner et qui ne me coûte rien immédiatement, et qui me coûtera tout dans vingt ans. » Il a presque l'air amusé. « C'est bien joué. »",
+        "Il fait venir un scribe. La ligne est écrite pendant que Yohan est encore dans la pièce."
+      ],
+      effets:{sang:26, xp:100, renom:12, suspicion:-15, flags:["tr_08_fait","karlsberg_reconnue"]},
+      choix:[ {label:"Écouter ce qu'il veut en échange", suite:"propose"} ]
+    },
+    reco_ko:{
+      texte:[
+        "Yohan demande trop, trop tôt, et sur le mauvais registre — celui de la réparation plutôt que celui de l'utilité.",
+        "Léopold écoute jusqu'au bout par pure politesse d'État. « Vous confondez ce que je vous dois avec ce que je peux vous donner », dit-il enfin. « Il n'y a que le second qui existe. »"
+      ],
+      effets:{xp:30},
+      choix:[ {label:"Écouter ce qu'il propose", suite:"propose"} ]
+    },
+    trahison_ok:{
+      pnj:"leopold",
+      texte:[
+        "« Pourquoi ? » demande Yohan. « Otto le Noir avait négocié. Karlsberg était entrée dans l'ordre impérial. Pourquoi votre aïeul a-t-il trahi ? »",
+        "Léopold ne fait pas semblant de chercher. Il connaît la réponse, et il l'a manifestement retournée souvent.",
+        "« Parce qu'il a eu peur d'une chose qu'il ne pouvait pas mesurer. » Il croise les mains. « C'est la seule raison pour laquelle les États tuent, jeune homme. Toutes les autres sont des habillages. »"
+      ],
+      effets:{sang:14, xp:70, flags:["tr_08_fait","verite_purge"]},
+      choix:[ {label:"Écouter ce qu'il propose", suite:"propose"} ]
+    },
+    trahison_ko:{
+      texte:[
+        "La question sort chargée de trois générations de rancune, et un empereur n'a aucune raison de répondre à ça.",
+        "« C'était il y a longtemps », dit Léopold, et il passe à autre chose avec une aisance qui a demandé des années d'entraînement."
+      ],
+      choix:[ {label:"Écouter ce qu'il propose", suite:"propose"} ]
+    }
+  }
+},
+
+/* ══════════ 8 · ce que l'Onde suivait ══════════ */
+{
+  id:"TR_09_CE_QUI_SUIVAIT", titre:"Ce que l'Onde suivait", famille:"ONDE", rarete:"épique",
+  image:"tr_suivait",
+  requis:{ sangMin:132, sansFlags:["tr_09_fait"] },
+  scenes:{
+    start:{
+      texte:[
+        "Trois informations que Yohan porte depuis des mois se rejoignent enfin, et il faut être immobile et fatigué pour que ça arrive.",
+        "Un : l'Onde n'a pas frappé au hasard, elle suivait quelque chose qui bougeait. Deux : la Cicatrice récite des noms de porteurs, et elle ne s'arrête pas au passé. Trois : les Pierres du Premier Rugissement sont accordées sur une note qui vient du nord.",
+        "Ce n'est pas une cicatrice. C'est un point de passage, et il est encore ouvert."
+      ],
+      choix:[
+        {label:"Retourner à la Cicatrice et demander", detail:"Jet de Volonté (16) · elle connaît son nom, désormais",
+         test:{stat:"vol", dc:16}, reussite:"demande_ok", echec:"demande_ko"},
+        {label:"Recouper avec l'archive elfique", detail:"Requiert l'archive · trois siècles de mesures",
+         requis:{flag:"archive_elfique"}, suite:"archive"},
+        {label:"Ne pas creuser", detail:"Certaines vérités ne servent personne",
+         suite:"laisse", effets:{sang:8, xp:40, flag:"tr_09_fait"}},
+      ]
+    },
+    demande_ok:{
+      texte:[
+        "Yohan revient sur la pierre vitrifiée et pose la question à voix haute, comme un imbécile ou comme quelqu'un qui a compris que c'est la seule méthode.",
+        "La récitation s'interrompt. Pour la première fois, elle change.",
+        "Elle ne récite plus des noms : elle récite une seule date, encore et encore, dans une langue que personne ne parle plus mais que le sang comprend. Une date à venir. Pas lointaine."
+      ],
+      effets:{sang:28, xp:130, fat:30, pv:-10, flags:["tr_09_fait","date_annoncee"]},
+      fin:true
+    },
+    demande_ko:{
+      texte:[
+        "La pression monte plus vite que la dernière fois — elle a appris, ou lui a désappris — et Yohan rompt au bout de quelques secondes.",
+        "Il redescend en saignant du nez, avec une seule certitude : ce qui parle là-dedans attend quelque chose, et l'attente a une fin."
+      ],
+      effets:{sang:12, xp:50, fat:25, pv:-12, flag:"tr_09_fait"},
+      fin:true
+    },
+    archive:{
+      texte:[
+        "Les colonnes elfiques donnent les mesures d'Onde année par année sur trois siècles. Yohan ne cherche pas les chiffres : il cherche la courbe.",
+        "Elle ne décroît pas régulièrement. Elle pulse — un creux, un pic, un creux — à intervalle exact. Les Elfes l'ont mesurée sans jamais l'interpréter, parce qu'interpréter aurait signifié admettre qu'ils avaient laissé passer quelque chose de cyclique.",
+        "Le prochain pic n'est pas dans trois siècles. Au rythme relevé, il est pour bientôt — et le dernier a produit les Parias."
+      ],
+      effets:{sang:24, xp:120, flags:["tr_09_fait","cycle_compris"]},
+      fin:true
+    },
+    laisse:{
+      texte:[
+        "Yohan replie ses trois informations et les range là où il range ce qui ne l'aide pas à survivre cette semaine.",
+        "Elles ne s'en iront pas. Elles attendront, exactement comme ce qu'elles décrivent."
+      ],
+      fin:true
+    }
+  }
+},
+
+/* ══════════ 9 · le prix du nom ══════════ */
 {
   id:"TR_06_PRIX", titre:"Le prix du nom", famille:"PARIA", rarete:"épique",
   image:"tr_prix",
@@ -472,6 +683,106 @@ const EVENTS_TRAME = [
         "Le nom Karlsberg vient de coûter son premier vrai prix. Il en coûtera d'autres."
       ],
       effets:{or:-250, pv:-14, sang:10, suspicion:10, flags:["tr_06_fait","marque_debiteur"]},
+      fin:true
+    }
+  }
+},
+
+/* ══════════ 10 · ce qu'une maison doit choisir ══════════ */
+{
+  id:"TR_10_LA_MAISON", titre:"Ce qu'une maison doit choisir", famille:"POLITIQUE", rarete:"épique",
+  image:"tr_maison",
+  requis:{ sangMin:162, flags:["tr_06_fait"], sansFlags:["tr_10_fait"] },
+  scenes:{
+    start:{
+      texte:[
+        "Karlsberg existe : un nom, une armée, des ruines tenues, des créanciers. Ce qui n'existe pas encore, c'est une réponse à la seule question que toutes les maisons finissent par poser.",
+        "Trois messages sont arrivés la même semaine, et aucun n'est une menace.",
+        "L'Empire propose une marche. Alycia propose un refuge permanent pour les porteurs. Et une maison voisine propose une alliance ordinaire — la chose la plus banale du monde, et la plus difficile à obtenir pour un nom qui était mort."
+      ],
+      choix:[
+        {label:"Karlsberg sera une marche de l'Empire", detail:"Puissance, protection, et une laisse",
+         suite:"empire", effets:{sang:18, xp:90, renom:20, or:800, suspicion:-20,
+           flags:["tr_10_fait","voie_empire"]}},
+        {label:"Karlsberg sera un refuge", detail:"Ce que personne d'autre ne peut offrir · et une cible permanente",
+         suite:"refuge", effets:{sang:26, xp:100, suspicion:20,
+           flags:["tr_10_fait","voie_refuge","cause_parias"]}},
+        {label:"Karlsberg sera une maison ordinaire", detail:"Des alliances, des dettes, des mariages · la voie lente",
+         suite:"ordinaire", effets:{sang:20, xp:95, renom:10, or:400,
+           flags:["tr_10_fait","voie_ordinaire"]}},
+      ]
+    },
+    empire:{
+      texte:[
+        "Yohan choisit la marche. Karlsberg tiendra le nord au nom d'un Empire qui l'a rasée, ce qui est soit une victoire complète soit une capitulation élégante — et personne, y compris lui, ne saura trancher avant vingt ans.",
+        "Les avantages sont immédiats : l'or, les hommes, la fin de la chasse.",
+        "Alycia lit la charge de marche jusqu'au bout sans un commentaire. Puis elle la repose et parle d'autre chose, et c'est ce silence-là qui coûte le plus cher de toute l'affaire."
+      ],
+      fin:true
+    },
+    refuge:{
+      texte:[
+        "Yohan choisit le refuge. Les ruines du Loup deviennent le seul endroit de Vardhen où un porteur de l'Onde peut dormir sans compter les sorties.",
+        "C'est intenable, c'est ruineux, et ça fait de Karlsberg une cible permanente pour tout ce qui compte à Vardhen.",
+        "Le premier soir, il y a trente-trois personnes dans le carré d'herbe. Le trentième jour, il y en a quarante et une. Personne n'a fait de proclamation : ça s'est su, c'est tout."
+      ],
+      fin:true
+    },
+    ordinaire:{
+      texte:[
+        "Yohan choisit l'ennui. Des alliances, des dettes, des contrats de grain, des mariages entre gens qui se connaissent à peine.",
+        "C'est la voie la plus lente et la seule qui ne dépende de personne. Une maison ne meurt pas de manquer de gloire : elle meurt de manquer de voisins qui ont intérêt à ce qu'elle vive.",
+        "Dans dix ans, plus personne ne se rappellera que Karlsberg était un nom de Paria. C'est exactement le but."
+      ],
+      fin:true
+    }
+  }
+},
+
+/* ══════════ 11 · fin de la chronique ══════════ */
+{
+  id:"TR_11_LE_NOM", titre:"Le nom Karlsberg", famille:"PARIA", rarete:"épique",
+  image:"tr_le_nom",
+  requis:{ sangMin:190, flags:["tr_10_fait"], sansFlags:["tr_11_fait"] },
+  scenes:{
+    start:{
+      texte:[
+        "Il n'y a pas de dernière bataille. C'est la première chose qui surprend Yohan.",
+        "Il y a une matinée d'automne, un carré d'herbe où l'on a relevé deux pans de mur, un loup de pierre fendu du museau à la nuque, et des gens qui font des choses ordinaires à l'intérieur d'une enceinte qui n'existait plus il y a trois ans.",
+        "Quelqu'un demande à Yohan, sans y attacher d'importance, où l'on doit ranger les outils. Il répond. C'est à ce moment précis, en indiquant un appentis, qu'il comprend que c'est fini."
+      ],
+      choix:[
+        {label:"Faire graver l'acte de fondation sur le mur", detail:"Requiert l'acte · « de son propre chef et non d'une couronne »",
+         requis:{flag:"acte_fondation"}, suite:"grave",
+         effets:{sang:10, xp:200, flags:["tr_11_fait","fin_acte"]}},
+        {label:"Ne rien graver du tout", detail:"Les maisons qui durent n'ont pas besoin de se le rappeler",
+         suite:"rien", effets:{sang:10, xp:180, flags:["tr_11_fait","fin_sobre"]}},
+        {label:"Faire relever la statue du loup", detail:"Elle est fendue · on peut la laisser fendue",
+         suite:"loup", effets:{sang:10, xp:190, flags:["tr_11_fait","fin_loup"]}},
+      ]
+    },
+    grave:{
+      texte:[
+        "Le tailleur met onze jours. Le texte est court : la Maison Karlsberg tient ses terres de son propre chef et non d'une couronne, avec les seings et la date d'origine.",
+        "Ce n'est pas une bravade — c'est un document administratif recopié sur une pierre. C'est précisément pour ça que personne ne pourra jamais prétendre qu'il n'a pas existé.",
+        "Yohan ne fait pas de discours. Il regarde le tailleur travailler, tous les jours, jusqu'à la dernière lettre."
+      ],
+      fin:true
+    },
+    rien:{
+      texte:[
+        "Yohan ne fait rien graver. Pas de proclamation, pas de bannière au-dessus de la porte, pas de date sur le mur.",
+        "Les maisons qui durent ne passent pas leur temps à rappeler qu'elles existent : elles paient leurs dettes, tiennent leurs routes et marient leurs enfants, et personne ne songe à vérifier leurs titres.",
+        "Le soir, il y a des feux dans le carré d'herbe et quelqu'un se plaint du prix du sel. C'est la chose la plus extraordinaire qui soit arrivée à cet endroit depuis la Purge."
+      ],
+      fin:true
+    },
+    loup: {
+      texte:[
+        "Ils remontent la statue sans reboucher la fente. C'était le seul point sur lequel Yohan a été catégorique.",
+        "Un loup de pierre fendu du museau à la nuque, redressé quand même, à l'endroit exact où il a toujours été.",
+        "Les voyageurs qui passent demandent parfois pourquoi on ne l'a pas réparée. Les gens d'ici répondent qu'elle est très bien comme ça, et ils changent de sujet."
+      ],
       fin:true
     }
   }

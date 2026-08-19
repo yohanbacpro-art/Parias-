@@ -13,6 +13,12 @@
  *
  * Format identique aux événements écrits, avec un type de scène en plus :
  *   bataille: { def:"BAT_ROUTE", victoire:"scene", defaite:"scene" }
+ *
+ * Les CAMPAGNES MAJEURES (une par peuple) exigent en plus que la crise de ce
+ * peuple ait réellement mûri dans la simulation du monde :
+ *   requis:{ tensionMin:{ peuple:"khesh", n:60 } }
+ * Elles n'apparaissent donc pas au même moment d'une partie à l'autre — c'est le
+ * monde qui décide quand, pas le joueur.
  */
 
 const CONTRATS_SPECIAUX = [
@@ -444,6 +450,444 @@ const CONTRATS_SPECIAUX = [
         "Yohan ne vient pas. L'armée impériale occupe le terrain une journée entière, puis se retire en bon ordre.",
         "Aucune représaille, aucun message. Simplement, quelque part, une ligne rayée puis réécrite un peu plus haut dans une colonne."
       ],
+      fin:true
+    }
+  }
+},
+
+
+/* ══════════════════════════ CAMPAGNES MAJEURES ══════════════════════════ */
+/* Une par peuple. Le monde décide de leur heure : voir requis.tensionMin. */
+
+{
+  id:"CG_KHESH", categorie:"campagne", titre:"L'Unification des Sables",
+  commanditaire:"Kem-Val le Banni", lieu:"Les Dunes Khesh",
+  image:"cg_khesh", famille:"KHESH", rarete:"épique",
+  requis:{ renomMin:40, tensionMin:{peuple:"khesh", n:55}, sansFlags:["cg_khesh_fait"] },
+  resume:"Khal-Vaene a rassemblé les tribus. Kem-Val a réuni ce qui refuse. Il manque une armée qui n'appartienne à aucun des deux.",
+  scenes:{
+    start:{
+      pnj:"kemval",
+      texte:[
+        "Kem-Val n'a pas envoyé de message : il est venu, seul, à pied, et il s'est assis sans qu'on l'y invite.",
+        "« Mon frère a réuni les tribus. Chez nous, réunir les tribus veut dire une seule chose : on part vers le nord et on ne s'arrête qu'à la mer. »",
+        "Il pose ses mains à plat. « Je peux lui opposer la moitié des lances. Pas plus. Il me manque quelque chose qui ne soit ni à lui ni à moi — sinon ce sera une guerre de famille, et une guerre de famille ne se termine jamais. »"
+      ],
+      choix:[
+        {label:"Amener l'armée de Karlsberg", detail:"Bataille · un tiers neutre change tout",
+         suite:"champ"},
+        {label:"Demander ce que Yohan y gagne", detail:"Jet de Précision (13) · il ne s'en offusquera pas",
+         test:{stat:"precision", dc:13}, reussite:"gagne_ok", echec:"gagne_ko"},
+        {label:"Refuser de se mêler d'une succession Khesh", detail:"Ils règleront ça entre eux, comme toujours",
+         suite:"refus", effets:{flags:["cg_khesh_fait","khesh_seuls"]}},
+      ]
+    },
+    gagne_ok:{
+      pnj:"kemval",
+      texte:[
+        "« Qu'est-ce que j'y gagne ? »",
+        "Kem-Val ne prend pas mal la question — il a l'air soulagé qu'on la pose franchement plutôt que d'invoquer l'honneur.",
+        "« Les Dunes cessent d'être une frontière. Tu passes, tu commerces, tu recrutes. Et le jour où quelqu'un viendra te chercher, tu auras deux mille lances qui te devront quelque chose. » Il hausse les épaules. « Ou bien mon frère gagne, et tu n'auras plus jamais de Khesh comme voisins tranquilles. »"
+      ],
+      effets:{xp:36, sang:5},
+      choix:[ {label:"Amener l'armée", suite:"champ"} ]
+    },
+    gagne_ko:{
+      texte:[
+        "Yohan pose la question de travers, avec ce ton de marchand qui vexe partout et dans les dunes plus qu'ailleurs.",
+        "Kem-Val répond quand même, brièvement, sans un mot de trop. Il ne redemandera rien."
+      ],
+      choix:[ {label:"Amener l'armée", suite:"champ"} ]
+    },
+    champ:{
+      texte:[
+        "La plaine de sel est blanche, plate et sans un pouce de couvert. On y voit tout venir, ce qui n'aide personne.",
+        "En face, les lances de Khal-Vaene sont rangées par tribu, chaque bannière à sa place. Il a fait ça proprement."
+      ],
+      bataille:{ def:"BAT_KHESH", victoire:"gagne", defaite:"perdu" }
+    },
+    gagne:{
+      pnj:"kemval",
+      texte:[
+        "Les lances se plantent dans le sel une par une, à mesure que leurs porteurs changent de camp. Chez les Khesh, on ne se rend pas : on reconnaît.",
+        "Kem-Val ne poursuit pas son frère. Il reste au milieu de la plaine jusqu'au soir, et quand il revient, il ne dit qu'une chose : « Le puits du nord est à toi. Tous les puits sont à toi. »"
+      ],
+      effets:{flags:["cg_khesh_fait","kemval_allie"]},
+      fin:true
+    },
+    perdu:{
+      texte:[
+        "La ligne cède au centre et le sel boit ce qu'il faut. Kem-Val couvre la retraite lui-même, ce qui lui ressemble et ne lui vaudra rien.",
+        "Les tribus marcheront vers le nord. Yohan entendra parler de ce qu'elles y feront, comme tout le monde, par les Chroniques."
+      ],
+      effets:{flag:"cg_khesh_fait"},
+      fin:true
+    },
+    refus:{
+      texte:[
+        "Kem-Val hoche la tête sans insister et se relève. Il a fait quatre jours de marche pour cette conversation et il n'en montre rien.",
+        "« Tu as raison », dit-il en partant. « Ce n'est pas ta guerre. » C'est exactement ce qu'il fallait ne pas entendre."
+      ],
+      fin:true
+    }
+  }
+},
+
+{
+  id:"CG_KARDURAK", categorie:"campagne", titre:"La Guerre des Profondeurs",
+  commanditaire:"Kar-Durak", lieu:"Kar-Durak",
+  image:"cg_kardurak", famille:"NAIN", rarete:"épique",
+  requis:{ renomMin:42, tensionMin:{peuple:"nains", n:55}, sansFlags:["cg_kardurak_fait"] },
+  resume:"Le tunnel n'allait pas au Défilé. Il allait sous la Halle des Forges, et il vient de déboucher.",
+  scenes:{
+    start:{
+      pnj:"gorm",
+      texte:[
+        "Le messager nain est arrivé en trois jours et il est mort en arrivant, ce qui dit à peu près tout de la course.",
+        "Le tunnel ne visait pas le Défilé. Il visait Kar-Durak, par-dessous, et il a débouché avant-hier au milieu de la Halle des Forges.",
+        "Gorm écrit, sur un feuillet qui sent la fumée : *Nous tenons trois salles. Nous n'en tiendrons pas quatre. Si le nom de Karlsberg veut dire quelque chose, qu'il le dise maintenant.*"
+      ],
+      choix:[
+        {label:"Descendre sous la montagne", detail:"Bataille · aucun front à contourner",
+         suite:"champ"},
+        {label:"Envoyer de l'or et des vivres à la place", detail:"−800 or · ils tiendront peut-être plus longtemps",
+         requis:{or:800}, suite:"or", effets:{or:-800, flags:["cg_kardurak_fait","kardurak_soutenu"]}},
+        {label:"Ne pas venir", detail:"Une armée de surface sous terre, c'est une armée perdue",
+         suite:"refus", effets:{flags:["cg_kardurak_fait","kardurak_abandonne"]}},
+      ]
+    },
+    champ:{
+      texte:[
+        "Sous la montagne, il n'y a ni ciel ni flanc : trois salles, trois goulets, et de la roche partout ailleurs.",
+        "La Halle des Forges brûle encore d'un feu que personne n'a allumé. Le sol du Grand Escalier remue."
+      ],
+      bataille:{ def:"BAT_KARDURAK", victoire:"gagne", defaite:"perdu" }
+    },
+    gagne:{
+      pnj:"gorm",
+      texte:[
+        "Quand le dernier tombe, Gorm s'assoit au milieu de sa Halle et reste là très longtemps sans rien dire.",
+        "Puis il se relève, prend un burin, et grave lui-même dans le pilier central un nom qui n'est pas nain.",
+        "« Ça durera plus longtemps que nous deux », dit-il. C'est la chose la plus affectueuse qu'un nain puisse faire."
+      ],
+      effets:{flags:["cg_kardurak_fait","gorm_ami","kardurak_dette"]},
+      fin:true
+    },
+    perdu:{
+      texte:[
+        "Les niveaux hauts sont perdus. Les nains scellent derrière eux, comme ils l'ont déjà fait une fois, et redescendent vivre plus bas.",
+        "Gorm serre l'avant-bras de Yohan avant qu'il ne remonte au jour. Il ne le remercie pas et ne lui reproche rien. Les deux auraient été déplacés."
+      ],
+      effets:{flag:"cg_kardurak_fait"},
+      fin:true
+    },
+    or:{
+      texte:[
+        "Huit cents pièces de vivres et de fer partent vers la montagne par la route la plus rapide.",
+        "Kar-Durak tiendra plus longtemps. Peut-être assez. Yohan n'en saura rien avant des mois, et c'est le prix de n'être pas venu."
+      ],
+      fin:true
+    },
+    refus:{
+      texte:[
+        "Yohan ne répond pas au feuillet. C'est militairement défendable : une armée de surface engagée sous terre est une armée qu'on ne récupère pas.",
+        "Ce sera aussi la première chose que les nains diront de lui, longtemps après que tout le reste aura été oublié."
+      ],
+      fin:true
+    }
+  }
+},
+
+{
+  id:"CG_SURFACE", categorie:"campagne", titre:"La Remontée",
+  commanditaire:"Les basses terres", lieu:"Les Profondeurs Vertes",
+  image:"cg_surface", famille:"PEAU_VERTE", rarete:"épique",
+  requis:{ renomMin:45, tensionMin:{peuple:"peaux_vertes", n:60}, sansFlags:["cg_surface_fait"] },
+  resume:"Ils ne sortent plus par une galerie : par toutes à la fois, sur trente lieues. Personne n'a d'armée là-bas. Personne sauf Yohan.",
+  scenes:{
+    start:{
+      texte:[
+        "Ce ne sont pas des rumeurs : ce sont des gens sur les routes, avec des charrettes, dans le mauvais sens.",
+        "La Remontée a commencé sur trente lieues de front. Aucune maison ne peut couvrir ça, et aucune n'essaie — chacune se replie sur ses murs et laisse les basses terres au milieu.",
+        "Il n'y a pas de commanditaire. Il n'y a que des villages, et un endroit où une armée peut encore servir à quelque chose."
+      ],
+      choix:[
+        {label:"Choisir un point et le tenir", detail:"Bataille · on ne sauve pas trente lieues, on en sauve une",
+         suite:"champ"},
+        {label:"Organiser l'évacuation plutôt que la défense", detail:"Jet de Précision (14) · sauver des gens, pas du terrain",
+         test:{stat:"precision", dc:14}, reussite:"evac_ok", echec:"evac_ko"},
+        {label:"Se replier avec les maisons", detail:"C'est ce que fait tout le monde",
+         suite:"repli", effets:{flags:["cg_surface_fait","basses_terres_perdues"]}},
+      ]
+    },
+    evac_ok:{
+      texte:[
+        "Yohan renonce à défendre et se met à compter : les routes praticables, les gués, les charrettes disponibles, le temps qu'il faut pour vider un village.",
+        "Son armée ne se bat pas — elle escorte, elle ouvre les routes, elle tient les carrefours douze heures et repart. Onze villages passent au nord.",
+        "Ce n'est pas une victoire. Personne n'écrira de chanson là-dessus. Onze villages, tout de même."
+      ],
+      effets:{renom:22, sang:14, xp:150, or:-200, flags:["cg_surface_fait","evacuation_reussie"]},
+      fin:true
+    },
+    evac_ko:{
+      texte:[
+        "Le plan est bon et arrive tard. Trois villages sur onze passent le gué avant que la route ne soit coupée.",
+        "Yohan reste sur la levée avec ce qu'il reste de temps."
+      ],
+      effets:{sang:5, xp:40},
+      choix:[ {label:"Tenir la levée", suite:"champ"} ]
+    },
+    champ:{
+      texte:[
+        "Le point choisi vaut ce que vaut n'importe quel point sur trente lieues : rien de particulier, sauf qu'on a décidé de s'y arrêter.",
+        "Ils arrivent par vagues, sans ordre apparent, et la première n'est pas la pire."
+      ],
+      bataille:{ def:"BAT_SURFACE", victoire:"gagne", defaite:"perdu" }
+    },
+    gagne:{
+      texte:[
+        "La deuxième vague ralentit. La troisième s'arrête à distance et regarde. La quatrième ne vient pas.",
+        "Personne n'a donné cet ordre. Ils ont simplement vu ce qui restait de la première, et une migration, ça se décide vague par vague.",
+        "Sur trente lieues de front, la Remontée s'arrête ici. Personne ne saura jamais pourquoi ici plutôt qu'ailleurs."
+      ],
+      effets:{flag:"cg_surface_fait"},
+      fin:true
+    },
+    perdu:{
+      texte:[
+        "La levée cède avant midi. Yohan décroche avec ce qui tient encore debout, et derrière eux les basses terres cessent d'exister comme lieu habité.",
+        "Il faudra une génération. Peut-être deux."
+      ],
+      effets:{flag:"cg_surface_fait"},
+      fin:true
+    },
+    repli:{
+      texte:[
+        "Yohan replie son armée derrière les murs, comme les maisons, comme tout le monde, et regarde de loin la fumée monter sur trente lieues.",
+        "C'était le choix raisonnable. Il le restera longtemps après qu'il aura cessé d'être supportable."
+      ],
+      fin:true
+    }
+  }
+},
+
+{
+  id:"CG_HORDE", categorie:"campagne", titre:"La Grande Horde",
+  commanditaire:"Personne — les hardes marchent", lieu:"La Forêt des Mille Cornes",
+  image:"cg_horde", famille:"HOMME_BETE", rarete:"épique",
+  requis:{ renomMin:38, tensionMin:{peuple:"hommes_betes", n:60}, sansFlags:["cg_horde_fait"] },
+  resume:"Les hardes marchent ensemble pour la première fois depuis des siècles. Quelqu'un a repris le titre de Seigneur des Cornes.",
+  scenes:{
+    start:{
+      texte:[
+        "Les totems de la lisière ont été abattus — par ceux qui les avaient plantés. Une harde qui abat ses propres bornes ne défend plus un territoire : elle en cherche un autre.",
+        "Elles marchent ensemble, ce qui n'était pas arrivé depuis des siècles, et elles marchent vers les terres cultivées.",
+        "Quelqu'un a repris un titre que tout le monde croyait légendaire."
+      ],
+      choix:[
+        {label:"Les arrêter au gué du nord", detail:"Bataille · l'endroit où la forêt cesse",
+         suite:"champ"},
+        {label:"Demander à parler au Seigneur des Cornes", detail:"Jet de Volonté (15) · personne n'a essayé",
+         requis:{flag:"harde_toleree"}, test:{stat:"vol", dc:15}, reussite:"parle_ok", echec:"champ"},
+        {label:"Laisser passer", detail:"Ce ne sont pas ses terres",
+         suite:"laisse", effets:{flags:["cg_horde_fait","grande_horde_passee"]}},
+      ]
+    },
+    parle_ok:{
+      texte:[
+        "Yohan entre seul sous les arbres, sans arme visible, et on le laisse aller loin — parce qu'un jour il a franchi une ligne de totems les paumes ouvertes, et que ces choses-là se transmettent.",
+        "Le Seigneur des Cornes n'est pas un géant : c'est une vieille femme, appuyée sur une hampe, entourée de chefs qui ont trois fois sa taille.",
+        "« Nous partons parce que la forêt meurt », dit-elle. « Pas parce que nous voulons vos champs. Montre-nous où aller, et nous n'irons pas là. »"
+      ],
+      choix:[
+        {label:"Leur ouvrir les Champs de Cendre", detail:"Personne n'y vit · personne n'y vivra",
+         suite:"cendre", effets:{renom:20, sang:20, xp:180,
+           flags:["cg_horde_fait","hardes_installees","crise_hommes_betes_reglee"]}},
+        {label:"Refuser : il n'a pas de terres à donner", detail:"C'est vrai · et ça ne changera rien à ce qui suit",
+         suite:"champ"},
+      ]
+    },
+    cendre:{
+      texte:[
+        "Yohan leur ouvre les Champs de Cendre — une terre brûlée par des guerres humaines, que personne ne réclame et que personne ne cultivera avant un siècle.",
+        "La vieille femme écoute la description jusqu'au bout, puis hoche la tête une fois. Les hardes obliquent vers l'est dans la nuit.",
+        "Aucune bataille n'a lieu. Personne ne saura qu'il y en avait une à éviter, et c'est très exactement le problème de ce genre de victoire."
+      ],
+      fin:true
+    },
+    champ:{
+      texte:[
+        "Le gué du nord est l'endroit où la forêt cesse et où les champs commencent. C'est là que ça se joue, faute d'ailleurs.",
+        "Elles arrivent au son des tambours, sans se presser, et elles couvrent la lisière d'un bord à l'autre."
+      ],
+      bataille:{ def:"BAT_HORDE", victoire:"gagne", defaite:"perdu" }
+    },
+    gagne:{
+      texte:[
+        "Les hardes se défont comme elles s'étaient faites : d'un coup, sans négociation, chacune reprenant sa direction.",
+        "Le titre redevient vacant. Il le restera peut-être encore quelques siècles — ou jusqu'à ce que la forêt meure pour de bon."
+      ],
+      effets:{flag:"cg_horde_fait"},
+      fin:true
+    },
+    perdu:{
+      texte:[
+        "Le gué est franchi avant le soir. Ce qui suit se lira dans les Chroniques pendant deux ans.",
+        "Il y a un Seigneur des Cornes, désormais, et tout le monde connaît son nom."
+      ],
+      effets:{flag:"cg_horde_fait"},
+      fin:true
+    },
+    laisse:{
+      texte:[
+        "Yohan ne bouge pas son armée. Les hardes passent le gué et se répandent sur les terres cultivées.",
+        "Ce n'étaient pas ses terres. Il se le répétera plusieurs fois."
+      ],
+      fin:true
+    }
+  }
+},
+
+{
+  id:"CG_ELTHARION", categorie:"campagne", titre:"La Faute d'Eltharion",
+  commanditaire:"Princesse Alarielle", lieu:"La Cour lumineuse d'Eltharion",
+  image:"cg_eltharion", famille:"ELFE", rarete:"épique",
+  requis:{ renomMin:44, tensionMin:{peuple:"elfes", n:50}, flags:["archive_elfique"],
+           sansFlags:["cg_eltharion_fait"] },
+  resume:"L'archive est réelle et Alarielle veut la lire à voix haute devant la cour. La moitié de cette cour a des soldats.",
+  scenes:{
+    start:{
+      pnj:"alarielle",
+      texte:[
+        "« Je vais la lire », dit Alarielle. « Devant la cour, à voix haute, du premier chiffre au dernier. »",
+        "Elle sait exactement ce que cela déclenchera : la moitié des maisons a intérêt à ce que trois siècles restent silencieux, et cette moitié-là entretient des archers.",
+        "« Je ne vous demande pas de me protéger. Je vous demande de tenir le pavillon des archives assez longtemps pour que j'aie fini de lire. »"
+      ],
+      choix:[
+        {label:"Tenir le pavillon", detail:"Bataille · il faut tenir, pas vaincre",
+         suite:"champ"},
+        {label:"Lui proposer de publier l'archive ailleurs", detail:"Jet de Précision (14) · sans effusion",
+         test:{stat:"precision", dc:14}, reussite:"ailleurs_ok", echec:"champ"},
+        {label:"Lui dire de brûler l'archive", detail:"Trois siècles de plus ne changeront rien",
+         suite:"brule", effets:{flags:["cg_eltharion_fait","archive_etouffee"]}},
+      ]
+    },
+    ailleurs_ok:{
+      pnj:"alarielle",
+      texte:[
+        "« Une lecture publique, c'est un événement », dit Yohan. « Trois cents copies chez trois cents notaires humains, c'est un fait. On n'assassine pas un fait. »",
+        "Alarielle le regarde longuement. « Vous proposez de la donner à des humains. » Un temps. « Mon peuple ne s'en remettra pas. »",
+        "« Non », convient-il. Elle sourit — un vrai sourire, très bref. « Faisons ça. »"
+      ],
+      effets:{renom:12, sang:18, xp:160, or:-400,
+        flags:["cg_eltharion_fait","archive_publiee","crise_elfes_reglee"]},
+      fin:true
+    },
+    champ:{
+      texte:[
+        "Le pavillon des archives est en pierre blanche et n'a jamais été conçu pour être défendu, ce qui se voit tout de suite.",
+        "Alarielle monte à la tribune et ouvre le premier registre. Dehors, les premiers traits partent avant qu'elle ait fini la première colonne."
+      ],
+      bataille:{ def:"BAT_ELTHARION", victoire:"gagne", defaite:"perdu" }
+    },
+    gagne:{
+      pnj:"alarielle",
+      texte:[
+        "Elle a fini de lire. C'est la seule chose qui comptait, et elle a fini de lire.",
+        "Trois siècles de mesures, de dates et de signatures, énoncés à voix haute devant une cour qui ne peut plus prétendre ne pas savoir.",
+        "Tyrion était au fond de la salle du début à la fin. Il n'a pas fait un geste pour empêcher quoi que ce soit, et ce sera consigné aussi."
+      ],
+      effets:{flag:"cg_eltharion_fait"},
+      fin:true
+    },
+    perdu:{
+      texte:[
+        "Le pavillon brûle avec ce qu'il contenait, et Alarielle en est sortie de justesse avec quatre feuillets sur trois cents.",
+        "Officiellement, c'est un accident. Officiellement, il n'y a jamais rien eu à mesurer."
+      ],
+      effets:{flag:"cg_eltharion_fait"},
+      fin:true
+    },
+    brule: {
+      pnj:"alarielle",
+      texte:[
+        "« Brûlez-la », dit Yohan. « Trois siècles de plus ne changeront rien, et vous, vous serez morte dans trois jours. »",
+        "Alarielle ne discute pas. C'est ce qui rend la chose insupportable : elle obéit, proprement, comme elle fait tout.",
+        "Ils regardent l'archive brûler ensemble. Ni l'un ni l'autre ne reparlera de cette soirée."
+      ],
+      fin:true
+    }
+  }
+},
+
+{
+  id:"CG_PARIAS", categorie:"campagne", titre:"La Renaissance des Parias",
+  commanditaire:"Alycia de Callensbourg", lieu:"Un refuge sans nom",
+  image:"cg_parias", famille:"PARIA", rarete:"épique",
+  requis:{ renomMin:46, compagnon:"alycia", tensionMin:{peuple:"parias", n:45},
+           sansFlags:["cg_parias_fait"] },
+  resume:"L'Ordre des Chasseurs a localisé le refuge. Trente-trois noms, et tout ce que Yohan a pu lever.",
+  scenes:{
+    start:{
+      pnj:"alycia",
+      texte:[
+        "Alycia n'a pas la liste à la main. C'est la première fois, et c'est ce qui inquiète Yohan avant qu'elle n'ait parlé.",
+        "« Ils l'ont trouvé. » Elle ne dit pas *le refuge*, elle ne le nomme jamais. « Pas par hasard. Quelqu'un a vendu l'emplacement, et je saurai qui, plus tard, s'il y a un plus tard. »",
+        "Elle relève enfin les yeux. « Trente-trois personnes. Deux savent se battre. J'y vais de toute façon, avec ou sans toi — je te le dis pour que tu ne croies pas me faire une faveur. »"
+      ],
+      choix:[
+        {label:"Y aller avec toute l'armée", detail:"Bataille · rien à négocier",
+         suite:"champ"},
+        {label:"Vider le refuge avant qu'ils n'arrivent", detail:"Jet de Précision (15) · une course, pas une bataille",
+         test:{stat:"precision", dc:15}, reussite:"vide_ok", echec:"champ"},
+        {label:"Payer l'Ordre pour qu'il regarde ailleurs", detail:"−1200 or · ils ont un tarif, comme tout le monde",
+         requis:{or:1200}, suite:"paye", effets:{or:-1200}},
+      ]
+    },
+    vide_ok:{
+      pnj:"alycia",
+      texte:[
+        "Yohan ne défend pas le refuge : il le vide. Trois nuits, quatre routes, des charrettes payées trop cher et des gens qu'on réveille sans explication.",
+        "Quand l'Ordre des Chasseurs arrive, il trouve des lits froids, des cendres tièdes et rien d'autre. Une opération parfaitement montée contre un endroit vide.",
+        "Alycia compte les têtes à l'arrivée. Trente-trois. Elle recommence deux fois, à voix haute, et il n'y a rien à ajouter à ça."
+      ],
+      effets:{renom:18, sang:30, xp:220, or:-500,
+        flags:["cg_parias_fait","refuge_vide","crise_parias_reglee"]},
+      fin:true
+    },
+    champ:{
+      texte:[
+        "Le refuge est au bout d'un chemin creux, dans un ancien prieuré dont les murs tiennent encore.",
+        "L'Ordre des Chasseurs monte en trois colonnes, sans se presser. Ils ne sont pas venus pour une bataille : ils sont venus pour une rafle, et ils découvrent en arrivant qu'il y a une armée devant."
+      ],
+      bataille:{ def:"BAT_PARIAS", victoire:"gagne", defaite:"perdu" }
+    },
+    gagne:{
+      pnj:"alycia",
+      texte:[
+        "Le lendemain matin, ils sont trente-trois. C'est la première fois depuis la Purge que ce chiffre ne baisse pas d'une année sur l'autre.",
+        "Alycia ne sort pas le rouleau ce soir-là. Elle s'assoit contre un mur du prieuré et ne fait rien du tout pendant plusieurs heures, ce qui, chez elle, est un événement historique.",
+        "« Il faudra recommencer », finit-elle par dire. « Ailleurs, autrement, dans six mois. » Elle ferme les yeux. « Mais pas ce soir. »"
+      ],
+      effets:{flag:"cg_parias_fait"},
+      fin:true
+    },
+    perdu:{
+      pnj:"alycia",
+      texte:[
+        "Yohan décroche avec ce qu'il peut emmener, et ce qu'il peut emmener n'est pas trente-trois.",
+        "Alycia ne dit rien pendant trois jours. Le quatrième, elle sort le rouleau, et elle commence à rayer."
+      ],
+      effets:{flag:"cg_parias_fait"},
+      fin:true
+    },
+    paye:{
+      texte:[
+        "Douze cents pièces changent de main dans une arrière-salle, et l'opération est reportée pour raisons de renseignement insuffisant.",
+        "Ça marche. Ça marche exactement une fois, et les deux parties le savent en signant.",
+        "Alycia apprend le prix par un tiers, des semaines plus tard. Elle ne remercie pas — elle demande combien de temps ça achète. Yohan n'a pas la réponse."
+      ],
+      effets:{sang:12, xp:120, flags:["cg_parias_fait","ordre_achete"]},
       fin:true
     }
   }

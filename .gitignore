@@ -1,5 +1,5 @@
 node_modules/
-dist/
+# dist/ est un artefact de sortie, mais parias.html est partagé volontairement
 .DS_Store
 *.local
 .vite/
