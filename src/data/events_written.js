@@ -17,6 +17,8 @@
  *   effets   appliqués à l'entrée de la scène
  *   choix    tableau de choix (absent = scène terminale)
  *   combat   { groupe:[{bst:"BST_002", n:2}], victoire:"id", defaite:"id" }
+ *            Une défaite renvoie vers la scène `defaite` : pas de mort
+ *            permanente, sauf si l'on ajoute mortel:true.
  *
  * Choix :
  *   label     texte du bouton
@@ -986,5 +988,385 @@ const EVENTS_WRITTEN = [
     }
   }
 },
+
+/* ══════════════════════════════ PEAU-VERTE · Profondeurs Vertes ══════════════════════════════ */
+{
+  id:"EW_TUNNEL", titre:"Le tunnel qui monte", famille:"PEAU_VERTE", rarete:"inhabituel",
+  image:"evt_tunnel", lieux:["LOC_009","LOC_008"],
+  scenes:{
+    start:{
+      texte:[
+        "La galerie n'est pas naine. Les nains taillent droit, étayent, et laissent des marques de forge tous les trois rangs. Celle-ci est creusée à la va-vite, en biais, et elle monte — ce qui est la seule direction qui compte ici.",
+        "Sur le sol, la terre remuée est fraîche. Sur les parois, à hauteur d'épaule, des entailles régulières : quelqu'un compte les jours.",
+        "Une galerie qui monte vers la surface, creusée depuis les Profondeurs, avec un calendrier gravé dedans. Ce n'est pas une mine. C'est un projet."
+      ],
+      choix:[
+        {label:"Suivre le tunnel vers le haut", detail:"Savoir où il débouche · quitte à croiser les creuseurs",
+         suite:"suit"},
+        {label:"Compter les entailles", detail:"Jet de Précision (12) · le calendrier dit tout",
+         test:{stat:"precision", dc:12}, reussite:"compte_ok", echec:"compte_ko"},
+        {label:"Effondrer la galerie", detail:"Jet de Volonté (13) · gagner du temps pour ceux d'en haut",
+         test:{stat:"vol", dc:13}, reussite:"effondre_ok", echec:"effondre_ko"},
+      ]
+    },
+    compte_ok:{
+      texte:[
+        "Cent quatre-vingt-onze entailles, groupées par sept. Trente-sept semaines de creusement continu, sans interruption, par une équipe assez nombreuse pour se relayer.",
+        "Yohan mesure la pente à l'œil et fait le calcul dans l'autre sens : à ce rythme, la galerie débouchera à la surface avant la fin de l'année. Et vu l'orientation, elle débouchera **sous Kar-Durak**.",
+        "Ce n'est pas une bande de pillards. C'est un siège que personne n'a vu commencer."
+      ],
+      effets:{xp:34, sang:4, flag:"tunnel_kardurak"},
+      fin:true
+    },
+    compte_ko:{
+      texte:[
+        "Yohan compte les entailles trois fois et obtient trois nombres différents. La roche suinte, la lumière est mauvaise, et certaines marques se recouvrent.",
+        "Il repart avec une impression, pas une information : quelque chose se prépare, et depuis longtemps."
+      ],
+      effets:{xp:10, fat:6},
+      fin:true
+    },
+    suit:{
+      texte:[
+        "La pente est régulière et le silence dure une demi-heure. Puis il cesse, d'un coup, parce que quelqu'un a laissé tomber un outil devant.",
+        "Ils sont trois, ils ne s'attendaient à personne, et ils sont entre Yohan et le seul chemin qui remonte."
+      ],
+      combat:{ groupe:[{bst:"BST_017",n:3}], victoire:"suit_ok", defaite:"suit_ko" }
+    },
+    suit_ok:{
+      texte:[
+        "Le chantier abandonné en vaut la peine : des outils en quantité, des vivres, et une réserve de pièces prélevées sur des mois de pillage.",
+        "Yohan remonte au jour par un boyau qui débouche à flanc de colline, à un jet de pierre d'une route de commerce. Personne, en surface, n'a la moindre idée de ce qui se creuse dessous."
+      ],
+      effets:{or:180, xp:40, sang:3, flag:"tunnel_kardurak"},
+      fin:true
+    },
+    suit_ko:{
+      texte:[
+        "Yohan décroche vers le bas, ce qui est la mauvaise direction, et met deux heures à retrouver un embranchement connu.",
+        "Il ressort par où il est entré, épuisé, en sachant seulement qu'on creuse et qu'on est nombreux."
+      ],
+      effets:{fat:18, pv:-6, xp:14},
+      fin:true
+    },
+    effondre_ok:{
+      texte:[
+        "Yohan repère l'étai le plus sollicité — il n'y en a que quatre sur toute la longueur visible, ce qui en dit long sur la hâte des creuseurs — et travaille dessus jusqu'à ce que le plafond commence à parler.",
+        "Il sort en courant devant l'effondrement et le sent le rattraper dans le dos comme un souffle chaud.",
+        "Trente-sept semaines de travail. Il vient d'en effacer une bonne partie, et personne à Kar-Durak ne saura jamais qu'il faut le remercier."
+      ],
+      effets:{xp:44, sang:6, fat:20, flag:"tunnel_effondre"},
+      fin:true
+    },
+    effondre_ko:{
+      texte:[
+        "L'étai cède mieux que prévu, et beaucoup plus vite. Yohan se jette en arrière et prend la moitié du plafond sur les jambes.",
+        "Il se dégage seul, ce qui lui prend une heure et lui coûte cher. La galerie est bouchée sur dix pas — un contretemps, pas une victoire."
+      ],
+      effets:{pv:-14, fat:22, xp:18, flag:"tunnel_effondre"},
+      fin:true
+    }
+  }
+},
+
+/* ══════════════════════════════ HOMME-BÊTE · Forêt des Mille Cornes ══════════════════════════════ */
+{
+  id:"EW_HARDE", titre:"La harde qui laisse passer", famille:"HOMME_BETE", rarete:"commun",
+  image:"evt_harde", lieux:["LOC_010","LOC_020"],
+  scenes:{
+    start:{
+      texte:[
+        "La forêt cesse d'être une forêt à un endroit précis : une ligne de totems plantés dans la mousse, hauts comme un homme, taillés dans des troncs vivants qui continuent de pousser autour des sculptures.",
+        "Derrière la ligne, rien ne bouge — et c'est justement ce qui prouve qu'on y est très attentivement observé.",
+        "La harde n'attaque pas les voyageurs qui font demi-tour. C'est la seule chose que tout le monde sait sur les Hommes-Bêtes, et la seule chose qui soit vraie."
+      ],
+      choix:[
+        {label:"Faire demi-tour", detail:"Deux jours de détour · aucun risque",
+         suite:"demitour", effets:{fat:8, xp:8}},
+        {label:"Franchir la ligne en montrant les mains vides", detail:"Jet de Volonté (12)",
+         test:{stat:"vol", dc:12}, reussite:"franchit_ok", echec:"franchit_ko"},
+        {label:"Laisser une offrande devant un totem", detail:"−40 or · on n'entre pas les mains vides",
+         requis:{or:40}, suite:"offrande", effets:{or:-40}},
+      ]
+    },
+    demitour:{
+      texte:[
+        "Yohan tourne les talons devant la ligne de totems et ne regarde pas en arrière.",
+        "À trois cents pas, il entend enfin quelque chose bouger derrière lui — le bruit d'une escorte qui rentre chez elle, ayant vérifié qu'il partait vraiment."
+      ],
+      fin:true
+    },
+    franchit_ok:{
+      texte:[
+        "Yohan franchit la ligne les paumes ouvertes, à hauteur d'épaule, et s'arrête aussitôt de l'autre côté au lieu d'avancer. C'est ce deuxième geste qui compte : il demande la permission au lieu de la prendre.",
+        "Il attend un temps interminable. Puis, à sa droite, la fougère se déplie sur quelque chose de très grand qui était accroupi là depuis le début.",
+        "La harde le laisse traverser. On ne lui parle pas, on ne l'accompagne pas ; simplement, à chaque clairière, quelqu'un est déjà là et s'écarte."
+      ],
+      effets:{xp:28, sang:3, flag:"harde_toleree"},
+      fin:true
+    },
+    franchit_ko:{
+      texte:[
+        "Yohan franchit la ligne trop vite et trop droit, comme on traverse un champ.",
+        "Ce qui sort des fougères ne pose pas de question. Chez les Hommes-Bêtes, franchir sans demander, c'est revendiquer."
+      ],
+      combat:{ groupe:[{bst:"BST_021",n:2}], victoire:"franchit_apres", defaite:"franchit_apres" }
+    },
+    franchit_apres:{
+      texte:[
+        "La forêt redevient silencieuse. Yohan traverse le reste du territoire sans être inquiété — non par respect, mais parce qu'on a désormais fait le compte de ce qu'il vaut, et que le compte n'est plus avantageux.",
+        "Il laisse une réputation derrière lui. Dans ces bois, ce n'est pas forcément une bonne chose."
+      ],
+      effets:{suspicion:5, sang:2, xp:16},
+      fin:true
+    },
+    offrande:{
+      texte:[
+        "Yohan pose au pied du totem ce qu'il a de mieux à donner : du sel, du fil, une lame courte. Des choses qui servent, pas des choses qui brillent.",
+        "Il recule de trois pas et attend. Quand il relève les yeux, l'offrande a disparu et quelqu'un a posé à la place une bande de cuir tressé, encore tiède.",
+        "Personne ne s'est montré. C'est, dans cette forêt, la plus haute forme de courtoisie."
+      ],
+      effets:{xp:26, sang:4, item:"accessoire_gants", flag:"harde_toleree"},
+      fin:true
+    }
+  }
+},
+
+/* ══════════════════════════════ ONDE · Côte des Dents ══════════════════════════════ */
+{
+  id:"EW_EPAVE", titre:"L'épave qui n'a pas coulé", famille:"VOYAGE", rarete:"rare",
+  image:"evt_epave", lieux:["LOC_019","LOC_013"],
+  scenes:{
+    start:{
+      texte:[
+        "Le navire est posé sur les rochers à mi-hauteur de la falaise, à quinze mètres au-dessus de la ligne des plus hautes marées. Intact. Mâts debout, gréement en place, coque sans une brèche.",
+        "Aucune tempête ne pose un navire là. Aucune vague ne le dépose sans le briser.",
+        "Sur le pont, les cordages sont lovés proprement. Quelqu'un a rangé le bateau avant qu'il ne se retrouve dans le ciel."
+      ],
+      choix:[
+        {label:"Monter à bord", detail:"L'Onde est passée par là · elle y est peut-être encore",
+         suite:"bord"},
+        {label:"Chercher l'équipage sur la grève", detail:"Jet de Précision (12)",
+         test:{stat:"precision", dc:12}, reussite:"greve_ok", echec:"greve_ko"},
+        {label:"S'éloigner de la falaise", detail:"−Fatigue · certaines choses sont des avertissements",
+         suite:"loin", effets:{fat:-8, xp:10}},
+      ]
+    },
+    bord:{
+      texte:[
+        "Le pont est sec. Le bois n'a pas gonflé, le sel n'a pas mordu, et dans la cambuse le pain est rassis mais pas moisi — ce qui, à quinze mètres au-dessus de la mer, n'a aucun sens.",
+        "Dans la cabine du capitaine, le livre de bord est ouvert à la dernière page. L'écriture est nette jusqu'au dernier mot, sans tremblement : « L'eau monte dans le mauvais sens. Nous montons avec. Je note ceci pour qu'on sache que nous n'avons pas eu peur. »",
+        "Yohan referme le livre. L'Onde ne détruit pas toujours. Parfois elle déplace, simplement, et c'est bien pire à regarder."
+      ],
+      choix:[
+        {label:"Emporter le livre de bord", detail:"Un témoignage direct d'une anomalie de l'Onde",
+         suite:"livre", effets:{sang:10, xp:38, fat:10, flag:"livre_bord"}},
+        {label:"Fouiller la cale et repartir", detail:"Il y a de quoi vivre trois mois là-dedans",
+         suite:"cale", effets:{or:220, xp:22}},
+      ]
+    },
+    livre:{
+      texte:[
+        "Yohan glisse le livre dans sa besace et redescend la falaise sans se retourner.",
+        "Il ne saura jamais où est passé l'équipage. Mais il a, noir sur blanc, la preuve que l'Onde agit encore — pas dans les ruines, pas dans les légendes : sur une côte fréquentée, il y a moins d'un an."
+      ],
+      fin:true
+    },
+    cale:{
+      texte:[
+        "La cargaison est intacte et se revend très bien : étoffes, sel fin, une caisse d'outils de charpentier de marine.",
+        "Yohan redescend chargé, et met un long moment à cesser de regarder par-dessus son épaule le navire posé dans le ciel."
+      ],
+      fin:true
+    },
+    greve_ok:{
+      texte:[
+        "Yohan cherche en bas plutôt qu'en haut, et il a raison : l'équipage est là, sur la grève, tous les onze, allongés côte à côte au-dessus de la ligne de marée.",
+        "Personne ne les a alignés — le sable sous eux n'est pas remué. Ils sont simplement arrivés là dans cette position, et ils sont morts noyés, à quarante pas de la mer, sans une goutte d'eau autour d'eux.",
+        "Yohan les enterre. Cela lui prend la journée entière, et il ne saurait pas expliquer pourquoi c'était important."
+      ],
+      effets:{sang:8, xp:32, fat:14, flag:"equipage_enterre"},
+      fin:true
+    },
+    greve_ko:{
+      texte:[
+        "Yohan arpente la grève jusqu'au soir et ne trouve que du varech et des bois flottés.",
+        "L'équipage n'est nulle part — ni à bord, ni en bas, ni entre les deux. Il repart avec cette absence sur les bras, ce qui pèse plus lourd qu'un corps."
+      ],
+      effets:{fat:10, xp:12},
+      fin:true
+    },
+    loin:{
+      texte:[
+        "Yohan reprend la route côtière en laissant le navire derrière lui, posé dans le ciel comme une chose que personne n'a demandé à voir.",
+        "Il croisera trois voyageurs ce jour-là. Aucun ne mentionnera l'épave. Il ne la mentionnera pas non plus."
+      ],
+      fin:true
+    }
+  }
+},
+
+/* ══════════════════════════════ ONDE · Pierres du Premier Rugissement ══════════════════════════════ */
+{
+  id:"EW_PIERRES", titre:"Les pierres qui écoutent", famille:"ONDE", rarete:"rare",
+  image:"evt_pierres", lieux:["LOC_020","LOC_010"],
+  scenes:{
+    start:{
+      texte:[
+        "Le cercle fait cent pas de diamètre : neuf pierres levées, usées par les mains plus que par le vent — on les touche depuis très longtemps, et toujours au même endroit.",
+        "Les Hommes-Bêtes racontent qu'un chef y a rugi une fois, et que toutes les hardes l'ont entendu, où qu'elles fussent. Yohan a toujours pris ça pour une image.",
+        "Il le prend moins pour une image maintenant qu'il est au centre et que les neuf pierres, très légèrement, vibrent à la même note."
+      ],
+      choix:[
+        {label:"Poser les mains où tout le monde les pose", detail:"Requiert un pouvoir de l'Onde",
+         requis:{pouvoir:"poussee"}, suite:"mains"},
+        {label:"Écouter la note sans rien toucher", detail:"Jet de Volonté (12)",
+         test:{stat:"vol", dc:12}, reussite:"ecoute_ok", echec:"ecoute_ko"},
+        {label:"Ressortir du cercle", detail:"Ce lieu n'appartient pas à Yohan",
+         suite:"sort", effets:{xp:10}},
+      ]
+    },
+    mains:{
+      texte:[
+        "Yohan pose les paumes à l'endroit usé de la pierre la plus proche, et les neuf pierres répondent d'un coup — pas un son : une pression, qui part du cercle et s'en va dans toutes les directions à la fois.",
+        "Il la sent partir. Il la sent surtout ne pas s'arrêter.",
+        "Ce cercle n'est pas un sanctuaire. C'est un instrument, et il vient d'en jouer une note que des choses très éloignées viennent d'entendre."
+      ],
+      choix:[
+        {label:"Recommencer, plus fort", detail:"Voir jusqu'où ça porte · le coût sera réel",
+         suite:"encore", effets:{fat:30, sang:14, xp:48, suspicion:16, flag:"pierres_sonnees"}},
+        {label:"Retirer les mains immédiatement", detail:"Une note suffit",
+         suite:"retire", effets:{fat:12, sang:6, xp:26, flag:"pierres_touchees"}},
+      ]
+    },
+    encore:{
+      texte:[
+        "Yohan appuie de tout son poids et laisse l'Onde passer sans la retenir. Les neuf pierres chauffent sous ses mains, l'herbe se couche en cercles concentriques sur cent pas, et un vol d'oiseaux se lève à des lieues de là.",
+        "Quand il se relève, il saigne du nez, il tient à peine debout, et il sait deux choses. La première : le cercle porte à une distance qu'il n'ose pas estimer. La seconde : quelque chose, très loin, a répondu.",
+        "Pas un mot. Une seconde note, plus grave, arrivée trop tard pour être un écho."
+      ],
+      fin:true
+    },
+    retire:{
+      texte:[
+        "Yohan retire les mains comme on lâche un fer chaud, et le cercle se tait en quelques secondes.",
+        "Il quitte le sanctuaire à reculons, avec la nette impression d'avoir frappé à une porte et de ne pas avoir attendu qu'on ouvre."
+      ],
+      fin:true
+    },
+    ecoute_ok:{
+      texte:[
+        "Yohan s'assoit au centre, ferme les yeux, et écoute la note sans y ajouter la sienne.",
+        "Elle n'est pas continue : elle bat, très lentement, à peu près une fois toutes les quarante respirations. Et elle ne vient pas des pierres — les pierres la reprennent, comme neuf cordes accordées sur un instrument qui joue ailleurs.",
+        "L'instrument est au nord. Loin au nord, dans la direction exacte de la Cicatrice."
+      ],
+      effets:{sang:10, xp:36, flag:"pierres_accordees"},
+      fin:true
+    },
+    ecoute_ko:{
+      texte:[
+        "Yohan reste assis au centre du cercle jusqu'à ce que le froid le chasse, et n'entend rien d'autre que le vent dans l'herbe haute.",
+        "Peut-être qu'il n'y avait rien. Peut-être que ces pierres-là ne parlent pas à n'importe qui, et qu'il n'a pas encore la bonne oreille."
+      ],
+      effets:{fat:8, xp:12},
+      fin:true
+    },
+    sort:{
+      texte:[
+        "Yohan sort du cercle par où il est entré, et la vibration cesse dès qu'il franchit la ligne des pierres.",
+        "Il se retourne une fois. Elles sont parfaitement immobiles, parfaitement muettes, et parfaitement patientes."
+      ],
+      fin:true
+    }
+  }
+},
+
+/* ══════════════════════════════ VILLE · Port-Noir ══════════════════════════════ */
+{
+  id:"EW_PORT_NOIR", titre:"Le manifeste qui ne correspond pas", famille:"VILLE", rarete:"inhabituel",
+  image:"evt_port_noir", lieux:["LOC_016","LOC_007"],
+  scenes:{
+    start:{
+      pnj:"taverniere",
+      texte:[
+        "À Port-Noir, tout se vend, y compris le droit de ne pas être vu — c'est même le produit le plus cher du port.",
+        "Wenda tient ici une seconde salle, plus basse et moins fréquentable que la première. Elle sert à Yohan sans qu'il commande. « Le trois-mâts du quai nord », dit-elle en essuyant. « Il charge depuis quatre jours et il ne charge rien. »",
+        "Elle pose le pichet. « Manifeste de sel. Sauf que les hommes portent les caisses à deux, et le sel, ça se porte à un. »"
+      ],
+      choix:[
+        {label:"Aller voir les caisses de plus près", detail:"Jet d'Agilité (12) · le quai est gardé",
+         test:{stat:"agi", dc:12}, reussite:"caisses_ok", echec:"caisses_ko"},
+        {label:"Acheter le manifeste au commis du port", detail:"−70 or · tout se vend ici",
+         requis:{or:70}, suite:"manifeste", effets:{or:-70}},
+        {label:"Laisser courir", detail:"Ce n'est pas l'affaire de Yohan · et c'est ce qui la rend sûre",
+         suite:"laisse", effets:{suspicion:-4, xp:8}},
+      ]
+    },
+    caisses_ok:{
+      texte:[
+        "Yohan attend le changement de garde et se glisse sous l'appontement, là où les caisses transitent à découvert le temps d'un palan.",
+        "Elles ne contiennent pas de sel. Elles contiennent des armes de guerre, neuves, encore graissées, empaquetées avec un soin militaire que les contrebandiers n'ont jamais.",
+        "Et sur le flanc de chaque caisse, au pochoir, un double aigle qu'on n'a plus le droit de peindre depuis la fin de la guerre civile."
+      ],
+      effets:{xp:38, sang:5, flag:"bannieres_vues"},
+      choix:[
+        {label:"Repartir avec l'information", detail:"Elle vaudra cher au bon interlocuteur",
+         suite:"info_repart", effets:{suspicion:4}},
+        {label:"Saboter le chargement", detail:"Jet d'Agilité (13) · une nuit de travail, beaucoup de risque",
+         test:{stat:"agi", dc:13}, reussite:"sabote_ok", echec:"sabote_ko"},
+      ]
+    },
+    info_repart:{
+      texte:[
+        "Yohan remonte sur le quai avant l'aube et quitte Port-Noir par la route de terre, ce qui est plus long et beaucoup plus discret.",
+        "Un port de contrebandiers qui arme quelqu'un sous pavillon impérial interdit, c'est le genre d'information qui vaut de l'or — ou la vie de celui qui la détient trop longtemps."
+      ],
+      fin:true
+    },
+    sabote_ok:{
+      texte:[
+        "Yohan ne coule pas le navire : trop bruyant, trop mortel, et le port entier saurait qui chercher. Il fait mieux — il noie deux caisses sur trente et remplace les documents de calage.",
+        "Le chargement partira avec du matériel rouillé au fond et un plan d'arrimage faux. Quelque part au sud, dans deux mois, une compagnie entière découvrira que ses armes ne valent rien juste au moment de s'en servir.",
+        "Personne ne saura jamais pourquoi."
+      ],
+      effets:{xp:48, sang:8, or:120, flags:["bannieres_vues","sabotage_port_noir"]},
+      fin:true
+    },
+    sabote_ko:{
+      texte:[
+        "Un palan grince au mauvais moment. Yohan a le temps de se jeter à l'eau entre deux coques, et l'eau de Port-Noir en hiver fait plus de dégâts que les gardes.",
+        "Il ressort deux quais plus loin, gelé, sans avoir rien saboté du tout — mais sans avoir été vu non plus, ce qui, à Port-Noir, se compte comme un succès."
+      ],
+      effets:{pv:-8, fat:14, xp:16, flag:"bannieres_vues"},
+      fin:true
+    },
+    caisses_ko:{
+      texte:[
+        "Le quai nord est mieux tenu que le reste du port. Yohan est repéré avant l'appontement et doit reculer sans discuter.",
+        "On ne le poursuit pas. On note simplement son visage, et à Port-Noir, un visage noté finit toujours par se revendre."
+      ],
+      effets:{suspicion:8, xp:10},
+      fin:true
+    },
+    manifeste:{
+      pnj:"taverniere",
+      texte:[
+        "Le commis vend le manifeste sans même faire semblant d'hésiter — c'est un tarif, pas une trahison.",
+        "Sel de première qualité, trente caisses, destination une baie du sud qui n'a pas de saline, pas de marché, et pas de population. Le sel voyagerait donc trois semaines pour être livré à personne.",
+        "Wenda lit par-dessus son épaule et rend le papier sans commentaire. « Vous devriez partir demain », dit-elle simplement. « Pas ce soir. Demain, avec les charretiers. »"
+      ],
+      effets:{xp:30, sang:3, flag:"bannieres_vues"},
+      fin:true
+    },
+    laisse:{
+      texte:[
+        "Yohan finit son verre, paie, et ne remonte pas vers le quai nord.",
+        "Port-Noir a survécu deux siècles précisément parce que les gens de passage y regardent leurs propres mains. Il n'a aucune intention d'être l'exception."
+      ],
+      fin:true
+    }
+  }
+},
+
 
 ];

@@ -7,7 +7,7 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V0.3** — les événements écrits, le combat de groupe et les images.
+**Version actuelle : V0.4** — la trame qui se débloque, les rencontres, et les 20 lieux couverts.
 
 ## Lancer le jeu
 
@@ -26,7 +26,11 @@ python3 -m http.server 8000   # puis http://localhost:8000
 | Prologue en 4 écrans | ✅ |
 | Carte du monde (20 lieux, épingles colorées par Danger) | ✅ |
 | Boucle de tour : 3 actions puis 2–6 semaines qui passent | ✅ |
-| **Événements écrits** : 11 récits ramifiés, 89 scènes, 53 choix | ✅ |
+| **Événements de lieu** : 16 récits ramifiés, au moins un par lieu | ✅ |
+| **Rencontres** : 8 figures du Codex, croisées ou affrontées | ✅ |
+| **Jalons de trame** : 6 étapes d'histoire qui se débloquent seules | ✅ |
+| 237 scènes, 142 choix, 19 affrontements écrits au total | ✅ |
+| **Combattants nommés** : 9 champions hors bestiaire | ✅ |
 | Événements générés (200 variantes) — remplissage quand les écrits sont épuisés | ✅ |
 | Contrats en 5 phases (Audience → Retour), 50 au registre | ✅ |
 | **Combat de groupe** : party contre plusieurs adversaires, cibles au clic | ✅ |
@@ -43,6 +47,43 @@ python3 -m http.server 8000   # puis http://localhost:8000
 | **Illustrations** : bandeaux d'événement et portraits, avec blason de repli | ✅ |
 | Sauvegarde locale + export/import fichier | ✅ |
 | Arbre de pouvoirs elfique (`TREE_ELFES`) | ✅ joué par Alarielle |
+
+## Comment l'histoire avance
+
+Trois sources d'événements, qui ne se déclenchent pas de la même façon.
+
+**Les événements de lieu** se tirent en dépensant une action *Explorer*. Chaque
+lieu a les siens ; ils ne se répètent pas tant que ceux de l'endroit ne sont pas
+tous vus, et les 20 lieux en ont au moins un.
+
+**Les rencontres** se tirent au même moment, mais seulement quand leurs
+conditions sont réunies — un niveau, un chapitre, un marqueur posé par un
+événement antérieur. Quand une est disponible, elle passe devant les autres :
+croiser Caleb ou Tyrion vaut mieux qu'un énième bandit de route. Elles ne
+reviennent jamais.
+
+**Les jalons de trame** ne se cherchent pas. Ils se débloquent, et le premier
+disponible se déclenche **de lui-même à la fin d'un tour** — le temps qui passe
+fait avancer l'histoire, même quand Yohan ne cherche rien. Chacun pose un
+marqueur dont le suivant dépend, ce qui garantit l'enchaînement. L'écran de
+Quête indique combien sont franchis et si quelque chose est prêt à se produire.
+
+## Les figures du monde
+
+Neuf combattants nommés vivent hors du bestiaire, dans `src/data/champions.js` :
+Caleb, Tyrion, Khal-Vaene, Kem-Val, Charles de Mont-Draken, une Lame de la Cour
+Noire, le Tenant de l'Arène, la garde d'Astrah et un chasseur de Parias.
+
+Les croiser n'implique pas de se battre. Caleb propose un marché, Kem-Val
+partage son eau, Charles partage son pain, Lucius explique posément pourquoi il
+devra supprimer Yohan — « vers la fin, vous n'êtes pas prioritaires ». Chaque
+rencontre a une sortie sans violence, une sortie par les armes, et au moins une
+troisième voie qui demande de trouver le bon angle.
+
+**Un duel écrit ne tue jamais définitivement.** Quand un événement définit ce
+qui se passe en cas de défaite, c'est cette scène qui s'applique — la mort
+permanente reste réservée aux rencontres aléatoires et aux contrats, où
+personne n'a écrit de porte de sortie.
 
 ## Règles clés
 
@@ -83,7 +124,10 @@ src/data/
   bestiary.js         40 créatures, Danger 1–6
   locations.js        20 lieux + coordonnées sur la carte
   events.js           200 événements générés + variantes narratives
-  events_written.js   11 événements écrits, ramifiés en scènes
+  events_written.js   16 événements de lieu, ramifiés en scènes
+  events_meetings.js  8 rencontres avec les figures du Codex
+  events_trame.js     6 jalons de la quête principale
+  champions.js        9 combattants nommés (hors bestiaire)
   contracts.js        50 contrats (10 archétypes) + habillage narratif
   powers.js           arbres de pouvoirs (Onde, Elfes) + portée des sorts
   items.js            équipement et consommables
@@ -104,8 +148,10 @@ for f in src/*.js src/*/*.js; do node --check "$f"; done   # syntaxe
 ```
 
 `tools/validate.js` vérifie que chaque scène référencée existe, que les créatures,
-objets, pouvoirs, portraits et lieux cités sont réels, et signale les scènes
-écrites mais inatteignables.
+champions, objets, pouvoirs, portraits et lieux cités sont réels, que les
+marqueurs exigés sont bien posés quelque part, et que chaque jalon de trame pose
+le sien. Il imprime aussi **la couverture par lieu** et échoue si un lieu ne peut
+déclencher aucun événement écrit.
 
 ## Écrire un événement
 
@@ -128,10 +174,24 @@ scènes ; le format complet est documenté en tête de fichier. En résumé :
       ]
     },
     ko:{ texte:["…"], combat:{groupe:[{bst:"BST_002",n:2}], victoire:"apres", defaite:"apres"} },
-    apres:{ texte:["…"], effets:{suspicion:5}, fin:true }
+    apres:{ texte:["…"], effets:{suspicion:5, flags:["marqueur"]}, fin:true }
   }
 }
 ```
+
+Pour une **rencontre** (`events_meetings.js`), ajouter des conditions
+d'apparition et, si besoin, un combattant nommé :
+
+```js
+requis:{ niveauMin:4, chapitreMin:1, sangMin:40, compagnon:"alycia",
+         flags:["bannieres_vues"], sansFlags:["caleb_rencontre"] },
+…
+combat:{ groupe:[{champion:"caleb"}], victoire:"gagne", defaite:"perdu" }
+```
+
+Pour un **jalon de trame** (`events_trame.js`), même format : `requis.sansFlags`
+doit nommer le marqueur que l'événement pose lui-même — c'est ce qui l'empêche
+de se rejouer, et le validateur le vérifie.
 
 Un choix verrouillé reste visible, grisé, avec la raison affichée — le joueur
 voit ce qu'il rate. Les événements écrits ne se répètent pas tant que ceux

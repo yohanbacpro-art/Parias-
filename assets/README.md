@@ -26,6 +26,35 @@ identifiant. Déposer le fichier au bon chemin suffit à le remplacer — aucun 
 | `evt_chapelle.webp` | La chapelle qu'on n'ouvre pas |
 | `evt_orpailleur.webp` | Ce que l'orpailleur a remonté |
 | `evt_traque.webp` | Un chasseur de primes rattrape Yohan |
+| `evt_tunnel.webp` | Le tunnel qui monte |
+| `evt_harde.webp` | La harde qui laisse passer |
+| `evt_epave.webp` | L'épave qui n'a pas coulé |
+| `evt_pierres.webp` | Les pierres qui écoutent |
+| `evt_port_noir.webp` | Le manifeste qui ne correspond pas |
+
+### Rencontres
+
+| Fichier attendu | Rencontre |
+|---|---|
+| `rc_caleb.webp` | Le prince qui n'aime pas la concurrence |
+| `rc_tyrion.webp` | La faute d'un autre peuple |
+| `rc_charles.webp` | Le Sourire de Fer |
+| `rc_kemval.webp` | Deux bannis sous le même soleil |
+| `rc_khalvaene.webp` | L'usurpateur au milieu des os |
+| `rc_anarion.webp` | Une invitation qu'on ne refuse pas |
+| `rc_arene.webp` | Le Tenant du Sable Rouge |
+| `rc_lucius.webp` | Le tacticien |
+
+### Jalons de trame
+
+| Fichier attendu | Jalon |
+|---|---|
+| `tr_courrier.webp` | Le courrier qui n'est jamais arrivé |
+| `tr_alycia.webp` | Ce qu'elle n'a pas dit en arrivant |
+| `tr_ruines.webp` | La statue qui garde encore |
+| `tr_dette.webp` | Ce que son peuple doit |
+| `tr_banniere.webp` | La bannière qu'il faut coudre |
+| `tr_prix.webp` | Le prix du nom |
 
 Les événements générés de `src/data/events.js` cherchent `evt_<famille>.webp`
 en minuscules — `evt_voyage.webp`, `evt_ville.webp`, `evt_paria.webp`,

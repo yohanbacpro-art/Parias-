@@ -352,6 +352,9 @@
   .f-tag.warn{border-color:var(--warn);color:var(--warn);}
   .foe-hint{font-family:'Inter',sans-serif;font-size:10.5px;color:var(--parchment-dim);margin:-6px 0 10px;}
 
+  .trame-etat{font-family:'Inter',sans-serif;font-size:12px;color:var(--parchment-dim);
+    margin-top:14px;padding-top:10px;border-top:1px dashed var(--line);}
+
   footer{text-align:center;margin-top:24px;font-family:'Inter',sans-serif;font-size:11px;color:var(--parchment-dim);letter-spacing:.05em;}
 </style>
 </head>
@@ -464,6 +467,7 @@
       <div class="gauge" style="margin-top:10px;"><div class="gauge-fill fat" id="queteBar" style="width:0%"></div></div>
       <p style="color:var(--parchment-dim);font-size:12.5px;font-family:'Inter',sans-serif;" id="queteProgressText"></p>
       <p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;margin-top:10px;">Le sang de l'Onde se réveille avec le temps qui passe, et plus encore lorsque Yohan revient sur les terres de Karlsberg ou honore ses contrats.</p>
+      <p class="trame-etat" id="trameEtat"></p>
     </div>
     <div class="panel">
       <h2>Compagnons</h2>
@@ -599,6 +603,7 @@
 
 <script src="src/data/bestiary.js"></script>
 <script src="src/data/portraits.js"></script>
+<script src="src/data/champions.js"></script>
 <script src="src/data/locations.js"></script>
 <script src="src/data/events.js"></script>
 <script src="src/data/contracts.js"></script>
@@ -606,6 +611,8 @@
 <script src="src/data/items.js"></script>
 <script src="src/data/lore.js"></script>
 <script src="src/data/events_written.js"></script>
+<script src="src/data/events_meetings.js"></script>
+<script src="src/data/events_trame.js"></script>
 <script src="src/ui/art.js"></script>
 <script src="src/combat.js"></script>
 <script src="src/events_runner.js"></script>

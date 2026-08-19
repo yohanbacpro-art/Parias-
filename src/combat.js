@@ -9,7 +9,10 @@
  * carte d'adversaire), puis termine le tour — les adversaires jouent alors.
  *
  * API utilisée ailleurs :
- *   startCombat(spec, defBonus)   spec = gabarit unique | tableau | [{bst,n}]
+ *   startCombat(spec, defBonus, opts)  spec = gabarit unique | tableau |
+ *                                      [{bst,n}] | [{champion}]
+ *                                      opts.sansMort : une défaite est une
+ *                                      retraite, jamais une mort permanente
  *   lastCombatVictory             true/false, lu par les contrats
  *   combatReturnTo()              défini par l'appelant, rappelé à la sortie
  *   rollDie / rollDice / fatZone  utilitaires partagés avec les événements
@@ -32,15 +35,21 @@ function fatZone(fat){
 
 const NUMEROTATION = ["I","II","III","IV","V","VI"];
 
-/* Accepte un gabarit unique, un tableau de gabarits, ou une composition [{bst,n}]. */
+/* Accepte un gabarit unique, un tableau de gabarits, ou une composition
+ * mêlant [{bst,n}] (bestiaire) et [{champion,n}] (figures nommées). */
 function expandFoeSpec(spec){
   const out = [];
   (Array.isArray(spec) ? spec : [spec]).forEach(x=>{
-    if(x && x.bst){
+    if(!x) return;
+    if(x.champion){
+      const tpl = CHAMPIONS[x.champion];
+      if(!tpl){ console.warn('Champion inconnu :', x.champion); return; }
+      for(let i=0;i<(x.n||1);i++) out.push(tpl);
+    } else if(x.bst){
       const tpl = BESTIARY_FULL.find(b=>b.id===x.bst);
       if(!tpl){ console.warn('Bestiaire : identifiant inconnu', x.bst); return; }
       for(let i=0;i<(x.n||1);i++) out.push(tpl);
-    } else if(x){
+    } else {
       out.push(x);
     }
   });
@@ -140,7 +149,7 @@ function buildParty(extraDef){
 
 /* ============================= CYCLE DE COMBAT ============================= */
 
-function startCombat(spec, extraDef){
+function startCombat(spec, extraDef, opts){
   combat = {
     party: buildParty(extraDef),
     foes: buildFoes(spec),
@@ -148,6 +157,9 @@ function startCombat(spec, extraDef){
     targetIdx: 0,
     round: 1,
     over: false,
+    // Un duel « pas à mort », ou un affrontement dont un événement écrit gère
+    // déjà l'issue : la défaite y est une retraite, quel que soit le Danger.
+    sansMort: !!(opts && opts.sansMort),
   };
   lastCombatVictory = null;
 
@@ -487,8 +499,9 @@ function checkEnd(){
     lastCombatVictory = false;
     adjustSuspicion(5);
     const dangerMax = Math.max(...combat.foes.map(f=>f.danger||1));
-    if(dangerMax <= 2){
-      // Menace mineure : Yohan survit, blessé — pas de mort permanente pour un simple loup
+    if(dangerMax <= 2 || combat.sansMort){
+      // Menace mineure, ou affrontement dont l'issue est écrite ailleurs :
+      // Yohan survit, blessé — pas de mort permanente
       const yohan = combat.party.find(p=>p.estYohan);
       hero.pv = Math.max(1, Math.round(hero.pvMax*0.3));
       hero.fat = yohan ? yohan.fat : hero.fat;

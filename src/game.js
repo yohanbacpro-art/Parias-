@@ -65,6 +65,17 @@ function renderQuete(){
     ? `${hero.trame.points} / ${next.seuil} points de sang avant : ${next.titre}`
     : `${hero.trame.points} points de sang — dernier chapitre atteint.`;
 
+  const tr = (typeof trameProgres === 'function') ? trameProgres() : null;
+  const trEl = document.getElementById('trameEtat');
+  if(trEl && tr){
+    trEl.innerHTML = tr.prochain
+      ? `<span class="qc-num">Jalons de l'histoire · ${tr.faits}/${tr.total}</span>` +
+        (tr.debloque
+          ? `<b style="color:var(--onde-bright);">Quelque chose est prêt à se produire.</b> Terminez un tour pour que cela vienne à Yohan.`
+          : `Le prochain jalon n'est pas encore mûr — il faut du sang, du temps, ou les bonnes rencontres.`)
+      : `<span class="qc-num">Jalons de l'histoire · ${tr.faits}/${tr.total}</span>Tous les jalons connus ont été franchis.`;
+  }
+
   const list = document.getElementById('compagnonList');
   if(!hero.compagnons.length){
     list.innerHTML = "<p class=\"compagnon-empty\">Yohan chemine seul, pour l'instant.</p>";
@@ -643,6 +654,10 @@ function endTurnMeta(){
   gainPointsSang(karlsberg ? 5 : 1);
   saveGame(true);
   renderCalendar();
+
+  // Le temps qui passe fait avancer l'histoire : si un jalon de la trame a ses
+  // conditions réunies, il se déclenche maintenant (ou dès que l'écran se libère).
+  armerTrame();
 }
 
 function triggerExploration(){
@@ -678,6 +693,8 @@ function triggerExploration(){
 
 function closeEventModal(){
   document.getElementById('eventModal').style.display='none';
+  // Un jalon de trame armé en fin de tour attendait que l'écran se libère.
+  if(typeof resoudreTrameEnAttente === 'function') resoudreTrameEnAttente();
 }
 
 /* ============================= CONTRATS ============================= */

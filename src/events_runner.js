@@ -16,20 +16,48 @@ function heroFlags(){ if(!hero.flags) hero.flags = []; return hero.flags; }
 function heroVus(){ if(!hero.evenementsVus) hero.evenementsVus = []; return hero.evenementsVus; }
 function hasFlag(f){ return heroFlags().includes(f); }
 
-/* Un événement écrit est applicable si son lieu correspond — soit explicitement
- * (champ `lieux`), soit par la famille d'événements acceptée par le lieu. */
+/* Un événement est applicable au lieu courant — soit explicitement (champ
+ * `lieux`), soit par la famille d'événements acceptée par ce lieu. */
 function eventApplicable(ev, lieu){
   if(ev.lieux) return !!lieu && ev.lieux.includes(lieu.id);
   if(!lieu) return true;
   return lieu.familles_evenements_compatibles.includes(ev.famille);
 }
 
+/* Conditions d'apparition d'un événement (rencontres et trame surtout).
+ * Évaluées au tirage, pas au clic : un événement dont les conditions ne sont
+ * pas réunies n'apparaît simplement jamais. */
+function conditionsRemplies(req){
+  if(!req) return true;
+  if(req.chapitreMin  !== undefined && hero.trame.chapitre < req.chapitreMin) return false;
+  if(req.chapitreMax  !== undefined && hero.trame.chapitre > req.chapitreMax) return false;
+  if(req.sangMin      !== undefined && hero.trame.points   < req.sangMin) return false;
+  if(req.niveauMin    !== undefined && hero.niveau         < req.niveauMin) return false;
+  if(req.suspicionMin !== undefined && hero.suspicion      < req.suspicionMin) return false;
+  if(req.suspicionMax !== undefined && hero.suspicion      > req.suspicionMax) return false;
+  if(req.compagnon    && !hero.compagnons.some(c=>c.id===req.compagnon)) return false;
+  if(req.flags        && !req.flags.every(f=>hasFlag(f))) return false;
+  if(req.sansFlags    && req.sansFlags.some(f=>hasFlag(f))) return false;
+  return true;
+}
+
+/* Catalogue tirable en explorant : événements de lieu + rencontres dont les
+ * conditions sont réunies. La trame n'y figure pas — elle se déclenche seule. */
+function catalogueExploration(){
+  return EVENTS_WRITTEN.concat(EVENTS_RENCONTRE.filter(e=>conditionsRemplies(e.requis)));
+}
+
 function pickWrittenEvent(lieu){
   const vus = heroVus();
-  const applicables = EVENTS_WRITTEN.filter(e => eventApplicable(e, lieu));
+  const applicables = catalogueExploration().filter(e => eventApplicable(e, lieu));
   const frais = applicables.filter(e => !vus.includes(e.id));
   if(!frais.length) return null;          // catalogue épuisé ici → repli sur les générés
-  return frais[Math.floor(Math.random()*frais.length)];
+  // Une rencontre disponible passe avant un événement de lieu : ces gens-là ne
+  // repassent pas deux fois, et croiser une figure du monde vaut mieux qu'un
+  // énième bandit de route.
+  const rencontres = frais.filter(e=>e.id.startsWith('RC_'));
+  const pool = (rencontres.length && Math.random() < 0.55) ? rencontres : frais;
+  return pool[Math.floor(Math.random()*pool.length)];
 }
 
 function openWrittenEvent(ev, lieu){
@@ -92,6 +120,7 @@ function applyEffets(e){
     }
   }
   if(e.flag && !hasFlag(e.flag)) heroFlags().push(e.flag);
+  (e.flags || []).forEach(f => { if(!hasFlag(f)) heroFlags().push(f); });
   return tags;
 }
 
@@ -130,7 +159,9 @@ function renderScene(sceneId){
         else if(!lastCombatVictory && suiteD) renderScene(suiteD);
         else { closeEventModal(); showScreen(ecritState.retourEcran); }
       };
-      startCombat(sc.combat.groupe);
+      // Une scène de combat définit déjà ce qui arrive en cas de défaite : on
+      // désactive la mort permanente, sauf si l'événement la réclame (mortel:true).
+      startCombat(sc.combat.groupe, undefined, { sansMort: !sc.combat.mortel });
     };
     return;
   }
@@ -290,4 +321,55 @@ function pickEnemyGroupForZone(lieu, rarete){
   const bonusGroupe = Math.max(0, (hero.compagnons||[]).filter(c=>c.combat).length);
   const n = 1 + Math.min(renfortsPossibles, Math.floor(Math.random()*(1+renfortsPossibles)) + bonusGroupe);
   return [{ bst: chef.id, n: Math.min(n, 4) }];
+}
+
+
+/* ============================= TRAME PRINCIPALE ============================= */
+/*
+ * Les jalons de l'histoire ne se cherchent pas : ils se débloquent. À chaque fin
+ * de tour, on regarde si l'un d'eux a ses conditions réunies — et le premier
+ * disponible se déclenche de lui-même.
+ *
+ * Si une modale occupe déjà l'écran (repos, changement de chapitre, événement en
+ * cours), le déclenchement attend qu'elle se referme plutôt que de l'écraser.
+ */
+
+let tramePending = false;
+
+function trameDisponible(){
+  return EVENTS_TRAME.find(ev => conditionsRemplies(ev.requis)) || null;
+}
+
+function modaleOuverte(){
+  const m = document.getElementById('eventModal');
+  return !!m && m.style.display === 'flex';
+}
+
+/* Appelé en fin de tour : arme le déclencheur, puis tente de le résoudre. */
+function armerTrame(){
+  tramePending = true;
+  resoudreTrameEnAttente();
+}
+
+function resoudreTrameEnAttente(){
+  if(!tramePending || modaleOuverte()) return false;
+  tramePending = false;
+  const ev = trameDisponible();
+  if(!ev) return false;
+  openWrittenEvent(ev, LOCATIONS.find(l=>l.id===hero.position) || null);
+  return true;
+}
+
+/* Un jalon est joué dès que le marqueur qu'il pose est présent. */
+function trameJouee(ev){
+  const marqueurs = (ev.requis && ev.requis.sansFlags) || [];
+  return marqueurs.some(f => hasFlag(f));
+}
+
+/* Compte des jalons de la trame, pour l'écran de quête. */
+function trameProgres(){
+  const total = EVENTS_TRAME.length;
+  const faits = EVENTS_TRAME.filter(trameJouee).length;
+  const prochain = EVENTS_TRAME.find(ev => !trameJouee(ev)) || null;
+  return { total, faits, prochain, debloque: !!trameDisponible() };
 }
