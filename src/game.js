@@ -256,14 +256,61 @@ function initSaveScreen(){
 
 document.getElementById('btnSaveNow').onclick = () => saveGame(false);
 document.getElementById('btnExportSave').onclick = () => {
-  const blob = new Blob([serializeHero()], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'parias_vardhen_save.json';
-  a.click();
-  URL.revokeObjectURL(url);
-  setSaveStatus("Fichier de sauvegarde exporté.");
+  const texte = serializeHero();
+
+  // Le téléchargement direct ne marche pas partout (page intégrée, sandbox,
+  // file://). On propose donc toujours le texte de la sauvegarde à côté : c'est
+  // le seul moyen qui fonctionne dans tous les cas.
+  try{
+    const blob = new Blob([texte], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'parias_vardhen_save.json';
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(url), 1000);
+  } catch(e){ /* sans importance : le texte ci-dessous reste disponible */ }
+
+  const zone = document.getElementById('saveTextZone');
+  zone.style.display = 'block';
+  const champ = document.getElementById('saveText');
+  champ.value = texte;
+  champ.focus();
+  champ.select();
+  setSaveStatus("Sauvegarde prête. Si le fichier ne s'est pas téléchargé, copiez le texte ci-dessous et conservez-le.");
 };
+
+document.getElementById('btnCopySave').onclick = async () => {
+  const champ = document.getElementById('saveText');
+  champ.select();
+  try{
+    await navigator.clipboard.writeText(champ.value);
+    setSaveStatus('Sauvegarde copiée dans le presse-papiers.');
+  } catch(e){
+    setSaveStatus('Copie automatique refusée — le texte est sélectionné, faites Ctrl+C.');
+  }
+};
+
+document.getElementById('btnPasteSave').onclick = () => {
+  const zone = document.getElementById('saveTextZone');
+  zone.style.display = 'block';
+  const champ = document.getElementById('saveText');
+  champ.value = '';
+  champ.placeholder = 'Collez ici le texte d\'une sauvegarde, puis cliquez « Charger ce texte ».';
+  champ.focus();
+  setSaveStatus('Collez votre sauvegarde dans le champ, puis chargez-la.');
+};
+
+document.getElementById('btnLoadText').onclick = () => {
+  const texte = document.getElementById('saveText').value.trim();
+  if(!texte){ setSaveStatus('Le champ est vide.'); return; }
+  try{
+    loadHeroFromJSON(texte);
+    renderPersonnage(); renderMonde(); renderContracts(); renderCalendar();
+    renderChroniques(); renderQuete(); renderArmee();
+    setSaveStatus('Sauvegarde chargée.');
+  } catch(err){ setSaveStatus('Texte invalide : '+err.message); }
+};
+
 document.getElementById('btnImportSave').onclick = () => document.getElementById('importFileInput').click();
 document.getElementById('importFileInput').onchange = (e) => {
   const file = e.target.files[0];
@@ -272,7 +319,8 @@ document.getElementById('importFileInput').onchange = (e) => {
   reader.onload = () => {
     try{
       loadHeroFromJSON(reader.result);
-      renderPersonnage(); renderMonde(); renderContracts(); renderCalendar(); renderChroniques(); renderQuete();
+      renderPersonnage(); renderMonde(); renderContracts(); renderCalendar();
+      renderChroniques(); renderQuete(); renderArmee();
       setSaveStatus("Sauvegarde importée.");
     } catch(err){ setSaveStatus("Fichier invalide : "+err.message); }
   };
