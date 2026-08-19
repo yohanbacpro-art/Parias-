@@ -193,70 +193,14 @@ function renderCodex(){
   </div>`).join('');
 }
 
-/* ============================= SAUVEGARDE ============================= */
-const SAVE_KEY = "parias_vardhen_save_v1";
+/* ============================= ÉCRAN SAUVEGARDE ============================= */
+/* Le moteur de sauvegarde lui-même vit dans src/save.js. Ici on ne branche que
+ * les commandes de l'écran Personnage : enregistrer, exporter, réimporter. */
 
-function serializeHero(){
-  return JSON.stringify(hero, (k,v)=> v instanceof Set ? Array.from(v) : v);
-}
+document.getElementById('btnSaveNow').onclick = () => { saveGame(false); renderSauvegardes(); };
 
-function saveGame(silent){
-  try{
-    localStorage.setItem(SAVE_KEY, serializeHero());
-    if(!silent) setSaveStatus("Partie sauvegardée.");
-  } catch(e){ setSaveStatus("Échec de la sauvegarde : "+e.message); }
-}
-
-function loadHeroFromJSON(json){
-  const obj = JSON.parse(json);
-  obj.unlocked = new Set(obj.unlocked || YOHAN_STARTING_POWERS);
-  obj.crisesDeclenchees = new Set(obj.crisesDeclenchees || []);
-  obj.flags = obj.flags || [];
-  obj.evenementsVus = obj.evenementsVus || [];
-  obj.renom = obj.renom || 0;
-  obj.armee = obj.armee || [];
-  obj.affinites = obj.affinites || {};
-  // Les compagnons sauvegardés avant l'ajout du combat de groupe n'ont pas de bloc `combat`
-  obj.compagnons = (obj.compagnons || []).map(c => COMPANIONS_POOL[c.id] || c);
-  hero = obj;
-}
-
-/* Efface la sauvegarde et repart de zéro : mort permanente, ou fin de chronique. */
-function resetGame(){
-  try{ localStorage.removeItem(SAVE_KEY); } catch(e){}
-  try{ location.reload(); } catch(e){}
-}
-
-function hasLocalSave(){
-  try{ return !!localStorage.getItem(SAVE_KEY); } catch(e){ return false; }
-}
-
-function setSaveStatus(msg){
-  const el = document.getElementById('saveStatusText');
-  if(el) el.textContent = msg;
-}
-
-function initSaveScreen(){
-  const holder = document.getElementById('saveOptions');
-  if(!holder) return;
-  holder.innerHTML = '';
-  if(hasLocalSave()){
-    const btn = document.createElement('button');
-    btn.className = 'ghost';
-    btn.textContent = 'Charger la partie en cours';
-    btn.onclick = () => {
-      try{
-        loadHeroFromJSON(localStorage.getItem(SAVE_KEY));
-        enterGame();
-      } catch(e){ alert("Sauvegarde illisible : "+e.message); }
-    };
-    holder.appendChild(btn);
-  }
-}
-
-document.getElementById('btnSaveNow').onclick = () => saveGame(false);
 document.getElementById('btnExportSave').onclick = () => {
-  const texte = serializeHero();
+  const texte = serialiserHero({ version: SAVE_VERSION, meta: construireMeta(hero), hero });
 
   // Le téléchargement direct ne marche pas partout (page intégrée, sandbox,
   // file://). On propose donc toujours le texte de la sauvegarde à côté : c'est
@@ -304,10 +248,8 @@ document.getElementById('btnLoadText').onclick = () => {
   const texte = document.getElementById('saveText').value.trim();
   if(!texte){ setSaveStatus('Le champ est vide.'); return; }
   try{
-    loadHeroFromJSON(texte);
-    renderPersonnage(); renderMonde(); renderContracts(); renderCalendar();
-    renderChroniques(); renderQuete(); renderArmee();
-    setSaveStatus('Sauvegarde chargée.');
+    chargerDepuisTexte(texte);
+    setSaveStatus('Sauvegarde chargée. Enregistrez-la dans un emplacement pour la conserver.');
   } catch(err){ setSaveStatus('Texte invalide : '+err.message); }
 };
 
@@ -318,10 +260,8 @@ document.getElementById('importFileInput').onchange = (e) => {
   const reader = new FileReader();
   reader.onload = () => {
     try{
-      loadHeroFromJSON(reader.result);
-      renderPersonnage(); renderMonde(); renderContracts(); renderCalendar();
-      renderChroniques(); renderQuete(); renderArmee();
-      setSaveStatus("Sauvegarde importée.");
+      chargerDepuisTexte(reader.result);
+      setSaveStatus("Sauvegarde importée. Enregistrez-la dans un emplacement pour la conserver.");
     } catch(err){ setSaveStatus("Fichier invalide : "+err.message); }
   };
   reader.readAsText(file);
@@ -493,6 +433,7 @@ function renderPersonnage(){
     });
     grid.appendChild(col);
   });
+  renderSauvegardes();
 }
 
 function itemById(id){ return ITEM_POOL.find(i=>i.id===id); }

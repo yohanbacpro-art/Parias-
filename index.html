@@ -407,6 +407,31 @@
   .cr-badge.campagne{border-color:var(--warn);color:var(--warn);}
   .cr-badge.verrou{border-color:var(--line);color:var(--parchment-dim);}
 
+  .save-warning{background:rgba(140,40,30,.16);border:1px solid var(--blood-bright);
+    border-radius:4px;padding:10px 12px;color:var(--parchment);font-family:'Inter',sans-serif;
+    font-size:12px;line-height:1.55;margin:0 0 12px;}
+  .save-aide{color:var(--parchment-dim);font-family:'Inter',sans-serif;font-size:12px;
+    line-height:1.55;margin:0 0 12px;max-width:60ch;}
+  .slot-list{display:grid;gap:10px;}
+  .slot{border:1px solid var(--line);border-radius:5px;padding:11px 13px;background:rgba(255,255,255,.012);
+    display:flex;flex-direction:column;gap:8px;}
+  .slot.occupe{border-color:var(--gold-dim);background:rgba(198,160,74,.045);}
+  .slot.auto{border-style:dashed;}
+  .slot-tete{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;}
+  .slot-nom{font-family:'Cinzel',serif;font-size:14px;color:var(--gold);letter-spacing:.04em;}
+  .slot-tag{font-family:'Inter',sans-serif;font-size:10px;text-transform:uppercase;
+    letter-spacing:.1em;color:var(--parchment-dim);border:1px solid var(--line);
+    border-radius:3px;padding:1px 6px;}
+  .slot-corps{font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;}
+  .slot-ligne{color:var(--parchment);}
+  .slot-ligne b{color:var(--gold);font-weight:600;}
+  .slot-meta{color:var(--parchment-dim);font-variant-numeric:tabular-nums;}
+  .slot-date{color:var(--parchment-dim);font-size:11px;opacity:.75;margin-top:3px;}
+  .slot-vide{color:var(--parchment-dim);font-style:italic;opacity:.7;}
+  .slot-actions{display:flex;gap:8px;flex-wrap:wrap;}
+  .slot-actions button{font-size:11px;padding:5px 11px;}
+  .slot-actions button[disabled]{opacity:.35;cursor:not-allowed;}
+
   #saveText{width:100%;min-height:110px;resize:vertical;background:#0a0807;
     border:1px solid var(--line);border-radius:4px;color:var(--parchment-dim);
     font-family:'Inter',sans-serif;font-size:11px;line-height:1.5;padding:10px;}
@@ -507,8 +532,11 @@
 
     <div class="panel">
       <h2>Sauvegarde</h2>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <button class="ghost" id="btnSaveNow">Sauvegarder maintenant</button>
+      <p id="saveWarning" class="save-warning" style="display:none;"></p>
+      <p class="save-aide">La partie est enregistrée automatiquement à chaque fin de tour. Les trois autres emplacements sont à vous : gardez-y une partie avant un choix qui vous engage.</p>
+      <div id="slotList" class="slot-list"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+        <button class="ghost" id="btnSaveNow">Sauvegarde automatique</button>
         <button class="ghost" id="btnExportSave">Exporter</button>
         <button class="ghost" id="btnPasteSave">Coller une sauvegarde</button>
         <button class="ghost" id="btnImportSave">Importer un fichier</button>
@@ -758,6 +786,7 @@
 <script src="src/combat.js"></script>
 <script src="src/battle.js"></script>
 <script src="src/events_runner.js"></script>
+<script src="src/save.js"></script>
 <script src="src/game.js"></script>
 </body>
 </html>
