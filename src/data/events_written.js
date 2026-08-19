@@ -1369,4 +1369,182 @@ const EVENTS_WRITTEN = [
 },
 
 
+/* ══════════════════════════════ PEAU-VERTE · Profondeurs Vertes ══════════════════════════════ */
+{
+  id:"EW_TAMBOURS", titre:"Les tambours qui comptent", famille:"PEAU_VERTE", rarete:"rare",
+  image:"evt_tambours", lieux:["LOC_009"],
+  scenes:{
+    start:{
+      texte:[
+        "Sous les Profondeurs Vertes, il y a toujours eu des tambours. Ce qui a changé, c'est qu'ils sont désormais tous sur le même rythme.",
+        "Yohan s'accroupit contre la paroi et écoute jusqu'à en avoir mal aux dents. Ce n'est pas une musique : c'est une annonce, répétée à l'identique par des dizaines de galeries à la fois.",
+        "Quelque part en bas, quelqu'un est en train de faire la seule chose que les Peaux-Vertes n'avaient jamais réussi à faire — les compter tous."
+      ],
+      choix:[
+        {label:"Descendre vers la source du rythme", detail:"Savoir combien ils sont · et être vu en le sachant",
+         suite:"descend"},
+        {label:"Relever le rythme et le noter", detail:"Jet de Précision (13) · une cadence dit un effectif",
+         test:{stat:"precision", dc:13}, reussite:"note_ok", echec:"note_ko"},
+        {label:"Remonter et prévenir quelqu'un", detail:"Kar-Durak paiera pour ça · si on le croit",
+         suite:"previent", effets:{xp:18}},
+      ]
+    },
+    note_ok:{
+      texte:[
+        "Yohan compte les reprises entre deux silences, puis compte les galeries qui répondent, puis multiplie. Il refait le calcul trois fois parce que le premier résultat lui a paru absurde.",
+        "Le troisième donne le même chiffre. Ce ne sont pas des bandes : c'est une armée, et elle est déjà rassemblée.",
+        "Il ne manque plus qu'une chose pour qu'elle sorte — un chemin vers la surface. Et quelqu'un, quelque part sous Kar-Durak, est en train de le creuser."
+      ],
+      effets:{xp:40, sang:5, flags:["horde_comptee","tunnel_kardurak"]},
+      fin:true
+    },
+    note_ko:{
+      texte:[
+        "Le rythme se brouille dès que deux galeries se répondent avec un décalage, et Yohan perd le compte quatre fois de suite.",
+        "Il ressort avec une certitude sans chiffre : ils sont beaucoup, et ils sont d'accord. C'est déjà plus que ce que savent les nains."
+      ],
+      effets:{xp:14, fat:8, flag:"horde_pressentie"},
+      fin:true
+    },
+    descend:{
+      texte:[
+        "Trois niveaux plus bas, la galerie s'élargit en une salle où l'air est chaud et vivant. Yohan n'a pas le temps de voir combien ils sont : il a le temps de voir qu'ils sont trop.",
+        "Une patrouille le repère à la remontée, dans un boyau où l'on ne passe qu'un par un — ce qui, pour une fois, joue en sa faveur."
+      ],
+      combat:{ groupe:[{bst:"BST_017",n:2},{bst:"BST_033",n:1}], victoire:"descend_ok", defaite:"descend_ko" }
+    },
+    descend_ok:{
+      texte:[
+        "Yohan remonte au jour bien après la nuit tombée, couvert d'une poussière qui sent le fer et autre chose.",
+        "Il a vu la salle. Il ne dira jamais le chiffre à voix haute, parce que personne ne le croirait et que le dire donnerait envie de partir loin.",
+        "Il a aussi vu ce que portait celui qui menait la cadence : une bannière verte, neuve, et un symbole que personne n'a jamais relevé."
+      ],
+      effets:{xp:48, sang:6, or:90, flags:["horde_comptee","banniere_verte_vue"]},
+      fin:true
+    },
+    descend_ko:{
+      texte:[
+        "Yohan remonte le boyau à l'aveugle en laissant derrière lui plus de sang qu'il n'aurait voulu, et débouche au jour au petit matin.",
+        "Il n'a pas de chiffre, pas de bannière, pas de preuve. Seulement le rythme, qui continue de battre dans son crâne trois jours durant."
+      ],
+      effets:{pv:-12, fat:16, xp:16, flag:"horde_pressentie"},
+      fin:true
+    },
+    previent:{
+      texte:[
+        "Yohan remonte au jour et fait ce que personne ne fait jamais : il prend le temps d'aller dire à des gens concernés une chose qu'ils n'ont pas envie d'entendre.",
+        "On l'écoute poliment à Kar-Durak. On note. On le remercie. Et on ne fait rien, parce qu'un avertissement sans chiffre n'est qu'une inquiétude.",
+        "Il repart en sachant qu'il aura été le premier à savoir, ce qui ne servira strictement à rien le jour venu."
+      ],
+      effets:{flag:"horde_pressentie"},
+      fin:true
+    }
+  }
+},
+
+/* ══════════════════════════════ ONDE · Côte des Dents ══════════════════════════════ */
+{
+  id:"EW_PHARE", titre:"Le phare qu'on rallume", famille:"VOYAGE", rarete:"inhabituel",
+  image:"evt_phare", lieux:["LOC_019"],
+  scenes:{
+    start:{
+      texte:[
+        "La Côte des Dents porte bien son nom : une rangée de récifs qui affleurent à marée basse et disparaissent à marée haute, exactement au moment où il faudrait les voir.",
+        "Le phare est là depuis toujours, et il est éteint depuis trois ans. Le gardien est mort, personne n'a repris le poste, et les naufrages ont repris avec.",
+        "Ce soir, il y a une voile au large qui remonte la côte dans le mauvais sens, et il reste peut-être deux heures avant qu'elle ne trouve les récifs."
+      ],
+      choix:[
+        {label:"Monter et rallumer le feu", detail:"Jet d'Agilité (12) · l'escalier n'a pas été entretenu",
+         test:{stat:"agi", dc:12}, reussite:"allume_ok", echec:"allume_ko"},
+        {label:"Faire un feu sur la grève, plus bas", detail:"Moins visible · beaucoup plus rapide",
+         suite:"greve"},
+        {label:"Chercher pourquoi le phare est resté éteint trois ans", detail:"Jet de Précision (13) · personne ne laisse un phare s'éteindre",
+         test:{stat:"precision", dc:13}, reussite:"pourquoi_ok", echec:"pourquoi_ko"},
+      ]
+    },
+    allume_ok:{
+      texte:[
+        "L'escalier tient sur deux marches sur trois et Yohan monte les cent quarante en comptant celles qui manquent. La réserve d'huile est intacte : personne n'a même pris la peine de la voler.",
+        "Le feu prend au bout d'une demi-heure, mal d'abord, puis franchement, et la lanterne renvoie sur l'eau un cône jaune qui n'avait pas été là depuis trois ans.",
+        "La voile vire au large dans le quart d'heure. Yohan reste en haut jusqu'à ce qu'elle ait doublé la pointe, parce que redescendre avant serait absurde."
+      ],
+      effets:{xp:34, sang:4, fat:12, flag:"phare_rallume"},
+      fin:true
+    },
+    allume_ko:{
+      texte:[
+        "L'escalier cède au tiers de la montée et Yohan redescend plus vite qu'il n'était monté, en s'écorchant sur trois étages de pierre.",
+        "Il fait un feu sur la grève avec ce qu'il trouve. C'est moins haut, moins visible, et ça arrive peut-être trop tard.",
+        "La voile disparaît derrière la pointe sans qu'il sache, et il ne le saura jamais."
+      ],
+      effets:{pv:-8, xp:16},
+      fin:true
+    },
+    greve:{
+      texte:[
+        "Yohan ramasse du bois flotté pendant une heure et allume sur la grève le plus gros feu qu'il puisse tenir seul.",
+        "Ça ne vaut pas un phare. Mais depuis la mer, une lumière qui n'est pas là d'habitude fait au moins réfléchir un timonier.",
+        "La voile ralentit, hésite, et finit par virer. Ça a suffi — cette fois."
+      ],
+      effets:{xp:24, sang:2, fat:8},
+      fin:true
+    },
+    pourquoi_ok:{
+      texte:[
+        "Yohan monte d'abord regarder avant d'allumer quoi que ce soit. La réserve d'huile est pleine, la lanterne intacte, le mécanisme graissé il y a peu.",
+        "Ce phare n'est pas abandonné : il est éteint. Volontairement, régulièrement, par quelqu'un qui l'entretient pour qu'il puisse resservir un jour.",
+        "Trois ans de naufrages sur une côte dont les épaves reviennent toutes à la même grève. Ce n'est pas un accident : c'est un commerce."
+      ],
+      effets:{xp:44, sang:5, flag:"phare_sabote"},
+      choix:[
+        {label:"Rallumer quand même, et qu'ils viennent", detail:"Ils viendront",
+         suite:"defi"},
+        {label:"Repartir avec l'information", detail:"Cela vaudra cher au bon interlocuteur",
+         suite:"info", effets:{or:60, suspicion:3}},
+      ]
+    },
+    info:{
+      texte:[
+        "Yohan redescend sans rien allumer et quitte la côte avant l'aube.",
+        "Un phare éteint volontairement pendant trois ans, sur une côte dont les épaves reviennent toutes à la même grève — cela vaut de l'argent auprès d'une compagnie d'assurance maritime, d'un port rival, ou d'une maison qui cherche un moyen de pression.",
+        "Ce soir-là, une voile passe la pointe dans le noir. Yohan est déjà à deux lieues et n'entend rien."
+      ],
+      fin:true
+    },
+    defi:{
+      texte:[
+        "Yohan allume le feu, puis s'assoit au pied de la tour, dos à la pierre, et attend.",
+        "Ils arrivent avant minuit — quatre hommes de la grève, qui montent en connaissant le chemin, et qui s'arrêtent net en trouvant quelqu'un assis là."
+      ],
+      combat:{ groupe:[{bst:"BST_002",n:2},{bst:"BST_001",n:2}], victoire:"defi_ok", defaite:"defi_ko" }
+    },
+    defi_ok:{
+      texte:[
+        "Le feu brûle jusqu'au matin et deux voiles doublent la pointe pendant la nuit sans même savoir qu'elles ont failli ne pas la doubler.",
+        "Yohan laisse la réserve d'huile ouverte et un mot en évidence sur la porte : *entretenu par un ami du gardien*. Il n'a aucune idée de qui reprendra le poste.",
+        "Quelqu'un le reprendra. Les gens de la côte ne demandaient qu'à ce qu'on rende ça possible."
+      ],
+      effets:{xp:52, sang:8, flags:["phare_rallume","cote_liberee"]},
+      fin:true
+    },
+    defi_ko:{
+      texte:[
+        "Ils sont plus nombreux que prévu et ils connaissent la tour mieux que lui. Yohan décroche par la grève en laissant le feu derrière lui — allumé, au moins.",
+        "Il brûlera jusqu'à l'aube avant que quelqu'un ne remonte l'éteindre. Une nuit. C'est une voile, peut-être."
+      ],
+      effets:{pv:-10, xp:20, flag:"phare_sabote"},
+      fin:true
+    },
+    pourquoi_ko:{
+      texte:[
+        "Yohan fouille la base de la tour et n'y trouve que du sel, du sable et des cordages pourris.",
+        "Le temps qu'il renonce, la marée a monté. Il allume tout de même la lanterne, trop tard pour que cela change quoi que ce soit ce soir."
+      ],
+      effets:{fat:10, xp:12},
+      fin:true
+    }
+  }
+},
+
+
 ];

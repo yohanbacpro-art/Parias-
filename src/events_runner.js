@@ -35,7 +35,9 @@ function conditionsRemplies(req){
   if(req.niveauMin    !== undefined && hero.niveau         < req.niveauMin) return false;
   if(req.suspicionMin !== undefined && hero.suspicion      < req.suspicionMin) return false;
   if(req.suspicionMax !== undefined && hero.suspicion      > req.suspicionMax) return false;
+  if(req.renomMin     !== undefined && renomActuel() < req.renomMin) return false;
   if(req.compagnon    && !hero.compagnons.some(c=>c.id===req.compagnon)) return false;
+  if(req.affinite     && affiniteAvec(req.affinite.qui) < req.affinite.min) return false;
   if(req.flags        && !req.flags.every(f=>hasFlag(f))) return false;
   if(req.sansFlags    && req.sansFlags.some(f=>hasFlag(f))) return false;
   return true;
@@ -119,6 +121,11 @@ function applyEffets(e){
       tags.push(`<span class="reward-tag">${it.nom}</span>`);
     }
   }
+  if(e.renom){ ajusterRenom(e.renom); tags.push(`<span class="reward-tag${e.renom<0?' neg':''}">${e.renom>0?'+':'−'}${Math.abs(e.renom)} Renom</span>`); }
+  if(e.affinite){
+    ajusterAffinite(e.affinite.qui, e.affinite.n);
+    tags.push(`<span class="reward-tag">Lien resserré</span>`);
+  }
   if(e.flag && !hasFlag(e.flag)) heroFlags().push(e.flag);
   (e.flags || []).forEach(f => { if(!hasFlag(f)) heroFlags().push(f); });
   return tags;
@@ -145,6 +152,31 @@ function renderScene(sceneId){
   if(ecritState.dernierJet){ html += ecritState.dernierJet; ecritState.dernierJet = null; }
   html += sc.texte.map(p=>`<p class="narrative">${p}</p>`).join('');
   if(tags.length) html += `<div class="reward-tags">${tags.join('')}</div>`;
+
+  // --- Scène de bataille rangée ---
+  if(sc.bataille){
+    const def = BATTLES[sc.bataille.def];
+    const armee = (hero.armee||[]).filter(u=>u.effectif>0);
+    const hommes = armee.reduce((n,u)=>n+u.effectif, 0);
+    html += `<p class="mech-line">Bataille rangée · votre armée compte ${armee.length} unité(s), ${hommes} hommes.</p>`;
+    if(!armee.length){
+      html += `<p class="narrative fail">Yohan n'a aucune troupe. Une bataille rangée ne se mène pas seul — passez par l'écran <b>Armée</b> pour lever des hommes.</p>
+        <div style="margin-top:16px;text-align:right;"><button class="primary" id="scRetourBtn">Revenir</button></div>`;
+      box.innerHTML = html;
+      document.getElementById('eventModal').style.display='flex';
+      document.getElementById('scRetourBtn').onclick = closeEventModal;
+      return;
+    }
+    html += `<div style="margin-top:16px;text-align:right;"><button class="primary" id="scBatailleBtn">Prendre le commandement</button></div>`;
+    box.innerHTML = html;
+    document.getElementById('eventModal').style.display='flex';
+    document.getElementById('scBatailleBtn').onclick = () => {
+      closeEventModal();
+      const suiteV = sc.bataille.victoire, suiteD = sc.bataille.defaite;
+      startBattle(def, (gagnee) => renderScene(gagnee ? suiteV : suiteD));
+    };
+    return;
+  }
 
   // --- Scène de combat ---
   if(sc.combat){
@@ -324,6 +356,18 @@ function pickEnemyGroupForZone(lieu, rarete){
 }
 
 
+/* ============================= AFFINITÉS ============================= */
+/* Le lien avec quelqu'un ne monte que par des choix — jamais par le temps. */
+function heroAffinites(){
+  if(!hero.affinites) hero.affinites = { ...AFFINITES_DEPART };
+  return hero.affinites;
+}
+function affiniteAvec(qui){ const a = heroAffinites(); return a[qui] || 0; }
+function ajusterAffinite(qui, n){
+  const a = heroAffinites();
+  a[qui] = Math.max(0, (a[qui]||0) + n);
+}
+
 /* ============================= TRAME PRINCIPALE ============================= */
 /*
  * Les jalons de l'histoire ne se cherchent pas : ils se débloquent. À chaque fin
@@ -336,8 +380,11 @@ function pickEnemyGroupForZone(lieu, rarete){
 
 let tramePending = false;
 
+/* La trame passe avant l'intime : l'histoire d'abord, les moments calmes ensuite. */
 function trameDisponible(){
-  return EVENTS_TRAME.find(ev => conditionsRemplies(ev.requis)) || null;
+  return EVENTS_TRAME.find(ev => conditionsRemplies(ev.requis))
+      || EVENTS_ROMANCE.find(ev => conditionsRemplies(ev.requis))
+      || null;
 }
 
 function modaleOuverte(){
@@ -371,5 +418,22 @@ function trameProgres(){
   const total = EVENTS_TRAME.length;
   const faits = EVENTS_TRAME.filter(trameJouee).length;
   const prochain = EVENTS_TRAME.find(ev => !trameJouee(ev)) || null;
-  return { total, faits, prochain, debloque: !!trameDisponible() };
+  const romTotal = EVENTS_ROMANCE.length;
+  const romFaits = EVENTS_ROMANCE.filter(trameJouee).length;
+  return { total, faits, prochain, romTotal, romFaits, debloque: !!trameDisponible() };
+}
+
+/* ============================= CONTRATS SPÉCIAUX ============================= */
+/* Campagnes et affaires personnelles : proposées sur l'écran Contrats, jouées
+ * comme des événements écrits. */
+function contratsSpeciauxDisponibles(categorie){
+  return CONTRATS_SPECIAUX.filter(c =>
+    (!categorie || c.categorie === categorie) && conditionsRemplies(c.requis));
+}
+
+function ouvrirContratSpecial(id){
+  const c = CONTRATS_SPECIAUX.find(x=>x.id===id);
+  if(!c) return;
+  ecritState = { ev:c, lieu:null, retourEcran:'contrats', dernierJet:null };
+  renderScene('start');
 }

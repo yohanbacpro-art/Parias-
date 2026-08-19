@@ -74,6 +74,11 @@ function renderQuete(){
           ? `<b style="color:var(--onde-bright);">Quelque chose est prêt à se produire.</b> Terminez un tour pour que cela vienne à Yohan.`
           : `Le prochain jalon n'est pas encore mûr — il faut du sang, du temps, ou les bonnes rencontres.`)
       : `<span class="qc-num">Jalons de l'histoire · ${tr.faits}/${tr.total}</span>Tous les jalons connus ont été franchis.`;
+    const liens = Object.entries(hero.affinites||{}).filter(([,v])=>v>0);
+    if(liens.length){
+      trEl.innerHTML += `<br><span class="qc-num" style="margin-top:8px;">Liens · ${tr.romFaits}/${tr.romTotal} moments partagés</span>`
+        + liens.map(([qui,v])=>`${(PORTRAITS[qui]||{}).nom||qui} <b style="color:var(--gold);">${v}</b>`).join(' · ');
+    }
   }
 
   const list = document.getElementById('compagnonList');
@@ -108,6 +113,9 @@ let hero = {
   compagnons: [],
   flags: [],            // marqueurs posés par les événements écrits
   evenementsVus: [],    // événements écrits déjà joués (évite les répétitions)
+  renom: 0,             // réputation militaire — débloque les campagnes
+  armee: [],            // unités persistantes, avec leurs pertes
+  affinites: {},        // liens tissés, alimentés uniquement par des choix
 };
 
 /* ============================= NIVEAU & EXPÉRIENCE ============================= */
@@ -151,7 +159,7 @@ function showScreen(id){
   document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active', b.dataset.screen===id));
   const cal = document.getElementById('calendarBar');
   if(cal.dataset.gameStarted==='1'){
-    cal.style.display = (id==='combat') ? 'none' : 'flex';
+    cal.style.display = (id==='combat' || id==='bataille') ? 'none' : 'flex';
   }
 }
 
@@ -205,6 +213,9 @@ function loadHeroFromJSON(json){
   obj.crisesDeclenchees = new Set(obj.crisesDeclenchees || []);
   obj.flags = obj.flags || [];
   obj.evenementsVus = obj.evenementsVus || [];
+  obj.renom = obj.renom || 0;
+  obj.armee = obj.armee || [];
+  obj.affinites = obj.affinites || {};
   // Les compagnons sauvegardés avant l'ajout du combat de groupe n'ont pas de bloc `combat`
   obj.compagnons = (obj.compagnons || []).map(c => COMPANIONS_POOL[c.id] || c);
   hero = obj;
@@ -279,6 +290,7 @@ function enterGame(){
   renderCalendar();
   renderChroniques();
   renderQuete();
+  renderArmee();
   showScreen('personnage');
 }
 
@@ -296,6 +308,10 @@ document.querySelectorAll('nav.tabs button').forEach(b=>{
     if(b.dataset.screen==='quete') renderQuete();
     if(b.dataset.screen==='personnage') renderEquipement();
     if(b.dataset.screen==='codex') renderCodex();
+    if(b.dataset.screen==='armee') renderArmee();
+    // Les campagnes et affaires personnelles s'ouvrent au fil du Renom et des
+    // marqueurs : il faut refaire le tri à chaque visite, pas seulement au départ.
+    if(b.dataset.screen==='contrats') renderContracts();
   };
 });
 document.getElementById('btnBackMonde').onclick = () => showScreen('monde');
@@ -519,6 +535,124 @@ function grantLoot(){
   return null;
 }
 
+/* ============================= ARMÉE ============================= */
+
+function entretienTotal(){
+  return (hero.armee||[]).filter(u=>u.effectif>0).reduce((s,u)=>{
+    const t = UNIT_TYPES[u.type];
+    if(!t || !t.entretien) return s;
+    // On paie au prorata de l'effectif restant : une unité décimée coûte moins cher.
+    return s + Math.round(t.entretien * (u.effectif/u.effectifMax));
+  }, 0);
+}
+
+/* Une troupe qu'on ne paie pas finit par s'en aller. */
+function payerLaSolde(){
+  const du = entretienTotal();
+  if(du <= 0) return;
+  if(hero.or >= du){ hero.or -= du; return; }
+  hero.or = 0;
+  const vivantes = (hero.armee||[]).filter(u=>u.effectif>0);
+  if(!vivantes.length) return;
+  const partante = vivantes[vivantes.length-1];
+  hero.armee = hero.armee.filter(u => u !== partante);
+  ajusterRenom(-3);
+  const box = document.getElementById('eventModalBox');
+  box.innerHTML = `<span class="event-tag">Solde impayée</span><h3>Ils sont partis dans la nuit</h3>
+    <p class="narrative">La solde n'a pas suivi, et ${partante.nom} a fait ce que font les hommes qu'on ne paie pas : ils ont plié leurs affaires sans bruit et ils sont partis avant l'aube.</p>
+    <p class="narrative" style="color:var(--parchment-dim);font-style:italic;">Personne ne le dira à voix haute, mais tout le camp le sait avant midi. On suit un capitaine qui paie.</p>
+    <div class="reward-tags"><span class="reward-tag neg">−3 Renom</span><span class="reward-tag neg">${partante.nom} dissoute</span></div>
+    <div style="margin-top:16px;text-align:right;"><button class="primary" id="soldeBtn">Continuer</button></div>`;
+  document.getElementById('eventModal').style.display='flex';
+  document.getElementById('soldeBtn').onclick = () => { renderArmee(); closeEventModal(); };
+}
+
+function recruterUnite(typeId){
+  const t = UNIT_TYPES[typeId];
+  if(!t || t.ennemi) return;
+  if(hero.or < (t.prix||0)) return;
+  if(renomActuel() < (t.renomRequis||0)) return;
+  if(t.requisFlag && !hasFlag(t.requisFlag)) return;
+  if(t.unique && (hero.armee||[]).some(u=>u.type===typeId)) return;
+  hero.or -= (t.prix||0);
+  if(!hero.armee) hero.armee = [];
+  hero.armee.push(instancierUnite(typeId));
+  saveGame(true);
+  renderArmee();
+}
+
+function dissoudreUnite(uid){
+  hero.armee = (hero.armee||[]).filter(u=>u.uid!==uid);
+  saveGame(true);
+  renderArmee();
+}
+
+function renderArmee(){
+  const rn = renomActuel();
+  const tRenom = document.getElementById('renomTexte');
+  if(!tRenom) return;
+  tRenom.textContent = `${rn} · ${rangMilitaire(rn)}`;
+  document.getElementById('renomBar').style.width = Math.min(100, rn) + '%';
+
+  const vivantes = (hero.armee||[]).filter(u=>u.effectif>0);
+  document.getElementById('armeeEffectif').textContent =
+    vivantes.length ? `${vivantes.reduce((s,u)=>s+u.effectif,0)} hommes · ${vivantes.length} unité(s)` : 'aucune troupe';
+  document.getElementById('armeeEntretien').textContent = entretienTotal() + ' or';
+  document.getElementById('armeeOr').textContent = hero.or;
+
+  // --- Rôle ---
+  const role = document.getElementById('armeeRole');
+  role.innerHTML = '';
+  if(!vivantes.length){
+    role.innerHTML = `<p class="inv-empty">Yohan ne commande personne. Une campagne exige une armée : commencez par recruter.</p>`;
+  } else {
+    vivantes.forEach(u=>{
+      const t = UNIT_TYPES[u.type] || {};
+      const pct = Math.max(0, 100*u.effectif/u.effectifMax);
+      const div = document.createElement('div');
+      div.className = 'unit-card allie';
+      div.innerHTML = `<div class="u-top"><span class="u-nom">${u.nom}</span><span class="u-eff">${u.effectif}/${u.effectifMax}</span></div>
+        <div class="u-bar"><i style="width:${pct}%"></i></div>
+        <div class="u-meta">${u.categorie} · ATQ ${u.attaque} · DÉF ${u.defense}${u.portee?' · à distance':''} · entretien ${Math.round((t.entretien||0)*(u.effectif/u.effectifMax))} or</div>`;
+      const btn = document.createElement('button');
+      btn.className = 'ghost'; btn.textContent = 'Congédier';
+      btn.style.marginTop = '8px';
+      btn.onclick = () => dissoudreUnite(u.uid);
+      div.appendChild(btn);
+      role.appendChild(div);
+    });
+  }
+
+  // --- Recrutement ---
+  const rec = document.getElementById('recrutementList');
+  rec.innerHTML = '';
+  unitesRecrutables().forEach(t=>{
+    const dejaUnique = t.unique && (hero.armee||[]).some(u=>u.type===t.id);
+    const verrouRenom = renomActuel() < (t.renomRequis||0);
+    const verrouFlag  = t.requisFlag && !hasFlag(t.requisFlag);
+    const tropCher    = hero.or < (t.prix||0);
+
+    const div = document.createElement('div');
+    div.className = 'unit-card';
+    div.style.cursor = 'default';
+    div.innerHTML = `<div class="u-top"><span class="u-nom">${t.nom}</span>
+        <span class="u-eff">${t.prix ? t.prix+' or' : 'sans solde'}</span></div>
+      <div class="u-meta">${t.categorie} · ${t.effectif} hommes · ATQ ${t.attaque} · DÉF ${t.defense}${t.portee?' · à distance':''} · entretien ${t.entretien||0}/tour</div>
+      <div class="u-desc">${t.desc}</div>`;
+
+    const btn = document.createElement('button');
+    btn.className = 'ghost';
+    btn.style.marginTop = '8px';
+    if(dejaUnique){ btn.textContent = 'Déjà au rôle'; btn.disabled = true; }
+    else if(verrouFlag){ btn.textContent = 'Ils ne vous suivront pas encore'; btn.disabled = true; }
+    else if(verrouRenom){ btn.textContent = `Renom ${t.renomRequis} requis (vous avez ${renomActuel()})`; btn.disabled = true; }
+    else if(tropCher){ btn.textContent = `${t.prix} or requis`; btn.disabled = true; }
+    else { btn.textContent = 'Recruter'; btn.onclick = () => recruterUnite(t.id); }
+    div.appendChild(btn);
+    rec.appendChild(div);
+  });
+}
+
 /* ============================= MONDE (carte interactive) ============================= */
 function dangerColor(l){
   const m = l.danger_range.max;
@@ -652,6 +786,7 @@ function endTurnMeta(){
 
   const karlsberg = lieu && (lieu.id==='LOC_001' || lieu.id==='LOC_014');
   gainPointsSang(karlsberg ? 5 : 1);
+  payerLaSolde();
   saveGame(true);
   renderCalendar();
 
@@ -698,7 +833,33 @@ function closeEventModal(){
 }
 
 /* ============================= CONTRATS ============================= */
+function renderContratsSpeciaux(){
+  const rendu = (holder, categorie, vide) => {
+    if(!holder) return;
+    const dispo = contratsSpeciauxDisponibles(categorie);
+    holder.innerHTML = '';
+    if(!dispo.length){ holder.innerHTML = `<p class="inv-empty">${vide}</p>`; return; }
+    dispo.forEach(c=>{
+      const row = document.createElement('div');
+      row.className = 'contract-row';
+      const badge = categorie === 'campagne'
+        ? `<span class="cr-badge campagne">Bataille</span>`
+        : `<span class="cr-badge">Personnel</span>`;
+      row.innerHTML = `<div><div class="cr-titre">${c.titre}</div>
+        <div class="cr-meta">${c.commanditaire} · ${c.lieu}</div>
+        <div class="cr-meta" style="color:var(--parchment);font-style:italic;margin-top:4px;">${c.resume||''}</div></div>${badge}`;
+      row.onclick = () => ouvrirContratSpecial(c.id);
+      holder.appendChild(row);
+    });
+  };
+  rendu(document.getElementById('campagneList'), 'campagne',
+    `Aucune campagne ouverte. Gagnez du Renom en menant des contrats et des batailles — le vôtre est de ${renomActuel()}.`);
+  rendu(document.getElementById('personnelList'), 'personnel',
+    "Personne n'a encore assez de raisons de vous en vouloir pour vous proposer quelque chose de tordu.");
+}
+
 function renderContracts(){
+  renderContratsSpeciaux();
   const list = document.getElementById('contractList');
   list.innerHTML = '';
   CONTRACTS.forEach(c=>{
@@ -795,6 +956,9 @@ function renderContractStep(){
         b.innerHTML = `${o.label}<small>${o.sub}</small>`;
         b.onclick = () => {
           contractState.prixChoisi = o.id;
+          if(o.id==="NOBLE_CONSENTANTE" || o.id==="OR_ET_NOBLE_CONSENTANTE"){
+            if(!hasFlag('prix_noble_accepte')) heroFlags().push('prix_noble_accepte');
+          }
           if(o.id==="REFUSER"){
             body.innerHTML += `<p style="color:var(--blood-bright);margin-top:12px;">Yohan décline. Le contrat est clos sans suite.</p>`;
           } else if(o.id==="NEGOCIER"){
@@ -968,6 +1132,7 @@ function renderContractStep(){
       const orGagne = Math.round(c.or * (contractState.mods.orMult||1));
       hero.or += orGagne;
       gainPointsSang(5);
+      ajusterRenom(3);   // un contrat honoré se sait, et le Renom monte
       msg = fillTemplate(pickVariant(FRAME_RETOUR_SUCCESS), c) + ` Yohan reçoit ${orGagne} pièces d'or.`;
       if(c.prix_paria && (contractState.prixChoisi==="NOBLE_CONSENTANTE" || contractState.prixChoisi==="OR_ET_NOBLE_CONSENTANTE")){
         const p = c.prix_paria.noble_proposee;

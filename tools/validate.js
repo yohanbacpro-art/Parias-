@@ -15,7 +15,9 @@ const fichiers = [
   'src/data/bestiary.js', 'src/data/portraits.js', 'src/data/locations.js',
   'src/data/events.js', 'src/data/contracts.js', 'src/data/powers.js',
   'src/data/items.js', 'src/data/lore.js', 'src/data/champions.js',
+  'src/data/units.js', 'src/data/battles.js',
   'src/data/events_written.js', 'src/data/events_meetings.js', 'src/data/events_trame.js',
+  'src/data/contracts_special.js', 'src/data/romances.js',
 ];
 
 const ctx = vm.createContext({ console });
@@ -27,12 +29,14 @@ for(const f of fichiers){
 // l'objet global : on les récupère en évaluant une expression dans ce même contexte.
 const {
   BESTIARY_FULL, PORTRAITS, LOCATIONS, EVENTS, CONTRACTS, ITEM_POOL,
-  EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME,
+  EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME, CONTRATS_SPECIAUX, EVENTS_ROMANCE,
   TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS,
+  UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART,
 } = vm.runInContext(`({
   BESTIARY_FULL, PORTRAITS, LOCATIONS, EVENTS, CONTRACTS, ITEM_POOL,
-  EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME,
-  TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS
+  EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME, CONTRATS_SPECIAUX, EVENTS_ROMANCE,
+  TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS,
+  UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART
 })`, ctx);
 
 const erreurs = [];
@@ -51,12 +55,23 @@ const locIds   = new Set(LOCATIONS.map(l => l.id));
 const portrIds = new Set(Object.keys(PORTRAITS));
 const champIds = new Set(Object.keys(CHAMPIONS));
 const compagnonIds = new Set(Object.keys(COMPANIONS_POOL));
+const batailleIds = new Set(Object.keys(BATTLES));
+const uniteIds    = new Set(Object.keys(UNIT_TYPES));
+const affiniteIds = new Set(Object.keys(AFFINITES_DEPART));
 const tousLesEvenements = [
   ...EVENTS_WRITTEN.map(e => ({ ev:e, cat:'lieu' })),
   ...EVENTS_RENCONTRE.map(e => ({ ev:e, cat:'rencontre' })),
   ...EVENTS_TRAME.map(e => ({ ev:e, cat:'trame' })),
+  ...CONTRATS_SPECIAUX.map(e => ({ ev:e, cat:'contrat' })),
+  ...EVENTS_ROMANCE.map(e => ({ ev:e, cat:'romance' })),
 ];
-const marqueursPoses = new Set();   // tout flag qu'un effet peut poser
+// Certains marqueurs sont posés par le moteur et non par un effet de contenu :
+// on les déclare ici pour que le contrôle des marqueurs orphelins reste utile.
+const MARQUEURS_MOTEUR = [
+  'prix_noble_accepte',   // src/game.js — choix du Prix du Paria dans un contrat
+  'onde_devant_armee',    // src/battle.js — Coup de l'Onde employé en bataille
+];
+const marqueursPoses = new Set(MARQUEURS_MOTEUR);   // tout flag qu'un effet peut poser
 const marqueursLus = new Map();     // flag → où il est exigé
 const powerIds = new Set();
 for(const arbre of [TREE, TREE_ELFES])
@@ -64,7 +79,7 @@ for(const arbre of [TREE, TREE_ELFES])
     for(const n of branche.nodes) powerIds.add(n.id);
 
 /* ---- Événements écrits ---- */
-let nbScenes = 0, nbChoix = 0, nbCombats = 0;
+let nbScenes = 0, nbChoix = 0, nbCombats = 0, nbBatailles = 0;
 const idsVus = new Set();
 for(const { ev, cat } of tousLesEvenements){
   const nom = ev.id;
@@ -77,6 +92,11 @@ for(const { ev, cat } of tousLesEvenements){
     if(req.compagnon && !compagnonIds.has(req.compagnon)) err(`${nom} : compagnon inconnu ${req.compagnon}`);
     (req.flags || []).forEach(f => marqueursLus.set(f, nom));
     (req.sansFlags || []).forEach(f => marqueursLus.set(f, nom));
+    if(req.affinite && !affiniteIds.has(req.affinite.qui))
+      err(`${nom} : affinité inconnue ${req.affinite.qui}`);
+  }
+  if((cat === 'romance' || cat === 'contrat') && !(req && req.sansFlags && req.sansFlags.length)){
+    err(`${nom} : un ${cat} doit poser un marqueur via requis.sansFlags, sinon il se rejoue en boucle`);
   }
   if(cat === 'trame' && !(req && req.sansFlags && req.sansFlags.length)){
     err(`${nom} : un jalon de trame doit poser un marqueur via requis.sansFlags, sinon il se rejoue en boucle`);
@@ -99,7 +119,17 @@ for(const { ev, cat } of tousLesEvenements){
     noterMarqueurs(sc.effets);
 
     const suivantes = [];
-    if(sc.combat){
+    if(sc.effets && sc.effets.affinite && !affiniteIds.has(sc.effets.affinite.qui))
+      err(`${nom}/${id} : affinité inconnue ${sc.effets.affinite.qui}`);
+
+    if(sc.bataille){
+      nbBatailles++;
+      if(!batailleIds.has(sc.bataille.def)) err(`${nom}/${id} : bataille inconnue ${sc.bataille.def}`);
+      if(!sc.bataille.victoire || !sc.bataille.defaite) err(`${nom}/${id} : bataille sans issue victoire/defaite`);
+      if(sc.bataille.victoire) suivantes.push(sc.bataille.victoire);
+      if(sc.bataille.defaite)  suivantes.push(sc.bataille.defaite);
+      if(sc.choix) err(`${nom}/${id} : une scène de bataille ne doit pas porter de choix`);
+    } else if(sc.combat){
       nbCombats++;
       (sc.combat.groupe || []).forEach(g => {
         if(g.champion){
@@ -137,6 +167,8 @@ for(const { ev, cat } of tousLesEvenements){
           if(r.objet && !itemIds.has(r.objet)) err(`${ref} : objet inconnu ${r.objet}`);
         }
         if(c.effets && c.effets.item && !itemIds.has(c.effets.item)) err(`${ref} : objet inconnu ${c.effets.item}`);
+        if(c.effets && c.effets.affinite && !affiniteIds.has(c.effets.affinite.qui))
+          err(`${ref} : affinité inconnue ${c.effets.affinite.qui}`);
         noterMarqueurs(c.effets);
       });
     } else if(!sc.fin){
@@ -149,6 +181,34 @@ for(const { ev, cat } of tousLesEvenements){
   Object.keys(ev.scenes).forEach(sid => {
     if(!atteintes.has(sid)) warn(`${nom} : scène inatteignable → ${sid}`);
   });
+}
+
+/* ---- Batailles ---- */
+for(const [id, b] of Object.entries(BATTLES)){
+  if(b.id !== id) err(`Bataille ${id} : champ id incohérent (${b.id})`);
+  if(!b.fronts || b.fronts.length !== 3) err(`Bataille ${id} : ${b.fronts?b.fronts.length:0} fronts au lieu de 3`);
+  (b.fronts||[]).forEach((f,i)=>{
+    if(!TERRAINS[f.terrain]) err(`Bataille ${id}/front ${i} : terrain inconnu ${f.terrain}`);
+    if(!f.ennemis || !f.ennemis.length) warn(`Bataille ${id}/front ${i} (${f.nom}) : aucun adversaire`);
+    (f.ennemis||[]).forEach(e=>{
+      if(!uniteIds.has(e.type)) err(`Bataille ${id}/front ${i} : type d'unité inconnu ${e.type}`);
+      else if(!UNIT_TYPES[e.type].ennemi) warn(`Bataille ${id}/front ${i} : ${e.type} est une unité recrutable, pas une troupe adverse`);
+    });
+  });
+  ['recompense','echec'].forEach(k=>{
+    (((b[k]||{}).flags)||[]).forEach(f => marqueursPoses.add(f));
+  });
+}
+
+/* ---- Troupes ---- */
+for(const [id, t] of Object.entries(UNIT_TYPES)){
+  if(t.id !== id) err(`Unité ${id} : champ id incohérent (${t.id})`);
+  if(!['infanterie','archers','cavalerie'].includes(t.categorie)) err(`Unité ${id} : catégorie inconnue ${t.categorie}`);
+  ['effectif','attaque','defense','moral'].forEach(k=>{
+    if(typeof t[k] !== 'number') err(`Unité ${id} : statistique manquante ${k}`);
+  });
+  if(!t.ennemi && typeof t.prix !== 'number') err(`Unité ${id} : recrutable sans prix`);
+  if(t.requisFlag) marqueursLus.set(t.requisFlag, `unité ${id}`);
 }
 
 /* ---- Champions ---- */
@@ -196,12 +256,14 @@ console.log(`Bestiaire   ${BESTIARY_FULL.length} créatures`);
 console.log(`Lieux       ${LOCATIONS.length}`);
 console.log(`Contrats    ${CONTRACTS.length}`);
 console.log(`Événements  ${EVENTS_WRITTEN.length} de lieu · ${EVENTS_RENCONTRE.length} rencontres · ${EVENTS_TRAME.length} jalons de trame`);
-console.log(`            ${nbScenes} scènes, ${nbChoix} choix, ${nbCombats} affrontements · + ${EVENTS.length} générés en remplissage`);
+console.log(`            ${CONTRATS_SPECIAUX.length} contrats spéciaux · ${EVENTS_ROMANCE.length} attachements`);
+console.log(`            ${nbScenes} scènes, ${nbChoix} choix, ${nbCombats} affrontements, ${nbBatailles} batailles · + ${EVENTS.length} générés`);
+console.log(`Troupes     ${Object.keys(UNIT_TYPES).length} types · ${Object.keys(BATTLES).length} champs de bataille`);
 console.log(`Pouvoirs    ${powerIds.size} · Objets ${itemIds.size} · Portraits ${portrIds.size} · Champions ${champIds.size}`);
 console.log('');
 
 /* ---- Couverture par lieu ---- */
-const tirables = [...EVENTS_WRITTEN, ...EVENTS_RENCONTRE];
+const tirables = [...EVENTS_WRITTEN, ...EVENTS_RENCONTRE];  // la trame et les romances ne se tirent pas sur place
 console.log('Couverture par lieu (événements écrits tirables sur place) :');
 let vides = 0;
 LOCATIONS.forEach(l => {

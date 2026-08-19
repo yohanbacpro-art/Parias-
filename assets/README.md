@@ -45,6 +45,20 @@ identifiant. Déposer le fichier au bon chemin suffit à le remplacer — aucun 
 | `rc_arene.webp` | Le Tenant du Sable Rouge |
 | `rc_lucius.webp` | Le tacticien |
 
+### Campagnes et affaires personnelles
+
+`cg_route`, `cg_cendre`, `cg_defile`, `cg_karlsberg`, `cg_tyrion`, `cg_lucius`,
+`cs_caleb`, `cs_tyrion`, `cs_vauclair`.
+
+### Attachements
+
+`ro_alycia_1`, `ro_alycia_2`, `ro_alycia_3`, `ro_alarielle_1`, `ro_alarielle_2`,
+`ro_eleonore_1`, `ro_eleonore_2`.
+
+### Événements de lieu ajoutés
+
+`evt_tambours`, `evt_phare`.
+
 ### Jalons de trame
 
 | Fichier attendu | Jalon |

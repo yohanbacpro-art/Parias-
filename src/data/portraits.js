@@ -10,6 +10,7 @@ const PORTRAITS = {
   yohan:        {nom:"Yohan de Karlsberg", role:"Paria · dernier héritier du Loup"},
   alycia:       {nom:"Alycia de Callensbourg", role:"Paria · vit cachée"},
   alarielle:    {nom:"Princesse Alarielle", role:"Elfe · Cour d'Eltharion"},
+  eleonore:     {nom:"Lady Éléonore", role:"Maison de Valombre"},
 
   /* — Figures du Codex — */
   caleb:        {nom:"Caleb de Fort-aux-Princes", role:"Prince Paria"},

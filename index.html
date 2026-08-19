@@ -355,6 +355,58 @@
   .trame-etat{font-family:'Inter',sans-serif;font-size:12px;color:var(--parchment-dim);
     margin-top:14px;padding-top:10px;border-top:1px dashed var(--line);}
 
+  /* ---- armée & bataille ---- */
+  .unit-list{display:flex;flex-direction:column;gap:8px;}
+  .unit-card{background:#0f0c0a;border:1px solid var(--line);border-radius:5px;padding:8px 10px;cursor:pointer;}
+  .unit-card.allie{border-left:3px solid var(--gold-dim);}
+  .unit-card.ennemi{border-left:3px solid var(--blood-bright);cursor:default;}
+  .unit-card.selectionnee{border-color:var(--onde-bright);background:#12201f;}
+  .unit-card.a-bouge{opacity:.55;}
+  .unit-card.morte{opacity:.3;}
+  .unit-card .u-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+  .unit-card .u-nom{font-family:'Cinzel',serif;font-size:12.5px;color:var(--parchment);}
+  .unit-card .u-eff{font-family:'Inter',sans-serif;font-size:11px;color:var(--gold);font-variant-numeric:tabular-nums;}
+  .unit-card .u-bar{height:6px;border-radius:3px;background:#0a0807;border:1px solid var(--line);overflow:hidden;margin:5px 0 4px;}
+  .unit-card .u-bar i{display:block;height:100%;background:linear-gradient(90deg,#8a6f1f,var(--gold));}
+  .unit-card.ennemi .u-bar i{background:linear-gradient(90deg,#5a1015,var(--blood-bright));}
+  .unit-card .u-meta{font-family:'Inter',sans-serif;font-size:10px;color:var(--parchment-dim);letter-spacing:.03em;}
+  .unit-card .u-desc{font-size:12px;color:var(--parchment-dim);font-style:italic;margin-top:4px;}
+  .unit-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+
+  .bat-tete{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px;}
+  .bat-tour{font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--onde-bright);}
+  .bat-morals{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .bat-moral-label{font-family:'Inter',sans-serif;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--parchment-dim);margin-bottom:5px;}
+  .bat-moral-label b{color:var(--parchment);font-variant-numeric:tabular-nums;}
+  .bat-aide{font-family:'Inter',sans-serif;font-size:11.5px;color:var(--parchment-dim);margin:0 0 14px;}
+  .bat-fronts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:980px){.bat-fronts{grid-template-columns:1fr;}}
+  .front{background:#0f0c0a;border:1px solid var(--line);border-radius:6px;padding:10px;}
+  .front.avec-yohan{border-color:var(--gold);}
+  .front-tete{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+  .front-nom{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);}
+  .front-terrain{font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--onde-bright);cursor:help;}
+  .front-label{font-family:'Inter',sans-serif;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--parchment-dim);margin:8px 0 5px;}
+  .front-vide{font-size:12px;color:var(--parchment-dim);font-style:italic;padding:6px 0;}
+  .front-allies{min-height:70px;border-top:1px dashed var(--line);margin-top:8px;cursor:pointer;}
+  .front-ordre{margin-top:8px;}
+  .front-ordre label{font-family:'Inter',sans-serif;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--parchment-dim);display:block;margin-bottom:4px;}
+  .front-ordre select{width:100%;background:#161210;border:1px solid var(--line);color:var(--parchment);
+    font-family:'EB Garamond',serif;font-size:13px;padding:5px 8px;border-radius:4px;}
+  .ordre-desc{font-family:'Inter',sans-serif;font-size:10px;color:var(--parchment-dim);margin-top:4px;font-style:italic;}
+  .front-yohan{width:100%;margin-top:8px;font-size:10px;padding:5px;}
+  .bat-journal{background:#0a0807;border:1px solid var(--line);border-radius:4px;padding:12px 14px;
+    max-height:380px;overflow-y:auto;font-size:13.5px;line-height:1.55;}
+  .bat-journal p{margin:0 0 7px;padding-bottom:7px;border-bottom:1px dashed rgba(255,255,255,.05);}
+  .bat-log-systeme{color:var(--gold);}
+  .bat-log-recit{color:var(--parchment-dim);font-style:italic;}
+  .bat-log-front{color:var(--parchment);}
+  .bat-log-perte{color:var(--blood-bright);}
+  .bat-log-onde{color:var(--onde-bright);font-weight:600;}
+  .perte-e{color:var(--onde-bright);} .perte-a{color:var(--blood-bright);}
+  .cr-badge.campagne{border-color:var(--warn);color:var(--warn);}
+  .cr-badge.verrou{border-color:var(--line);color:var(--parchment-dim);}
+
   footer{text-align:center;margin-top:24px;font-family:'Inter',sans-serif;font-size:11px;color:var(--parchment-dim);letter-spacing:.05em;}
 </style>
 </head>
@@ -370,6 +422,7 @@
     <button data-screen="personnage">Personnage</button>
     <button data-screen="quete">Quête</button>
     <button data-screen="monde">Monde</button>
+    <button data-screen="armee">Armée</button>
     <button data-screen="contrats">Contrats</button>
     <button data-screen="chroniques">Chroniques</button>
     <button data-screen="codex">Codex</button>
@@ -523,10 +576,81 @@
 
   <!-- CONTRATS -->
   <div class="screen" id="screen-contrats">
+    <div class="panel" id="panelCampagnes">
+      <h2>Campagnes</h2>
+      <p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;">On n'y va pas seul. Elles se débloquent au Renom, pas au niveau — personne ne confie une colonne à un inconnu.</p>
+      <div class="contract-list" id="campagneList"></div>
+    </div>
+    <div class="panel" id="panelPersonnels">
+      <h2>Affaires personnelles</h2>
+      <p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;">Proposées par ceux que Yohan a contrariés. Elles paient mieux que tout le reste, et ce n'est jamais gratuit.</p>
+      <div class="contract-list" id="personnelList"></div>
+    </div>
     <div class="panel">
       <h2>Registre des Contrats</h2>
       <div class="contract-list" id="contractList"></div>
     </div>
+  </div>
+
+  <!-- ARMÉE -->
+  <div class="screen" id="screen-armee">
+    <div class="panel">
+      <h2>L'armée de Karlsberg</h2>
+      <div class="stat-row"><span>Renom militaire</span><b id="renomTexte">—</b></div>
+      <div class="gauge"><div class="gauge-fill fat" id="renomBar" style="width:0%"></div></div>
+      <div class="stat-row"><span>Effectif total</span><b id="armeeEffectif">—</b></div>
+      <div class="stat-row"><span>Entretien par tour</span><b id="armeeEntretien">—</b></div>
+      <div class="stat-row"><span>Or</span><b id="armeeOr">—</b></div>
+      <p style="color:var(--parchment-dim);font-style:italic;font-size:13px;margin-top:8px;">L'entretien est prélevé à chaque fin de tour. Une troupe qu'on ne paie pas finit par s'en aller.</p>
+    </div>
+    <div class="panel">
+      <h2>Rôle</h2>
+      <div class="unit-list" id="armeeRole"></div>
+    </div>
+    <div class="panel">
+      <h2>Recrutement</h2>
+      <div class="unit-list" id="recrutementList"></div>
+    </div>
+  </div>
+
+  <!-- BATAILLE -->
+  <div class="screen" id="screen-bataille">
+    <div class="panel">
+      <div class="bat-tete">
+        <h2 id="batTitre" style="border:none;margin:0;padding:0;">—</h2>
+        <span class="bat-tour" id="batTour">—</span>
+      </div>
+      <div class="bat-morals">
+        <div class="bat-moral">
+          <div class="bat-moral-label">Notre moral <b id="batMoralAllieTxt">100</b></div>
+          <div class="gauge"><div class="gauge-fill fat" id="batMoralAllieBar" style="width:100%"></div></div>
+        </div>
+        <div class="bat-moral">
+          <div class="bat-moral-label">Moral ennemi <b id="batMoralEnnemiTxt">100</b></div>
+          <div class="gauge"><div class="gauge-fill pv" id="batMoralEnnemiBar" style="width:100%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="batCorps">
+      <div class="panel">
+        <p class="bat-aide" id="batAide"></p>
+        <div class="bat-fronts" id="batFronts"></div>
+      </div>
+      <div class="grid" style="grid-template-columns:320px 1fr;">
+        <div class="panel">
+          <h2>Réserve</h2>
+          <div class="unit-list" id="batReserve"></div>
+          <button class="primary" id="batActionBtn" style="width:100%;margin-top:12px;">Engager la bataille</button>
+          <button class="ghost" id="batOndeBtn" style="width:100%;margin-top:8px;">Coup de l'Onde</button>
+        </div>
+        <div class="panel">
+          <h2>Déroulé</h2>
+          <div class="bat-journal" id="batJournal"></div>
+        </div>
+      </div>
+    </div>
+    <div id="batFin" class="end-screen panel" style="display:none;"></div>
   </div>
 
   <!-- CONTRAT DETAIL -->
@@ -604,6 +728,8 @@
 <script src="src/data/bestiary.js"></script>
 <script src="src/data/portraits.js"></script>
 <script src="src/data/champions.js"></script>
+<script src="src/data/units.js"></script>
+<script src="src/data/battles.js"></script>
 <script src="src/data/locations.js"></script>
 <script src="src/data/events.js"></script>
 <script src="src/data/contracts.js"></script>
@@ -613,8 +739,11 @@
 <script src="src/data/events_written.js"></script>
 <script src="src/data/events_meetings.js"></script>
 <script src="src/data/events_trame.js"></script>
+<script src="src/data/contracts_special.js"></script>
+<script src="src/data/romances.js"></script>
 <script src="src/ui/art.js"></script>
 <script src="src/combat.js"></script>
+<script src="src/battle.js"></script>
 <script src="src/events_runner.js"></script>
 <script src="src/game.js"></script>
 </body>
