@@ -129,7 +129,7 @@ const EVENTS_TRAME = [
       effets:{sang:8, xp:16, flag:"tr_02_fait"},
       fin:true
     },
-    accepte:{
+    accepte:{ pnj:"alycia",
       texte:[
         "Yohan accepte, et il sait exactement ce qu'il accepte : devenir la cible la plus visible de Vardhen pour que trente-et-une personnes puissent rester invisibles.",
         "Alycia n'a pas l'air triomphante. Elle a l'air soulagée, ce qui est différent, et pour la première fois Yohan la croit tout à fait.",
@@ -351,7 +351,7 @@ const EVENTS_TRAME = [
       effets:{sang:26, xp:74, flags:["tr_04_fait","archive_elfique"]},
       fin:true
     },
-    encaisse_ko:{
+    encaisse_ko:{ pnj:"alarielle",
       texte:[
         "Yohan sort du gué sans un mot et marche jusqu'à la nuit sans s'arrêter une fois. Alarielle suit à distance, ce qui est la seule chose correcte à faire.",
         "Ils ne reparleront pas de cette conversation avant longtemps. Mais elle a été dite, et rien n'est jamais tout à fait pareil après."
@@ -369,7 +369,7 @@ const EVENTS_TRAME = [
       effets:{xp:30},
       choix:[ {label:"Demander qui était l'être vivant", suite:"qui"} ]
     },
-    maintenant_ko:{
+    maintenant_ko:{ pnj:"alarielle",
       texte:[
         "Yohan cherche l'arrière-pensée et passe à côté de l'aveu. Alarielle répond poliment à la mauvaise question, et le gué se traverse en silence.",
         "Ce qu'elle voulait dire, elle ne le redira pas de sitôt."
@@ -492,7 +492,7 @@ const EVENTS_TRAME = [
          suite:"refuse", effets:{sang:16, xp:70, flags:["tr_08_fait","karlsberg_independante"]}},
       ]
     },
-    charge:{
+    charge:{ pnj:"garde_astrah",
       texte:[
         "Yohan signe. C'est un morceau de papier qui dit qu'un Paria répond du nord au nom d'un Empire qui a rasé sa maison — et c'est le premier document officiel portant le nom Karlsberg depuis la Purge.",
         "Léopold le contresigne sans commentaire. Au moment où Yohan sort, il ajoute, sans lever la tête : « Mon grand-père a eu tort. Je ne le dirai pas deux fois, et je le nierai si on me cite. »"
@@ -518,7 +518,7 @@ const EVENTS_TRAME = [
       effets:{sang:26, xp:100, renom:12, suspicion:-15, flags:["tr_08_fait","karlsberg_reconnue"]},
       choix:[ {label:"Écouter ce qu'il veut en échange", suite:"propose"} ]
     },
-    reco_ko:{
+    reco_ko:{ pnj:"leopold",
       texte:[
         "Yohan demande trop, trop tôt, et sur le mauvais registre — celui de la réparation plutôt que celui de l'utilité.",
         "Léopold écoute jusqu'au bout par pure politesse d'État. « Vous confondez ce que je vous dois avec ce que je peux vous donner », dit-il enfin. « Il n'y a que le second qui existe. »"
@@ -536,7 +536,7 @@ const EVENTS_TRAME = [
       effets:{sang:14, xp:70, flags:["tr_08_fait","verite_purge"]},
       choix:[ {label:"Écouter ce qu'il propose", suite:"propose"} ]
     },
-    trahison_ko:{
+    trahison_ko:{ pnj:"leopold",
       texte:[
         "La question sort chargée de trois générations de rancune, et un empereur n'a aucune raison de répondre à ça.",
         "« C'était il y a longtemps », dit Léopold, et il passe à autre chose avec une aisance qui a demandé des années d'entraînement."
@@ -659,7 +659,7 @@ const EVENTS_TRAME = [
       effets:{sang:14, xp:44, suspicion:6, flags:["tr_06_fait","contrat_rachete"]},
       fin:true
     },
-    bataille:{
+    bataille:{ pnj:"chasseur_prime",
       texte:[
         "Yohan ne répond pas. Il avance de trois pas sur la route, ce qui est une réponse suffisante, et derrière lui le groupe se déploie sans qu'il ait à le demander.",
         "« Bon », dit le chasseur, presque satisfait. « Au moins c'est net. »"
@@ -667,7 +667,7 @@ const EVENTS_TRAME = [
       combat:{ groupe:[{champion:"chasseur_paria"},{champion:"garde_leopold"},{bst:"BST_002",n:2}],
                victoire:"bataille_gagnee", defaite:"bataille_perdue" }
     },
-    bataille_gagnee:{
+    bataille_gagnee:{ pnj:"chasseur_prime",
       texte:[
         "La route reste vide un long moment après. Yohan fouille le chasseur et trouve le contrat, plié dans une poche intérieure : une somme, une description, et trois initiales.",
         "**L.F.A.** — et en marge, d'une écriture nette et sans colère : *pas prioritaire.*",
@@ -694,7 +694,7 @@ const EVENTS_TRAME = [
   image:"tr_maison",
   requis:{ sangMin:162, flags:["tr_06_fait"], sansFlags:["tr_10_fait"] },
   scenes:{
-    start:{
+    start:{ pnj:"alycia",
       texte:[
         "Karlsberg existe : un nom, une armée, des ruines tenues, des créanciers. Ce qui n'existe pas encore, c'est une réponse à la seule question que toutes les maisons finissent par poser.",
         "Trois messages sont arrivés la même semaine, et aucun n'est une menace.",
@@ -712,7 +712,7 @@ const EVENTS_TRAME = [
            flags:["tr_10_fait","voie_ordinaire"]}},
       ]
     },
-    empire:{
+    empire:{ pnj:"alycia",
       texte:[
         "Yohan choisit la marche. Karlsberg tiendra le nord au nom d'un Empire qui l'a rasée, ce qui est soit une victoire complète soit une capitulation élégante — et personne, y compris lui, ne saura trancher avant vingt ans.",
         "Les avantages sont immédiats : l'or, les hommes, la fin de la chasse.",

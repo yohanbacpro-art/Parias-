@@ -41,7 +41,12 @@ function expandFoeSpec(spec){
   const out = [];
   (Array.isArray(spec) ? spec : [spec]).forEach(x=>{
     if(!x) return;
-    if(x.champion){
+    if(x.groupe){
+      // Tolère qu'on passe la définition de combat entière plutôt que son
+      // groupe : sans cela l'adversaire serait construit à partir d'un objet
+      // vide, et le combat s'ouvrirait sur un ennemi sans nom ni points de vie.
+      out.push(...expandFoeSpec(x.groupe));
+    } else if(x.champion){
       const tpl = CHAMPIONS[x.champion];
       if(!tpl){ console.warn('Champion inconnu :', x.champion); return; }
       for(let i=0;i<(x.n||1);i++) out.push(tpl);
@@ -564,8 +569,11 @@ function fighterCard(c, idx, role){
     ? `<div class="f-bar fat ${zone.cls}"><i style="width:${Math.max(0,c.fat)}%"></i></div>`
     : '';
 
+  // Le visage de celui qu'on frappe : un combat écrit met des gens en face.
+  const face = c.portrait ? artPortraitImg(c.portrait, 'f-face') : '';
+
   return `<div class="${cls}" data-idx="${idx}" data-side="${c.side}">
-    <div class="f-top"><span class="f-nom">${c.nom}</span><span class="f-meta">${c.pv}/${c.pvMax} PV</span></div>
+    <div class="f-top">${face}<span class="f-nom">${c.nom}</span><span class="f-meta">${c.pv}/${c.pvMax} PV</span></div>
     <div class="f-bar pv"><i style="width:${pvPct}%"></i></div>
     ${fatBar}
     <div class="f-top" style="margin-top:4px;"><span class="f-meta">${meta}</span></div>

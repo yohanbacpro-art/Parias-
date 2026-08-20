@@ -1,18 +1,23 @@
 # Illustrations
 
-Deux dossiers, deux formats. Les fichiers sont **facultatifs** : tant qu'un fichier
-manque, le jeu affiche à sa place un blason généré en SVG, stable pour un même
-identifiant. Déposer le fichier au bon chemin suffit à le remplacer — aucun code
-à modifier.
+Deux dossiers, deux formats. Les fichiers sont **facultatifs** : tant qu'un
+fichier manque, le jeu dessine l'image à sa place, en SVG, à partir de ce
+qu'elle représente — la palette du peuple et les attributs du personnage pour un
+portrait, la famille de l'événement pour un bandeau. Déposer le fichier au bon
+chemin suffit à le remplacer, aucun code à modifier.
+
+> Ce fichier est **généré** : `node tools/manifest-assets.js`. Ne pas l'éditer à
+> la main — ajouter un événement ou un personnage puis relancer la commande.
 
 ## `events/` — bandeaux d'événements
 
 - **Format** : `<id>.webp`, ratio **5:2**, 1200×480 recommandé.
-- **Cadrage** : l'image est recadrée en `object-fit: cover`, donc le sujet doit
-  être centré verticalement.
-- **id** : le champ `image` de l'événement dans `src/data/events_written.js`.
+- **Cadrage** : recadré en `object-fit: cover`, sujet centré verticalement.
+- **id** : le champ `image` de l'événement.
 
-| Fichier attendu | Événement |
+### Événements de lieu
+
+| Fichier attendu | Illustre |
 |---|---|
 | `evt_peage.webp` | Le péage des Trois Clous |
 | `evt_archives.webp` | Ce que gardent les archives |
@@ -25,16 +30,17 @@ identifiant. Déposer le fichier au bon chemin suffit à le remplacer — aucun 
 | `evt_galerie.webp` | La galerie qu'on a murée deux fois |
 | `evt_chapelle.webp` | La chapelle qu'on n'ouvre pas |
 | `evt_orpailleur.webp` | Ce que l'orpailleur a remonté |
-| `evt_traque.webp` | Un chasseur de primes rattrape Yohan |
 | `evt_tunnel.webp` | Le tunnel qui monte |
 | `evt_harde.webp` | La harde qui laisse passer |
 | `evt_epave.webp` | L'épave qui n'a pas coulé |
 | `evt_pierres.webp` | Les pierres qui écoutent |
 | `evt_port_noir.webp` | Le manifeste qui ne correspond pas |
+| `evt_tambours.webp` | Les tambours qui comptent |
+| `evt_phare.webp` | Le phare qu'on rallume |
 
 ### Rencontres
 
-| Fichier attendu | Rencontre |
+| Fichier attendu | Illustre |
 |---|---|
 | `rc_caleb.webp` | Le prince qui n'aime pas la concurrence |
 | `rc_tyrion.webp` | La faute d'un autre peuple |
@@ -45,49 +51,115 @@ identifiant. Déposer le fichier au bon chemin suffit à le remplacer — aucun 
 | `rc_arene.webp` | Le Tenant du Sable Rouge |
 | `rc_lucius.webp` | Le tacticien |
 
-### Campagnes et affaires personnelles
+### Jalons de la trame
 
-`cg_route`, `cg_cendre`, `cg_defile`, `cg_karlsberg`, `cg_tyrion`, `cg_lucius`,
-`cs_caleb`, `cs_tyrion`, `cs_vauclair`.
-
-### Attachements
-
-`ro_alycia_1`, `ro_alycia_2`, `ro_alycia_3`, `ro_alarielle_1`, `ro_alarielle_2`,
-`ro_eleonore_1`, `ro_eleonore_2`.
-
-### Événements de lieu ajoutés
-
-`evt_tambours`, `evt_phare`.
-
-### Jalons de trame
-
-| Fichier attendu | Jalon |
+| Fichier attendu | Illustre |
 |---|---|
 | `tr_courrier.webp` | Le courrier qui n'est jamais arrivé |
 | `tr_alycia.webp` | Ce qu'elle n'a pas dit en arrivant |
 | `tr_ruines.webp` | La statue qui garde encore |
+| `tr_sans_nom.webp` | Ceux qui n'ont plus de nom |
 | `tr_dette.webp` | Ce que son peuple doit |
 | `tr_banniere.webp` | La bannière qu'il faut coudre |
+| `tr_roi_cendre.webp` | Une audience qu'on ne refuse pas |
+| `tr_suivait.webp` | Ce que l'Onde suivait |
 | `tr_prix.webp` | Le prix du nom |
+| `tr_maison.webp` | Ce qu'une maison doit choisir |
+| `tr_le_nom.webp` | Le nom Karlsberg |
 
-Les événements générés de `src/data/events.js` cherchent `evt_<famille>.webp`
-en minuscules — `evt_voyage.webp`, `evt_ville.webp`, `evt_paria.webp`,
-`evt_onde.webp`, `evt_guerre.webp`, `evt_politique.webp`, `evt_khesh.webp`,
-`evt_elfe.webp`, `evt_elfe_noir.webp`, `evt_nain.webp`, `evt_peau_verte.webp`,
-`evt_homme_bete.webp`, `evt_taverne.webp`, `evt_contrat.webp`.
+### Campagnes et affaires personnelles
+
+| Fichier attendu | Illustre |
+|---|---|
+| `cg_route.webp` | Rouvrir la Route Grise |
+| `cg_cendre.webp` | Déloger la compagnie franche |
+| `cg_defile.webp` | Boucher le Défilé |
+| `cg_karlsberg.webp` | Reprendre les Ruines du Loup |
+| `cg_tyrion.webp` | Le champ que Tyrion a choisi |
+| `cg_lucius.webp` | Le calendrier de Lucius |
+| `cg_khesh.webp` | L'Unification des Sables |
+| `cg_kardurak.webp` | La Guerre des Profondeurs |
+| `cg_surface.webp` | La Remontée |
+| `cg_horde.webp` | La Grande Horde |
+| `cg_eltharion.webp` | La Faute d'Eltharion |
+| `cg_parias.webp` | La Renaissance des Parias |
+| `cs_caleb.webp` | La faveur de Fort-aux-Princes |
+| `cs_tyrion.webp` | La commission d'Eltharion |
+| `cs_vauclair.webp` | Ce que Vauclair n'a pas oublié |
+
+### Attachements
+
+| Fichier attendu | Illustre |
+|---|---|
+| `ro_alycia_1.webp` | Ce qu'on ne dit qu'à quelqu'un qui sait |
+| `ro_alycia_2.webp` | Ce qu'elle demande vraiment |
+| `ro_alycia_3.webp` | Trente-et-un noms, et un de plus |
+| `ro_alarielle_1.webp` | Ce que coûte de réparer |
+| `ro_alarielle_2.webp` | Ce qu'elle perdrait |
+| `ro_eleonore_1.webp` | Ce qui n'était pas dans le contrat |
+| `ro_eleonore_2.webp` | Une maison qui compte |
+
+### Événements générés
+
+Les 200 variantes de `src/data/events.js` cherchent un bandeau par
+famille : `evt_contrat.webp`, `evt_elfe.webp`, `evt_elfe_noir.webp`, `evt_guerre.webp`, `evt_homme_bete.webp`, `evt_khesh.webp`, `evt_nain.webp`, `evt_onde.webp`, `evt_paria.webp`, `evt_peau_verte.webp`, `evt_politique.webp`, `evt_taverne.webp`, `evt_ville.webp`, `evt_voyage.webp`.
 
 ## `portraits/` — portraits de personnages
 
 - **Format** : `<id>.webp`, **carré**, 512×512 recommandé.
-- Affiché en médaillon rond de 56 px : cadrer le visage au centre.
+- Affiché en médaillon rond : cadrer le visage **au centre**, il est recadré en cercle.
 - **id** : la clé dans `src/data/portraits.js`.
 
-Les 24 identifiants attendus sont listés dans ce fichier — protagoniste et
-compagnons (`yohan`, `alycia`, `alarielle`), figures du Codex, et personnages
-d'événements (`baltus`, `mere_orsen`, `soeur_lisen`, `gorm`, …).
+| Fichier attendu | Personnage | Peuple | Attribut |
+|---|---|---|---|
+| `yohan.webp` | Yohan de Karlsberg — *Paria · dernier héritier du Loup* | paria | nu · Onde |
+| `alycia.webp` | Alycia de Callensbourg — *Paria · vit cachée* | paria | capuche · Onde |
+| `alarielle.webp` | Princesse Alarielle — *Elfe · Cour d'Eltharion* | elfe | tresses |
+| `eleonore.webp` | Lady Éléonore — *Maison de Valombre* | astrah | voile |
+| `caleb.webp` | Caleb de Fort-aux-Princes — *Prince Paria* | paria | couronne · Onde |
+| `leopold.webp` | Léopold IV d'Astrah — *Le Roi de Cendre* | astrah | couronne |
+| `lucius.webp` | Lucius Furius Augustus — *Prétendant impérial* | astrah | heaume |
+| `tyrion.webp` | Prince Tyrion — *Elfe · fils d'Eltharion* | elfe | couronne |
+| `anarion.webp` | Anarion le Magnifique — *Roi des Elfes noirs* | elfe_noir | couronne |
+| `eltharion.webp` | Eltharion le Grand — *Roi des Elfes* | elfe | couronne |
+| `charles.webp` | Charles de Mont-Draken — *Le Sourire de Fer* | astrah | barbe |
+| `kemval.webp` | Kem-Val — *Khesh · Le Banni* | khesh | voile |
+| `khalvaene.webp` | Khal-Vaene — *Khesh · usurpateur* | khesh | masque |
+| `baltus.webp` | Baltus Trois-Clous — *Chef de péage* | humain | chapeau |
+| `mere_orsen.webp` | Mère Orsen — *Archiviste de Fort-aux-Princes* | humain | voile |
+| `perrin.webp` | Perrin le Boiteux — *Ancien soldat d'Astrah* | astrah | barbe |
+| `dame_sarre.webp` | Dame Sarre de Vauclair — *Commanditaire* | humain | tresses |
+| `vieil_orpailleur.webp` | Hesken — *Orpailleur des Champs de Cendre* | humain | chapeau |
+| `soeur_lisen.webp` | Sœur Lisen — *Gardienne de la chapelle* | humain | voile |
+| `taverniere.webp` | Wenda — *Tenancière du Chaudron Fendu* | humain | nu |
+| `gorm.webp` | Gorm fils de Gorik — *Nain · maître de galerie* | nain | barbe |
+| `aza_khesh.webp` | Aza-Rhun — *Khesh · porteuse de lances* | khesh | tresses |
+| `capitaine_ferre.webp` | Capitaine Ferré — *Officier d'Astrah* | astrah | heaume |
+| `enfant_onde.webp` | L'enfant sans nom — *Touchée par l'Onde* | paria | nu · Onde |
+| `chasseur_prime.webp` | Le Chasseur — *Prime sur un Paria* | humain | capuche |
+| `tenant_arene.webp` | Le Tenant du Sable Rouge — *Invaincu de l'Arène Rouge* | humain | masque |
+| `garde_astrah.webp` | Garde du Roi de Cendre — *Astrah · maison royale* | astrah | heaume |
+| `lame_noire.webp` | Lame de la Cour Noire — *Duelliste d'Anarion* | elfe_noir | masque |
+
+### Combattants nommés
+
+Chaque champion affiche le portrait ci-dessous pendant un affrontement.
+
+| Champion | Portrait utilisé |
+|---|---|
+| Caleb de Fort-aux-Princes | `caleb` |
+| Prince Tyrion | `tyrion` |
+| Khal-Vaene | `khalvaene` |
+| Kem-Val le Banni | `kemval` |
+| Charles le Sourire de Fer | `charles` |
+| Lame de la Cour Noire | `lame_noire` |
+| Le Tenant du Sable Rouge | `tenant_arene` |
+| Garde du Roi de Cendre | `garde_astrah` |
+| Chasseur de Parias | `chasseur_prime` |
 
 ## Vérifier
 
 `node tools/validate.js` signale tout `image` ou `pnj` référencé sans entrée
-correspondante. Il ne vérifie pas la présence des fichiers eux-mêmes, puisqu'ils
-sont facultatifs par construction.
+correspondante, tout champion dont le portrait n'existe pas au registre, et tout
+portrait dont le peuple ou l'attribut ne serait pas dessinable. Il ne vérifie pas
+la présence des fichiers eux-mêmes, puisqu'ils sont facultatifs par construction.

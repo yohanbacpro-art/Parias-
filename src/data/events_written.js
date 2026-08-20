@@ -57,7 +57,7 @@ const EVENTS_WRITTEN = [
          requis:{pouvoir:"foudre"}, suite:"onde"},
       ]
     },
-    paye:{
+    paye:{ pnj:"baltus",
       texte:[
         "Yohan compte les pièces dans la paume tendue. Baltus les fait sauter une fois, les glisse dans sa ceinture, et fait signe qu'on abaisse la chaîne. Aucun des six ne le regarde vraiment traverser — ils regardent déjà derrière lui, vers le prochain.",
         "C'est exactement ce que Yohan voulait : passer sans laisser de trace. Vingt pièces, c'est le prix courant de l'oubli."
@@ -74,7 +74,7 @@ const EVENTS_WRITTEN = [
       effets:{xp:10},
       fin:true
     },
-    tenir_ko:{
+    tenir_ko:{ pnj:"baltus",
       texte:[
         "Yohan tient bon un moment de trop. Baltus, lui, a compris qu'il n'y aurait ni paiement ni recul, et il n'a pas six hommes derrière lui pour reculer le premier.",
         "La chaîne racle la pierre. Deux d'entre eux contournent déjà par le flanc."
@@ -107,7 +107,7 @@ const EVENTS_WRITTEN = [
       effets:{or:-20},
       fin:true
     },
-    onde:{
+    onde:{ pnj:"baltus",
       texte:[
         "Yohan ne dit rien. Il laisse simplement l'Onde monter — juste assez pour que l'air se charge, que les chevaux reculent d'eux-mêmes, que la chaîne se mette à vibrer contre la pierre avec un bruit de guêpe.",
         "Baltus regarde la chaîne. Puis Yohan. Puis, très vite, ailleurs. « Enlevez ça. Enlevez ça tout de suite. »",
@@ -140,7 +140,7 @@ const EVENTS_WRITTEN = [
          test:{stat:"precision", dc:14}, reussite:"fouille_ok", echec:"fouille_ko"},
       ]
     },
-    nie_ok:{
+    nie_ok:{ pnj:"mere_orsen",
       texte:[
         "Yohan rit, du bon rire un peu las de l'homme qu'on confond avec un autre pour la dixième fois du mois. Il donne un nom de bourg, un métier de père, une raison plate d'être là. Rien qui accroche.",
         "Mère Orsen l'écoute jusqu'au bout, hoche la tête, et retourne à son registre. « Alors j'aurai eu tort. À mon âge, ça arrive de plus en plus. »",
@@ -173,7 +173,7 @@ const EVENTS_WRITTEN = [
          suite:"admet_refuse"},
       ]
     },
-    admet_prend:{
+    admet_prend:{ pnj:"mere_orsen",
       texte:[
         "Le rouleau tient dans une main. Des colonnes de chiffres, des noms de villages, et au milieu d'une liste de créanciers : *Maison Karlsberg — grain, sel, fer* — sur douze années, avec les signatures des intendants.",
         "Ce n'est pas une généalogie. C'est mieux : c'est une preuve administrative que la maison a existé, tenue par une main qui n'avait aucune raison de mentir.",
@@ -181,7 +181,7 @@ const EVENTS_WRITTEN = [
       ],
       fin:true
     },
-    admet_refuse:{
+    admet_refuse:{ pnj:"mere_orsen",
       texte:[
         "Yohan repousse doucement le rouleau vers elle. « Si on trouve ça ici, on vous pendra à la porte de la salle des rôles. Brûlez-le. »",
         "Mère Orsen le regarde longtemps. « Vous êtes le premier Karlsberg que je rencontre qui pense à quelqu'un d'autre. » Elle range le rouleau là où il était. « Il sera là si vous changez d'avis. »"
@@ -189,7 +189,7 @@ const EVENTS_WRITTEN = [
       effets:{suspicion:-4, xp:12, flag:"orsen_epargnee"},
       fin:true
     },
-    fouille_ok:{
+    fouille_ok:{ pnj:"mere_orsen",
       texte:[
         "Yohan connaît la logique des registres mieux qu'un scribe : on ne cherche pas ce qu'on veut trouver, on cherche ce que l'administration n'a pas eu de raison de détruire.",
         "Il remonte les rôles de péage, les taxes de foire, les listes de saisies. Et il trouve — pas un nom, mais une adresse : un entrepôt de Fort-aux-Princes saisi à un débiteur nommé seulement « l'homme du Loup ».",
@@ -245,7 +245,7 @@ const EVENTS_WRITTEN = [
          suite:"apprend", effets:{sang:5, xp:18, flag:"enfant_cachee"}},
       ]
     },
-    emmene:{
+    emmene:{ pnj:"enfant_onde",
       texte:[
         "Yohan ressort de la grange avec la petite derrière lui et le cercle s'ouvre sans un mot — de soulagement plus que de respect. Le problème s'en va sur ses deux jambes, c'est tout ce qu'ils demandaient.",
         "La route sera longue et il faudra la faire en évitant les villes. Mais quelque part au bout, il y a des gens qui savent quoi faire d'une enfant de onze ans qui fait trembler les vitres.",
@@ -253,7 +253,7 @@ const EVENTS_WRITTEN = [
       ],
       fin:true
     },
-    apprend:{
+    apprend:{ pnj:"enfant_onde",
       texte:[
         "Yohan lui montre le peu qu'on peut montrer en une heure : respirer contre l'Onde, la ravaler, faire semblant que le monde ne bourdonne pas. Ce n'est pas une éducation, c'est un déguisement.",
         "« Ça fait mal », dit-elle. « Oui », répond Yohan. « Toute ta vie. »",
@@ -261,7 +261,7 @@ const EVENTS_WRITTEN = [
       ],
       fin:true
     },
-    entre_ko:{
+    entre_ko:{ pnj:"enfant_onde",
       texte:[
         "Yohan entre, et l'Onde de la petite le prend de plein fouet — sans intention, sans malice, la panique brute d'une enfant qui ne contrôle rien. Il est projeté contre la cloison avant d'avoir pu dire un mot.",
         "Il ressort en s'appuyant au chambranle, sonné, sous les yeux de vingt personnes qui viennent de le voir échouer.",
@@ -511,7 +511,7 @@ const EVENTS_WRITTEN = [
          suite:"sortie_propre", effets:{xp:22}},
       ]
     },
-    silence_ok:{
+    silence_ok:{ pnj:"dame_sarre",
       texte:[
         "Yohan explique calmement combien vaut une maison qui a tenté de faire assassiner son propre intendant en piégeant un tiers, et combien il en coûterait que la chose se sache dans trois cours différentes.",
         "Dame Sarre paie. Elle paie beaucoup, et elle paie en le regardant droit dans les yeux, ce qui est sa manière de dire qu'elle n'oubliera pas."
@@ -519,7 +519,7 @@ const EVENTS_WRITTEN = [
       effets:{or:340, xp:26, suspicion:6, flag:"vauclair_rancune"},
       fin:true
     },
-    silence_ko:{
+    silence_ko:{ pnj:"dame_sarre",
       texte:[
         "Yohan demande trop, trop vite. Dame Sarre cesse de sourire et rappelle, sans hausser la voix, que cette pièce n'a pas de fenêtre et qu'elle a deux hommes derrière la porte.",
         "Il sort avec ce qu'on lui laisse emporter : rien, et la certitude d'avoir fait une ennemie utile."
@@ -593,7 +593,7 @@ const EVENTS_WRITTEN = [
       effets:{or:180, xp:24, flag:"lucius_pressenti"},
       fin:true
     },
-    interesse_ko:{
+    interesse_ko:{ pnj:"capitaine_ferre",
       texte:[
         "Yohan pose une question de trop sur le commandement, et deux cents hommes qui cousent des bannières interdites n'ont pas de patience pour les curieux.",
         "Ferré ne donne même pas d'ordre. Il fait un geste, et l'avant-garde s'écarte pour laisser passer ceux dont c'est le travail."
@@ -618,7 +618,7 @@ const EVENTS_WRITTEN = [
       effets:{xp:28, sang:4, suspicion:6, flag:"averti_lucius"},
       fin:true
     },
-    paria_ko:{
+    paria_ko:{ pnj:"capitaine_ferre",
       texte:[
         "Yohan en dit trop, et ce qui devait créer une complicité crée exactement le contraire : deux cents hommes viennent d'apprendre qu'un Paria connaît leur secret.",
         "Ferré ne le fait pas tuer — il a trop à faire. Mais il envoie un cavalier vers le sud le soir même, et ce cavalier porte une description."
@@ -673,7 +673,7 @@ const EVENTS_WRITTEN = [
       effets:{xp:30, sang:4, item:"accessoire_gants", flag:"khesh_reconnu"},
       fin:true
     },
-    force_ko:{
+    force_ko:{ pnj:"aza_khesh",
       texte:[
         "Yohan perd, proprement, devant deux cents témoins. Personne ne rit — c'est aussi une preuve, simplement pas celle qu'il espérait donner.",
         "Aza-Rhun laisse les trois lances plantées dans le sable. « Reviens quand elles voudront dire quelque chose. »"
@@ -691,7 +691,7 @@ const EVENTS_WRITTEN = [
       effets:{xp:26, sang:3, flag:"khesh_dette"},
       fin:true
     },
-    parole_ko:{
+    parole_ko:{ pnj:"aza_khesh",
       texte:[
         "Yohan choisit ses mots trop bien, et c'est précisément ce qu'on lui reproche. Aza-Rhun lève la main avant la fin. « Tu parles comme un homme d'Astrah. Ici, c'est une insulte. »",
         "On ne le chasse pas. On lui retire simplement l'eau, la conversation et l'ombre, ce qui revient au même dans les dunes."
@@ -746,7 +746,7 @@ const EVENTS_WRITTEN = [
          suite:"scelle", effets:{fat:10, xp:24, or:90, flag:"gorm_ami"}},
       ]
     },
-    lit_ko:{
+    lit_ko:{ pnj:"gorm",
       texte:[
         "Yohan examine la pierre et n'y voit qu'une pierre. Les marques de forge lui échappent, et la logique des deux appareillages avec.",
         "Gorm décide donc seul, comme il l'aurait fait de toute façon. Il crache dans ses mains et empoigne la masse."
@@ -763,14 +763,14 @@ const EVENTS_WRITTEN = [
       effets:{xp:26, or:120, sang:2, flag:"gorm_ami"},
       fin:true
     },
-    scelle:{
+    scelle:{ pnj:"gorm",
       texte:[
         "Ils ne rouvrent pas. Ils doublent le scellement, avec les marques de forge remises dans le bon ordre, parce que Gorm sait les tracer même s'il ignore ce qu'elles retiennent.",
         "En repartant, Gorm glisse une bourse à Yohan sans commentaire. Chez les nains, remercier avec des mots serait une façon de dire que le travail n'avait pas de valeur."
       ],
       fin:true
     },
-    ouvre:{
+    ouvre:{ pnj:"gorm",
       texte:[
         "La masse tombe trois fois. Au troisième coup, le mur cède vers l'intérieur — vers l'intérieur, ce qui veut dire que quelque chose tirait.",
         "L'air qui sort de la galerie est plus froid que la pierre et sent le fer rouillé. Gorm lève sa lanterne, et la lumière ne va pas aussi loin qu'elle le devrait."
@@ -787,7 +787,7 @@ const EVENTS_WRITTEN = [
       effets:{xp:34, or:200, sang:3, item:"armure_cuir", flag:"galerie_rouverte"},
       fin:true
     },
-    ouvre_ko:{
+    ouvre_ko:{ pnj:"gorm",
       texte:[
         "Ils reculent en désordre jusqu'au coude de la galerie, et c'est l'effondrement du plafond — provoqué par Gorm, à la masse, sur ses propres étais — qui referme le passage.",
         "Gorm a une jambe brisée et l'air de quelqu'un qui vient de comprendre son père trente ans trop tard. « Troisième mur », souffle-t-il. « Et celui-là, je n'expliquerai à personne. »"
@@ -844,7 +844,7 @@ const EVENTS_WRITTEN = [
          suite:"veille", effets:{fat:12, xp:12, sang:1}},
       ]
     },
-    veille:{
+    veille:{ pnj:"soeur_lisen",
       texte:[
         "Ils passent la nuit à deux devant la porte, sans parler. Rien ne vient. Au matin, le village compte encore tous ses vivants, ce qui n'était pas arrivé depuis trois semaines.",
         "Ce n'est pas résolu. C'est seulement reporté, et Sœur Lisen a dormi trois heures sur son tabouret, la tête contre le montant."
@@ -899,7 +899,7 @@ const EVENTS_WRITTEN = [
       effets:{or:90, xp:28, sang:2, flag:"chapelle_resolue"},
       fin:true
     },
-    entre_ko:{
+    entre_ko:{ pnj:"soeur_lisen",
       texte:[
         "Yohan gagne la porte à reculons et remet la poutre en travers de ses propres mains, ce qui est l'aveu le plus humiliant de sa semaine.",
         "Sœur Lisen ne dit rien. Elle se rassoit sur son tabouret et rallume sa lampe.",
@@ -946,21 +946,21 @@ const EVENTS_WRITTEN = [
          suite:"prend_part"},
       ]
     },
-    prend_paie:{
+    prend_paie:{ pnj:"vieil_orpailleur",
       texte:[
         "Yohan compte cent cinquante pièces dans la main de l'orpailleur, ce qui représente environ quatre ans de gravier lavé.",
         "Hesken regarde l'or, puis Yohan, puis l'or. « C'était quoi, alors ? » — « Un anneau », répond Yohan. Hesken hoche la tête, et range l'argent. Il a trente ans d'expérience de ce qu'il ne faut pas demander."
       ],
       fin:true
     },
-    prend_part:{
+    prend_part:{ pnj:"vieil_orpailleur",
       texte:[
         "Yohan glisse l'anneau à son doigt et reprend la route. Hesken retourne à son gravier sans un mot.",
         "Il racontera peut-être, un jour, qu'un homme est venu prendre l'anneau qui chauffait. Personne ne le croira, et c'est très bien ainsi."
       ],
       fin:true
     },
-    achete:{
+    achete:{ pnj:"vieil_orpailleur",
       texte:[
         "Cent pièces changent de main, et Hesken a l'air d'un homme à qui on retire un poids plutôt qu'à qui on achète un bien.",
         "L'anneau ne chauffe plus une fois dans la bourse de Yohan. Il y a, gravé à l'intérieur du jonc, un loup assis que Yohan ne regarde pas tout de suite — et qu'il regardera longtemps, plus tard, à la lumière d'un feu."
@@ -978,7 +978,7 @@ const EVENTS_WRITTEN = [
       effets:{xp:14, sang:1},
       fin:true
     },
-    rejette_ko:{
+    rejette_ko:{ pnj:"vieil_orpailleur",
       texte:[
         "Hesken écoute le conseil, réfléchit, et fait exactement le contraire : il empoche l'anneau. Trente ans de ruisseau lui ont appris qu'on ne rejette pas ce qui a de la valeur parce qu'un étranger a un mauvais pressentiment.",
         "Yohan reprend la route. Derrière lui, un vieil homme porte à son doigt un anneau qui chauffe."

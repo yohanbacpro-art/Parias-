@@ -264,6 +264,54 @@ console.log(`Troupes     ${Object.keys(UNIT_TYPES).length} types · ${Object.key
 console.log(`Pouvoirs    ${powerIds.size} · Objets ${itemIds.size} · Portraits ${portrIds.size} · Champions ${champIds.size}`);
 console.log('');
 
+/* ---- Illustrations ---- */
+/* Un portrait mal attribué ne casse rien : il montre simplement le mauvais
+ * visage, et personne ne s'en aperçoit avant de jouer la scène. */
+const PEUPLES_DESSIN = ['humain','paria','onde','elfe','elfe_noir','nain','khesh',
+                        'peau_verte','homme_bete','astrah'];
+const TRAITS_DESSIN  = ['couronne','capuche','heaume','voile','barbe','cornes',
+                        'masque','tresses','chapeau','nu'];
+Object.entries(PORTRAITS).forEach(([id, p]) => {
+  if(!p.nom || !p.role) err(`Portrait ${id} : nom ou rôle manquant`);
+  if(!p.peuple) err(`Portrait ${id} : pas de peuple — le dessin de repli serait générique`);
+  else if(!PEUPLES_DESSIN.includes(p.peuple)) err(`Portrait ${id} : peuple « ${p.peuple} » sans palette`);
+  if(p.trait && !TRAITS_DESSIN.includes(p.trait)) err(`Portrait ${id} : attribut « ${p.trait} » non dessinable`);
+});
+Object.entries(CHAMPIONS).forEach(([k, c]) => {
+  if(!c.portrait) err(`Champion ${k} : aucun portrait — l'adversaire se bat sans visage`);
+  else if(!portrIds.has(c.portrait)) err(`Champion ${k} : portrait « ${c.portrait} » absent du registre`);
+});
+/* Deux champions distincts qui partagent un visage : l'un des deux montre celui
+ * de l'autre. Seul un doublon volontaire (même personne, deux fiches) passe. */
+const parPortrait = {};
+Object.entries(CHAMPIONS).forEach(([k, c]) => { (parPortrait[c.portrait] = parPortrait[c.portrait] || []).push(k); });
+Object.entries(parPortrait).forEach(([pid, ks]) => {
+  if(ks.length > 1) warn(`Portrait ${pid} partagé par ${ks.join(' et ')} — vérifier que c'est la même personne`);
+});
+/* Une scène qui nomme un personnage du registre sans montrer son visage.
+ * Le repérage se fait sur le nom propre : les personnages désignés par un nom
+ * commun (« Le Chasseur », « Garde du Roi de Cendre ») ne peuvent pas être
+ * détectés sans lever une alerte à chaque emploi ordinaire du mot — ceux-là
+ * restent à la charge de l'auteur. */
+const MOTS_COMMUNS = ['garde','enfant','chasseur','tenant','lame','sourire','roi','princesse'];
+const NOMS_SCENE = Object.entries(PORTRAITS)
+  .map(([id, p]) => [id, p.nom.replace(/^(Princesse|Lady|Prince|Capitaine|Sœur|Mère|Dame|Le|La|L')\s*/, '').split(/[ ']/)[0]])
+  .filter(([id, m]) => m.length > 3 && id !== 'yohan' && !MOTS_COMMUNS.includes(m.toLowerCase()));
+let sansVisage = 0;
+tousLesEvenements.forEach(({ ev }) => {
+  Object.entries(ev.scenes || {}).forEach(([sid, sc]) => {
+    if(sc.pnj) return;
+    const txt = (sc.texte || []).join(' ');
+    const cites = NOMS_SCENE.filter(([, m]) => new RegExp('\\b' + m.replace(/-/g, '\\-'), 'i').test(txt));
+    if(cites.length === 1){
+      sansVisage++;
+      warn(`${ev.id}/${sid} : ${PORTRAITS[cites[0][0]].nom} est nommé mais aucun portrait n'est affiché (pnj:"${cites[0][0]}")`);
+    }
+  });
+});
+console.log(`Illustrations ${Object.keys(PORTRAITS).length} portraits · ${tousLesEvenements.filter(x => x.ev.image).length}/${tousLesEvenements.length} événements illustrés${sansVisage ? ` · ${sansVisage} scène(s) sans visage` : ''}`);
+console.log('');
+
 /* ---- Épilogue ---- */
 /* Un verdict conditionné à un marqueur qui n'existe pas ne se déclenche jamais :
  * la fin serait muette sans que rien ne le signale. */

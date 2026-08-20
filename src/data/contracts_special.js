@@ -188,7 +188,7 @@ const CONTRATS_SPECIAUX = [
       effets:{xp:30, or:200, flag:"gorm_ami"},
       choix:[ {label:"Prendre position dans la gorge", suite:"champ"} ]
     },
-    renfort_ko:{
+    renfort_ko:{ pnj:"gorm",
       texte:[
         "Gorm écoute et secoue la tête. « Chaque arbalétrier que je vous donne est un arbalétrier qui ne tient plus une porte en bas. »",
         "Ce sera avec ce qu'on a. Comme d'habitude."
@@ -336,7 +336,7 @@ const CONTRATS_SPECIAUX = [
       effets:{xp:36, sang:6, flag:"tyrion_ebranle"},
       choix:[ {label:"Prendre le centre", suite:"champ"} ]
     },
-    gauche_ko:{
+    gauche_ko:{ pnj:"tyrion",
       texte:[
         "Yohan proteste, et il proteste devant témoins, ce qui est exactement ce qu'il ne fallait pas faire.",
         "Tyrion ne répond même pas. Un officier lui indique sa position d'un geste, et la conversation est close."
@@ -344,7 +344,7 @@ const CONTRATS_SPECIAUX = [
       effets:{suspicion:4},
       choix:[ {label:"Prendre le centre", suite:"champ"} ]
     },
-    champ:{
+    champ:{ pnj:"tyrion",
       texte:[
         "Les Elfes noirs arrivent par la lisière, sans hâte, dans cette élégance qui est chez eux une forme d'insulte.",
         "À gauche, la colonne de Tyrion s'ébranle avec une précision de parade. Au centre, il y a Yohan, ses hommes, et environ trois cents personnes qui regardent."
@@ -370,7 +370,7 @@ const CONTRATS_SPECIAUX = [
       effets:{flags:["cg_tyrion_fait","tyrion_confirme"]},
       fin:true
     },
-    decline:{
+    decline:{ pnj:"tyrion",
       texte:[
         "Yohan renvoie la carte sans annotation.",
         "Tyrion tiendra son champ sans lui, gagnera probablement, et n'aura plus jamais besoin de se demander ce que valait ce Paria-là. Il a sa réponse."
@@ -403,7 +403,7 @@ const CONTRATS_SPECIAUX = [
          suite:"absent", effets:{flags:["cg_lucius_fait","lucius_reporte"], suspicion:10}},
       ]
     },
-    vitesse_ok:{
+    vitesse_ok:{ pnj:"lucius",
       texte:[
         "Yohan fait ce que Lucius ne fait jamais : il arrive en avance et il improvise. Un pont brûlé la veille, deux fourrages détournés, un guide payé pour se tromper.",
         "Rien de décisif. Juste assez pour qu'une armée réglée comme une horloge arrive avec une aile en retard et de l'humeur.",
@@ -492,14 +492,14 @@ const CONTRATS_SPECIAUX = [
       effets:{xp:36, sang:5},
       choix:[ {label:"Amener l'armée", suite:"champ"} ]
     },
-    gagne_ko:{
+    gagne_ko:{ pnj:"kemval",
       texte:[
         "Yohan pose la question de travers, avec ce ton de marchand qui vexe partout et dans les dunes plus qu'ailleurs.",
         "Kem-Val répond quand même, brièvement, sans un mot de trop. Il ne redemandera rien."
       ],
       choix:[ {label:"Amener l'armée", suite:"champ"} ]
     },
-    champ:{
+    champ:{ pnj:"khalvaene",
       texte:[
         "La plaine de sel est blanche, plate et sans un pouce de couvert. On y voit tout venir, ce qui n'aide personne.",
         "En face, les lances de Khal-Vaene sont rangées par tribu, chaque bannière à sa place. Il a fait ça proprement."
@@ -515,7 +515,7 @@ const CONTRATS_SPECIAUX = [
       effets:{flags:["cg_khesh_fait","kemval_allie"]},
       fin:true
     },
-    perdu:{
+    perdu:{ pnj:"kemval",
       texte:[
         "La ligne cède au centre et le sel boit ce qu'il faut. Kem-Val couvre la retraite lui-même, ce qui lui ressemble et ne lui vaudra rien.",
         "Les tribus marcheront vers le nord. Yohan entendra parler de ce qu'elles y feront, comme tout le monde, par les Chroniques."
@@ -523,7 +523,7 @@ const CONTRATS_SPECIAUX = [
       effets:{flag:"cg_khesh_fait"},
       fin:true
     },
-    refus:{
+    refus:{ pnj:"kemval",
       texte:[
         "Kem-Val hoche la tête sans insister et se relève. Il a fait quatre jours de marche pour cette conversation et il n'en montre rien.",
         "« Tu as raison », dit-il en partant. « Ce n'est pas ta guerre. » C'est exactement ce qu'il fallait ne pas entendre."
@@ -573,7 +573,7 @@ const CONTRATS_SPECIAUX = [
       effets:{flags:["cg_kardurak_fait","gorm_ami","kardurak_dette"]},
       fin:true
     },
-    perdu:{
+    perdu:{ pnj:"gorm",
       texte:[
         "Les niveaux hauts sont perdus. Les nains scellent derrière eux, comme ils l'ont déjà fait une fois, et redescendent vivre plus bas.",
         "Gorm serre l'avant-bras de Yohan avant qu'il ne remonte au jour. Il ne le remercie pas et ne lui reproche rien. Les deux auraient été déplacés."
@@ -783,7 +783,7 @@ const CONTRATS_SPECIAUX = [
         flags:["cg_eltharion_fait","archive_publiee","crise_elfes_reglee"]},
       fin:true
     },
-    champ:{
+    champ:{ pnj:"alarielle",
       texte:[
         "Le pavillon des archives est en pierre blanche et n'a jamais été conçu pour être défendu, ce qui se voit tout de suite.",
         "Alarielle monte à la tribune et ouvre le premier registre. Dehors, les premiers traits partent avant qu'elle ait fini la première colonne."
@@ -800,7 +800,7 @@ const CONTRATS_SPECIAUX = [
       effets:{flag:"cg_eltharion_fait"},
       fin:true
     },
-    perdu:{
+    perdu:{ pnj:"alarielle",
       texte:[
         "Le pavillon brûle avec ce qu'il contenait, et Alarielle en est sortie de justesse avec quatre feuillets sur trois cents.",
         "Officiellement, c'est un accident. Officiellement, il n'y a jamais rien eu à mesurer."
@@ -855,7 +855,7 @@ const CONTRATS_SPECIAUX = [
         flags:["cg_parias_fait","refuge_vide","crise_parias_reglee"]},
       fin:true
     },
-    champ:{
+    champ:{ pnj:"chasseur_prime",
       texte:[
         "Le refuge est au bout d'un chemin creux, dans un ancien prieuré dont les murs tiennent encore.",
         "L'Ordre des Chasseurs monte en trois colonnes, sans se presser. Ils ne sont pas venus pour une bataille : ils sont venus pour une rafle, et ils découvrent en arrivant qu'il y a une armée devant."
@@ -881,7 +881,7 @@ const CONTRATS_SPECIAUX = [
       effets:{flag:"cg_parias_fait"},
       fin:true
     },
-    paye:{
+    paye:{ pnj:"alycia",
       texte:[
         "Douze cents pièces changent de main dans une arrière-salle, et l'opération est reportée pour raisons de renseignement insuffisant.",
         "Ça marche. Ça marche exactement une fois, et les deux parties le savent en signant.",
@@ -950,7 +950,7 @@ const CONTRATS_SPECIAUX = [
       effets:{xp:20, flags:["cs_caleb_fait"]},
       fin:true
     },
-    detour:{
+    detour:{ pnj:"caleb",
       texte:[
         "Yohan fait l'escorte par le sud, deux jours de plus, sans jamais approcher le territoire litigieux. Le sel arrive. Personne n'est pris nulle part.",
         "Caleb paie l'intégralité de la somme sans commentaire — payer était le seul moyen de ne pas admettre que le piège existait."
@@ -964,7 +964,7 @@ const CONTRATS_SPECIAUX = [
       ],
       combat:{ groupe:[{champion:"garde_leopold"},{bst:"BST_002",n:2}], victoire:"piege_survecu", defaite:"piege_survecu" }
     },
-    piege_survecu:{
+    piege_survecu:{ pnj:"caleb",
       texte:[
         "Yohan décroche du gué avec le convoi et arrive à destination avec deux caisses de moins et une réputation d'incursion armée.",
         "Caleb paie rubis sur l'ongle, publiquement, avec force remerciements — ce qui achève de graver l'affaire dans les registres de trois maisons.",
@@ -973,7 +973,7 @@ const CONTRATS_SPECIAUX = [
       effets:{or:700, suspicion:18, xp:26, flags:["cs_caleb_fait","incident_frontiere"]},
       fin:true
     },
-    refus:{
+    refus:{ pnj:"caleb",
       texte:[
         "Yohan déchire le contrat en quatre et renvoie les morceaux par le même coursier.",
         "Il n'a rien gagné et rien perdu. Caleb, lui, vient d'apprendre que le piège était trop gros — et le prochain sera meilleur."
@@ -1044,7 +1044,7 @@ const CONTRATS_SPECIAUX = [
       effets:{suspicion:10, xp:18, flags:["cs_tyrion_fait","tyrion_confirme"]},
       fin:true
     },
-    refus:{
+    refus:{ pnj:"tyrion",
       texte:[
         "Yohan repose la commission sur la table et sort des jardins sans attendre qu'on le raccompagne.",
         "Il n'a rien porté, rien ouvert, rien appris. Tyrion, lui, a obtenu la réponse qu'il cherchait en une phrase et sans rien dépenser."
@@ -1091,7 +1091,7 @@ const CONTRATS_SPECIAUX = [
          suite:"refus_ferme", effets:{xp:30, sang:4, flags:["cs_vauclair_fait","vauclair_neutralisee"]}},
       ]
     },
-    vrai_ok:{
+    vrai_ok:{ pnj:"dame_sarre",
       texte:[
         "Le prix triple quand on cesse de prétendre que le travail est propre. Yohan entre dans l'étude scellée une nuit de pluie, ressort avec le coffret, et ne l'ouvre pas — c'était la seule condition qu'il ait posée à voix haute.",
         "Dame Sarre paie sans compter, ce qui chez elle est une forme de respect.",
@@ -1100,7 +1100,7 @@ const CONTRATS_SPECIAUX = [
       effets:{or:1400, suspicion:12, xp:52, flags:["cs_vauclair_fait","vauclair_apaisee"]},
       fin:true
     },
-    vrai_ko:{
+    vrai_ko:{ pnj:"dame_sarre",
       texte:[
         "Yohan demande mal, trop tôt, et Dame Sarre reprend l'avantage en trois phrases. Il fera le travail au tarif initial, ce qui, pour une effraction sur bien saisi, est un très mauvais tarif.",
         "Le coffret est récupéré. La somme est versée. Et quelque part dans les registres de la garde de Port-Noir, une description commence à circuler."
@@ -1116,7 +1116,7 @@ const CONTRATS_SPECIAUX = [
       ],
       combat:{ groupe:[{champion:"garde_leopold", n:2}], victoire:"fuite", defaite:"fuite" }
     },
-    fuite:{
+    fuite:{ pnj:"dame_sarre",
       texte:[
         "Yohan quitte Port-Noir par la route de terre avec le coffret et une description de lui-même qui circulera dans trois ports avant la fin du mois.",
         "Dame Sarre paie les neuf cents pièces promises, intégralement, avec un plaisir qu'elle ne cherche même pas à dissimuler.",

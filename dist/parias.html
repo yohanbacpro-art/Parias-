@@ -189,7 +189,7 @@
   .map-pin:hover{filter:brightness(1.3);}
 
   /* ---- personnage ---- */
-  .charhead{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px;margin-bottom:6px;}
+  .charhead{display:flex;align-items:center;flex-wrap:wrap;gap:14px;margin-bottom:12px;}
   .charhead .lvl{font-family:'Cinzel',serif;color:var(--gold);font-size:14px;}
   .stat-row{display:flex;justify-content:space-between;align-items:center;font-family:'Inter',sans-serif;font-size:12.5px;margin-bottom:6px;color:var(--parchment-dim);}
   .stat-row b{color:var(--parchment);font-weight:700;font-variant-numeric:tabular-nums;}
@@ -315,7 +315,7 @@
   .event-illu{display:block;width:100%;aspect-ratio:5/2;object-fit:cover;}
   .pnj-card{display:flex;align-items:center;gap:12px;margin:12px 0 4px;padding:8px 10px;
     background:#0f0c0a;border:1px solid var(--line);border-left:3px solid var(--gold-dim);border-radius:4px;}
-  .portrait-img{width:56px;height:56px;border-radius:50%;object-fit:cover;flex:0 0 56px;
+  .portrait-img{width:76px;height:76px;border-radius:50%;object-fit:cover;flex:0 0 76px;
     border:1px solid var(--gold-dim);background:#0a0807;}
   .pnj-nom{font-family:'Cinzel',serif;font-size:13.5px;color:var(--gold);}
   .pnj-role{font-family:'Inter',sans-serif;font-size:10.5px;color:var(--parchment-dim);letter-spacing:.04em;}
@@ -407,6 +407,13 @@
   .cr-badge.campagne{border-color:var(--warn);color:var(--warn);}
   .cr-badge.verrou{border-color:var(--line);color:var(--parchment-dim);}
 
+  .fighter .f-face{width:26px;height:26px;border-radius:50%;object-fit:cover;flex:0 0 auto;
+    border:1px solid var(--line);background:#0a0807;margin-right:2px;}
+  .fighter.active .f-face{border-color:var(--gold);}
+  .fighter.target .f-face{border-color:var(--blood-bright);}
+  #charFace img{width:64px;height:64px;border-radius:50%;object-fit:cover;
+    border:1px solid var(--gold-dim);background:#0a0807;display:block;}
+
   .epi-panel{max-width:760px;margin:0 auto;}
   .epi-tag{display:inline-block;font-family:'Inter',sans-serif;font-size:10px;text-transform:uppercase;
     letter-spacing:.18em;color:var(--parchment-dim);border:1px solid var(--line);
@@ -488,7 +495,7 @@
   <header class="hero">
     <div class="eyebrow">Prototype interne</div>
     <h1>PARIAS — Chroniques de Vardhen</h1>
-    <div class="sub" id="heroSub">V0.7 · Le monde, les contrats, l'affrontement, les batailles et la fin · version jouable du 2026-08-19</div>
+    <div class="sub" id="heroSub">V0.7 · Le monde, les contrats, l'affrontement, les batailles et la fin · version jouable du 2026-08-20</div>
   </header>
 
   <nav class="tabs" id="tabs" style="display:none;">
@@ -546,8 +553,11 @@
   <div class="screen" id="screen-personnage">
     <div class="panel">
       <div class="charhead">
-        <h2 style="border:none;margin:0;padding:0;">Yohan</h2>
-        <span class="lvl">Niveau <span id="charLvl">3</span> · Paria</span>
+        <span id="charFace"></span>
+        <div>
+          <h2 style="border:none;margin:0;padding:0;">Yohan</h2>
+          <span class="lvl">Niveau <span id="charLvl">3</span> · Paria</span>
+        </div>
       </div>
       <div class="stat-row"><span>Points de Vie</span><b id="charPvText">—</b></div>
       <div class="gauge"><div class="gauge-fill pv" id="charPvBar" style="width:100%"></div></div>
@@ -829,41 +839,82 @@ const BESTIARY_FULL = [{"id": "BST_001", "nom": "Loup gris", "danger": 1, "pv": 
 /* PARIAS — Registre des personnages illustrés
  *
  * Chaque clé correspond à un fichier attendu dans assets/portraits/<clé>.webp
- * (512×512). En son absence, src/ui/art.js affiche un blason procédural stable.
+ * (512×512). En son absence, src/ui/art.js DESSINE le personnage à partir des
+ * champs ci-dessous — le portrait n'est donc jamais anonyme, même sans fichier.
  *
- * `role` s'affiche sous le nom dans la vignette d'un événement.
+ *   nom     affiché dans la vignette
+ *   role    seconde ligne de la vignette
+ *   peuple  palette du dessin : humain, paria, elfe, elfe_noir, nain, khesh,
+ *           peau_verte, homme_bete, astrah (impérial)
+ *   trait   silhouette : couronne, capuche, heaume, voile, barbe, cornes,
+ *           masque, tresses, chapeau, nu
+ *   onde    true si le personnage porte l'Onde — le regard et une marque
+ *           passent alors dans le turquoise
  */
 const PORTRAITS = {
   /* — Protagoniste et proches — */
-  yohan:        {nom:"Yohan de Karlsberg", role:"Paria · dernier héritier du Loup"},
-  alycia:       {nom:"Alycia de Callensbourg", role:"Paria · vit cachée"},
-  alarielle:    {nom:"Princesse Alarielle", role:"Elfe · Cour d'Eltharion"},
-  eleonore:     {nom:"Lady Éléonore", role:"Maison de Valombre"},
+  yohan:        {nom:"Yohan de Karlsberg", role:"Paria · dernier héritier du Loup",
+                 peuple:"paria", trait:"nu", onde:true},
+  alycia:       {nom:"Alycia de Callensbourg", role:"Paria · vit cachée",
+                 peuple:"paria", trait:"capuche", onde:true},
+  alarielle:    {nom:"Princesse Alarielle", role:"Elfe · Cour d'Eltharion",
+                 peuple:"elfe", trait:"tresses"},
+  eleonore:     {nom:"Lady Éléonore", role:"Maison de Valombre",
+                 peuple:"astrah", trait:"voile"},
 
   /* — Figures du Codex — */
-  caleb:        {nom:"Caleb de Fort-aux-Princes", role:"Prince Paria"},
-  leopold:      {nom:"Léopold IV d'Astrah", role:"Le Roi de Cendre"},
-  lucius:       {nom:"Lucius Furius Augustus", role:"Prétendant impérial"},
-  tyrion:       {nom:"Prince Tyrion", role:"Elfe · fils d'Eltharion"},
-  anarion:      {nom:"Anarion le Magnifique", role:"Roi des Elfes noirs"},
-  eltharion:    {nom:"Eltharion le Grand", role:"Roi des Elfes"},
-  charles:      {nom:"Charles de Mont-Draken", role:"Le Sourire de Fer"},
-  kemval:       {nom:"Kem-Val", role:"Khesh · Le Banni"},
-  khalvaene:    {nom:"Khal-Vaene", role:"Khesh · usurpateur"},
+  caleb:        {nom:"Caleb de Fort-aux-Princes", role:"Prince Paria",
+                 peuple:"paria", trait:"couronne", onde:true},
+  leopold:      {nom:"Léopold IV d'Astrah", role:"Le Roi de Cendre",
+                 peuple:"astrah", trait:"couronne"},
+  lucius:       {nom:"Lucius Furius Augustus", role:"Prétendant impérial",
+                 peuple:"astrah", trait:"heaume"},
+  tyrion:       {nom:"Prince Tyrion", role:"Elfe · fils d'Eltharion",
+                 peuple:"elfe", trait:"couronne"},
+  anarion:      {nom:"Anarion le Magnifique", role:"Roi des Elfes noirs",
+                 peuple:"elfe_noir", trait:"couronne"},
+  eltharion:    {nom:"Eltharion le Grand", role:"Roi des Elfes",
+                 peuple:"elfe", trait:"couronne"},
+  charles:      {nom:"Charles de Mont-Draken", role:"Le Sourire de Fer",
+                 peuple:"astrah", trait:"barbe"},
+  kemval:       {nom:"Kem-Val", role:"Khesh · Le Banni",
+                 peuple:"khesh", trait:"voile"},
+  khalvaene:    {nom:"Khal-Vaene", role:"Khesh · usurpateur",
+                 peuple:"khesh", trait:"masque"},
 
   /* — Personnages d'événements — */
-  baltus:       {nom:"Baltus Trois-Clous", role:"Chef de péage"},
-  mere_orsen:   {nom:"Mère Orsen", role:"Archiviste de Fort-aux-Princes"},
-  perrin:       {nom:"Perrin le Boiteux", role:"Ancien soldat d'Astrah"},
-  dame_sarre:   {nom:"Dame Sarre de Vauclair", role:"Commanditaire"},
-  vieil_orpailleur: {nom:"Hesken", role:"Orpailleur des Champs de Cendre"},
-  soeur_lisen:  {nom:"Sœur Lisen", role:"Gardienne de la chapelle"},
-  taverniere:   {nom:"Wenda", role:"Tenancière du Chaudron Fendu"},
-  gorm:         {nom:"Gorm fils de Gorik", role:"Nain · maître de galerie"},
-  aza_khesh:    {nom:"Aza-Rhun", role:"Khesh · porteuse de lances"},
-  capitaine_ferre:{nom:"Capitaine Ferré", role:"Officier d'Astrah"},
-  enfant_onde:  {nom:"L'enfant sans nom", role:"Touché par l'Onde"},
-  chasseur_prime:{nom:"Le Chasseur", role:"Prime sur un Paria"},
+  baltus:       {nom:"Baltus Trois-Clous", role:"Chef de péage",
+                 peuple:"humain", trait:"chapeau"},
+  mere_orsen:   {nom:"Mère Orsen", role:"Archiviste de Fort-aux-Princes",
+                 peuple:"humain", trait:"voile"},
+  perrin:       {nom:"Perrin le Boiteux", role:"Ancien soldat d'Astrah",
+                 peuple:"astrah", trait:"barbe"},
+  dame_sarre:   {nom:"Dame Sarre de Vauclair", role:"Commanditaire",
+                 peuple:"humain", trait:"tresses"},
+  vieil_orpailleur: {nom:"Hesken", role:"Orpailleur des Champs de Cendre",
+                 peuple:"humain", trait:"chapeau"},
+  soeur_lisen:  {nom:"Sœur Lisen", role:"Gardienne de la chapelle",
+                 peuple:"humain", trait:"voile"},
+  taverniere:   {nom:"Wenda", role:"Tenancière du Chaudron Fendu",
+                 peuple:"humain", trait:"nu"},
+  gorm:         {nom:"Gorm fils de Gorik", role:"Nain · maître de galerie",
+                 peuple:"nain", trait:"barbe"},
+  aza_khesh:    {nom:"Aza-Rhun", role:"Khesh · porteuse de lances",
+                 peuple:"khesh", trait:"tresses"},
+  capitaine_ferre:{nom:"Capitaine Ferré", role:"Officier d'Astrah",
+                 peuple:"astrah", trait:"heaume"},
+  enfant_onde:  {nom:"L'enfant sans nom", role:"Touchée par l'Onde",
+                 peuple:"paria", trait:"nu", onde:true},
+  chasseur_prime:{nom:"Le Chasseur", role:"Prime sur un Paria",
+                 peuple:"humain", trait:"capuche"},
+
+  /* — Combattants nommés qui n'ont pas de fiche ailleurs — */
+  tenant_arene: {nom:"Le Tenant du Sable Rouge", role:"Invaincu de l'Arène Rouge",
+                 peuple:"humain", trait:"masque"},
+  garde_astrah: {nom:"Garde du Roi de Cendre", role:"Astrah · maison royale",
+                 peuple:"astrah", trait:"heaume"},
+  lame_noire:   {nom:"Lame de la Cour Noire", role:"Duelliste d'Anarion",
+                 peuple:"elfe_noir", trait:"masque"},
 };
 
 </script>
@@ -932,7 +983,7 @@ const CHAMPIONS = {
   },
 
   lame_anarion: {
-    id:"CHP_LAME_ANARION", nom:"Lame de la Cour Noire", portrait:"anarion",
+    id:"CHP_LAME_ANARION", nom:"Lame de la Cour Noire", portrait:"lame_noire",
     danger:4, pv:64, defense:16, pa_par_tour:4, precision:9,
     attaque_base:{ degats_base:11, de_variance:"1d10" },
     capacites_speciales:[{ nom:"Poison de cour", cout_pa:2,
@@ -941,7 +992,7 @@ const CHAMPIONS = {
   },
 
   champion_arene: {
-    id:"CHP_ARENE", nom:"Le Tenant du Sable Rouge", portrait:"chasseur_prime",
+    id:"CHP_ARENE", nom:"Le Tenant du Sable Rouge", portrait:"tenant_arene",
     danger:4, pv:76, defense:15, pa_par_tour:3, precision:8,
     attaque_base:{ degats_base:11, de_variance:"1d10" },
     capacites_speciales:[{ nom:"Coup de la foule", cout_pa:2,
@@ -950,7 +1001,7 @@ const CHAMPIONS = {
   },
 
   garde_leopold: {
-    id:"CHP_GARDE_ASTRAH", nom:"Garde du Roi de Cendre", portrait:"leopold",
+    id:"CHP_GARDE_ASTRAH", nom:"Garde du Roi de Cendre", portrait:"garde_astrah",
     danger:3, pv:52, defense:15, pa_par_tour:3, precision:6,
     attaque_base:{ degats_base:8, de_variance:"1d8" },
     capacites_speciales:[],
@@ -1911,7 +1962,7 @@ const EVENTS_WRITTEN = [
          requis:{pouvoir:"foudre"}, suite:"onde"},
       ]
     },
-    paye:{
+    paye:{ pnj:"baltus",
       texte:[
         "Yohan compte les pièces dans la paume tendue. Baltus les fait sauter une fois, les glisse dans sa ceinture, et fait signe qu'on abaisse la chaîne. Aucun des six ne le regarde vraiment traverser — ils regardent déjà derrière lui, vers le prochain.",
         "C'est exactement ce que Yohan voulait : passer sans laisser de trace. Vingt pièces, c'est le prix courant de l'oubli."
@@ -1928,7 +1979,7 @@ const EVENTS_WRITTEN = [
       effets:{xp:10},
       fin:true
     },
-    tenir_ko:{
+    tenir_ko:{ pnj:"baltus",
       texte:[
         "Yohan tient bon un moment de trop. Baltus, lui, a compris qu'il n'y aurait ni paiement ni recul, et il n'a pas six hommes derrière lui pour reculer le premier.",
         "La chaîne racle la pierre. Deux d'entre eux contournent déjà par le flanc."
@@ -1961,7 +2012,7 @@ const EVENTS_WRITTEN = [
       effets:{or:-20},
       fin:true
     },
-    onde:{
+    onde:{ pnj:"baltus",
       texte:[
         "Yohan ne dit rien. Il laisse simplement l'Onde monter — juste assez pour que l'air se charge, que les chevaux reculent d'eux-mêmes, que la chaîne se mette à vibrer contre la pierre avec un bruit de guêpe.",
         "Baltus regarde la chaîne. Puis Yohan. Puis, très vite, ailleurs. « Enlevez ça. Enlevez ça tout de suite. »",
@@ -1994,7 +2045,7 @@ const EVENTS_WRITTEN = [
          test:{stat:"precision", dc:14}, reussite:"fouille_ok", echec:"fouille_ko"},
       ]
     },
-    nie_ok:{
+    nie_ok:{ pnj:"mere_orsen",
       texte:[
         "Yohan rit, du bon rire un peu las de l'homme qu'on confond avec un autre pour la dixième fois du mois. Il donne un nom de bourg, un métier de père, une raison plate d'être là. Rien qui accroche.",
         "Mère Orsen l'écoute jusqu'au bout, hoche la tête, et retourne à son registre. « Alors j'aurai eu tort. À mon âge, ça arrive de plus en plus. »",
@@ -2027,7 +2078,7 @@ const EVENTS_WRITTEN = [
          suite:"admet_refuse"},
       ]
     },
-    admet_prend:{
+    admet_prend:{ pnj:"mere_orsen",
       texte:[
         "Le rouleau tient dans une main. Des colonnes de chiffres, des noms de villages, et au milieu d'une liste de créanciers : *Maison Karlsberg — grain, sel, fer* — sur douze années, avec les signatures des intendants.",
         "Ce n'est pas une généalogie. C'est mieux : c'est une preuve administrative que la maison a existé, tenue par une main qui n'avait aucune raison de mentir.",
@@ -2035,7 +2086,7 @@ const EVENTS_WRITTEN = [
       ],
       fin:true
     },
-    admet_refuse:{
+    admet_refuse:{ pnj:"mere_orsen",
       texte:[
         "Yohan repousse doucement le rouleau vers elle. « Si on trouve ça ici, on vous pendra à la porte de la salle des rôles. Brûlez-le. »",
         "Mère Orsen le regarde longtemps. « Vous êtes le premier Karlsberg que je rencontre qui pense à quelqu'un d'autre. » Elle range le rouleau là où il était. « Il sera là si vous changez d'avis. »"
@@ -2043,7 +2094,7 @@ const EVENTS_WRITTEN = [
       effets:{suspicion:-4, xp:12, flag:"orsen_epargnee"},
       fin:true
     },
-    fouille_ok:{
+    fouille_ok:{ pnj:"mere_orsen",
       texte:[
         "Yohan connaît la logique des registres mieux qu'un scribe : on ne cherche pas ce qu'on veut trouver, on cherche ce que l'administration n'a pas eu de raison de détruire.",
         "Il remonte les rôles de péage, les taxes de foire, les listes de saisies. Et il trouve — pas un nom, mais une adresse : un entrepôt de Fort-aux-Princes saisi à un débiteur nommé seulement « l'homme du Loup ».",
@@ -2099,7 +2150,7 @@ const EVENTS_WRITTEN = [
          suite:"apprend", effets:{sang:5, xp:18, flag:"enfant_cachee"}},
       ]
     },
-    emmene:{
+    emmene:{ pnj:"enfant_onde",
       texte:[
         "Yohan ressort de la grange avec la petite derrière lui et le cercle s'ouvre sans un mot — de soulagement plus que de respect. Le problème s'en va sur ses deux jambes, c'est tout ce qu'ils demandaient.",
         "La route sera longue et il faudra la faire en évitant les villes. Mais quelque part au bout, il y a des gens qui savent quoi faire d'une enfant de onze ans qui fait trembler les vitres.",
@@ -2107,7 +2158,7 @@ const EVENTS_WRITTEN = [
       ],
       fin:true
     },
-    apprend:{
+    apprend:{ pnj:"enfant_onde",
       texte:[
         "Yohan lui montre le peu qu'on peut montrer en une heure : respirer contre l'Onde, la ravaler, faire semblant que le monde ne bourdonne pas. Ce n'est pas une éducation, c'est un déguisement.",
         "« Ça fait mal », dit-elle. « Oui », répond Yohan. « Toute ta vie. »",
@@ -2115,7 +2166,7 @@ const EVENTS_WRITTEN = [
       ],
       fin:true
     },
-    entre_ko:{
+    entre_ko:{ pnj:"enfant_onde",
       texte:[
         "Yohan entre, et l'Onde de la petite le prend de plein fouet — sans intention, sans malice, la panique brute d'une enfant qui ne contrôle rien. Il est projeté contre la cloison avant d'avoir pu dire un mot.",
         "Il ressort en s'appuyant au chambranle, sonné, sous les yeux de vingt personnes qui viennent de le voir échouer.",
@@ -2365,7 +2416,7 @@ const EVENTS_WRITTEN = [
          suite:"sortie_propre", effets:{xp:22}},
       ]
     },
-    silence_ok:{
+    silence_ok:{ pnj:"dame_sarre",
       texte:[
         "Yohan explique calmement combien vaut une maison qui a tenté de faire assassiner son propre intendant en piégeant un tiers, et combien il en coûterait que la chose se sache dans trois cours différentes.",
         "Dame Sarre paie. Elle paie beaucoup, et elle paie en le regardant droit dans les yeux, ce qui est sa manière de dire qu'elle n'oubliera pas."
@@ -2373,7 +2424,7 @@ const EVENTS_WRITTEN = [
       effets:{or:340, xp:26, suspicion:6, flag:"vauclair_rancune"},
       fin:true
     },
-    silence_ko:{
+    silence_ko:{ pnj:"dame_sarre",
       texte:[
         "Yohan demande trop, trop vite. Dame Sarre cesse de sourire et rappelle, sans hausser la voix, que cette pièce n'a pas de fenêtre et qu'elle a deux hommes derrière la porte.",
         "Il sort avec ce qu'on lui laisse emporter : rien, et la certitude d'avoir fait une ennemie utile."
@@ -2447,7 +2498,7 @@ const EVENTS_WRITTEN = [
       effets:{or:180, xp:24, flag:"lucius_pressenti"},
       fin:true
     },
-    interesse_ko:{
+    interesse_ko:{ pnj:"capitaine_ferre",
       texte:[
         "Yohan pose une question de trop sur le commandement, et deux cents hommes qui cousent des bannières interdites n'ont pas de patience pour les curieux.",
         "Ferré ne donne même pas d'ordre. Il fait un geste, et l'avant-garde s'écarte pour laisser passer ceux dont c'est le travail."
@@ -2472,7 +2523,7 @@ const EVENTS_WRITTEN = [
       effets:{xp:28, sang:4, suspicion:6, flag:"averti_lucius"},
       fin:true
     },
-    paria_ko:{
+    paria_ko:{ pnj:"capitaine_ferre",
       texte:[
         "Yohan en dit trop, et ce qui devait créer une complicité crée exactement le contraire : deux cents hommes viennent d'apprendre qu'un Paria connaît leur secret.",
         "Ferré ne le fait pas tuer — il a trop à faire. Mais il envoie un cavalier vers le sud le soir même, et ce cavalier porte une description."
@@ -2527,7 +2578,7 @@ const EVENTS_WRITTEN = [
       effets:{xp:30, sang:4, item:"accessoire_gants", flag:"khesh_reconnu"},
       fin:true
     },
-    force_ko:{
+    force_ko:{ pnj:"aza_khesh",
       texte:[
         "Yohan perd, proprement, devant deux cents témoins. Personne ne rit — c'est aussi une preuve, simplement pas celle qu'il espérait donner.",
         "Aza-Rhun laisse les trois lances plantées dans le sable. « Reviens quand elles voudront dire quelque chose. »"
@@ -2545,7 +2596,7 @@ const EVENTS_WRITTEN = [
       effets:{xp:26, sang:3, flag:"khesh_dette"},
       fin:true
     },
-    parole_ko:{
+    parole_ko:{ pnj:"aza_khesh",
       texte:[
         "Yohan choisit ses mots trop bien, et c'est précisément ce qu'on lui reproche. Aza-Rhun lève la main avant la fin. « Tu parles comme un homme d'Astrah. Ici, c'est une insulte. »",
         "On ne le chasse pas. On lui retire simplement l'eau, la conversation et l'ombre, ce qui revient au même dans les dunes."
@@ -2600,7 +2651,7 @@ const EVENTS_WRITTEN = [
          suite:"scelle", effets:{fat:10, xp:24, or:90, flag:"gorm_ami"}},
       ]
     },
-    lit_ko:{
+    lit_ko:{ pnj:"gorm",
       texte:[
         "Yohan examine la pierre et n'y voit qu'une pierre. Les marques de forge lui échappent, et la logique des deux appareillages avec.",
         "Gorm décide donc seul, comme il l'aurait fait de toute façon. Il crache dans ses mains et empoigne la masse."
@@ -2617,14 +2668,14 @@ const EVENTS_WRITTEN = [
       effets:{xp:26, or:120, sang:2, flag:"gorm_ami"},
       fin:true
     },
-    scelle:{
+    scelle:{ pnj:"gorm",
       texte:[
         "Ils ne rouvrent pas. Ils doublent le scellement, avec les marques de forge remises dans le bon ordre, parce que Gorm sait les tracer même s'il ignore ce qu'elles retiennent.",
         "En repartant, Gorm glisse une bourse à Yohan sans commentaire. Chez les nains, remercier avec des mots serait une façon de dire que le travail n'avait pas de valeur."
       ],
       fin:true
     },
-    ouvre:{
+    ouvre:{ pnj:"gorm",
       texte:[
         "La masse tombe trois fois. Au troisième coup, le mur cède vers l'intérieur — vers l'intérieur, ce qui veut dire que quelque chose tirait.",
         "L'air qui sort de la galerie est plus froid que la pierre et sent le fer rouillé. Gorm lève sa lanterne, et la lumière ne va pas aussi loin qu'elle le devrait."
@@ -2641,7 +2692,7 @@ const EVENTS_WRITTEN = [
       effets:{xp:34, or:200, sang:3, item:"armure_cuir", flag:"galerie_rouverte"},
       fin:true
     },
-    ouvre_ko:{
+    ouvre_ko:{ pnj:"gorm",
       texte:[
         "Ils reculent en désordre jusqu'au coude de la galerie, et c'est l'effondrement du plafond — provoqué par Gorm, à la masse, sur ses propres étais — qui referme le passage.",
         "Gorm a une jambe brisée et l'air de quelqu'un qui vient de comprendre son père trente ans trop tard. « Troisième mur », souffle-t-il. « Et celui-là, je n'expliquerai à personne. »"
@@ -2698,7 +2749,7 @@ const EVENTS_WRITTEN = [
          suite:"veille", effets:{fat:12, xp:12, sang:1}},
       ]
     },
-    veille:{
+    veille:{ pnj:"soeur_lisen",
       texte:[
         "Ils passent la nuit à deux devant la porte, sans parler. Rien ne vient. Au matin, le village compte encore tous ses vivants, ce qui n'était pas arrivé depuis trois semaines.",
         "Ce n'est pas résolu. C'est seulement reporté, et Sœur Lisen a dormi trois heures sur son tabouret, la tête contre le montant."
@@ -2753,7 +2804,7 @@ const EVENTS_WRITTEN = [
       effets:{or:90, xp:28, sang:2, flag:"chapelle_resolue"},
       fin:true
     },
-    entre_ko:{
+    entre_ko:{ pnj:"soeur_lisen",
       texte:[
         "Yohan gagne la porte à reculons et remet la poutre en travers de ses propres mains, ce qui est l'aveu le plus humiliant de sa semaine.",
         "Sœur Lisen ne dit rien. Elle se rassoit sur son tabouret et rallume sa lampe.",
@@ -2800,21 +2851,21 @@ const EVENTS_WRITTEN = [
          suite:"prend_part"},
       ]
     },
-    prend_paie:{
+    prend_paie:{ pnj:"vieil_orpailleur",
       texte:[
         "Yohan compte cent cinquante pièces dans la main de l'orpailleur, ce qui représente environ quatre ans de gravier lavé.",
         "Hesken regarde l'or, puis Yohan, puis l'or. « C'était quoi, alors ? » — « Un anneau », répond Yohan. Hesken hoche la tête, et range l'argent. Il a trente ans d'expérience de ce qu'il ne faut pas demander."
       ],
       fin:true
     },
-    prend_part:{
+    prend_part:{ pnj:"vieil_orpailleur",
       texte:[
         "Yohan glisse l'anneau à son doigt et reprend la route. Hesken retourne à son gravier sans un mot.",
         "Il racontera peut-être, un jour, qu'un homme est venu prendre l'anneau qui chauffait. Personne ne le croira, et c'est très bien ainsi."
       ],
       fin:true
     },
-    achete:{
+    achete:{ pnj:"vieil_orpailleur",
       texte:[
         "Cent pièces changent de main, et Hesken a l'air d'un homme à qui on retire un poids plutôt qu'à qui on achète un bien.",
         "L'anneau ne chauffe plus une fois dans la bourse de Yohan. Il y a, gravé à l'intérieur du jonc, un loup assis que Yohan ne regarde pas tout de suite — et qu'il regardera longtemps, plus tard, à la lumière d'un feu."
@@ -2832,7 +2883,7 @@ const EVENTS_WRITTEN = [
       effets:{xp:14, sang:1},
       fin:true
     },
-    rejette_ko:{
+    rejette_ko:{ pnj:"vieil_orpailleur",
       texte:[
         "Hesken écoute le conseil, réfléchit, et fait exactement le contraire : il empoche l'anneau. Trente ans de ruisseau lui ont appris qu'on ne rejette pas ce qui a de la valeur parce qu'un étranger a un mauvais pressentiment.",
         "Yohan reprend la route. Derrière lui, un vieil homme porte à son doigt un anneau qui chauffe."
@@ -3461,7 +3512,7 @@ const EVENTS_RENCONTRE = [
          test:{stat:"precision", dc:15}, reussite:"alliance_ok", echec:"alliance_ko"},
       ]
     },
-    pacte:{
+    pacte:{ pnj:"caleb",
       texte:[
         "Ils ne se serrent pas la main — ce serait déjà trop d'engagement. Caleb hoche la tête une fois et se replonge dans ses papiers comme si Yohan avait déjà quitté la pièce.",
         "Fort-aux-Princes lui restera hostile, mais silencieuse. Dans le métier de Yohan, le silence d'une forteresse-frontière vaut plus cher qu'un allié bavard."
@@ -3479,7 +3530,7 @@ const EVENTS_RENCONTRE = [
       effets:{xp:28, sang:5, flags:["caleb_rencontre","caleb_respect"]},
       fin:true
     },
-    refus_ko:{
+    refus_ko:{ pnj:"caleb",
       texte:[
         "Yohan refuse mal — trop vite, avec un mot de trop sur les princes qui se croient propriétaires des routes.",
         "Caleb ne répond rien du tout, ce qui est bien pire. Il reprend ses papiers, et dans la semaine, deux garnisons de la frontière reçoivent une description très précise d'un voyageur aux armes trop lourdes."
@@ -3506,7 +3557,7 @@ const EVENTS_RENCONTRE = [
       effets:{suspicion:4, flag:"caleb_rencontre"},
       fin:true
     },
-    sort_ok:{
+    sort_ok:{ pnj:"caleb",
       texte:[
         "Yohan sort sans se retourner et sans presser le pas, ce qui demande plus de sang-froid que de rester.",
         "Personne ne le suit. Il apprendra plus tard que Caleb a dit à ses officiers, ce soir-là, qu'il n'avait vu personne d'intéressant — ce qui est, chez lui, une forme de politesse."
@@ -3543,7 +3594,7 @@ const EVENTS_RENCONTRE = [
       effets:{xp:60, sang:12, suspicion:8, flags:["caleb_rencontre","caleb_vaincu"]},
       fin:true
     },
-    duel_perdu:{
+    duel_perdu:{ pnj:"caleb",
       texte:[
         "Caleb s'arrête net quand Yohan tombe, et c'est ce geste-là — s'arrêter — qui dit le plus sur lui.",
         "« Pas à mort », répète-t-il à ses hommes qui accourent. « J'ai dit pas à mort. »",
@@ -3627,7 +3678,7 @@ const EVENTS_RENCONTRE = [
       effets:{xp:38, sang:8, flags:["tyrion_rencontre","onde_suivait"]},
       fin:true
     },
-    savoir_ko:{
+    savoir_ko:{ pnj:"tyrion",
       texte:[
         "Yohan pose ses questions et se heurte à une paroi lisse. Tyrion répond à côté avec une élégance qui rend l'insistance impossible.",
         "Il ressort avec la certitude que les Elfes savent quelque chose, et rien de plus — ce qui est peut-être exactement l'effet recherché."
@@ -3653,7 +3704,7 @@ const EVENTS_RENCONTRE = [
       effets:{xp:70, sang:14, suspicion:10, flags:["tyrion_rencontre","tyrion_vaincu"]},
       fin:true
     },
-    duel_perdu:{
+    duel_perdu:{ pnj:"tyrion",
       texte:[
         "La lame de Tyrion s'arrête à un doigt de la gorge de Yohan, immobile, le temps que tout le monde ait bien vu où elle se trouvait.",
         "« Voilà », dit-il en la relevant. « Voilà exactement pourquoi je préfère la distance. »",
@@ -3711,7 +3762,7 @@ const EVENTS_RENCONTRE = [
       effets:{xp:36, sang:6, flags:["charles_rencontre","charles_allie"]},
       fin:true
     },
-    menace_ko:{
+    menace_ko:{ pnj:"charles",
       texte:[
         "Charles hausse les épaules et parle d'autre chose — la neige, les loups, une histoire de forgeron. Il ne répondra pas à cette question aujourd'hui.",
         "Yohan repart nourri, reposé, et pas plus renseigné. Ce n'est déjà pas rien."
@@ -3740,7 +3791,7 @@ const EVENTS_RENCONTRE = [
         {label:"S'asseoir", suite:"repas"},
       ]
     },
-    jauge_ko:{
+    jauge_ko:{ pnj:"charles",
       texte:[
         "Yohan reste sur ses gardes trop longtemps, et Charles finit par se lever en soupirant.",
         "« Tant pis. » Il remballe son pain. « Vous vous méfiez de la seule personne de cette montagne qui ne vous voulait rien. »",
@@ -3749,7 +3800,7 @@ const EVENTS_RENCONTRE = [
       effets:{flag:"charles_rencontre"},
       fin:true
     },
-    faille:{
+    faille:{ pnj:"charles",
       texte:[
         "Yohan descend malgré l'avertissement. La chaleur monte par vagues, l'air sent le soufre, et à mi-pente il comprend que ce qu'il a pris pour une paroi est en train de respirer.",
         "Derrière lui, très haut, la voix de Charles arrive amortie par la roche : « Je vous avais prévenu ! »"
@@ -3765,7 +3816,7 @@ const EVENTS_RENCONTRE = [
       effets:{xp:50, sang:10, flags:["charles_rencontre","charles_allie"], item:"armure_ecailles"},
       fin:true
     },
-    faille_ko:{
+    faille_ko:{ pnj:"charles",
       texte:[
         "Yohan remonte la pente à quatre pattes, brûlé, sourd d'une oreille, et s'effondre à trois pas de l'éperon.",
         "Charles le retourne sur le dos avec le pied, constate qu'il respire, et lui met sa gourde dans la main. « Voilà pourquoi je préviens les gens. »"
@@ -3821,7 +3872,7 @@ const EVENTS_RENCONTRE = [
       ],
       fin:true
     },
-    ment_ok:{
+    ment_ok:{ pnj:"kemval",
       texte:[
         "Yohan invente une histoire de dette et de maison marchande, plate, ennuyeuse, parfaitement crédible. Kem-Val l'accepte sans insister — un homme qui ment sur son bannissement a ses raisons, et les raisons se respectent.",
         "Ils passent la nuit au puits sans plus rien se dire. Au matin, l'outre est pleine et le géant est parti."
@@ -3859,7 +3910,7 @@ const EVENTS_RENCONTRE = [
       effets:{xp:22},
       choix:[ {label:"S'asseoir", suite:"parle"} ]
     },
-    refus_ko:{
+    refus_ko:{ pnj:"kemval",
       texte:[
         "Yohan refuse l'eau, et il le fait mal — avec le geste de quelqu'un qui craint le poison.",
         "Kem-Val range l'outre en silence. Le puits reste ouvert : il n'est pas mesquin. Mais il ne dira plus un mot, et Yohan repartira sans savoir qui il vient de vexer."
@@ -3892,7 +3943,7 @@ const EVENTS_RENCONTRE = [
          suite:"trahison"},
       ]
     },
-    nie_ok:{
+    nie_ok:{ pnj:"khalvaene",
       texte:[
         "Yohan raconte une route différente, un puits différent, un géant qu'il n'a jamais vu. C'est plat, vérifiable, et suffisamment ennuyeux pour être vrai.",
         "Khal-Vaene fait un geste, et on rapporte à Yohan l'arme qu'on lui avait prise à l'entrée du camp. « Alors on m'a menti. Ça arrive souvent. »",
@@ -3952,7 +4003,7 @@ const EVENTS_RENCONTRE = [
       effets:{or:400, suspicion:10, sang:-4, xp:16, flags:["khalvaene_rencontre","trahi_kemval"]},
       fin:true
     },
-    combat_gagne:{
+    combat_gagne:{ pnj:"khalvaene",
       texte:[
         "Khal-Vaene tombe au milieu des os de dragons qu'il prétendait posséder, et le camp ne bouge pas. Chez les Khesh, on ne venge pas un chef qui a perdu en duel ouvert : on en cherche un autre.",
         "Ce qui vient de se passer va remonter les dunes plus vite qu'un cavalier. Quelque part, un banni va l'apprendre — et le trône des Dragons des Sables vient de se libérer."
@@ -4054,7 +4105,7 @@ const EVENTS_RENCONTRE = [
   image:"rc_arene", lieux:["LOC_017"],
   requis:{ sansFlags:["arene_tentee"] },
   scenes:{
-    start:{
+    start:{ pnj:"tenant_arene",
       texte:[
         "L'Arène Rouge ne tue pas ses combattants — elle les use, ce qui rapporte plus longtemps. Le Tenant y est invaincu depuis deux saisons, et la maison paie très bien quiconque accepte de lui donner un vrai adversaire.",
         "Le régisseur détaille les termes sans lever les yeux de son registre : cent cinquante à l'inscription, quatre cents à la victoire, et pas d'armes de poing.",
@@ -4069,14 +4120,14 @@ const EVENTS_RENCONTRE = [
          suite:"refus", effets:{suspicion:-4, flag:"arene_tentee"}},
       ]
     },
-    combat_loyal:{
+    combat_loyal:{ pnj:"tenant_arene",
       texte:[
         "Le sable est plus profond qu'il n'y paraît depuis les gradins — c'est le vrai adversaire, celui qui fatigue les jambes en trois minutes.",
         "Le Tenant salue la foule avant de saluer Yohan, dans cet ordre, ce qui dit tout de sa profession."
       ],
       combat:{ groupe:[{champion:"champion_arene"}], victoire:"loyal_gagne", defaite:"loyal_perdu" }
     },
-    loyal_gagne:{
+    loyal_gagne:{ pnj:"tenant_arene",
       texte:[
         "Le Tenant tombe dans le sable rouge et lève la main avant qu'on ait à le compter. La foule hurle un nom qu'elle ne connaît pas et qu'elle inventera d'ici demain.",
         "Le régisseur paie sans discuter, avec le respect sincère d'un homme qui vient de gagner beaucoup plus que ce qu'il verse.",
@@ -4085,7 +4136,7 @@ const EVENTS_RENCONTRE = [
       effets:{or:400, xp:44, sang:3, suspicion:2, flag:"arene_champion"},
       fin:true
     },
-    loyal_perdu:{
+    loyal_perdu:{ pnj:"tenant_arene",
       texte:[
         "Le Tenant reste le Tenant. Il aide Yohan à se relever, lui tape l'épaule, et se tourne vers les gradins qui scandent son nom.",
         "Le régisseur ne rend pas l'inscription, mais il glisse tout de même : « Vous avez tenu six passes. La plupart en tiennent deux. »"
@@ -4093,14 +4144,14 @@ const EVENTS_RENCONTRE = [
       effets:{pv:-10, xp:16},
       fin:true
     },
-    combat_onde:{
+    combat_onde:{ pnj:"tenant_arene",
       texte:[
         "Yohan entre dans l'arène en ayant déjà décidé de tricher, ce qui change la façon dont on marche sur le sable.",
         "Le Tenant le salue. La foule se tait. Et Yohan laisse monter quelque chose qui n'a rien à faire dans un combat d'arène."
       ],
       combat:{ groupe:[{champion:"champion_arene"}], victoire:"onde_gagne", defaite:"onde_perdu" }
     },
-    onde_gagne:{
+    onde_gagne:{ pnj:"tenant_arene",
       texte:[
         "Le Tenant est projeté à six pas sans qu'on l'ait touché. Il n'y a pas d'applaudissements. Il y a deux mille personnes debout, absolument silencieuses.",
         "Le régisseur paie — il faut bien — et pousse la bourse sur la table du bout des doigts, comme si elle brûlait. « Sortez par les écuries. Tout de suite. »",
@@ -4109,7 +4160,7 @@ const EVENTS_RENCONTRE = [
       effets:{or:400, xp:40, sang:6, suspicion:30, fat:20, flag:"arene_onde"},
       fin:true
     },
-    onde_perdu:{
+    onde_perdu:{ pnj:"tenant_arene",
       texte:[
         "L'Onde monte, rate, et le contrecoup fait plus de dégâts à Yohan qu'au Tenant. Ce qui est déjà humiliant devient dangereux : deux mille personnes ont vu le sable se soulever autour d'un homme qui perdait quand même.",
         "On l'évacue par les écuries sans le payer. Le régisseur ne dit rien du tout, ce qui vaut toutes les menaces."
@@ -4193,7 +4244,7 @@ const EVENTS_RENCONTRE = [
       effets:{or:300, xp:34, flags:["lucius_rencontre","lucius_menace"]},
       fin:true
     },
-    services_ko:{
+    services_ko:{ pnj:"lucius",
       texte:[
         "Lucius laisse Yohan terminer son offre, puis retourne à ses jetons sans un mot, comme si la tente s'était vidée.",
         "Un officier touche le coude de Yohan. C'est tout : pas de menace, pas d'escorte armée. On le fait sortir comme on range un objet qui n'avait pas sa place sur la table."
@@ -4208,7 +4259,7 @@ const EVENTS_RENCONTRE = [
       ],
       fin:true
     },
-    part:{
+    part:{ pnj:"lucius",
       texte:[
         "Yohan tourne les talons au milieu d'une phrase, et personne ne l'arrête — parce que personne, dans ce camp, ne considère qu'il représente un problème immédiat.",
         "C'est peut-être l'information la plus utile de la journée : Lucius Furius Augustus ne le craint pas encore."
@@ -4355,7 +4406,7 @@ const EVENTS_TRAME = [
       effets:{sang:8, xp:16, flag:"tr_02_fait"},
       fin:true
     },
-    accepte:{
+    accepte:{ pnj:"alycia",
       texte:[
         "Yohan accepte, et il sait exactement ce qu'il accepte : devenir la cible la plus visible de Vardhen pour que trente-et-une personnes puissent rester invisibles.",
         "Alycia n'a pas l'air triomphante. Elle a l'air soulagée, ce qui est différent, et pour la première fois Yohan la croit tout à fait.",
@@ -4577,7 +4628,7 @@ const EVENTS_TRAME = [
       effets:{sang:26, xp:74, flags:["tr_04_fait","archive_elfique"]},
       fin:true
     },
-    encaisse_ko:{
+    encaisse_ko:{ pnj:"alarielle",
       texte:[
         "Yohan sort du gué sans un mot et marche jusqu'à la nuit sans s'arrêter une fois. Alarielle suit à distance, ce qui est la seule chose correcte à faire.",
         "Ils ne reparleront pas de cette conversation avant longtemps. Mais elle a été dite, et rien n'est jamais tout à fait pareil après."
@@ -4595,7 +4646,7 @@ const EVENTS_TRAME = [
       effets:{xp:30},
       choix:[ {label:"Demander qui était l'être vivant", suite:"qui"} ]
     },
-    maintenant_ko:{
+    maintenant_ko:{ pnj:"alarielle",
       texte:[
         "Yohan cherche l'arrière-pensée et passe à côté de l'aveu. Alarielle répond poliment à la mauvaise question, et le gué se traverse en silence.",
         "Ce qu'elle voulait dire, elle ne le redira pas de sitôt."
@@ -4718,7 +4769,7 @@ const EVENTS_TRAME = [
          suite:"refuse", effets:{sang:16, xp:70, flags:["tr_08_fait","karlsberg_independante"]}},
       ]
     },
-    charge:{
+    charge:{ pnj:"garde_astrah",
       texte:[
         "Yohan signe. C'est un morceau de papier qui dit qu'un Paria répond du nord au nom d'un Empire qui a rasé sa maison — et c'est le premier document officiel portant le nom Karlsberg depuis la Purge.",
         "Léopold le contresigne sans commentaire. Au moment où Yohan sort, il ajoute, sans lever la tête : « Mon grand-père a eu tort. Je ne le dirai pas deux fois, et je le nierai si on me cite. »"
@@ -4744,7 +4795,7 @@ const EVENTS_TRAME = [
       effets:{sang:26, xp:100, renom:12, suspicion:-15, flags:["tr_08_fait","karlsberg_reconnue"]},
       choix:[ {label:"Écouter ce qu'il veut en échange", suite:"propose"} ]
     },
-    reco_ko:{
+    reco_ko:{ pnj:"leopold",
       texte:[
         "Yohan demande trop, trop tôt, et sur le mauvais registre — celui de la réparation plutôt que celui de l'utilité.",
         "Léopold écoute jusqu'au bout par pure politesse d'État. « Vous confondez ce que je vous dois avec ce que je peux vous donner », dit-il enfin. « Il n'y a que le second qui existe. »"
@@ -4762,7 +4813,7 @@ const EVENTS_TRAME = [
       effets:{sang:14, xp:70, flags:["tr_08_fait","verite_purge"]},
       choix:[ {label:"Écouter ce qu'il propose", suite:"propose"} ]
     },
-    trahison_ko:{
+    trahison_ko:{ pnj:"leopold",
       texte:[
         "La question sort chargée de trois générations de rancune, et un empereur n'a aucune raison de répondre à ça.",
         "« C'était il y a longtemps », dit Léopold, et il passe à autre chose avec une aisance qui a demandé des années d'entraînement."
@@ -4885,7 +4936,7 @@ const EVENTS_TRAME = [
       effets:{sang:14, xp:44, suspicion:6, flags:["tr_06_fait","contrat_rachete"]},
       fin:true
     },
-    bataille:{
+    bataille:{ pnj:"chasseur_prime",
       texte:[
         "Yohan ne répond pas. Il avance de trois pas sur la route, ce qui est une réponse suffisante, et derrière lui le groupe se déploie sans qu'il ait à le demander.",
         "« Bon », dit le chasseur, presque satisfait. « Au moins c'est net. »"
@@ -4893,7 +4944,7 @@ const EVENTS_TRAME = [
       combat:{ groupe:[{champion:"chasseur_paria"},{champion:"garde_leopold"},{bst:"BST_002",n:2}],
                victoire:"bataille_gagnee", defaite:"bataille_perdue" }
     },
-    bataille_gagnee:{
+    bataille_gagnee:{ pnj:"chasseur_prime",
       texte:[
         "La route reste vide un long moment après. Yohan fouille le chasseur et trouve le contrat, plié dans une poche intérieure : une somme, une description, et trois initiales.",
         "**L.F.A.** — et en marge, d'une écriture nette et sans colère : *pas prioritaire.*",
@@ -4920,7 +4971,7 @@ const EVENTS_TRAME = [
   image:"tr_maison",
   requis:{ sangMin:162, flags:["tr_06_fait"], sansFlags:["tr_10_fait"] },
   scenes:{
-    start:{
+    start:{ pnj:"alycia",
       texte:[
         "Karlsberg existe : un nom, une armée, des ruines tenues, des créanciers. Ce qui n'existe pas encore, c'est une réponse à la seule question que toutes les maisons finissent par poser.",
         "Trois messages sont arrivés la même semaine, et aucun n'est une menace.",
@@ -4938,7 +4989,7 @@ const EVENTS_TRAME = [
            flags:["tr_10_fait","voie_ordinaire"]}},
       ]
     },
-    empire:{
+    empire:{ pnj:"alycia",
       texte:[
         "Yohan choisit la marche. Karlsberg tiendra le nord au nom d'un Empire qui l'a rasée, ce qui est soit une victoire complète soit une capitulation élégante — et personne, y compris lui, ne saura trancher avant vingt ans.",
         "Les avantages sont immédiats : l'or, les hommes, la fin de la chasse.",
@@ -5209,7 +5260,7 @@ const CONTRATS_SPECIAUX = [
       effets:{xp:30, or:200, flag:"gorm_ami"},
       choix:[ {label:"Prendre position dans la gorge", suite:"champ"} ]
     },
-    renfort_ko:{
+    renfort_ko:{ pnj:"gorm",
       texte:[
         "Gorm écoute et secoue la tête. « Chaque arbalétrier que je vous donne est un arbalétrier qui ne tient plus une porte en bas. »",
         "Ce sera avec ce qu'on a. Comme d'habitude."
@@ -5357,7 +5408,7 @@ const CONTRATS_SPECIAUX = [
       effets:{xp:36, sang:6, flag:"tyrion_ebranle"},
       choix:[ {label:"Prendre le centre", suite:"champ"} ]
     },
-    gauche_ko:{
+    gauche_ko:{ pnj:"tyrion",
       texte:[
         "Yohan proteste, et il proteste devant témoins, ce qui est exactement ce qu'il ne fallait pas faire.",
         "Tyrion ne répond même pas. Un officier lui indique sa position d'un geste, et la conversation est close."
@@ -5365,7 +5416,7 @@ const CONTRATS_SPECIAUX = [
       effets:{suspicion:4},
       choix:[ {label:"Prendre le centre", suite:"champ"} ]
     },
-    champ:{
+    champ:{ pnj:"tyrion",
       texte:[
         "Les Elfes noirs arrivent par la lisière, sans hâte, dans cette élégance qui est chez eux une forme d'insulte.",
         "À gauche, la colonne de Tyrion s'ébranle avec une précision de parade. Au centre, il y a Yohan, ses hommes, et environ trois cents personnes qui regardent."
@@ -5391,7 +5442,7 @@ const CONTRATS_SPECIAUX = [
       effets:{flags:["cg_tyrion_fait","tyrion_confirme"]},
       fin:true
     },
-    decline:{
+    decline:{ pnj:"tyrion",
       texte:[
         "Yohan renvoie la carte sans annotation.",
         "Tyrion tiendra son champ sans lui, gagnera probablement, et n'aura plus jamais besoin de se demander ce que valait ce Paria-là. Il a sa réponse."
@@ -5424,7 +5475,7 @@ const CONTRATS_SPECIAUX = [
          suite:"absent", effets:{flags:["cg_lucius_fait","lucius_reporte"], suspicion:10}},
       ]
     },
-    vitesse_ok:{
+    vitesse_ok:{ pnj:"lucius",
       texte:[
         "Yohan fait ce que Lucius ne fait jamais : il arrive en avance et il improvise. Un pont brûlé la veille, deux fourrages détournés, un guide payé pour se tromper.",
         "Rien de décisif. Juste assez pour qu'une armée réglée comme une horloge arrive avec une aile en retard et de l'humeur.",
@@ -5513,14 +5564,14 @@ const CONTRATS_SPECIAUX = [
       effets:{xp:36, sang:5},
       choix:[ {label:"Amener l'armée", suite:"champ"} ]
     },
-    gagne_ko:{
+    gagne_ko:{ pnj:"kemval",
       texte:[
         "Yohan pose la question de travers, avec ce ton de marchand qui vexe partout et dans les dunes plus qu'ailleurs.",
         "Kem-Val répond quand même, brièvement, sans un mot de trop. Il ne redemandera rien."
       ],
       choix:[ {label:"Amener l'armée", suite:"champ"} ]
     },
-    champ:{
+    champ:{ pnj:"khalvaene",
       texte:[
         "La plaine de sel est blanche, plate et sans un pouce de couvert. On y voit tout venir, ce qui n'aide personne.",
         "En face, les lances de Khal-Vaene sont rangées par tribu, chaque bannière à sa place. Il a fait ça proprement."
@@ -5536,7 +5587,7 @@ const CONTRATS_SPECIAUX = [
       effets:{flags:["cg_khesh_fait","kemval_allie"]},
       fin:true
     },
-    perdu:{
+    perdu:{ pnj:"kemval",
       texte:[
         "La ligne cède au centre et le sel boit ce qu'il faut. Kem-Val couvre la retraite lui-même, ce qui lui ressemble et ne lui vaudra rien.",
         "Les tribus marcheront vers le nord. Yohan entendra parler de ce qu'elles y feront, comme tout le monde, par les Chroniques."
@@ -5544,7 +5595,7 @@ const CONTRATS_SPECIAUX = [
       effets:{flag:"cg_khesh_fait"},
       fin:true
     },
-    refus:{
+    refus:{ pnj:"kemval",
       texte:[
         "Kem-Val hoche la tête sans insister et se relève. Il a fait quatre jours de marche pour cette conversation et il n'en montre rien.",
         "« Tu as raison », dit-il en partant. « Ce n'est pas ta guerre. » C'est exactement ce qu'il fallait ne pas entendre."
@@ -5594,7 +5645,7 @@ const CONTRATS_SPECIAUX = [
       effets:{flags:["cg_kardurak_fait","gorm_ami","kardurak_dette"]},
       fin:true
     },
-    perdu:{
+    perdu:{ pnj:"gorm",
       texte:[
         "Les niveaux hauts sont perdus. Les nains scellent derrière eux, comme ils l'ont déjà fait une fois, et redescendent vivre plus bas.",
         "Gorm serre l'avant-bras de Yohan avant qu'il ne remonte au jour. Il ne le remercie pas et ne lui reproche rien. Les deux auraient été déplacés."
@@ -5804,7 +5855,7 @@ const CONTRATS_SPECIAUX = [
         flags:["cg_eltharion_fait","archive_publiee","crise_elfes_reglee"]},
       fin:true
     },
-    champ:{
+    champ:{ pnj:"alarielle",
       texte:[
         "Le pavillon des archives est en pierre blanche et n'a jamais été conçu pour être défendu, ce qui se voit tout de suite.",
         "Alarielle monte à la tribune et ouvre le premier registre. Dehors, les premiers traits partent avant qu'elle ait fini la première colonne."
@@ -5821,7 +5872,7 @@ const CONTRATS_SPECIAUX = [
       effets:{flag:"cg_eltharion_fait"},
       fin:true
     },
-    perdu:{
+    perdu:{ pnj:"alarielle",
       texte:[
         "Le pavillon brûle avec ce qu'il contenait, et Alarielle en est sortie de justesse avec quatre feuillets sur trois cents.",
         "Officiellement, c'est un accident. Officiellement, il n'y a jamais rien eu à mesurer."
@@ -5876,7 +5927,7 @@ const CONTRATS_SPECIAUX = [
         flags:["cg_parias_fait","refuge_vide","crise_parias_reglee"]},
       fin:true
     },
-    champ:{
+    champ:{ pnj:"chasseur_prime",
       texte:[
         "Le refuge est au bout d'un chemin creux, dans un ancien prieuré dont les murs tiennent encore.",
         "L'Ordre des Chasseurs monte en trois colonnes, sans se presser. Ils ne sont pas venus pour une bataille : ils sont venus pour une rafle, et ils découvrent en arrivant qu'il y a une armée devant."
@@ -5902,7 +5953,7 @@ const CONTRATS_SPECIAUX = [
       effets:{flag:"cg_parias_fait"},
       fin:true
     },
-    paye:{
+    paye:{ pnj:"alycia",
       texte:[
         "Douze cents pièces changent de main dans une arrière-salle, et l'opération est reportée pour raisons de renseignement insuffisant.",
         "Ça marche. Ça marche exactement une fois, et les deux parties le savent en signant.",
@@ -5971,7 +6022,7 @@ const CONTRATS_SPECIAUX = [
       effets:{xp:20, flags:["cs_caleb_fait"]},
       fin:true
     },
-    detour:{
+    detour:{ pnj:"caleb",
       texte:[
         "Yohan fait l'escorte par le sud, deux jours de plus, sans jamais approcher le territoire litigieux. Le sel arrive. Personne n'est pris nulle part.",
         "Caleb paie l'intégralité de la somme sans commentaire — payer était le seul moyen de ne pas admettre que le piège existait."
@@ -5985,7 +6036,7 @@ const CONTRATS_SPECIAUX = [
       ],
       combat:{ groupe:[{champion:"garde_leopold"},{bst:"BST_002",n:2}], victoire:"piege_survecu", defaite:"piege_survecu" }
     },
-    piege_survecu:{
+    piege_survecu:{ pnj:"caleb",
       texte:[
         "Yohan décroche du gué avec le convoi et arrive à destination avec deux caisses de moins et une réputation d'incursion armée.",
         "Caleb paie rubis sur l'ongle, publiquement, avec force remerciements — ce qui achève de graver l'affaire dans les registres de trois maisons.",
@@ -5994,7 +6045,7 @@ const CONTRATS_SPECIAUX = [
       effets:{or:700, suspicion:18, xp:26, flags:["cs_caleb_fait","incident_frontiere"]},
       fin:true
     },
-    refus:{
+    refus:{ pnj:"caleb",
       texte:[
         "Yohan déchire le contrat en quatre et renvoie les morceaux par le même coursier.",
         "Il n'a rien gagné et rien perdu. Caleb, lui, vient d'apprendre que le piège était trop gros — et le prochain sera meilleur."
@@ -6065,7 +6116,7 @@ const CONTRATS_SPECIAUX = [
       effets:{suspicion:10, xp:18, flags:["cs_tyrion_fait","tyrion_confirme"]},
       fin:true
     },
-    refus:{
+    refus:{ pnj:"tyrion",
       texte:[
         "Yohan repose la commission sur la table et sort des jardins sans attendre qu'on le raccompagne.",
         "Il n'a rien porté, rien ouvert, rien appris. Tyrion, lui, a obtenu la réponse qu'il cherchait en une phrase et sans rien dépenser."
@@ -6112,7 +6163,7 @@ const CONTRATS_SPECIAUX = [
          suite:"refus_ferme", effets:{xp:30, sang:4, flags:["cs_vauclair_fait","vauclair_neutralisee"]}},
       ]
     },
-    vrai_ok:{
+    vrai_ok:{ pnj:"dame_sarre",
       texte:[
         "Le prix triple quand on cesse de prétendre que le travail est propre. Yohan entre dans l'étude scellée une nuit de pluie, ressort avec le coffret, et ne l'ouvre pas — c'était la seule condition qu'il ait posée à voix haute.",
         "Dame Sarre paie sans compter, ce qui chez elle est une forme de respect.",
@@ -6121,7 +6172,7 @@ const CONTRATS_SPECIAUX = [
       effets:{or:1400, suspicion:12, xp:52, flags:["cs_vauclair_fait","vauclair_apaisee"]},
       fin:true
     },
-    vrai_ko:{
+    vrai_ko:{ pnj:"dame_sarre",
       texte:[
         "Yohan demande mal, trop tôt, et Dame Sarre reprend l'avantage en trois phrases. Il fera le travail au tarif initial, ce qui, pour une effraction sur bien saisi, est un très mauvais tarif.",
         "Le coffret est récupéré. La somme est versée. Et quelque part dans les registres de la garde de Port-Noir, une description commence à circuler."
@@ -6137,7 +6188,7 @@ const CONTRATS_SPECIAUX = [
       ],
       combat:{ groupe:[{champion:"garde_leopold", n:2}], victoire:"fuite", defaite:"fuite" }
     },
-    fuite:{
+    fuite:{ pnj:"dame_sarre",
       texte:[
         "Yohan quitte Port-Noir par la route de terre avec le coffret et une description de lui-même qui circulera dans trois ports avant la fin du mois.",
         "Dame Sarre paie les neuf cents pièces promises, intégralement, avec un plaisir qu'elle ne cherche même pas à dissimuler.",
@@ -6244,7 +6295,7 @@ const EVENTS_ROMANCE = [
       effets:{flag:"ro_alycia_1_fait"},
       fin:true
     },
-    detourne:{
+    detourne:{ pnj:"alycia",
       texte:[
         "Yohan parle de la route du lendemain, des vivres, du col à passer avant les neiges.",
         "Alycia le suit sans insister, avec une facilité qui prouve qu'elle a l'habitude qu'on referme des portes devant elle.",
@@ -6424,7 +6475,7 @@ const EVENTS_ROMANCE = [
       effets:{affinite:{qui:"alarielle", n:4}, xp:34, flag:"ro_alarielle_1_fait"},
       fin:true
     },
-    veut_ko:{
+    veut_ko:{ pnj:"alarielle",
       texte:[
         "La question tombe mal, entre deux bandages, et Alarielle y répond par une formule de cour parfaitement polie qui ne dit rien du tout.",
         "Elle a l'habitude. Elle est même excellente à cet exercice, et c'est bien le problème."
@@ -7009,110 +7060,320 @@ const EPI_LEGS = [
  *   assets/events/<id>.webp     bandeau d'illustration d'un événement
  *   assets/portraits/<id>.webp  portrait d'un personnage
  *
- * Tant qu'un fichier n'existe pas, on affiche un blason procédural généré en SVG
- * à partir de l'identifiant : toujours le même motif pour le même personnage,
- * dans la palette du jeu. Déposer le vrai fichier au bon chemin suffit à le
- * remplacer, sans toucher au code.
+ * Tant qu'un fichier n'existe pas, le jeu DESSINE l'image à sa place, en SVG,
+ * de façon déterministe : le même personnage a toujours le même visage, le même
+ * événement le même paysage. Ce n'est pas un pis-aller anonyme — le dessin est
+ * informé par ce qu'il représente :
  *
- * Formats conseillés : bandeau 1200×480 (5:2), portrait 512×512 (carré).
+ *   · un portrait prend la palette du peuple du personnage (PORTRAITS[id].peuple)
+ *     et sa silhouette de ses attributs (PORTRAITS[id].trait) : capuche, heaume,
+ *     couronne, voile, cornes, barbe…
+ *   · un bandeau prend son ciel, son horizon et son motif de la famille de
+ *     l'événement (VOYAGE, ONDE, NAIN, KHESH…).
+ *
+ * Déposer un vrai fichier au bon chemin suffit à remplacer le dessin, sans
+ * toucher au code. Formats : bandeau 1200×480 (5:2), portrait 512×512.
  */
 
 const ART_PATHS = { event: 'assets/events/', portrait: 'assets/portraits/' };
 const ART_EXT = '.webp';
 
-/* Hachage stable (FNV-1a) : même id → même blason, d'une partie à l'autre. */
+/* Hachage stable (FNV-1a) : même id → même image, d'une partie à l'autre. */
 function artHash(str){
   let h = 0x811c9dc5;
   for(let i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); }
   return h >>> 0;
 }
+/* Suite déterministe tirée d'un identifiant : chaque appel avance d'un cran. */
+function artSuite(id){
+  let h = artHash(id);
+  return () => { h ^= h << 13; h >>>= 0; h ^= h >> 17; h ^= h << 5; h >>>= 0; return h / 4294967296; };
+}
 
-const ART_INKS = [
-  ['#8b1e2b','#c8303f'], // sang
-  ['#1c6b64','#5fd6cb'], // onde
-  ['#8a6f1f','#c9a227'], // or
-  ['#7a3a18','#d98a2b'], // cendre
-  ['#2b3d2c','#6f9c6a'], // sylve
-  ['#2a2f4a','#6b74a8'], // nuit
-];
+/* ============================= PALETTES ============================= */
+/* Chaque peuple a son encre : un fond, une carnation, un accent. */
+const ART_PEUPLES = {
+  humain:      { fond:'#3a352e', peau:'#c2a184', tissu:'#6b6257', accent:'#cbb99a' },
+  paria:       { fond:'#2a1518', peau:'#b8977e', tissu:'#5e2027', accent:'#d2455a' },
+  onde:        { fond:'#0e2b2a', peau:'#a9b6b2', tissu:'#14544f', accent:'#56d6c9' },
+  elfe:        { fond:'#1d2c22', peau:'#e2d3bd', tissu:'#2f5c46', accent:'#cfe3c0' },
+  elfe_noir:   { fond:'#1a1526', peau:'#8f8ba0', tissu:'#2a2140', accent:'#b39ddb' },
+  nain:        { fond:'#2b1a10', peau:'#c9a07a', tissu:'#6b3b1c', accent:'#d99a4e' },
+  khesh:       { fond:'#3a2a10', peau:'#a9754c', tissu:'#7a5a24', accent:'#e6c274' },
+  peau_verte:  { fond:'#1e2412', peau:'#6f8f45', tissu:'#35471f', accent:'#8fbe4a' },
+  homme_bete:  { fond:'#241c14', peau:'#7d6448', tissu:'#4a3a2a', accent:'#cfc0a3' },
+  astrah:      { fond:'#231f1a', peau:'#bfa287', tissu:'#4a4038', accent:'#c6a04a' },
+};
+function artPeuple(nom){ return ART_PEUPLES[nom] || ART_PEUPLES.humain; }
 
-/* Blason procédural : un champ, une partition, une charge centrale. */
-function artFallbackSVG(id, kind){
-  const h = artHash(id);
-  const [dark, bright] = ART_INKS[h % ART_INKS.length];
-  const partition = (h >> 3) % 4;   // orientation du champ
-  const charge    = (h >> 6) % 6;   // figure centrale
-  const rings     = 2 + ((h >> 9) % 3);
-  const w = kind === 'portrait' ? 512 : 1200;
-  const hh = kind === 'portrait' ? 512 : 480;
-  const cx = w/2, cy = hh/2;
-  const r = Math.min(w,hh) * 0.26;
+/* ============================= PORTRAITS ============================= */
+/* Un buste : épaules, cou, tête, puis les attributs du personnage. Le hachage
+ * ne décide que du détail (largeur du visage, inclinaison) — l'identité vient
+ * des métadonnées. */
+function artVisage(id, meta){
+  const m = meta || {};
+  const p = artPeuple(m.peuple);
+  const rnd = artSuite(id);
+  const S = 512, cx = S/2;
+  const teteR   = 106 + Math.round(rnd()*10);         // rayon du crâne
+  const teteY   = 238;                                // centré : le médaillon rond recadre au milieu
+  const machoire= teteR * (0.92 + rnd()*0.16);
+  const epauleY = teteY + teteR + 62;
+  const trait   = m.trait || 'nu';
 
-  const champs = [
-    `<rect width="${w}" height="${hh}" fill="url(#g)"/>`,
-    `<rect width="${w}" height="${hh}" fill="url(#g)"/><rect y="${hh/2}" width="${w}" height="${hh/2}" fill="${dark}" opacity=".35"/>`,
-    `<rect width="${w}" height="${hh}" fill="url(#g)"/><rect width="${w/2}" height="${hh}" fill="${dark}" opacity=".3"/>`,
-    `<rect width="${w}" height="${hh}" fill="url(#g)"/><path d="M0 ${hh} L${w} 0 L${w} ${hh} Z" fill="${dark}" opacity=".3"/>`,
-  ];
+  /* — Fond : champ dégradé + halo — */
+  const fond = `
+    <defs>
+      <radialGradient id="f" cx="50%" cy="38%" r="80%">
+        <stop offset="0%" stop-color="${p.tissu}" stop-opacity=".75"/>
+        <stop offset="100%" stop-color="${p.fond}"/>
+      </radialGradient>
+      <linearGradient id="t" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${p.tissu}"/>
+        <stop offset="100%" stop-color="${p.fond}"/>
+      </linearGradient>
+      <radialGradient id="v" cx="50%" cy="45%" r="72%">
+        <stop offset="60%" stop-color="#000" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#000" stop-opacity=".55"/>
+      </radialGradient>
+    </defs>
+    <rect width="${S}" height="${S}" fill="url(#f)"/>
+    <circle cx="${cx}" cy="${teteY}" r="${teteR*2.15}" fill="none" stroke="${p.accent}" stroke-width="1.5" opacity=".16"/>
+    <circle cx="${cx}" cy="${teteY}" r="${teteR*1.62}" fill="none" stroke="${p.accent}" stroke-width="1.5" opacity=".22"/>`;
 
-  const charges = [
-    // chevron
-    `<path d="M${cx-r} ${cy+r*0.6} L${cx} ${cy-r*0.7} L${cx+r} ${cy+r*0.6}" fill="none" stroke="${bright}" stroke-width="${r*0.16}" stroke-linecap="round" stroke-linejoin="round"/>`,
-    // faille de l'Onde
-    `<path d="M${cx-r*0.3} ${cy-r} L${cx+r*0.2} ${cy-r*0.2} L${cx-r*0.15} ${cy+r*0.1} L${cx+r*0.3} ${cy+r}" fill="none" stroke="${bright}" stroke-width="${r*0.13}" stroke-linecap="round"/>`,
-    // croissant
-    `<path d="M${cx+r*0.55} ${cy-r*0.75} A ${r} ${r} 0 1 0 ${cx+r*0.55} ${cy+r*0.75} A ${r*0.78} ${r*0.78} 0 1 1 ${cx+r*0.55} ${cy-r*0.75} Z" fill="${bright}"/>`,
-    // lame
-    `<path d="M${cx} ${cy-r} L${cx+r*0.22} ${cy+r*0.35} L${cx} ${cy+r} L${cx-r*0.22} ${cy+r*0.35} Z" fill="${bright}"/>`,
-    // tour
-    `<path d="M${cx-r*0.6} ${cy+r*0.8} L${cx-r*0.6} ${cy-r*0.4} L${cx-r*0.3} ${cy-r*0.4} L${cx-r*0.3} ${cy-r*0.75} L${cx} ${cy-r*0.75} L${cx} ${cy-r*0.4} L${cx+r*0.3} ${cy-r*0.4} L${cx+r*0.3} ${cy-r*0.75} L${cx+r*0.6} ${cy-r*0.75} L${cx+r*0.6} ${cy+r*0.8} Z" fill="${bright}"/>`,
-    // couronne de crocs
-    `<path d="M${cx-r} ${cy+r*0.5} L${cx-r*0.5} ${cy-r*0.5} L${cx} ${cy+r*0.15} L${cx+r*0.5} ${cy-r*0.5} L${cx+r} ${cy+r*0.5} Z" fill="${bright}"/>`,
-  ];
+  /* — Buste — */
+  const epaules = `<path d="M${cx-216} ${S} C ${cx-200} ${epauleY} ${cx-104} ${epauleY-30} ${cx} ${epauleY-30}
+      C ${cx+104} ${epauleY-30} ${cx+200} ${epauleY} ${cx+216} ${S} Z" fill="url(#t)"/>`;
+  const cou = `<path d="M${cx-30} ${teteY+teteR-14} L${cx-34} ${epauleY-20} L${cx+34} ${epauleY-20} L${cx+30} ${teteY+teteR-14} Z" fill="${p.peau}" opacity=".85"/>`;
+  const tete = `<path d="M${cx-teteR} ${teteY-14}
+      C ${cx-teteR} ${teteY-teteR*1.15} ${cx+teteR} ${teteY-teteR*1.15} ${cx+teteR} ${teteY-14}
+      C ${cx+teteR} ${teteY+machoire*0.5} ${cx+machoire*0.52} ${teteY+machoire} ${cx} ${teteY+machoire}
+      C ${cx-machoire*0.52} ${teteY+machoire} ${cx-teteR} ${teteY+machoire*0.5} ${cx-teteR} ${teteY-14} Z"
+      fill="${p.peau}"/>`;
 
-  let halos = '';
-  for(let i=1;i<=rings;i++){
-    halos += `<circle cx="${cx}" cy="${cy}" r="${r*(1 + i*0.42)}" fill="none" stroke="${bright}" stroke-width="1.5" opacity="${0.22/i}"/>`;
-  }
+  /* — Regard : deux marques dans l'accent du peuple — */
+  const oeilY = teteY - 4, oeilX = teteR * 0.42;
+  const yeux = `
+    <ellipse cx="${cx-oeilX}" cy="${oeilY}" rx="13" ry="${m.trait==='masque'?3:6}" fill="#100d0b"/>
+    <ellipse cx="${cx+oeilX}" cy="${oeilY}" rx="13" ry="${m.trait==='masque'?3:6}" fill="#100d0b"/>
+    <circle cx="${cx-oeilX}" cy="${oeilY}" r="4.2" fill="${m.onde ? ART_PEUPLES.onde.accent : p.accent}"/>
+    <circle cx="${cx+oeilX}" cy="${oeilY}" r="4.2" fill="${m.onde ? ART_PEUPLES.onde.accent : p.accent}"/>
+    <path d="M${cx-oeilX-16} ${oeilY-19} q 16 -8 32 -1" stroke="#2b211a" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8"/>
+    <path d="M${cx+oeilX-16} ${oeilY-20} q 16 -7 32 1" stroke="#2b211a" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8"/>
+    <path d="M${cx} ${oeilY+6} l -4 26 q 4 5 9 1" stroke="#8a6a52" stroke-width="3" fill="none" stroke-linecap="round" opacity=".55"/>`;
 
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${hh}" width="${w}" height="${hh}">
-<defs><radialGradient id="g" cx="50%" cy="42%" r="78%">
-<stop offset="0%" stop-color="${dark}" stop-opacity=".85"/>
-<stop offset="100%" stop-color="#120f0c"/></radialGradient></defs>
-${champs[partition]}${halos}${charges[charge]}
-<rect width="${w}" height="${hh}" fill="none" stroke="#3a2f28" stroke-width="6"/></svg>`;
+  /* — Attributs : ce qui distingue vraiment un personnage d'un autre — */
+  const A = {
+    couronne: `<path d="M${cx-teteR*0.92} ${teteY-teteR*0.72} l ${teteR*0.34} ${-teteR*0.5} l ${teteR*0.3} ${teteR*0.34}
+        l ${teteR*0.28} ${-teteR*0.56} l ${teteR*0.28} ${teteR*0.56} l ${teteR*0.3} ${-teteR*0.34} l ${teteR*0.34} ${teteR*0.5} Z"
+        fill="${p.accent}" stroke="#1a140f" stroke-width="3"/>`,
+    capuche: `<path d="M${cx-teteR*1.62} ${S}
+        C ${cx-teteR*1.78} ${teteY-teteR*1.02} ${cx-teteR*1.12} ${teteY-teteR*1.62} ${cx} ${teteY-teteR*1.6}
+        C ${cx+teteR*1.12} ${teteY-teteR*1.62} ${cx+teteR*1.78} ${teteY-teteR*1.02} ${cx+teteR*1.62} ${S} Z"
+        fill="${p.tissu}" stroke="#0d0a08" stroke-width="3"/>
+      <path d="M${cx-teteR*1.62} ${S} C ${cx-teteR*1.6} ${teteY+teteR*0.2} ${cx-teteR*1.2} ${teteY-teteR*1.1} ${cx-teteR*0.86} ${teteY-teteR*0.68}
+        L ${cx-teteR*0.7} ${S} Z" fill="${p.fond}" opacity=".9"/>
+      <path d="M${cx+teteR*1.62} ${S} C ${cx+teteR*1.6} ${teteY+teteR*0.2} ${cx+teteR*1.2} ${teteY-teteR*1.1} ${cx+teteR*0.86} ${teteY-teteR*0.68}
+        L ${cx+teteR*0.7} ${S} Z" fill="${p.fond}" opacity=".9"/>
+      <path d="M${cx-teteR*1.02} ${teteY-teteR*0.36}
+        C ${cx-teteR*0.9} ${teteY-teteR*1.12} ${cx+teteR*0.9} ${teteY-teteR*1.12} ${cx+teteR*1.02} ${teteY-teteR*0.36} Z"
+        fill="#0a0806" opacity=".72"/>`,
+    heaume: `<path d="M${cx-teteR*1.04} ${teteY+6} C ${cx-teteR*1.04} ${teteY-teteR*1.3} ${cx+teteR*1.04} ${teteY-teteR*1.3} ${cx+teteR*1.04} ${teteY+6}
+        L ${cx+teteR*1.04} ${teteY-teteR*0.1} L ${cx-teteR*1.04} ${teteY-teteR*0.1} Z" fill="${p.tissu}" stroke="${p.accent}" stroke-width="3"/>
+      <rect x="${cx-6}" y="${teteY-teteR*0.3}" width="12" height="${teteR*1.05}" rx="4" fill="${p.tissu}" stroke="${p.accent}" stroke-width="2.5"/>`,
+    voile: `<path d="M${cx-teteR*1.28} ${S} C ${cx-teteR*1.4} ${teteY-teteR*1.2} ${cx+teteR*1.4} ${teteY-teteR*1.2} ${cx+teteR*1.28} ${S} Z"
+        fill="${p.tissu}" opacity=".62"/>
+      <path d="M${cx-teteR*0.96} ${teteY-teteR*0.5} q ${teteR*0.96} ${-teteR*0.62} ${teteR*1.92} 0" fill="none" stroke="${p.accent}" stroke-width="3" opacity=".8"/>`,
+    barbe: `<path d="M${cx-machoire*0.78} ${teteY+machoire*0.42}
+        C ${cx-machoire*0.9} ${teteY+machoire*1.7} ${cx+machoire*0.9} ${teteY+machoire*1.7} ${cx+machoire*0.78} ${teteY+machoire*0.42}
+        C ${cx+machoire*0.5} ${teteY+machoire*0.95} ${cx-machoire*0.5} ${teteY+machoire*0.95} ${cx-machoire*0.78} ${teteY+machoire*0.42} Z"
+        fill="${p.tissu}" stroke="#100d0b" stroke-width="2"/>`,
+    cornes: `<path d="M${cx-teteR*0.86} ${teteY-teteR*0.66} C ${cx-teteR*1.7} ${teteY-teteR*1.5} ${cx-teteR*1.62} ${teteY-teteR*0.2} ${cx-teteR*1.18} ${teteY+teteR*0.12}"
+        fill="none" stroke="${p.accent}" stroke-width="15" stroke-linecap="round"/>
+      <path d="M${cx+teteR*0.86} ${teteY-teteR*0.66} C ${cx+teteR*1.7} ${teteY-teteR*1.5} ${cx+teteR*1.62} ${teteY-teteR*0.2} ${cx+teteR*1.18} ${teteY+teteR*0.12}"
+        fill="none" stroke="${p.accent}" stroke-width="15" stroke-linecap="round"/>`,
+    masque: `<rect x="${cx-teteR*1.02}" y="${teteY-teteR*0.42}" width="${teteR*2.04}" height="${teteR*0.62}" rx="8"
+        fill="${p.fond}" stroke="${p.accent}" stroke-width="2.5" opacity=".92"/>`,
+    tresses: `<path d="M${cx-teteR*0.94} ${teteY-teteR*0.34}
+        C ${cx-teteR*1.34} ${teteY+teteR*0.5} ${cx-teteR*1.24} ${teteY+teteR*1.5} ${cx-teteR*1.06} ${S}"
+        fill="none" stroke="${p.tissu}" stroke-width="30" stroke-linecap="round"/>
+      <path d="M${cx+teteR*0.94} ${teteY-teteR*0.34}
+        C ${cx+teteR*1.34} ${teteY+teteR*0.5} ${cx+teteR*1.24} ${teteY+teteR*1.5} ${cx+teteR*1.06} ${S}"
+        fill="none" stroke="${p.tissu}" stroke-width="30" stroke-linecap="round"/>
+      <path d="M${cx-teteR*1.02} ${teteY-teteR*0.5}
+        C ${cx-teteR*0.7} ${teteY-teteR*1.08} ${cx+teteR*0.7} ${teteY-teteR*1.08} ${cx+teteR*1.02} ${teteY-teteR*0.5}
+        C ${cx+teteR*0.6} ${teteY-teteR*0.82} ${cx-teteR*0.6} ${teteY-teteR*0.82} ${cx-teteR*1.02} ${teteY-teteR*0.5} Z"
+        fill="${p.tissu}"/>`,
+    oreilles: `<path d="M${cx-teteR*0.96} ${teteY-6} l ${-teteR*0.62} ${-teteR*0.56} l ${teteR*0.28} ${teteR*0.72} Z" fill="${p.peau}"/>
+      <path d="M${cx+teteR*0.96} ${teteY-6} l ${teteR*0.62} ${-teteR*0.56} l ${-teteR*0.28} ${teteR*0.72} Z" fill="${p.peau}"/>`,
+    chapeau: `<path d="M${cx-teteR*1.55} ${teteY-teteR*0.55} q ${teteR*1.55} ${teteR*0.42} ${teteR*3.1} 0 q ${-teteR*1.55} ${teteR*0.3} ${-teteR*3.1} 0 Z" fill="${p.tissu}"/>
+      <path d="M${cx-teteR*0.72} ${teteY-teteR*0.5} l 0 ${-teteR*0.62} q ${teteR*0.72} ${-teteR*0.24} ${teteR*1.44} 0 l 0 ${teteR*0.62} Z" fill="${p.tissu}" stroke="#100d0b" stroke-width="2"/>`,
+    nu: '',
+  };
+  const dessus = A[trait] !== undefined ? A[trait] : '';
+  /* La capuche et le heaume passent derrière la tête, le reste devant. */
+  const derriere = (trait === 'capuche' || trait === 'voile' || trait === 'tresses') ? dessus : '';
+  const devant   = derriere ? '' : dessus;
+  const oreillesElfes = (m.peuple === 'elfe' || m.peuple === 'elfe_noir') ? A.oreilles : '';
 
+  /* — Marque de l'Onde : ce que porte un Paria qui s'en sert — */
+  const marque = m.onde
+    ? `<path d="M${cx+teteR*0.5} ${teteY-teteR*0.74} l ${teteR*0.26} ${teteR*0.36} l ${-teteR*0.2} ${teteR*0.12} l ${teteR*0.3} ${teteR*0.46}"
+         fill="none" stroke="${ART_PEUPLES.onde.accent}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/>
+       <circle cx="${cx}" cy="${teteY}" r="${teteR*1.28}" fill="none" stroke="${ART_PEUPLES.onde.accent}" stroke-width="2" opacity=".3"/>` : '';
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" width="${S}" height="${S}">
+${fond}${epaules}${derriere}${cou}${oreillesElfes}${tete}${yeux}${marque}${devant}
+<rect width="${S}" height="${S}" fill="url(#v)"/>
+<rect x="3" y="3" width="${S-6}" height="${S-6}" fill="none" stroke="${p.accent}" stroke-width="3" opacity=".45"/></svg>`;
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 }
 
-/* Construit une <img> qui bascule sur le blason si le fichier est absent. */
-function artImage(id, kind, className){
-  const img = document.createElement('img');
-  img.className = className || (kind === 'portrait' ? 'portrait-img' : 'event-illu');
-  img.alt = '';
-  img.loading = 'lazy';
-  img.dataset.artId = id;
-  img.onerror = () => { img.onerror = null; img.src = artFallbackSVG(id, kind); };
-  img.src = ART_PATHS[kind] + id + ART_EXT;
-  return img;
+/* ============================= BANDEAUX D'ÉVÉNEMENT ============================= */
+/* Un paysage : ciel, deux crêtes, un sol, un motif au premier plan. La famille
+ * de l'événement décide de tout ; le hachage ne décide que du relief. */
+const ART_SCENES = {
+  VOYAGE:     { ciel:['#3d3527','#8a6a3a'], sol:'#241c14', accent:'#c9a227', motif:'route' },
+  VILLE:      { ciel:['#2b2a2e','#6b6257'], sol:'#1d1b19', accent:'#cbb99a', motif:'ville' },
+  TAVERNE:    { ciel:['#2a1d12','#7a4a1e'], sol:'#1a120c', accent:'#d98a2b', motif:'feu' },
+  PARIA:      { ciel:['#241014','#7d1f2a'], sol:'#160d0e', accent:'#d2455a', motif:'ruine' },
+  ONDE:       { ciel:['#0b2523','#1c6b64'], sol:'#0a1614', accent:'#56d6c9', motif:'faille' },
+  GUERRE:     { ciel:['#2c1b16','#8a3a22'], sol:'#1a100d', accent:'#c8303f', motif:'lances' },
+  POLITIQUE:  { ciel:['#241f2c','#5a4a6b'], sol:'#171420', accent:'#c6a04a', motif:'sceau' },
+  CONTRAT:    { ciel:['#2a2419','#6f5b2a'], sol:'#1a160f', accent:'#c9a227', motif:'sceau' },
+  KHESH:      { ciel:['#3a2a10','#c08a2e'], sol:'#2a1d0c', accent:'#e6c274', motif:'dunes' },
+  ELFE:       { ciel:['#16281d','#4d8a5e'], sol:'#0f1a13', accent:'#cfe3c0', motif:'foret' },
+  ELFE_NOIR:  { ciel:['#140f1e','#3c2f5c'], sol:'#0d0a14', accent:'#b39ddb', motif:'voute' },
+  NAIN:       { ciel:['#1c1109','#6b3b1c'], sol:'#120b06', accent:'#d99a4e', motif:'mine' },
+  PEAU_VERTE: { ciel:['#141a0c','#4a6b22'], sol:'#0e1208', accent:'#8fbe4a', motif:'horde' },
+  HOMME_BETE: { ciel:['#1a140d','#5a4426'], sol:'#100c08', accent:'#cfc0a3', motif:'pierres' },
+};
+function artScene(id, famille){
+  const s = ART_SCENES[famille] || ART_SCENES.VOYAGE;
+  const rnd = artSuite(id);
+  const W = 1200, H = 480, horizon = 300 + Math.round(rnd()*40);
+
+  /* Crêtes : une ligne brisée déterministe, deux plans de profondeur. */
+  const crete = (base, ampl, pas) => {
+    let d = `M0 ${base}`;
+    for(let x = 0; x <= W; x += pas) d += ` L${x} ${Math.round(base - rnd()*ampl)}`;
+    return d + ` L${W} ${H} L0 ${H} Z`;
+  };
+  const loin  = crete(horizon - 22, 78, 100);
+  const pres  = crete(horizon + 26, 46, 70);
+
+  const astreX = 190 + Math.round(rnd()*820), astreY = 96 + Math.round(rnd()*70);
+  const astre = `<circle cx="${astreX}" cy="${astreY}" r="${34 + Math.round(rnd()*22)}" fill="${s.accent}" opacity=".5"/>
+    <circle cx="${astreX}" cy="${astreY}" r="${86 + Math.round(rnd()*30)}" fill="none" stroke="${s.accent}" stroke-width="1.5" opacity=".18"/>`;
+
+  const bx = W/2, by = horizon + 108;
+  const M = {
+    route:  `<path d="M${bx-320} ${H} L${bx-34} ${horizon+16} L${bx+34} ${horizon+16} L${bx+320} ${H} Z" fill="${s.accent}" opacity=".16"/>
+             <path d="M${bx-40} ${H} L${bx-6} ${horizon+18}" stroke="${s.accent}" stroke-width="3" opacity=".4"/>`,
+    ville:  `<g fill="${s.sol}" stroke="${s.accent}" stroke-width="2" opacity=".95">
+             <rect x="${bx-300}" y="${horizon-40}" width="110" height="${H-horizon+40}"/>
+             <rect x="${bx-150}" y="${horizon-120}" width="80" height="${H-horizon+120}"/>
+             <rect x="${bx+40}" y="${horizon-72}" width="130" height="${H-horizon+72}"/>
+             <rect x="${bx+210}" y="${horizon-160}" width="60" height="${H-horizon+160}"/></g>`,
+    feu:    `<path d="M${bx} ${by-120} C ${bx+66} ${by-40} ${bx+40} ${by} ${bx} ${by} C ${bx-40} ${by} ${bx-66} ${by-40} ${bx} ${by-120} Z" fill="${s.accent}" opacity=".65"/>
+             <path d="M${bx} ${by-64} C ${bx+30} ${by-26} ${bx+18} ${by} ${bx} ${by} C ${bx-18} ${by} ${bx-30} ${by-26} ${bx} ${by-64} Z" fill="#f2d59a" opacity=".8"/>`,
+    ruine:  `<g fill="${s.sol}" stroke="${s.accent}" stroke-width="2.5">
+             <path d="M${bx-260} ${H} L${bx-260} ${horizon-30} L${bx-190} ${horizon-70} L${bx-190} ${H} Z"/>
+             <path d="M${bx-60} ${H} L${bx-60} ${horizon-140} L${bx+10} ${horizon-90} L${bx+10} ${H} Z"/>
+             <path d="M${bx+150} ${H} L${bx+150} ${horizon-46} L${bx+220} ${horizon-16} L${bx+220} ${H} Z"/></g>`,
+    faille: `<path d="M${bx-180} ${H} L${bx-40} ${horizon-90} L${bx+16} ${horizon+10} L${bx-10} ${horizon-40} L${bx+130} ${H} Z" fill="${s.accent}" opacity=".55"/>
+             <path d="M${bx-40} ${horizon-90} L${bx+16} ${horizon+10}" stroke="#eafffb" stroke-width="4" opacity=".8"/>`,
+    lances: `<g stroke="${s.accent}" stroke-width="4" opacity=".8">${
+              Array.from({length:11}, (_,i)=>{
+                const x = bx - 300 + i*60 + Math.round(rnd()*18);
+                const h2 = 120 + Math.round(rnd()*70);
+                return `<line x1="${x}" y1="${H}" x2="${x+Math.round(rnd()*16-8)}" y2="${H-h2}"/>`;
+              }).join('')}</g>`,
+    sceau:  `<circle cx="${bx}" cy="${by-40}" r="76" fill="${s.accent}" opacity=".28"/>
+             <circle cx="${bx}" cy="${by-40}" r="76" fill="none" stroke="${s.accent}" stroke-width="4"/>
+             <path d="M${bx-34} ${by-4} L${bx} ${by-92} L${bx+34} ${by-4} Z" fill="${s.accent}" opacity=".85"/>`,
+    dunes:  `<path d="M0 ${H} C ${W*0.22} ${horizon+40} ${W*0.38} ${H-40} ${W*0.6} ${horizon+70} C ${W*0.8} ${H-20} ${W*0.9} ${horizon+90} ${W} ${horizon+60} L${W} ${H} Z" fill="${s.accent}" opacity=".22"/>`,
+    foret:  `<g fill="${s.sol}" stroke="${s.accent}" stroke-width="2">${
+              Array.from({length:9}, (_,i)=>{
+                const x = 70 + i*135, h2 = 130 + Math.round(rnd()*110);
+                return `<path d="M${x} ${H} L${x-44} ${H-h2*0.55} L${x-20} ${H-h2*0.55} L${x-54} ${H-h2} L${x} ${H-h2-34} L${x+54} ${H-h2} L${x+20} ${H-h2*0.55} L${x+44} ${H-h2*0.55} Z"/>`;
+              }).join('')}</g>`,
+    voute:  `<path d="M${bx-260} ${H} L${bx-260} ${horizon+20} A 260 190 0 0 1 ${bx+260} ${horizon+20} L${bx+260} ${H} Z" fill="${s.sol}" stroke="${s.accent}" stroke-width="3"/>
+             <path d="M${bx-120} ${H} L${bx-120} ${horizon+90} A 120 96 0 0 1 ${bx+120} ${horizon+90} L${bx+120} ${H} Z" fill="#07050a"/>`,
+    mine:   `<g stroke="${s.accent}" stroke-width="5" fill="none">
+             <path d="M${bx-170} ${H} L${bx} ${horizon-40} L${bx+170} ${H}"/>
+             <path d="M${bx-100} ${H-90} L${bx+100} ${H-90}"/>
+             <path d="M${bx-60} ${H-170} L${bx+60} ${H-170}"/></g>
+             <rect x="${bx-46}" y="${H-70}" width="92" height="70" fill="${s.sol}" stroke="${s.accent}" stroke-width="3"/>`,
+    horde:  `<g fill="${s.accent}" opacity=".55">${
+              Array.from({length:26}, ()=>{
+                const x = Math.round(rnd()*W), y = horizon + 30 + Math.round(rnd()*(H-horizon-40));
+                const r2 = 6 + Math.round(rnd()*10);
+                return `<circle cx="${x}" cy="${y}" r="${r2}"/>`;
+              }).join('')}</g>`,
+    pierres:`<g fill="${s.sol}" stroke="${s.accent}" stroke-width="3">${
+              Array.from({length:5}, (_,i)=>{
+                const x = bx - 300 + i*150, h2 = 120 + Math.round(rnd()*90);
+                return `<path d="M${x-30} ${H} L${x-24} ${H-h2} L${x+22} ${H-h2-16} L${x+30} ${H} Z"/>`;
+              }).join('')}</g>`,
+  };
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
+<defs>
+  <linearGradient id="c" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="${s.ciel[0]}"/><stop offset="100%" stop-color="${s.ciel[1]}"/>
+  </linearGradient>
+  <radialGradient id="vg" cx="50%" cy="46%" r="76%">
+    <stop offset="52%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#000" stop-opacity=".72"/>
+  </radialGradient>
+</defs>
+<rect width="${W}" height="${H}" fill="url(#c)"/>
+${astre}
+<path d="${loin}" fill="${s.sol}" opacity=".55"/>
+<path d="${pres}" fill="${s.sol}"/>
+${M[s.motif] || ''}
+<rect width="${W}" height="${H}" fill="url(#vg)"/>
+<rect x="2" y="2" width="${W-4}" height="${H-4}" fill="none" stroke="${s.accent}" stroke-width="3" opacity=".35"/></svg>`;
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 }
 
+/* ============================= RÉSOLUTION ============================= */
+
+/* Métadonnées d'un portrait, si le registre en connaît. */
+function artMetaPortrait(id){
+  return (typeof PORTRAITS !== 'undefined' && PORTRAITS[id]) || {};
+}
+
+/* Image de repli, quel que soit le registre. `info` est la famille de
+ * l'événement pour un bandeau, ignoré pour un portrait. */
+function artFallbackSVG(id, kind, info){
+  return kind === 'portrait' ? artVisage(id, artMetaPortrait(id)) : artScene(id, info);
+}
+
+function artAttr(url){ return url.replace(/"/g, '&quot;'); }
+
 /* Bandeau d'illustration d'un événement (renvoie du HTML, pas un nœud). */
-function artEventBanner(id){
+function artEventBanner(id, famille){
   if(!id) return '';
-  const fb = artFallbackSVG(id, 'event').replace(/"/g, '&quot;');
+  const fb = artAttr(artScene(id, famille));
   return `<div class="event-illu-wrap"><img class="event-illu" alt="" loading="lazy"
     src="${ART_PATHS.event}${id}${ART_EXT}" onerror="this.onerror=null;this.src=&quot;${fb}&quot;"></div>`;
+}
+
+/* Portrait seul, en médaillon — pour le combat, l'écran Personnage, une liste. */
+function artPortraitImg(pnjId, className){
+  if(!pnjId) return '';
+  const fb = artAttr(artVisage(pnjId, artMetaPortrait(pnjId)));
+  return `<img class="${className || 'portrait-img'}" alt="" loading="lazy"
+    src="${ART_PATHS.portrait}${pnjId}${ART_EXT}" onerror="this.onerror=null;this.src=&quot;${fb}&quot;">`;
 }
 
 /* Vignette de personnage : portrait + nom + rôle. */
 function artPortraitCard(pnjId){
   const p = (typeof PORTRAITS !== 'undefined' && PORTRAITS[pnjId]) || null;
   if(!p) return '';
-  const fb = artFallbackSVG(pnjId, 'portrait').replace(/"/g, '&quot;');
   return `<div class="pnj-card">
-    <img class="portrait-img" alt="" loading="lazy"
-      src="${ART_PATHS.portrait}${pnjId}${ART_EXT}" onerror="this.onerror=null;this.src=&quot;${fb}&quot;">
+    ${artPortraitImg(pnjId)}
     <div class="pnj-id"><div class="pnj-nom">${p.nom}</div><div class="pnj-role">${p.role}</div></div>
   </div>`;
 }
@@ -7163,7 +7424,12 @@ function expandFoeSpec(spec){
   const out = [];
   (Array.isArray(spec) ? spec : [spec]).forEach(x=>{
     if(!x) return;
-    if(x.champion){
+    if(x.groupe){
+      // Tolère qu'on passe la définition de combat entière plutôt que son
+      // groupe : sans cela l'adversaire serait construit à partir d'un objet
+      // vide, et le combat s'ouvrirait sur un ennemi sans nom ni points de vie.
+      out.push(...expandFoeSpec(x.groupe));
+    } else if(x.champion){
       const tpl = CHAMPIONS[x.champion];
       if(!tpl){ console.warn('Champion inconnu :', x.champion); return; }
       for(let i=0;i<(x.n||1);i++) out.push(tpl);
@@ -7686,8 +7952,11 @@ function fighterCard(c, idx, role){
     ? `<div class="f-bar fat ${zone.cls}"><i style="width:${Math.max(0,c.fat)}%"></i></div>`
     : '';
 
+  // Le visage de celui qu'on frappe : un combat écrit met des gens en face.
+  const face = c.portrait ? artPortraitImg(c.portrait, 'f-face') : '';
+
   return `<div class="${cls}" data-idx="${idx}" data-side="${c.side}">
-    <div class="f-top"><span class="f-nom">${c.nom}</span><span class="f-meta">${c.pv}/${c.pvMax} PV</span></div>
+    <div class="f-top">${face}<span class="f-nom">${c.nom}</span><span class="f-meta">${c.pv}/${c.pvMax} PV</span></div>
     <div class="f-bar pv"><i style="width:${pvPct}%"></i></div>
     ${fatBar}
     <div class="f-top" style="margin-top:4px;"><span class="f-meta">${meta}</span></div>
@@ -8448,7 +8717,7 @@ function renderScene(sceneId){
   const tags = applyEffets(sc.effets);
   const box = document.getElementById('eventModalBox');
 
-  let html = artEventBanner(ev.image);
+  let html = artEventBanner(ev.image, ev.famille);
   html += `<span class="event-tag">${ev.famille} · ${ev.rarete}${lieu?' · '+lieu.nom:''}</span>`;
   if(sceneId === 'start') html += `<h3>${ev.titre}</h3>`;
   if(sc.pnj) html += artPortraitCard(sc.pnj);
@@ -8596,7 +8865,7 @@ function resolveEventChoice(label, ev){
 
 function openEventModal(ev, lieu){
   const box = document.getElementById('eventModalBox');
-  box.innerHTML = `${artEventBanner('evt_'+ev.famille.toLowerCase())}
+  box.innerHTML = `${artEventBanner('evt_'+ev.famille.toLowerCase(), ev.famille)}
     <span class="event-tag">${ev.famille} · ${ev.rarete}${lieu?' · '+lieu.nom:''}</span>
     <h3>${ev.titre}</h3>
     ${buildNarrativeBlock(ev, lieu)}
@@ -9826,6 +10095,8 @@ function applyPassiveEffects(){
 
 function renderPersonnage(){
   applyPassiveEffects();
+  const face = document.getElementById('charFace');
+  if(face && !face.dataset.pose){ face.innerHTML = artPortraitImg('yohan'); face.dataset.pose = '1'; }
   document.getElementById('charLvl').textContent = hero.niveau;
   document.getElementById('charPvText').textContent = `${hero.pv} / ${hero.pvMax}`;
   document.getElementById('charPvBar').style.width = (100*hero.pv/hero.pvMax)+'%';
@@ -10218,7 +10489,7 @@ function triggerExploration(){
   // Sous forte suspicion, la traque peut se manifester directement
   if(hero.suspicion>=60 && Math.random()<0.25){
     const box = document.getElementById('eventModalBox');
-    box.innerHTML = `${artEventBanner('evt_traque')}<span class="event-tag">Traque</span><h3>Ils l'ont retrouvé</h3>
+    box.innerHTML = `${artEventBanner('evt_traque', 'PARIA')}<span class="event-tag">Traque</span><h3>Ils l'ont retrouvé</h3>
       ${artPortraitCard('chasseur_prime')}
       <p class="narrative">${pickVariant(["Une silhouette encapuchonnée se détache de la foule, trop précise dans ses mouvements pour être un simple passant. Un chasseur de primes — et il n'est pas venu discuter.", "Le bruit d'une arme qu'on arme résonne dans le silence. Quelqu'un, enfin, a fini par mettre un nom sur le visage caché de Yohan.", "Ce n'est pas une coïncidence : le chasseur qui lui barre la route connaît exactement qui il traque."])}</p>
       <div style="margin-top:16px;text-align:right;"><button class="primary" id="bhFightBtn">Affronter</button></div>`;

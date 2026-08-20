@@ -189,7 +189,7 @@
   .map-pin:hover{filter:brightness(1.3);}
 
   /* ---- personnage ---- */
-  .charhead{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px;margin-bottom:6px;}
+  .charhead{display:flex;align-items:center;flex-wrap:wrap;gap:14px;margin-bottom:12px;}
   .charhead .lvl{font-family:'Cinzel',serif;color:var(--gold);font-size:14px;}
   .stat-row{display:flex;justify-content:space-between;align-items:center;font-family:'Inter',sans-serif;font-size:12.5px;margin-bottom:6px;color:var(--parchment-dim);}
   .stat-row b{color:var(--parchment);font-weight:700;font-variant-numeric:tabular-nums;}
@@ -315,7 +315,7 @@
   .event-illu{display:block;width:100%;aspect-ratio:5/2;object-fit:cover;}
   .pnj-card{display:flex;align-items:center;gap:12px;margin:12px 0 4px;padding:8px 10px;
     background:#0f0c0a;border:1px solid var(--line);border-left:3px solid var(--gold-dim);border-radius:4px;}
-  .portrait-img{width:56px;height:56px;border-radius:50%;object-fit:cover;flex:0 0 56px;
+  .portrait-img{width:76px;height:76px;border-radius:50%;object-fit:cover;flex:0 0 76px;
     border:1px solid var(--gold-dim);background:#0a0807;}
   .pnj-nom{font-family:'Cinzel',serif;font-size:13.5px;color:var(--gold);}
   .pnj-role{font-family:'Inter',sans-serif;font-size:10.5px;color:var(--parchment-dim);letter-spacing:.04em;}
@@ -406,6 +406,13 @@
   .perte-e{color:var(--onde-bright);} .perte-a{color:var(--blood-bright);}
   .cr-badge.campagne{border-color:var(--warn);color:var(--warn);}
   .cr-badge.verrou{border-color:var(--line);color:var(--parchment-dim);}
+
+  .fighter .f-face{width:26px;height:26px;border-radius:50%;object-fit:cover;flex:0 0 auto;
+    border:1px solid var(--line);background:#0a0807;margin-right:2px;}
+  .fighter.active .f-face{border-color:var(--gold);}
+  .fighter.target .f-face{border-color:var(--blood-bright);}
+  #charFace img{width:64px;height:64px;border-radius:50%;object-fit:cover;
+    border:1px solid var(--gold-dim);background:#0a0807;display:block;}
 
   .epi-panel{max-width:760px;margin:0 auto;}
   .epi-tag{display:inline-block;font-family:'Inter',sans-serif;font-size:10px;text-transform:uppercase;
@@ -546,8 +553,11 @@
   <div class="screen" id="screen-personnage">
     <div class="panel">
       <div class="charhead">
-        <h2 style="border:none;margin:0;padding:0;">Yohan</h2>
-        <span class="lvl">Niveau <span id="charLvl">3</span> · Paria</span>
+        <span id="charFace"></span>
+        <div>
+          <h2 style="border:none;margin:0;padding:0;">Yohan</h2>
+          <span class="lvl">Niveau <span id="charLvl">3</span> · Paria</span>
+        </div>
       </div>
       <div class="stat-row"><span>Points de Vie</span><b id="charPvText">—</b></div>
       <div class="gauge"><div class="gauge-fill pv" id="charPvBar" style="width:100%"></div></div>

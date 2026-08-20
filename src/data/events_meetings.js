@@ -53,7 +53,7 @@ const EVENTS_RENCONTRE = [
          test:{stat:"precision", dc:15}, reussite:"alliance_ok", echec:"alliance_ko"},
       ]
     },
-    pacte:{
+    pacte:{ pnj:"caleb",
       texte:[
         "Ils ne se serrent pas la main — ce serait déjà trop d'engagement. Caleb hoche la tête une fois et se replonge dans ses papiers comme si Yohan avait déjà quitté la pièce.",
         "Fort-aux-Princes lui restera hostile, mais silencieuse. Dans le métier de Yohan, le silence d'une forteresse-frontière vaut plus cher qu'un allié bavard."
@@ -71,7 +71,7 @@ const EVENTS_RENCONTRE = [
       effets:{xp:28, sang:5, flags:["caleb_rencontre","caleb_respect"]},
       fin:true
     },
-    refus_ko:{
+    refus_ko:{ pnj:"caleb",
       texte:[
         "Yohan refuse mal — trop vite, avec un mot de trop sur les princes qui se croient propriétaires des routes.",
         "Caleb ne répond rien du tout, ce qui est bien pire. Il reprend ses papiers, et dans la semaine, deux garnisons de la frontière reçoivent une description très précise d'un voyageur aux armes trop lourdes."
@@ -98,7 +98,7 @@ const EVENTS_RENCONTRE = [
       effets:{suspicion:4, flag:"caleb_rencontre"},
       fin:true
     },
-    sort_ok:{
+    sort_ok:{ pnj:"caleb",
       texte:[
         "Yohan sort sans se retourner et sans presser le pas, ce qui demande plus de sang-froid que de rester.",
         "Personne ne le suit. Il apprendra plus tard que Caleb a dit à ses officiers, ce soir-là, qu'il n'avait vu personne d'intéressant — ce qui est, chez lui, une forme de politesse."
@@ -135,7 +135,7 @@ const EVENTS_RENCONTRE = [
       effets:{xp:60, sang:12, suspicion:8, flags:["caleb_rencontre","caleb_vaincu"]},
       fin:true
     },
-    duel_perdu:{
+    duel_perdu:{ pnj:"caleb",
       texte:[
         "Caleb s'arrête net quand Yohan tombe, et c'est ce geste-là — s'arrêter — qui dit le plus sur lui.",
         "« Pas à mort », répète-t-il à ses hommes qui accourent. « J'ai dit pas à mort. »",
@@ -219,7 +219,7 @@ const EVENTS_RENCONTRE = [
       effets:{xp:38, sang:8, flags:["tyrion_rencontre","onde_suivait"]},
       fin:true
     },
-    savoir_ko:{
+    savoir_ko:{ pnj:"tyrion",
       texte:[
         "Yohan pose ses questions et se heurte à une paroi lisse. Tyrion répond à côté avec une élégance qui rend l'insistance impossible.",
         "Il ressort avec la certitude que les Elfes savent quelque chose, et rien de plus — ce qui est peut-être exactement l'effet recherché."
@@ -245,7 +245,7 @@ const EVENTS_RENCONTRE = [
       effets:{xp:70, sang:14, suspicion:10, flags:["tyrion_rencontre","tyrion_vaincu"]},
       fin:true
     },
-    duel_perdu:{
+    duel_perdu:{ pnj:"tyrion",
       texte:[
         "La lame de Tyrion s'arrête à un doigt de la gorge de Yohan, immobile, le temps que tout le monde ait bien vu où elle se trouvait.",
         "« Voilà », dit-il en la relevant. « Voilà exactement pourquoi je préfère la distance. »",
@@ -303,7 +303,7 @@ const EVENTS_RENCONTRE = [
       effets:{xp:36, sang:6, flags:["charles_rencontre","charles_allie"]},
       fin:true
     },
-    menace_ko:{
+    menace_ko:{ pnj:"charles",
       texte:[
         "Charles hausse les épaules et parle d'autre chose — la neige, les loups, une histoire de forgeron. Il ne répondra pas à cette question aujourd'hui.",
         "Yohan repart nourri, reposé, et pas plus renseigné. Ce n'est déjà pas rien."
@@ -332,7 +332,7 @@ const EVENTS_RENCONTRE = [
         {label:"S'asseoir", suite:"repas"},
       ]
     },
-    jauge_ko:{
+    jauge_ko:{ pnj:"charles",
       texte:[
         "Yohan reste sur ses gardes trop longtemps, et Charles finit par se lever en soupirant.",
         "« Tant pis. » Il remballe son pain. « Vous vous méfiez de la seule personne de cette montagne qui ne vous voulait rien. »",
@@ -341,7 +341,7 @@ const EVENTS_RENCONTRE = [
       effets:{flag:"charles_rencontre"},
       fin:true
     },
-    faille:{
+    faille:{ pnj:"charles",
       texte:[
         "Yohan descend malgré l'avertissement. La chaleur monte par vagues, l'air sent le soufre, et à mi-pente il comprend que ce qu'il a pris pour une paroi est en train de respirer.",
         "Derrière lui, très haut, la voix de Charles arrive amortie par la roche : « Je vous avais prévenu ! »"
@@ -357,7 +357,7 @@ const EVENTS_RENCONTRE = [
       effets:{xp:50, sang:10, flags:["charles_rencontre","charles_allie"], item:"armure_ecailles"},
       fin:true
     },
-    faille_ko:{
+    faille_ko:{ pnj:"charles",
       texte:[
         "Yohan remonte la pente à quatre pattes, brûlé, sourd d'une oreille, et s'effondre à trois pas de l'éperon.",
         "Charles le retourne sur le dos avec le pied, constate qu'il respire, et lui met sa gourde dans la main. « Voilà pourquoi je préviens les gens. »"
@@ -413,7 +413,7 @@ const EVENTS_RENCONTRE = [
       ],
       fin:true
     },
-    ment_ok:{
+    ment_ok:{ pnj:"kemval",
       texte:[
         "Yohan invente une histoire de dette et de maison marchande, plate, ennuyeuse, parfaitement crédible. Kem-Val l'accepte sans insister — un homme qui ment sur son bannissement a ses raisons, et les raisons se respectent.",
         "Ils passent la nuit au puits sans plus rien se dire. Au matin, l'outre est pleine et le géant est parti."
@@ -451,7 +451,7 @@ const EVENTS_RENCONTRE = [
       effets:{xp:22},
       choix:[ {label:"S'asseoir", suite:"parle"} ]
     },
-    refus_ko:{
+    refus_ko:{ pnj:"kemval",
       texte:[
         "Yohan refuse l'eau, et il le fait mal — avec le geste de quelqu'un qui craint le poison.",
         "Kem-Val range l'outre en silence. Le puits reste ouvert : il n'est pas mesquin. Mais il ne dira plus un mot, et Yohan repartira sans savoir qui il vient de vexer."
@@ -484,7 +484,7 @@ const EVENTS_RENCONTRE = [
          suite:"trahison"},
       ]
     },
-    nie_ok:{
+    nie_ok:{ pnj:"khalvaene",
       texte:[
         "Yohan raconte une route différente, un puits différent, un géant qu'il n'a jamais vu. C'est plat, vérifiable, et suffisamment ennuyeux pour être vrai.",
         "Khal-Vaene fait un geste, et on rapporte à Yohan l'arme qu'on lui avait prise à l'entrée du camp. « Alors on m'a menti. Ça arrive souvent. »",
@@ -544,7 +544,7 @@ const EVENTS_RENCONTRE = [
       effets:{or:400, suspicion:10, sang:-4, xp:16, flags:["khalvaene_rencontre","trahi_kemval"]},
       fin:true
     },
-    combat_gagne:{
+    combat_gagne:{ pnj:"khalvaene",
       texte:[
         "Khal-Vaene tombe au milieu des os de dragons qu'il prétendait posséder, et le camp ne bouge pas. Chez les Khesh, on ne venge pas un chef qui a perdu en duel ouvert : on en cherche un autre.",
         "Ce qui vient de se passer va remonter les dunes plus vite qu'un cavalier. Quelque part, un banni va l'apprendre — et le trône des Dragons des Sables vient de se libérer."
@@ -646,7 +646,7 @@ const EVENTS_RENCONTRE = [
   image:"rc_arene", lieux:["LOC_017"],
   requis:{ sansFlags:["arene_tentee"] },
   scenes:{
-    start:{
+    start:{ pnj:"tenant_arene",
       texte:[
         "L'Arène Rouge ne tue pas ses combattants — elle les use, ce qui rapporte plus longtemps. Le Tenant y est invaincu depuis deux saisons, et la maison paie très bien quiconque accepte de lui donner un vrai adversaire.",
         "Le régisseur détaille les termes sans lever les yeux de son registre : cent cinquante à l'inscription, quatre cents à la victoire, et pas d'armes de poing.",
@@ -661,14 +661,14 @@ const EVENTS_RENCONTRE = [
          suite:"refus", effets:{suspicion:-4, flag:"arene_tentee"}},
       ]
     },
-    combat_loyal:{
+    combat_loyal:{ pnj:"tenant_arene",
       texte:[
         "Le sable est plus profond qu'il n'y paraît depuis les gradins — c'est le vrai adversaire, celui qui fatigue les jambes en trois minutes.",
         "Le Tenant salue la foule avant de saluer Yohan, dans cet ordre, ce qui dit tout de sa profession."
       ],
       combat:{ groupe:[{champion:"champion_arene"}], victoire:"loyal_gagne", defaite:"loyal_perdu" }
     },
-    loyal_gagne:{
+    loyal_gagne:{ pnj:"tenant_arene",
       texte:[
         "Le Tenant tombe dans le sable rouge et lève la main avant qu'on ait à le compter. La foule hurle un nom qu'elle ne connaît pas et qu'elle inventera d'ici demain.",
         "Le régisseur paie sans discuter, avec le respect sincère d'un homme qui vient de gagner beaucoup plus que ce qu'il verse.",
@@ -677,7 +677,7 @@ const EVENTS_RENCONTRE = [
       effets:{or:400, xp:44, sang:3, suspicion:2, flag:"arene_champion"},
       fin:true
     },
-    loyal_perdu:{
+    loyal_perdu:{ pnj:"tenant_arene",
       texte:[
         "Le Tenant reste le Tenant. Il aide Yohan à se relever, lui tape l'épaule, et se tourne vers les gradins qui scandent son nom.",
         "Le régisseur ne rend pas l'inscription, mais il glisse tout de même : « Vous avez tenu six passes. La plupart en tiennent deux. »"
@@ -685,14 +685,14 @@ const EVENTS_RENCONTRE = [
       effets:{pv:-10, xp:16},
       fin:true
     },
-    combat_onde:{
+    combat_onde:{ pnj:"tenant_arene",
       texte:[
         "Yohan entre dans l'arène en ayant déjà décidé de tricher, ce qui change la façon dont on marche sur le sable.",
         "Le Tenant le salue. La foule se tait. Et Yohan laisse monter quelque chose qui n'a rien à faire dans un combat d'arène."
       ],
       combat:{ groupe:[{champion:"champion_arene"}], victoire:"onde_gagne", defaite:"onde_perdu" }
     },
-    onde_gagne:{
+    onde_gagne:{ pnj:"tenant_arene",
       texte:[
         "Le Tenant est projeté à six pas sans qu'on l'ait touché. Il n'y a pas d'applaudissements. Il y a deux mille personnes debout, absolument silencieuses.",
         "Le régisseur paie — il faut bien — et pousse la bourse sur la table du bout des doigts, comme si elle brûlait. « Sortez par les écuries. Tout de suite. »",
@@ -701,7 +701,7 @@ const EVENTS_RENCONTRE = [
       effets:{or:400, xp:40, sang:6, suspicion:30, fat:20, flag:"arene_onde"},
       fin:true
     },
-    onde_perdu:{
+    onde_perdu:{ pnj:"tenant_arene",
       texte:[
         "L'Onde monte, rate, et le contrecoup fait plus de dégâts à Yohan qu'au Tenant. Ce qui est déjà humiliant devient dangereux : deux mille personnes ont vu le sable se soulever autour d'un homme qui perdait quand même.",
         "On l'évacue par les écuries sans le payer. Le régisseur ne dit rien du tout, ce qui vaut toutes les menaces."
@@ -785,7 +785,7 @@ const EVENTS_RENCONTRE = [
       effets:{or:300, xp:34, flags:["lucius_rencontre","lucius_menace"]},
       fin:true
     },
-    services_ko:{
+    services_ko:{ pnj:"lucius",
       texte:[
         "Lucius laisse Yohan terminer son offre, puis retourne à ses jetons sans un mot, comme si la tente s'était vidée.",
         "Un officier touche le coude de Yohan. C'est tout : pas de menace, pas d'escorte armée. On le fait sortir comme on range un objet qui n'avait pas sa place sur la table."
@@ -800,7 +800,7 @@ const EVENTS_RENCONTRE = [
       ],
       fin:true
     },
-    part:{
+    part:{ pnj:"lucius",
       texte:[
         "Yohan tourne les talons au milieu d'une phrase, et personne ne l'arrête — parce que personne, dans ce camp, ne considère qu'il représente un problème immédiat.",
         "C'est peut-être l'information la plus utile de la journée : Lucius Furius Augustus ne le craint pas encore."

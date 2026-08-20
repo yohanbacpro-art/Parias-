@@ -151,7 +151,7 @@ function renderScene(sceneId){
   const tags = applyEffets(sc.effets);
   const box = document.getElementById('eventModalBox');
 
-  let html = artEventBanner(ev.image);
+  let html = artEventBanner(ev.image, ev.famille);
   html += `<span class="event-tag">${ev.famille} · ${ev.rarete}${lieu?' · '+lieu.nom:''}</span>`;
   if(sceneId === 'start') html += `<h3>${ev.titre}</h3>`;
   if(sc.pnj) html += artPortraitCard(sc.pnj);
@@ -299,7 +299,7 @@ function resolveEventChoice(label, ev){
 
 function openEventModal(ev, lieu){
   const box = document.getElementById('eventModalBox');
-  box.innerHTML = `${artEventBanner('evt_'+ev.famille.toLowerCase())}
+  box.innerHTML = `${artEventBanner('evt_'+ev.famille.toLowerCase(), ev.famille)}
     <span class="event-tag">${ev.famille} · ${ev.rarete}${lieu?' · '+lieu.nom:''}</span>
     <h3>${ev.titre}</h3>
     ${buildNarrativeBlock(ev, lieu)}

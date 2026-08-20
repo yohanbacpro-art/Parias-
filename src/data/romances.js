@@ -72,7 +72,7 @@ const EVENTS_ROMANCE = [
       effets:{flag:"ro_alycia_1_fait"},
       fin:true
     },
-    detourne:{
+    detourne:{ pnj:"alycia",
       texte:[
         "Yohan parle de la route du lendemain, des vivres, du col à passer avant les neiges.",
         "Alycia le suit sans insister, avec une facilité qui prouve qu'elle a l'habitude qu'on referme des portes devant elle.",
@@ -252,7 +252,7 @@ const EVENTS_ROMANCE = [
       effets:{affinite:{qui:"alarielle", n:4}, xp:34, flag:"ro_alarielle_1_fait"},
       fin:true
     },
-    veut_ko:{
+    veut_ko:{ pnj:"alarielle",
       texte:[
         "La question tombe mal, entre deux bandages, et Alarielle y répond par une formule de cour parfaitement polie qui ne dit rien du tout.",
         "Elle a l'habitude. Elle est même excellente à cet exercice, et c'est bien le problème."

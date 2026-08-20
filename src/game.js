@@ -399,6 +399,8 @@ function applyPassiveEffects(){
 
 function renderPersonnage(){
   applyPassiveEffects();
+  const face = document.getElementById('charFace');
+  if(face && !face.dataset.pose){ face.innerHTML = artPortraitImg('yohan'); face.dataset.pose = '1'; }
   document.getElementById('charLvl').textContent = hero.niveau;
   document.getElementById('charPvText').textContent = `${hero.pv} / ${hero.pvMax}`;
   document.getElementById('charPvBar').style.width = (100*hero.pv/hero.pvMax)+'%';
@@ -791,7 +793,7 @@ function triggerExploration(){
   // Sous forte suspicion, la traque peut se manifester directement
   if(hero.suspicion>=60 && Math.random()<0.25){
     const box = document.getElementById('eventModalBox');
-    box.innerHTML = `${artEventBanner('evt_traque')}<span class="event-tag">Traque</span><h3>Ils l'ont retrouvé</h3>
+    box.innerHTML = `${artEventBanner('evt_traque', 'PARIA')}<span class="event-tag">Traque</span><h3>Ils l'ont retrouvé</h3>
       ${artPortraitCard('chasseur_prime')}
       <p class="narrative">${pickVariant(["Une silhouette encapuchonnée se détache de la foule, trop précise dans ses mouvements pour être un simple passant. Un chasseur de primes — et il n'est pas venu discuter.", "Le bruit d'une arme qu'on arme résonne dans le silence. Quelqu'un, enfin, a fini par mettre un nom sur le visage caché de Yohan.", "Ce n'est pas une coïncidence : le chasseur qui lui barre la route connaît exactement qui il traque."])}</p>
       <div style="margin-top:16px;text-align:right;"><button class="primary" id="bhFightBtn">Affronter</button></div>`;

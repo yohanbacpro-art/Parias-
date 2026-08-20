@@ -61,7 +61,7 @@ const CHAMPIONS = {
   },
 
   lame_anarion: {
-    id:"CHP_LAME_ANARION", nom:"Lame de la Cour Noire", portrait:"anarion",
+    id:"CHP_LAME_ANARION", nom:"Lame de la Cour Noire", portrait:"lame_noire",
     danger:4, pv:64, defense:16, pa_par_tour:4, precision:9,
     attaque_base:{ degats_base:11, de_variance:"1d10" },
     capacites_speciales:[{ nom:"Poison de cour", cout_pa:2,
@@ -70,7 +70,7 @@ const CHAMPIONS = {
   },
 
   champion_arene: {
-    id:"CHP_ARENE", nom:"Le Tenant du Sable Rouge", portrait:"chasseur_prime",
+    id:"CHP_ARENE", nom:"Le Tenant du Sable Rouge", portrait:"tenant_arene",
     danger:4, pv:76, defense:15, pa_par_tour:3, precision:8,
     attaque_base:{ degats_base:11, de_variance:"1d10" },
     capacites_speciales:[{ nom:"Coup de la foule", cout_pa:2,
@@ -79,7 +79,7 @@ const CHAMPIONS = {
   },
 
   garde_leopold: {
-    id:"CHP_GARDE_ASTRAH", nom:"Garde du Roi de Cendre", portrait:"leopold",
+    id:"CHP_GARDE_ASTRAH", nom:"Garde du Roi de Cendre", portrait:"garde_astrah",
     danger:3, pv:52, defense:15, pa_par_tour:3, precision:6,
     attaque_base:{ degats_base:8, de_variance:"1d8" },
     capacites_speciales:[],
