@@ -77,4 +77,8 @@ const PORTRAITS = {
                  peuple:"astrah", trait:"heaume"},
   lame_noire:   {nom:"Lame de la Cour Noire", role:"Duelliste d'Anarion",
                  peuple:"elfe_noir", trait:"masque"},
+
+  /* — Le Livré — le sang de Yohan sous les couleurs de l'Empire — */
+  le_livre:     {nom:"L'homme sans nom", role:"L.F.A. · Livré, Formé, Assermenté",
+                 peuple:"astrah", trait:"nu", onde:true},
 };

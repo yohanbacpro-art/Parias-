@@ -94,6 +94,10 @@ function choixVerrou(choix){
   }
   if(r.flag && !hasFlag(r.flag)) return `Hors de portée pour l'instant`;
   if(r.sansFlag && hasFlag(r.sansFlag)) return `Ce n'est plus possible`;
+  if(r.renomMin !== undefined && (hero.renom || 0) < r.renomMin)
+    return `Requiert ${r.renomMin} de Renom (vous en avez ${hero.renom || 0})`;
+  if(r.compagnon && !hero.compagnons.some(c => c.id === r.compagnon))
+    return `Requiert la présence d'un compagnon`;
   return null;
 }
 
@@ -386,9 +390,12 @@ function ajusterAffinite(qui, n){
 
 let tramePending = false;
 
-/* La trame passe avant l'intime : l'histoire d'abord, les moments calmes ensuite. */
+/* Trois fils, dans cet ordre : la trame principale, puis celui qui poursuit
+ * Yohan, puis l'intime. Les seuils du Livré tombent entre ceux de la trame — il
+ * revient donc dans les tours où l'histoire respire, et jamais à sa place. */
 function trameDisponible(){
   return EVENTS_TRAME.find(ev => conditionsRemplies(ev.requis))
+      || EVENTS_NEMESIS.find(ev => conditionsRemplies(ev.requis))
       || EVENTS_ROMANCE.find(ev => conditionsRemplies(ev.requis))
       || null;
 }
@@ -426,7 +433,10 @@ function trameProgres(){
   const prochain = EVENTS_TRAME.find(ev => !trameJouee(ev)) || null;
   const romTotal = EVENTS_ROMANCE.length;
   const romFaits = EVENTS_ROMANCE.filter(trameJouee).length;
-  return { total, faits, prochain, romTotal, romFaits, debloque: !!trameDisponible() };
+  const nemTotal = EVENTS_NEMESIS.length;
+  const nemFaits = EVENTS_NEMESIS.filter(trameJouee).length;
+  return { total, faits, prochain, romTotal, romFaits, nemTotal, nemFaits,
+           debloque: !!trameDisponible() };
 }
 
 /* ============================= CONTRATS SPÉCIAUX ============================= */

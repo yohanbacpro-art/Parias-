@@ -17,7 +17,8 @@ const fichiers = [
   'src/data/items.js', 'src/data/lore.js', 'src/data/champions.js',
   'src/data/units.js', 'src/data/battles.js',
   'src/data/events_written.js', 'src/data/events_meetings.js', 'src/data/events_trame.js',
-  'src/data/contracts_special.js', 'src/data/romances.js', 'src/data/epilogue.js',
+  'src/data/contracts_special.js', 'src/data/romances.js',
+  'src/data/events_nemesis.js', 'src/data/epilogue.js',
 ];
 
 const ctx = vm.createContext({ console });
@@ -30,15 +31,15 @@ for(const f of fichiers){
 const {
   BESTIARY_FULL, PORTRAITS, LOCATIONS, EVENTS, CONTRACTS, ITEM_POOL,
   EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME, CONTRATS_SPECIAUX, EVENTS_ROMANCE,
-  TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS,
+  EVENTS_NEMESIS, TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS,
   UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART,
-  EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_ONDE, EPI_LEGS,
+  EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_ONDE, EPI_LEGS,
 } = vm.runInContext(`({
   BESTIARY_FULL, PORTRAITS, LOCATIONS, EVENTS, CONTRACTS, ITEM_POOL,
   EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME, CONTRATS_SPECIAUX, EVENTS_ROMANCE,
-  TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS,
+  EVENTS_NEMESIS, TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS,
   UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART,
-  EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_ONDE, EPI_LEGS
+  EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_ONDE, EPI_LEGS
 })`, ctx);
 
 const erreurs = [];
@@ -66,6 +67,7 @@ const tousLesEvenements = [
   ...EVENTS_TRAME.map(e => ({ ev:e, cat:'trame' })),
   ...CONTRATS_SPECIAUX.map(e => ({ ev:e, cat:'contrat' })),
   ...EVENTS_ROMANCE.map(e => ({ ev:e, cat:'romance' })),
+  ...EVENTS_NEMESIS.map(e => ({ ev:e, cat:'nemesis' })),
 ];
 // Certains marqueurs sont posés par le moteur et non par un effet de contenu :
 // on les déclare ici pour que le contrôle des marqueurs orphelins reste utile.
@@ -293,7 +295,7 @@ Object.entries(parPortrait).forEach(([pid, ks]) => {
  * commun (« Le Chasseur », « Garde du Roi de Cendre ») ne peuvent pas être
  * détectés sans lever une alerte à chaque emploi ordinaire du mot — ceux-là
  * restent à la charge de l'auteur. */
-const MOTS_COMMUNS = ['garde','enfant','chasseur','tenant','lame','sourire','roi','princesse'];
+const MOTS_COMMUNS = ['garde','enfant','chasseur','tenant','lame','sourire','roi','princesse','homme'];
 const NOMS_SCENE = Object.entries(PORTRAITS)
   .map(([id, p]) => [id, p.nom.replace(/^(Princesse|Lady|Prince|Capitaine|Sœur|Mère|Dame|Le|La|L')\s*/, '').split(/[ ']/)[0]])
   .filter(([id, m]) => m.length > 3 && id !== 'yohan' && !MOTS_COMMUNS.includes(m.toLowerCase()));
@@ -318,7 +320,7 @@ console.log('');
 const PEUPLES_MONDE = ['humains','parias','khesh','elfes','elfes_noirs','nains','peaux_vertes','hommes_betes'];
 const sectionsEpi = [
   ['EPI_OUVERTURE', EPI_OUVERTURE], ['EPI_NOM', EPI_NOM],
-  ['EPI_GENS', EPI_GENS], ['EPI_ONDE', EPI_ONDE], ['EPI_LEGS', EPI_LEGS],
+  ['EPI_GENS', EPI_GENS], ['EPI_NEMESIS', EPI_NEMESIS], ['EPI_ONDE', EPI_ONDE], ['EPI_LEGS', EPI_LEGS],
   ...Object.entries(EPI_PEUPLES).map(([id, p]) => [`EPI_PEUPLES.${id}`, p.verdicts]),
 ];
 let nbVerdicts = 0;

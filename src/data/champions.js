@@ -86,6 +86,19 @@ const CHAMPIONS = {
     intention:"Discipline impériale. Ils viennent toujours à plusieurs.",
   },
 
+  /* Le nemesis. Sa force ne tient pas à ses points de vie : elle tient au
+   * Sillage — il frappe d'autant plus fort que Yohan a brûlé l'Onde. Gagner en
+   * vidant ses pouvoirs, c'est le nourrir. Voir `sillage` dans src/combat.js. */
+  le_livre: {
+    id:"CHP_LIVRE", nom:"L'homme sans nom", portrait:"le_livre",
+    danger:6, pv:300, defense:20, pa_par_tour:3, precision:11,
+    attaque_base:{ degats_base:8, de_variance:"1d10" },
+    sillage: { precision:5, degats:12 },   // au maximum de Fatigue de Yohan
+    capacites_speciales:[{ nom:"Relève", cout_pa:2,
+      effet:"Lit la Fatigue de Yohan et frappe dans son souffle : les dégâts montent avec elle" }],
+    intention:"Ne cherche pas à tuer. Cherche à prouver qu'un porteur de l'Onde finit toujours par coûter plus qu'il ne rapporte.",
+  },
+
   chasseur_paria: {
     id:"CHP_CHASSEUR", nom:"Chasseur de Parias", portrait:"chasseur_prime",
     danger:4, pv:72, defense:16, pa_par_tour:4, precision:9,

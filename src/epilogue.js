@@ -72,6 +72,7 @@ function construireEpilogue(h){
     nom:     epiPremier(EPI_NOM, h),
     peuples,
     gens:    epiTous(EPI_GENS, h),
+    nemesis: epiPremier(EPI_NEMESIS, h),
     onde:    epiPremier(EPI_ONDE, h),
     legs:    epiTous(EPI_LEGS, h),
     bilan: {
@@ -196,6 +197,7 @@ function renderEpilogue(){
 
     ${section('Le monde après', `<div class="epi-peuples">${peuples}</div>`)}
     ${section('Ceux qui restaient', gens)}
+    ${section('Celui qui suivait', epi.nemesis ? `<p class="epi-gens">${epi.nemesis.texte}</p>` : '')}
     ${section("Ce qui suivait", epi.onde ? `<p class="epi-texte epi-onde">${epi.onde.texte}</p>` : '')}
 
     <section class="epi-section">

@@ -13,11 +13,11 @@ const vm = require('vm');
 
 const racine = path.join(__dirname, '..');
 const fichiers = ['portraits','locations','events','lore','champions',
-  'events_written','events_meetings','events_trame','contracts_special','romances'];
+  'events_written','events_meetings','events_trame','events_nemesis','contracts_special','romances'];
 const ctx = vm.createContext({ console });
 fichiers.forEach(f => vm.runInContext(fs.readFileSync(path.join(racine,'src/data',f+'.js'),'utf8'), ctx, {filename:f}));
 const G = vm.runInContext(`({PORTRAITS, EVENTS, EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME,
-  CONTRATS_SPECIAUX, EVENTS_ROMANCE, CHAMPIONS})`, ctx);
+  EVENTS_NEMESIS, CONTRATS_SPECIAUX, EVENTS_ROMANCE, CHAMPIONS})`, ctx);
 
 const tableau = (entetes, lignes) =>
   `| ${entetes.join(' | ')} |\n|${entetes.map(()=>'---').join('|')}|\n` +
@@ -51,6 +51,7 @@ chemin suffit à le remplacer, aucun code à modifier.
 ${section('Événements de lieu', G.EVENTS_WRITTEN)}
 ${section('Rencontres', G.EVENTS_RENCONTRE)}
 ${section('Jalons de la trame', G.EVENTS_TRAME)}
+${section("L'arc du Livré", G.EVENTS_NEMESIS)}
 ${section('Campagnes et affaires personnelles', G.CONTRATS_SPECIAUX)}
 ${section('Attachements', G.EVENTS_ROMANCE)}
 ### Événements générés
@@ -85,5 +86,5 @@ la présence des fichiers eux-mêmes, puisqu'ils sont facultatifs par constructi
 
 fs.writeFileSync(path.join(racine,'assets','README.md'), doc, 'utf8');
 const nbEv = G.EVENTS_WRITTEN.length + G.EVENTS_RENCONTRE.length + G.EVENTS_TRAME.length
-           + G.CONTRATS_SPECIAUX.length + G.EVENTS_ROMANCE.length;
+           + G.EVENTS_NEMESIS.length + G.CONTRATS_SPECIAUX.length + G.EVENTS_ROMANCE.length;
 console.log(`assets/README.md régénéré : ${nbEv} bandeaux + ${familles.length} familles, ${Object.keys(G.PORTRAITS).length} portraits`);

@@ -67,6 +67,16 @@ chemin suffit à le remplacer, aucun code à modifier.
 | `tr_maison.webp` | Ce qu'une maison doit choisir |
 | `tr_le_nom.webp` | Le nom Karlsberg |
 
+### L'arc du Livré
+
+| Fichier attendu | Illustre |
+|---|---|
+| `ne_trois_lettres.webp` | Le hameau qu'on n'a pas eu à brûler |
+| `ne_sillage.webp` | Le registre du sillage |
+| `ne_sans_nom.webp` | L'homme qui a rendu son nom |
+| `ne_ce_quil_prend.webp` | Ce qu'il prend d'abord |
+| `ne_le_nom.webp` | Le nom qu'on lui donne |
+
 ### Campagnes et affaires personnelles
 
 | Fichier attendu | Illustre |
@@ -140,6 +150,7 @@ famille : `evt_contrat.webp`, `evt_elfe.webp`, `evt_elfe_noir.webp`, `evt_guerre
 | `tenant_arene.webp` | Le Tenant du Sable Rouge — *Invaincu de l'Arène Rouge* | humain | masque |
 | `garde_astrah.webp` | Garde du Roi de Cendre — *Astrah · maison royale* | astrah | heaume |
 | `lame_noire.webp` | Lame de la Cour Noire — *Duelliste d'Anarion* | elfe_noir | masque |
+| `le_livre.webp` | L'homme sans nom — *L.F.A. · Livré, Formé, Assermenté* | astrah | nu · Onde |
 
 ### Combattants nommés
 
@@ -155,6 +166,7 @@ Chaque champion affiche le portrait ci-dessous pendant un affrontement.
 | Lame de la Cour Noire | `lame_noire` |
 | Le Tenant du Sable Rouge | `tenant_arene` |
 | Garde du Roi de Cendre | `garde_astrah` |
+| L'homme sans nom | `le_livre` |
 | Chasseur de Parias | `chasseur_prime` |
 
 ## Vérifier

@@ -73,6 +73,7 @@ function makeFoe(tpl, index, total, sameName){
     paMax: f.pa_par_tour || f.pa || 2, pa: 0,
     degBase: f.attaque_base ? f.attaque_base.degats_base : (f.degBase || 4),
     deDeg:   f.attaque_base ? f.attaque_base.de_variance  : (f.deDeg || "1d4"),
+    sillage: f.sillage || null,
     special: (f.capacites_speciales && f.capacites_speciales[0])
       ? {nom:f.capacites_speciales[0].nom, desc:f.capacites_speciales[0].effet}
       : (f.special || null),
@@ -439,26 +440,60 @@ function afterPartyAction(){
   renderCombat();
 }
 
+/* ---- Le Sillage ---- */
+/* Un adversaire qui a appris à lire l'Onde frappe d'autant plus fort que Yohan
+ * l'a brûlée. La mesure est la Fatigue actuelle de Yohan, rapportée à son
+ * maximum : à zéro, l'adversaire vaut ses statistiques nominales ; à la
+ * Rupture, il vaut son bonus entier. Gagner en vidant ses pouvoirs, c'est le
+ * nourrir — c'est tout le sujet du duel. */
+function fractionSillage(){
+  const y = combat.party.find(p => p.estYohan);
+  if(!y || !y.fatMax) return 0;
+  return Math.max(0, Math.min(1, y.fat / y.fatMax));
+}
+function bonusSillage(f, champ){
+  if(!f.sillage) return 0;
+  return Math.round((f.sillage[champ] || 0) * fractionSillage());
+}
+/* Ce que l'interface affiche : le degré atteint, dans les mots du registre. */
+function degreSillage(){
+  const p = fractionSillage();
+  if(p <= 0.4) return { nom:'calme',    pct:Math.round(p*100) };
+  if(p <= 0.7) return { nom:'tendu',    pct:Math.round(p*100) };
+  if(p <= 0.9) return { nom:'critique', pct:Math.round(p*100) };
+  return          { nom:'rompu',    pct:Math.round(p*100) };
+}
+
 /* ---- Actions des adversaires ---- */
 
 function foeBasicAttack(f, cible){
-  const touche = attemptTouch(f.precision, defenseOf(cible));
+  const touche = attemptTouch(f.precision + bonusSillage(f, 'precision'), defenseOf(cible));
   if(!touche.hit){ logHit(f.nom, `L'attaque manque ${cible.nom}.`, 'miss'); return; }
-  let dmg = f.degBase+rollDice(f.deDeg); if(touche.crit) dmg=Math.round(dmg*1.5);
+  let dmg = f.degBase+rollDice(f.deDeg)+bonusSillage(f, 'degats');
+  if(touche.crit) dmg=Math.round(dmg*1.5);
   damage(cible, dmg);
-  logHit(f.nom, `${dmg} dégâts${touche.crit?' — critique !':''} infligés à ${cible.nom}.`, touche.crit?'crit':'hit');
+  const sil = f.sillage && bonusSillage(f, 'degats') > 0 ? ` — il frappe dans le souffle (${degreSillage().nom})` : '';
+  logHit(f.nom, `${dmg} dégâts${touche.crit?' — critique !':''} infligés à ${cible.nom}${sil}.`, touche.crit?'crit':'hit');
   flashPanel('playerPanel');
 }
 
 function foeSpecialAttack(f, cible){
-  const touche = attemptTouch(f.precision, defenseOf(cible));
+  const touche = attemptTouch(f.precision + bonusSillage(f, 'precision'), defenseOf(cible));
   if(!touche.hit){ logHit(f.nom, `${f.special.nom} manque ${cible.nom}.`, 'miss'); return; }
-  let dmg = f.degBase+rollDice(f.deDeg);
+  let dmg = f.degBase+rollDice(f.deDeg)+bonusSillage(f, 'degats');
   damage(cible, dmg);
   let msg = `${f.special.nom} inflige ${dmg} dégâts à ${cible.nom}.`;
   const nom = f.special.nom.toLowerCase();
   if(nom.includes("venimeux") || nom.includes("poison")){ cible.poison=3; msg+=` ${cible.nom} est empoisonné (3 dégâts/tour, 3 tours).`; }
   if(nom.includes("esprit")){ const s=rollDie(8); cible.vol=Math.max(0,cible.vol-1); f.pv=Math.min(f.pvMax,f.pv+s); msg+=` ${f.nom} se soigne de ${s} PV.`; }
+  if(nom.includes("relève")){
+    const y = livingParty().find(p => p.estYohan);
+    if(y){
+      const avant = y.fat;
+      y.fat = Math.min(y.fatMax, y.fat + 8);
+      msg += ` Il tient le rythme de la respiration de Yohan (Fatigue ${avant} → ${y.fat}).`;
+    }
+  }
   if(nom.includes("zone") || nom.includes("souffle")){
     livingParty().filter(p=>p!==cible).forEach(p=>{
       const d = Math.round(dmg*0.5); damage(p, d);
@@ -563,6 +598,12 @@ function fighterCard(c, idx, role){
   if(c.poison>0) tags.push(`<span class="f-tag warn">Poison ${c.poison}</span>`);
   if(c.garde>0)  tags.push(`<span class="f-tag">Garde +${c.garde}</span>`);
   if(c.side==='foe' && c.special) tags.push(`<span class="f-tag warn">${c.special.nom}</span>`);
+  // Le Sillage doit se voir : une règle de combat invisible est un piège.
+  if(c.side==='foe' && c.sillage){
+    const d = degreSillage();
+    const bp = bonusSillage(c, 'precision'), bd = bonusSillage(c, 'degats');
+    tags.push(`<span class="f-tag sillage">Sillage · ${d.nom} · +${bp} touche, +${bd} dégâts</span>`);
+  }
   if(c.side==='party' && !c.estYohan) tags.push(`<span class="f-tag">${c.arbre==='elfique'?'Magie ancienne':'Onde'}</span>`);
 
   const fatBar = c.side==='party'

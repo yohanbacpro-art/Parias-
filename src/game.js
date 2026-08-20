@@ -70,6 +70,13 @@ function renderQuete(){
           ? `<b style="color:var(--onde-bright);">Quelque chose est prêt à se produire.</b> Terminez un tour pour que cela vienne à Yohan.`
           : `Le prochain jalon n'est pas encore mûr — il faut du sang, du temps, ou les bonnes rencontres.`)
       : `<span class="qc-num">Jalons de l'histoire · ${tr.faits}/${tr.total}</span>Tous les jalons connus ont été franchis.`;
+    if(tr.nemFaits > 0){
+      const clos = hasFlag('ne_05_fait');
+      trEl.innerHTML += `<br><span class="qc-num" style="margin-top:8px;">Celui qui suit · ${tr.nemFaits}/${tr.nemTotal}</span>`
+        + (clos
+            ? `L'homme sans nom ne reviendra plus.`
+            : `<b style="color:var(--onde-bright);">L.F.A.</b> — trois lettres, et quelqu'un derrière qui ne se presse pas.`);
+    }
     const liens = Object.entries(hero.affinites||{}).filter(([,v])=>v>0);
     if(liens.length){
       trEl.innerHTML += `<br><span class="qc-num" style="margin-top:8px;">Liens · ${tr.romFaits}/${tr.romTotal} moments partagés</span>`

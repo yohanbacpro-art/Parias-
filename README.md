@@ -7,7 +7,7 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V0.7** — la sauvegarde à emplacements et l'épilogue qui rend son verdict.
+**Version actuelle : V0.8** — le nemesis, et des images qui vont au bon personnage.
 
 ## Lancer le jeu
 
@@ -37,7 +37,8 @@ lien. Il se régénère avec `node tools/build-standalone.js`.
 | **Attachements** : 3 arcs relationnels, 7 étapes, affinité par les choix | ✅ |
 | **Événements de lieu** : 18 récits ramifiés, au moins deux par lieu | ✅ |
 | **Rencontres** : 8 figures du Codex, croisées ou affrontées | ✅ |
-| **Jalons de trame** : 6 étapes d'histoire qui se débloquent seules | ✅ |
+| **Jalons de trame** : 11 étapes d'histoire qui se débloquent seules | ✅ |
+| **L'arc du Livré** : un nemesis en 5 jalons, 5 issues, un duel à règle propre | ✅ |
 | 349 scènes, 213 choix, 23 affrontements, 6 batailles au total | ✅ |
 | **Combattants nommés** : 9 champions hors bestiaire | ✅ |
 | Événements générés (200 variantes) — remplissage quand les écrits sont épuisés | ✅ |
@@ -53,7 +54,7 @@ lien. Il se régénère avec `node tools/build-standalone.js`.
 | Tensions des 8 peuples, chroniques générées | ✅ |
 | Trame principale en 5 chapitres, 11 jalons écrits | ✅ |
 | **Compagnons combattants** : Alycia (Onde), Alarielle (magie ancienne) | ✅ |
-| **Illustrations** : bandeaux d'événement et portraits, avec blason de repli | ✅ |
+| **Illustrations** : bandeaux et portraits dessinés d'après le sujet, remplaçables par des fichiers | ✅ |
 | **Sauvegarde** : 4 emplacements, métadonnées, migrations, export texte | ✅ |
 | **Épilogue** : une fin assemblée à partir de ce que la partie a fait | ✅ |
 | **Héritage** : ce qu'une chronique achevée transmet à la suivante | ✅ |
@@ -182,6 +183,7 @@ Cinq sections, toutes conditionnelles :
   sinon de la tension où la simulation les a laissés.
 - **Ceux qui restaient** — cumulatif : chaque personne dont Yohan a croisé la
   route et laissé une trace, compagnes et princes compris.
+- **Celui qui suivait** — ce que devient le Livré, selon ce que Yohan lui a fait.
 - **Ce qui suivait** — le fil de l'Onde, selon ce qu'il en a compris.
 - **Ce qui se transmet** — les legs mérités, et rien d'autre.
 
@@ -195,9 +197,48 @@ pour un nom reconnu, du Renom pour une réputation d'armes, un point de talent
 pour avoir compris le cycle ou sorti les siens de l'ombre. On garde le legs le
 plus riche jamais obtenu, pas le dernier : recommencer ne fait jamais reculer.
 
+## Le Livré — le nemesis
+
+Dès le premier jalon de la trame, un registre de relais nomme un destinataire
+réduit à trois lettres — **L.F.A.** — et le texte promet que Yohan « le
+reconnaîtra plus tard ». L'arc du Livré paie cette promesse.
+
+Ces trois lettres ne sont pas un nom. C'est le tampon apposé sur le dossier d'un
+enfant Paria pris pendant la Grande Purge et gardé vivant : **Livré · Formé ·
+Assermenté**. Il signe de son classement parce que c'est la seule chose qu'on
+lui ait donnée à la place d'un nom.
+
+Il rassemble les derniers porteurs de l'Onde — sans en tuer un seul — pour
+qu'ils meurent vieux et sans descendance, et il compte être le dernier. C'est le
+miroir exact de Yohan : même sang, même magie, conclusion inverse. Il ne casse
+pas de porte : il paie les soldes en retard, il présente des ordres en règle, il
+parle aux gens jusqu'à ce qu'ils le suivent. On ne peut pas le haïr proprement.
+
+**Le Sillage.** C'est lui qui a compris que l'Onde laisse une trace mesurable
+après usage — *cherchez-le par la Fatigue* — et lui qui l'a mis par écrit, sur
+une échelle en quatre degrés : calme, tendu, critique, rompu. En duel, cela se
+paie : sa précision et ses dégâts montent avec la Fatigue de Yohan, jusqu'à
++5 pour toucher et +12 aux dégâts à la Rupture. Gagner en vidant ses pouvoirs,
+c'est le nourrir. L'interface affiche le degré atteint et le bonus exact — une
+règle de combat invisible serait un piège, pas une mécanique.
+
+Mesuré sur 30 duels par état, avec compagnes et pouvoirs : **83 %** de victoires
+en arrivant reposé, **60 %** à Fatigue tendue, **53 %** à la Rupture. Le duel se
+gagne quand on choisit son moment.
+
+**Cinq jalons**, intercalés entre ceux de la trame : un hameau vidé sans un cri,
+le registre du sillage, la première rencontre — une table, pas un combat —, ce
+qu'il prend à Yohan (les Sans-Nom, la colonne ou le hameau qui l'abritait, selon
+ce que Yohan a construit), et la carrière.
+
+**Cinq issues**, qui s'écrivent différemment dans l'épilogue : le tuer, lui
+prendre son cahier, conclure un délai, perdre — il vous laisse vivre, ce qui est
+son argument — ou **lui donner un nom**, ce qui exige d'avoir compris ce que
+L.F.A. veut dire, et de le penser vraiment.
+
 ## Les figures du monde
 
-Neuf combattants nommés vivent hors du bestiaire, dans `src/data/champions.js` :
+Dix combattants nommés vivent hors du bestiaire, dans `src/data/champions.js` :
 Caleb, Tyrion, Khal-Vaene, Kem-Val, Charles de Mont-Draken, une Lame de la Cour
 Noire, le Tenant de l'Arène, la garde d'Astrah et un chasseur de Parias.
 
@@ -257,6 +298,7 @@ src/data/
   events_written.js   18 événements de lieu, ramifiés en scènes
   events_meetings.js  8 rencontres avec les figures du Codex
   events_trame.js     11 jalons de la quête principale
+  events_nemesis.js   5 jalons de l'arc du Livré
   champions.js        9 combattants nommés (hors bestiaire)
   contracts_special.js 6 campagnes + 3 affaires personnelles
   romances.js         3 arcs relationnels, 7 étapes
@@ -275,6 +317,8 @@ tools/build-standalone.js  fabrique dist/parias.html
 tools/smoke-save.js        éprouve la sauvegarde dans un navigateur
 tools/smoke-epilogue.js    éprouve les fins et l'héritage
 tools/smoke-campagnes.js   éprouve les campagnes majeures et la trame
+tools/smoke-nemesis.js     éprouve l'arc du Livré, le Sillage et ses issues
+tools/manifest-assets.js   régénère assets/README.md
 ```
 
 Les fichiers de `src/data/` sont des scripts classiques chargés avant `game.js` :
@@ -290,6 +334,9 @@ node tools/build-standalone.js               # puis, sur le fichier unique :
 node tools/smoke-save.js                     # emplacements, migrations, stockage refusé
 node tools/smoke-epilogue.js                 # deux fins opposées + héritage
 node tools/smoke-campagnes.js                # campagnes majeures et trame complète
+node tools/smoke-nemesis.js                  # l'arc du Livré, le Sillage, ses cinq fins
+
+node tools/manifest-assets.js                # régénère la liste des illustrations
 ```
 
 Les épreuves de navigateur utilisent le Chromium préinstallé
@@ -363,6 +410,28 @@ requis:{ compagnon:"alycia", affinite:{qui:"alycia", min:4}, sansFlags:["ro_x_fa
 Un choix verrouillé reste visible, grisé, avec la raison affichée — le joueur
 voit ce qu'il rate. Les événements écrits ne se répètent pas tant que ceux
 applicables au lieu ne sont pas tous vus.
+
+## Les illustrations
+
+Aucun fichier n'est requis. Tant qu'une image manque, le jeu la **dessine** en
+SVG, de façon déterministe et informée par ce qu'elle représente :
+
+- un **portrait** prend la palette du peuple du personnage et sa silhouette de
+  ses attributs — couronne, capuche, heaume, voile, barbe, masque, tresses,
+  oreilles elfiques, et la marque turquoise de ceux qui portent l'Onde ;
+- un **bandeau** prend son ciel, son horizon et son motif de la famille de
+  l'événement — dunes pour les Khesh, chevalement pour Kar-Durak, voûte pour la
+  Cour Noire, faille pour l'Onde, forêt de lances pour la guerre.
+
+Le même personnage a donc toujours le même visage, d'une partie à l'autre.
+Déposer un vrai fichier au bon chemin le remplace, sans toucher au code :
+`assets/portraits/<id>.webp` (512×512, visage centré — il est recadré en rond)
+et `assets/events/<id>.webp` (1200×480). La liste exacte des fichiers attendus
+est dans `assets/README.md`, **générée** par `node tools/manifest-assets.js`.
+
+Le validateur garde le câblage : peuple et attribut dessinables, portrait de
+champion existant, alerte quand deux champions partagent un visage, et quand une
+scène nomme un personnage sans l'afficher.
 
 ## Écrire une fin
 

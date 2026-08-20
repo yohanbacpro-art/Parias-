@@ -328,6 +328,38 @@ const EPI_GENS = [
     et raconta toute sa vie qu'un loup l'avait portée jusqu'à la route.` },
 ];
 
+/* ============================= CELUI QUI SUIVAIT ============================= */
+/* Le fil du Livré. Il n'apparaît que si Yohan a su qu'il existait. */
+const EPI_NEMESIS = [
+  { si:{flags:['nemesis_nomme']},
+    texte:`<b>L'homme sans nom</b> en reçut un, dans une carrière, d'un homme qui n'avait aucune
+    raison de lui en donner. Ce fut la seule chose que Yohan lui prit, et la seule qu'il lui
+    laissa. On dit qu'il enseigna, ensuite, dans une province de l'est — à respirer contre l'Onde,
+    et à durer. Personne n'a jamais retrouvé son cahier.` },
+  { si:{flags:['nemesis_pacte']},
+    texte:`<b>L'homme sans nom</b> tint son délai. Il ne reparut plus devant les gens de Karlsberg,
+    et continua son compte ailleurs, méthodiquement, jusqu'à un chiffre que personne ne connaît.
+    Ce n'était pas une paix. Cela en eut la durée.` },
+  { si:{flags:['nemesis_brise']},
+    texte:`<b>L'homme sans nom</b> perdut son cahier, et avec lui la seule chose qui reliait
+    quatre-vingt-onze personnes à l'idée qu'elles avaient existé. Il recommença. On recommence
+    toujours. Mais il recommença de zéro, et il n'avait plus l'âge.` },
+  { si:{flags:['nemesis_tue']},
+    texte:`<b>L'homme sans nom</b> mourut sans nom, ce qui était exactement son projet, et Yohan
+    n'eut jamais personne à qui dire ce qu'il avait fait ce jour-là. On ne raconte pas la mort de
+    quelqu'un qu'on ne peut pas nommer. La chose resta entre lui et une carrière vide.` },
+  { si:{flags:['nemesis_libre']},
+    texte:`<b>L'homme sans nom</b> ne fut jamais arrêté. Il laissa Yohan vivre — c'était son
+    argument, et il ne le retira pas. Quelque part, un cahier continua de se remplir, et une ligne
+    y resta ouverte au nom de Karlsberg pendant tout le reste du siècle.` },
+  { si:{flags:['lfa_vu']},
+    texte:`<b>L'homme sans nom</b> disparut des routes sans que rien ne se conclue. Yohan ne sut
+    jamais s'il avait renoncé, changé de province, ou simplement fini par se compter lui-même.` },
+  { si:{flags:['lfa_connu']},
+    texte:`Trois lettres poursuivirent Yohan jusqu'au bout : <b>L.F.A.</b> Il ne rencontra jamais
+    l'homme qui les portait, et passa le reste de sa vie à ne pas savoir de qui il s'était méfié.` },
+];
+
 /* ============================= L'ONDE ============================= */
 /* Le fil qui court sous toute la chronique : ce qui suivait Yohan. */
 const EPI_ONDE = [
@@ -379,6 +411,12 @@ const EPI_LEGS = [
     effet:{or:80},
     texte:`Les routes tenues restent tenues un moment. 80 pièces d'or d'avance, et des chemins qui
     ne réclament pas de péage.` },
+  { id:'sillage_su', nom:'Le sillage connu',
+    si:{unDes:['lfa_copie','nemesis_nomme','nemesis_brise','nemesis_tue']},
+    effet:{renom:5, or:60},
+    texte:`Ce qu'un chasseur avait mis vingt ans à écrire ne se reperd pas : on sait désormais
+    comment on traque un porteur de l'Onde, donc comment on ne l'est pas. 5 de Renom et 60 pièces
+    d'avance, et des routes qu'on sait prendre.` },
   { id:'main_tendue', nom:'Une main tendue',
     si:{unDes:['reseau_parias','sans_nom_leves','crise_parias_reglee']},
     effet:{talentPoints:1},
