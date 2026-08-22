@@ -331,6 +331,22 @@ function appliquerSuitesBataille(victoire){
   if(gains.xp)      gainXP(gains.xp);
   if(gains.suspicion) adjustSuspicion(gains.suspicion);
   (gains.flags||[]).forEach(f=>{ if(!hasFlag(f)) heroFlags().push(f); });
+  if(gains.reputation){
+    for(const [p, n] of Object.entries(gains.reputation)) ajusterReputation(p, n);
+  }
+
+  // Ce qu'on ramasse sur le champ : l'équipement de ceux qu'on vient de battre.
+  // `peupleAdverse` est celui d'en face — à ne pas confondre avec `peuple`, qui
+  // désigne le peuple dont cette bataille est la crise.
+  bataille.butin = null;
+  if(victoire){
+    if(d.butinPeuple) bataille.butin = butinDeBataille(d.butinPeuple);
+    // Battre un peuple laisse des traces chez lui, même quand la cause est juste.
+    // Une compagnie franche ou une bande de pillards n'est le peuple de personne :
+    // les tailler en pièces ne coûte rien à personne.
+    if(d.peupleAdverse) ajusterReputation(d.peupleAdverse, -8);
+    if(d.peupleAllie)   ajusterReputation(d.peupleAllie, 12);
+  }
 
   // Employer l'Onde devant une armée, c'est renoncer à l'anonymat
   if(bataille.ondeUtilisee){ adjustSuspicion(25); if(!hasFlag('onde_devant_armee')) heroFlags().push('onde_devant_armee'); }
@@ -354,6 +370,9 @@ function afficherFinBataille(victoire){
   if(gains.or)    lignes.push(`Or <b style="color:var(--gold);">${gains.or>0?'+':''}${gains.or}</b>`);
   if(gains.sang)  lignes.push(`Sang <b style="color:var(--gold);">+${gains.sang}</b>`);
   if(gains.xp)    lignes.push(`Expérience <b style="color:var(--gold);">+${gains.xp}</b>`);
+  if(bataille.butin) lignes.push(`Ramassé sur le champ : <b style="color:var(--gold);">${bataille.butin.nom}</b>`);
+  if(victoire && d.peupleAdverse) lignes.push(`Chez les ${PEUPLE_LABELS[d.peupleAdverse]} <b style="color:var(--blood-bright);">−8</b>`);
+  if(victoire && d.peupleAllie) lignes.push(`Chez les ${PEUPLE_LABELS[d.peupleAllie]} <b style="color:var(--gold);">+12</b>`);
 
   el.innerHTML = `<h2>${victoire ? 'La ligne a tenu' : 'L\'armée a rompu'}</h2>
     <p>${victoire ? (d.texteVictoire || 'Le champ reste aux couleurs de Karlsberg.')

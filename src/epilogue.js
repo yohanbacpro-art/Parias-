@@ -36,6 +36,14 @@ function epiCondition(si, h){
       if(((h.tensions || {})[p] || 0) > n) return false;
     }
   }
+  if(si.reputationMin){
+    for(const [p, n] of Object.entries(si.reputationMin))
+      if(((h.reputations || {})[p] || 0) < n) return false;
+  }
+  if(si.reputationMax){
+    for(const [p, n] of Object.entries(si.reputationMax))
+      if(((h.reputations || {})[p] || 0) > n) return false;
+  }
   if(si.renomMin     !== undefined && (h.renom || 0) < si.renomMin)         return false;
   if(si.suspicionMin !== undefined && (h.suspicion || 0) < si.suspicionMin) return false;
   if(si.suspicionMax !== undefined && (h.suspicion || 0) > si.suspicionMax) return false;
@@ -87,6 +95,10 @@ function construireEpilogue(h){
       jalons: jalons ? `${jalons.faits}/${jalons.total}` : '—',
       liens: jalons ? `${jalons.romFaits}/${jalons.romTotal}` : '—',
       marqueurs: (h.flags || []).length,
+      amities: Object.entries(h.reputations || {}).filter(([, v]) => v >= 45)
+                     .map(([p]) => PEUPLE_LABELS[p]),
+      inimities: Object.entries(h.reputations || {}).filter(([, v]) => v <= -55)
+                     .map(([p]) => PEUPLE_LABELS[p]),
       batailles: (h.flags || []).filter(f => f.startsWith('cg_') && f.endsWith('_fait')).length,
     },
   };
@@ -215,6 +227,8 @@ function renderEpilogue(){
         <div><span>Durée</span><b>${ans} an${ans > 1 ? 's' : ''}${d ? ` · ${d.saison}, An ${d.an}` : ''}</b></div>
       </div>
       ${b.compagnons.length ? `<p class="epi-compagnons">Ils étaient là à la fin : ${b.compagnons.join(', ')}.</p>` : ''}
+      ${b.amities.length ? `<p class="epi-compagnons">Comptaient sur lui : ${b.amities.join(', ')}.</p>` : ''}
+      ${b.inimities.length ? `<p class="epi-compagnons">Ne lui pardonnaient pas : ${b.inimities.join(', ')}.</p>` : ''}
     </section>
 
     ${section('Ce qui se transmet', legs)}

@@ -37,6 +37,32 @@ chemin suffit à le remplacer, aucun code à modifier.
 | `evt_port_noir.webp` | Le manifeste qui ne correspond pas |
 | `evt_tambours.webp` | Les tambours qui comptent |
 | `evt_phare.webp` | Le phare qu'on rallume |
+| `evt2_forge.webp` | La forge qui ne chauffe pas pour tout le monde |
+| `evt2_dette_naine.webp` | Ce qu'un nain refuse de devoir |
+| `evt2_puits.webp` | Le puits qu'on ne partage pas deux fois |
+| `evt2_tempete.webp` | Ce que la tempête met au jour |
+| `evt2_ossements.webp` | Ce qui reste chaud dans les os |
+| `evt2_chant.webp` | Le chant qu'on n'a pas le droit d'entendre |
+| `evt2_jardin.webp` | Le jardin qu'on laisse mourir |
+| `evt2_tribut.webp` | Le tribut des Profondeurs |
+| `evt2_jeune_chef.webp` | Celui qui veut être vu perdre |
+| `evt2_harde_blessee.webp` | Ce que les chasseurs ont laissé |
+| `evt2_marque.webp` | La marque qu'on ne demande pas |
+| `evt2_veine.webp` | La veine qui répond |
+| `evt2_pelerin.webp` | Celui qui monte pour ne pas redescendre |
+| `evt2_maree.webp` | Ce que la marée rend |
+| `evt2_naufrages.webp` | Ceux qui ne veulent pas être sauvés |
+| `evt2_ile.webp` | L'île qui n'était pas là |
+| `evt2_echo.webp` | L'écho qui prend une voix connue |
+| `evt2_pierre_blason.webp` | La pierre qu'on a retournée |
+| `evt2_arene_truquee.webp` | Le combat qu'on vous demande de perdre |
+| `evt2_receleur.webp` | Ce que le receleur ne veut plus garder |
+| `evt2_convoi.webp` | Le convoi qui n'aurait pas dû passer là |
+| `evt2_veillee.webp` | La veillée aux Pierres |
+| `evt2_col_ferme.webp` | Le col qu'on a fermé sans le dire |
+| `evt2_sans_ombre.webp` | L'homme qui marche sans ombre |
+| `evt2_traduction.webp` | Le mot qu'on a traduit de travers |
+| `evt2_moisson.webp` | La première moisson des Champs |
 
 ### Rencontres
 
@@ -150,6 +176,8 @@ famille : `evt_contrat.webp`, `evt_elfe.webp`, `evt_elfe_noir.webp`, `evt_guerre
 | `tenant_arene.webp` | Le Tenant du Sable Rouge — *Invaincu de l'Arène Rouge* | humain | masque |
 | `garde_astrah.webp` | Garde du Roi de Cendre — *Astrah · maison royale* | astrah | heaume |
 | `lame_noire.webp` | Lame de la Cour Noire — *Duelliste d'Anarion* | elfe_noir | masque |
+| `jardiniere.webp` | La jardinière — *Elfe · entretient ce que la Cour a laissé* | elfe | voile |
+| `gruk.webp` | Gruk — *Peau-Verte · dix-sept ans* | peau_verte | nu |
 | `le_livre.webp` | L'homme sans nom — *L.F.A. · Livré, Formé, Assermenté* | astrah | nu · Onde |
 
 ### Combattants nommés
@@ -167,6 +195,8 @@ Chaque champion affiche le portrait ci-dessous pendant un affrontement.
 | Le Tenant du Sable Rouge | `tenant_arene` |
 | Garde du Roi de Cendre | `garde_astrah` |
 | L'homme sans nom | `le_livre` |
+| Aza-Rhun | `aza_khesh` |
+| Gruk | `gruk` |
 | Chasseur de Parias | `chasseur_prime` |
 
 ## Vérifier

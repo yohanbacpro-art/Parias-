@@ -13,7 +13,7 @@ const vm = require('vm');
 
 const racine = path.join(__dirname, '..');
 const fichiers = ['portraits','locations','events','lore','champions',
-  'events_written','events_meetings','events_trame','events_nemesis','contracts_special','romances'];
+  'events_written','events_written_2','events_meetings','events_trame','events_nemesis','contracts_special','romances'];
 const ctx = vm.createContext({ console });
 fichiers.forEach(f => vm.runInContext(fs.readFileSync(path.join(racine,'src/data',f+'.js'),'utf8'), ctx, {filename:f}));
 const G = vm.runInContext(`({PORTRAITS, EVENTS, EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME,

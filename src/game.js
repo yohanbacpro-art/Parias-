@@ -320,6 +320,7 @@ hero.tensions = {
   humains:12, parias:6, khesh:12, elfes:6, elfes_noirs:8, nains:8, peaux_vertes:14, hommes_betes:14
 };
 hero.crisesDeclenchees = new Set();
+hero.reputations = { ...REPUTATION_DEPART };
 
 function dateFromSemaines(s){
   const saisonIdx = Math.floor(s/13)%4;
@@ -387,6 +388,7 @@ function renderTensions(){
 
 function renderChroniques(){
   renderTensions();
+  renderReputations();
   const list = document.getElementById('newsList');
   if(!hero.chroniques.length){
     list.innerHTML = `<p class="news-empty">Rien à signaler pour l'instant — le temps n'a pas encore assez avancé.</p>`;
@@ -501,20 +503,63 @@ function renderShop(){
   const shop = document.getElementById('shopList');
   if(!shop) return;
   shop.innerHTML = '';
-  ITEM_POOL.forEach(item=>{
+
+  // Le marchand qu'on a sous la main dépend de l'endroit où l'on se trouve.
+  const lieu   = currentLieu || LOCATIONS.find(l => l.id === hero.position) || null;
+  const peuple = peupleDuLieu(lieu);
+  const marchand = peuple ? SHOPS[peuple] : COLPORTEUR;
+  const entete = document.getElementById('shopHead');
+
+  if(peuple && !marchand){
+    // Peaux-Vertes, Hommes-Bêtes : ils ne tiennent pas boutique.
+    if(entete) entete.innerHTML = `<b>${PEUPLE_LABELS[peuple]}</b> — on ne commerce pas ici.
+      Ce qu'ils portent se prend sur un champ de bataille, pas sur un étal.`;
+    return;
+  }
+
+  const rang = peuple ? rangReputation(peuple) : null;
+  if(rang && rang.hostile){
+    if(entete) entete.innerHTML = `<b>${marchand.nom}</b> — on refuse de vous servir.
+      ${rang.note}`;
+    return;
+  }
+
+  // L'estime fait sortir ce qu'on garde derrière : un rang de plus à l'étal.
+  const rangMax = marchand.rangMax + (rang && (rang.id === 'estime' || rang.id === 'allie') ? 1 : 0)
+                                   + (rang && rang.id === 'allie' ? 1 : 0);
+  const stock = ITEM_POOL.filter(it => !it.unique
+    && (it.peuple === peuple || it.peuple === null)
+    && it.rang <= rangMax);
+
+  if(entete){
+    const prix = peuple ? multiplicateurPrix(peuple) : 1;
+    const mention = prix === 1 ? 'Prix ordinaires.'
+      : (prix < 1 ? `Prix d'ami : ×${prix.toFixed(2).replace(/0$/,'')}.`
+                  : `On vous compte ×${prix.toFixed(2).replace(/0$/,'')}.`);
+    const propos = (rang && (rang.id === 'estime' || rang.id === 'allie')) ? rang.note : marchand.note;
+    entete.innerHTML = `<b>${marchand.nom}</b> — ${propos} <span class="shop-prix">${mention}</span>`;
+  }
+
+  if(!stock.length){
+    shop.innerHTML = `<p class="news-empty">L'étal est vide aujourd'hui.</p>`;
+    return;
+  }
+
+  stock.forEach(item => {
+    const prix = peuple ? prixPour(item, peuple) : item.prix;
     const row = document.createElement('div');
     row.className = 'inv-item';
-    row.innerHTML = `<div><div class="ii-nom">${item.nom} — ${item.prix} or</div><div class="ii-desc">${item.desc}</div></div>`;
+    row.innerHTML = `<div><div class="ii-nom">${item.nom} — ${prix} or${
+      item.rang >= 2 ? ' <span class="cr-badge">pièce rare</span>' : ''}</div>
+      <div class="ii-desc">${item.desc}</div></div>`;
     const btn = document.createElement('button');
     btn.className = 'ghost';
     btn.textContent = 'Acheter';
-    btn.disabled = hero.or < item.prix;
+    btn.disabled = hero.or < prix;
     btn.onclick = () => {
-      if(hero.or < item.prix) return;
-      hero.or -= item.prix;
-      const existing = hero.inventaire.find(e=>e.itemId===item.id);
-      if(existing) existing.qty++;
-      else hero.inventaire.push({uid: item.id+'_'+Date.now(), itemId:item.id, qty:1});
+      if(hero.or < prix) return;
+      hero.or -= prix;
+      donnerObjet(item.id);
       saveGame(true);
       renderEquipement();
     };
@@ -523,15 +568,34 @@ function renderShop(){
   });
 }
 
+/* Ajoute un objet à l'inventaire, en empilant les consommables. */
+function donnerObjet(itemId){
+  const item = itemById(itemId);
+  if(!item) return null;
+  const existing = hero.inventaire.find(e => e.itemId === itemId);
+  if(existing) existing.qty++;
+  else hero.inventaire.push({ uid: itemId + '_' + Date.now() + '_' + Math.floor(Math.random()*1000),
+                              itemId, qty:1 });
+  return item;
+}
+
+/* Butin ramassé après une bataille gagnée, sur le peuple qu'on vient de battre.
+ * Une pièce rare n'est pas garantie : c'est un ramassage, pas une récompense. */
+function butinDeBataille(peuple){
+  const table = BUTIN_PAR_PEUPLE[peuple];
+  if(!table || !table.length) return null;
+  if(Math.random() > 0.55) return null;
+  const item = donnerObjet(table[Math.floor(Math.random()*table.length)]);
+  return item;
+}
+
+/* Butin ordinaire d'un contrat : du commun et du bon, jamais une pièce unique
+ * ni une pièce de maître — celles-là se gagnent dans une scène ou sur un champ
+ * de bataille, sinon elles ne valent plus rien. */
 function grantLoot(){
-  if(Math.random() < 0.5){
-    const item = ITEM_POOL[Math.floor(Math.random()*ITEM_POOL.length)];
-    const existing = hero.inventaire.find(e=>e.itemId===item.id);
-    if(existing) existing.qty++;
-    else hero.inventaire.push({uid: item.id+'_'+Date.now(), itemId:item.id, qty:1});
-    return item;
-  }
-  return null;
+  if(Math.random() >= 0.5) return null;
+  const ordinaire = ITEM_POOL.filter(it => !it.unique && it.rang <= 1);
+  return donnerObjet(ordinaire[Math.floor(Math.random()*ordinaire.length)].id);
 }
 
 /* ============================= ARMÉE ============================= */
@@ -684,7 +748,20 @@ function openLieu(l){
   currentLieu = l;
   hero.position = l.id;
   document.getElementById('lieuNom').textContent = l.nom;
-  document.getElementById('lieuDesc').textContent = l.description_courte+" — Peuple dominant : "+l.peuple_dominant+".";
+  const peuple = peupleDuLieu(l);
+  let ligne = l.description_courte + " — Peuple dominant : " + l.peuple_dominant + ".";
+  const avert = document.getElementById('lieuHostile');
+  if(avert){
+    if(peuple && rangReputation(peuple).hostile){
+      // Un peuple qui vous tient pour ennemi ne se contente pas de mal vous parler.
+      avert.style.display = 'block';
+      avert.innerHTML = `Les ${PEUPLE_LABELS[peuple]} vous tiennent pour un ennemi.
+        On ne vous vendra rien ici, et rester est un risque pris en connaissance de cause.`;
+    } else {
+      avert.style.display = 'none';
+    }
+  }
+  document.getElementById('lieuDesc').textContent = ligne;
   showScreen('lieu');
 }
 

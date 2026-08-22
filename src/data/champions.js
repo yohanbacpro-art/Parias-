@@ -99,6 +99,24 @@ const CHAMPIONS = {
     intention:"Ne cherche pas à tuer. Cherche à prouver qu'un porteur de l'Onde finit toujours par coûter plus qu'il ne rapporte.",
   },
 
+  aza_rhun: {
+    id:"CHP_AZA", nom:"Aza-Rhun", portrait:"aza_khesh",
+    danger:4, pv:78, defense:16, pa_par_tour:3, precision:8,
+    attaque_base:{ degats_base:11, de_variance:"1d10" },
+    capacites_speciales:[{ nom:"Trois lances", cout_pa:2,
+      effet:"Enchaîne trois pointes sur la même ouverture" }],
+    intention:"Défend un puits et des enfants. Ne cherche pas la mort de l'adversaire, seulement son recul.",
+  },
+
+  gruk: {
+    id:"CHP_GRUK", nom:"Gruk", portrait:"gruk",
+    danger:3, pv:54, defense:14, pa_par_tour:3, precision:7,
+    attaque_base:{ degats_base:9, de_variance:"1d8" },
+    capacites_speciales:[{ nom:"Charge du jeune", cout_pa:2,
+      effet:"Se jette en avant sans se garder — tout ou rien" }],
+    intention:"Dix-sept ans, et trente des siens qui regardent. Se bat pour être vu, pas pour gagner.",
+  },
+
   chasseur_paria: {
     id:"CHP_CHASSEUR", nom:"Chasseur de Parias", portrait:"chasseur_prime",
     danger:4, pv:72, defense:16, pa_par_tour:4, precision:9,

@@ -93,6 +93,10 @@ const EPI_NOM = [
  * ensuite l'état où la simulation du monde les a laissés. */
 const EPI_PEUPLES = {
   humains: { nom:'L\'Empire d\'Astrah', verdicts:[
+    { si:{reputationMax:{humains:-55}},
+      texte:`Astrah fit de lui un cas d'école. Pendant quarante ans, on enseigna dans ses académies
+      militaires comment on aurait dû traiter le problème Karlsberg, et chaque promotion arrivait à
+      une conclusion différente.` },
     { si:{flags:['crise_parias_reglee'],  tensionMax:{humains:25}},
       texte:`Astrah cessa de chasser ce qu'elle ne comprenait pas — non par sagesse, mais parce que
       la chasse coûtait plus qu'elle ne rapportait. Les édits restèrent au mur. Personne ne les
@@ -128,6 +132,10 @@ const EPI_PEUPLES = {
       grain en dehors.` },
   ]},
   khesh: { nom:'Les Khesh des Dunes', verdicts:[
+    { si:{reputationMax:{khesh:-55}},
+      texte:`Les Dunes gardèrent contre lui une dette de sang, et les Khesh ne remettent pas les
+      dettes : ils les transmettent. Trois générations plus tard, un jeune homme du sud portait
+      encore le nom de Karlsberg gravé à l'intérieur de son bouclier, du côté qu'on ne montre pas.` },
     { si:{flags:['khesh_unifies']},
       texte:`Les clans des Dunes n'avaient pas été unis depuis quatre générations. Ils le furent —
       brièvement, violemment, assez pour que le reste du monde s'en souvienne. Puis ils se
@@ -183,6 +191,10 @@ const EPI_PEUPLES = {
       et de cruauté que le reste du monde préfère ignorer.` },
   ]},
   nains: { nom:'Kar-Durak', verdicts:[
+    { si:{reputationMin:{nains:70}},
+      texte:`Kar-Durak inscrivit Yohan de Karlsberg au registre des passages permanents — quatre
+      hommes y figuraient avant lui en huit cents ans, et aucun n'était humain. La galerie qui porte
+      sa marque est toujours ouverte.` },
     { si:{flags:['kardurak_sauve']},
       texte:`Kar-Durak tint. Les Grandes Portes se refermèrent sur une cité vivante, et les forges
       se rallumèrent une à une. Les nains inscrivirent le nom de Yohan dans la pierre, à l'endroit
@@ -222,6 +234,10 @@ const EPI_PEUPLES = {
       remet chaque année à l'année suivante.` },
   ]},
   hommes_betes: { nom:'Les Hommes-Bêtes', verdicts:[
+    { si:{reputationMin:{hommes_betes:70}},
+      texte:`La forêt le laissa passer jusqu'à la fin, et le laissa passer *seul*, ce qui ne s'était
+      jamais vu. Aux Pierres, il y a un endroit où l'on empile trois cailloux quand un homme meurt.
+      Il y en a trois, quelque part, pour lui.` },
     { si:{flags:['pierres_accordees']},
       texte:`Les Pierres du Premier Rugissement se turent — non parce qu'on les avait brisées, mais
       parce qu'on avait enfin écouté ce qu'elles disaient. Les hardes tinrent la Forêt des Mille

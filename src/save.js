@@ -19,9 +19,10 @@
  * reconstruits au chargement (voir CHAMPS_SET).
  */
 
-const SAVE_VERSION = 3;
-const SAVE_PREFIX  = 'parias_save_v3_';
+const SAVE_VERSION = 4;
+const SAVE_PREFIX  = 'parias_save_v4_';
 const SAVE_LEGACY  = 'parias_vardhen_save_v1';   // format d'avant les emplacements
+const SAVE_PREFIXES_ANCIENS = ['parias_save_v3_'];   // relus une fois, puis migrés
 const SLOTS = [
   { id:'auto', nom:'Automatique', auto:true },
   { id:'s1',   nom:'Emplacement 1' },
@@ -68,6 +69,7 @@ function reconstruireHero(brut){
   h.renom             = h.renom || 0;
   h.armee             = h.armee || [];
   h.affinites         = h.affinites || {};
+  h.reputations       = { ...REPUTATION_DEPART, ...(h.reputations || {}) };
   h.compagnons        = (h.compagnons || []).map(c => COMPANIONS_POOL[c.id] || c);
   h.temps             = h.temps || { semaines: 0 };
   h.chroniques        = h.chroniques || [];
@@ -107,6 +109,11 @@ const MIGRATIONS = {
     enr.hero.armee = enr.hero.armee || [];
     enr.hero.affinites = enr.hero.affinites || {};
     enr.version = 3;
+    return enr;
+  },
+  3: enr => {           // v3 → v4 : la réputation auprès des huit peuples
+    enr.hero.reputations = { ...REPUTATION_DEPART, ...(enr.hero.reputations || {}) };
+    enr.version = 4;
     return enr;
   },
 };
@@ -180,7 +187,17 @@ function ecrireSlot(slot, h){
 function lireSlot(slot){
   if(!stockageDisponible()) return null;
   let texte;
-  try{ texte = localStorage.getItem(cleSlot(slot)); } catch(e){ return null; }
+  try{
+    texte = localStorage.getItem(cleSlot(slot));
+    // Une partie enregistrée par une version antérieure vit sous l'ancien
+    // préfixe : on la relit plutôt que de faire comme si l'emplacement était vide.
+    if(!texte){
+      for(const p of SAVE_PREFIXES_ANCIENS){
+        const t = localStorage.getItem(p + slot);
+        if(t){ texte = t; break; }
+      }
+    }
+  } catch(e){ return null; }
   if(!texte) return null;
   try{
     let enr = JSON.parse(texte);

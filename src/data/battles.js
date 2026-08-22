@@ -17,7 +17,7 @@
 const BATTLES = {
 
   BAT_ROUTE: {
-    id:"BAT_ROUTE", nom:"L'embuscade de la Route Grise",
+    id:"BAT_ROUTE", nom:"L'embuscade de la Route Grise", butinPeuple:"humains", peupleAllie:"humains",
     intro:"Ils ont coupé la route en trois endroits et attendent les convois depuis six semaines. Trois cents pillards mal commandés, mais trois cents.",
     fronts:[
       {nom:"Le pont", terrain:"gue", ennemis:[{type:"pillards", effectifPct:0.7}]},
@@ -32,7 +32,7 @@ const BATTLES = {
   },
 
   BAT_CENDRE: {
-    id:"BAT_CENDRE", nom:"Les Champs de Cendre",
+    id:"BAT_CENDRE", nom:"Les Champs de Cendre", butinPeuple:"humains",
     intro:"Une compagnie franche tient les hauteurs depuis trois jours, et personne n'a les moyens de l'en déloger. Personne, jusqu'ici.",
     fronts:[
       {nom:"Aile gauche", terrain:"bois", ennemis:[{type:"mercenaires", effectifPct:0.8}]},
@@ -46,7 +46,7 @@ const BATTLES = {
   },
 
   BAT_KARLSBERG: {
-    id:"BAT_KARLSBERG", nom:"Les Ruines du Loup",
+    id:"BAT_KARLSBERG", nom:"Les Ruines du Loup", butinPeuple:"humains", peupleAdverse:"humains", peupleAllie:"parias",
     intro:"Quelqu'un a compris avant Yohan que Karlsberg avait de la valeur. Ils occupent le mur d'enceinte et la grande salle, et ils ne comptaient pas voir arriver une armée.",
     fronts:[
       {nom:"La brèche nord", terrain:"ruines", ennemis:[{type:"mercenaires"},{type:"pillards", effectifPct:0.8}]},
@@ -60,7 +60,7 @@ const BATTLES = {
   },
 
   BAT_DEFILE: {
-    id:"BAT_DEFILE", nom:"Le Défilé des Souffrances",
+    id:"BAT_DEFILE", nom:"Le Défilé des Souffrances", butinPeuple:"peaux_vertes", peupleAdverse:"peaux_vertes", peupleAllie:"humains",
     intro:"Une horde remonte des Profondeurs par la gorge. Il n'y a pas de flanc à tourner, pas de manœuvre à inventer : seulement une gorge, et le nombre en face.",
     fronts:[
       {nom:"Verrou amont", terrain:"defile", ennemis:[{type:"horde", effectifPct:0.8}]},
@@ -74,7 +74,7 @@ const BATTLES = {
   },
 
   BAT_TYRION: {
-    id:"BAT_TYRION", nom:"L'affaire des Elfes noirs",
+    id:"BAT_TYRION", nom:"L'affaire des Elfes noirs", butinPeuple:"elfes_noirs", peupleAdverse:"elfes_noirs", peupleAllie:"elfes",
     intro:"Tyrion n'a pas demandé d'aide : il a proposé un champ. Sa colonne tiendra la gauche, celle de Yohan le centre. Si le centre cède, la cour d'Eltharion saura exactement à qui l'imputer.",
     fronts:[
       {nom:"Lisière", terrain:"bois", ennemis:[{type:"elfes_noirs", effectifPct:0.8}]},
@@ -90,7 +90,7 @@ const BATTLES = {
   /* ══════════ BATAILLES MAJEURES — une par peuple, une par crise ══════════ */
 
   BAT_KHESH: {
-    id:"BAT_KHESH", nom:"L'Unification des Sables", peuple:"khesh",
+    id:"BAT_KHESH", nom:"L'Unification des Sables", peuple:"khesh", butinPeuple:"khesh", peupleAllie:"khesh",
     intro:"Khal-Vaene a rassemblé les tribus sous une seule bannière, et une seule bannière chez les Khesh signifie qu'on part vers le nord. Kem-Val a réuni ce qui refuse. Entre les deux, une plaine de sel.",
     fronts:[
       {nom:"Les dunes basses", terrain:"plaine", ennemis:[{type:"khesh_rivaux"},{type:"archers_merc", effectifPct:0.8}]},
@@ -104,7 +104,7 @@ const BATTLES = {
   },
 
   BAT_KARDURAK: {
-    id:"BAT_KARDURAK", nom:"La Guerre des Profondeurs", peuple:"nains",
+    id:"BAT_KARDURAK", nom:"La Guerre des Profondeurs", peuple:"nains", butinPeuple:"peaux_vertes", peupleAdverse:"peaux_vertes", peupleAllie:"nains",
     intro:"Le tunnel a débouché. Pas dans le Défilé — sous la Halle des Forges, au cœur de Kar-Durak. Il n'y a pas de front à tenir : il y a trois salles, et ce qui remonte par le sol.",
     fronts:[
       {nom:"Halle des Forges", terrain:"ruines", ennemis:[{type:"horde"},{type:"troll_guerre", effectifPct:0.8}]},
@@ -118,7 +118,7 @@ const BATTLES = {
   },
 
   BAT_SURFACE: {
-    id:"BAT_SURFACE", nom:"La Remontée", peuple:"peaux_vertes",
+    id:"BAT_SURFACE", nom:"La Remontée", peuple:"peaux_vertes", butinPeuple:"peaux_vertes", peupleAdverse:"peaux_vertes", peupleAllie:"nains",
     intro:"Ils sortent. Pas par une galerie : par toutes à la fois, sur trente lieues de front. Ce n'est plus une horde, c'est une migration armée, et elle a choisi les basses terres.",
     fronts:[
       {nom:"Les guérets", terrain:"plaine", ennemis:[{type:"horde"},{type:"horde", effectifPct:0.9}]},
@@ -132,7 +132,7 @@ const BATTLES = {
   },
 
   BAT_HORDE: {
-    id:"BAT_HORDE", nom:"La Grande Horde", peuple:"hommes_betes",
+    id:"BAT_HORDE", nom:"La Grande Horde", peuple:"hommes_betes", butinPeuple:"hommes_betes", peupleAdverse:"hommes_betes", peupleAllie:"humains",
     intro:"Le Seigneur des Cornes n'était pas une légende, ou bien quelqu'un a décidé d'en redevenir un. Les hardes marchent ensemble pour la première fois depuis des siècles, et elles marchent vers les terres cultivées.",
     fronts:[
       {nom:"La lisière", terrain:"bois", ennemis:[{type:"harde_cornes"},{type:"harde_cornes", effectifPct:0.8}]},
@@ -146,7 +146,7 @@ const BATTLES = {
   },
 
   BAT_ELTHARION: {
-    id:"BAT_ELTHARION", nom:"La Faute d'Eltharion", peuple:"elfes",
+    id:"BAT_ELTHARION", nom:"La Faute d'Eltharion", peuple:"elfes", butinPeuple:"elfes", peupleAllie:"elfes",
     intro:"Trois siècles de silence sur ce que les Elfes ont mesuré et tu. Quand l'archive sort au jour, la cour se fend en deux — et les deux moitiés ont des soldats.",
     fronts:[
       {nom:"Les jardins", terrain:"bois", ennemis:[{type:"sylvains"},{type:"sylvains", effectifPct:0.8}]},
@@ -160,7 +160,7 @@ const BATTLES = {
   },
 
   BAT_PARIAS: {
-    id:"BAT_PARIAS", nom:"La Renaissance des Parias", peuple:"parias",
+    id:"BAT_PARIAS", nom:"La Renaissance des Parias", peuple:"parias", butinPeuple:"humains", peupleAdverse:"humains", peupleAllie:"parias",
     intro:"Ils ne sont pas venus pour une bataille : ils sont venus pour une rafle. L'Ordre des Chasseurs a localisé le refuge d'Alycia et amène de quoi le vider. En face, trente-trois noms et tout ce que Yohan a pu lever.",
     fronts:[
       {nom:"Le chemin creux", terrain:"defile", ennemis:[{type:"chasseurs_ordre"},{type:"archers_merc"}]},
@@ -174,7 +174,7 @@ const BATTLES = {
   },
 
   BAT_LUCIUS: {
-    id:"BAT_LUCIUS", nom:"Le calendrier de Lucius",
+    id:"BAT_LUCIUS", nom:"Le calendrier de Lucius", butinPeuple:"humains", peupleAdverse:"humains",
     intro:"Il avait dit « vers la fin ». Le voilà. Sa doctrine tient en une phrase : rendre la force prévisible. Aujourd'hui, elle est en face, en ordre parfait, et elle ne rompra pas d'elle-même.",
     fronts:[
       {nom:"Flanc gauche", terrain:"plaine", ennemis:[{type:"cavalerie_imp"},{type:"archers_merc"}]},

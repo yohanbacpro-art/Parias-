@@ -50,12 +50,12 @@ function verifie(nom, condition, detail){
   /* ---------- 2. Une écriture ratée ne détruit pas la précédente ---------- */
   console.log('\nUne écriture ratée ne détruit pas la précédente');
   const r2 = await page.evaluate(() => {
-    const avant = localStorage.getItem('parias_save_v3_s2');
+    const avant = localStorage.getItem(SAVE_PREFIX + 's2');
     // Un personnage cyclique : JSON.stringify échoue, l'écriture doit renoncer.
     const casse = { niveau: 1, pvMax: 10, trame: {chapitre:0, points:0} };
     casse.moi = casse;
     const ok = ecrireSlot('s2', casse);
-    const apres = localStorage.getItem('parias_save_v3_s2');
+    const apres = localStorage.getItem(SAVE_PREFIX + 's2');
     return { ok, intact: avant === apres, relisible: !!lireSlot('s2') };
   });
   verifie('l\'écriture impossible est signalée', r2.ok === false);
@@ -94,18 +94,54 @@ function verifie(nom, condition, detail){
     const charge = chargerDepuis('s1');
     return { recupere, charge, ancienneCleEffacee: !localStorage.getItem('parias_vardhen_save_v1'),
              niveau: hero.niveau, or: hero.or,
-             version: JSON.parse(localStorage.getItem('parias_save_v3_s1')).version,
+             version: JSON.parse(localStorage.getItem(SAVE_PREFIX + 's1')).version,
+             versionAttendue: SAVE_VERSION,
              renom: hero.renom, armee: Array.isArray(hero.armee), affinites: !!hero.affinites,
              flags: Array.isArray(hero.flags),
              boutonReprendre: !!document.querySelector('#saveOptions button') };
   });
   verifie('la vieille partie est reprise dans l\'emplacement 1', r4.recupere);
   verifie('l\'ancienne clé est libérée', r4.ancienneCleEffacee);
-  verifie('elle est migrée en version courante', r4.version === 3, r4.version);
+  verifie('elle est migrée en version courante', r4.version === r4.versionAttendue, r4);
   verifie('les champs récents sont comblés', r4.renom === 0 && r4.armee && r4.affinites && r4.flags, r4);
   verifie('elle reste jouable (niveau 5, 900 or)', r4.niveau === 5 && r4.or === 900, r4);
   verifie('l\'accueil propose de reprendre', r4.boutonReprendre);
   await ctx4.close();
+
+  /* ---------- 4 bis. Un emplacement d'une version antérieure se relit ---------- */
+  console.log("\nUn emplacement écrit par la version précédente n'est pas perdu");
+  const ctx4b = await browser.newContext();
+  page = await ctx4b.newPage();
+  page.on('pageerror', e => { echecs++; console.log('  ✘ erreur de page :', e.message); });
+  await page.goto(url);
+  await page.evaluate(() => {
+    // Un enregistrement au format v3 : pas de réputations, ancien préfixe.
+    localStorage.setItem('parias_save_v3_s2', JSON.stringify({
+      version: 3,
+      meta: { date:new Date().toISOString(), niveau:9, chapitre:'—', numeroChapitre:2,
+              sang:60, renom:14, or:700, suspicion:20, lieu:'Kar-Durak', saison:'—',
+              armee:0, compagnons:[], termine:false },
+      hero: { nom:'Yohan', niveau:9, pv:50, pvMax:70, or:700, suspicion:20,
+              trame:{chapitre:1, points:60}, temps:{semaines:40}, position:'LOC_008',
+              unlocked:['p_frappe'], crisesDeclenchees:[], compagnons:[], inventaire:[],
+              equipement:{}, chroniques:[], actionsTour:3, talentPoints:0, xp:0,
+              flags:[], evenementsVus:[], renom:14, armee:[], affinites:{} }
+    }));
+  });
+  await page.reload();
+  const r4b = await page.evaluate(() => {
+    const enr = lireSlot('s2');
+    if(!enr) return { relu:false };
+    const charge = chargerDepuis('s2');
+    return { relu:true, charge, version: enr.version, niveau: hero.niveau,
+             reputations: hero.reputations, meta: listerSlots().find(s => s.id === 's2').meta };
+  });
+  verifie("l'ancien emplacement est retrouvé", r4b.relu && r4b.charge, r4b);
+  verifie('il est migré en version courante', r4b.version === 4, r4b.version);
+  verifie('la réputation manquante est comblée',
+    r4b.reputations && r4b.reputations.parias === 10 && r4b.reputations.nains === 0, r4b.reputations);
+  verifie('la partie reste jouable au niveau 9', r4b.niveau === 9, r4b.niveau);
+  await ctx4b.close();
 
   /* ---------- 5. Stockage refusé : le jeu le dit ---------- */
   console.log('\nStockage refusé : le jeu le dit');

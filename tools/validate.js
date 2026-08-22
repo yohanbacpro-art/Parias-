@@ -16,9 +16,10 @@ const fichiers = [
   'src/data/events.js', 'src/data/contracts.js', 'src/data/powers.js',
   'src/data/items.js', 'src/data/lore.js', 'src/data/champions.js',
   'src/data/units.js', 'src/data/battles.js',
-  'src/data/events_written.js', 'src/data/events_meetings.js', 'src/data/events_trame.js',
+  'src/data/events_written.js', 'src/data/events_written_2.js',
+  'src/data/events_meetings.js', 'src/data/events_trame.js',
   'src/data/contracts_special.js', 'src/data/romances.js',
-  'src/data/events_nemesis.js', 'src/data/epilogue.js',
+  'src/data/events_nemesis.js', 'src/data/reputation.js', 'src/data/epilogue.js',
 ];
 
 const ctx = vm.createContext({ console });
@@ -33,12 +34,14 @@ const {
   EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME, CONTRATS_SPECIAUX, EVENTS_ROMANCE,
   EVENTS_NEMESIS, TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS,
   UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART,
+  REPUTATION_DEPART, RANGS_REPUTATION, LOC_PEUPLE, REPUTATION_VOIX, SHOPS, BUTIN_PAR_PEUPLE,
   EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_ONDE, EPI_LEGS,
 } = vm.runInContext(`({
   BESTIARY_FULL, PORTRAITS, LOCATIONS, EVENTS, CONTRACTS, ITEM_POOL,
   EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME, CONTRATS_SPECIAUX, EVENTS_ROMANCE,
   EVENTS_NEMESIS, TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS,
   UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART,
+  REPUTATION_DEPART, RANGS_REPUTATION, LOC_PEUPLE, REPUTATION_VOIX, SHOPS, BUTIN_PAR_PEUPLE,
   EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_ONDE, EPI_LEGS
 })`, ctx);
 
@@ -266,6 +269,67 @@ console.log(`Troupes     ${Object.keys(UNIT_TYPES).length} types · ${Object.key
 console.log(`Pouvoirs    ${powerIds.size} · Objets ${itemIds.size} · Portraits ${portrIds.size} · Champions ${champIds.size}`);
 console.log('');
 
+/* ---- Réputation ---- */
+/* Une condition sur un peuple mal orthographié ne s'ouvre jamais, et rien ne le
+ * signale : la branche reste simplement invisible pour toujours. */
+const PEUPLES_REP = Object.keys(REPUTATION_DEPART);
+let nbRep = 0;
+tousLesEvenements.forEach(({ ev }) => {
+  const verifierPeuples = (obj, ou) => {
+    Object.keys(obj || {}).forEach(p => {
+      nbRep++;
+      if(!PEUPLES_REP.includes(p)) err(`${ou} : peuple « ${p} » inconnu de la réputation`);
+    });
+  };
+  verifierPeuples((ev.requis || {}).reputationMin, `${ev.id} (requis)`);
+  verifierPeuples((ev.requis || {}).reputationMax, `${ev.id} (requis)`);
+  Object.entries(ev.scenes || {}).forEach(([sid, sc]) => {
+    verifierPeuples((sc.effets || {}).reputation, `${ev.id}/${sid}`);
+    (sc.choix || []).forEach((c, i) => {
+      verifierPeuples((c.effets || {}).reputation, `${ev.id}/${sid} choix ${i}`);
+      verifierPeuples((c.requis || {}).reputationMin, `${ev.id}/${sid} choix ${i}`);
+    });
+  });
+});
+Object.entries(LOC_PEUPLE).forEach(([lid, p]) => {
+  if(!locIds.has(lid)) err(`LOC_PEUPLE : lieu inconnu « ${lid} »`);
+  if(p !== null && !PEUPLES_REP.includes(p)) err(`LOC_PEUPLE ${lid} : peuple inconnu « ${p} »`);
+});
+LOCATIONS.forEach(l => {
+  if(!(l.id in LOC_PEUPLE)) err(`LOC_PEUPLE : ${l.id} (${l.nom}) n'est rattaché à aucun peuple, même pas à null`);
+});
+Object.keys(SHOPS).forEach(p => {
+  if(!PEUPLES_REP.includes(p)) err(`SHOPS : peuple inconnu « ${p} »`);
+});
+Object.entries(BUTIN_PAR_PEUPLE).forEach(([p, ids]) => {
+  if(!PEUPLES_REP.includes(p)) err(`BUTIN_PAR_PEUPLE : peuple inconnu « ${p} »`);
+  ids.forEach(id => { if(!itemIds.has(id)) err(`BUTIN_PAR_PEUPLE ${p} : objet inconnu « ${id} »`); });
+});
+ITEM_POOL.forEach(it => {
+  if(it.peuple !== null && it.peuple !== undefined && !PEUPLES_REP.includes(it.peuple))
+    err(`Objet ${it.id} : peuple inconnu « ${it.peuple} »`);
+  if(typeof it.rang !== 'number') err(`Objet ${it.id} : pas de rang`);
+  if(it.unique && it.rang < 3) warn(`Objet ${it.id} : unique mais de rang ${it.rang}`);
+});
+/* Une pièce unique qu'aucune scène ne donne est un objet mort. */
+const donnesParScene = new Set();
+tousLesEvenements.forEach(({ ev }) => Object.values(ev.scenes || {}).forEach(sc => {
+  if(sc.effets && sc.effets.item) donnesParScene.add(sc.effets.item);
+  (sc.choix || []).forEach(c => { if(c.effets && c.effets.item) donnesParScene.add(c.effets.item); });
+}));
+ITEM_POOL.filter(it => it.unique).forEach(it => {
+  if(!donnesParScene.has(it.id)) err(`Objet unique ${it.id} : aucune scène ne le donne — il est inatteignable`);
+});
+Object.values(BATTLES).forEach(b => {
+  [b.butinPeuple, b.peupleAdverse, b.peupleAllie].forEach(p => {
+    if(p && !PEUPLES_REP.includes(p)) err(`Bataille ${b.id} : peuple inconnu « ${p} »`);
+  });
+  if(b.butinPeuple && !BUTIN_PAR_PEUPLE[b.butinPeuple])
+    err(`Bataille ${b.id} : aucun butin défini pour les ${b.butinPeuple}`);
+});
+console.log(`Réputation  ${PEUPLES_REP.length} peuples · ${nbRep} conditions et effets · ${Object.keys(SHOPS).length} marchands · ${ITEM_POOL.filter(i=>i.unique).length} pièces uniques`);
+console.log('');
+
 /* ---- Illustrations ---- */
 /* Un portrait mal attribué ne casse rien : il montre simplement le mauvais
  * visage, et personne ne s'en aperçoit avant de jouer la scène. */
@@ -295,7 +359,11 @@ Object.entries(parPortrait).forEach(([pid, ks]) => {
  * commun (« Le Chasseur », « Garde du Roi de Cendre ») ne peuvent pas être
  * détectés sans lever une alerte à chaque emploi ordinaire du mot — ceux-là
  * restent à la charge de l'auteur. */
-const MOTS_COMMUNS = ['garde','enfant','chasseur','tenant','lame','sourire','roi','princesse','homme'];
+/* « Eltharion » désigne à la fois le roi et sa capitale : impossible de trancher
+ * sur le seul mot, et afficher le portrait du roi dans une scène qui parle de la
+ * ville serait plus faux que de ne rien afficher. */
+const MOTS_COMMUNS = ['garde','enfant','chasseur','tenant','lame','sourire','roi',
+                      'princesse','homme','eltharion'];
 const NOMS_SCENE = Object.entries(PORTRAITS)
   .map(([id, p]) => [id, p.nom.replace(/^(Princesse|Lady|Prince|Capitaine|Sœur|Mère|Dame|Le|La|L')\s*/, '').split(/[ ']/)[0]])
   .filter(([id, m]) => m.length > 3 && id !== 'yohan' && !MOTS_COMMUNS.includes(m.toLowerCase()));
@@ -336,7 +404,8 @@ for(const [nom, liste] of sectionsEpi){
       if(!affiniteIds.has(q)) err(`${ou} : affinité inconnue « ${q} »`);
     });
     if(si.compagnon && !compagnonIds.has(si.compagnon)) err(`${ou} : compagnon inconnu « ${si.compagnon} »`);
-    [...Object.keys(si.tensionMin || {}), ...Object.keys(si.tensionMax || {})].forEach(p => {
+    [...Object.keys(si.tensionMin || {}), ...Object.keys(si.tensionMax || {}),
+     ...Object.keys(si.reputationMin || {}), ...Object.keys(si.reputationMax || {})].forEach(p => {
       if(!PEUPLES_MONDE.includes(p)) err(`${ou} : peuple inconnu « ${p} »`);
     });
     if(!e.texte) err(`${ou} : verdict sans texte`);

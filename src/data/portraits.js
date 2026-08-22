@@ -78,6 +78,11 @@ const PORTRAITS = {
   lame_noire:   {nom:"Lame de la Cour Noire", role:"Duelliste d'Anarion",
                  peuple:"elfe_noir", trait:"masque"},
 
+  jardiniere:   {nom:"La jardinière", role:"Elfe · entretient ce que la Cour a laissé",
+                 peuple:"elfe", trait:"voile"},
+  gruk:         {nom:"Gruk", role:"Peau-Verte · dix-sept ans",
+                 peuple:"peau_verte", trait:"nu"},
+
   /* — Le Livré — le sang de Yohan sous les couleurs de l'Empire — */
   le_livre:     {nom:"L'homme sans nom", role:"L.F.A. · Livré, Formé, Assermenté",
                  peuple:"astrah", trait:"nu", onde:true},

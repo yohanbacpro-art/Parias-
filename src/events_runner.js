@@ -46,6 +46,14 @@ function conditionsRemplies(req){
   }
   if(req.flags        && !req.flags.every(f=>hasFlag(f))) return false;
   if(req.sansFlags    && req.sansFlags.some(f=>hasFlag(f))) return false;
+  if(req.reputationMin){
+    for(const [p, n] of Object.entries(req.reputationMin))
+      if(reputationDe(p) < n) return false;
+  }
+  if(req.reputationMax){
+    for(const [p, n] of Object.entries(req.reputationMax))
+      if(reputationDe(p) > n) return false;
+  }
   return true;
 }
 
@@ -96,6 +104,12 @@ function choixVerrou(choix){
   if(r.sansFlag && hasFlag(r.sansFlag)) return `Ce n'est plus possible`;
   if(r.renomMin !== undefined && (hero.renom || 0) < r.renomMin)
     return `Requiert ${r.renomMin} de Renom (vous en avez ${hero.renom || 0})`;
+  if(r.reputationMin){
+    for(const [p, n] of Object.entries(r.reputationMin)){
+      if(reputationDe(p) < n)
+        return `Requiert l'estime des ${PEUPLE_LABELS[p]} (${reputationDe(p)}/${n})`;
+    }
+  }
   if(r.compagnon && !hero.compagnons.some(c => c.id === r.compagnon))
     return `Requiert la présence d'un compagnon`;
   return null;
@@ -135,6 +149,13 @@ function applyEffets(e){
   if(e.affinite){
     ajusterAffinite(e.affinite.qui, e.affinite.n);
     tags.push(`<span class="reward-tag">Lien resserré</span>`);
+  }
+  if(e.reputation){
+    for(const [p, n] of Object.entries(e.reputation)){
+      if(!n) continue;
+      ajusterReputation(p, n);
+      tags.push(`<span class="reward-tag${n < 0 ? ' neg' : ''}">${n > 0 ? '+' : '−'}${Math.abs(n)} chez les ${PEUPLE_LABELS[p]}</span>`);
+    }
   }
   if(e.flag && !hasFlag(e.flag)) heroFlags().push(e.flag);
   (e.flags || []).forEach(f => { if(!hasFlag(f)) heroFlags().push(f); });

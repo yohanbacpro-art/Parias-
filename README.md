@@ -7,7 +7,7 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V0.8** — le nemesis, et des images qui vont au bon personnage.
+**Version actuelle : V0.9** — la réputation des peuples, une économie par peuple, et 26 récits de lieu de plus.
 
 ## Lancer le jeu
 
@@ -35,7 +35,9 @@ lien. Il se régénère avec `node tools/build-standalone.js`.
 | **Campagnes** : 6 contrats de général menant à une bataille | ✅ |
 | **Affaires personnelles** : 3 contrats piégés par ceux qui vous en veulent | ✅ |
 | **Attachements** : 3 arcs relationnels, 7 étapes, affinité par les choix | ✅ |
-| **Événements de lieu** : 18 récits ramifiés, au moins deux par lieu | ✅ |
+| **Événements de lieu** : 44 récits ramifiés, au moins quatre par lieu | ✅ |
+| **Réputation** : ce que chaque peuple pense de vous, et ce que ça coûte | ✅ |
+| **Économie** : marchands par peuple, prix par réputation, butin de bataille | ✅ |
 | **Rencontres** : 8 figures du Codex, croisées ou affrontées | ✅ |
 | **Jalons de trame** : 11 étapes d'histoire qui se débloquent seules | ✅ |
 | **L'arc du Livré** : un nemesis en 5 jalons, 5 issues, un duel à règle propre | ✅ |
@@ -66,7 +68,8 @@ Trois sources d'événements, qui ne se déclenchent pas de la même façon.
 
 **Les événements de lieu** se tirent en dépensant une action *Explorer*. Chaque
 lieu a les siens ; ils ne se répètent pas tant que ceux de l'endroit ne sont pas
-tous vus, et les 20 lieux en ont au moins un.
+tous vus. **Les 20 lieux en ont au moins quatre** — c'était deux, et passé deux
+explorations on retombait sur les variantes générées.
 
 **Les rencontres** se tirent au même moment, mais seulement quand leurs
 conditions sont réunies — un niveau, un chapitre, un marqueur posé par un
@@ -79,6 +82,48 @@ disponible se déclenche **de lui-même à la fin d'un tour** — le temps qui p
 fait avancer l'histoire, même quand Yohan ne cherche rien. Chacun pose un
 marqueur dont le suivant dépend, ce qui garantit l'enchaînement. L'écran de
 Quête indique combien sont franchis et si quelque chose est prêt à se produire.
+
+## La réputation
+
+À ne pas confondre avec les **tensions** : la tension est la trajectoire propre
+d'un peuple, qu'on la regarde ou non. La réputation, c'est ce que ce peuple
+pense de **vous**. Elle va de −100 à +100, ne bouge que par des choix — jamais
+par le temps qui passe — et se lit sur l'écran des Chroniques, avec ce qu'on dit
+de Yohan chez eux.
+
+| Rang | Seuil | Ce que ça change |
+|---|---|---|
+| Ennemi juré | −100 | On ne vous vend plus rien, et le lieu vous le dit en arrivant |
+| Honni | −60 | Prix ×1,6 |
+| Sous surveillance | −25 | Prix ×1,25 |
+| Sans histoire | −9 | Prix ordinaires |
+| Bien vu | +30 | Prix ×0,85, et un rang de marchandise de plus à l'étal |
+| Des leurs | +70 | Prix ×0,70, et ce qu'ils gardent pour eux |
+
+Franchir un rang est **annoncé dans les Chroniques**, dans les deux sens : une
+réputation qu'on ne voit pas changer ne se joue pas.
+
+Dans les données : `effets:{ reputation:{ nains:8, humains:-4 } }` pour la
+déplacer, `requis:{ reputationMin:{ nains:30 } }` pour ouvrir une branche que
+seuls les estimés voient. Le validateur refuse un peuple mal orthographié — la
+branche resterait invisible pour toujours sans que rien ne le signale.
+
+## L'équipement et les marchands
+
+Chaque objet porte un **peuple** et un **rang** (0 commun → 3 pièce de maître).
+Ce qu'on trouve dépend du lieu, ce qu'on en demande dépend de la réputation :
+
+- **six marchands** — Astrah, Kar-Durak, les tentes khesh, le dépôt d'Eltharion,
+  l'étal de Valombre, le fond de charrette paria — plus le colporteur des terres
+  de personne, qui ne fait de prix à personne ;
+- **Peaux-Vertes et Hommes-Bêtes ne tiennent pas boutique.** Leur équipement se
+  prend sur un champ de bataille, pas sur un étal ;
+- **six pièces uniques** ne s'achètent nulle part : elles se gagnent dans une
+  scène. Le validateur refuse une pièce unique qu'aucune scène ne donne ;
+- **butin de bataille** : on ramasse l'équipement de ceux qu'on vient de battre —
+  et les battre coûte 8 points de réputation chez eux, quand ce sont bien des
+  gens et pas une compagnie franche. Les battre *pour* quelqu'un en rapporte 12
+  chez lui.
 
 ## Les batailles
 
@@ -287,6 +332,7 @@ index.html            structure + styles + ordre de chargement
 src/game.js           boucle de tour, monde, personnage, contrats
 src/save.js           emplacements, métadonnées, migrations, intégrité
 src/epilogue.js       verdict de fin de chronique et héritage
+src/reputation.js     rangs, prix, accueil hostile, écran des peuples
 src/combat.js         moteur de combat de groupe (party vs adversaires)
 src/events_runner.js  déroulement des événements écrits et générés
 src/battle.js         moteur de bataille rangée (fronts, ordres, moral)
@@ -296,6 +342,8 @@ src/data/
   locations.js        20 lieux + coordonnées sur la carte
   events.js           200 événements générés + variantes narratives
   events_written.js   18 événements de lieu, ramifiés en scènes
+  events_written_2.js 26 de plus — la deuxième vague, adossée à la réputation
+  reputation.js       rangs, peuple de chaque lieu, ce qu'on dit de vous
   events_meetings.js  8 rencontres avec les figures du Codex
   events_trame.js     11 jalons de la quête principale
   events_nemesis.js   5 jalons de l'arc du Livré
@@ -318,6 +366,7 @@ tools/smoke-save.js        éprouve la sauvegarde dans un navigateur
 tools/smoke-epilogue.js    éprouve les fins et l'héritage
 tools/smoke-campagnes.js   éprouve les campagnes majeures et la trame
 tools/smoke-nemesis.js     éprouve l'arc du Livré, le Sillage et ses issues
+tools/smoke-monde.js       éprouve la réputation, les marchands et la 2e vague
 tools/manifest-assets.js   régénère assets/README.md
 ```
 
@@ -335,6 +384,7 @@ node tools/smoke-save.js                     # emplacements, migrations, stockag
 node tools/smoke-epilogue.js                 # deux fins opposées + héritage
 node tools/smoke-campagnes.js                # campagnes majeures et trame complète
 node tools/smoke-nemesis.js                  # l'arc du Livré, le Sillage, ses cinq fins
+node tools/smoke-monde.js                    # réputation, marchands, couverture des lieux
 
 node tools/manifest-assets.js                # régénère la liste des illustrations
 ```

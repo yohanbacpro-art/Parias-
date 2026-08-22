@@ -407,6 +407,28 @@
   .cr-badge.campagne{border-color:var(--warn);color:var(--warn);}
   .cr-badge.verrou{border-color:var(--line);color:var(--parchment-dim);}
 
+  .shop-head{color:var(--parchment-dim);font-size:12px;font-family:'Inter',sans-serif;
+    line-height:1.6;margin:0 0 10px;max-width:60ch;}
+  .shop-head b{color:var(--gold);}
+  .shop-prix{color:var(--parchment);}
+  .rep-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;}
+  .rep-card{border:1px solid var(--line);border-radius:5px;padding:10px 12px;
+    background:rgba(255,255,255,.012);display:flex;flex-direction:column;gap:6px;}
+  .rep-card.hostile{border-color:var(--blood-bright);background:rgba(140,40,30,.08);}
+  .rep-nom{display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+    font-family:'Cinzel',serif;font-size:13px;color:var(--parchment);}
+  .rep-rang{font-family:'Inter',sans-serif;font-size:10px;text-transform:uppercase;
+    letter-spacing:.1em;}
+  .rep-bar{position:relative;height:7px;border-radius:3px;background:#0a0807;
+    border:1px solid var(--line);overflow:hidden;}
+  .rep-bar i{position:absolute;top:0;bottom:0;display:block;}
+  .rep-zero{position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;
+    background:var(--parchment-dim);opacity:.5;}
+  .rep-voix{font-family:'Inter',sans-serif;font-size:11.5px;line-height:1.55;
+    color:var(--parchment-dim);font-style:italic;}
+  .rep-effet{font-family:'Inter',sans-serif;font-size:10.5px;color:var(--parchment-dim);
+    letter-spacing:.04em;opacity:.85;}
+
   .fighter .f-tag.sillage{border-color:var(--onde-bright);color:var(--onde-bright);}
 
   .fighter .f-face{width:26px;height:26px;border-radius:50%;object-fit:cover;flex:0 0 auto;
@@ -497,7 +519,7 @@
   <header class="hero">
     <div class="eyebrow">Prototype interne</div>
     <h1>PARIAS — Chroniques de Vardhen</h1>
-    <div class="sub" id="heroSub">V0.8 · Le monde, les contrats, l'affrontement, les batailles, celui qui suit, et la fin</div>
+    <div class="sub" id="heroSub">V0.9 · Le monde qui vous répond, les contrats, les batailles, celui qui suit, et la fin</div>
   </header>
 
   <nav class="tabs" id="tabs" style="display:none;">
@@ -581,8 +603,8 @@
       <div class="equip-slots" id="equipSlots"></div>
       <h3>Sac</h3>
       <div class="inv-list" id="invList"></div>
-      <h3>Boutique</h3>
-      <p style="color:var(--parchment-dim);font-size:12px;font-family:'Inter',sans-serif;">Un marchand itinérant peut fournir l'essentiel — contre paiement.</p>
+      <h3>Marchand</h3>
+      <p id="shopHead" class="shop-head"></p>
       <div class="inv-list" id="shopList"></div>
     </div>
 
@@ -672,6 +694,7 @@
       <button class="ghost" id="btnBackMonde">← Retour à la carte</button>
       <h2 id="lieuNom" style="margin-top:14px;">—</h2>
       <p id="lieuDesc" style="color:var(--parchment-dim);font-style:italic;"></p>
+      <p id="lieuHostile" class="save-warning" style="display:none;"></p>
       <p style="color:var(--parchment-dim);font-size:13px;">Yohan se trouve ici. Utilisez « Passer le tour » (en haut) pour voir ce qui se passe — le temps continue même sans vous.</p>
     </div>
   </div>
@@ -772,6 +795,15 @@
       <p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;">Chaque peuple avance, avec ou sans Yohan, vers sa propre crise.</p>
       <div class="tension-grid" id="tensionGrid"></div>
     </div>
+
+    <div class="panel">
+      <h2>Ce qu'ils pensent de vous</h2>
+      <p style="color:var(--parchment-dim);font-size:12px;font-family:'Inter',sans-serif;line-height:1.6;max-width:62ch;">
+        La tension est la trajectoire d'un peuple, qu'on la regarde ou non. La réputation, c'est
+        ce que ce peuple pense de <b>vous</b> — et elle ne bouge que par vos choix. Elle décide de
+        ce qu'on vous vend, à quel prix, et de qui vous laisse passer.</p>
+      <div class="rep-grid" id="reputationGrid"></div>
+    </div>
     <div class="panel">
       <h2>Chroniques de Vardhen</h2>
       <p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;">Le monde continue d'exister, que Yohan agisse ou non. Ces nouvelles sont générées au fil du temps qui passe.</p>
@@ -839,16 +871,19 @@
 <script src="src/data/items.js"></script>
 <script src="src/data/lore.js"></script>
 <script src="src/data/events_written.js"></script>
+<script src="src/data/events_written_2.js"></script>
 <script src="src/data/events_meetings.js"></script>
 <script src="src/data/events_trame.js"></script>
 <script src="src/data/events_nemesis.js"></script>
 <script src="src/data/contracts_special.js"></script>
 <script src="src/data/romances.js"></script>
+<script src="src/data/reputation.js"></script>
 <script src="src/data/epilogue.js"></script>
 <script src="src/ui/art.js"></script>
 <script src="src/combat.js"></script>
 <script src="src/battle.js"></script>
 <script src="src/events_runner.js"></script>
+<script src="src/reputation.js"></script>
 <script src="src/epilogue.js"></script>
 <script src="src/save.js"></script>
 <script src="src/game.js"></script>
