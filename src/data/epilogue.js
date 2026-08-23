@@ -344,6 +344,28 @@ const EPI_GENS = [
     et raconta toute sa vie qu'un loup l'avait portée jusqu'à la route.` },
 ];
 
+/* ============================= LA LIGNÉE ============================= */
+/* Toute la chronique tourne autour d'un nom. Il faut dire ce qu'il en advient. */
+const EPI_LIGNEE = [
+  { si:{flags:['heritier_paria','karlsberg_reconnue']},
+    texte:`Le nom Karlsberg ne s'arrêta pas à lui. Un enfant de son sang, reconnu et inscrit, grandit
+    dans une maison qui existait de nouveau — et porta l'Onde, ce que la maison sut avant lui et lui
+    dit au bon âge, ce que personne n'avait jamais fait pour Yohan.` },
+  { si:{flags:['heritier_paria']},
+    texte:`Un enfant de son sang porta l'Onde. Yohan passa des années à se demander s'il fallait le
+    lui dire, et le lui dit finalement un hiver, mal, en s'y prenant à trois fois. L'enfant répondit
+    qu'il s'en doutait depuis longtemps.` },
+  { si:{flags:['descendance']},
+    texte:`Il y eut des enfants, qui ne portèrent rien de particulier — et Yohan mit longtemps à
+    comprendre que c'était peut-être la meilleure nouvelle de sa vie. Le nom continua sans le poids.` },
+  { si:{flags:['prix_noble_accepte']},
+    texte:`Le Prix fut réclamé et consenti, et il n'en naquit rien. Deux maisons se tinrent liées
+    par un accord que personne n'écrivit, et cela suffit à ouvrir des portes pendant vingt ans.` },
+  { si:{toujours:true},
+    texte:`Le nom Karlsberg s'arrêta à lui. Il le savait depuis le début et n'en fit jamais un drame
+    devant témoins ; ce qu'il en pensait seul, la nuit, ne regarde personne.` },
+];
+
 /* ============================= L'EMPIRE ============================= */
 /* Ce que devient Astrah, et ce qu'Isolde en a fait. N'apparaît que si Yohan a
  * su qu'elle existait. */
@@ -463,6 +485,11 @@ const EPI_LEGS = [
     texte:`Ce qu'un chasseur avait mis vingt ans à écrire ne se reperd pas : on sait désormais
     comment on traque un porteur de l'Onde, donc comment on ne l'est pas. 5 de Renom et 60 pièces
     d'avance, et des routes qu'on sait prendre.` },
+  { id:'sang_transmis', nom:'Le sang transmis',
+    si:{flags:['heritier_paria']},
+    effet:{talentPoints:1, or:100},
+    texte:`Un enfant a porté l'Onde et a été élevé en le sachant. Ce qui s'apprend à cet âge-là ne se
+    reperd pas : un point de talent supplémentaire, et cent pièces d'une maison qui se souvient.` },
   { id:'nom_ecrit', nom:'Un nom au registre',
     si:{unDes:['karlsberg_legalise','yohan_du_second_empire']},
     effet:{or:200, renom:5},

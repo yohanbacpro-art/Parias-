@@ -19,10 +19,10 @@
  * reconstruits au chargement (voir CHAMPS_SET).
  */
 
-const SAVE_VERSION = 5;
-const SAVE_PREFIX  = 'parias_save_v5_';
+const SAVE_VERSION = 6;
+const SAVE_PREFIX  = 'parias_save_v6_';
 const SAVE_LEGACY  = 'parias_vardhen_save_v1';   // format d'avant les emplacements
-const SAVE_PREFIXES_ANCIENS = ['parias_save_v4_', 'parias_save_v3_'];   // relus une fois, puis migrés
+const SAVE_PREFIXES_ANCIENS = ['parias_save_v5_', 'parias_save_v4_', 'parias_save_v3_'];   // relus une fois, puis migrés
 const SLOTS = [
   { id:'auto', nom:'Automatique', auto:true },
   { id:'s1',   nom:'Emplacement 1' },
@@ -71,6 +71,8 @@ function reconstruireHero(brut){
   h.affinites         = h.affinites || {};
   h.reputations       = { ...REPUTATION_DEPART, ...(h.reputations || {}) };
   h.dossiers          = h.dossiers || {};
+  h.lignee            = h.lignee || { liaisons: [], enfants: [] };
+  if(typeof h.age !== 'number') h.age = AGE_DEPART;
   h.compagnons        = (h.compagnons || []).map(c => COMPANIONS_POOL[c.id] || c);
   h.temps             = h.temps || { semaines: 0 };
   h.chroniques        = h.chroniques || [];
@@ -122,6 +124,15 @@ const MIGRATIONS = {
     enr.version = 5;
     return enr;
   },
+  5: enr => {           // v5 → v6 : l'âge et la lignée
+    enr.hero.lignee = enr.hero.lignee || { liaisons: [], enfants: [] };
+    if(typeof enr.hero.age !== 'number'){
+      const sem = (enr.hero.temps && enr.hero.temps.semaines) || 0;
+      enr.hero.age = AGE_DEPART + Math.floor(sem / 52);
+    }
+    enr.version = 6;
+    return enr;
+  },
 };
 
 function migrer(enr){
@@ -152,6 +163,8 @@ function construireMeta(h){
     sang: h.trame ? h.trame.points : 0,
     renom: h.renom || 0,
     or: h.or || 0,
+    age: h.age || AGE_DEPART,
+    enfants: ((h.lignee || {}).enfants || []).length,
     suspicion: h.suspicion || 0,
     lieu: lieu ? lieu.nom : 'En route',
     saison: d ? `${d.saison}, An ${d.an}` : '—',
@@ -333,6 +346,7 @@ function texteMeta(m){
   return `<div class="slot-ligne"><b>Chapitre ${m.numeroChapitre}</b> · ${m.chapitre}</div>
     <div class="slot-meta">Niveau ${m.niveau} · Renom ${m.renom} · ${m.or} or · Suspicion ${m.suspicion}</div>
     <div class="slot-meta">${m.saison} · ${m.lieu}${m.armee ? ' · '+m.armee+' hommes' : ''}</div>
+    <div class="slot-meta">${m.age || '—'} ans${m.enfants ? ' · ' + m.enfants + ' enfant' + (m.enfants > 1 ? 's' : '') : ''}</div>
     ${m.compagnons.length ? `<div class="slot-meta">Avec ${m.compagnons.join(' et ')}</div>` : ''}
     <div class="slot-date">${quand}${m.termine ? ' · chronique achevée' : ''}</div>`;
 }

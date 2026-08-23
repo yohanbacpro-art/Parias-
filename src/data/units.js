@@ -59,6 +59,65 @@ const UNIT_TYPES = {
     desc:"Une poignée de porteurs de l'Onde qu'Alycia tenait cachés. Ils ne se recrutent pas : ils se méritent.",
     requisFlag:"cause_parias", unique:true,
   },
+
+  /* ---- Recrutements ouverts par la réputation d'un peuple ----
+   * `reputationRequise` : ce peuple ne confie pas ses hommes à quelqu'un qu'il
+   * ne tient pas en estime. Distinct du Renom, qui est militaire et général. */
+  sapeurs: {
+    id:"sapeurs", nom:"Sapeurs de Kar-Durak", categorie:"infanterie",
+    effectif:25, attaque:9, defense:20, moral:13, portee:0,
+    prix:420, entretien:30, renomRequis:25,
+    desc:"Ils ne chargent pas : ils s'enterrent. Une position tenue par des sapeurs ne se reprend qu'au prix fort.",
+    reputationRequise:{ nains:30 },
+  },
+  eclaireurs: {
+    id:"eclaireurs", nom:"Éclaireurs des Friches", categorie:"cavalerie",
+    effectif:20, attaque:8, defense:7, moral:9, portee:1,
+    prix:200, entretien:14, renomRequis:10,
+    desc:"Trop peu nombreux pour tenir quoi que ce soit. Ils voient venir, et c'est souvent ce qui décide.",
+  },
+  frondeurs: {
+    id:"frondeurs", nom:"Frondeurs des hameaux", categorie:"archers",
+    effectif:50, attaque:6, defense:5, moral:6, portee:1,
+    prix:90, entretien:7, renomRequis:0,
+    desc:"Des paysans avec des lanières de cuir. Ils ne valent rien un par un et beaucoup à cinquante.",
+  },
+  gardes_serment: {
+    id:"gardes_serment", nom:"Gardes du serment", categorie:"infanterie",
+    effectif:30, attaque:14, defense:18, moral:20, portee:0,
+    prix:700, entretien:52, renomRequis:60,
+    desc:"Ils ont juré sur un nom, pas sur une solde. Ils rompent en dernier, quand il n'y a plus de ligne à tenir.",
+    requisFlag:"acte_fondation",
+  },
+  sylvains_allies: {
+    id:"sylvains_allies", nom:"Archers d'Eltharion", categorie:"archers",
+    effectif:30, attaque:19, defense:8, moral:16, portee:1,
+    prix:820, entretien:58, renomRequis:50,
+    desc:"Trois volées par le temps qu'un homme en tire une. Ce qu'ils coûtent n'est pas de l'argent.",
+    reputationRequise:{ elfes:45 },
+  },
+  cornes: {
+    id:"cornes", nom:"Harde jurée", categorie:"infanterie",
+    effectif:35, attaque:18, defense:11, moral:17, portee:0,
+    prix:0, entretien:20, renomRequis:35,
+    desc:"Ils ne comprennent pas vos ordres et n'en ont pas besoin. Montrez-leur où est la ligne d'en face.",
+    reputationRequise:{ hommes_betes:45 },
+  },
+  bandes_vertes: {
+    id:"bandes_vertes", nom:"Bande verte sous contrat", categorie:"infanterie",
+    effectif:55, attaque:15, defense:9, moral:7, portee:0,
+    prix:380, entretien:40, renomRequis:20,
+    desc:"Ils frappent très fort et rompent très tôt. À placer là où la bataille se gagne en un tour.",
+    reputationRequise:{ peaux_vertes:30 },
+  },
+  chariots: {
+    id:"chariots", nom:"Chariots de guerre khesh", categorie:"cavalerie",
+    effectif:15, attaque:22, defense:8, moral:12, portee:0,
+    prix:760, entretien:56, renomRequis:55,
+    desc:"Une seule charge, dévastatrice, puis plus rien. Tout l'art est de choisir le moment.",
+    reputationRequise:{ khesh:45 },
+  },
+
   /* ---- Troupes adverses : jamais recrutables, seulement rencontrées ---- */
   milice: {
     id:"milice", nom:"Milice levée", categorie:"infanterie", ennemi:true,

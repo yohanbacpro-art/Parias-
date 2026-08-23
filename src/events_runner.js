@@ -453,6 +453,12 @@ function armerTrame(){
   resoudreTrameEnAttente();
 }
 
+/* Arme sans ouvrir : le pli du tour s'affiche d'abord, et le jalon se déclenche
+ * quand on le referme — le tour se termine sur l'histoire, pas sur un bouton. */
+function armerTrameSansOuvrir(){
+  tramePending = true;
+}
+
 function resoudreTrameEnAttente(){
   if(!tramePending || modaleOuverte()) return false;
   tramePending = false;

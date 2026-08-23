@@ -35,19 +35,19 @@ const {
   EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME, CONTRATS_SPECIAUX, EVENTS_ROMANCE,
   EVENTS_NEMESIS, EVENTS_ISOLDE, EVENTS_COMPAGNONS,
   TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS,
-  UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART,
+  UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART, REGIONS, ROUTES, LOC_REGION,
   REPUTATION_DEPART, RANGS_REPUTATION, LOC_PEUPLE, REPUTATION_VOIX, SHOPS, BUTIN_PAR_PEUPLE,
   CONTRATS_LOCAUX, CONTRACT_COMPLICATIONS,
-  EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_ONDE, EPI_LEGS,
+  EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_LIGNEE, EPI_ONDE, EPI_LEGS,
 } = vm.runInContext(`({
   BESTIARY_FULL, PORTRAITS, LOCATIONS, EVENTS, CONTRACTS, ITEM_POOL,
   EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME, CONTRATS_SPECIAUX, EVENTS_ROMANCE,
   EVENTS_NEMESIS, EVENTS_ISOLDE, EVENTS_COMPAGNONS,
   TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS,
-  UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART,
+  UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART, REGIONS, ROUTES, LOC_REGION,
   REPUTATION_DEPART, RANGS_REPUTATION, LOC_PEUPLE, REPUTATION_VOIX, SHOPS, BUTIN_PAR_PEUPLE,
   CONTRATS_LOCAUX, CONTRACT_COMPLICATIONS,
-  EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_ONDE, EPI_LEGS
+  EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_LIGNEE, EPI_ONDE, EPI_LEGS
 })`, ctx);
 
 const erreurs = [];
@@ -82,8 +82,11 @@ const tousLesEvenements = [
 // Certains marqueurs sont posés par le moteur et non par un effet de contenu :
 // on les déclare ici pour que le contrôle des marqueurs orphelins reste utile.
 const MARQUEURS_MOTEUR = [
-  'prix_noble_accepte',   // src/game.js — choix du Prix du Paria dans un contrat
+  'prix_noble_accepte',   // src/lignee.js — Prix du Paria réclamé et consenti
   'onde_devant_armee',    // src/battle.js — Coup de l'Onde employé en bataille
+  'descendance',          // src/lignee.js — première naissance
+  'heritier_paria',       // src/lignee.js — un enfant porte l'Onde
+  'chronique_terminee',   // src/epilogue.js — la chronique est allée à son terme
 ];
 const marqueursPoses = new Set(MARQUEURS_MOTEUR);   // tout flag qu'un effet peut poser
 const marqueursLus = new Map();     // flag → où il est exigé
@@ -276,6 +279,42 @@ console.log(`Troupes     ${Object.keys(UNIT_TYPES).length} types · ${Object.key
 console.log(`Pouvoirs    ${powerIds.size} · Objets ${itemIds.size} · Portraits ${portrIds.size} · Champions ${champIds.size}`);
 console.log('');
 
+/* ---- Lisibilité de la carte ---- */
+/* Un lieu sans région n'apparaît nulle part dans la liste ; une route vers un
+ * lieu inexistant se dessine dans le vide. */
+LOCATIONS.forEach(l => {
+  if(!LOC_REGION[l.id]) err(`Carte : ${l.id} (${l.nom}) n'appartient à aucune région`);
+  if(!LOC_COORDS[l.id]) err(`Carte : ${l.id} n'a pas de coordonnées`);
+});
+REGIONS.forEach(r => {
+  r.lieux.forEach(id => { if(!locIds.has(id)) err(`Région ${r.id} : lieu inconnu « ${id} »`); });
+  if(!r.nom || !r.note) err(`Région ${r.id} : nom ou description manquants`);
+});
+const relies = new Set();
+ROUTES.forEach(([a, b], i) => {
+  if(!locIds.has(a) || !locIds.has(b)) err(`Route ${i} : lieu inconnu (${a} → ${b})`);
+  relies.add(a); relies.add(b);
+});
+LOCATIONS.forEach(l => {
+  if(!relies.has(l.id)) err(`Carte : ${l.id} (${l.nom}) n'est relié par aucune route — on ne peut pas savoir comment y aller`);
+});
+console.log(`Carte       ${REGIONS.length} régions · ${ROUTES.length} routes · ${LOCATIONS.length} lieux tous reliés`);
+console.log('');
+
+/* ---- Recrutement ---- */
+Object.values(UNIT_TYPES).forEach(t => {
+  if(t.ennemi) return;
+  Object.keys(t.reputationRequise || {}).forEach(p => {
+    if(!Object.keys(REPUTATION_DEPART).includes(p))
+      err(`Unité ${t.id} : peuple inconnu « ${p} » dans reputationRequise`);
+  });
+  if(t.requisFlag && !marqueursPoses.has(t.requisFlag))
+    err(`Unité ${t.id} : marqueur « ${t.requisFlag} » jamais posé — elle serait irrecrutable`);
+});
+const recrutables = Object.values(UNIT_TYPES).filter(t => !t.ennemi);
+console.log(`Recrutement ${recrutables.length} troupes recrutables · ${Object.values(UNIT_TYPES).length - recrutables.length} adverses`);
+console.log('');
+
 /* ---- Affaires locales ---- */
 /* Le registre général affiche des lieux qui n'existent pas sur la carte : c'est
  * assumé, ce sont des affaires venues d'ailleurs. Les affaires LOCALES, elles,
@@ -447,7 +486,7 @@ console.log('');
 const PEUPLES_MONDE = ['humains','parias','khesh','elfes','elfes_noirs','nains','peaux_vertes','hommes_betes'];
 const sectionsEpi = [
   ['EPI_OUVERTURE', EPI_OUVERTURE], ['EPI_NOM', EPI_NOM],
-  ['EPI_GENS', EPI_GENS], ['EPI_NEMESIS', EPI_NEMESIS], ['EPI_EMPIRE', EPI_EMPIRE], ['EPI_ONDE', EPI_ONDE], ['EPI_LEGS', EPI_LEGS],
+  ['EPI_GENS', EPI_GENS], ['EPI_NEMESIS', EPI_NEMESIS], ['EPI_EMPIRE', EPI_EMPIRE], ['EPI_LIGNEE', EPI_LIGNEE], ['EPI_ONDE', EPI_ONDE], ['EPI_LEGS', EPI_LEGS],
   ...Object.entries(EPI_PEUPLES).map(([id, p]) => [`EPI_PEUPLES.${id}`, p.verdicts]),
 ];
 let nbVerdicts = 0;
@@ -472,7 +511,7 @@ for(const [nom, liste] of sectionsEpi){
 }
 /* Chaque section à verdict unique doit avoir un filet, sinon une partie peut
  * atteindre la fin et n'avoir rien à lire. */
-[['EPI_OUVERTURE', EPI_OUVERTURE], ['EPI_NOM', EPI_NOM], ['EPI_ONDE', EPI_ONDE],
+[['EPI_OUVERTURE', EPI_OUVERTURE], ['EPI_NOM', EPI_NOM], ['EPI_ONDE', EPI_ONDE], ['EPI_LIGNEE', EPI_LIGNEE],
  ...Object.entries(EPI_PEUPLES).map(([id, p]) => [`EPI_PEUPLES.${id}`, p.verdicts])
 ].forEach(([nom, liste]) => {
   if(!liste.some(e => e.si && e.si.toujours)) err(`${nom} : aucun verdict de repli — la fin peut rester muette`);

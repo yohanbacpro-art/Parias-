@@ -104,7 +104,9 @@ function buildYohan(extraDef){
     nom:"Yohan", portrait:"yohan",
     pv: hero.pv>0 ? hero.pv : hero.pvMax, pvMax: hero.pvMax,
     fat: hero.fat, fatMax: hero.fatMax,
-    precision: hero.precision, vol: hero.vol, agi: hero.agi,
+    // L'âge ne se voit pas sur la fiche : il se voit quand il faut esquiver.
+    precision: hero.precision, vol: hero.vol,
+    agi: hero.agi + ((typeof malusAge === 'function') ? malusAge().agi : 0),
     defenseBase: hero.defenseBase,
     paMax: hero.paMax, pa: 0,
     bonusNiveau: bonusDeNiveau(hero.niveau),

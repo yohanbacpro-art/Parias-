@@ -407,6 +407,132 @@
   .cr-badge.campagne{border-color:var(--warn);color:var(--warn);}
   .cr-badge.verrou{border-color:var(--line);color:var(--parchment-dim);}
 
+  /* Le bandeau de quête : toujours là, au-dessus de tout le reste. */
+  /* La carte : régions nommées, routes tracées, état de chaque lieu visible. */
+  .map-routes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+  .map-regions{position:absolute;inset:0;pointer-events:none;}
+  .map-region{position:absolute;transform:translate(-50%,-50%);text-align:center;
+    max-width:180px;opacity:.55;}
+  .mr-nom{display:block;font-family:'Cinzel',serif;font-size:12px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--parchment-dim);}
+  .mr-note{display:block;font-family:'Inter',sans-serif;font-size:9.5px;line-height:1.4;
+    color:var(--parchment-dim);opacity:.7;margin-top:2px;}
+
+  .map-pin{position:absolute;transform:translate(-50%,-50%);width:auto;height:auto;
+    border:none;box-shadow:none;background:none;display:flex;flex-direction:column;
+    align-items:center;gap:2px;cursor:pointer;z-index:2;}
+  .map-pin::after{display:none;}
+  .mp-point{width:12px;height:12px;border-radius:50%;background:var(--danger);
+    border:2px solid var(--ink);box-shadow:0 0 0 2px rgba(255,255,255,.08);}
+  .map-pin.ici .mp-point{width:16px;height:16px;border-color:var(--gold);
+    box-shadow:0 0 0 3px rgba(198,160,74,.35);}
+  .map-pin.hostile .mp-point{border-color:var(--blood-bright);}
+  .mp-nom{font-family:'Cinzel',serif;font-size:10px;white-space:nowrap;color:var(--parchment);
+    background:rgba(10,8,7,.82);padding:1px 5px;border-radius:3px;}
+  .map-pin.ici .mp-nom{color:var(--gold);background:rgba(10,8,7,.95);}
+  .map-pin:hover .mp-nom{color:var(--gold);}
+  .mp-badges{display:flex;gap:3px;}
+  .mp-badge{font-family:'Inter',sans-serif;font-size:8.5px;line-height:1;padding:2px 4px;
+    border-radius:2px;background:rgba(10,8,7,.85);border:1px solid var(--line);
+    color:var(--parchment-dim);}
+  .mp-badge.affaires{border-color:var(--gold-dim);color:var(--gold);}
+  .mp-badge.decision{border-color:var(--onde-bright);color:var(--onde-bright);}
+  .mp-badge.clos{opacity:.45;}
+  .mp-badge.hostile{border-color:var(--blood-bright);color:var(--blood-bright);}
+
+  .map-legende{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;
+    font-family:'Inter',sans-serif;font-size:10.5px;color:var(--parchment-dim);}
+  .map-legende span{display:flex;align-items:center;gap:5px;}
+  .lg-pt{width:9px;height:9px;border-radius:50%;display:inline-block;}
+  .lg-ligne{width:18px;height:0;border-top:1.4px dashed #6a5c4e;display:inline-block;}
+  .lg-badge{font-size:8.5px;padding:2px 4px;border-radius:2px;border:1px solid var(--gold-dim);
+    color:var(--gold);font-style:normal;}
+  .lg-badge.dec{border-color:var(--onde-bright);color:var(--onde-bright);}
+
+  .liste-lieux{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;}
+  .reg-bloc{border:1px solid var(--line);border-radius:5px;padding:11px 13px;
+    background:rgba(255,255,255,.012);}
+  .reg-nom{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);letter-spacing:.05em;}
+  .reg-desc{font-family:'Inter',sans-serif;font-size:11px;color:var(--parchment-dim);
+    font-style:italic;margin:2px 0 8px;}
+  .lieu-row{display:flex;justify-content:space-between;align-items:center;gap:10px;
+    padding:6px 0;border-top:1px dashed rgba(255,255,255,.05);cursor:pointer;}
+  .lieu-row:hover .lr-nom{color:var(--gold);}
+  .lieu-row.ici{background:rgba(198,160,74,.06);margin:0 -6px;padding:6px;border-radius:3px;}
+  .lr-nom{font-family:'Cinzel',serif;font-size:12px;color:var(--parchment);}
+  .lr-ici{font-family:'Inter',sans-serif;font-size:9px;text-transform:uppercase;
+    letter-spacing:.1em;color:var(--gold);}
+  .lr-meta{font-family:'Inter',sans-serif;font-size:10.5px;color:var(--parchment-dim);margin-top:1px;}
+  .lr-etat{font-family:'Inter',sans-serif;font-size:10px;white-space:nowrap;padding:2px 6px;
+    border-radius:3px;border:1px solid var(--line);color:var(--parchment-dim);}
+  .lr-etat.ouvert{border-color:var(--gold-dim);color:var(--gold);}
+  .lr-etat.decision{border-color:var(--onde-bright);color:var(--onde-bright);}
+  .lr-etat.clos{opacity:.5;}
+
+  .quete-bandeau{display:flex;justify-content:space-between;align-items:center;gap:14px;
+    flex-wrap:wrap;padding:7px 11px;margin-bottom:8px;cursor:pointer;
+    border:1px solid var(--gold-dim);border-radius:4px;background:rgba(198,160,74,.07);}
+  .quete-bandeau:hover{background:rgba(198,160,74,.13);}
+  .bq-gauche{display:flex;align-items:baseline;gap:9px;min-width:0;}
+  .bq-num{font-family:'Inter',sans-serif;font-size:9.5px;text-transform:uppercase;
+    letter-spacing:.14em;color:var(--parchment-dim);white-space:nowrap;}
+  .bq-titre{font-family:'Cinzel',serif;font-size:13.5px;color:var(--gold);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .bq-droite{display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    font-family:'Inter',sans-serif;font-size:11px;}
+  .bq-etape{color:var(--parchment-dim);}
+  .bq-pret{color:var(--onde-bright);font-weight:600;}
+  .bq-jalons{color:var(--parchment-dim);border:1px solid var(--line);border-radius:3px;
+    padding:1px 7px;font-variant-numeric:tabular-nums;white-space:nowrap;}
+
+  /* Le pli du tour */
+  .pli-liste{list-style:none;padding:0;margin:0 0 14px;display:grid;gap:6px;}
+  .pli-liste li{font-family:'Inter',sans-serif;font-size:12.5px;line-height:1.6;
+    color:var(--parchment);padding-left:14px;position:relative;}
+  .pli-liste li::before{content:"—";position:absolute;left:0;color:var(--parchment-dim);}
+  .pli-liste li b{color:var(--gold);}
+  .pli-monde{color:var(--parchment-dim) !important;font-style:italic;}
+  .pli-solde{color:var(--warn) !important;}
+  .pli-or{color:var(--gold) !important;}
+  .pli-rien{font-family:'Inter',sans-serif;font-size:12.5px;color:var(--parchment-dim);
+    font-style:italic;margin:0 0 14px;}
+  .pli-quete{border-left:2px solid var(--gold);padding:8px 0 8px 12px;margin-bottom:16px;}
+  .pli-quete-tete{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);margin-bottom:4px;}
+  .pli-quete p{font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;
+    color:var(--parchment-dim);margin:0 0 6px;max-width:62ch;}
+  .pli-quete-etat{font-family:'Inter',sans-serif;font-size:11.5px;color:var(--parchment);}
+  .pli-quete-etat b{color:var(--onde-bright);}
+  .pli-props-titre{font-family:'Inter',sans-serif;font-size:10px;text-transform:uppercase;
+    letter-spacing:.14em;color:var(--parchment-dim);margin-bottom:8px;}
+  .pli-props{display:grid;gap:8px;}
+  .pli-prop{display:flex;justify-content:space-between;align-items:center;gap:12px;
+    border:1px solid var(--line);border-radius:4px;padding:9px 11px;
+    background:rgba(255,255,255,.012);}
+  .pli-prop-titre{font-family:'Cinzel',serif;font-size:13px;color:var(--parchment);}
+  .pli-prop-texte{font-family:'Inter',sans-serif;font-size:11.5px;line-height:1.5;
+    color:var(--parchment-dim);margin-top:3px;max-width:52ch;}
+  .pli-prop button{white-space:nowrap;}
+
+  .lignee-age{font-family:'Inter',sans-serif;font-size:13px;color:var(--parchment);margin-bottom:10px;}
+  .lignee-age b{color:var(--gold);}
+  .lignee-note{color:var(--parchment-dim);font-style:italic;font-size:12px;}
+  .lignee-vide{font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;
+    color:var(--parchment-dim);font-style:italic;max-width:60ch;margin:0;}
+  .lignee-liste{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:9px;}
+  .lignee-carte{border:1px solid var(--line);border-radius:4px;padding:9px 11px;
+    background:rgba(255,255,255,.012);}
+  .lignee-carte.enfant{border-color:var(--gold-dim);background:rgba(198,160,74,.05);}
+  .lignee-nom{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);}
+  .lignee-onde{font-family:'Inter',sans-serif;font-size:9px;text-transform:uppercase;
+    letter-spacing:.1em;color:var(--onde-bright);border:1px solid var(--onde-bright);
+    border-radius:3px;padding:1px 5px;margin-left:5px;}
+  .lignee-meta{font-family:'Inter',sans-serif;font-size:11px;color:var(--parchment-dim);margin-top:2px;}
+  .lignee-etat{font-family:'Inter',sans-serif;font-size:11.5px;line-height:1.5;
+    color:var(--parchment);margin-top:5px;font-style:italic;}
+  .lignee-rente{font-family:'Inter',sans-serif;font-size:11.5px;color:var(--parchment-dim);
+    margin:10px 0 0;}
+  .lignee-rente b{color:var(--gold);}
+
   .reg-titre{font-family:'Cinzel',serif;font-size:14px;color:var(--gold);letter-spacing:.06em;
     margin:18px 0 4px;}
   .reg-titre:first-of-type{margin-top:0;}
@@ -538,7 +664,7 @@
   <header class="hero">
     <div class="eyebrow">Prototype interne</div>
     <h1>PARIAS — Chroniques de Vardhen</h1>
-    <div class="sub" id="heroSub">V1.1 · Le monde qui vous répond, les contrats, les batailles, celui qui suit, et la fin · version jouable du 2026-08-23</div>
+    <div class="sub" id="heroSub">V1.2 · Le temps qui passe, la carte, les affaires, les batailles, et ce qu'on transmet · version jouable du 2026-08-23</div>
   </header>
 
   <nav class="tabs" id="tabs" style="display:none;">
@@ -552,6 +678,7 @@
   </nav>
 
   <div class="calendar-bar" id="calendarBar" style="display:none;">
+    <div class="quete-bandeau" id="queteBandeau"></div>
     <div class="cal-row1">
       <span id="calendarText"></span>
       <span class="suspicion-badge" id="suspicionBadge"></span>
@@ -625,6 +752,11 @@
       <h3>Marchand</h3>
       <p id="shopHead" class="shop-head"></p>
       <div class="inv-list" id="shopList"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Lignée</h2>
+      <div id="ligneeBloc"></div>
     </div>
 
     <div class="panel">
@@ -702,8 +834,18 @@
           <path d="M 460 40 L 478 130 L 455 190 L 490 260 L 468 330 L 495 400"
                 stroke="#5fd6cb" stroke-width="7" fill="none" opacity="0.12" stroke-linecap="round"/>
         </svg>
+        <svg class="map-routes" id="mapRoutes" viewBox="0 0 1000 650" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+        <div class="map-regions" id="mapRegions"></div>
         <div class="map-pins" id="mapPins"></div>
       </div>
+      <div class="map-legende">
+        <span><i class="lg-ligne"></i>Route · en or, celles qui partent d'où vous êtes</span>
+        <span><i class="lg-badge">3</i>Affaires à traiter ici</span>
+        <span><i class="lg-badge dec">décision</i>Le lieu attend votre choix</span>
+      </div>
+
+      <h3 class="reg-titre">Les régions de Vardhen</h3>
+      <div class="liste-lieux" id="listeLieux"></div>
     </div>
   </div>
 
@@ -1183,6 +1325,65 @@ const UNIT_TYPES = {
     desc:"Une poignée de porteurs de l'Onde qu'Alycia tenait cachés. Ils ne se recrutent pas : ils se méritent.",
     requisFlag:"cause_parias", unique:true,
   },
+
+  /* ---- Recrutements ouverts par la réputation d'un peuple ----
+   * `reputationRequise` : ce peuple ne confie pas ses hommes à quelqu'un qu'il
+   * ne tient pas en estime. Distinct du Renom, qui est militaire et général. */
+  sapeurs: {
+    id:"sapeurs", nom:"Sapeurs de Kar-Durak", categorie:"infanterie",
+    effectif:25, attaque:9, defense:20, moral:13, portee:0,
+    prix:420, entretien:30, renomRequis:25,
+    desc:"Ils ne chargent pas : ils s'enterrent. Une position tenue par des sapeurs ne se reprend qu'au prix fort.",
+    reputationRequise:{ nains:30 },
+  },
+  eclaireurs: {
+    id:"eclaireurs", nom:"Éclaireurs des Friches", categorie:"cavalerie",
+    effectif:20, attaque:8, defense:7, moral:9, portee:1,
+    prix:200, entretien:14, renomRequis:10,
+    desc:"Trop peu nombreux pour tenir quoi que ce soit. Ils voient venir, et c'est souvent ce qui décide.",
+  },
+  frondeurs: {
+    id:"frondeurs", nom:"Frondeurs des hameaux", categorie:"archers",
+    effectif:50, attaque:6, defense:5, moral:6, portee:1,
+    prix:90, entretien:7, renomRequis:0,
+    desc:"Des paysans avec des lanières de cuir. Ils ne valent rien un par un et beaucoup à cinquante.",
+  },
+  gardes_serment: {
+    id:"gardes_serment", nom:"Gardes du serment", categorie:"infanterie",
+    effectif:30, attaque:14, defense:18, moral:20, portee:0,
+    prix:700, entretien:52, renomRequis:60,
+    desc:"Ils ont juré sur un nom, pas sur une solde. Ils rompent en dernier, quand il n'y a plus de ligne à tenir.",
+    requisFlag:"acte_fondation",
+  },
+  sylvains_allies: {
+    id:"sylvains_allies", nom:"Archers d'Eltharion", categorie:"archers",
+    effectif:30, attaque:19, defense:8, moral:16, portee:1,
+    prix:820, entretien:58, renomRequis:50,
+    desc:"Trois volées par le temps qu'un homme en tire une. Ce qu'ils coûtent n'est pas de l'argent.",
+    reputationRequise:{ elfes:45 },
+  },
+  cornes: {
+    id:"cornes", nom:"Harde jurée", categorie:"infanterie",
+    effectif:35, attaque:18, defense:11, moral:17, portee:0,
+    prix:0, entretien:20, renomRequis:35,
+    desc:"Ils ne comprennent pas vos ordres et n'en ont pas besoin. Montrez-leur où est la ligne d'en face.",
+    reputationRequise:{ hommes_betes:45 },
+  },
+  bandes_vertes: {
+    id:"bandes_vertes", nom:"Bande verte sous contrat", categorie:"infanterie",
+    effectif:55, attaque:15, defense:9, moral:7, portee:0,
+    prix:380, entretien:40, renomRequis:20,
+    desc:"Ils frappent très fort et rompent très tôt. À placer là où la bataille se gagne en un tour.",
+    reputationRequise:{ peaux_vertes:30 },
+  },
+  chariots: {
+    id:"chariots", nom:"Chariots de guerre khesh", categorie:"cavalerie",
+    effectif:15, attaque:22, defense:8, moral:12, portee:0,
+    prix:760, entretien:56, renomRequis:55,
+    desc:"Une seule charge, dévastatrice, puis plus rien. Tout l'art est de choisir le moment.",
+    reputationRequise:{ khesh:45 },
+  },
+
   /* ---- Troupes adverses : jamais recrutables, seulement rencontrées ---- */
   milice: {
     id:"milice", nom:"Milice levée", categorie:"infanterie", ennemi:true,
@@ -1517,6 +1718,48 @@ const LOC_COORDS = {
   LOC_019: {x:78, y:50}, // Côte des Dents — côte est
   LOC_020: {x:30, y:88}, // Pierres du Premier Rugissement — sanctuaire sud
 };
+
+/* ============================= LIRE LA CARTE ============================= */
+/* La carte n'était qu'un semis de points sur des taches de couleur : on ne
+ * savait ni où l'on était, ni ce qui menait où, ni ce qu'il y avait à faire.
+ * Ces trois tables lui donnent une géographie. */
+
+/* Les quatre régions, avec l'endroit où écrire leur nom sur le canevas. */
+const REGIONS = [
+  { id:'nord',   nom:"Les Marches du Nord", x:52, y:6,
+    lieux:['LOC_002','LOC_003','LOC_008','LOC_011','LOC_012','LOC_014'],
+    note:"Frontières, cols et forges. On y passe, on n'y reste pas." },
+  { id:'coeur',  nom:"Le Cœur d'Astrah", x:30, y:38,
+    lieux:['LOC_001','LOC_004','LOC_009','LOC_017'],
+    note:"Le pouvoir humain, ses ruines et ce qui remonte dessous." },
+  { id:'brulees',nom:"Les Terres Brûlées", x:80, y:40,
+    lieux:['LOC_005','LOC_015','LOC_018','LOC_019'],
+    note:"Ce que les guerres et le sable ont laissé." },
+  { id:'sylve',  nom:"La Sylve et les Côtes", x:22, y:66,
+    lieux:['LOC_006','LOC_007','LOC_010','LOC_013','LOC_016','LOC_020'],
+    note:"Forêts anciennes, cours fermées et ports qui ne déclarent rien." },
+];
+
+/* Le réseau de routes. Chaque paire est un trait sur la carte : on voit enfin
+ * ce qui mène où, et à quelle distance. */
+const ROUTES = [
+  ['LOC_002','LOC_011'], ['LOC_002','LOC_003'], ['LOC_003','LOC_008'],
+  ['LOC_008','LOC_012'], ['LOC_012','LOC_011'], ['LOC_011','LOC_014'],
+  ['LOC_014','LOC_004'], ['LOC_011','LOC_001'], ['LOC_001','LOC_004'],
+  ['LOC_001','LOC_009'], ['LOC_004','LOC_017'], ['LOC_017','LOC_018'],
+  ['LOC_012','LOC_018'], ['LOC_018','LOC_019'], ['LOC_019','LOC_005'],
+  ['LOC_005','LOC_015'], ['LOC_001','LOC_006'], ['LOC_006','LOC_010'],
+  ['LOC_010','LOC_016'], ['LOC_010','LOC_020'], ['LOC_020','LOC_007'],
+  ['LOC_007','LOC_013'], ['LOC_016','LOC_009'], ['LOC_017','LOC_007'],
+];
+
+/* À quelle région appartient un lieu. */
+const LOC_REGION = (() => {
+  const m = {};
+  REGIONS.forEach(r => r.lieux.forEach(id => { m[id] = r.id; }));
+  return m;
+})();
+
 
 </script>
 <script>
@@ -12260,6 +12503,28 @@ const EPI_GENS = [
     et raconta toute sa vie qu'un loup l'avait portée jusqu'à la route.` },
 ];
 
+/* ============================= LA LIGNÉE ============================= */
+/* Toute la chronique tourne autour d'un nom. Il faut dire ce qu'il en advient. */
+const EPI_LIGNEE = [
+  { si:{flags:['heritier_paria','karlsberg_reconnue']},
+    texte:`Le nom Karlsberg ne s'arrêta pas à lui. Un enfant de son sang, reconnu et inscrit, grandit
+    dans une maison qui existait de nouveau — et porta l'Onde, ce que la maison sut avant lui et lui
+    dit au bon âge, ce que personne n'avait jamais fait pour Yohan.` },
+  { si:{flags:['heritier_paria']},
+    texte:`Un enfant de son sang porta l'Onde. Yohan passa des années à se demander s'il fallait le
+    lui dire, et le lui dit finalement un hiver, mal, en s'y prenant à trois fois. L'enfant répondit
+    qu'il s'en doutait depuis longtemps.` },
+  { si:{flags:['descendance']},
+    texte:`Il y eut des enfants, qui ne portèrent rien de particulier — et Yohan mit longtemps à
+    comprendre que c'était peut-être la meilleure nouvelle de sa vie. Le nom continua sans le poids.` },
+  { si:{flags:['prix_noble_accepte']},
+    texte:`Le Prix fut réclamé et consenti, et il n'en naquit rien. Deux maisons se tinrent liées
+    par un accord que personne n'écrivit, et cela suffit à ouvrir des portes pendant vingt ans.` },
+  { si:{toujours:true},
+    texte:`Le nom Karlsberg s'arrêta à lui. Il le savait depuis le début et n'en fit jamais un drame
+    devant témoins ; ce qu'il en pensait seul, la nuit, ne regarde personne.` },
+];
+
 /* ============================= L'EMPIRE ============================= */
 /* Ce que devient Astrah, et ce qu'Isolde en a fait. N'apparaît que si Yohan a
  * su qu'elle existait. */
@@ -12379,6 +12644,11 @@ const EPI_LEGS = [
     texte:`Ce qu'un chasseur avait mis vingt ans à écrire ne se reperd pas : on sait désormais
     comment on traque un porteur de l'Onde, donc comment on ne l'est pas. 5 de Renom et 60 pièces
     d'avance, et des routes qu'on sait prendre.` },
+  { id:'sang_transmis', nom:'Le sang transmis',
+    si:{flags:['heritier_paria']},
+    effet:{talentPoints:1, or:100},
+    texte:`Un enfant a porté l'Onde et a été élevé en le sachant. Ce qui s'apprend à cet âge-là ne se
+    reperd pas : un point de talent supplémentaire, et cent pièces d'une maison qui se souvient.` },
   { id:'nom_ecrit', nom:'Un nom au registre',
     si:{unDes:['karlsberg_legalise','yohan_du_second_empire']},
     effet:{or:200, renom:5},
@@ -12844,7 +13114,9 @@ function buildYohan(extraDef){
     nom:"Yohan", portrait:"yohan",
     pv: hero.pv>0 ? hero.pv : hero.pvMax, pvMax: hero.pvMax,
     fat: hero.fat, fatMax: hero.fatMax,
-    precision: hero.precision, vol: hero.vol, agi: hero.agi,
+    // L'âge ne se voit pas sur la fiche : il se voit quand il faut esquiver.
+    precision: hero.precision, vol: hero.vol,
+    agi: hero.agi + ((typeof malusAge === 'function') ? malusAge().agi : 0),
     defenseBase: hero.defenseBase,
     paMax: hero.paMax, pa: 0,
     bonusNiveau: bonusDeNiveau(hero.niveau),
@@ -14436,6 +14708,12 @@ function armerTrame(){
   resoudreTrameEnAttente();
 }
 
+/* Arme sans ouvrir : le pli du tour s'affiche d'abord, et le jalon se déclenche
+ * quand on le referme — le tour se termine sur l'histoire, pas sur un bouton. */
+function armerTrameSansOuvrir(){
+  tramePending = true;
+}
+
 function resoudreTrameEnAttente(){
   if(!tramePending || modaleOuverte()) return false;
   tramePending = false;
@@ -14737,6 +15015,395 @@ function renderAffairesLocales(){
 
 </script>
 <script>
+/* src/lignee.js */
+/* PARIAS — Le temps qui passe, et ce qu'on transmet
+ *
+ * Le Prix du Paria promettait depuis le début qu'« une descendance pourrait en
+ * naître ». Elle en naît maintenant.
+ *
+ * Deux choses liées, parce que c'est la même :
+ *
+ *   LE TEMPS. Yohan a vingt-sept ans au premier tour et vieillit avec le
+ *   calendrier. Passé quarante-cinq ans le corps commence à compter, passé
+ *   cinquante-cinq il compte pour de bon. Les compagnons vieillissent aussi —
+ *   sauf Alarielle, qui a deux cent quarante ans et pour qui une chronique
+ *   entière est une saison.
+ *
+ *   LA LIGNÉE. Une liaison nouée au Prix du Paria est enregistrée. À chaque
+ *   tour, elle peut donner une conception ; quarante semaines plus tard, une
+ *   naissance. L'enfant porte les deux maisons, et le sang Paria une fois sur
+ *   deux — c'est un héritage latent, pas une certitude.
+ *
+ * Ce que ça rapporte est réel et immédiat : une maison qui vous doit un enfant
+ * vous soutient, et avoir quelqu'un à qui transmettre change ce qu'on fait de
+ * sa vie.
+ */
+
+const AGE_DEPART = 27;
+const GESTATION_SEMAINES = 40;
+const CHANCE_CONCEPTION = 0.16;      // par tour, par liaison sans enfant en cours
+const CHANCE_SANG_PARIA = 0.5;       // héritage latent, pas transmission garantie
+
+const PRENOMS_FILS  = ["Otto","Perrin","Aldric","Gauvain","Bertrand","Renaud","Étienne","Guiral"];
+const PRENOMS_FILLES = ["Ysoré","Aliénor","Mahaut","Berthe","Sibylle","Ermengarde","Clarisse","Aude"];
+
+function heroLignee(){
+  if(!hero.lignee) hero.lignee = { liaisons: [], enfants: [] };
+  if(typeof hero.age !== 'number') hero.age = AGE_DEPART;
+  return hero.lignee;
+}
+
+/* ============================= LIAISONS ============================= */
+
+/* Nouée quand le Prix du Paria est réclamé avec consentement. */
+function nouerLiaison(nom, maison, origine){
+  const l = heroLignee();
+  if(l.liaisons.some(x => x.nom === nom)) return null;
+  const liaison = {
+    nom, maison, origine,
+    semaine: hero.temps ? hero.temps.semaines : 0,
+    grossesse: null,      // semaine de conception, tant que l'enfant n'est pas né
+    enfants: [],
+  };
+  l.liaisons.push(liaison);
+  // Une maison noble qui a consenti au Prix soutient celui à qui elle l'a donné.
+  ajusterReputation('humains', 8);
+  if(!hasFlag('prix_noble_accepte')) heroFlags().push('prix_noble_accepte');
+  return liaison;
+}
+
+/* Rente des maisons alliées : on ne l'annonce pas, elle arrive. */
+function renteDesMaisons(){
+  return heroLignee().liaisons.length * 60;
+}
+
+/* ============================= LE TEMPS ============================= */
+
+/* Appelé par advanceTime. Rend la liste de ce qui s'est produit, pour que le
+ * joueur le lise au lieu de le découvrir dans un tableau. */
+function passerLeTemps(semaines){
+  const l = heroLignee();
+  const evenements = [];
+  const avantAge = hero.age;
+  hero.age = AGE_DEPART + Math.floor((hero.temps.semaines) / 52);
+  if(hero.age !== avantAge && hero.age % 10 === 0)
+    evenements.push({ type:'age', texte:`Yohan a ${hero.age} ans.` });
+
+  l.enfants.forEach(e => { e.age = Math.floor((hero.temps.semaines - e.ne) / 52); });
+
+  l.liaisons.forEach(liaison => {
+    if(liaison.grossesse === null){
+      if(Math.random() < CHANCE_CONCEPTION){
+        liaison.grossesse = hero.temps.semaines;
+        evenements.push({ type:'conception',
+          texte:`${liaison.nom} fait savoir qu'elle attend un enfant. Elle ne demande rien.` });
+      }
+      return;
+    }
+    if(hero.temps.semaines - liaison.grossesse >= GESTATION_SEMAINES){
+      const enfant = faireNaitre(liaison);
+      evenements.push({ type:'naissance', enfant,
+        texte:`${liaison.maison} annonce la naissance de <b>${enfant.nom}</b>, ${enfant.sexe === 'f' ? 'fille' : 'fils'} de ${liaison.nom}.` +
+              (enfant.paria ? ` Les sages-femmes ont noté quelque chose et n'en ont parlé à personne.` : '') });
+    }
+  });
+
+  return evenements;
+}
+
+/* « Maison de Corven » → « de Corven » ; « Vauclair » → « de Vauclair ». */
+function nomDeMaison(maison){
+  const brut = (maison || 'sans nom').replace(/^(La )?Maison\s+/i, '').trim();
+  return /^(de |du |des |d')/i.test(brut) ? brut : 'de ' + brut;
+}
+
+function faireNaitre(liaison){
+  const l = heroLignee();
+  const fille = Math.random() < 0.5;
+  const pool = fille ? PRENOMS_FILLES : PRENOMS_FILS;
+  const pris = l.enfants.map(e => e.nom.split(' ')[0]);
+  const dispo = pool.filter(p => !pris.includes(p));
+  const prenom = (dispo.length ? dispo : pool)[Math.floor(Math.random() * (dispo.length ? dispo.length : pool.length))];
+  const enfant = {
+    nom: prenom + ' ' + nomDeMaison(liaison.maison),
+    sexe: fille ? 'f' : 'm',
+    mere: liaison.nom, maison: liaison.maison,
+    ne: hero.temps.semaines, age: 0,
+    paria: Math.random() < CHANCE_SANG_PARIA,
+  };
+  l.enfants.push(enfant);
+  liaison.enfants.push(enfant.nom);
+  liaison.grossesse = null;
+
+  // Ce que ça change, tout de suite.
+  ajusterReputation('humains', 12);
+  gainPointsSang(10);
+  if(enfant.paria){ gainPointsSang(10); ajusterReputation('parias', 10); }
+  if(l.enfants.length === 1){
+    // Avoir quelqu'un à qui transmettre change ce qu'on fait de sa vie.
+    hero.talentPoints += 1;
+    if(!hasFlag('descendance')) heroFlags().push('descendance');
+  }
+  if(enfant.paria && !hasFlag('heritier_paria')) heroFlags().push('heritier_paria');
+  return enfant;
+}
+
+/* ============================= EFFETS DE L'ÂGE ============================= */
+/* Lus par applyPassiveEffects : le corps finit par compter. */
+function malusAge(){
+  if(hero.age >= 55) return { agi:-2, pvMax:-8, note:"Cinquante-cinq ans. Les matins sont plus longs qu'avant." };
+  if(hero.age >= 45) return { agi:-1, pvMax:-3, note:"Quarante-cinq ans. Rien de grave, sauf qu'on le sent le lendemain." };
+  return { agi:0, pvMax:0, note:null };
+}
+
+/* ============================= AFFICHAGE ============================= */
+
+function renderLignee(){
+  const el = document.getElementById('ligneeBloc');
+  if(!el) return;
+  const l = heroLignee();
+  const m = malusAge();
+
+  let html = `<div class="lignee-age">Yohan a <b>${hero.age} ans</b>.` +
+    (m.note ? ` <span class="lignee-note">${m.note}</span>` : '') + `</div>`;
+
+  if(!l.liaisons.length && !l.enfants.length){
+    html += `<p class="lignee-vide">Aucune liaison, aucun enfant. Le nom Karlsberg s'arrête à lui,
+      et il le sait chaque fois qu'on le lui rappelle.</p>`;
+    el.innerHTML = html;
+    return;
+  }
+
+  html += `<div class="lignee-liste">`;
+  l.liaisons.forEach(li => {
+    const attend = li.grossesse !== null;
+    const reste = attend ? Math.max(0, GESTATION_SEMAINES - (hero.temps.semaines - li.grossesse)) : 0;
+    html += `<div class="lignee-carte">
+      <div class="lignee-nom">${li.nom}</div>
+      <div class="lignee-meta">${li.maison}${li.origine ? ' · ' + li.origine : ''}</div>
+      <div class="lignee-etat">${attend
+        ? `Attend un enfant — environ ${reste} semaine${reste > 1 ? 's' : ''}.`
+        : (li.enfants.length ? li.enfants.join(', ') : 'Rien à annoncer.')}</div>
+    </div>`;
+  });
+  l.enfants.forEach(e => {
+    html += `<div class="lignee-carte enfant">
+      <div class="lignee-nom">${e.nom}${e.paria ? ' <span class="lignee-onde">Onde</span>' : ''}</div>
+      <div class="lignee-meta">${e.sexe === 'f' ? 'Fille' : 'Fils'} de ${e.mere} · ${e.age} an${e.age > 1 ? 's' : ''}</div>
+      <div class="lignee-etat">${e.paria
+        ? "Porte le sang. Personne ne le lui a encore dit."
+        : "Ne porte rien de particulier. C'est peut-être une chance."}</div>
+    </div>`;
+  });
+  html += `</div>`;
+  if(l.liaisons.length){
+    html += `<p class="lignee-rente">Les maisons alliées versent <b>${renteDesMaisons()} or</b> par tour.</p>`;
+  }
+  el.innerHTML = html;
+}
+
+</script>
+<script>
+/* src/tour.js */
+/* PARIAS — Le pli du tour, et la quête au centre
+ *
+ * Terminer un tour ne devait pas être un bouton qui avance un compteur. Il
+ * arrive maintenant quelque chose à chaque fois.
+ *
+ * LE PLI. À chaque fin de tour, Yohan reçoit un pli : ce qui a changé pendant
+ * les semaines écoulées, ce que la lignée a fait, la nouvelle du monde — et
+ * surtout **ce qu'on lui propose**. Trois choses au plus, cliquables, qui
+ * mènent directement où il faut aller. Un tour ne se termine jamais sur rien.
+ *
+ * LA QUÊTE. Le bandeau sous le calendrier rappelle en permanence où en est
+ * l'histoire, ce qu'il faut pour la faire avancer, et si quelque chose est déjà
+ * prêt. On ne peut plus perdre de vue pourquoi on joue.
+ */
+
+/* ============================= CE QU'ON PROPOSE ============================= */
+
+/* Une proposition sait se décrire et sait où elle mène. */
+function propositionsDuTour(){
+  const props = [];
+  const lieu = LOCATIONS.find(l => l.id === hero.position) || null;
+
+  // 1. Un jalon prêt à se produire passe avant tout le reste.
+  const jalon = trameDisponible();
+  if(jalon){
+    props.push({
+      cle:'jalon', titre:"Quelque chose vous attend",
+      texte:"Ce qui devait arriver est arrivé. Cela ne peut plus être remis.",
+      action:'jalon', bouton:"Voir",
+    });
+  }
+
+  // 2. Le dénouement d'un lieu dont les trois affaires sont closes.
+  for(const l of LOCATIONS){
+    const den = denouementDisponible(l.id);
+    if(den){
+      props.push({
+        cle:'denouement_' + l.id, titre:`${l.nom} attend une décision`,
+        texte:"Les trois affaires sont réglées. Ce qui reste ne se paie pas en or.",
+        action:'lieu', cible:l.id, bouton:"S'y rendre",
+      });
+      break;
+    }
+  }
+
+  // 3. Une affaire du lieu où l'on se trouve.
+  if(lieu){
+    const locales = affairesDuLieu(lieu.id);
+    if(locales.length){
+      const a = locales[Math.floor(Math.random() * locales.length)];
+      props.push({
+        cle:'affaire_' + a.id, titre:a.titre,
+        texte:`${a.commanditaire} — ${a.pitch}`,
+        action:'contrat', cible:a.id, bouton:`${a.or} or`,
+      });
+    }
+  }
+
+  // 4. Une affaire d'ailleurs, portée par un courrier — il faut bien que le
+  //    monde vienne à Yohan de temps en temps.
+  const ailleurs = LOCATIONS.filter(l => l.id !== hero.position && affairesDuLieu(l.id).length);
+  if(ailleurs.length && props.length < 3){
+    const l = ailleurs[Math.floor(Math.random() * ailleurs.length)];
+    const a = affairesDuLieu(l.id)[0];
+    props.push({
+      cle:'ailleurs_' + a.id, titre:a.titre,
+      texte:`On demande quelqu'un à ${l.nom}. ${a.pitch}`,
+      action:'lieu', cible:l.id, bouton:"S'y rendre",
+    });
+  }
+
+  // 5. Une campagne ou une affaire personnelle ouverte.
+  if(props.length < 3){
+    const camp = contratsSpeciauxDisponibles('campagne')[0] || contratsSpeciauxDisponibles('personnel')[0];
+    if(camp){
+      props.push({
+        cle:'special_' + camp.id, titre:camp.titre,
+        texte:camp.resume || "On vous confie une colonne. Ce n'est pas un contrat ordinaire.",
+        action:'special', cible:camp.id, bouton:"Écouter",
+      });
+    }
+  }
+
+  // 6. Filet : le registre général a toujours quelque chose.
+  if(!props.length){
+    const c = CONTRACTS[Math.floor(Math.random() * CONTRACTS.length)];
+    props.push({
+      cle:'general_' + c.id, titre:c.titre,
+      texte:`${c.commanditaire} — ${c.pitch}`,
+      action:'registre', bouton:"Au registre",
+    });
+  }
+
+  return props.slice(0, 3);
+}
+
+/* ============================= LE PLI ============================= */
+
+function ouvrirPliDuTour(resume){
+  const d = dateFromSemaines(hero.temps.semaines);
+  const props = propositionsDuTour();
+  const tr = trameProgres();
+  const ch = TRAME_CHAPITRES[hero.trame.chapitre];
+
+  const lignes = [];
+  if(resume && resume.nouvelle) lignes.push(`<li class="pli-monde">${resume.nouvelle}</li>`);
+  (resume && resume.lignee || []).forEach(e => lignes.push(`<li class="pli-lignee">${e.texte}</li>`));
+  if(resume && resume.solde) lignes.push(`<li class="pli-solde">${resume.solde}</li>`);
+  if(resume && resume.rente) lignes.push(`<li class="pli-or">${resume.rente}</li>`);
+
+  const box = document.getElementById('eventModalBox');
+  box.innerHTML = `
+    <span class="event-tag">${d.saison}, An ${d.an}</span>
+    <h3>Ce qui s'est passé pendant ce temps</h3>
+    ${lignes.length ? `<ul class="pli-liste">${lignes.join('')}</ul>`
+                    : `<p class="pli-rien">Les semaines ont passé sans que rien ne remonte jusqu'à vous.</p>`}
+
+    <div class="pli-quete">
+      <div class="pli-quete-tete">Chapitre ${hero.trame.chapitre + 1} · ${ch.titre}</div>
+      <p>${ch.objectif}</p>
+      <div class="pli-quete-etat">${tr.debloque
+        ? `<b>Quelque chose est prêt à se produire.</b>`
+        : `Jalons franchis : ${tr.faits}/${tr.total}. Il faut du sang, du temps, ou les bonnes rencontres.`}</div>
+    </div>
+
+    <div class="pli-props-titre">Ce qu'on vous propose</div>
+    <div class="pli-props" id="pliProps"></div>
+
+    <div style="margin-top:16px;text-align:right;">
+      <button class="primary" id="pliFermer">Reprendre la route</button>
+    </div>`;
+
+  const holder = document.getElementById('pliProps');
+  props.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'pli-prop';
+    div.innerHTML = `<div><div class="pli-prop-titre">${p.titre}</div>
+      <div class="pli-prop-texte">${p.texte}</div></div>`;
+    const b = document.createElement('button');
+    b.className = 'ghost';
+    b.textContent = p.bouton;
+    b.onclick = () => { closeEventModal(); suivreProposition(p); };
+    div.appendChild(b);
+    holder.appendChild(div);
+  });
+
+  document.getElementById('eventModal').style.display = 'flex';
+  document.getElementById('pliFermer').onclick = () => {
+    closeEventModal();
+    // Un jalon prêt se déclenche en refermant le pli : le tour se termine sur
+    // l'histoire, pas sur un bouton.
+    resoudreTrameEnAttente();
+  };
+}
+
+function suivreProposition(p){
+  if(p.action === 'jalon'){ resoudreTrameEnAttente(); return; }
+  if(p.action === 'lieu'){
+    const l = LOCATIONS.find(x => x.id === p.cible);
+    if(l) openLieu(l);
+    return;
+  }
+  if(p.action === 'contrat'){
+    const c = Object.values(CONTRATS_LOCAUX_EXPANSES).flat().find(x => x.id === p.cible);
+    if(c) openContract(c);
+    return;
+  }
+  if(p.action === 'special'){ ouvrirContratSpecial(p.cible); return; }
+  showScreen('contrats'); renderContracts();
+}
+
+/* ============================= LE BANDEAU DE QUÊTE ============================= */
+/* Toujours visible : on ne doit jamais avoir à chercher pourquoi on joue. */
+function renderBandeauQuete(){
+  const el = document.getElementById('queteBandeau');
+  if(!el || !hero.trame) return;
+  const ch = TRAME_CHAPITRES[hero.trame.chapitre];
+  const suivant = TRAME_CHAPITRES[hero.trame.chapitre + 1];
+  const tr = (typeof trameProgres === 'function') ? trameProgres() : null;
+  const manque = suivant ? Math.max(0, suivant.seuil - hero.trame.points) : 0;
+
+  el.innerHTML = `
+    <div class="bq-gauche">
+      <span class="bq-num">Chapitre ${hero.trame.chapitre + 1}</span>
+      <span class="bq-titre">${ch.titre}</span>
+    </div>
+    <div class="bq-droite">
+      ${tr && tr.debloque
+        ? `<span class="bq-pret">Quelque chose est prêt — terminez un tour</span>`
+        : (suivant
+            ? `<span class="bq-etape">Encore ${manque} points de sang avant : ${suivant.titre}</span>`
+            : `<span class="bq-etape">Dernier chapitre.</span>`)}
+      ${tr ? `<span class="bq-jalons">${tr.faits}/${tr.total} jalons</span>` : ''}
+    </div>`;
+  el.onclick = () => { showScreen('quete'); renderQuete(); };
+}
+
+</script>
+<script>
 /* src/epilogue.js */
 /* PARIAS — Moteur d'épilogue et d'héritage
  *
@@ -14822,6 +15489,7 @@ function construireEpilogue(h){
     gens:    epiTous(EPI_GENS, h),
     nemesis: epiPremier(EPI_NEMESIS, h),
     empire:  epiPremier(EPI_EMPIRE, h),
+    lignee:  epiPremier(EPI_LIGNEE, h),
     onde:    epiPremier(EPI_ONDE, h),
     legs:    epiTous(EPI_LEGS, h),
     bilan: {
@@ -14837,6 +15505,8 @@ function construireEpilogue(h){
       liens: jalons ? `${jalons.romFaits}/${jalons.romTotal}` : '—',
       marqueurs: (h.flags || []).length,
       dossiers: (typeof dossiersClos === 'function') ? dossiersClos() : 0,
+      age: h.age || 27,
+      enfants: ((h.lignee || {}).enfants || []).map(e => e.nom + (e.paria ? ' (porte le sang)' : '')),
       amities: Object.entries(h.reputations || {}).filter(([, v]) => v >= 45)
                      .map(([p]) => PEUPLE_LABELS[p]),
       inimities: Object.entries(h.reputations || {}).filter(([, v]) => v <= -55)
@@ -14951,6 +15621,7 @@ function renderEpilogue(){
 
     ${section('Le monde après', `<div class="epi-peuples">${peuples}</div>`)}
     ${section('Ceux qui restaient', gens)}
+    ${section('Ce que le nom devint', epi.lignee ? `<p class="epi-texte">${epi.lignee.texte}</p>` : '')}
     ${section("Ce qu'il advint de l'Empire", epi.empire ? `<p class="epi-gens">${epi.empire.texte}</p>` : '')}
     ${section('Celui qui suivait', epi.nemesis ? `<p class="epi-gens">${epi.nemesis.texte}</p>` : '')}
     ${section("Ce qui suivait", epi.onde ? `<p class="epi-texte epi-onde">${epi.onde.texte}</p>` : '')}
@@ -14968,9 +15639,11 @@ function renderEpilogue(){
         <div><span>Campagnes menées</span><b>${b.batailles}</b></div>
         <div><span>Lieux menés au bout</span><b>${b.dossiers}/20</b></div>
         <div><span>Hommes sous bannière</span><b>${b.armee}</b></div>
+        <div><span>Âge à la fin</span><b>${b.age} ans</b></div>
         <div><span>Durée</span><b>${ans} an${ans > 1 ? 's' : ''}${d ? ` · ${d.saison}, An ${d.an}` : ''}</b></div>
       </div>
       ${b.compagnons.length ? `<p class="epi-compagnons">Ils étaient là à la fin : ${b.compagnons.join(', ')}.</p>` : ''}
+      ${b.enfants.length ? `<p class="epi-compagnons">Sa descendance : ${b.enfants.join(', ')}.</p>` : ''}
       ${b.amities.length ? `<p class="epi-compagnons">Comptaient sur lui : ${b.amities.join(', ')}.</p>` : ''}
       ${b.inimities.length ? `<p class="epi-compagnons">Ne lui pardonnaient pas : ${b.inimities.join(', ')}.</p>` : ''}
     </section>
@@ -15046,10 +15719,10 @@ function nouvelleChronique(){
  * reconstruits au chargement (voir CHAMPS_SET).
  */
 
-const SAVE_VERSION = 5;
-const SAVE_PREFIX  = 'parias_save_v5_';
+const SAVE_VERSION = 6;
+const SAVE_PREFIX  = 'parias_save_v6_';
 const SAVE_LEGACY  = 'parias_vardhen_save_v1';   // format d'avant les emplacements
-const SAVE_PREFIXES_ANCIENS = ['parias_save_v4_', 'parias_save_v3_'];   // relus une fois, puis migrés
+const SAVE_PREFIXES_ANCIENS = ['parias_save_v5_', 'parias_save_v4_', 'parias_save_v3_'];   // relus une fois, puis migrés
 const SLOTS = [
   { id:'auto', nom:'Automatique', auto:true },
   { id:'s1',   nom:'Emplacement 1' },
@@ -15098,6 +15771,8 @@ function reconstruireHero(brut){
   h.affinites         = h.affinites || {};
   h.reputations       = { ...REPUTATION_DEPART, ...(h.reputations || {}) };
   h.dossiers          = h.dossiers || {};
+  h.lignee            = h.lignee || { liaisons: [], enfants: [] };
+  if(typeof h.age !== 'number') h.age = AGE_DEPART;
   h.compagnons        = (h.compagnons || []).map(c => COMPANIONS_POOL[c.id] || c);
   h.temps             = h.temps || { semaines: 0 };
   h.chroniques        = h.chroniques || [];
@@ -15149,6 +15824,15 @@ const MIGRATIONS = {
     enr.version = 5;
     return enr;
   },
+  5: enr => {           // v5 → v6 : l'âge et la lignée
+    enr.hero.lignee = enr.hero.lignee || { liaisons: [], enfants: [] };
+    if(typeof enr.hero.age !== 'number'){
+      const sem = (enr.hero.temps && enr.hero.temps.semaines) || 0;
+      enr.hero.age = AGE_DEPART + Math.floor(sem / 52);
+    }
+    enr.version = 6;
+    return enr;
+  },
 };
 
 function migrer(enr){
@@ -15179,6 +15863,8 @@ function construireMeta(h){
     sang: h.trame ? h.trame.points : 0,
     renom: h.renom || 0,
     or: h.or || 0,
+    age: h.age || AGE_DEPART,
+    enfants: ((h.lignee || {}).enfants || []).length,
     suspicion: h.suspicion || 0,
     lieu: lieu ? lieu.nom : 'En route',
     saison: d ? `${d.saison}, An ${d.an}` : '—',
@@ -15360,6 +16046,7 @@ function texteMeta(m){
   return `<div class="slot-ligne"><b>Chapitre ${m.numeroChapitre}</b> · ${m.chapitre}</div>
     <div class="slot-meta">Niveau ${m.niveau} · Renom ${m.renom} · ${m.or} or · Suspicion ${m.suspicion}</div>
     <div class="slot-meta">${m.saison} · ${m.lieu}${m.armee ? ' · '+m.armee+' hommes' : ''}</div>
+    <div class="slot-meta">${m.age || '—'} ans${m.enfants ? ' · ' + m.enfants + ' enfant' + (m.enfants > 1 ? 's' : '') : ''}</div>
     ${m.compagnons.length ? `<div class="slot-meta">Avec ${m.compagnons.join(' et ')}</div>` : ''}
     <div class="slot-date">${quand}${m.termine ? ' · chronique achevée' : ''}</div>`;
 }
@@ -15786,6 +16473,8 @@ hero.tensions = {
 hero.crisesDeclenchees = new Set();
 hero.reputations = { ...REPUTATION_DEPART };
 hero.dossiers = {};   // affaires locales réglées, par lieu
+hero.age = AGE_DEPART;
+hero.lignee = { liaisons: [], enfants: [] };
 
 function dateFromSemaines(s){
   const saisonIdx = Math.floor(s/13)%4;
@@ -15798,19 +16487,27 @@ function renderCalendar(){
   document.getElementById('calendarText').innerHTML = `${d.saison}, An ${d.an} après la Purge <b>· semaine ${hero.temps.semaines % 13 + 1}/13</b>`;
   renderSuspicionBadge();
   renderApPips();
+  if(typeof renderBandeauQuete === 'function') renderBandeauQuete();
 }
 
 function advanceTime(semaines){
   const before = dateFromSemaines(hero.temps.semaines);
   hero.temps.semaines += semaines;
   const after = dateFromSemaines(hero.temps.semaines);
+  let nouvelle = null;
   if(after.saisonIdx !== before.saisonIdx || after.an !== before.an){
     const region = LOCATIONS[Math.floor(Math.random()*LOCATIONS.length)].nom;
-    const line = NEWS_POOL[Math.floor(Math.random()*NEWS_POOL.length)](region);
-    hero.chroniques.push({ date: `${after.saison}, An ${after.an}`, texte: line });
+    nouvelle = NEWS_POOL[Math.floor(Math.random()*NEWS_POOL.length)](region);
+    hero.chroniques.push({ date: `${after.saison}, An ${after.an}`, texte: nouvelle });
     progressTensions(after);
   }
+  // Le temps ne fait pas que tourner un compteur : on vieillit, et il naît des gens.
+  const lignee = passerLeTemps(semaines);
+  lignee.filter(e => e.type !== 'age').forEach(e => {
+    hero.chroniques.push({ date: `${after.saison}, An ${after.an}`, texte: '◆ ' + e.texte });
+  });
   renderCalendar();
+  return { nouvelle, lignee };
 }
 
 function progressTensions(dateInfo){
@@ -15864,7 +16561,8 @@ function renderChroniques(){
 
 /* ============================= PERSONNAGE / TALENTS ============================= */
 function applyPassiveEffects(){
-  const basePv = 42 + (hero.niveau-3)*5; // 42 au niveau 3, +5/niveau au-delà
+  const age = (typeof malusAge === 'function') ? malusAge() : {agi:0, pvMax:0};
+  const basePv = 42 + (hero.niveau-3)*5 + age.pvMax; // 42 au niveau 3, +5/niveau au-delà
   hero.pvMax = basePv;
   hero.renaissanceUsed = false;
   if(hero.unlocked.has('resilience')) hero.pvMax += 15;
@@ -15910,6 +16608,7 @@ function renderPersonnage(){
     });
     grid.appendChild(col);
   });
+  renderLignee();
   renderSauvegardes();
 }
 
@@ -16075,16 +16774,19 @@ function entretienTotal(){
 }
 
 /* Une troupe qu'on ne paie pas finit par s'en aller. */
-function payerLaSolde(){
+/* `silencieux` : rend la ligne à afficher dans le pli du tour, au lieu d'ouvrir
+ * une modale qui entrerait en concurrence avec lui. */
+function payerLaSolde(silencieux){
   const du = entretienTotal();
-  if(du <= 0) return;
-  if(hero.or >= du){ hero.or -= du; return; }
+  if(du <= 0) return null;
+  if(hero.or >= du){ hero.or -= du; return silencieux ? `Solde versée : ${du} or.` : null; }
   hero.or = 0;
   const vivantes = (hero.armee||[]).filter(u=>u.effectif>0);
-  if(!vivantes.length) return;
+  if(!vivantes.length) return null;
   const partante = vivantes[vivantes.length-1];
   hero.armee = hero.armee.filter(u => u !== partante);
   ajusterRenom(-3);
+  if(silencieux) return `Solde impayée : <b>${partante.nom}</b> a plié bagage dans la nuit. −3 Renom.`;
   const box = document.getElementById('eventModalBox');
   box.innerHTML = `<span class="event-tag">Solde impayée</span><h3>Ils sont partis dans la nuit</h3>
     <p class="narrative">La solde n'a pas suivi, et ${partante.nom} a fait ce que font les hommes qu'on ne paie pas : ils ont plié leurs affaires sans bruit et ils sont partis avant l'aube.</p>
@@ -16095,12 +16797,24 @@ function payerLaSolde(){
   document.getElementById('soldeBtn').onclick = () => { renderArmee(); closeEventModal(); };
 }
 
+/* Un peuple ne confie pas ses hommes à quelqu'un qu'il n'estime pas — c'est
+ * distinct du Renom, qui est militaire et ne dit rien de la confiance. */
+function verrouReputation(t){
+  if(!t.reputationRequise) return null;
+  for(const [p, n] of Object.entries(t.reputationRequise)){
+    if(reputationDe(p) < n)
+      return `Estime des ${PEUPLE_LABELS[p]} : ${reputationDe(p)}/${n}`;
+  }
+  return null;
+}
+
 function recruterUnite(typeId){
   const t = UNIT_TYPES[typeId];
   if(!t || t.ennemi) return;
   if(hero.or < (t.prix||0)) return;
   if(renomActuel() < (t.renomRequis||0)) return;
   if(t.requisFlag && !hasFlag(t.requisFlag)) return;
+  if(verrouReputation(t)) return;
   if(t.unique && (hero.armee||[]).some(u=>u.type===typeId)) return;
   hero.or -= (t.prix||0);
   if(!hero.armee) hero.armee = [];
@@ -16158,6 +16872,7 @@ function renderArmee(){
     const dejaUnique = t.unique && (hero.armee||[]).some(u=>u.type===t.id);
     const verrouRenom = renomActuel() < (t.renomRequis||0);
     const verrouFlag  = t.requisFlag && !hasFlag(t.requisFlag);
+    const verrouRep   = verrouReputation(t);
     const tropCher    = hero.or < (t.prix||0);
 
     const div = document.createElement('div');
@@ -16174,6 +16889,7 @@ function renderArmee(){
     if(dejaUnique){ btn.textContent = 'Déjà au rôle'; btn.disabled = true; }
     else if(verrouFlag){ btn.textContent = 'Ils ne vous suivront pas encore'; btn.disabled = true; }
     else if(verrouRenom){ btn.textContent = `Renom ${t.renomRequis} requis (vous avez ${renomActuel()})`; btn.disabled = true; }
+    else if(verrouRep){ btn.textContent = verrouRep; btn.disabled = true; }
     else if(tropCher){ btn.textContent = `${t.prix} or requis`; btn.disabled = true; }
     else { btn.textContent = 'Recruter'; btn.onclick = () => recruterUnite(t.id); }
     div.appendChild(btn);
@@ -16192,20 +16908,98 @@ function dangerColor(l){
 
 function renderMonde(){
   const holder = document.getElementById('mapPins');
+  if(!holder) return;
   holder.innerHTML = '';
-  LOCATIONS.forEach(l=>{
-    const c = LOC_COORDS[l.id] || {x:50,y:50};
+
+  // --- Les routes, d'abord : c'est ce qui fait qu'une carte se lit. ---
+  const svg = document.getElementById('mapRoutes');
+  if(svg){
+    svg.innerHTML = ROUTES.map(([a, b]) => {
+      const p1 = LOC_COORDS[a], p2 = LOC_COORDS[b];
+      if(!p1 || !p2) return '';
+      const ici = (hero.position === a || hero.position === b);
+      return `<line x1="${p1.x*10}" y1="${p1.y*6.5}" x2="${p2.x*10}" y2="${p2.y*6.5}"
+        stroke="${ici ? 'var(--gold)' : '#4a4038'}" stroke-width="${ici ? 2.4 : 1.4}"
+        stroke-dasharray="${ici ? '' : '5 6'}" opacity="${ici ? 0.85 : 0.5}"/>`;
+    }).join('');
+  }
+
+  // --- Les noms de régions, écrits sur la carte ---
+  const reg = document.getElementById('mapRegions');
+  if(reg){
+    reg.innerHTML = '';
+    REGIONS.forEach(r => {
+      const d = document.createElement('div');
+      d.className = 'map-region';
+      d.style.left = r.x + '%'; d.style.top = r.y + '%';
+      d.innerHTML = `<span class="mr-nom">${r.nom}</span><span class="mr-note">${r.note}</span>`;
+      reg.appendChild(d);
+    });
+  }
+
+  // --- Les lieux ---
+  LOCATIONS.forEach(l => {
+    const c = LOC_COORDS[l.id] || {x:50, y:50};
     const color = dangerColor(l);
+    const ici = hero.position === l.id;
+    const restantes = (typeof affairesDuLieu === 'function') ? affairesDuLieu(l.id).length : 0;
+    const den = (typeof denouementDisponible === 'function') ? denouementDisponible(l.id) : null;
+    const peuple = (typeof peupleDuLieu === 'function') ? peupleDuLieu(l) : null;
+    const hostile = peuple && rangReputation(peuple).hostile;
+
     const pin = document.createElement('div');
-    pin.className = 'map-pin';
-    pin.style.left = c.x+'%';
-    pin.style.top = c.y+'%';
-    pin.style.background = color;
-    pin.style.color = color;
-    pin.title = l.nom;
-    pin.innerHTML = `<span class="pin-label">${l.nom}</span>`;
+    pin.className = 'map-pin' + (ici ? ' ici' : '') + (hostile ? ' hostile' : '');
+    pin.style.left = c.x + '%';
+    pin.style.top = c.y + '%';
+    pin.style.setProperty('--danger', color);
+
+    const badges = [];
+    if(den) badges.push('<span class="mp-badge decision">décision</span>');
+    else if(restantes) badges.push(`<span class="mp-badge affaires">${restantes}</span>`);
+    else badges.push('<span class="mp-badge clos">réglé</span>');
+    if(hostile) badges.push('<span class="mp-badge hostile">hostile</span>');
+
+    pin.innerHTML = `<span class="mp-point"></span>
+      <span class="mp-nom">${l.nom.replace(/^.*— /, '')}</span>
+      <span class="mp-badges">${badges.join('')}</span>`;
     pin.onclick = () => openLieu(l);
     holder.appendChild(pin);
+  });
+
+  renderListeLieux();
+}
+
+/* La carte reste une carte : la liste dit la même chose en clair, par région. */
+function renderListeLieux(){
+  const el = document.getElementById('listeLieux');
+  if(!el) return;
+  el.innerHTML = '';
+  REGIONS.forEach(r => {
+    const bloc = document.createElement('div');
+    bloc.className = 'reg-bloc';
+    bloc.innerHTML = `<div class="reg-nom">${r.nom}</div><div class="reg-desc">${r.note}</div>`;
+    r.lieux.forEach(id => {
+      const l = LOCATIONS.find(x => x.id === id);
+      if(!l) return;
+      const restantes = (typeof affairesDuLieu === 'function') ? affairesDuLieu(id).length : 0;
+      const den = (typeof denouementDisponible === 'function') ? denouementDisponible(id) : null;
+      const ici = hero.position === id;
+      const peuple = (typeof peupleDuLieu === 'function') ? peupleDuLieu(l) : null;
+      const rang = peuple ? rangReputation(peuple) : null;
+
+      const row = document.createElement('div');
+      row.className = 'lieu-row' + (ici ? ' ici' : '');
+      row.innerHTML = `<div>
+          <div class="lr-nom">${l.nom}${ici ? ' <span class="lr-ici">vous êtes ici</span>' : ''}</div>
+          <div class="lr-meta">Danger ${l.danger_range.min}–${l.danger_range.max}
+            · ${peuple ? PEUPLE_LABELS[peuple] + ' · ' + rang.nom : 'terre de personne'}</div>
+        </div>
+        <span class="lr-etat ${den ? 'decision' : (restantes ? 'ouvert' : 'clos')}">${
+          den ? 'décision à prendre' : (restantes ? restantes + ' affaire' + (restantes > 1 ? 's' : '') : 'réglé')}</span>`;
+      row.onclick = () => openLieu(l);
+      bloc.appendChild(row);
+    });
+    el.appendChild(bloc);
   });
 }
 
@@ -16321,19 +17115,26 @@ function doRepos(){
 
 function endTurnMeta(){
   const lieu = LOCATIONS.find(l=>l.id===hero.position) || null;
-  advanceTime(2 + Math.floor(Math.random()*5)); // 2 à 6 semaines
+  const resume = advanceTime(2 + Math.floor(Math.random()*5)); // 2 à 6 semaines
   adjustSuspicion(-1); // le temps qui passe aide un peu à se faire oublier
   hero.actionsTour = 3;
 
   const karlsberg = lieu && (lieu.id==='LOC_001' || lieu.id==='LOC_014');
   gainPointsSang(karlsberg ? 5 : 1);
-  payerLaSolde();
+
+  // Les maisons alliées par le Prix versent leur soutien avant qu'on paie la solde.
+  const rente = (typeof renteDesMaisons === 'function') ? renteDesMaisons() : 0;
+  if(rente){ hero.or += rente; resume.rente = `Les maisons alliées ont versé ${rente} or.`; }
+  resume.solde = payerLaSolde(true);
+
   saveGame(true);
   renderCalendar();
+  renderBandeauQuete();
 
-  // Le temps qui passe fait avancer l'histoire : si un jalon de la trame a ses
-  // conditions réunies, il se déclenche maintenant (ou dès que l'écran se libère).
-  armerTrame();
+  // Un tour ne se termine jamais sur rien : le pli dit ce qui a changé et ce
+  // qu'on propose. Un jalon prêt se déclenche en le refermant.
+  armerTrameSansOuvrir();
+  ouvrirPliDuTour(resume);
 }
 
 function triggerExploration(){
@@ -16678,7 +17479,10 @@ function renderContractStep(){
       msg = fillTemplate(pickVariant(FRAME_RETOUR_SUCCESS), c) + ` Yohan reçoit ${orGagne} pièces d'or.`;
       if(c.prix_paria && (contractState.prixChoisi==="NOBLE_CONSENTANTE" || contractState.prixChoisi==="OR_ET_NOBLE_CONSENTANTE")){
         const p = c.prix_paria.noble_proposee;
-        msg += " Une relation persistante se noue avec "+(p?p.nom:"la noble concernée")+" ; le temps dira si une descendance en naîtra.";
+        const liaison = p ? nouerLiaison(p.nom, p.maison || c.commanditaire, c.titre) : null;
+        msg += liaison
+          ? ` Une relation persistante se noue avec <b>${p.nom}</b>. ${p.maison || c.commanditaire} soutient désormais celui à qui elle a consenti le Prix — et le temps dira le reste.`
+          : " La relation existait déjà ; on n'en reparle pas.";
       }
       const looted = grantLoot();
       if(looted) lootHtml = `<p style="margin-top:8px;color:var(--onde-bright);">Butin trouvé : <b>${looted.nom}</b> — ${looted.desc}.</p>`;

@@ -82,6 +82,7 @@ function construireEpilogue(h){
     gens:    epiTous(EPI_GENS, h),
     nemesis: epiPremier(EPI_NEMESIS, h),
     empire:  epiPremier(EPI_EMPIRE, h),
+    lignee:  epiPremier(EPI_LIGNEE, h),
     onde:    epiPremier(EPI_ONDE, h),
     legs:    epiTous(EPI_LEGS, h),
     bilan: {
@@ -97,6 +98,8 @@ function construireEpilogue(h){
       liens: jalons ? `${jalons.romFaits}/${jalons.romTotal}` : '—',
       marqueurs: (h.flags || []).length,
       dossiers: (typeof dossiersClos === 'function') ? dossiersClos() : 0,
+      age: h.age || 27,
+      enfants: ((h.lignee || {}).enfants || []).map(e => e.nom + (e.paria ? ' (porte le sang)' : '')),
       amities: Object.entries(h.reputations || {}).filter(([, v]) => v >= 45)
                      .map(([p]) => PEUPLE_LABELS[p]),
       inimities: Object.entries(h.reputations || {}).filter(([, v]) => v <= -55)
@@ -211,6 +214,7 @@ function renderEpilogue(){
 
     ${section('Le monde après', `<div class="epi-peuples">${peuples}</div>`)}
     ${section('Ceux qui restaient', gens)}
+    ${section('Ce que le nom devint', epi.lignee ? `<p class="epi-texte">${epi.lignee.texte}</p>` : '')}
     ${section("Ce qu'il advint de l'Empire", epi.empire ? `<p class="epi-gens">${epi.empire.texte}</p>` : '')}
     ${section('Celui qui suivait', epi.nemesis ? `<p class="epi-gens">${epi.nemesis.texte}</p>` : '')}
     ${section("Ce qui suivait", epi.onde ? `<p class="epi-texte epi-onde">${epi.onde.texte}</p>` : '')}
@@ -228,9 +232,11 @@ function renderEpilogue(){
         <div><span>Campagnes menées</span><b>${b.batailles}</b></div>
         <div><span>Lieux menés au bout</span><b>${b.dossiers}/20</b></div>
         <div><span>Hommes sous bannière</span><b>${b.armee}</b></div>
+        <div><span>Âge à la fin</span><b>${b.age} ans</b></div>
         <div><span>Durée</span><b>${ans} an${ans > 1 ? 's' : ''}${d ? ` · ${d.saison}, An ${d.an}` : ''}</b></div>
       </div>
       ${b.compagnons.length ? `<p class="epi-compagnons">Ils étaient là à la fin : ${b.compagnons.join(', ')}.</p>` : ''}
+      ${b.enfants.length ? `<p class="epi-compagnons">Sa descendance : ${b.enfants.join(', ')}.</p>` : ''}
       ${b.amities.length ? `<p class="epi-compagnons">Comptaient sur lui : ${b.amities.join(', ')}.</p>` : ''}
       ${b.inimities.length ? `<p class="epi-compagnons">Ne lui pardonnaient pas : ${b.inimities.join(', ')}.</p>` : ''}
     </section>

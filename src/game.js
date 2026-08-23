@@ -322,6 +322,8 @@ hero.tensions = {
 hero.crisesDeclenchees = new Set();
 hero.reputations = { ...REPUTATION_DEPART };
 hero.dossiers = {};   // affaires locales réglées, par lieu
+hero.age = AGE_DEPART;
+hero.lignee = { liaisons: [], enfants: [] };
 
 function dateFromSemaines(s){
   const saisonIdx = Math.floor(s/13)%4;
@@ -334,19 +336,27 @@ function renderCalendar(){
   document.getElementById('calendarText').innerHTML = `${d.saison}, An ${d.an} après la Purge <b>· semaine ${hero.temps.semaines % 13 + 1}/13</b>`;
   renderSuspicionBadge();
   renderApPips();
+  if(typeof renderBandeauQuete === 'function') renderBandeauQuete();
 }
 
 function advanceTime(semaines){
   const before = dateFromSemaines(hero.temps.semaines);
   hero.temps.semaines += semaines;
   const after = dateFromSemaines(hero.temps.semaines);
+  let nouvelle = null;
   if(after.saisonIdx !== before.saisonIdx || after.an !== before.an){
     const region = LOCATIONS[Math.floor(Math.random()*LOCATIONS.length)].nom;
-    const line = NEWS_POOL[Math.floor(Math.random()*NEWS_POOL.length)](region);
-    hero.chroniques.push({ date: `${after.saison}, An ${after.an}`, texte: line });
+    nouvelle = NEWS_POOL[Math.floor(Math.random()*NEWS_POOL.length)](region);
+    hero.chroniques.push({ date: `${after.saison}, An ${after.an}`, texte: nouvelle });
     progressTensions(after);
   }
+  // Le temps ne fait pas que tourner un compteur : on vieillit, et il naît des gens.
+  const lignee = passerLeTemps(semaines);
+  lignee.filter(e => e.type !== 'age').forEach(e => {
+    hero.chroniques.push({ date: `${after.saison}, An ${after.an}`, texte: '◆ ' + e.texte });
+  });
   renderCalendar();
+  return { nouvelle, lignee };
 }
 
 function progressTensions(dateInfo){
@@ -400,7 +410,8 @@ function renderChroniques(){
 
 /* ============================= PERSONNAGE / TALENTS ============================= */
 function applyPassiveEffects(){
-  const basePv = 42 + (hero.niveau-3)*5; // 42 au niveau 3, +5/niveau au-delà
+  const age = (typeof malusAge === 'function') ? malusAge() : {agi:0, pvMax:0};
+  const basePv = 42 + (hero.niveau-3)*5 + age.pvMax; // 42 au niveau 3, +5/niveau au-delà
   hero.pvMax = basePv;
   hero.renaissanceUsed = false;
   if(hero.unlocked.has('resilience')) hero.pvMax += 15;
@@ -446,6 +457,7 @@ function renderPersonnage(){
     });
     grid.appendChild(col);
   });
+  renderLignee();
   renderSauvegardes();
 }
 
@@ -611,16 +623,19 @@ function entretienTotal(){
 }
 
 /* Une troupe qu'on ne paie pas finit par s'en aller. */
-function payerLaSolde(){
+/* `silencieux` : rend la ligne à afficher dans le pli du tour, au lieu d'ouvrir
+ * une modale qui entrerait en concurrence avec lui. */
+function payerLaSolde(silencieux){
   const du = entretienTotal();
-  if(du <= 0) return;
-  if(hero.or >= du){ hero.or -= du; return; }
+  if(du <= 0) return null;
+  if(hero.or >= du){ hero.or -= du; return silencieux ? `Solde versée : ${du} or.` : null; }
   hero.or = 0;
   const vivantes = (hero.armee||[]).filter(u=>u.effectif>0);
-  if(!vivantes.length) return;
+  if(!vivantes.length) return null;
   const partante = vivantes[vivantes.length-1];
   hero.armee = hero.armee.filter(u => u !== partante);
   ajusterRenom(-3);
+  if(silencieux) return `Solde impayée : <b>${partante.nom}</b> a plié bagage dans la nuit. −3 Renom.`;
   const box = document.getElementById('eventModalBox');
   box.innerHTML = `<span class="event-tag">Solde impayée</span><h3>Ils sont partis dans la nuit</h3>
     <p class="narrative">La solde n'a pas suivi, et ${partante.nom} a fait ce que font les hommes qu'on ne paie pas : ils ont plié leurs affaires sans bruit et ils sont partis avant l'aube.</p>
@@ -631,12 +646,24 @@ function payerLaSolde(){
   document.getElementById('soldeBtn').onclick = () => { renderArmee(); closeEventModal(); };
 }
 
+/* Un peuple ne confie pas ses hommes à quelqu'un qu'il n'estime pas — c'est
+ * distinct du Renom, qui est militaire et ne dit rien de la confiance. */
+function verrouReputation(t){
+  if(!t.reputationRequise) return null;
+  for(const [p, n] of Object.entries(t.reputationRequise)){
+    if(reputationDe(p) < n)
+      return `Estime des ${PEUPLE_LABELS[p]} : ${reputationDe(p)}/${n}`;
+  }
+  return null;
+}
+
 function recruterUnite(typeId){
   const t = UNIT_TYPES[typeId];
   if(!t || t.ennemi) return;
   if(hero.or < (t.prix||0)) return;
   if(renomActuel() < (t.renomRequis||0)) return;
   if(t.requisFlag && !hasFlag(t.requisFlag)) return;
+  if(verrouReputation(t)) return;
   if(t.unique && (hero.armee||[]).some(u=>u.type===typeId)) return;
   hero.or -= (t.prix||0);
   if(!hero.armee) hero.armee = [];
@@ -694,6 +721,7 @@ function renderArmee(){
     const dejaUnique = t.unique && (hero.armee||[]).some(u=>u.type===t.id);
     const verrouRenom = renomActuel() < (t.renomRequis||0);
     const verrouFlag  = t.requisFlag && !hasFlag(t.requisFlag);
+    const verrouRep   = verrouReputation(t);
     const tropCher    = hero.or < (t.prix||0);
 
     const div = document.createElement('div');
@@ -710,6 +738,7 @@ function renderArmee(){
     if(dejaUnique){ btn.textContent = 'Déjà au rôle'; btn.disabled = true; }
     else if(verrouFlag){ btn.textContent = 'Ils ne vous suivront pas encore'; btn.disabled = true; }
     else if(verrouRenom){ btn.textContent = `Renom ${t.renomRequis} requis (vous avez ${renomActuel()})`; btn.disabled = true; }
+    else if(verrouRep){ btn.textContent = verrouRep; btn.disabled = true; }
     else if(tropCher){ btn.textContent = `${t.prix} or requis`; btn.disabled = true; }
     else { btn.textContent = 'Recruter'; btn.onclick = () => recruterUnite(t.id); }
     div.appendChild(btn);
@@ -728,20 +757,98 @@ function dangerColor(l){
 
 function renderMonde(){
   const holder = document.getElementById('mapPins');
+  if(!holder) return;
   holder.innerHTML = '';
-  LOCATIONS.forEach(l=>{
-    const c = LOC_COORDS[l.id] || {x:50,y:50};
+
+  // --- Les routes, d'abord : c'est ce qui fait qu'une carte se lit. ---
+  const svg = document.getElementById('mapRoutes');
+  if(svg){
+    svg.innerHTML = ROUTES.map(([a, b]) => {
+      const p1 = LOC_COORDS[a], p2 = LOC_COORDS[b];
+      if(!p1 || !p2) return '';
+      const ici = (hero.position === a || hero.position === b);
+      return `<line x1="${p1.x*10}" y1="${p1.y*6.5}" x2="${p2.x*10}" y2="${p2.y*6.5}"
+        stroke="${ici ? 'var(--gold)' : '#4a4038'}" stroke-width="${ici ? 2.4 : 1.4}"
+        stroke-dasharray="${ici ? '' : '5 6'}" opacity="${ici ? 0.85 : 0.5}"/>`;
+    }).join('');
+  }
+
+  // --- Les noms de régions, écrits sur la carte ---
+  const reg = document.getElementById('mapRegions');
+  if(reg){
+    reg.innerHTML = '';
+    REGIONS.forEach(r => {
+      const d = document.createElement('div');
+      d.className = 'map-region';
+      d.style.left = r.x + '%'; d.style.top = r.y + '%';
+      d.innerHTML = `<span class="mr-nom">${r.nom}</span><span class="mr-note">${r.note}</span>`;
+      reg.appendChild(d);
+    });
+  }
+
+  // --- Les lieux ---
+  LOCATIONS.forEach(l => {
+    const c = LOC_COORDS[l.id] || {x:50, y:50};
     const color = dangerColor(l);
+    const ici = hero.position === l.id;
+    const restantes = (typeof affairesDuLieu === 'function') ? affairesDuLieu(l.id).length : 0;
+    const den = (typeof denouementDisponible === 'function') ? denouementDisponible(l.id) : null;
+    const peuple = (typeof peupleDuLieu === 'function') ? peupleDuLieu(l) : null;
+    const hostile = peuple && rangReputation(peuple).hostile;
+
     const pin = document.createElement('div');
-    pin.className = 'map-pin';
-    pin.style.left = c.x+'%';
-    pin.style.top = c.y+'%';
-    pin.style.background = color;
-    pin.style.color = color;
-    pin.title = l.nom;
-    pin.innerHTML = `<span class="pin-label">${l.nom}</span>`;
+    pin.className = 'map-pin' + (ici ? ' ici' : '') + (hostile ? ' hostile' : '');
+    pin.style.left = c.x + '%';
+    pin.style.top = c.y + '%';
+    pin.style.setProperty('--danger', color);
+
+    const badges = [];
+    if(den) badges.push('<span class="mp-badge decision">décision</span>');
+    else if(restantes) badges.push(`<span class="mp-badge affaires">${restantes}</span>`);
+    else badges.push('<span class="mp-badge clos">réglé</span>');
+    if(hostile) badges.push('<span class="mp-badge hostile">hostile</span>');
+
+    pin.innerHTML = `<span class="mp-point"></span>
+      <span class="mp-nom">${l.nom.replace(/^.*— /, '')}</span>
+      <span class="mp-badges">${badges.join('')}</span>`;
     pin.onclick = () => openLieu(l);
     holder.appendChild(pin);
+  });
+
+  renderListeLieux();
+}
+
+/* La carte reste une carte : la liste dit la même chose en clair, par région. */
+function renderListeLieux(){
+  const el = document.getElementById('listeLieux');
+  if(!el) return;
+  el.innerHTML = '';
+  REGIONS.forEach(r => {
+    const bloc = document.createElement('div');
+    bloc.className = 'reg-bloc';
+    bloc.innerHTML = `<div class="reg-nom">${r.nom}</div><div class="reg-desc">${r.note}</div>`;
+    r.lieux.forEach(id => {
+      const l = LOCATIONS.find(x => x.id === id);
+      if(!l) return;
+      const restantes = (typeof affairesDuLieu === 'function') ? affairesDuLieu(id).length : 0;
+      const den = (typeof denouementDisponible === 'function') ? denouementDisponible(id) : null;
+      const ici = hero.position === id;
+      const peuple = (typeof peupleDuLieu === 'function') ? peupleDuLieu(l) : null;
+      const rang = peuple ? rangReputation(peuple) : null;
+
+      const row = document.createElement('div');
+      row.className = 'lieu-row' + (ici ? ' ici' : '');
+      row.innerHTML = `<div>
+          <div class="lr-nom">${l.nom}${ici ? ' <span class="lr-ici">vous êtes ici</span>' : ''}</div>
+          <div class="lr-meta">Danger ${l.danger_range.min}–${l.danger_range.max}
+            · ${peuple ? PEUPLE_LABELS[peuple] + ' · ' + rang.nom : 'terre de personne'}</div>
+        </div>
+        <span class="lr-etat ${den ? 'decision' : (restantes ? 'ouvert' : 'clos')}">${
+          den ? 'décision à prendre' : (restantes ? restantes + ' affaire' + (restantes > 1 ? 's' : '') : 'réglé')}</span>`;
+      row.onclick = () => openLieu(l);
+      bloc.appendChild(row);
+    });
+    el.appendChild(bloc);
   });
 }
 
@@ -857,19 +964,26 @@ function doRepos(){
 
 function endTurnMeta(){
   const lieu = LOCATIONS.find(l=>l.id===hero.position) || null;
-  advanceTime(2 + Math.floor(Math.random()*5)); // 2 à 6 semaines
+  const resume = advanceTime(2 + Math.floor(Math.random()*5)); // 2 à 6 semaines
   adjustSuspicion(-1); // le temps qui passe aide un peu à se faire oublier
   hero.actionsTour = 3;
 
   const karlsberg = lieu && (lieu.id==='LOC_001' || lieu.id==='LOC_014');
   gainPointsSang(karlsberg ? 5 : 1);
-  payerLaSolde();
+
+  // Les maisons alliées par le Prix versent leur soutien avant qu'on paie la solde.
+  const rente = (typeof renteDesMaisons === 'function') ? renteDesMaisons() : 0;
+  if(rente){ hero.or += rente; resume.rente = `Les maisons alliées ont versé ${rente} or.`; }
+  resume.solde = payerLaSolde(true);
+
   saveGame(true);
   renderCalendar();
+  renderBandeauQuete();
 
-  // Le temps qui passe fait avancer l'histoire : si un jalon de la trame a ses
-  // conditions réunies, il se déclenche maintenant (ou dès que l'écran se libère).
-  armerTrame();
+  // Un tour ne se termine jamais sur rien : le pli dit ce qui a changé et ce
+  // qu'on propose. Un jalon prêt se déclenche en le refermant.
+  armerTrameSansOuvrir();
+  ouvrirPliDuTour(resume);
 }
 
 function triggerExploration(){
@@ -1214,7 +1328,10 @@ function renderContractStep(){
       msg = fillTemplate(pickVariant(FRAME_RETOUR_SUCCESS), c) + ` Yohan reçoit ${orGagne} pièces d'or.`;
       if(c.prix_paria && (contractState.prixChoisi==="NOBLE_CONSENTANTE" || contractState.prixChoisi==="OR_ET_NOBLE_CONSENTANTE")){
         const p = c.prix_paria.noble_proposee;
-        msg += " Une relation persistante se noue avec "+(p?p.nom:"la noble concernée")+" ; le temps dira si une descendance en naîtra.";
+        const liaison = p ? nouerLiaison(p.nom, p.maison || c.commanditaire, c.titre) : null;
+        msg += liaison
+          ? ` Une relation persistante se noue avec <b>${p.nom}</b>. ${p.maison || c.commanditaire} soutient désormais celui à qui elle a consenti le Prix — et le temps dira le reste.`
+          : " La relation existait déjà ; on n'en reparle pas.";
       }
       const looted = grantLoot();
       if(looted) lootHtml = `<p style="margin-top:8px;color:var(--onde-bright);">Butin trouvé : <b>${looted.nom}</b> — ${looted.desc}.</p>`;

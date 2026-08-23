@@ -105,8 +105,13 @@ const FILE = 'file://' + require('path').join(__dirname, '..', 'dist', 'parias.h
     await page.waitForTimeout(90);
 
     // Dérouler tout ce qui s'est ouvert, y compris un enchaînement de jalons
-    for (let garde = 0; garde < 12; garde++) {
+    for (let garde = 0; garde < 14; garde++) {
       if (!await page.isVisible('#eventModal')) break;
+      // Le pli du tour s'ouvre d'abord : c'est en le refermant que le jalon part.
+      if (await page.isVisible('#pliFermer')) {
+        await page.click('#pliFermer'); await page.waitForTimeout(80);
+        continue;
+      }
       const id = await page.evaluate(() => ecritState && ecritState.ev ? ecritState.ev.id : null);
       if (await page.isVisible('#scFinBtn')) {
         if (id && (id.startsWith('TR_') || id.startsWith('RO_'))) joues++;

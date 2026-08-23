@@ -27,3 +27,45 @@ const LOC_COORDS = {
   LOC_019: {x:78, y:50}, // Côte des Dents — côte est
   LOC_020: {x:30, y:88}, // Pierres du Premier Rugissement — sanctuaire sud
 };
+
+/* ============================= LIRE LA CARTE ============================= */
+/* La carte n'était qu'un semis de points sur des taches de couleur : on ne
+ * savait ni où l'on était, ni ce qui menait où, ni ce qu'il y avait à faire.
+ * Ces trois tables lui donnent une géographie. */
+
+/* Les quatre régions, avec l'endroit où écrire leur nom sur le canevas. */
+const REGIONS = [
+  { id:'nord',   nom:"Les Marches du Nord", x:52, y:6,
+    lieux:['LOC_002','LOC_003','LOC_008','LOC_011','LOC_012','LOC_014'],
+    note:"Frontières, cols et forges. On y passe, on n'y reste pas." },
+  { id:'coeur',  nom:"Le Cœur d'Astrah", x:30, y:38,
+    lieux:['LOC_001','LOC_004','LOC_009','LOC_017'],
+    note:"Le pouvoir humain, ses ruines et ce qui remonte dessous." },
+  { id:'brulees',nom:"Les Terres Brûlées", x:80, y:40,
+    lieux:['LOC_005','LOC_015','LOC_018','LOC_019'],
+    note:"Ce que les guerres et le sable ont laissé." },
+  { id:'sylve',  nom:"La Sylve et les Côtes", x:22, y:66,
+    lieux:['LOC_006','LOC_007','LOC_010','LOC_013','LOC_016','LOC_020'],
+    note:"Forêts anciennes, cours fermées et ports qui ne déclarent rien." },
+];
+
+/* Le réseau de routes. Chaque paire est un trait sur la carte : on voit enfin
+ * ce qui mène où, et à quelle distance. */
+const ROUTES = [
+  ['LOC_002','LOC_011'], ['LOC_002','LOC_003'], ['LOC_003','LOC_008'],
+  ['LOC_008','LOC_012'], ['LOC_012','LOC_011'], ['LOC_011','LOC_014'],
+  ['LOC_014','LOC_004'], ['LOC_011','LOC_001'], ['LOC_001','LOC_004'],
+  ['LOC_001','LOC_009'], ['LOC_004','LOC_017'], ['LOC_017','LOC_018'],
+  ['LOC_012','LOC_018'], ['LOC_018','LOC_019'], ['LOC_019','LOC_005'],
+  ['LOC_005','LOC_015'], ['LOC_001','LOC_006'], ['LOC_006','LOC_010'],
+  ['LOC_010','LOC_016'], ['LOC_010','LOC_020'], ['LOC_020','LOC_007'],
+  ['LOC_007','LOC_013'], ['LOC_016','LOC_009'], ['LOC_017','LOC_007'],
+];
+
+/* À quelle région appartient un lieu. */
+const LOC_REGION = (() => {
+  const m = {};
+  REGIONS.forEach(r => r.lieux.forEach(id => { m[id] = r.id; }));
+  return m;
+})();
+

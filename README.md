@@ -7,7 +7,7 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V1.1** — Isolde et le Second Empire, le consentement des compagnons, les conclusions d'attachement, et 60 affaires ancrées sur la carte.
+**Version actuelle : V1.2** — le temps qui passe, la descendance, une carte qui se lit, un tour qui apporte toujours quelque chose, et huit troupes de plus.
 
 ## Lancer le jeu
 
@@ -31,12 +31,16 @@ lien. Il se régénère avec `node tools/build-standalone.js`.
 | Boucle de tour : 3 actions puis 2–6 semaines qui passent | ✅ |
 | **Batailles rangées** : trois fronts, ordres, manœuvres, moral | ✅ |
 | **Renom militaire** : recrutement et campagnes s'ouvrent avec lui | ✅ |
-| **Armée** : 7 troupes recrutables, pertes et entretien persistants | ✅ |
+| **Armée** : 15 troupes recrutables, pertes et entretien persistants | ✅ |
 | **Campagnes** : 6 contrats de général menant à une bataille | ✅ |
 | **Affaires personnelles** : 3 contrats piégés par ceux qui vous en veulent | ✅ |
 | **Attachements** : 3 arcs relationnels, 10 étapes dont 3 conclusions | ✅ |
 | **Événements de lieu** : 44 récits ramifiés, au moins quatre par lieu | ✅ |
 | **Réputation** : ce que chaque peuple pense de vous, et ce que ça coûte | ✅ |
+| **Le temps** : Yohan vieillit, et le corps finit par compter | ✅ |
+| **La lignée** : le Prix du Paria donne des enfants, et un nom qui continue | ✅ |
+| **Le pli du tour** : chaque fin de tour apporte quelque chose à faire | ✅ |
+| **Carte lisible** : régions nommées, routes tracées, état de chaque lieu | ✅ |
 | **Économie** : marchands par peuple, prix par réputation, butin de bataille | ✅ |
 | **Rencontres** : 8 figures du Codex, croisées ou affrontées | ✅ |
 | **Jalons de trame** : 11 étapes d'histoire qui se débloquent seules | ✅ |
@@ -164,12 +168,20 @@ colonne à un inconnu.
 
 | Renom | Rang | Ce qui s'ouvre |
 |---|---|---|
-| 0 | Inconnu | Lanciers, Archers · première campagne |
+| 0 | Inconnu | Lanciers, Archers, Frondeurs · première campagne |
 | 15 | Chef de bande | Cavalerie |
 | 35 | Capitaine | Vétérans d'Astrah |
 | 45 | Commandant | Arbalétriers nains *(exige l'amitié de Gorm)* |
 | 55 | — | Lanciers Khesh *(exige l'alliance de Kem-Val)* |
 | 100 | Seigneur de guerre | — |
+
+Quinze troupes recrutables, réparties sur les trois côtés du triangle : des
+frondeurs de hameau à quatre-vingt-dix pièces, des sapeurs nains qui ne
+chargent jamais, des chariots khesh qui n'ont qu'une charge dans le ventre, des
+gardes du serment qui rompent en dernier. Huit d'entre elles s'ouvrent à
+l'**estime d'un peuple** plutôt qu'au Renom : les nains ne confient pas leurs
+sapeurs à quelqu'un qu'ils ne tiennent pas en estime, quel que soit son rang
+militaire.
 
 Les unités **persistent avec leurs pertes** d'une bataille à l'autre et coûtent
 un entretien prélevé à chaque fin de tour. Une troupe qu'on ne paie pas déserte
@@ -232,6 +244,7 @@ Cinq sections, toutes conditionnelles :
 - **Ceux qui restaient** — cumulatif : chaque personne dont Yohan a croisé la
   route et laissé une trace, compagnes et princes compris.
 - **Celui qui suivait** — ce que devient le Livré, selon ce que Yohan lui a fait.
+- **Ce que le nom devint** — la descendance, ou son absence.
 - **Ce qu'il advint de l'Empire** — le Second Empire, ou son absence.
 - **Ce qui suivait** — le fil de l'Onde, selon ce qu'il en a compris.
 - **Ce qui se transmet** — les legs mérités, et rien d'autre.
@@ -245,6 +258,67 @@ manuel libre — elle reste jouable — et transmet ce qu'elle a mérité : de l
 pour un nom reconnu, du Renom pour une réputation d'armes, un point de talent
 pour avoir compris le cycle ou sorti les siens de l'ombre. On garde le legs le
 plus riche jamais obtenu, pas le dernier : recommencer ne fait jamais reculer.
+
+## Le tour, et la quête au centre
+
+Terminer un tour était un bouton qui avançait un compteur. Il arrive maintenant
+quelque chose à chaque fois.
+
+**Le pli du tour.** À chaque fin de tour, Yohan reçoit un pli : ce qui a changé
+pendant les semaines écoulées, ce que la lignée a fait, la nouvelle du monde —
+et surtout **ce qu'on lui propose**. Trois choses au plus, cliquables, qui
+mènent directement où il faut aller : un jalon prêt, un lieu qui attend une
+décision, une affaire d'ici, une affaire d'ailleurs portée par un courrier, une
+campagne ouverte. Un tour ne se termine jamais sur rien — vérifié sur
+vingt-cinq tours enchaînés.
+
+**La quête au centre.** Un bandeau sous le calendrier rappelle en permanence le
+chapitre en cours, ce qu'il faut pour le faire avancer, et si quelque chose est
+déjà prêt. Le pli le répète. On ne peut plus perdre de vue pourquoi on joue.
+
+Le jalon d'histoire se déclenche **en refermant le pli** : le tour se termine
+sur l'histoire, pas sur un bouton.
+
+## La carte
+
+Vingt points sans nom sur des taches de couleur : on ne savait ni où l'on était,
+ni ce qui menait où, ni ce qu'il y avait à faire. La carte a maintenant une
+géographie :
+
+- **quatre régions nommées** et décrites, écrites sur la carte ;
+- **vingt-quatre routes** tracées entre les lieux — en or, celles qui partent
+  d'où vous êtes ;
+- **les noms toujours visibles**, plus seulement au survol ;
+- **votre position** marquée, et pour chaque lieu un état lisible d'un coup
+  d'œil : combien d'affaires restent, si le lieu attend une décision, si le
+  peuple vous tient pour ennemi ;
+- **une liste par région** sous la carte, qui dit la même chose en clair.
+
+Le validateur refuse un lieu sans région, sans coordonnées, ou qu'aucune route
+ne relie — on ne saurait pas comment y aller.
+
+## Le temps et la lignée
+
+Yohan a **vingt-sept ans** au premier tour et vieillit avec le calendrier.
+Passé quarante-cinq ans le corps commence à compter (−1 Agilité, −3 PV), passé
+cinquante-cinq il compte pour de bon (−2 Agilité, −8 PV). Cela ne se voit pas
+sur la fiche : cela se voit quand il faut esquiver.
+
+Le Prix du Paria promettait depuis le début qu'« une descendance pourrait en
+naître ». Elle en naît :
+
+- réclamer le Prix avec consentement **noue une liaison** enregistrée : +8 de
+  réputation chez les humains, et **60 or par tour** — une maison qui a consenti
+  soutient celui à qui elle a consenti ;
+- à chaque tour, **16 % de chance de conception** par liaison ; quarante
+  semaines plus tard, une **naissance** ;
+- l'enfant porte les deux maisons, et le **sang Paria une fois sur deux** —
+  héritage latent, pas transmission garantie ;
+- une naissance rapporte 10 points de sang (20 si l'enfant porte l'Onde), de la
+  réputation, et **la première donne un point de talent** : avoir quelqu'un à
+  qui transmettre change ce qu'on fait de sa vie ;
+- l'épilogue dit ce que le nom est devenu, et le legs transmet à la chronique
+  suivante ce qu'un enfant élevé en le sachant a appris.
 
 ## Les affaires locales
 
@@ -395,6 +469,8 @@ src/save.js           emplacements, métadonnées, migrations, intégrité
 src/epilogue.js       verdict de fin de chronique et héritage
 src/reputation.js     rangs, prix, accueil hostile, écran des peuples
 src/contrats_locaux.js  dossiers par lieu, dénouements, registre local
+src/lignee.js         âge, liaisons, conceptions, naissances
+src/tour.js           le pli de fin de tour et le bandeau de quête
 src/combat.js         moteur de combat de groupe (party vs adversaires)
 src/events_runner.js  déroulement des événements écrits et générés
 src/battle.js         moteur de bataille rangée (fronts, ordres, moral)
@@ -412,6 +488,7 @@ src/data/
   events_isolde.js    5 jalons de l'arc d'Isolde
   events_compagnons.js  recrutement consenti, seconde offre, séparation
   contrats_locaux.js  60 affaires sur les 20 lieux + 20 dénouements
+  locations.js        20 lieux, 4 régions, 24 routes, coordonnées
   champions.js        9 combattants nommés (hors bestiaire)
   contracts_special.js 6 campagnes + 3 affaires personnelles
   romances.js         3 arcs relationnels, 7 étapes
@@ -435,6 +512,7 @@ tools/smoke-campagnes.js   éprouve les campagnes majeures et la trame
 tools/smoke-nemesis.js     éprouve l'arc du Livré, le Sillage et ses issues
 tools/smoke-monde.js       éprouve la réputation, les marchands et la 2e vague
 tools/smoke-arcs.js        éprouve Isolde, les compagnons, les liens et les dossiers
+tools/smoke-tour.js        éprouve le tour, le temps, la lignée, la carte, les troupes
 tools/manifest-assets.js   régénère assets/README.md (avec ce qui est fourni)
 ```
 
@@ -454,6 +532,7 @@ node tools/smoke-campagnes.js                # campagnes majeures et trame compl
 node tools/smoke-nemesis.js                  # l'arc du Livré, le Sillage, ses cinq fins
 node tools/smoke-monde.js                    # réputation, marchands, couverture des lieux
 node tools/smoke-arcs.js                     # Isolde, compagnons, attachements, dossiers
+node tools/smoke-tour.js                     # tour, âge, descendance, carte, recrutement
 
 node tools/manifest-assets.js                # régénère la liste des illustrations
 ```
