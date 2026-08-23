@@ -151,7 +151,31 @@ const verifie = (n, ok, d) => { if(ok) console.log('  ✔', n);
   });
   verifie('aucune branche ne casse ni ne bloque', parcours.length === 0, parcours.slice(0, 6));
 
+  /* ---------- Les illustrations fournies ---------- */
+  console.log("\nLes illustrations fournies remplacent bien le dessin de repli");
+  const art = await page.evaluate(() => {
+    const embarquees = Object.keys(ART_INLINE);
+    const portraitsFournis = Object.keys(PORTRAITS).filter(id => ART_INLINE['portrait/' + id]);
+    const familles = [...new Set(EVENTS.map(e => e.famille))];
+    const famillesFournies = familles.filter(f => ART_INLINE['event/evt_' + f.toLowerCase()]);
+    return {
+      embarquees: embarquees.length,
+      portraitsFournis, familles: familles.length, famillesFournies,
+      yohanEmbarque: artSource('yohan', 'portrait').startsWith('data:image/'),
+      absentSurFichier: artSource('baltus', 'portrait') === 'assets/portraits/baltus.webp',
+      // Le repli dessiné doit rester disponible pour tout ce qui manque.
+      repliDessine: artFallbackSVG('baltus', 'portrait').startsWith('data:image/svg+xml'),
+    };
+  });
+  verifie(`${art.embarquees} illustrations sont embarquées dans le fichier unique`, art.embarquees >= 20, art.embarquees);
+  verifie('Yohan est servi depuis les données embarquées', art.yohanEmbarque);
+  verifie('les 13 personnages majeurs ont leur portrait', art.portraitsFournis.length >= 13, art.portraitsFournis.length);
+  verifie('les 8 familles d\'événements générés ont leur bandeau',
+    art.famillesFournies.length >= 8, art.famillesFournies);
+  verifie('un portrait absent retombe sur son fichier', art.absentSurFichier, art);
+  verifie('et le dessin de repli reste disponible', art.repliDessine);
+
   await browser.close();
-  console.log(echecs ? `\n${echecs} échec(s).` : '\nLe monde réagit, les étals diffèrent, et les lieux ont de quoi raconter.');
+  console.log(echecs ? `\n${echecs} échec(s).` : '\nLe monde réagit, les étals diffèrent, les lieux racontent, et les visages sont peints.');
   process.exit(echecs ? 1 : 0);
 })();

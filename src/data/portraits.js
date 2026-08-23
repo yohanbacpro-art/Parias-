@@ -43,6 +43,8 @@ const PORTRAITS = {
                  peuple:"khesh", trait:"voile"},
   khalvaene:    {nom:"Khal-Vaene", role:"Khesh · usurpateur",
                  peuple:"khesh", trait:"masque"},
+  isolde:       {nom:"Isolde de Varenne", role:"Duchesse · l'étincelle du Second Empire",
+                 peuple:"astrah", trait:"tresses"},
 
   /* — Personnages d'événements — */
   baltus:       {nom:"Baltus Trois-Clous", role:"Chef de péage",

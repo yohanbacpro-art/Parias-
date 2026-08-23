@@ -7,7 +7,7 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V0.9** — la réputation des peuples, une économie par peuple, et 26 récits de lieu de plus.
+**Version actuelle : V1.0** — les vraies illustrations : 13 portraits et 10 bandeaux peints, embarqués dans le fichier unique.
 
 ## Lancer le jeu
 
@@ -358,7 +358,9 @@ src/data/
   items.js            équipement et consommables
   portraits.js        registre des personnages illustrés
   lore.js             prologue, trame, compagnons, codex, calendrier, tensions
-assets/               illustrations à déposer — voir assets/README.md
+assets/sources/       les planches d'origine, dont les découpes sont tirées
+assets/portraits/     13 portraits fournis · assets/events/ 10 bandeaux
+tools/decoupe-affiche.py   refait les découpes depuis les planches
 dist/parias.html      le jeu en un seul fichier (généré)
 tools/validate.js     contrôle d'intégrité du contenu
 tools/build-standalone.js  fabrique dist/parias.html
@@ -367,7 +369,7 @@ tools/smoke-epilogue.js    éprouve les fins et l'héritage
 tools/smoke-campagnes.js   éprouve les campagnes majeures et la trame
 tools/smoke-nemesis.js     éprouve l'arc du Livré, le Sillage et ses issues
 tools/smoke-monde.js       éprouve la réputation, les marchands et la 2e vague
-tools/manifest-assets.js   régénère assets/README.md
+tools/manifest-assets.js   régénère assets/README.md (avec ce qui est fourni)
 ```
 
 Les fichiers de `src/data/` sont des scripts classiques chargés avant `game.js` :
@@ -463,8 +465,16 @@ applicables au lieu ne sont pas tous vus.
 
 ## Les illustrations
 
-Aucun fichier n'est requis. Tant qu'une image manque, le jeu la **dessine** en
-SVG, de façon déterministe et informée par ce qu'elle représente :
+**13 portraits et 10 bandeaux sont fournis**, découpés des planches de
+`assets/sources/` par `python3 tools/decoupe-affiche.py` (coordonnées calées à
+la main, refaisables). Ils couvrent tous les personnages majeurs du Codex et
+les 8 familles d'événements générés — c'est-à-dire l'écrasante majorité de ce
+qu'on voit en jouant. `assets/README.md` liste ce qui est fourni et ce qui
+manque encore.
+
+Aucun fichier n'est requis pour autant. Tant qu'une image manque, le jeu la
+**dessine** en SVG, de façon déterministe et informée par ce qu'elle
+représente :
 
 - un **portrait** prend la palette du peuple du personnage et sa silhouette de
   ses attributs — couronne, capuche, heaume, voile, barbe, masque, tresses,
@@ -482,6 +492,11 @@ est dans `assets/README.md`, **générée** par `node tools/manifest-assets.js`.
 Le validateur garde le câblage : peuple et attribut dessinables, portrait de
 champion existant, alerte quand deux champions partagent un visage, et quand une
 scène nomme un personnage sans l'afficher.
+
+**Dans le fichier unique**, les images sont **embarquées en base64** par
+`tools/build-standalone.js` : une page unique n'a pas de « à côté » où aller
+chercher un fichier, et la version publiée n'afficherait rien sans cela. Le
+développement, lui, continue de lire les fichiers de `assets/`.
 
 ## Écrire une fin
 

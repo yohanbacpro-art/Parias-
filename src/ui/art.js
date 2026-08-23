@@ -22,6 +22,18 @@
 const ART_PATHS = { event: 'assets/events/', portrait: 'assets/portraits/' };
 const ART_EXT = '.webp';
 
+/* Illustrations embarquées. Vide en développement : le jeu lit alors les
+ * fichiers de assets/. tools/build-standalone.js remplit cette table de données
+ * en base64 pour le fichier unique — un fichier unique ne peut pas aller
+ * chercher une image à côté de lui, et la page publiée n'a pas de « à côté ». */
+const ART_INLINE = (typeof ART_INLINE_DATA !== 'undefined') ? ART_INLINE_DATA : {};
+
+/* Source d'une illustration : embarquée si on l'a, sinon le fichier attendu. */
+function artSource(id, kind){
+  const embarquee = ART_INLINE[kind + '/' + id];
+  return embarquee || (ART_PATHS[kind] + id + ART_EXT);
+}
+
 /* Hachage stable (FNV-1a) : même id → même image, d'une partie à l'autre. */
 function artHash(str){
   let h = 0x811c9dc5;
@@ -301,7 +313,7 @@ function artEventBanner(id, famille){
   if(!id) return '';
   const fb = artAttr(artScene(id, famille));
   return `<div class="event-illu-wrap"><img class="event-illu" alt="" loading="lazy"
-    src="${ART_PATHS.event}${id}${ART_EXT}" onerror="this.onerror=null;this.src=&quot;${fb}&quot;"></div>`;
+    src="${artAttr(artSource(id, 'event'))}" onerror="this.onerror=null;this.src=&quot;${fb}&quot;"></div>`;
 }
 
 /* Portrait seul, en médaillon — pour le combat, l'écran Personnage, une liste. */
@@ -309,7 +321,7 @@ function artPortraitImg(pnjId, className){
   if(!pnjId) return '';
   const fb = artAttr(artVisage(pnjId, artMetaPortrait(pnjId)));
   return `<img class="${className || 'portrait-img'}" alt="" loading="lazy"
-    src="${ART_PATHS.portrait}${pnjId}${ART_EXT}" onerror="this.onerror=null;this.src=&quot;${fb}&quot;">`;
+    src="${artAttr(artSource(pnjId, 'portrait'))}" onerror="this.onerror=null;this.src=&quot;${fb}&quot;">`;
 }
 
 /* Vignette de personnage : portrait + nom + rôle. */
