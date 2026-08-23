@@ -150,6 +150,22 @@ function applyEffets(e){
     ajusterAffinite(e.affinite.qui, e.affinite.n);
     tags.push(`<span class="reward-tag">Lien resserré</span>`);
   }
+  // Un compagnon ne s'impose plus : une scène le propose, le joueur décide.
+  if(e.compagnon){
+    const c = COMPANIONS_POOL[e.compagnon];
+    if(c && !hero.compagnons.some(x => x.id === c.id)){
+      hero.compagnons.push(c);
+      tags.push(`<span class="reward-tag">${c.nomCourt || c.nom} vous accompagne</span>`);
+    }
+  }
+  if(e.renvoyer){
+    const avant = hero.compagnons.length;
+    hero.compagnons = hero.compagnons.filter(x => x.id !== e.renvoyer);
+    if(hero.compagnons.length < avant){
+      const c = COMPANIONS_POOL[e.renvoyer];
+      tags.push(`<span class="reward-tag neg">${(c && (c.nomCourt || c.nom)) || e.renvoyer} s'en va</span>`);
+    }
+  }
   if(e.reputation){
     for(const [p, n] of Object.entries(e.reputation)){
       if(!n) continue;
@@ -415,8 +431,13 @@ let tramePending = false;
  * Yohan, puis l'intime. Les seuils du Livré tombent entre ceux de la trame — il
  * revient donc dans les tours où l'histoire respire, et jamais à sa place. */
 function trameDisponible(){
-  return EVENTS_TRAME.find(ev => conditionsRemplies(ev.requis))
+  // Les rencontres de compagnons passent devant : plusieurs jalons de la trame
+  // et tous les attachements supposent que quelqu'un soit là. Vient ensuite
+  // l'histoire, puis celui qui poursuit Yohan, puis la politique, puis l'intime.
+  return EVENTS_COMPAGNONS.find(ev => conditionsRemplies(ev.requis))
+      || EVENTS_TRAME.find(ev => conditionsRemplies(ev.requis))
       || EVENTS_NEMESIS.find(ev => conditionsRemplies(ev.requis))
+      || EVENTS_ISOLDE.find(ev => conditionsRemplies(ev.requis))
       || EVENTS_ROMANCE.find(ev => conditionsRemplies(ev.requis))
       || null;
 }
@@ -456,8 +477,10 @@ function trameProgres(){
   const romFaits = EVENTS_ROMANCE.filter(trameJouee).length;
   const nemTotal = EVENTS_NEMESIS.length;
   const nemFaits = EVENTS_NEMESIS.filter(trameJouee).length;
+  const isoTotal = EVENTS_ISOLDE.length;
+  const isoFaits = EVENTS_ISOLDE.filter(trameJouee).length;
   return { total, faits, prochain, romTotal, romFaits, nemTotal, nemFaits,
-           debloque: !!trameDisponible() };
+           isoTotal, isoFaits, debloque: !!trameDisponible() };
 }
 
 /* ============================= CONTRATS SPÉCIAUX ============================= */

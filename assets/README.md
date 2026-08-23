@@ -108,6 +108,26 @@ et se refont avec `python3 tools/decoupe-affiche.py`.
 | `ne_ce_quil_prend.webp` | — | Ce qu'il prend d'abord |
 | `ne_le_nom.webp` | — | Le nom qu'on lui donne |
 
+### L'arc d'Isolde
+
+| Fichier attendu | Fourni | Illustre |
+|---|---|---|
+| `is_invitation.webp` | — | L'invitation qui n'engage à rien |
+| `is_dossier.webp` | — | Ce qu'un carton peut faire |
+| `is_mariage.webp` | — | Le mariage qui manque |
+| `is_offre.webp` | — | Un nom rendu d'un trait de plume |
+| `is_etincelle.webp` | — | L'étincelle du Second Empire |
+
+### Rencontres de compagnons
+
+| Fichier attendu | Fourni | Illustre |
+|---|---|---|
+| `ec_alycia.webp` | — | Celle qui posait les bonnes questions |
+| `ec_alycia_2.webp` | — | La seconde fois qu'elle s'assied |
+| `ec_alarielle.webp` | — | L'émissaire qui n'est pas repartie |
+| `ec_alarielle_2.webp` | — | Ce qu'elle a laissé derrière elle |
+| `ec_separation.webp` | — | Ce qu'on finit par se dire |
+
 ### Campagnes et affaires personnelles
 
 | Fichier attendu | Fourni | Illustre |
@@ -139,6 +159,9 @@ et se refont avec `python3 tools/decoupe-affiche.py`.
 | `ro_alarielle_2.webp` | — | Ce qu'elle perdrait |
 | `ro_eleonore_1.webp` | — | Ce qui n'était pas dans le contrat |
 | `ro_eleonore_2.webp` | — | Une maison qui compte |
+| `ro_alycia_4.webp` | — | Ce qu'on décide de garder |
+| `ro_alarielle_3.webp` | — | La troisième convocation |
+| `ro_eleonore_3.webp` | — | Ce qu'une maison peut porter |
 
 ### Événements générés
 

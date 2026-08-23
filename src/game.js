@@ -24,18 +24,18 @@ function gainPointsSang(n){
 function triggerChapitre(idx){
   const ch = TRAME_CHAPITRES[idx];
   let extra = "";
-  if(idx===1 && !hero.compagnons.find(c=>c.id==='alycia')){
-    hero.compagnons.push(COMPANIONS_POOL.alycia);
-    extra = artPortraitCard('alycia') +
-      `<p style="margin-top:10px;color:var(--onde-bright);">Une femme se révèle à Yohan, comme si elle l'observait depuis longtemps : <b>Alycia de Callensbourg</b>. ${COMPANIONS_POOL.alycia.desc}</p>
-       <p style="font-family:'Inter',sans-serif;font-size:11.5px;color:var(--parchment-dim);">Elle se bat désormais aux côtés de Yohan — magie de l'Onde, offensive et vorace.</p>`;
+  // Les compagnons ne s'imposent plus au changement de chapitre : ils viennent
+  // par une rencontre écrite (src/data/events_compagnons.js) où l'on peut dire
+  // non. Le chapitre se contente d'annoncer que quelqu'un cherche Yohan.
+  if(idx === 1 && !hero.compagnons.find(c => c.id === 'alycia') && !hasFlag('ec_alycia_fait')){
+    extra = `<p style="margin-top:10px;color:var(--onde-bright);">Quelqu'un remonte la piste de Yohan depuis des semaines,
+      et ce quelqu'un n'est pas un chasseur de primes : les questions posées sont trop précises pour de l'argent.</p>`;
   }
-  if(idx===2 && !hero.compagnons.find(c=>c.id==='alarielle')){
-    hero.compagnons.push(COMPANIONS_POOL.alarielle);
-    extra = artPortraitCard('alarielle') +
-      `<p style="margin-top:10px;color:var(--onde-bright);">Une émissaire d'Eltharion attend Yohan aux abords des ruines : <b>Princesse Alarielle</b>. ${COMPANIONS_POOL.alarielle.desc}</p>
-       <p style="font-family:'Inter',sans-serif;font-size:11.5px;color:var(--parchment-dim);">Elle apporte la magie ancienne des Elfes — soin, protection et frappe en zone. Un arbre de pouvoirs que le sang Paria ne peut pas toucher.</p>`;
+  if(idx === 2 && !hero.compagnons.find(c => c.id === 'alarielle') && !hasFlag('ec_alarielle_fait')){
+    extra = `<p style="margin-top:10px;color:var(--onde-bright);">Une émissaire d'Eltharion a demandé où l'on pouvait trouver
+      le dernier des Karlsberg. On lui a répondu que personne ne le savait. Elle a remercié et n'est pas repartie.</p>`;
   }
+
   const box = document.getElementById('eventModalBox');
   if(ch.fin){
     // La chronique ne s'arrête pas sur un compteur : elle rend son verdict.
@@ -321,6 +321,7 @@ hero.tensions = {
 };
 hero.crisesDeclenchees = new Set();
 hero.reputations = { ...REPUTATION_DEPART };
+hero.dossiers = {};   // affaires locales réglées, par lieu
 
 function dateFromSemaines(s){
   const saisonIdx = Math.floor(s/13)%4;
@@ -936,6 +937,7 @@ function renderContratsSpeciaux(){
 
 function renderContracts(){
   renderContratsSpeciaux();
+  renderAffairesLocales();
   const list = document.getElementById('contractList');
   list.innerHTML = '';
   CONTRACTS.forEach(c=>{
@@ -1217,6 +1219,8 @@ function renderContractStep(){
       const looted = grantLoot();
       if(looted) lootHtml = `<p style="margin-top:8px;color:var(--onde-bright);">Butin trouvé : <b>${looted.nom}</b> — ${looted.desc}.</p>`;
     }
+    // Une affaire locale ratée reste une affaire réglée pour ceux qui vivent là.
+    noterAffaireReglee(c);
     body.innerHTML = `<p class="narrative">${msg}</p>${lootHtml}<div style="margin-top:14px;"><button class="ghost" id="doneBtn">Retour au registre</button></div>`;
     document.getElementById('doneBtn').onclick = () => { renderEquipement(); showScreen('contrats'); };
     return;

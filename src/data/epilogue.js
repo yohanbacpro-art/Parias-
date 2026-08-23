@@ -344,6 +344,36 @@ const EPI_GENS = [
     et raconta toute sa vie qu'un loup l'avait portée jusqu'à la route.` },
 ];
 
+/* ============================= L'EMPIRE ============================= */
+/* Ce que devient Astrah, et ce qu'Isolde en a fait. N'apparaît que si Yohan a
+ * su qu'elle existait. */
+const EPI_EMPIRE = [
+  { si:{flags:['yohan_du_second_empire']},
+    texte:`Le <b>Second Empire</b> n'eut pas de date de fondation : il eut un procès-verbal, au point
+    sept d'un ordre du jour, et un comte Paria debout dans la pièce d'à côté. Isolde de Varenne
+    gouverna trente et un ans sans jamais porter de couronne, et Karlsberg fut cité dans chaque
+    manuel de droit comme la preuve que l'ordre nouveau réparait ce que l'ancien avait cassé.` },
+  { si:{flags:['second_empire'], sansFlags:['yohan_du_second_empire']},
+    texte:`Le <b>Second Empire</b> naquit sans qu'un coup soit tiré, et personne dans les campagnes
+    ne s'en aperçut avant l'hiver. Ce qui changea pour Karlsberg tint dans une ligne d'en-tête sur
+    un formulaire d'impôt. C'était tout. C'était toujours tout.` },
+  { si:{flags:['isolde_brisee']},
+    texte:`<b>Isolde de Varenne</b> perdit quatre ans de travail en une après-midi, et trois maisons
+    avec. Elle recommença — elle recommençait toujours — mais avec une réputation d'imprudence dont
+    elle ne se défit jamais tout à fait. Il n'y eut pas de Second Empire cette génération-là.` },
+  { si:{flags:['isolde_ecartee']},
+    texte:`Léopold IV fit suspendre la session par ordonnance à la sixième heure. C'était illégal et
+    ce fut efficace : cela lui coûta trois maisons et deux provinces, et lui acheta onze ans.
+    <b>Isolde</b> attendit onze ans. Elle savait attendre.` },
+  { si:{flags:['isolde_refusee']},
+    texte:`<b>Isolde de Varenne</b> arriva où elle voulait, sans Yohan et sans lui en vouloir. Elle
+    lui écrivit une fois par an, chaque hiver, des lettres qui ne demandaient jamais rien — ce qui,
+    de sa part, était la plus haute marque d'estime qu'elle sût donner.` },
+  { si:{flags:['isolde_connue']},
+    texte:`<b>Isolde de Varenne</b> poursuivit son travail dans une pièce pleine de cartons, sans
+    lever d'armée, et Yohan ne sut jamais avec certitude si le monde qui lui succéda était le sien.` },
+];
+
 /* ============================= CELUI QUI SUIVAIT ============================= */
 /* Le fil du Livré. Il n'apparaît que si Yohan a su qu'il existait. */
 const EPI_NEMESIS = [
@@ -433,6 +463,12 @@ const EPI_LEGS = [
     texte:`Ce qu'un chasseur avait mis vingt ans à écrire ne se reperd pas : on sait désormais
     comment on traque un porteur de l'Onde, donc comment on ne l'est pas. 5 de Renom et 60 pièces
     d'avance, et des routes qu'on sait prendre.` },
+  { id:'nom_ecrit', nom:'Un nom au registre',
+    si:{unDes:['karlsberg_legalise','yohan_du_second_empire']},
+    effet:{or:200, renom:5},
+    texte:`Une maison inscrite quelque part reste inscrite : les greffes se recopient, et personne ne
+    relit. 200 pièces d'or et 5 de Renom d'avance, et des portes qui s'ouvrent sans qu'on explique
+    qui l'on est.` },
   { id:'main_tendue', nom:'Une main tendue',
     si:{unDes:['reseau_parias','sans_nom_leves','crise_parias_reglee']},
     effet:{talentPoints:1},

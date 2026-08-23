@@ -7,7 +7,7 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V1.0** — les vraies illustrations : 13 portraits et 10 bandeaux peints, embarqués dans le fichier unique.
+**Version actuelle : V1.1** — Isolde et le Second Empire, le consentement des compagnons, les conclusions d'attachement, et 60 affaires ancrées sur la carte.
 
 ## Lancer le jeu
 
@@ -34,13 +34,16 @@ lien. Il se régénère avec `node tools/build-standalone.js`.
 | **Armée** : 7 troupes recrutables, pertes et entretien persistants | ✅ |
 | **Campagnes** : 6 contrats de général menant à une bataille | ✅ |
 | **Affaires personnelles** : 3 contrats piégés par ceux qui vous en veulent | ✅ |
-| **Attachements** : 3 arcs relationnels, 7 étapes, affinité par les choix | ✅ |
+| **Attachements** : 3 arcs relationnels, 10 étapes dont 3 conclusions | ✅ |
 | **Événements de lieu** : 44 récits ramifiés, au moins quatre par lieu | ✅ |
 | **Réputation** : ce que chaque peuple pense de vous, et ce que ça coûte | ✅ |
 | **Économie** : marchands par peuple, prix par réputation, butin de bataille | ✅ |
 | **Rencontres** : 8 figures du Codex, croisées ou affrontées | ✅ |
 | **Jalons de trame** : 11 étapes d'histoire qui se débloquent seules | ✅ |
 | **L'arc du Livré** : un nemesis en 5 jalons, 5 issues, un duel à règle propre | ✅ |
+| **L'arc d'Isolde** : le Second Empire par les registres, 5 jalons, 5 issues | ✅ |
+| **Affaires locales** : 60 contrats sur les 20 lieux, 20 dénouements qui changent l'endroit | ✅ |
+| **Recrutement consenti** : chaque compagnon s'accepte, se refuse, et se congédie | ✅ |
 | 349 scènes, 213 choix, 23 affrontements, 6 batailles au total | ✅ |
 | **Combattants nommés** : 9 champions hors bestiaire | ✅ |
 | Événements générés (200 variantes) — remplissage quand les écrits sont épuisés | ✅ |
@@ -229,6 +232,7 @@ Cinq sections, toutes conditionnelles :
 - **Ceux qui restaient** — cumulatif : chaque personne dont Yohan a croisé la
   route et laissé une trace, compagnes et princes compris.
 - **Celui qui suivait** — ce que devient le Livré, selon ce que Yohan lui a fait.
+- **Ce qu'il advint de l'Empire** — le Second Empire, ou son absence.
 - **Ce qui suivait** — le fil de l'Onde, selon ce qu'il en a compris.
 - **Ce qui se transmet** — les legs mérités, et rien d'autre.
 
@@ -241,6 +245,63 @@ manuel libre — elle reste jouable — et transmet ce qu'elle a mérité : de l
 pour un nom reconnu, du Renom pour une réputation d'armes, un point de talent
 pour avoir compris le cycle ou sorti les siens de l'ombre. On garde le legs le
 plus riche jamais obtenu, pas le dernier : recommencer ne fait jamais reculer.
+
+## Les affaires locales
+
+Le registre général reste ce qu'il est : cinquante affaires venues d'ailleurs,
+interchangeables par construction. Leur défaut n'était pas la répétition —
+c'était que leurs lieux (« marais de Sombreval », « contreforts nains »)
+**n'existent nulle part sur la carte**. On ne reconnaissait donc rien.
+
+Chaque lieu de Vardhen a désormais **trois affaires à lui**, avec ses gens, ses
+ennuis et un commanditaire qui habite là : la solde amputée de Fort-aux-Princes,
+l'étai non posé de Kar-Durak, le puits empoisonné du clan Serth, le faux feu de
+la Côte des Dents.
+
+Et surtout elles **vont quelque part**. Les trois affaires d'un lieu forment un
+**dossier**. Les trois réglées — réussies ou non, ceux qui vivent là ne font pas
+la différence — un **dénouement** se déclenche : une scène écrite où l'on décide
+ce que devient l'endroit. Ce choix reste : il pose un marqueur, déplace une
+réputation, et se relit dans l'épilogue, qui compte les lieux menés au bout.
+
+Relever l'enceinte de Karlsberg ou céder ses pierres au hameau. Porter le dossier
+de la garnison à la citadelle, le confier au sergent-major, ou le vendre au
+capitaine. Refermer l'ossuaire khesh, le faire lire par un érudit, ou en vendre
+l'emplacement à Port-Noir. **60 affaires, 20 dénouements, 60 issues.**
+
+## Isolde de Varenne — le Second Empire
+
+Le troisième pôle politique, et le seul qui ne se combat pas. Lucius veut
+l'Empire par les armes ; le Livré veut la fin du sang Paria ; **Isolde veut
+l'Empire par les registres** — et elle l'aura probablement, que Yohan y
+participe ou non.
+
+Son arme est exactement celle qui a effacé Karlsberg : le papier. C'est tout le
+sujet de l'arc. Au quatrième jalon, elle pose sur la table un acte qui restaure
+la maison Karlsberg **avec effet rétroactif** — quarante ans de proscription
+requalifiés en erreur administrative. Il tient en une page et demie. Accepter,
+c'est reconnaître que le trait de plume décide de qui existe.
+
+Cinq jalons, intercalés dans les creux de la trame. Cinq issues : signer les deux
+pages, n'en signer qu'une (il faut lui vendre son propre argument), refuser,
+publier le dossier des soldes fantômes pour la briser, ou prévenir le Roi de
+Cendre. Le Second Empire naît ou ne naît pas, et l'épilogue le dit.
+
+## Les compagnons
+
+Alycia et Alarielle **s'imposaient** au changement de chapitre : elles
+apparaissaient dans le groupe sans qu'on ait rien dit. C'est réparé.
+
+Chacune arrive par une rencontre où l'on peut dire non — un vrai non, qui la
+fait repartir. Un refus n'est pas définitif : chacune revient **une seconde et
+dernière fois**, plus tard, dans des circonstances qui ne ressemblent pas aux
+premières. Et l'on peut congédier quelqu'un qu'on avait accepté : quand la
+Suspicion monte trop haut, Alycia pose elle-même la question du calcul.
+
+Les trois attachements ont maintenant une **conclusion** : ce qui a été tissé
+doit être nommé ou renoncé. Alycia doit choisir entre les routes et les murs ;
+Alarielle reçoit une troisième convocation qui la fait cesser d'être princesse ;
+Éléonore arrive enceinte et demande où l'enfant doit naître.
 
 ## Le Livré — le nemesis
 
@@ -333,6 +394,7 @@ src/game.js           boucle de tour, monde, personnage, contrats
 src/save.js           emplacements, métadonnées, migrations, intégrité
 src/epilogue.js       verdict de fin de chronique et héritage
 src/reputation.js     rangs, prix, accueil hostile, écran des peuples
+src/contrats_locaux.js  dossiers par lieu, dénouements, registre local
 src/combat.js         moteur de combat de groupe (party vs adversaires)
 src/events_runner.js  déroulement des événements écrits et générés
 src/battle.js         moteur de bataille rangée (fronts, ordres, moral)
@@ -347,6 +409,9 @@ src/data/
   events_meetings.js  8 rencontres avec les figures du Codex
   events_trame.js     11 jalons de la quête principale
   events_nemesis.js   5 jalons de l'arc du Livré
+  events_isolde.js    5 jalons de l'arc d'Isolde
+  events_compagnons.js  recrutement consenti, seconde offre, séparation
+  contrats_locaux.js  60 affaires sur les 20 lieux + 20 dénouements
   champions.js        9 combattants nommés (hors bestiaire)
   contracts_special.js 6 campagnes + 3 affaires personnelles
   romances.js         3 arcs relationnels, 7 étapes
@@ -369,6 +434,7 @@ tools/smoke-epilogue.js    éprouve les fins et l'héritage
 tools/smoke-campagnes.js   éprouve les campagnes majeures et la trame
 tools/smoke-nemesis.js     éprouve l'arc du Livré, le Sillage et ses issues
 tools/smoke-monde.js       éprouve la réputation, les marchands et la 2e vague
+tools/smoke-arcs.js        éprouve Isolde, les compagnons, les liens et les dossiers
 tools/manifest-assets.js   régénère assets/README.md (avec ce qui est fourni)
 ```
 
@@ -387,6 +453,7 @@ node tools/smoke-epilogue.js                 # deux fins opposées + héritage
 node tools/smoke-campagnes.js                # campagnes majeures et trame complète
 node tools/smoke-nemesis.js                  # l'arc du Livré, le Sillage, ses cinq fins
 node tools/smoke-monde.js                    # réputation, marchands, couverture des lieux
+node tools/smoke-arcs.js                     # Isolde, compagnons, attachements, dossiers
 
 node tools/manifest-assets.js                # régénère la liste des illustrations
 ```

@@ -435,4 +435,237 @@ const EVENTS_ROMANCE = [
   }
 },
 
+/* ══════════════════ CONCLUSIONS ══════════════════
+ * Chaque arc a maintenant une fin — une scène tardive où ce qui a été tissé
+ * doit être nommé, ou renoncé. L'épilogue lit les marqueurs qu'elles posent :
+ * un attachement qui n'aboutit à rien reste un attachement, mais il ne s'écrit
+ * pas de la même façon dans la dernière page. */
+
+{
+  id:"RO_ALYCIA_4", titre:"Ce qu'on décide de garder", famille:"PARIA", rarete:"épique",
+  image:"ro_alycia_4",
+  requis:{ compagnon:"alycia", affinite:{qui:"alycia", min:8}, flags:["ro_alycia_3_fait"],
+           sangMin:168, sansFlags:["ro_alycia_4_fait"] },
+  scenes:{
+    start:{
+      pnj:"alycia",
+      texte:[
+        "Karlsberg tient debout. C'est nouveau, et cela change tout : pour la première fois depuis qu'ils se sont rencontrés, il y a un endroit où l'on pourrait simplement rester.",
+        "Elle a passé la journée à ne pas s'asseoir. Elle vérifie des choses qui n'ont pas besoin d'être vérifiées.",
+        "« Je ne sais pas faire ça », finit-elle par dire, dos tourné. « Les murs. Les gens qui reviennent au même endroit tous les soirs. J'ai passé dix-neuf ans à ne pas dormir deux fois sous le même toit. »",
+        "« Je peux repartir sur les routes demain, et je serai excellente. Ou je peux rester ici et être très mauvaise pendant des années. » Elle se retourne enfin. « Je te demande laquelle des deux tu veux, et je te préviens que je vais faire celle que tu dis. »"
+      ],
+      choix:[
+        {label:"Lui dire de rester", detail:"Mauvaise pendant des années, et là",
+         suite:"reste", effets:{affinite:{qui:"alycia", n:4}, sang:16, xp:90,
+           flags:["ro_alycia_4_fait","alycia_restee","alycia_amants"]}},
+        {label:"Lui dire de repartir, et l'attendre", detail:"Excellente, et loin",
+         suite:"routes", effets:{affinite:{qui:"alycia", n:3}, sang:14, xp:84,
+           flags:["ro_alycia_4_fait","alycia_routes"], reputation:{parias:12}}},
+        {label:"Refuser de choisir à sa place", detail:"Jet de Volonté (17) · c'est exactement ce qu'elle demande",
+         test:{stat:"vol", dc:17}, reussite:"choisit_ok", echec:"choisit_ko"},
+      ]
+    },
+    reste:{
+      pnj:"alycia",
+      texte:[
+        "« Reste. »",
+        "Elle hoche la tête, va s'asseoir, et se relève au bout de dix secondes pour aller vérifier autre chose.",
+        "Cela lui prendra quatre ans. Quatre ans de nuits mal dormies, de sursauts, de sorties à trois heures du matin pour faire le tour de l'enceinte. Elle ne s'en plaindra pas une fois.",
+        "La cinquième année, un matin d'hiver, Yohan la trouvera endormie près du feu, sans arme à portée de main, et il restera un long moment sans bouger pour ne pas gâcher ça."
+      ],
+      fin:true
+    },
+    routes:{
+      pnj:"alycia",
+      texte:[
+        "« Repars. Tu es meilleure là-bas et nous le savons tous les deux. »",
+        "Elle encaisse — parce que c'est ce qu'elle voulait entendre et que ce n'est pas ce qu'elle espérait.",
+        "« Tu m'attendras. » Ce n'est pas une question. — « Oui. »",
+        "Elle repart au printemps. Elle reviendra deux fois par an, jamais aux mêmes dates, avec des gens derrière elle à chaque fois. En douze ans, elle amènera à Karlsberg soixante et onze personnes qui n'avaient nulle part où aller.",
+        "Ils vieilliront comme ça, à distance, et personne n'osera jamais leur dire que ce n'était pas une vraie vie de couple."
+      ],
+      fin:true
+    },
+    choisit_ok:{
+      pnj:"alycia",
+      texte:[
+        "« Non. »",
+        "Elle se raidit. « Comment ça, non ? »",
+        "« Tu me demandes de décider pour que ce ne soit pas ta faute si tu te trompes. Je ne le ferai pas. »",
+        "Le silence dure très longtemps. Puis elle rit — un rire bref, contrarié, sincère.",
+        "« Tu es odieux. » Elle se rassied. « Bon. Alors je reste jusqu'au printemps et on verra. »",
+        "Le printemps venu, elle restera. Elle prétendra toujours que c'était provisoire, et elle le prétendra pendant quarante ans."
+      ],
+      effets:{affinite:{qui:"alycia", n:5}, sang:20, xp:100,
+        flags:["ro_alycia_4_fait","alycia_restee","alycia_amants","alycia_choisie"]},
+      fin:true
+    },
+    choisit_ko:{
+      pnj:"alycia",
+      texte:[
+        "Yohan essaie de lui renvoyer la question et s'y prend de travers : cela sonne comme une dérobade, et elle l'entend comme une dérobade.",
+        "« D'accord. » Elle ramasse son sac. « Je vais faire celle où je suis excellente, alors. »",
+        "Elle repart le lendemain. Elle reviendra, souvent, et ce sera toujours un peu compliqué."
+      ],
+      effets:{affinite:{qui:"alycia", n:-1}, sang:10, xp:66, flags:["ro_alycia_4_fait","alycia_routes"]},
+      fin:true
+    },
+  }
+},
+
+{
+  id:"RO_ALARIELLE_3", titre:"La troisième convocation", famille:"ELFE", rarete:"épique",
+  image:"ro_alarielle_3",
+  requis:{ compagnon:"alarielle", affinite:{qui:"alarielle", min:7}, flags:["ro_alarielle_2_fait"],
+           sangMin:140, sansFlags:["ro_alarielle_3_fait"] },
+  scenes:{
+    start:{
+      pnj:"alarielle",
+      texte:[
+        "Le pli est sur la table depuis quatre jours et personne n'en parle.",
+        "Ce n'est plus une convocation : c'est une sommation, scellée du sceau de la Cour, avec une date. Passé cette date, la princesse Alarielle cesse d'être princesse — pas exilée, pas punie : *retirée des registres*, ce qui chez les elfes revient au même et prend cinq secondes.",
+        "« Quatre-vingts ans d'archives », dit-elle enfin. « Trois lignes suffiront à les défaire. »",
+        "Elle regarde Yohan. « Tu sais ce que c'est, toi. Mieux que personne. C'est même la seule chose que nos deux peuples aient jamais eue en commun. »"
+      ],
+      choix:[
+        {label:"Lui dire d'y aller", detail:"Sa cour, sa vie, ses quatre-vingts ans",
+         suite:"va", effets:{affinite:{qui:"alarielle", n:2}, sang:14, xp:80,
+           flags:["ro_alarielle_3_fait","alarielle_rentree"], reputation:{elfes:14}}},
+        {label:"Lui dire de brûler la sommation", detail:"Elle cessera d'être princesse",
+         suite:"brule", effets:{affinite:{qui:"alarielle", n:4}, sang:18, xp:90,
+           flags:["ro_alarielle_3_fait","alarielle_restee"], reputation:{elfes:-12}}},
+        {label:"Y aller avec elle", detail:"Jet de Volonté (18) · un Paria devant la Cour lumineuse",
+         test:{stat:"vol", dc:18}, reussite:"ensemble_ok", echec:"ensemble_ko"},
+      ]
+    },
+    va:{
+      pnj:"alarielle",
+      texte:[
+        "« Vas-y. Quatre-vingts ans, ça ne se jette pas parce qu'on est fatigué un mardi. »",
+        "Elle part. Elle plaide sa cause devant la Cour pendant onze jours — les elfes ne se pressent pas — et elle gagne, à moitié : elle reste princesse et perd le droit de quitter Eltharion sans autorisation.",
+        "Elle écrira. Beaucoup. Deux lettres par saison pendant des décennies, sur du papier qui ne jaunit pas, et Yohan les gardera toutes.",
+        "Elle obtiendra son autorisation de voyage soixante-douze ans plus tard. Il sera mort depuis longtemps. Elle viendra quand même."
+      ],
+      fin:true
+    },
+    brule:{
+      pnj:"alarielle",
+      texte:[
+        "« Brûle-la. »",
+        "Elle a un mouvement de recul — puis elle prend le pli, le regarde longuement, et le pose dans l'âtre sans le décacheter.",
+        "Le sceau fond en premier. C'est plus long qu'on ne croit.",
+        "« Je ne suis plus rien », dit-elle en regardant le papier noircir. Elle n'a pas l'air malheureuse. Elle a l'air d'une femme qui vient de poser quelque chose de très lourd.",
+        "« Tu es quelqu'un. » — « Oui. » Elle se redresse. « C'est nouveau. »",
+        "Eltharion la retirera des registres à la date prévue. Elle ne le saura jamais avec certitude et ne cherchera pas à savoir."
+      ],
+      fin:true
+    },
+    ensemble_ok:{
+      pnj:"alarielle",
+      texte:[
+        "« J'y vais avec toi. »",
+        "« Tu es un Paria. » — « Oui. » — « Devant la Cour lumineuse. » — « Oui. »",
+        "Elle ouvre la bouche pour expliquer pourquoi c'est absurde, et ne trouve rien à dire qui ne soit pas de la peur.",
+        "Ils y vont. Yohan se tient au fond de la salle pendant onze jours, sans arme, sans un mot, sous le regard de quatre cents elfes qui n'ont jamais vu ça.",
+        "Le onzième jour, un vieux conseiller demande à Alarielle pourquoi elle a amené *ça*. Elle répond : « Pour que vous soyez obligés de le regarder pendant que vous décidez. »",
+        "Ils décideront de la laisser partir. Ce ne sera pas de la clémence : ce sera de la gêne, ce qui, chez les elfes, dure beaucoup plus longtemps.",
+        "Elle garde son titre. Elle garde sa liberté. Et pour la première fois depuis quatre siècles, il y a eu un Paria dans cette salle et personne ne l'a fait sortir."
+      ],
+      effets:{affinite:{qui:"alarielle", n:5}, sang:24, xp:110,
+        flags:["ro_alarielle_3_fait","alarielle_restee","alarielle_amants","cour_elfique_connue"],
+        reputation:{elfes:18, parias:10}},
+      fin:true
+    },
+    ensemble_ko:{
+      pnj:"alarielle",
+      texte:[
+        "« J'y vais avec toi. »",
+        "Elle refuse net, et elle a raison, et il insiste, et il a tort.",
+        "Ils y vont. La Cour le fait attendre dehors onze jours sous la pluie, poliment, avec des repas apportés à heure fixe. C'est humiliant d'une façon qu'aucun coup ne pourrait égaler.",
+        "Elle garde son titre. Elle ne parlera plus jamais de ces onze jours."
+      ],
+      effets:{affinite:{qui:"alarielle", n:-1}, sang:12, xp:70,
+        flags:["ro_alarielle_3_fait","alarielle_rentree"], reputation:{elfes:6}},
+      fin:true
+    },
+  }
+},
+
+{
+  id:"RO_ELEONORE_3", titre:"Ce qu'une maison peut porter", famille:"POLITIQUE", rarete:"épique",
+  image:"ro_eleonore_3",
+  requis:{ affinite:{qui:"eleonore", min:8}, flags:["ro_eleonore_2_fait"],
+           sangMin:158, sansFlags:["ro_eleonore_3_fait"] },
+  scenes:{
+    start:{
+      pnj:"eleonore",
+      texte:[
+        "Elle a fait le voyage elle-même, ce qu'une dame de Valombre ne fait pas, et elle est arrivée sans escorte, ce qu'elle ne fait jamais.",
+        "« Je suis enceinte », dit-elle avant même de s'asseoir. « De quatre mois. Et avant que vous ne disiez quoi que ce soit d'idiot : oui, et je le savais en venant la dernière fois. »",
+        "Elle pose ses gants. « Voici la situation exacte, sans arrangement. Si l'enfant naît à Valombre, il est légitime, il hérite, et il porte le sang Paria dans une maison impériale — ce qui, le jour où quelqu'un s'en apercevra, tuera la maison et l'enfant avec. »",
+        "« S'il naît ici, il n'hérite de rien, il vit traqué, et il est à vous. »",
+        "« Je n'ai pas encore décidé. C'est pour ça que je suis venue. »"
+      ],
+      choix:[
+        {label:"Qu'il naisse à Valombre, et qu'on n'en parle jamais", detail:"Un héritier · et un secret qui tiendra ou pas",
+         suite:"valombre", effets:{affinite:{qui:"eleonore", n:3}, sang:20, xp:96,
+           flags:["ro_eleonore_3_fait","heritier_valombre","alliance_valombre"], reputation:{humains:10}}},
+        {label:"Qu'il naisse ici, et qu'il porte le nom Karlsberg", detail:"Rien à hériter · tout à porter",
+         suite:"karlsberg", effets:{affinite:{qui:"eleonore", n:4}, sang:24, xp:104,
+           flags:["ro_eleonore_3_fait","heritier_karlsberg"], reputation:{parias:16, humains:-8}}},
+        {label:"Lui dire que ce n'est pas à lui de trancher", detail:"Jet de Volonté (16)",
+         test:{stat:"vol", dc:16}, reussite:"elle_ok", echec:"elle_ko"},
+      ]
+    },
+    valombre:{
+      pnj:"eleonore",
+      texte:[
+        "« À Valombre. Et personne ne le sait jamais. »",
+        "Elle ferme les yeux une seconde — du soulagement, et elle en a honte, et cela se voit.",
+        "« Vous ne le verrez pas grandir. » — « Je sais. »",
+        "L'enfant naîtra en hiver. Ce sera une fille. Elle héritera de Valombre à vingt-trois ans et la gouvernera mieux que sa mère, ce qui n'est pas rien.",
+        "À quarante ans, un soir d'orage, elle fera trembler les vitres d'une pièce sans les toucher, et passera le reste de sa vie à ne le dire à personne."
+      ],
+      fin:true
+    },
+    karlsberg:{
+      pnj:"eleonore",
+      texte:[
+        "« Ici. Et il porte le nom. »",
+        "Elle met un long moment à répondre. « Vous savez ce que vous lui donnez ? Une maison en ruine et une prime sur la tête. »",
+        "« Je lui donne le droit de savoir ce qu'il est. » Yohan soutient son regard. « Personne ne me l'a donné. Je l'ai découvert à onze ans en voyant brûler ma famille. »",
+        "Éléonore de Valombre reste. Elle perd sa maison, son rang et ses revenus dans l'année — sa famille la déclare morte, ce qui est plus propre qu'un scandale.",
+        "Elle vivra à Karlsberg vingt-huit ans, dirigera la reconstruction avec une compétence terrifiante, et n'exprimera jamais un seul regret à voix haute."
+      ],
+      fin:true
+    },
+    elle_ok:{
+      pnj:"eleonore",
+      texte:[
+        "« Ce n'est pas à moi de trancher. »",
+        "« Je sais. » Elle a l'air presque en colère. « Je voulais que vous le disiez quand même. »",
+        "« Pourquoi ? » — « Parce que tout le monde décide toujours pour moi. Mon père, ma maison, l'Empire. Je voulais savoir si vous étiez comme eux. »",
+        "Elle reprend ses gants. « Vous ne l'êtes pas. C'est extrêmement contrariant : cela veut dire que c'est vraiment moi qui vais devoir choisir. »",
+        "Elle choisira Valombre. Elle reviendra chaque année, un mois, sous prétexte de chasse. Yohan verra sa fille grandir un mois par an pendant dix-neuf ans et n'aura jamais le droit de lui dire qui il est.",
+        "Le vingtième été, c'est la petite qui le lui dira."
+      ],
+      effets:{affinite:{qui:"eleonore", n:5}, sang:26, xp:110,
+        flags:["ro_eleonore_3_fait","heritier_valombre","alliance_valombre","eleonore_choisie"],
+        reputation:{humains:12}},
+      fin:true
+    },
+    elle_ko:{
+      pnj:"eleonore",
+      texte:[
+        "Yohan renvoie la décision, mal, avec des précautions qui sonnent comme de la fuite.",
+        "Elle l'entend ainsi. « Très bien. » Elle remet ses gants. « Alors ce sera Valombre, et vous n'en entendrez plus parler. »",
+        "Elle tiendra parole pendant onze ans. Puis il y aura une lettre, très courte, qui commencera par : *Elle vous ressemble et cela devient un problème.*"
+      ],
+      effets:{sang:14, xp:78, flags:["ro_eleonore_3_fait","heritier_valombre"]},
+      fin:true
+    },
+  }
+},
+
 ];

@@ -133,14 +133,16 @@ function verifie(nom, condition, detail){
     const enr = lireSlot('s2');
     if(!enr) return { relu:false };
     const charge = chargerDepuis('s2');
-    return { relu:true, charge, version: enr.version, niveau: hero.niveau,
-             reputations: hero.reputations, meta: listerSlots().find(s => s.id === 's2').meta };
+    return { relu:true, charge, version: enr.version, attendue: SAVE_VERSION, niveau: hero.niveau,
+             reputations: hero.reputations, dossiers: hero.dossiers,
+             meta: listerSlots().find(s => s.id === 's2').meta };
   });
   verifie("l'ancien emplacement est retrouvé", r4b.relu && r4b.charge, r4b);
-  verifie('il est migré en version courante', r4b.version === 4, r4b.version);
+  verifie('il est migré en version courante', r4b.version === r4b.attendue, [r4b.version, r4b.attendue]);
   verifie('la réputation manquante est comblée',
     r4b.reputations && r4b.reputations.parias === 10 && r4b.reputations.nains === 0, r4b.reputations);
   verifie('la partie reste jouable au niveau 9', r4b.niveau === 9, r4b.niveau);
+  verifie('les dossiers locaux sont initialisés', r4b.dossiers && typeof r4b.dossiers === 'object', r4b.dossiers);
   await ctx4b.close();
 
   /* ---------- 5. Stockage refusé : le jeu le dit ---------- */

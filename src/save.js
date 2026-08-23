@@ -19,10 +19,10 @@
  * reconstruits au chargement (voir CHAMPS_SET).
  */
 
-const SAVE_VERSION = 4;
-const SAVE_PREFIX  = 'parias_save_v4_';
+const SAVE_VERSION = 5;
+const SAVE_PREFIX  = 'parias_save_v5_';
 const SAVE_LEGACY  = 'parias_vardhen_save_v1';   // format d'avant les emplacements
-const SAVE_PREFIXES_ANCIENS = ['parias_save_v3_'];   // relus une fois, puis migrés
+const SAVE_PREFIXES_ANCIENS = ['parias_save_v4_', 'parias_save_v3_'];   // relus une fois, puis migrés
 const SLOTS = [
   { id:'auto', nom:'Automatique', auto:true },
   { id:'s1',   nom:'Emplacement 1' },
@@ -70,6 +70,7 @@ function reconstruireHero(brut){
   h.armee             = h.armee || [];
   h.affinites         = h.affinites || {};
   h.reputations       = { ...REPUTATION_DEPART, ...(h.reputations || {}) };
+  h.dossiers          = h.dossiers || {};
   h.compagnons        = (h.compagnons || []).map(c => COMPANIONS_POOL[c.id] || c);
   h.temps             = h.temps || { semaines: 0 };
   h.chroniques        = h.chroniques || [];
@@ -114,6 +115,11 @@ const MIGRATIONS = {
   3: enr => {           // v3 → v4 : la réputation auprès des huit peuples
     enr.hero.reputations = { ...REPUTATION_DEPART, ...(enr.hero.reputations || {}) };
     enr.version = 4;
+    return enr;
+  },
+  4: enr => {           // v4 → v5 : les dossiers locaux
+    enr.hero.dossiers = enr.hero.dossiers || {};
+    enr.version = 5;
     return enr;
   },
 };

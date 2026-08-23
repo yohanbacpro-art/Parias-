@@ -18,8 +18,9 @@ const fichiers = [
   'src/data/units.js', 'src/data/battles.js',
   'src/data/events_written.js', 'src/data/events_written_2.js',
   'src/data/events_meetings.js', 'src/data/events_trame.js',
-  'src/data/contracts_special.js', 'src/data/romances.js',
-  'src/data/events_nemesis.js', 'src/data/reputation.js', 'src/data/epilogue.js',
+  'src/data/contracts_special.js', 'src/data/contrats_locaux.js', 'src/data/romances.js',
+  'src/data/events_compagnons.js', 'src/data/events_nemesis.js', 'src/data/events_isolde.js',
+  'src/data/reputation.js', 'src/data/epilogue.js',
 ];
 
 const ctx = vm.createContext({ console });
@@ -32,17 +33,21 @@ for(const f of fichiers){
 const {
   BESTIARY_FULL, PORTRAITS, LOCATIONS, EVENTS, CONTRACTS, ITEM_POOL,
   EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME, CONTRATS_SPECIAUX, EVENTS_ROMANCE,
-  EVENTS_NEMESIS, TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS,
+  EVENTS_NEMESIS, EVENTS_ISOLDE, EVENTS_COMPAGNONS,
+  TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS,
   UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART,
   REPUTATION_DEPART, RANGS_REPUTATION, LOC_PEUPLE, REPUTATION_VOIX, SHOPS, BUTIN_PAR_PEUPLE,
-  EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_ONDE, EPI_LEGS,
+  CONTRATS_LOCAUX, CONTRACT_COMPLICATIONS,
+  EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_ONDE, EPI_LEGS,
 } = vm.runInContext(`({
   BESTIARY_FULL, PORTRAITS, LOCATIONS, EVENTS, CONTRACTS, ITEM_POOL,
   EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME, CONTRATS_SPECIAUX, EVENTS_ROMANCE,
-  EVENTS_NEMESIS, TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS,
+  EVENTS_NEMESIS, EVENTS_ISOLDE, EVENTS_COMPAGNONS,
+  TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS,
   UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART,
   REPUTATION_DEPART, RANGS_REPUTATION, LOC_PEUPLE, REPUTATION_VOIX, SHOPS, BUTIN_PAR_PEUPLE,
-  EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_ONDE, EPI_LEGS
+  CONTRATS_LOCAUX, CONTRACT_COMPLICATIONS,
+  EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_ONDE, EPI_LEGS
 })`, ctx);
 
 const erreurs = [];
@@ -71,6 +76,8 @@ const tousLesEvenements = [
   ...CONTRATS_SPECIAUX.map(e => ({ ev:e, cat:'contrat' })),
   ...EVENTS_ROMANCE.map(e => ({ ev:e, cat:'romance' })),
   ...EVENTS_NEMESIS.map(e => ({ ev:e, cat:'nemesis' })),
+  ...EVENTS_ISOLDE.map(e => ({ ev:e, cat:'isolde' })),
+  ...EVENTS_COMPAGNONS.map(e => ({ ev:e, cat:'compagnon' })),
 ];
 // Certains marqueurs sont posés par le moteur et non par un effet de contenu :
 // on les déclare ici pour que le contrôle des marqueurs orphelins reste utile.
@@ -269,6 +276,58 @@ console.log(`Troupes     ${Object.keys(UNIT_TYPES).length} types · ${Object.key
 console.log(`Pouvoirs    ${powerIds.size} · Objets ${itemIds.size} · Portraits ${portrIds.size} · Champions ${champIds.size}`);
 console.log('');
 
+/* ---- Affaires locales ---- */
+/* Le registre général affiche des lieux qui n'existent pas sur la carte : c'est
+ * assumé, ce sont des affaires venues d'ailleurs. Les affaires LOCALES, elles,
+ * doivent pointer sur un lieu réel, sans quoi on retombe exactement dans le
+ * défaut qu'elles corrigent. */
+const TYPES_CONTRAT = ['chasse','sauvetage','traque','récupération','enquête','guerre'];
+const DANGERS_CONTRAT = ['modéré','dangereux','très dangereux','extrême','légendaire'];
+let nbAffaires = 0, nbDenouements = 0;
+const idsAffaires = new Set();
+LOCATIONS.forEach(l => {
+  if(!CONTRATS_LOCAUX[l.id]) err(`Affaires locales : ${l.id} (${l.nom}) n'a aucun dossier`);
+});
+Object.entries(CONTRATS_LOCAUX).forEach(([locId, d]) => {
+  const ou = `Dossier ${locId}`;
+  if(!locIds.has(locId)) err(`${ou} : lieu inconnu`);
+  if(d.peuple !== null && d.peuple !== undefined && !Object.keys(REPUTATION_DEPART).includes(d.peuple))
+    err(`${ou} : peuple inconnu « ${d.peuple} »`);
+  if(!d.dossier) err(`${ou} : pas de nom de dossier`);
+  if(!Array.isArray(d.affaires) || d.affaires.length !== 3)
+    err(`${ou} : ${(d.affaires||[]).length} affaire(s) au lieu de 3`);
+  (d.affaires || []).forEach(a => {
+    nbAffaires++;
+    if(idsAffaires.has(a.id)) err(`${ou} : identifiant d'affaire en double « ${a.id} »`);
+    idsAffaires.add(a.id);
+    if(!a.titre || !a.commanditaire || !a.pitch) err(`${ou}/${a.id} : titre, commanditaire ou accroche manquant`);
+    if(!TYPES_CONTRAT.includes(a.type)) err(`${ou}/${a.id} : type inconnu « ${a.type} »`);
+    if(!DANGERS_CONTRAT.includes(a.danger)) err(`${ou}/${a.id} : danger inconnu « ${a.danger} »`);
+    if(typeof a.or !== 'number' || a.or <= 0) err(`${ou}/${a.id} : récompense absente`);
+  });
+  const dn = d.denouement;
+  if(!dn){ err(`${ou} : pas de dénouement — les trois affaires ne mèneraient nulle part`); return; }
+  nbDenouements++;
+  const marqueur = dn.id.toLowerCase() + '_fait';
+  if(!dn.intro || !dn.intro.length) err(`${ou} : dénouement sans introduction`);
+  if(!Array.isArray(dn.choix) || dn.choix.length < 3)
+    err(`${ou} : dénouement à moins de trois issues`);
+  (dn.choix || []).forEach((c, i) => {
+    if(!c.label || !c.texte || !c.texte.length) err(`${dn.id} choix ${i} : incomplet`);
+    const f = (c.effets && (c.effets.flags || [])) || [];
+    if(!f.includes(marqueur))
+      err(`${dn.id} choix ${i} : ne pose pas « ${marqueur} » — le dénouement se rejouerait`);
+    (c.effets && c.effets.reputation ? Object.keys(c.effets.reputation) : []).forEach(p => {
+      if(!Object.keys(REPUTATION_DEPART).includes(p)) err(`${dn.id} choix ${i} : peuple inconnu « ${p} »`);
+    });
+    if(c.effets && c.effets.item && !itemIds.has(c.effets.item))
+      err(`${dn.id} choix ${i} : objet inconnu « ${c.effets.item}»`);
+    f.forEach(x => marqueursPoses.add(x));
+  });
+});
+console.log(`Affaires locales ${nbAffaires} affaires sur ${Object.keys(CONTRATS_LOCAUX).length} lieux · ${nbDenouements} dénouements`);
+console.log('');
+
 /* ---- Réputation ---- */
 /* Une condition sur un peuple mal orthographié ne s'ouvre jamais, et rien ne le
  * signale : la branche reste simplement invisible pour toujours. */
@@ -388,7 +447,7 @@ console.log('');
 const PEUPLES_MONDE = ['humains','parias','khesh','elfes','elfes_noirs','nains','peaux_vertes','hommes_betes'];
 const sectionsEpi = [
   ['EPI_OUVERTURE', EPI_OUVERTURE], ['EPI_NOM', EPI_NOM],
-  ['EPI_GENS', EPI_GENS], ['EPI_NEMESIS', EPI_NEMESIS], ['EPI_ONDE', EPI_ONDE], ['EPI_LEGS', EPI_LEGS],
+  ['EPI_GENS', EPI_GENS], ['EPI_NEMESIS', EPI_NEMESIS], ['EPI_EMPIRE', EPI_EMPIRE], ['EPI_ONDE', EPI_ONDE], ['EPI_LEGS', EPI_LEGS],
   ...Object.entries(EPI_PEUPLES).map(([id, p]) => [`EPI_PEUPLES.${id}`, p.verdicts]),
 ];
 let nbVerdicts = 0;
