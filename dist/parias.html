@@ -14661,6 +14661,409 @@ const CHAINES = [
         }}},
   ]},
 
+/* ══════════════════════════════════════════════════════════════════════════
+   18 — LA MAISON SANS HÉRITIER
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_MERICOURT", type:'contrat', titre:"La Maison sans héritier",
+  commanditaire:"Maison de Méricourt", maison:"Maison de Méricourt",
+  or:1800, danger:"modéré", categorie:"enquête", prix:true,
+  lieux:["LOC_004","LOC_002"],
+  pitch:"Le dernier héritier officiel est mourant et trois branches produisent trois testaments différents. Il reste peut-être onze jours.",
+  paye:["testament_vrai","branche_choisie","maison_partagee"],
+  issues:{
+    testament_vrai:"Le vrai testament de Méricourt a été produit, et il ne nommait aucune des trois branches.",
+    branche_choisie:"Une branche a hérité de Méricourt, et les deux autres plaident encore.",
+    maison_partagee:"Méricourt a été partagée entre les trois branches, ce qui ne satisfait personne.",
+    abandonnee:"Méricourt s'est réglée sans Yohan, devant les tribunaux.",
+    refusee:"Yohan a refusé les termes de Méricourt.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Onze jours, peut-être moins.",
+      ev:{ id:"CHM_1", titre:"Trois testaments et un mourant", famille:"POLITIQUE", rarete:"majeur",
+        image:"evt_archives",
+        scenes:{
+          start:{ texte:[
+            "L'hôtel de Méricourt à Astrah est plein de monde, et pas un de ces gens n'est là pour le mourant.",
+            "Trois branches, trois avocats, trois testaments, et un vieil homme au premier étage qui respire mal depuis six semaines.",
+            "C'est le médecin qui a fait venir Yohan — sur ses propres deniers, ce qui est extraordinaire. « Ils vont le faire signer. Tous les trois. Ils attendent seulement qu'il ne comprenne plus ce qu'il signe. »"],
+            choix:[
+              {label:"Monter voir le mourant", detail:"Personne n'y est allé depuis trois jours",
+               suite:"mourant"},
+              {label:"Lire les trois testaments", detail:"Jet de Précision (13)",
+               test:{stat:"precision", dc:13}, reussite:"lit_ok", echec:"lit_ko"},
+              {label:"Demander au médecin ce qu'il veut", detail:"Un médecin qui paie de sa poche veut quelque chose",
+               suite:"medecin"},
+            ]},
+          mourant:{ texte:[
+            "Il a quatre-vingt-un ans, il est parfaitement lucide entre deux heures et cinq heures de l'après-midi, et personne ne monte entre deux heures et cinq heures.",
+            "« Ils viennent le matin », dit-il. « Quand je ne sais plus qui je suis. Ils m'ont fait signer trois fois. »",
+            "Il tourne la tête vers la fenêtre. « J'ai fait un testament il y a quatre ans, chez un notaire de Fort-aux-Princes, quand j'avais encore toute ma tête. Il n'est dans aucune de leurs mains. »"],
+            effets:{xp:26, flag:"mericourt_vrai_testament"}, suite:"termes"},
+          lit_ok:{ texte:[
+            "Trois testaments, trois dates, la même main — et la main tremble de plus en plus d'un document à l'autre.",
+            "Le troisième est signé d'une croix. Un homme qui a écrit son nom sur les deux premiers ne signe pas le troisième d'une croix, sauf si on lui tient la main.",
+            "Les trois sont donc valables au regard de la forme et douteux au regard du fond. Un tribunal mettra dix ans."],
+            effets:{xp:22, flag:"mericourt_croix"}, suite:"termes"},
+          lit_ko:{ texte:["Trois parchemins, trois sceaux, trois avocats qui les reprennent avant qu'on ait fini. Ils ne sont pas là pour qu'on lise."],
+            effets:{xp:5}, suite:"termes"},
+          medecin:{ texte:[
+            "« Il m'a payé pendant vingt ans et il ne m'a jamais fait attendre. »",
+            "Le médecin range ses instruments avec beaucoup de soin. « Je veux qu'il meure sans qu'on lui tienne la main pour signer. C'est tout ce que je veux. Ce qu'ils feront de la maison après, je m'en moque. »"],
+            effets:{xp:18, flag:"mericourt_medecin"}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "Les trois branches paient ensemble — elles sont d'accord sur ce point unique : qu'un tiers tranche.",
+            "« Mille huit cents écus, versés par les trois. Vous établissez quel testament est le vrai. »",
+            "Un avocat ajoute, du bout des lèvres : « Et pour ce qui est de la coutume ancestrale, aucune des trois branches n'a d'adulte reconnue. C'est précisément le problème que nous sommes en train de régler. »"]},
+        }}},
+
+    { id:"fort", delai:[2,4], attente:"Fort-aux-Princes est à quatre jours, et le vieil homme respire mal.",
+      ev:{ id:"CHM_2", titre:"Un notaire de Fort-aux-Princes", famille:"POLITIQUE", rarete:"majeur",
+        image:"evt_archives",
+        scenes:{
+          start:{ texte:[
+            "Il y a onze notaires à Fort-aux-Princes et quatre ans à remonter.",
+            "Le neuvième se souvient. Il se souvient très bien, parce que le vieil homme est venu seul, à pied, un jour de neige, et parce que ce qu'il a fait écrire était inhabituel.",
+            "« Je ne peux pas vous le montrer. Je peux vous dire qu'il existe et qu'il est ici. »"],
+            choix:[
+              {label:"Le convaincre de le produire", detail:"Jet de Volonté (14)",
+               test:{stat:"vol", dc:14}, reussite:"produit_ok", echec:"produit_ko"},
+              {label:"Le payer", detail:"−400 or · un notaire a un tarif pour tout",
+               requis:{or:400}, suite:"paye", effets:{or:-400}},
+              {label:"Faire venir le notaire au chevet du mourant", detail:"Quatre jours de route pour un homme de soixante ans",
+               suite:"amener"},
+            ]},
+          produit_ok:{ texte:[
+            "Il faut lui expliquer qu'on tient la main d'un homme de quatre-vingt-un ans pour lui faire signer des croix, et il faut le lui expliquer trois fois.",
+            "À la troisième, il se lève, ouvre un casier et sort une chemise de toile.",
+            "Il ne l'ouvre pas devant Yohan. « Je viendrai le lire moi-même. C'est ma charge, pas la vôtre. »"],
+            effets:{xp:26, flag:"mericourt_notaire_vient"}, fin:true},
+          produit_ko:{ texte:["« Ma charge m'interdit de produire un testament du vivant du testateur, sauf réquisition. » Il a raison, et il ne bougera pas."],
+            effets:{xp:8}, fin:true},
+          paye:{ texte:[
+            "Quatre cents écus, et il ne prend pas l'argent : il le fait porter à l'hospice, devant témoin, ce qui est sa façon de ne pas être acheté tout en cédant.",
+            "« Je viendrai. Pas pour vous. Parce qu'on ne fait pas signer des croix à un homme qui m'a fait quatre lieues dans la neige. »"],
+            effets:{xp:22, flag:"mericourt_notaire_vient"}, fin:true},
+          amener:{ texte:[
+            "Quatre jours de route dans un sens, quatre dans l'autre, avec un notaire de soixante ans qui a mal au dos et qui le dit toutes les deux heures.",
+            "Ils arrivent le neuvième jour. Le vieil homme respire encore."],
+            effets:{xp:20, fat:12, flag:"mericourt_notaire_vient"}, fin:true},
+        }}},
+
+    { id:"lecture", delai:[1,2], attente:"Il reste peut-être deux jours.",
+      ev:{ id:"CHM_3", titre:"Entre deux heures et cinq heures", famille:"POLITIQUE", rarete:"majeur",
+        image:"evt_chapelle",
+        scenes:{
+          start:{ texte:[
+            "Le grand salon de Méricourt, trois branches, trois avocats, un médecin, un notaire venu de Fort-aux-Princes, et un vieil homme qu'on a descendu dans un fauteuil.",
+            "Il est trois heures de l'après-midi. Il comprend tout ce qui se dit."],
+            choix:[
+              {label:"Faire lire le testament de Fort-aux-Princes",
+               detail:"Requiert que le notaire soit là",
+               requis:{flag:"mericourt_notaire_vient"}, suite:"lecture"},
+              {label:"Demander au vieil homme de désigner lui-même", detail:"Jet de Volonté (13) · devant tout le monde",
+               test:{stat:"vol", dc:13}, reussite:"designe_ok", echec:"designe_ko"},
+              {label:"Proposer le partage en trois", detail:"Personne ne sera content, personne ne plaidera dix ans",
+               suite:"partage",
+               effets:{issue:"maison_partagee", reputation:{humains:6}, renom:4}},
+            ]},
+          lecture:{ fin:true, texte:[
+            "Le notaire ouvre la chemise de toile et lit à voix haute pendant quatre minutes.",
+            "Le vieil homme, il y a quatre ans, a légué Méricourt — le nom, la terre, l'hôtel d'Astrah — à l'hospice de Fort-aux-Princes, à charge d'y entretenir douze lits perpétuels.",
+            "Aux trois branches, il laisse ce qu'il appelle « ce qu'elles m'ont donné », c'est-à-dire rien, et il l'a fait écrire en ces termes-là.",
+            "Il y a un silence, puis trois avocats se mettent à parler en même temps. Le vieil homme sourit pour la première fois depuis six semaines et meurt onze jours plus tard, en janvier.",
+            "Les trois branches paient le contrat. Elles n'ont pas le choix : elles ont signé ensemble."],
+            effets:{issue:"testament_vrai", reputation:{humains:10, parias:8}, renom:10,
+                    flag:"mericourt_hospice"}},
+          designe_ok:{ fin:true, texte:[
+            "« Monsieur. Il est trois heures. Ils sont tous là. Dites-le vous-même. »",
+            "Il met du temps à rassembler l'air. Puis il désigne la branche cadette — la seule qui ne lui ait rien fait signer — et il le dit assez fort pour que le notaire l'écrive et que trois avocats l'entendent.",
+            "Ce n'est pas un testament. C'est une déclaration devant sept témoins, et cela suffit à faire pencher un tribunal.",
+            "Les deux autres branches plaident. Elles plaideront six ans et elles perdront."],
+            effets:{issue:"branche_choisie", reputation:{humains:8}, renom:6}},
+          designe_ko:{ texte:[
+            "Il ouvre la bouche, et rien ne sort. Il est quatre heures moins le quart et l'après-midi a été long.",
+            "Un avocat en profite pour dire qu'on abuse d'un mourant, et il n'a pas complètement tort."],
+            effets:{xp:10}, suite:"partage"},
+          partage:{ fin:true, texte:[
+            "Un tiers chacun : la terre à l'aînée, l'hôtel d'Astrah à la cadette, le nom et les rentes à la troisième.",
+            "Les trois signent parce qu'aucune ne peut prouver mieux et qu'aucune ne veut plaider dix ans.",
+            "Le vieil homme meurt en janvier. Personne ne monte le voir entre deux heures et cinq heures, sauf le médecin, qui monte tous les jours jusqu'au dernier."]},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   19 — LA FILLE DU GÉNÉRAL
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_HAUTECOUR", type:'contrat', titre:"La Fille du général",
+  commanditaire:"Maison de Hautecour", maison:"Maison de Hautecour",
+  or:2500, danger:"dangereux", categorie:"sauvetage", prix:true,
+  lieux:["LOC_018","LOC_012","LOC_002"],
+  pitch:"La fille adulte d'un général a rejoint volontairement les ennemis de son père. Il exige qu'on la ramène, et il ne demande pas si elle le veut.",
+  paye:["ramenee","laissee","negociee"],
+  issues:{
+    ramenee:"La fille du général de Hautecour est rentrée sous escorte.",
+    laissee:"La fille du général de Hautecour est restée où elle était, et son père a payé quand même.",
+    negociee:"Il y a eu une trêve à Hautecour, et c'est sa fille qui l'a négociée.",
+    abandonnee:"Personne n'a ramené la fille du général.",
+    refusee:"Yohan a refusé les termes de Hautecour.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Le camp adverse est à six jours.",
+      ev:{ id:"CHH_1", titre:"Un général qui ne demande pas", famille:"GUERRE", rarete:"majeur",
+        image:"evt_lances",
+        scenes:{
+          start:{ texte:[
+            "Le général de Hautecour a soixante ans, quatre campagnes derrière lui, et il reçoit sous une tente où l'on n'a pas défait la carte depuis trois semaines.",
+            "« Ma fille est passée chez Vaubrun il y a deux mois. Elle est partie de nuit, à cheval, seule, et elle n'a pas été enlevée. »",
+            "Il tape la carte du plat de la main. « Vaubrun s'en sert. Il la montre. Il fait circuler des lettres qu'elle signe. »",
+            "Il relève la tête. « Ramenez-la. Je ne discute pas ce point. »"],
+            choix:[
+              {label:"Demander pourquoi elle est partie", detail:"Deux mois, à cheval, de nuit, seule",
+               suite:"pourquoi"},
+              {label:"Demander à voir les lettres", detail:"Jet de Précision (12)",
+               test:{stat:"precision", dc:12}, reussite:"lettres_ok", echec:"lettres_ko"},
+              {label:"Accepter sans discuter", detail:"Il a dit qu'il ne discutait pas",
+               suite:"termes", effets:{suspicion:-2}},
+            ]},
+          pourquoi:{ texte:[
+            "Il ne répond pas tout de suite, et quand il répond, c'est en regardant la carte.",
+            "« Parce que j'ai fait brûler Sainte-Ombre. »",
+            "Il ne se justifie pas. « Quatre cents feux, un dépôt de vivres, et une garnison de Vaubrun dedans. C'était juste militairement. Ma fille y avait passé deux étés chez sa tante. »",
+            "Il roule la carte. « Elle est partie onze jours après. »"],
+            effets:{xp:24, flag:"hautecour_sainte_ombre"}, suite:"termes"},
+          lettres_ok:{ texte:[
+            "Trois lettres, sa signature, son écriture. Elles ne disent rien de militaire : elles décrivent Sainte-Ombre.",
+            "Nombre de maisons, nombre de morts, noms des familles. C'est un inventaire, écrit par quelqu'un qui connaissait ces gens.",
+            "Vaubrun ne s'en sert pas comme d'un otage. Il s'en sert comme d'un témoin, et c'est bien pire pour Hautecour."],
+            effets:{xp:26, flags:["hautecour_sainte_ombre","hautecour_temoin"]}, suite:"termes"},
+          lettres_ko:{ texte:["« Des lettres », dit-il. « De la propagande. » Il ne les montrera pas."],
+            effets:{xp:5}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Deux mille cinq cents. Vivante, et ici. »",
+            "Il ajoute, du ton d'un homme qui règle une formalité : « Et la coutume sera honorée avant votre départ. Ma maison n'a jamais manqué à ses obligations, quelles qu'elles soient. »",
+            "Il ne dit pas qu'il l'a d'abord proposée à un autre, et Yohan ne le saura que plus tard."]},
+        }}},
+
+    { id:"camp", delai:[2,4], attente:"Six jours de route et une ligne à traverser.",
+      ev:{ id:"CHH_2", titre:"Chez Vaubrun", famille:"GUERRE", rarete:"majeur",
+        image:"evt2_convoi",
+        scenes:{
+          start:{ texte:[
+            "On ne traverse pas une ligne de front : on la contourne par le nord, où elle n'est tenue que par des postes.",
+            "Le camp de Vaubrun est un vrai camp — palissade, fossé, ordre — et la fille du général n'y est pas prisonnière. Elle a une tente, un cheval, et elle traverse le camp sans escorte.",
+            "Elle a vingt-cinq ans. Elle écrit beaucoup."],
+            choix:[
+              {label:"L'aborder directement", detail:"Elle circule librement, autant en profiter",
+               suite:"aborde"},
+              {label:"L'enlever de nuit", detail:"Jet d'Agilité (15) · c'est ce pour quoi on est payé",
+               test:{stat:"agi", dc:15}, reussite:"enleve_ok", echec:"enleve_ko"},
+              {label:"Voir d'abord ce qu'elle écrit", detail:"Jet de Précision (14)",
+               test:{stat:"precision", dc:14}, reussite:"ecrit_ok", echec:"ecrit_ko"},
+            ]},
+          aborde:{ texte:[
+            "Elle ne fuit pas et n'appelle pas. Elle repose sa plume et le regarde arriver.",
+            "« Mon père vous paie combien ? »",
+            "Elle ne l'attend pas pour continuer. « Le dernier, c'était mille huit cents. Il n'est pas allé plus loin que la ligne. »",
+            "Elle referme son cahier. « Asseyez-vous. Puisque vous êtes là, autant que quelqu'un écoute. »"],
+            effets:{xp:24, flag:"hautecour_elle_parle"}, fin:true},
+          enleve_ok:{ texte:[
+            "Une tente en bordure, un fossé, un cheval mené à la main sur six cents pas, et une femme qui ne se débat pas parce qu'elle a compris que se débattre la ferait tuer.",
+            "À la troisième lieue, elle dit : « Vous savez qu'il va me marier à Vaubrun pour finir la guerre ? C'est ce qu'il négociait avant que je parte. »",
+            "Elle le dit calmement. Il reste trois jours de route."],
+            effets:{xp:30, fat:14, flags:["hautecour_enlevee","hautecour_mariage"]}, fin:true},
+          enleve_ko:{ texte:[
+            "Le cheval bronche à la palissade et le camp se réveille en trente secondes.",
+            "Il ressort seul, poursuivi sur une lieue, avec un carreau dans l'épaule et rien d'autre."],
+            effets:{pv:-20, fat:18, xp:12}, fin:true},
+          ecrit_ok:{ texte:[
+            "Elle écrit un inventaire. Trois cent onze noms, à ce jour, avec l'âge et le hameau : tous les habitants de Sainte-Ombre.",
+            "Sur la dernière page, en tête, une ligne : *Pour qu'on ne puisse pas dire qu'il n'y avait personne.*",
+            "Elle ne renseigne pas Vaubrun. Elle établit un compte, et elle le fait chez celui qui a intérêt à ce qu'il existe."],
+            effets:{xp:32, flags:["hautecour_temoin","hautecour_inventaire"]}, fin:true},
+          ecrit_ko:{ texte:["Elle écrit sous une tente ouverte, en plein jour, entourée de gens. On voit qu'elle écrit beaucoup et on ne voit pas quoi."],
+            effets:{xp:8}, fin:true},
+        }}},
+
+    { id:"decision", delai:[1,3], attente:"Il faut rentrer, avec elle ou sans elle.",
+      ev:{ id:"CHH_3", titre:"Ce qu'on ramène à un général", famille:"GUERRE", rarete:"majeur",
+        image:"evt_bannieres",
+        scenes:{
+          start:{ texte:[
+            "Deux mille cinq cents écus contre une femme de vingt-cinq ans qui n'est prisonnière de personne et qui compte les morts d'un village que son père a brûlé.",
+            "Le contrat dit : vivante, et ici."],
+            choix:[
+              {label:"La ramener", detail:"C'est ce qui a été payé",
+               suite:"ramene",
+               effets:{issue:"ramenee", reputation:{humains:8, parias:-10}, renom:4}},
+              {label:"La ramener avec l'inventaire, et le faire lire devant l'état-major",
+               detail:"Requiert de savoir ce qu'elle écrit",
+               requis:{flag:"hautecour_inventaire"}, suite:"inventaire",
+               effets:{issue:"negociee", reputation:{humains:-6, parias:14}, renom:12, suspicion:8}},
+              {label:"La laisser et aller le dire à son père",
+               detail:"Requiert de l'avoir écoutée · il ne paiera peut-être pas",
+               requis:{flag:"hautecour_elle_parle"}, suite:"laisse",
+               effets:{issue:"laissee", reputation:{humains:-8, parias:12}, renom:6}},
+            ]},
+          ramene:{ fin:true, texte:[
+            "Six jours de route. Elle ne parle pas et ne cherche pas à s'échapper.",
+            "Le général paie devant sa tente, compte lui-même, et ne la regarde pas descendre de cheval.",
+            "Elle est mariée à Vaubrun en octobre. La guerre s'arrête. On dit que c'est un beau mariage.",
+            "Elle continue d'écrire. Personne ne lit ce qu'elle écrit."]},
+          inventaire:{ fin:true, texte:[
+            "Elle rentre d'elle-même, à une condition : qu'on la laisse lire.",
+            "Elle lit trois cent onze noms devant l'état-major de Hautecour, en entier, âge et hameau, pendant quarante minutes, sans qu'un officier ose sortir.",
+            "Son père écoute jusqu'au bout, debout, et ne l'interrompt pas une seule fois.",
+            "Il y a une trêve trois semaines plus tard, négociée par elle, qui coûte à Hautecour deux vallées et le dépôt du nord. C'est une mauvaise trêve militairement. Elle tient encore quatre ans après.",
+            "Le général paie le contrat en entier et n'adresse plus la parole à Yohan."]},
+          laisse:{ fin:true, texte:[
+            "Il rentre seul et il le dit sous la tente, en face : elle est vivante, elle n'est prisonnière de personne, et elle ne rentrera pas.",
+            "Le général reste très longtemps sans rien dire. Puis : « Elle a dit pourquoi ? »",
+            "« Sainte-Ombre. »",
+            "Il hoche la tête une fois. Il paie en entier, sans compter.",
+            "« Je savais », dit-il à la porte de la tente. « Je voulais l'entendre de quelqu'un qui n'a rien à y gagner. »"]},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   20 — LE PACTE DE LA HARDE
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_BRECOURT", type:'contrat', titre:"Le Pacte de la Harde",
+  commanditaire:"Maison de Brécourt", maison:"Maison de Brécourt",
+  or:2000, danger:"dangereux", categorie:"enquête", prix:true,
+  lieux:["LOC_010","LOC_020"],
+  pitch:"Un seigneur affirme que les Hommes-Bêtes ont rompu une trêve qu'aucune des deux parties ne peut reconnaître publiquement. Il veut qu'on le prouve.",
+  paye:["treve_tenue","treve_rompue","borne_rendue"],
+  issues:{
+    treve_tenue:"La trêve de Brécourt tient encore, et l'on sait qui avait déplacé la borne.",
+    treve_rompue:"La trêve de Brécourt est rompue. Les deux camps arment.",
+    borne_rendue:"La borne de Brécourt est revenue où elle était, et personne n'a rien dit publiquement.",
+    abandonnee:"Personne n'a établi qui avait rompu la trêve de Brécourt.",
+    refusee:"Yohan a refusé les termes de Brécourt.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Les bornes sont dans la forêt, et elles ne bougent pas seules.",
+      ev:{ id:"CHP_1", titre:"Une trêve qu'on ne peut pas avouer", famille:"HOMME_BETE", rarete:"majeur",
+        image:"evt_pierres",
+        scenes:{
+          start:{ texte:[
+            "Dame Ysoré de Brécourt garde les bornes de la trêve depuis huit ans et connaît les quarante-trois par leur numéro.",
+            "« Mon père a juré cette trêve à genoux devant une harde, il y a trente ans. Ce n'est écrit nulle part et cela ne peut pas l'être : une maison humaine n'avoue pas avoir traité avec des Hommes-Bêtes. »",
+            "Elle pose un croquis. « Quarante-trois bornes. La dix-neuf a bougé de soixante pas vers le sud cet hiver. Soixante pas de forêt ancienne. »",
+            "Elle relève les yeux. « Mon père dit qu'ils ont rompu. Il lève des hommes. Moi, je veux savoir qui a bougé la borne. »"],
+            choix:[
+              {label:"Demander qui d'autre gagne à ce que la trêve tombe", detail:"Une trêve secrète arrange peu de monde",
+               suite:"qui"},
+              {label:"Demander comment on déplace une borne", detail:"Jet de Précision (12)",
+               test:{stat:"precision", dc:12}, reussite:"comment_ok", echec:"comment_ko"},
+              {label:"Accepter et aller à la dix-neuf", detail:"C'est là que c'est",
+               suite:"termes"},
+            ]},
+          qui:{ texte:[
+            "« Les coupeurs. »",
+            "Elle le dit sans hésiter, ce qui veut dire qu'elle y pense depuis l'hiver. « La forêt de la trêve est la dernière futaie ancienne à quarante lieues. Une compagnie de Port-Noir propose depuis deux ans d'acheter la coupe. Mon père refuse à cause de la trêve. »",
+            "Elle range le croquis. « Si la trêve tombe, il n'y a plus de raison de refuser. »"],
+            effets:{xp:24, flag:"brecourt_coupeurs"}, suite:"termes"},
+          comment_ok:{ texte:[
+            "« Une borne de trêve, c'est un bloc de granit de sept cents livres enfoncé de quatre pieds. »",
+            "Elle sourit sans joie. « Il faut un treuil, un attelage, et une journée. Une harde ne déplace pas une borne : elle l'arrache et la casse, quand elle veut dire quelque chose. »",
+            "« La dix-neuf n'est pas cassée. Elle est reposée droite, à soixante pas. Proprement. »"],
+            effets:{xp:26, flag:"brecourt_proprement"}, suite:"termes"},
+          comment_ko:{ texte:["« Elle a bougé », dit-elle. « De soixante pas. C'est tout ce que je sais et c'est pour ça que je vous paie. »"],
+            effets:{xp:5}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Deux mille écus. Qui a bougé la dix-neuf. »",
+            "Elle ajoute : « Et si la réponse est : ma maison, dites-la-moi quand même. Surtout si c'est ma maison. »"]},
+        }}},
+
+    { id:"borne", delai:[2,4], attente:"La borne dix-neuf est à deux jours de forêt.",
+      ev:{ id:"CHP_2", titre:"La dix-neuf", famille:"HOMME_BETE", rarete:"majeur",
+        image:"evt_pierres",
+        scenes:{
+          start:{ texte:[
+            "La borne dix-neuf est un bloc de granit gravé d'une main humaine d'un côté et d'une entaille en V de l'autre. Elle est droite, calée, propre.",
+            "À soixante pas au nord, le trou d'origine est encore ouvert. On n'a pas rebouché.",
+            "Le sol entre les deux porte deux ornières parallèles, à peine visibles sous six semaines de feuilles."],
+            choix:[
+              {label:"Suivre les ornières", detail:"Jet de Précision (13)",
+               test:{stat:"precision", dc:13}, reussite:"ornieres_ok", echec:"ornieres_ko"},
+              {label:"Attendre la harde à la borne", detail:"Jet de Volonté (14) · ils viennent vérifier",
+               test:{stat:"vol", dc:14}, reussite:"attend_ok", echec:"attend_ko"},
+              {label:"Aller voir ce qu'il y a dans les soixante pas gagnés", detail:"Personne n'a regardé ce qu'on prenait",
+               suite:"gagne"},
+            ]},
+          ornieres_ok:{ texte:[
+            "Les ornières remontent vers le nord sur onze cents pas, contournent la coupe basse, et s'arrêtent à un chemin de débardage.",
+            "Au bout du chemin, une baraque de coupeurs, fermée depuis l'hiver, avec un treuil sous bâche.",
+            "Le treuil est marqué au fer d'une compagnie de Port-Noir."],
+            effets:{xp:30, flags:["brecourt_treuil","brecourt_coupeurs"]}, fin:true},
+          ornieres_ko:{ texte:["Six semaines de feuilles et trois pluies. Les ornières se perdent à deux cents pas et ne disent rien de plus."],
+            effets:{xp:8}, fin:true},
+          attend_ok:{ texte:[
+            "Ils viennent la troisième nuit. Ils sont quatre, ils ne sont pas armés pour se battre, et ils font ce que fait n'importe qui devant une borne déplacée : ils tournent autour.",
+            "Le plus âgé passe la main sur l'entaille en V, longuement, comme on vérifie une signature.",
+            "Puis il dit, en vardhi, à personne en particulier : « Ce n'est pas nous. » Et ils repartent vers le nord.",
+            "Ils savaient qu'il était là depuis la première nuit."],
+            effets:{xp:28, flag:"brecourt_pas_eux"}, fin:true},
+          attend_ko:{ texte:["Trois nuits dans le froid sans que rien vienne. La quatrième, il rentre. La harde a peut-être attendu qu'il parte."],
+            effets:{fat:14, xp:8}, fin:true},
+          gagne:{ texte:[
+            "Soixante pas sur quarante-trois bornes, cela ferait, si toutes bougeaient, un peu plus de deux cents arpents.",
+            "Dans les soixante pas de la dix-neuf, il y a onze chênes de futaie ancienne, dont quatre de plus de deux cents ans.",
+            "Ce n'est pas une frontière qu'on a déplacée. C'est une coupe qu'on a préparée."],
+            effets:{xp:26, flag:"brecourt_coupeurs"}, fin:true},
+        }}},
+
+    { id:"decision", delai:[1,2], attente:"Le père de Dame Ysoré lève des hommes.",
+      ev:{ id:"CHP_3", titre:"Ce qu'on dit à un seigneur qui arme", famille:"HOMME_BETE", rarete:"majeur",
+        image:"evt_harde",
+        scenes:{
+          start:{ texte:[
+            "Le seigneur de Brécourt a levé quatre-vingts hommes et il attend un prétexte pour les faire entrer dans la forêt.",
+            "Sa fille est derrière lui, debout, et elle n'a rien dit depuis que Yohan est entré."],
+            choix:[
+              {label:"Nommer les coupeurs et le treuil",
+               detail:"Requiert d'avoir trouvé le treuil · c'est vérifiable",
+               requis:{flag:"brecourt_treuil"}, suite:"nomme",
+               effets:{issue:"treve_tenue", reputation:{hommes_betes:20, humains:6}, renom:10}},
+              {label:"Remettre la borne à sa place et ne rien déclarer",
+               detail:"Requiert de savoir que ce n'est pas la harde · −300 or d'attelage",
+               requis:{flag:"brecourt_pas_eux", or:300}, suite:"remet", effets:{or:-300},
+               },
+              {label:"Dire que la harde a rompu", detail:"C'est ce qu'il veut entendre, et c'est faux",
+               suite:"rompt",
+               effets:{issue:"treve_rompue", reputation:{hommes_betes:-26, humains:8}, renom:-4, or:400}},
+              {label:"Dire qu'on n'a pas pu établir", detail:"Il entrera dans la forêt quand même",
+               suite:"rien", effets:{issue:"abandonnee", reputation:{humains:-4}}},
+            ]},
+          nomme:{ fin:true, texte:[
+            "Un treuil marqué au fer d'une compagnie de Port-Noir, dans une baraque de coupeurs, à onze cents pas d'une borne déplacée proprement.",
+            "Le seigneur de Brécourt met une heure à admettre et un quart d'heure à passer de la colère contre la harde à la colère contre la compagnie.",
+            "Les quatre-vingts hommes vont à Port-Noir au lieu d'aller dans la forêt. Ce qu'ils y font n'est pas légal et personne ne porte plainte.",
+            "La borne dix-neuf revient à sa place en avril. Dame Ysoré paie en entier. « Vous avez rendu soixante pas de futaie à des gens qui ne peuvent pas vous remercier publiquement », dit-elle. « Alors je le fais à leur place. »"]},
+          remet: { fin:true, texte:[
+            "Trois cents écus d'attelage, une journée, six hommes payés à ne pas poser de questions, et sept cents livres de granit remises dans leur trou d'origine.",
+            "On rebouche. On tasse. On remet les feuilles.",
+            "Le seigneur de Brécourt envoie vérifier la semaine suivante et trouve la borne dix-neuf exactement où elle a toujours été. Il licencie ses quatre-vingts hommes en maugréant contre sa fille et contre les gardes-bornes qui ne savent pas compter.",
+            "Personne n'a rien avoué. Personne n'a rien rompu. C'est exactement ce qu'une trêve qu'on ne peut pas reconnaître demande."],
+            effets:{issue:"borne_rendue", reputation:{hommes_betes:16, humains:4}, renom:6,
+                    flag:"brecourt_borne_rendue"}},
+          rompt:{ fin:true, texte:[
+            "« La harde a rompu. »",
+            "Quatre cents écus de prime par-dessus le contrat, et quatre-vingts hommes qui entrent dans la forêt le surlendemain.",
+            "Ils reviennent au bout de onze jours avec neuf morts et rien d'autre : on ne trouve pas une harde dans la Forêt des Mille Cornes quand elle ne veut pas être trouvée.",
+            "La compagnie de Port-Noir achète la coupe au printemps. Deux cents arpents de futaie ancienne tombent en une saison.",
+            "Dame Ysoré ne dit rien à Yohan. Elle ne lui parle plus du tout."]},
+          rien:{ fin:true, texte:[
+            "« Je n'ai pas pu établir qui a déplacé la borne. »",
+            "Le seigneur paie la moitié et fait entrer ses hommes dans la forêt la semaine suivante, parce qu'un homme qui a levé quatre-vingts hommes ne les licencie pas pour un rapport vide.",
+            "Dame Ysoré raccompagne Yohan jusqu'à la route. « Vous auriez pu inventer un nom », dit-elle. « Beaucoup l'auraient fait. »",
+            "Ce n'est pas tout à fait un remerciement."]},
+        }}},
+  ]},
+
 ];
 
 </script>
