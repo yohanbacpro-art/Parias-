@@ -270,6 +270,8 @@
     font-family:'EB Garamond',serif;font-size:13.5px;padding:12px;border-radius:5px;cursor:pointer;text-align:left;}
   .prix-choices button:hover{border-color:var(--onde-bright);}
   .prix-choices button small{display:block;font-family:'Inter',sans-serif;font-size:10px;color:var(--parchment-dim);margin-top:4px;}
+  .prix-choices button small.prix-detail{color:var(--parchment-dim);opacity:.75;font-style:italic;
+    line-height:1.5;margin-top:6px;text-transform:none;}
 
   /* ---- combat (repris de V0.1) ---- */
   .grid{display:grid;grid-template-columns:300px 1fr 300px;gap:18px;}
@@ -507,6 +509,8 @@
   .offre-tag.susp{border-color:var(--blood-bright);color:var(--blood-bright);}
   .offre-tag.voyage{border-color:var(--onde-bright);color:var(--onde-bright);}
   .offre-tag.ici{opacity:.6;}
+  .offre-tag.paria{border-color:var(--gold);color:var(--gold);background:rgba(198,160,74,.08);}
+  .offre-prix.prix-paria{color:var(--gold);font-family:'Cinzel',serif;letter-spacing:.03em;}
   .offre-btn{width:100%;}
   .offres-vide{font-family:'Inter',sans-serif;font-size:12.5px;color:var(--parchment-dim);
     font-style:italic;margin:0;}
@@ -1147,6 +1151,230 @@
  * sont dérivées du palier de Danger : voir note_originale pour la source.
  */
 const BESTIARY_FULL = [{"id": "BST_001", "nom": "Loup gris", "danger": 1, "pv": 18, "defense": 11, "pa_par_tour": 2, "precision": 2, "attaque_base": {"degats_base": 3, "de_variance": "1d4", "formule": "3 + 1d4 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 1 | Vitalité faible | Dégâts faibles | Armure variable | Mobilité variable"}, {"id": "BST_002", "nom": "Loup noir", "danger": 2, "pv": 30, "defense": 12, "pa_par_tour": 2, "precision": 3, "attaque_base": {"degats_base": 5, "de_variance": "1d6", "formule": "5 + 1d6 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 2 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_003", "nom": "Ours des montagnes", "danger": 3, "pv": 48, "defense": 13, "pa_par_tour": 3, "precision": 4, "attaque_base": {"degats_base": 7, "de_variance": "1d8", "formule": "7 + 1d8 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 3 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_004", "nom": "Sanglier cuirassé", "danger": 2, "pv": 30, "defense": 12, "pa_par_tour": 2, "precision": 3, "attaque_base": {"degats_base": 5, "de_variance": "1d6", "formule": "5 + 1d6 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 2 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_005", "nom": "Grand Cerf Blanc", "danger": 1, "pv": 18, "defense": 11, "pa_par_tour": 2, "precision": 2, "attaque_base": {"degats_base": 3, "de_variance": "1d4", "formule": "3 + 1d4 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 1 | Vitalité faible | Dégâts faibles | Armure variable | Mobilité variable"}, {"id": "BST_006", "nom": "Griffon", "danger": 4, "pv": 70, "defense": 14, "pa_par_tour": 3, "precision": 6, "attaque_base": {"degats_base": 10, "de_variance": "1d10", "formule": "10 + 1d10 + Niveau_zone"}, "capacites_speciales": [{"nom": "Fondre du ciel", "cout_pa": 2, "cout_fat": 0, "effet": "Attaque en piqué, bonus de dégâts si première attaque du combat", "limite": "1 fois par combat"}], "utilise_fatigue": true, "note_originale": "Danger 4 | Vitalité élevée | Dégâts élevés | Armure variable | Mobilité variable"}, {"id": "BST_007", "nom": "Hippogriffe", "danger": 3, "pv": 48, "defense": 13, "pa_par_tour": 3, "precision": 4, "attaque_base": {"degats_base": 7, "de_variance": "1d8", "formule": "7 + 1d8 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 3 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_008", "nom": "Manticore", "danger": 4, "pv": 70, "defense": 14, "pa_par_tour": 3, "precision": 6, "attaque_base": {"degats_base": 10, "de_variance": "1d10", "formule": "10 + 1d10 + Niveau_zone"}, "capacites_speciales": [{"nom": "Dard paralysant", "cout_pa": 2, "cout_fat": 0, "effet": "Dégâts + chance d'immobiliser 1 tour", "limite": "illimité"}], "utilise_fatigue": true, "note_originale": "Danger 4 | Vitalité élevée | Dégâts élevés | Armure variable | Mobilité variable"}, {"id": "BST_009", "nom": "Wyverne", "danger": 4, "pv": 70, "defense": 14, "pa_par_tour": 3, "precision": 6, "attaque_base": {"degats_base": 10, "de_variance": "1d10", "formule": "10 + 1d10 + Niveau_zone"}, "capacites_speciales": [{"nom": "Piqué venimeux", "cout_pa": 2, "cout_fat": 0, "effet": "Dégâts + poison (dégâts continus 3/tour pendant 3 tours)", "limite": "illimité"}], "utilise_fatigue": true, "note_originale": "Danger 4 | Vitalité élevée | Dégâts élevés | Armure variable | Mobilité variable"}, {"id": "BST_010", "nom": "Dragon des Sables", "danger": 5, "pv": 105, "defense": 15, "pa_par_tour": 4, "precision": 8, "attaque_base": {"degats_base": 14, "de_variance": "2d8", "formule": "14 + 2d8 + Niveau_zone"}, "capacites_speciales": [{"nom": "Enfouissement", "cout_pa": 2, "cout_fat": 0, "effet": "Disparaît sous le sable, revient en embuscade (bonus au prochain jet de touche)", "limite": "1 fois par combat"}], "utilise_fatigue": true, "note_originale": "Danger 5 | Vitalité élevée | Dégâts élevés | Armure variable | Mobilité variable"}, {"id": "BST_011", "nom": "Dragon des Montagnes", "danger": 5, "pv": 105, "defense": 15, "pa_par_tour": 4, "precision": 8, "attaque_base": {"degats_base": 14, "de_variance": "2d8", "formule": "14 + 2d8 + Niveau_zone"}, "capacites_speciales": [{"nom": "Souffle de feu", "cout_pa": 3, "cout_fat": 0, "effet": "Dégâts en zone 3d8", "limite": "1 fois toutes les 3 tours"}], "utilise_fatigue": true, "note_originale": "Danger 5 | Vitalité élevée | Dégâts élevés | Armure variable | Mobilité variable"}, {"id": "BST_012", "nom": "Dragon Ancien", "danger": 6, "pv": 185, "defense": 17, "pa_par_tour": 5, "precision": 10, "attaque_base": {"degats_base": 20, "de_variance": "3d10", "formule": "20 + 3d10 + Niveau_zone"}, "capacites_speciales": [{"nom": "Souffle draconique", "cout_pa": 3, "cout_fat": 0, "effet": "Dégâts en zone 4d10, tous les ennemis dans un cône", "limite": "1 fois toutes les 3 tours"}], "utilise_fatigue": true, "note_originale": "Danger 6 | Vitalité légendaire | Dégâts extrêmes | Armure variable | Mobilité variable"}, {"id": "BST_013", "nom": "Léviathan", "danger": 5, "pv": 105, "defense": 15, "pa_par_tour": 4, "precision": 8, "attaque_base": {"degats_base": 14, "de_variance": "2d8", "formule": "14 + 2d8 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 5 | Vitalité élevée | Dégâts élevés | Armure variable | Mobilité variable"}, {"id": "BST_014", "nom": "Araignée pâle", "danger": 2, "pv": 30, "defense": 12, "pa_par_tour": 2, "precision": 3, "attaque_base": {"degats_base": 5, "de_variance": "1d6", "formule": "5 + 1d6 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 2 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_015", "nom": "Troll des Cavernes", "danger": 4, "pv": 70, "defense": 14, "pa_par_tour": 3, "precision": 6, "attaque_base": {"degats_base": 10, "de_variance": "1d10", "formule": "10 + 1d10 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 4 | Vitalité élevée | Dégâts élevés | Armure variable | Mobilité variable"}, {"id": "BST_016", "nom": "Ver des Profondeurs", "danger": 4, "pv": 70, "defense": 14, "pa_par_tour": 3, "precision": 6, "attaque_base": {"degats_base": 10, "de_variance": "1d10", "formule": "10 + 1d10 + Niveau_zone"}, "capacites_speciales": [{"nom": "Broyage souterrain", "cout_pa": 3, "cout_fat": 0, "effet": "Dégâts élevés + peut entraîner la cible sous terre (retire du combat 1 tour)", "limite": "1 fois par combat"}], "utilise_fatigue": true, "note_originale": "Danger 4 | Vitalité élevée | Dégâts élevés | Armure variable | Mobilité variable"}, {"id": "BST_017", "nom": "Squig des Profondeurs", "danger": 2, "pv": 30, "defense": 12, "pa_par_tour": 2, "precision": 3, "attaque_base": {"degats_base": 5, "de_variance": "1d6", "formule": "5 + 1d6 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 2 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_018", "nom": "Loup Déformé", "danger": 3, "pv": 48, "defense": 13, "pa_par_tour": 3, "precision": 4, "attaque_base": {"degats_base": 7, "de_variance": "1d8", "formule": "7 + 1d8 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 3 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_019", "nom": "Ours Déformé", "danger": 4, "pv": 70, "defense": 14, "pa_par_tour": 3, "precision": 6, "attaque_base": {"degats_base": 10, "de_variance": "1d10", "formule": "10 + 1d10 + Niveau_zone"}, "capacites_speciales": [{"nom": "Rugissement corrompu", "cout_pa": 2, "cout_fat": 0, "effet": "Dégâts en zone faibles + effroi (malus initiative des ennemis proches)", "limite": "1 fois toutes les 2 tours"}], "utilise_fatigue": true, "note_originale": "Danger 4 | Vitalité élevée | Dégâts élevés | Armure variable | Mobilité variable"}, {"id": "BST_020", "nom": "Spectre de l'Onde", "danger": 4, "pv": 70, "defense": 14, "pa_par_tour": 3, "precision": 6, "attaque_base": {"degats_base": 10, "de_variance": "1d10", "formule": "10 + 1d10 + Niveau_zone"}, "capacites_speciales": [{"nom": "Passage spectral", "cout_pa": 1, "cout_fat": 0, "effet": "Devient intangible un tour, évite toute attaque physique", "limite": "1 fois toutes les 2 tours"}], "utilise_fatigue": true, "note_originale": "Danger 4 | Vitalité élevée | Dégâts élevés | Armure variable | Mobilité variable"}, {"id": "BST_021", "nom": "Corne-Rouge", "danger": 3, "pv": 48, "defense": 13, "pa_par_tour": 3, "precision": 4, "attaque_base": {"degats_base": 7, "de_variance": "1d8", "formule": "7 + 1d8 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 3 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_022", "nom": "Ours-Corne", "danger": 4, "pv": 70, "defense": 14, "pa_par_tour": 3, "precision": 6, "attaque_base": {"degats_base": 10, "de_variance": "1d10", "formule": "10 + 1d10 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 4 | Vitalité élevée | Dégâts élevés | Armure variable | Mobilité variable"}, {"id": "BST_023", "nom": "Revenant", "danger": 3, "pv": 48, "defense": 13, "pa_par_tour": 3, "precision": 4, "attaque_base": {"degats_base": 7, "de_variance": "1d8", "formule": "7 + 1d8 + Niveau_zone"}, "capacites_speciales": [{"nom": "Toucher glacial", "cout_pa": 2, "cout_fat": 0, "effet": "Dégâts + réduit l'Endurance de la cible", "limite": "illimité"}], "utilise_fatigue": true, "note_originale": "Danger 3 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_024", "nom": "Chevalier sans Visage", "danger": 4, "pv": 70, "defense": 14, "pa_par_tour": 3, "precision": 6, "attaque_base": {"degats_base": 10, "de_variance": "1d10", "formule": "10 + 1d10 + Niveau_zone"}, "capacites_speciales": [{"nom": "Terreur", "cout_pa": 1, "cout_fat": 0, "effet": "Impose un malus de Précision à un ennemi pendant 2 tours", "limite": "1 fois toutes les 2 tours"}], "utilise_fatigue": true, "note_originale": "Danger 4 | Vitalité élevée | Dégâts élevés | Armure variable | Mobilité variable"}, {"id": "BST_025", "nom": "Mange-Esprit", "danger": 5, "pv": 105, "defense": 15, "pa_par_tour": 4, "precision": 8, "attaque_base": {"degats_base": 14, "de_variance": "2d8", "formule": "14 + 2d8 + Niveau_zone"}, "capacites_speciales": [{"nom": "Drain d'esprit", "cout_pa": 2, "cout_fat": 0, "effet": "Vole de la Volonté/Fatigue à la cible et se soigne d'autant", "limite": "illimité mais réduit d'efficacité si répété"}], "utilise_fatigue": true, "note_originale": "Danger 5 | Vitalité élevée | Dégâts élevés | Armure variable | Mobilité variable"}, {"id": "BST_026", "nom": "Gharok, Roi sous la Montagne", "danger": 6, "pv": 185, "defense": 17, "pa_par_tour": 5, "precision": 10, "attaque_base": {"degats_base": 20, "de_variance": "3d10", "formule": "20 + 3d10 + Niveau_zone"}, "capacites_speciales": [{"nom": "Coup du Roi sous la Montagne", "cout_pa": 4, "cout_fat": 0, "effet": "Dégâts massifs + étourdissement (rate un tour)", "limite": "1 fois par combat"}], "utilise_fatigue": true, "note_originale": "Danger 6 | Vitalité légendaire | Dégâts extrêmes | Armure variable | Mobilité variable"}, {"id": "BST_027", "nom": "Chien des dunes", "danger": 2, "pv": 30, "defense": 12, "pa_par_tour": 2, "precision": 3, "attaque_base": {"degats_base": 5, "de_variance": "1d6", "formule": "5 + 1d6 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 2 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_028", "nom": "Scorpion cuirassé", "danger": 2, "pv": 30, "defense": 12, "pa_par_tour": 2, "precision": 3, "attaque_base": {"degats_base": 5, "de_variance": "1d6", "formule": "5 + 1d6 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 2 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_029", "nom": "Vautour rouge", "danger": 1, "pv": 18, "defense": 11, "pa_par_tour": 2, "precision": 2, "attaque_base": {"degats_base": 3, "de_variance": "1d4", "formule": "3 + 1d4 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 1 | Vitalité faible | Dégâts faibles | Armure variable | Mobilité variable"}, {"id": "BST_030", "nom": "Lion des roches", "danger": 3, "pv": 48, "defense": 13, "pa_par_tour": 3, "precision": 4, "attaque_base": {"degats_base": 7, "de_variance": "1d8", "formule": "7 + 1d8 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 3 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_031", "nom": "Serpent des ruines", "danger": 2, "pv": 30, "defense": 12, "pa_par_tour": 2, "precision": 3, "attaque_base": {"degats_base": 5, "de_variance": "1d6", "formule": "5 + 1d6 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 2 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_032", "nom": "Chauve-souris géante", "danger": 2, "pv": 30, "defense": 12, "pa_par_tour": 2, "precision": 3, "attaque_base": {"degats_base": 5, "de_variance": "1d6", "formule": "5 + 1d6 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 2 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_033", "nom": "Crache-Fange", "danger": 3, "pv": 48, "defense": 13, "pa_par_tour": 3, "precision": 4, "attaque_base": {"degats_base": 7, "de_variance": "1d8", "formule": "7 + 1d8 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 3 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_034", "nom": "Troll de guerre", "danger": 4, "pv": 70, "defense": 14, "pa_par_tour": 3, "precision": 6, "attaque_base": {"degats_base": 10, "de_variance": "1d10", "formule": "10 + 1d10 + Niveau_zone"}, "capacites_speciales": [{"nom": "Charge dévastatrice", "cout_pa": 3, "cout_fat": 0, "effet": "Dégâts lourds, ignore une partie de l'armure", "limite": "1 fois toutes les 2 tours"}], "utilise_fatigue": true, "note_originale": "Danger 4 | Vitalité élevée | Dégâts élevés | Armure variable | Mobilité variable"}, {"id": "BST_035", "nom": "Cerf d'écorce", "danger": 2, "pv": 30, "defense": 12, "pa_par_tour": 2, "precision": 3, "attaque_base": {"degats_base": 5, "de_variance": "1d6", "formule": "5 + 1d6 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 2 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_036", "nom": "Rôdeur des brumes", "danger": 3, "pv": 48, "defense": 13, "pa_par_tour": 3, "precision": 4, "attaque_base": {"degats_base": 7, "de_variance": "1d8", "formule": "7 + 1d8 + Niveau_zone"}, "capacites_speciales": [{"nom": "Voile de brume", "cout_pa": 1, "cout_fat": 0, "effet": "Devient plus difficile à toucher (malus aux jets de touche adverses) pendant 2 tours", "limite": "1 fois par combat"}], "utilise_fatigue": true, "note_originale": "Danger 3 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_037", "nom": "Gargouille vivante", "danger": 3, "pv": 48, "defense": 13, "pa_par_tour": 3, "precision": 4, "attaque_base": {"degats_base": 7, "de_variance": "1d8", "formule": "7 + 1d8 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 3 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_038", "nom": "Serpent de verre", "danger": 4, "pv": 70, "defense": 14, "pa_par_tour": 3, "precision": 6, "attaque_base": {"degats_base": 10, "de_variance": "1d10", "formule": "10 + 1d10 + Niveau_zone"}, "capacites_speciales": [{"nom": "Regard pétrifiant", "cout_pa": 2, "cout_fat": 0, "effet": "Chance d'immobiliser la cible 1 tour", "limite": "1 fois toutes les 2 tours"}], "utilise_fatigue": true, "note_originale": "Danger 4 | Vitalité élevée | Dégâts élevés | Armure variable | Mobilité variable"}, {"id": "BST_039", "nom": "Drake des falaises", "danger": 3, "pv": 48, "defense": 13, "pa_par_tour": 3, "precision": 4, "attaque_base": {"degats_base": 7, "de_variance": "1d8", "formule": "7 + 1d8 + Niveau_zone"}, "capacites_speciales": [], "utilise_fatigue": false, "note_originale": "Danger 3 | Vitalité moyenne | Dégâts moyens | Armure variable | Mobilité variable"}, {"id": "BST_040", "nom": "Basilic cendré", "danger": 4, "pv": 70, "defense": 14, "pa_par_tour": 3, "precision": 6, "attaque_base": {"degats_base": 10, "de_variance": "1d10", "formule": "10 + 1d10 + Niveau_zone"}, "capacites_speciales": [{"nom": "Souffle cendré", "cout_pa": 3, "cout_fat": 0, "effet": "Dégâts en zone + réduit la Défense des cibles touchées pendant 2 tours", "limite": "1 fois par combat"}], "utilise_fatigue": true, "note_originale": "Danger 4 | Vitalité élevée | Dégâts élevés | Armure variable | Mobilité variable"}];
+
+</script>
+<script>
+/* src/data/bestiary_2.js */
+/* PARIAS — Deuxième vague du bestiaire
+ *
+ * Le premier bestiaire ne contenait que des bêtes. Un contrat de traque
+ * commandité par une maison noble finissait donc toujours sur un ours ou une
+ * wyverne, quel que soit son pitch : « retrouver une cible qui ne veut pas être
+ * retrouvée » n'a jamais désigné un sanglier.
+ *
+ * Cette vague apporte surtout **ce contre quoi on se bat réellement dans ce
+ * monde** : des hommes. Des brigands, des soldats de la Couronne, des hommes
+ * d'armes de maison, des inquisiteurs de la Purge, des raiders elfes noirs, des
+ * bandes peaux-vertes, des cavaliers khesh, des hordes d'Hommes-Bêtes. Plus
+ * quelques bêtes qui manquaient aux régions froides et côtières.
+ *
+ * Chaque entrée porte deux champs que le premier bestiaire n'avait pas :
+ *   famille : 'homme' | 'bete' | 'monstre' | 'mort' — sert au composeur de
+ *             rencontres, qui n'envoie pas un ours escorter un sergent ;
+ *   role    : 'piétaille' | 'soutien' | 'élite' | 'meneur' — décide de qui
+ *             mène le groupe et de qui l'accompagne.
+ *
+ * Les valeurs suivent les mêmes paliers de Danger que la première vague.
+ */
+
+const BESTIARY_V2 = [
+  /* ─────────────────────── HOMMES — la route et les bois ─────────────────── */
+  { id:"BST_041", nom:"Détrousseur de route", danger:1, pv:20, defense:11, pa_par_tour:2, precision:3,
+    famille:'homme', role:'piétaille',
+    attaque_base:{ degats_base:4, de_variance:"1d4" }, capacites_speciales:[], utilise_fatigue:false,
+    note:"Un couteau, de mauvaises chaussures, et l'habitude de compter combien vous êtes avant d'attaquer." },
+  { id:"BST_042", nom:"Brigand aguerri", danger:2, pv:32, defense:12, pa_par_tour:3, precision:4,
+    famille:'homme', role:'piétaille',
+    attaque_base:{ degats_base:6, de_variance:"1d6" },
+    capacites_speciales:[{ nom:"Coup bas", cout_pa:2, effet:"Frappe une cible déjà blessée avec un bonus de touche", limite:"illimité" }],
+    utilise_fatigue:false, note:"Il a survécu à trois hivers sur les routes, ce que peu de gens honnêtes peuvent dire." },
+  { id:"BST_043", nom:"Arbalétrier embusqué", danger:2, pv:26, defense:11, pa_par_tour:2, precision:6,
+    famille:'homme', role:'soutien', portee:true,
+    attaque_base:{ degats_base:8, de_variance:"1d6" },
+    capacites_speciales:[{ nom:"Tir ajusté", cout_pa:3, effet:"Ignore une partie de la Défense", limite:"1 fois toutes les 2 tours" }],
+    utilise_fatigue:false, note:"Il tire une fois, bien, puis recharge pendant que les autres meurent devant lui." },
+  { id:"BST_044", nom:"Chef de bande", danger:3, pv:52, defense:13, pa_par_tour:3, precision:5,
+    famille:'homme', role:'meneur',
+    attaque_base:{ degats_base:8, de_variance:"1d8" },
+    capacites_speciales:[{ nom:"Tenez la ligne", cout_pa:2, effet:"Ses hommes gagnent un bonus de touche pendant 2 tours", limite:"1 fois par combat" }],
+    utilise_fatigue:false, note:"Ce n'est pas le plus fort de la bande. C'est celui que les autres écoutent." },
+
+  /* ─────────────────────── HOMMES — la Couronne et les maisons ────────────── */
+  { id:"BST_045", nom:"Homme d'armes de maison", danger:2, pv:34, defense:14, pa_par_tour:2, precision:4,
+    famille:'homme', role:'piétaille',
+    attaque_base:{ degats_base:6, de_variance:"1d6" }, capacites_speciales:[], utilise_fatigue:false,
+    note:"Payé au mois, nourri, et parfaitement conscient qu'il n'est pas payé pour mourir." },
+  { id:"BST_046", nom:"Sergent de la Couronne", danger:3, pv:50, defense:15, pa_par_tour:3, precision:5,
+    famille:'homme', role:'meneur',
+    attaque_base:{ degats_base:8, de_variance:"1d8" },
+    capacites_speciales:[{ nom:"Ordre de tenir", cout_pa:2, effet:"Relève la Défense de tous ses hommes de 2 pendant 2 tours", limite:"1 fois toutes les 3 tours" }],
+    utilise_fatigue:false, note:"Vingt ans de service, une hallebarde bien entretenue, et aucune curiosité pour ce que vous êtes." },
+  { id:"BST_047", nom:"Piquier d'ordonnance", danger:3, pv:46, defense:15, pa_par_tour:2, precision:4,
+    famille:'homme', role:'piétaille',
+    attaque_base:{ degats_base:9, de_variance:"1d8" },
+    capacites_speciales:[{ nom:"Pique en garde", cout_pa:1, effet:"Frappe le premier qui s'approche de lui ce tour-ci", limite:"illimité" }],
+    utilise_fatigue:false, note:"Trois mètres de frêne et de fer. On ne le contourne pas, on l'endure." },
+  { id:"BST_048", nom:"Chevalier de maison", danger:4, pv:76, defense:17, pa_par_tour:3, precision:7,
+    famille:'homme', role:'élite',
+    attaque_base:{ degats_base:12, de_variance:"1d10" },
+    capacites_speciales:[{ nom:"Charge d'honneur", cout_pa:3, effet:"Dégâts lourds, ignore la garde", limite:"1 fois par combat" }],
+    utilise_fatigue:false, note:"Armure de plates, cheval mort sous lui il y a une heure, et toujours pas décidé à reculer." },
+  { id:"BST_049", nom:"Inquisiteur de la Purge", danger:4, pv:64, defense:15, pa_par_tour:3, precision:8,
+    famille:'homme', role:'meneur',
+    attaque_base:{ degats_base:10, de_variance:"1d10" },
+    capacites_speciales:[{ nom:"Fers de contrainte", cout_pa:2, effet:"Alourdit l'Onde : la Fatigue de Yohan monte plus vite pendant 3 tours", limite:"1 fois par combat" }],
+    utilise_fatigue:true, note:"Il a un registre, une liste, et quarante ans d'expérience dans la reconnaissance d'un Paria qui ment." },
+  { id:"BST_050", nom:"Capitaine de la garde noire", danger:5, pv:112, defense:17, pa_par_tour:4, precision:9,
+    famille:'homme', role:'meneur',
+    attaque_base:{ degats_base:15, de_variance:"2d8" },
+    capacites_speciales:[{ nom:"Exécution", cout_pa:4, effet:"Dégâts massifs contre une cible sous la moitié de ses PV", limite:"illimité" }],
+    utilise_fatigue:true, note:"On ne l'envoie pas arrêter les gens. On l'envoie clore un dossier." },
+
+  /* ─────────────────────── HOMMES — les autres peuples ────────────────────── */
+  { id:"BST_051", nom:"Raider elfe noir", danger:3, pv:44, defense:14, pa_par_tour:4, precision:7,
+    famille:'homme', role:'élite',
+    attaque_base:{ degats_base:8, de_variance:"1d8" },
+    capacites_speciales:[{ nom:"Lames jumelles", cout_pa:3, effet:"Deux frappes dans le même geste", limite:"1 fois toutes les 2 tours" }],
+    utilise_fatigue:false, note:"Il est entré, il a pris ce qu'il venait prendre, et vous n'étiez pas censé être là." },
+  { id:"BST_052", nom:"Sorcier de Valombre", danger:4, pv:56, defense:13, pa_par_tour:3, precision:8,
+    famille:'homme', role:'soutien', portee:true,
+    attaque_base:{ degats_base:11, de_variance:"1d10" },
+    capacites_speciales:[{ nom:"Fil d'ombre", cout_pa:3, effet:"Dégâts et malus de Précision à une cible pendant 2 tours", limite:"illimité" }],
+    utilise_fatigue:true, note:"Il ne se bat pas : il rend le combat plus difficile pour tout le monde sauf les siens." },
+  { id:"BST_053", nom:"Guerrier peau-verte", danger:2, pv:38, defense:12, pa_par_tour:3, precision:3,
+    famille:'homme', role:'piétaille',
+    attaque_base:{ degats_base:7, de_variance:"1d6" }, capacites_speciales:[], utilise_fatigue:false,
+    note:"Grand, bruyant, et très supérieur à ce que la Couronne raconte dans ses rapports." },
+  { id:"BST_054", nom:"Casse-fer peau-verte", danger:4, pv:80, defense:13, pa_par_tour:3, precision:5,
+    famille:'homme', role:'élite',
+    attaque_base:{ degats_base:13, de_variance:"1d10" },
+    capacites_speciales:[{ nom:"Coup à deux mains", cout_pa:3, effet:"Dégâts lourds, réduit la Défense de la cible de 2 pendant 2 tours", limite:"illimité" }],
+    utilise_fatigue:false, note:"Il porte une masse faite d'une enclume naine et d'un essieu de charrette." },
+  { id:"BST_055", nom:"Chaman de la horde", danger:3, pv:42, defense:12, pa_par_tour:3, precision:6,
+    famille:'homme', role:'soutien', portee:true,
+    attaque_base:{ degats_base:7, de_variance:"1d8" },
+    capacites_speciales:[{ nom:"Cri de la horde", cout_pa:2, effet:"Soigne 10 PV à un allié et le relance", limite:"1 fois toutes les 2 tours" }],
+    utilise_fatigue:true, note:"Tant qu'il chante, ceux qui tombent se relèvent. Il faut le faire taire en premier." },
+  { id:"BST_056", nom:"Cavalier khesh démonté", danger:3, pv:46, defense:13, pa_par_tour:4, precision:6,
+    famille:'homme', role:'piétaille',
+    attaque_base:{ degats_base:8, de_variance:"1d8" }, capacites_speciales:[], utilise_fatigue:false,
+    note:"On lui a tué son cheval. C'est la pire chose qui puisse arriver à quelqu'un d'autre." },
+  { id:"BST_057", nom:"Archer des lisières", danger:3, pv:40, defense:13, pa_par_tour:3, precision:9,
+    famille:'homme', role:'soutien', portee:true,
+    attaque_base:{ degats_base:9, de_variance:"1d8" },
+    capacites_speciales:[{ nom:"Trois flèches", cout_pa:3, effet:"Trois tirs faibles répartis sur les cibles visibles", limite:"1 fois toutes les 2 tours" }],
+    utilise_fatigue:false, note:"Il vous a vu entrer dans la clairière il y a un quart d'heure." },
+  { id:"BST_058", nom:"Porteur de cornes", danger:3, pv:54, defense:12, pa_par_tour:3, precision:4,
+    famille:'homme', role:'piétaille',
+    attaque_base:{ degats_base:9, de_variance:"1d8" }, capacites_speciales:[], utilise_fatigue:false,
+    note:"Un Homme-Bête des Pierres, qui se bat pour une raison qu'aucun humain n'a jamais pris la peine d'écouter." },
+  { id:"BST_059", nom:"Doyen des Pierres", danger:5, pv:118, defense:15, pa_par_tour:4, precision:8,
+    famille:'homme', role:'meneur',
+    attaque_base:{ degats_base:15, de_variance:"2d8" },
+    capacites_speciales:[{ nom:"Rappel du premier rugissement", cout_pa:3, effet:"Toute la harde regagne 12 PV et frappe avec un bonus ce tour-ci", limite:"1 fois par combat" }],
+    utilise_fatigue:true, note:"Il se souvient d'avant la Purge, et il n'a pas l'intention de laisser recommencer." },
+  { id:"BST_060", nom:"Marteau de Kar-Durak", danger:4, pv:88, defense:18, pa_par_tour:2, precision:6,
+    famille:'homme', role:'élite',
+    attaque_base:{ degats_base:13, de_variance:"1d10" },
+    capacites_speciales:[{ nom:"Mur de boucliers", cout_pa:2, effet:"Encaisse à la place de l'allié le plus proche pendant 2 tours", limite:"illimité" }],
+    utilise_fatigue:false, note:"Il tient une porte depuis quarante ans. Vous n'êtes qu'un incident de plus." },
+
+  /* ─────────────────────── MERCENAIRES ET CHASSEURS ───────────────────────── */
+  { id:"BST_061", nom:"Épéiste à gages", danger:3, pv:48, defense:14, pa_par_tour:3, precision:6,
+    famille:'homme', role:'piétaille',
+    attaque_base:{ degats_base:9, de_variance:"1d8" }, capacites_speciales:[], utilise_fatigue:false,
+    note:"Il ne vous en veut pas. Il a été payé la veille, et il fera correctement son travail." },
+  { id:"BST_062", nom:"Traqueur de Parias", danger:4, pv:66, defense:15, pa_par_tour:4, precision:8,
+    famille:'homme', role:'élite',
+    attaque_base:{ degats_base:11, de_variance:"1d10" },
+    capacites_speciales:[{ nom:"Filet lesté", cout_pa:2, effet:"Immobilise brièvement et empêche un pouvoir de l'Onde le tour suivant", limite:"1 fois par combat" }],
+    utilise_fatigue:true, note:"Il en a pris onze. Il sait exactement combien de temps un homme peut tenir l'Onde avant de s'écrouler." },
+  { id:"BST_063", nom:"Duelliste de cour", danger:4, pv:60, defense:16, pa_par_tour:4, precision:9,
+    famille:'homme', role:'élite',
+    attaque_base:{ degats_base:10, de_variance:"1d10" },
+    capacites_speciales:[{ nom:"Riposte", cout_pa:1, effet:"Rend la moitié des dégâts subis au prochain assaut", limite:"illimité" }],
+    utilise_fatigue:false, note:"Il tue proprement, en public, et il facture la propreté." },
+
+  /* ─────────────────────── BÊTES ET MONSTRES ─────────────────────────────── */
+  { id:"BST_064", nom:"Meute affamée", danger:2, pv:28, defense:12, pa_par_tour:3, precision:4,
+    famille:'bete', role:'piétaille',
+    attaque_base:{ degats_base:5, de_variance:"1d6" },
+    capacites_speciales:[{ nom:"En nombre", cout_pa:1, effet:"Bonus de touche tant qu'un autre loup attaque la même cible", limite:"illimité" }],
+    utilise_fatigue:false, note:"L'hiver a été long. Ils n'ont plus peur du feu depuis trois semaines." },
+  { id:"BST_065", nom:"Élan des tourbières", danger:3, pv:56, defense:12, pa_par_tour:2, precision:4,
+    famille:'bete', role:'piétaille',
+    attaque_base:{ degats_base:10, de_variance:"1d8" }, capacites_speciales:[], utilise_fatigue:false,
+    note:"Une tonne d'animal qui n'attaque que si on le regarde trop longtemps. On le regarde toujours trop longtemps." },
+  { id:"BST_066", nom:"Chien de fosse", danger:2, pv:34, defense:11, pa_par_tour:3, precision:4,
+    famille:'bete', role:'piétaille',
+    attaque_base:{ degats_base:6, de_variance:"1d6" }, capacites_speciales:[], utilise_fatigue:false,
+    note:"Élevé pour l'Arène, revendu quand il a cessé de plaire, et rien n'a été retiré de ce qu'on lui a appris." },
+  { id:"BST_067", nom:"Crabe des épaves", danger:3, pv:58, defense:16, pa_par_tour:2, precision:4,
+    famille:'bete', role:'piétaille',
+    attaque_base:{ degats_base:8, de_variance:"1d8" }, capacites_speciales:[], utilise_fatigue:false,
+    note:"Il vit dans une coque échouée depuis une génération et considère la plage comme sienne." },
+  { id:"BST_068", nom:"Noyeur des quais", danger:4, pv:72, defense:13, pa_par_tour:3, precision:6,
+    famille:'monstre', role:'élite',
+    attaque_base:{ degats_base:11, de_variance:"1d10" },
+    capacites_speciales:[{ nom:"Prise et fond", cout_pa:3, effet:"Entraîne la cible sous l'eau : elle perd son prochain tour", limite:"1 fois par combat" }],
+    utilise_fatigue:true, note:"Port-Noir perd deux hommes par hiver et n'a jamais déclaré pourquoi." },
+  { id:"BST_069", nom:"Ombre de la Cicatrice", danger:5, pv:100, defense:16, pa_par_tour:4, precision:9,
+    famille:'monstre', role:'meneur',
+    attaque_base:{ degats_base:14, de_variance:"2d8" },
+    capacites_speciales:[{ nom:"Aspiration de l'Onde", cout_pa:3, effet:"Ajoute 12 de Fatigue à Yohan et se soigne d'autant", limite:"1 fois toutes les 2 tours" }],
+    utilise_fatigue:true, note:"Ce qui est resté quand la magie a brûlé la terre et que rien n'a repoussé." },
+  { id:"BST_070", nom:"Charognard cuirassé", danger:3, pv:50, defense:15, pa_par_tour:2, precision:5,
+    famille:'bete', role:'piétaille',
+    attaque_base:{ degats_base:8, de_variance:"1d8" }, capacites_speciales:[], utilise_fatigue:false,
+    note:"Il suit les colonnes depuis trois jours en attendant qu'il y ait quelque chose à manger." },
+  { id:"BST_071", nom:"Marcheur de gibet", danger:2, pv:36, defense:11, pa_par_tour:2, precision:3,
+    famille:'mort', role:'piétaille',
+    attaque_base:{ degats_base:6, de_variance:"1d6" }, capacites_speciales:[], utilise_fatigue:false,
+    note:"On l'a laissé au gibet trop longtemps, sur une terre qui ne pardonne pas ce genre de négligence." },
+  { id:"BST_072", nom:"Porte-lanterne des morts", danger:4, pv:68, defense:14, pa_par_tour:3, precision:7,
+    famille:'mort', role:'soutien', portee:true,
+    attaque_base:{ degats_base:10, de_variance:"1d10" },
+    capacites_speciales:[{ nom:"Relève", cout_pa:3, effet:"Remet debout un mort tombé avec un quart de ses PV", limite:"1 fois par combat" }],
+    utilise_fatigue:true, note:"Tant que la lanterne brûle, ce qui tombe ne reste pas tombé." },
+  { id:"BST_073", nom:"Colosse de tourbe", danger:5, pv:130, defense:16, pa_par_tour:3, precision:7,
+    famille:'monstre', role:'élite',
+    attaque_base:{ degats_base:16, de_variance:"2d8" },
+    capacites_speciales:[{ nom:"Se refaire", cout_pa:2, effet:"Regagne 15 PV en aspirant la boue autour de lui", limite:"1 fois toutes les 3 tours" }],
+    utilise_fatigue:false, note:"On l'a tué deux fois. La tourbe l'a rendu deux fois." },
+  { id:"BST_074", nom:"Reine des galeries", danger:5, pv:108, defense:15, pa_par_tour:4, precision:8,
+    famille:'monstre', role:'meneur',
+    attaque_base:{ degats_base:14, de_variance:"2d8" },
+    capacites_speciales:[{ nom:"Ponte", cout_pa:3, effet:"Fait apparaître deux araignées pâles à ses côtés", limite:"1 fois par combat" }],
+    utilise_fatigue:true, note:"Kar-Durak a muré quatre galeries à cause d'elle et n'a jamais rouvert." },
+  { id:"BST_075", nom:"Veilleur de la Purge", danger:6, pv:190, defense:18, pa_par_tour:5, precision:10,
+    famille:'monstre', role:'meneur',
+    attaque_base:{ degats_base:21, de_variance:"3d10" },
+    capacites_speciales:[{ nom:"Sentence", cout_pa:4, effet:"Dégâts massifs et 20 de Fatigue imposée à tout porteur de l'Onde", limite:"1 fois par combat" }],
+    utilise_fatigue:true, note:"Une chose qu'on a construite pour finir le travail, et qu'on a oublié d'éteindre." },
+];
+
+/* On complète les entrées et on les verse dans le bestiaire principal, pour
+ * que tout ce qui lit BESTIARY_FULL — combat, contrats, campagnes, Codex — les
+ * voie sans changer d'une ligne. */
+BESTIARY_V2.forEach(b => {
+  b.attaque_base.formule = `${b.attaque_base.degats_base} + ${b.attaque_base.de_variance} + Niveau_zone`;
+  b.note_originale = b.note;
+  BESTIARY_FULL.push(b);
+});
+
+/* La première vague n'avait ni famille ni rôle : on les lui donne, sinon le
+ * composeur de rencontres ne saurait pas quoi faire des quarante premières. */
+const FAMILLE_V1 = {
+  BST_012:'monstre', BST_020:'monstre', BST_023:'mort', BST_024:'mort', BST_025:'monstre',
+  BST_026:'homme', BST_037:'monstre', BST_038:'monstre', BST_040:'monstre', BST_017:'monstre',
+  BST_033:'monstre', BST_015:'monstre', BST_034:'monstre', BST_016:'monstre', BST_013:'monstre',
+  BST_010:'monstre', BST_011:'monstre', BST_006:'monstre', BST_008:'monstre', BST_009:'monstre',
+  BST_018:'bete', BST_019:'bete', BST_021:'bete', BST_022:'bete',
+};
+BESTIARY_FULL.forEach(b => {
+  if(!b.famille) b.famille = FAMILLE_V1[b.id] || 'bete';
+  if(!b.role) b.role = b.danger >= 6 ? 'meneur' : (b.danger >= 4 ? 'élite' : 'piétaille');
+});
 
 </script>
 <script>
@@ -14110,6 +14338,182 @@ function artPortraitCard(pnjId){
 
 </script>
 <script>
+/* src/rencontres.js */
+/* PARIAS — Composer une rencontre
+ *
+ * Un contrat envoyait une créature, tirée dans le bestiaire par palier de
+ * Danger, plus un doublon quand elle était trop faible. Résultat : « retrouver
+ * une cible qui ne veut pas être retrouvée », commandité par une maison noble,
+ * finissait sur un sanglier — et deux contrats de suite se ressemblaient.
+ *
+ * Une rencontre se compose maintenant comme une vraie opposition :
+ *
+ *   · le TYPE de l'affaire dit à quelle famille on a affaire (une traque, une
+ *     récupération ou une guerre opposent des hommes ; une chasse oppose une
+ *     bête ; un sauvetage, ce qui tient le prisonnier) ;
+ *   · le LIEU dit lesquels : on ne croise pas les mêmes hommes chez les nains
+ *     et dans les dunes khesh ;
+ *   · le DANGER dit combien et de quelle trempe : un meneur, ses élites, sa
+ *     piétaille, et parfois un soutien qui tire ou qui soigne.
+ *
+ * On y gagne trois choses : des combats qui ressemblent à leur pitch, une
+ * difficulté qui vient du nombre autant que des chiffres, et une raison
+ * mécanique de viser le chaman avant les guerriers.
+ */
+
+/* Ce qu'une affaire met en face de vous. */
+const FAMILLE_PAR_TYPE = {
+  chasse:        ['bete', 'monstre'],
+  sauvetage:     ['homme', 'monstre'],
+  traque:        ['homme'],
+  "récupération":['homme', 'mort'],
+  "enquête":     ['homme'],
+  guerre:        ['homme'],
+};
+
+/* Les hommes qu'on croise quelque part. Un peuple ne se bat pas avec les
+ * hommes d'un autre. */
+const HOMMES_PAR_PEUPLE = {
+  humains:     ['BST_041','BST_042','BST_043','BST_044','BST_045','BST_046','BST_047','BST_048','BST_049','BST_050','BST_061','BST_062','BST_063'],
+  parias:      ['BST_041','BST_042','BST_043','BST_061','BST_062','BST_049'],
+  khesh:       ['BST_056','BST_041','BST_042','BST_043','BST_061'],
+  elfes:       ['BST_057','BST_063','BST_061'],
+  elfes_noirs: ['BST_051','BST_052','BST_057','BST_061'],
+  nains:       ['BST_060','BST_061','BST_043'],
+  peaux_vertes:['BST_053','BST_054','BST_055'],
+  hommes_betes:['BST_058','BST_059'],
+  null:        ['BST_041','BST_042','BST_043','BST_044','BST_061'],
+};
+
+function bestiaireDe(id){ return BESTIARY_FULL.find(b => b.id === id) || null; }
+
+/* Le vivier d'une rencontre : famille compatible, palier de Danger tenable, et
+ * cohérent avec l'endroit quand il s'agit d'hommes. */
+function vivierRencontre(familles, lo, hi, peuple){
+  const permis = new Set(HOMMES_PAR_PEUPLE[peuple] || HOMMES_PAR_PEUPLE.null);
+  const tirer = (bas, haut, roster) => BESTIARY_FULL.filter(b => {
+    if(!familles.includes(b.famille)) return false;
+    if(b.danger < bas || b.danger > haut) return false;
+    if(b.famille === 'homme' && roster && !roster.has(b.id)) return false;
+    return true;
+  });
+  let v = tirer(Math.max(1, lo - 1), hi, permis);
+  if(v.length) return v;
+  // Le peuple d'ici n'a personne à ce palier : on élargit la fourchette avant
+  // de changer d'espèce. Une traque doit opposer des hommes, même si les
+  // Hommes-Bêtes n'alignent pas de piétaille à ce niveau-là.
+  v = tirer(1, 6, permis);
+  if(v.length) return v;
+  // Toujours rien : les mercenaires et les brigands, eux, vont partout.
+  return tirer(Math.max(1, lo - 1), hi, new Set(HOMMES_PAR_PEUPLE.null));
+}
+
+function tirerDans(liste, filtre){
+  const p = liste.filter(filtre);
+  if(!p.length) return null;
+  return p[Math.floor(Math.random() * p.length)];
+}
+
+/* Combien d'adversaires selon le palier. Un Danger élevé, c'est d'abord un
+ * meneur ; un Danger faible, c'est du nombre. */
+function tailleDeGroupe(danger){
+  if(danger <= 1) return { pietaille:[2, 3], elite:0, soutien:0, meneur:false };
+  if(danger === 2) return { pietaille:[2, 4], elite:0, soutien:0.4, meneur:false };
+  if(danger === 3) return { pietaille:[2, 3], elite:0, soutien:0.5, meneur:true };
+  if(danger === 4) return { pietaille:[1, 3], elite:1, soutien:0.5, meneur:true };
+  if(danger === 5) return { pietaille:[0, 2], elite:1, soutien:0.6, meneur:true };
+  return { pietaille:[0, 1], elite:1, soutien:0.4, meneur:true };   // 6 : le meneur suffit
+}
+
+/* La rencontre d'une affaire. Rend un tableau de gabarits prêt pour
+ * startCombat, et une phrase qui dit à quoi on a affaire. */
+function composerRencontre(c, lieu){
+  const [lo, hi] = DANGER_MAP[c.danger] || [1, 2];
+  const familles = FAMILLE_PAR_TYPE[c.type] || ['bete', 'monstre'];
+  const peuple = lieu ? peupleDuLieu(lieu) : null;
+
+  // Une créature nommée dans le titre reste la menace : « Les Trois Frères
+  // Rouges » n'est pas un ours, mais « Le Basilic de la mine » en est un.
+  const nomme = BESTIARY_FULL.find(b =>
+    c.titre && c.titre.toLowerCase().includes(b.nom.toLowerCase()));
+
+  let vivier = vivierRencontre(familles, lo, hi, peuple);
+  if(!vivier.length) vivier = vivierRencontre(['bete', 'monstre'], lo, hi, peuple);
+  if(!vivier.length) vivier = BESTIARY_FULL.filter(b => b.danger >= lo && b.danger <= hi);
+  if(!vivier.length) vivier = BESTIARY_FULL.slice();
+
+  const t = tailleDeGroupe(hi);
+  const groupe = [];
+
+  const meneur = nomme
+    || (t.meneur ? (tirerDans(vivier, b => b.role === 'meneur' && b.danger >= hi - 1)
+                 || tirerDans(vivier, b => b.role === 'élite')) : null)
+    || tirerDans(vivier, b => b.danger === hi)
+    || vivier[0];
+  groupe.push(meneur);
+
+  const memeFamille = b => b.famille === meneur.famille;
+  if(t.elite){
+    const e = tirerDans(vivier, b => b.role === 'élite' && b.id !== meneur.id && memeFamille(b));
+    if(e) groupe.push(e);
+  }
+  if(Math.random() < t.soutien){
+    const s = tirerDans(vivier, b => b.role === 'soutien' && memeFamille(b));
+    if(s) groupe.push(s);
+  }
+  const [minP, maxP] = t.pietaille;
+  const n = minP + Math.floor(Math.random() * (maxP - minP + 1));
+  // Le repli reste dans la famille du meneur : un ours n'escorte pas un sergent.
+  const pietaille = tirerDans(vivier, b => b.role === 'piétaille' && memeFamille(b))
+                 || tirerDans(vivier, b => b.id !== meneur.id && memeFamille(b) && b.danger <= meneur.danger)
+                 || tirerDans(BESTIARY_FULL, b => b.famille === meneur.famille && b.role === 'piétaille'
+                                                  && b.danger <= Math.max(1, meneur.danger))
+                 || meneur;
+  for(let i = 0; i < n; i++) groupe.push(pietaille);
+
+  // Jamais plus de cinq : au-delà, l'écran de combat devient illisible et le
+  // tour du joueur interminable. Et jamais deux familles dans le même groupe.
+  return groupe.filter(b => b && b.famille === meneur.famille)
+               .slice(0, 5)
+               .map(b => JSON.parse(JSON.stringify(b)));
+}
+
+/* ---- Le pluriel, correctement ----
+ * « 3 épéiste à gagess » n'est pas du français. Dans un nom composé, seul le
+ * noyau se met au pluriel : ce qui suit une préposition n'y touche pas
+ * (épéistes à gages, chiens des dunes). Sans préposition, tout s'accorde
+ * (loups déformés, meutes affamées). */
+const PREPOSITIONS = / (?:à|de|des|du|au|aux|sans|sous|en) | d'/;
+
+function motAuPluriel(mot){
+  if(/[sxz]$/i.test(mot)) return mot;                 // ours, chauve-souris
+  if(/al$/i.test(mot)) return mot.slice(0, -2) + 'aux';
+  if(/(eau|eu)$/i.test(mot)) return mot + 'x';
+  return mot + 's';
+}
+
+function pluriel(nom){
+  const coupe = nom.search(PREPOSITIONS);
+  const noyau = coupe === -1 ? nom : nom.slice(0, coupe);
+  const reste = coupe === -1 ? '' : nom.slice(coupe);
+  return noyau.split(/([ -])/).map(m => /^[ -]$/.test(m) ? m : motAuPluriel(m)).join('') + reste;
+}
+
+/* Comment on l'annonce avant d'engager. */
+function annonceRencontre(groupe){
+  const counts = {};
+  groupe.forEach(b => { counts[b.nom] = (counts[b.nom] || 0) + 1; });
+  const parts = Object.entries(counts).map(([nom, n]) =>
+    n > 1 ? `${n} ${pluriel(nom.charAt(0).toLowerCase() + nom.slice(1))}` : nom);
+  const danger = Math.max(...groupe.map(b => b.danger));
+  const liste = parts.length > 1
+    ? parts.slice(0, -1).join(', ') + ' et ' + parts[parts.length - 1]
+    : parts[0];
+  return { liste, danger, nombre: groupe.length };
+}
+
+</script>
+<script>
 /* src/combat.js */
 /* PARIAS — Moteur de combat (multi-cibles)
  *
@@ -16174,8 +16578,9 @@ function nouerLiaison(nom, maison, origine){
     enfants: [],
   };
   l.liaisons.push(liaison);
-  // Une maison noble qui a consenti au Prix soutient celui à qui elle l'a donné.
-  ajusterReputation('humains', 8);
+  // La maison qui a consenti soutient Yohan — en or, chaque tour (voir
+  // renteDesMaisons). Ce que la noblesse en pense, en revanche, dépend de la
+  // façon dont il a réclamé son Prix : c'est prix.js qui en décide.
   if(!hasFlag('prix_noble_accepte')) heroFlags().push('prix_noble_accepte');
   return liaison;
 }
@@ -16308,6 +16713,137 @@ function renderLignee(){
     html += `<p class="lignee-rente">Les maisons alliées versent <b>${renteDesMaisons()} or</b> par tour.</p>`;
   }
   el.innerHTML = html;
+}
+
+</script>
+<script>
+/* src/prix.js */
+/* PARIAS — Le Prix du Paria
+ *
+ * La coutume est ancienne et elle n'a jamais été abrogée, parce que personne
+ * n'a jamais voulu l'écrire noir sur blanc : **une maison noble qui emploie un
+ * Paria lui doit l'Or et le Sang.** De l'or comptant, et le consentement d'une
+ * femme de son rang. C'est une humiliation pour la maison, et c'est exactement
+ * pour cela que la coutume existe : on ne fait pas appel à un Paria de gaieté
+ * de cœur.
+ *
+ * Ce qui n'allait pas :
+ *   · vingt des cinquante affaires du registre étaient commanditées par les
+ *     mêmes maisons nobles que les trente autres, sans offrir le Prix ;
+ *   · réclamer l'Or seul, la noble seule, ou le Prix complet payait exactement
+ *     la même chose : le choix n'existait pas ;
+ *   · l'écran du lieu remplaçait le nom de la maison par « le prévôt de la
+ *     place », si bien qu'aucune offre ne portait plus le Prix.
+ *
+ * Désormais : toute maison noble doit le Prix, un commanditaire du commun paie
+ * en or (une veuve du quartier bas n'a pas de fille de rang à donner), et les
+ * trois façons de réclamer mènent à trois situations différentes.
+ */
+
+/* ---- Qui est noble ---- */
+const MARQUES_NOBLES = [
+  /^Maison /i, /\bmaison mineure\b/i, /\bDuc\b/i, /\bDuchesse\b/i, /\bComte\b/i,
+  /\bComtesse\b/i, /\bBaron\b/i, /\bBaronne\b/i, /\bSeigneur\b/i, /\bDame /i,
+  /\bLady /i, /\bintendant\b/i, /\bdélégation d'Astrah\b/i, /\bconseiller de la Cour\b/i,
+];
+function commanditaireNoble(c){
+  if(!c) return false;
+  if(c.noble === false) return false;
+  if(c.noble === true || c.prix_paria) return true;
+  const q = c.maisonNoble || c.commanditaire || '';
+  return MARQUES_NOBLES.some(r => r.test(q));
+}
+
+/* ---- Quelle femme la maison propose ---- */
+const NOBLES_PROPOSEES = [
+  "Lady Éléonore", "Lady Isabeau", "Lady Adélaïde", "Lady Mathilde", "Lady Aliénor",
+  "Lady Constance", "Lady Marguerite", "Lady Héloïse", "Lady Blanche", "Lady Célestine",
+  "Lady Agnès", "Lady Philippa", "Lady Ysabeau", "Lady Aveline", "Lady Béatrice",
+  "Lady Rosamonde", "Lady Mélisende", "Lady Clarisse", "Lady Diane", "Lady Ophélie",
+];
+
+/* Le Prix d'une affaire : celui qu'elle déclare, ou celui que sa maison doit de
+ * toute façon. Déterministe : la même affaire propose toujours la même femme. */
+function prixPariaDe(c){
+  if(!commanditaireNoble(c)) return null;
+  if(c.prix_paria && c.prix_paria.noble_proposee) return c.prix_paria;
+  const h = artHash((c.origine || c.id || c.titre || '') + '|' + (c.commanditaire || ''));
+  return {
+    negocie_avant_depart: true,
+    noble_proposee: {
+      nom: NOBLES_PROPOSEES[h % NOBLES_PROPOSEES.length],
+      maison: c.maisonNoble || c.commanditaire,
+      adulte: true, consentement_requis: true,
+    },
+    choix: ["OR", "NOBLE_CONSENTANTE", "OR_ET_NOBLE_CONSENTANTE", "NEGOCIER", "REFUSER"],
+  };
+}
+
+/* ---- Les trois façons de réclamer, et ce qu'elles font vraiment ---- */
+/* orMult est appliqué au paiement ; le reste tombe au retour de mission. */
+const TERMES_DU_PRIX = {
+  OR: {
+    label: "Réclamer l'Or seul",
+    sub: c => `${Math.round(c.or * 1.25)} or · la maison paie et respire`,
+    detail: "Une maison soulagée paie mieux. On vous prend pour un mercenaire, ce qui est un déguisement commode.",
+    orMult: 1.25, liaison:false,
+    reputation:{ humains:6, parias:-3 }, renom:0, suspicion:-2,
+  },
+  NOBLE_CONSENTANTE: {
+    label: "Réclamer le consentement seul",
+    sub: c => `Aucun or · une alliance, et une rente`,
+    detail: "Renoncer à l'or pour du sang : la maison comprend qu'elle a affaire à quelqu'un qui pense en générations.",
+    orMult: 0.15, liaison:true,
+    reputation:{ humains:-4, parias:12 }, renom:6, suspicion:4,
+  },
+  OR_ET_NOBLE_CONSENTANTE: {
+    label: "Réclamer le Prix entier",
+    sub: c => `${c.or} or et le consentement · la coutume, en entier`,
+    detail: "L'Or et le Sang, comme il est écrit nulle part et su de tous. La maison s'exécute, et ne l'oubliera pas.",
+    orMult: 1, liaison:true,
+    reputation:{ humains:-9, parias:20 }, renom:10, suspicion:9,
+  },
+};
+
+function optionsDuPrix(c, prix){
+  const p = prix.noble_proposee;
+  const opts = Object.entries(TERMES_DU_PRIX).map(([id, t]) => ({
+    id, label: id === 'NOBLE_CONSENTANTE' ? `Réclamer ${p.nom}` : t.label,
+    sub: t.sub(c), detail: t.detail,
+  }));
+  opts.push({ id:"NEGOCIER", label:"Négocier les termes", sub:"Issue incertaine", detail:"On peut toujours essayer d'obtenir mieux. On obtient parfois moins." });
+  opts.push({ id:"REFUSER", label:"Refuser l'affaire", sub:"Met fin à la mission", detail:"Une maison qu'on refuse s'en souvient." });
+  return opts;
+}
+
+/* Le multiplicateur d'or dû au terme choisi. */
+function multiplicateurDuPrix(choix){
+  const t = TERMES_DU_PRIX[choix];
+  return t ? t.orMult : 1;
+}
+
+/* Appliqué au retour d'une mission réussie. Rend la phrase à afficher. */
+function appliquerPrix(c, choix, prix){
+  const t = TERMES_DU_PRIX[choix];
+  if(!t || !prix) return '';
+  for(const [k, n] of Object.entries(t.reputation || {})) ajusterReputation(k, n);
+  if(t.renom) ajusterRenom(t.renom);
+  if(t.suspicion) adjustSuspicion(t.suspicion);
+
+  if(!t.liaison){
+    return ` La maison paie en or, sans un mot de plus. On n'a pas eu à parler du reste, et chacun préfère qu'il en soit ainsi.`;
+  }
+  const p = prix.noble_proposee;
+  const liaison = nouerLiaison(p.nom, p.maison || c.commanditaire, c.titre);
+  return liaison
+    ? ` <b>${p.nom}</b> consent devant témoins, comme la coutume l'exige — et comme sa maison espérait n'avoir jamais à le faire.
+       ${p.maison || c.commanditaire} soutient désormais celui à qui elle a donné l'Or et le Sang, et le temps dira le reste.`
+    : ` La femme que la maison propose est déjà liée à Yohan. On règle en or, et l'on n'en reparle pas.`;
+}
+
+/* Ce qu'on écrit sur la carte d'une offre. */
+function mentionDuPrix(c){
+  return commanditaireNoble(c) ? "Prix du Paria" : (c.or + ' or');
 }
 
 </script>
@@ -16657,13 +17193,19 @@ function rhabiller(c, lieu){
   const peuple = peupleDuLieu(lieu);
   const pool = COMMANDITAIRES_LOCAUX[peuple] || COMMANDITAIRES_LOCAUX.null;
   const h = artHash(c.id + lieu.id);
+  // Une maison noble garde son nom : c'est elle qui doit le Prix du Paria, et
+  // la remplacer par « le prévôt de la place » faisait disparaître la coutume
+  // du jeu entier. L'homme du lieu devient alors l'entremetteur, pas le
+  // commanditaire.
+  const noble = (typeof commanditaireNoble === 'function') && commanditaireNoble(c);
   return {
     ...c,
     id: 'G_' + lieu.id + '_' + c.id,
     origine: c.id,
     lieu: lieu.nom,
     locId: lieu.id,
-    commanditaire: pool[h % pool.length],
+    commanditaire: noble ? c.commanditaire : pool[h % pool.length],
+    entremetteur: noble ? pool[h % pool.length] : null,
     tableau: true,          // vient du tableau des mercenaires, pas du lieu
   };
 }
@@ -16707,13 +17249,18 @@ function offresDuTour(){
                              semainesRoute: semainesDeVoyage(lieu.id, dest) });
   }
 
-  /* 3. Le tableau des mercenaires bouche les trous, rhabillé au lieu. */
+  /* 3. Le tableau des mercenaires bouche les trous, rhabillé au lieu. Le
+   *    registre décline dix archétypes en cinquante affaires : on n'en tire
+   *    jamais deux du même, sans quoi le tableau affiche deux fois la même
+   *    histoire à un mot près. */
   if(liste.length < 3){
-    const pool = CONTRACTS.filter(c => !hero.contratsFaits || !hero.contratsFaits.includes(c.id));
-    const reste = pool.length ? pool : CONTRACTS.slice();
-    const tirage = reste.slice();
+    const base = t => (t || '').split(' — ')[0];
+    const dejaVus = new Set(liste.map(c => base(c.titre)));
+    const tirage = CONTRACTS.slice();
     while(liste.length < 3 && tirage.length){
       const c = tirage.splice(Math.floor(rnd() * tirage.length), 1)[0];
+      if(dejaVus.has(base(c.titre))) continue;
+      dejaVus.add(base(c.titre));
       liste.push(rhabiller(c, lieu));
     }
   }
@@ -16869,20 +17416,22 @@ function renderLieu(){
     }
     offres.forEach(c => {
       const ailleurs = c.ailleurs ? LOCATIONS.find(x => x.id === c.ailleurs) : null;
+      const noble = (typeof commanditaireNoble === 'function') && commanditaireNoble(c);
       const trajet = ailleurs ? semainesDeVoyage(hero.position, c.ailleurs) : 0;
       const div = document.createElement('div');
       div.className = 'offre' + (c.locale ? ' locale' : '') + (ailleurs ? ' ailleurs' : '');
       div.innerHTML = `
         <div class="offre-tete">
           <span class="offre-titre">${c.titre}</span>
-          <span class="offre-prix">${c.prix_paria ? 'Prix Paria' : c.or + ' or'}</span>
+          <span class="offre-prix${noble ? ' prix-paria' : ''}">${noble ? 'Or et Sang' : c.or + ' or'}</span>
         </div>
-        <div class="offre-qui">${c.commanditaire}${c.locale ? ' · affaire du lieu' : ' · tableau des mercenaires'}</div>
+        <div class="offre-qui">${c.commanditaire}${c.entremetteur ? ` · par l'entremise de ${c.entremetteur.toLowerCase()}` : ''}${c.locale ? ' · affaire du lieu' : ' · tableau des mercenaires'}</div>
         <p class="offre-pitch">${c.pitch}</p>
         <div class="offre-pied">
           <span class="offre-tag ${c.danger === 'modéré' ? '' : 'chaud'}">${c.danger}</span>
           <span class="offre-tag">${c.type}</span>
           <span class="offre-tag susp">+${c.suspicion} Suspicion</span>
+          ${noble ? `<span class="offre-tag paria">Prix du Paria · ${c.or} or et le consentement</span>` : ''}
           ${ailleurs ? `<span class="offre-tag voyage">${ailleurs.nom} · ${trajet} sem. de route</span>`
                      : `<span class="offre-tag ici">sur place</span>`}
         </div>`;
@@ -18879,14 +19428,23 @@ function renderSuspicionBadge(){
   el.className = 'suspicion-badge '+info.cls;
 }
 
+/* Un chasseur de primes ne vient plus seul : il vient avec ce qu'il a pu payer
+ * avec l'avance sur la prime. Le groupe grossit avec la Suspicion. */
 function generateBountyHunter(){
   const tier = dangerRecommande(hero.niveau);
-  return {
-    id:"CHASSEUR_PRIME", nom:"Chasseur de primes", danger: Math.min(6, tier+1),
-    pv: 55 + tier*8, defense: 15, pa_par_tour: 4, precision: 7 + Math.floor(tier/2),
-    attaque_base:{ degats_base: 10 + tier, de_variance:"1d10" },
-    capacites_speciales:[{ nom:"Filet lesté", effet:"Immobilise brièvement Yohan avant de frapper (effet narratif simplifié)." }],
-  };
+  const chef = JSON.parse(JSON.stringify(
+    BESTIARY_FULL.find(b => b.id === 'BST_062') || BESTIARY_FULL[0]));
+  chef.nom = "Chasseur de primes";
+  chef.danger = Math.min(6, tier + 1);
+  chef.pv = 55 + tier * 8;
+  chef.precision = 7 + Math.floor(tier / 2);
+  chef.attaque_base = { degats_base: 10 + tier, de_variance: "1d10",
+                        formule: `${10 + tier} + 1d10 + Niveau_zone` };
+  const groupe = [chef];
+  const renforts = (hero.suspicion || 0) >= 85 ? 3 : ((hero.suspicion || 0) >= 70 ? 2 : 1);
+  const aide = BESTIARY_FULL.find(b => b.id === (tier >= 4 ? 'BST_061' : 'BST_042'));
+  for(let i = 0; i < renforts && aide; i++) groupe.push(JSON.parse(JSON.stringify(aide)));
+  return groupe;
 }
 
 /* ============================= BLOCS NARRATIFS ============================= */
@@ -19094,6 +19652,41 @@ function renderContracts(){
   renderContratsSpeciaux();
 }
 
+/* ---- Habillage narratif d'une affaire ----
+ * Les cinq phases d'un contrat ne sont pas écrites à la main : elles sont
+ * remplies à partir de ce que l'affaire déclare (titre, lieu, commanditaire,
+ * danger, type). C'est ce qui permet à une affaire locale d'un dossier de se
+ * jouer exactement comme un contrat du registre. */
+function fillTemplate(str, c){
+  return str.replace(/\{titre\}/g, c.titre).replace(/\{lieu\}/g, c.lieu).replace(/\{commanditaire\}/g, c.commanditaire);
+}
+
+/* « de une affaire » ne se dit pas. Les qualificatifs commencent presque tous
+ * par une voyelle : on élide. */
+function elide(prep, mot){
+  return /^[aàâeéèêiîoôuûyh]/i.test(mot) ? prep.slice(0, -1) + "'" + mot : prep + mot;
+}
+
+function contractNarrative(c, step){
+  const qualif = DANGER_QUALIF[c.danger] || "une affaire à ne pas prendre à la légère";
+  const enjeu = TYPE_ENJEU[c.type] || "mener cette mission à bien";
+  const fill = (str) => fillTemplate(str, c).replace(/\{qualif\}/g, qualif).replace(/\{enjeu\}/g, enjeu);
+  switch(step){
+    case "Audience":
+      // Le commanditaire peut être un homme, une maison ou tout un hameau :
+      // on met Yohan en sujet pour que la phrase tienne dans les trois cas.
+      return `<p>Yohan est reçu par <b>${c.commanditaire}</b> sans intermédiaire — signe que l'affaire compte réellement. Elle porte déjà un nom, murmuré à mots couverts : <b>${c.titre}</b>. Ce que l'on en dit suffit à comprendre qu'il s'agit ${elide('de ', qualif)}.</p><p>${c.pitch}</p><p style="color:var(--parchment-dim);font-style:italic;">Au fond, il ne s'agit que de ${enjeu} — mais Yohan sait mieux que quiconque que ce genre de mission cache toujours plus qu'il n'y paraît.</p>`;
+    case "Préparation": return `<p>${fill(pickVariant(FRAME_PREP))}</p>`;
+    case "Approche":    return `<p>${fill(pickVariant(FRAME_APPROCHE))}</p>`;
+    case "Résolution":  return `<p>${fill(pickVariant(FRAME_RESOLUTION))}</p>`;
+    default: return '';
+  }
+}
+
+function flavorFor(type, key, fallback){
+  return (CONTRACT_FLAVOR[type] && CONTRACT_FLAVOR[type][key]) || fallback;
+}
+
 function openContract(c){
   currentContract = c;
   contractState = {stepIndex:0, prixChoisi:null, aborted:false, complication:null, mods:{orMult:1, defBonus:0, enemyPvMult:1, skipCombat:false, infoGained:false}};
@@ -19137,24 +19730,23 @@ function renderContractStep(){
     body.innerHTML = `${contractNarrative(c,'Audience')}<div id="audienceExtra"></div>`;
     const extra = document.getElementById('audienceExtra');
 
-    if(c.prix_paria){
-      const p = c.prix_paria.noble_proposee;
-      extra.innerHTML = `<h3>Négociation du Prix du Paria</h3>
-        <p style="color:var(--parchment-dim);font-size:13.5px;">La maison propose, selon la coutume ancestrale : l'Or, ou ${p?p.nom+' ('+p.maison+')':'une noble consentante'} — jamais l'un sans le consentement établi.</p>
+    const prix = prixPariaDe(c);
+    contractState.prix = prix;
+    if(prix){
+      const p = prix.noble_proposee;
+      extra.innerHTML = `<h3>Le Prix du Paria</h3>
+        <p style="color:var(--parchment-dim);font-size:13.5px;">La coutume n'a jamais été abrogée : une maison noble qui emploie un Paria lui doit
+          <b>l'Or et le Sang</b> — des pièces comptant, et le consentement d'une femme de son rang.
+          ${p.maison} propose ${p.nom}. À Yohan de dire ce qu'il réclame.</p>
         <div class="prix-choices" id="prixChoices"></div>`;
-      const opts = [
-        {id:"OR", label:"Réclamer l'Or seul", sub:c.or+" pièces d'or"},
-        {id:"NOBLE_CONSENTANTE", label:"Réclamer "+(p?p.nom:"la noble consentante"), sub:"Relation persistante possible"},
-        {id:"OR_ET_NOBLE_CONSENTANTE", label:"Réclamer le Prix complet", sub:"Or + relation persistante"},
-        {id:"NEGOCIER", label:"Négocier les termes", sub:"Issue incertaine"},
-        {id:"REFUSER", label:"Refuser le contrat", sub:"Met fin à la mission"},
-      ];
+      const opts = optionsDuPrix(c, prix);
       const holder = document.getElementById('prixChoices');
       opts.forEach(o=>{
         const b = document.createElement('button');
-        b.innerHTML = `${o.label}<small>${o.sub}</small>`;
+        b.innerHTML = `${o.label}<small>${o.sub}</small><small class="prix-detail">${o.detail}</small>`;
         b.onclick = () => {
           contractState.prixChoisi = o.id;
+          contractState.mods.orMult = multiplicateurDuPrix(o.id);
           if(o.id==="NOBLE_CONSENTANTE" || o.id==="OR_ET_NOBLE_CONSENTANTE"){
             if(!hasFlag('prix_noble_accepte')) heroFlags().push('prix_noble_accepte');
           }
@@ -19163,6 +19755,7 @@ function renderContractStep(){
           } else if(o.id==="NEGOCIER"){
             const success = Math.random()<0.5;
             contractState.mods.orMult = success ? 1.3 : 0.85;
+            contractState.prixChoisi = success ? "OR_ET_NOBLE_CONSENTANTE" : "OR";
             body.innerHTML += `<p style="margin-top:12px;color:${success?'var(--onde-bright)':'var(--warn)'};">${success?"La négociation porte ses fruits — de meilleures conditions sont obtenues.":"La négociation tourne court — la maison concède un peu moins que prévu."}</p>
               <div style="margin-top:10px;text-align:right;"><button class="primary" id="audNextBtn">Poursuivre</button></div>`;
             document.getElementById('audNextBtn').onclick = goNextStep;
@@ -19296,24 +19889,24 @@ function renderContractStep(){
       contractState.resolutionSuccess = success;
       document.getElementById('nextStepBtn').onclick = goNextStep;
     } else {
-      const [lo,hi] = DANGER_MAP[c.danger] || [1,2];
-      let pool = BESTIARY_FULL.filter(b=>b.danger>=lo && b.danger<=hi);
-      let forced = BESTIARY_FULL.find(b => c.titre.toLowerCase().includes(b.nom.toLowerCase().split(' ')[0].toLowerCase()));
-      let enemy = JSON.parse(JSON.stringify(forced || (pool.length? pool[Math.floor(Math.random()*pool.length)] : BESTIARY_FULL[0])));
-      if(contractState.mods.enemyPvMult !== 1) enemy.pv = Math.max(1, Math.round(enemy.pv * contractState.mods.enemyPvMult));
+      // Une affaire n'oppose pas une créature tirée au hasard : elle oppose un
+      // groupe cohérent avec son type, son lieu et son Danger.
+      const lieuCourant = LOCATIONS.find(l => l.id === (c.locId || c.ailleurs || hero.position)) || currentLieu;
+      const groupe = composerRencontre(c, lieuCourant);
+      if(contractState.mods.enemyPvMult !== 1)
+        groupe.forEach(g => { g.pv = Math.max(1, Math.round(g.pv * contractState.mods.enemyPvMult)); });
+      const an = annonceRencontre(groupe);
       const recommande = dangerRecommande(hero.niveau);
-      const warnHtml = enemy.danger > recommande+1
-        ? `<p style="margin-top:8px;color:var(--blood-bright);">⚠ Cette menace (Danger ${enemy.danger}) dépasse nettement ce que Yohan affronte habituellement à son niveau (${hero.niveau}, Danger recommandé ${recommande}). Prudence.</p>`
+      const warnHtml = an.danger > recommande+1
+        ? `<p style="margin-top:8px;color:var(--blood-bright);">⚠ Cette menace (Danger ${an.danger}) dépasse nettement ce que Yohan affronte habituellement à son niveau (${hero.niveau}, Danger recommandé ${recommande}). Prudence.</p>`
         : '';
       body.innerHTML = `${compRef}${contractNarrative(c,'Résolution')}
-        <p style="margin-top:10px;color:var(--parchment-dim);font-style:italic;">${RESOLUTION_INTRO[c.type]||''} La menace se révèle : <b>${enemy.nom}</b> (Danger ${enemy.danger}).${contractState.mods.enemyPvMult!==1?" Yohan a déjà l'avantage.":''}</p>
+        <p style="margin-top:10px;color:var(--parchment-dim);font-style:italic;">${RESOLUTION_INTRO[c.type]||''} En face : <b>${an.liste}</b> — ${an.nombre > 1 ? `${an.nombre} adversaires` : 'seul'}, Danger ${an.danger}.${contractState.mods.enemyPvMult!==1?" Yohan a déjà l'avantage.":''}</p>
         ${warnHtml}
         <div style="margin-top:14px;"><button class="primary" id="goCombatBtn">Engager le combat</button></div>`;
       document.getElementById('goCombatBtn').onclick = () => {
         combatReturnTo = () => { contractState.stepIndex++; showScreen('contrat'); renderContractStep(); };
-        // Une menace faible ne se présente pas seule sur un contrat rémunéré
-        const escorte = enemy.danger <= 2 ? [enemy, enemy] : [enemy];
-        startCombat(escorte, contractState.mods.defBonus);
+        startCombat(groupe, contractState.mods.defBonus);
       };
     }
     return;
@@ -19333,13 +19926,8 @@ function renderContractStep(){
       gainPointsSang(5);
       ajusterRenom(3);   // un contrat honoré se sait, et le Renom monte
       msg = fillTemplate(pickVariant(FRAME_RETOUR_SUCCESS), c) + ` Yohan reçoit ${orGagne} pièces d'or.`;
-      if(c.prix_paria && (contractState.prixChoisi==="NOBLE_CONSENTANTE" || contractState.prixChoisi==="OR_ET_NOBLE_CONSENTANTE")){
-        const p = c.prix_paria.noble_proposee;
-        const liaison = p ? nouerLiaison(p.nom, p.maison || c.commanditaire, c.titre) : null;
-        msg += liaison
-          ? ` Une relation persistante se noue avec <b>${p.nom}</b>. ${p.maison || c.commanditaire} soutient désormais celui à qui elle a consenti le Prix — et le temps dira le reste.`
-          : " La relation existait déjà ; on n'en reparle pas.";
-      }
+      if(contractState.prix && contractState.prixChoisi)
+        msg += appliquerPrix(c, contractState.prixChoisi, contractState.prix);
       const looted = grantLoot();
       if(looted) lootHtml = `<p style="margin-top:8px;color:var(--onde-bright);">Butin trouvé : <b>${looted.nom}</b> — ${looted.desc}.</p>`;
     }

@@ -899,14 +899,23 @@ function renderSuspicionBadge(){
   el.className = 'suspicion-badge '+info.cls;
 }
 
+/* Un chasseur de primes ne vient plus seul : il vient avec ce qu'il a pu payer
+ * avec l'avance sur la prime. Le groupe grossit avec la Suspicion. */
 function generateBountyHunter(){
   const tier = dangerRecommande(hero.niveau);
-  return {
-    id:"CHASSEUR_PRIME", nom:"Chasseur de primes", danger: Math.min(6, tier+1),
-    pv: 55 + tier*8, defense: 15, pa_par_tour: 4, precision: 7 + Math.floor(tier/2),
-    attaque_base:{ degats_base: 10 + tier, de_variance:"1d10" },
-    capacites_speciales:[{ nom:"Filet lesté", effet:"Immobilise brièvement Yohan avant de frapper (effet narratif simplifié)." }],
-  };
+  const chef = JSON.parse(JSON.stringify(
+    BESTIARY_FULL.find(b => b.id === 'BST_062') || BESTIARY_FULL[0]));
+  chef.nom = "Chasseur de primes";
+  chef.danger = Math.min(6, tier + 1);
+  chef.pv = 55 + tier * 8;
+  chef.precision = 7 + Math.floor(tier / 2);
+  chef.attaque_base = { degats_base: 10 + tier, de_variance: "1d10",
+                        formule: `${10 + tier} + 1d10 + Niveau_zone` };
+  const groupe = [chef];
+  const renforts = (hero.suspicion || 0) >= 85 ? 3 : ((hero.suspicion || 0) >= 70 ? 2 : 1);
+  const aide = BESTIARY_FULL.find(b => b.id === (tier >= 4 ? 'BST_061' : 'BST_042'));
+  for(let i = 0; i < renforts && aide; i++) groupe.push(JSON.parse(JSON.stringify(aide)));
+  return groupe;
 }
 
 /* ============================= BLOCS NARRATIFS ============================= */
@@ -1114,6 +1123,41 @@ function renderContracts(){
   renderContratsSpeciaux();
 }
 
+/* ---- Habillage narratif d'une affaire ----
+ * Les cinq phases d'un contrat ne sont pas écrites à la main : elles sont
+ * remplies à partir de ce que l'affaire déclare (titre, lieu, commanditaire,
+ * danger, type). C'est ce qui permet à une affaire locale d'un dossier de se
+ * jouer exactement comme un contrat du registre. */
+function fillTemplate(str, c){
+  return str.replace(/\{titre\}/g, c.titre).replace(/\{lieu\}/g, c.lieu).replace(/\{commanditaire\}/g, c.commanditaire);
+}
+
+/* « de une affaire » ne se dit pas. Les qualificatifs commencent presque tous
+ * par une voyelle : on élide. */
+function elide(prep, mot){
+  return /^[aàâeéèêiîoôuûyh]/i.test(mot) ? prep.slice(0, -1) + "'" + mot : prep + mot;
+}
+
+function contractNarrative(c, step){
+  const qualif = DANGER_QUALIF[c.danger] || "une affaire à ne pas prendre à la légère";
+  const enjeu = TYPE_ENJEU[c.type] || "mener cette mission à bien";
+  const fill = (str) => fillTemplate(str, c).replace(/\{qualif\}/g, qualif).replace(/\{enjeu\}/g, enjeu);
+  switch(step){
+    case "Audience":
+      // Le commanditaire peut être un homme, une maison ou tout un hameau :
+      // on met Yohan en sujet pour que la phrase tienne dans les trois cas.
+      return `<p>Yohan est reçu par <b>${c.commanditaire}</b> sans intermédiaire — signe que l'affaire compte réellement. Elle porte déjà un nom, murmuré à mots couverts : <b>${c.titre}</b>. Ce que l'on en dit suffit à comprendre qu'il s'agit ${elide('de ', qualif)}.</p><p>${c.pitch}</p><p style="color:var(--parchment-dim);font-style:italic;">Au fond, il ne s'agit que de ${enjeu} — mais Yohan sait mieux que quiconque que ce genre de mission cache toujours plus qu'il n'y paraît.</p>`;
+    case "Préparation": return `<p>${fill(pickVariant(FRAME_PREP))}</p>`;
+    case "Approche":    return `<p>${fill(pickVariant(FRAME_APPROCHE))}</p>`;
+    case "Résolution":  return `<p>${fill(pickVariant(FRAME_RESOLUTION))}</p>`;
+    default: return '';
+  }
+}
+
+function flavorFor(type, key, fallback){
+  return (CONTRACT_FLAVOR[type] && CONTRACT_FLAVOR[type][key]) || fallback;
+}
+
 function openContract(c){
   currentContract = c;
   contractState = {stepIndex:0, prixChoisi:null, aborted:false, complication:null, mods:{orMult:1, defBonus:0, enemyPvMult:1, skipCombat:false, infoGained:false}};
@@ -1157,24 +1201,23 @@ function renderContractStep(){
     body.innerHTML = `${contractNarrative(c,'Audience')}<div id="audienceExtra"></div>`;
     const extra = document.getElementById('audienceExtra');
 
-    if(c.prix_paria){
-      const p = c.prix_paria.noble_proposee;
-      extra.innerHTML = `<h3>Négociation du Prix du Paria</h3>
-        <p style="color:var(--parchment-dim);font-size:13.5px;">La maison propose, selon la coutume ancestrale : l'Or, ou ${p?p.nom+' ('+p.maison+')':'une noble consentante'} — jamais l'un sans le consentement établi.</p>
+    const prix = prixPariaDe(c);
+    contractState.prix = prix;
+    if(prix){
+      const p = prix.noble_proposee;
+      extra.innerHTML = `<h3>Le Prix du Paria</h3>
+        <p style="color:var(--parchment-dim);font-size:13.5px;">La coutume n'a jamais été abrogée : une maison noble qui emploie un Paria lui doit
+          <b>l'Or et le Sang</b> — des pièces comptant, et le consentement d'une femme de son rang.
+          ${p.maison} propose ${p.nom}. À Yohan de dire ce qu'il réclame.</p>
         <div class="prix-choices" id="prixChoices"></div>`;
-      const opts = [
-        {id:"OR", label:"Réclamer l'Or seul", sub:c.or+" pièces d'or"},
-        {id:"NOBLE_CONSENTANTE", label:"Réclamer "+(p?p.nom:"la noble consentante"), sub:"Relation persistante possible"},
-        {id:"OR_ET_NOBLE_CONSENTANTE", label:"Réclamer le Prix complet", sub:"Or + relation persistante"},
-        {id:"NEGOCIER", label:"Négocier les termes", sub:"Issue incertaine"},
-        {id:"REFUSER", label:"Refuser le contrat", sub:"Met fin à la mission"},
-      ];
+      const opts = optionsDuPrix(c, prix);
       const holder = document.getElementById('prixChoices');
       opts.forEach(o=>{
         const b = document.createElement('button');
-        b.innerHTML = `${o.label}<small>${o.sub}</small>`;
+        b.innerHTML = `${o.label}<small>${o.sub}</small><small class="prix-detail">${o.detail}</small>`;
         b.onclick = () => {
           contractState.prixChoisi = o.id;
+          contractState.mods.orMult = multiplicateurDuPrix(o.id);
           if(o.id==="NOBLE_CONSENTANTE" || o.id==="OR_ET_NOBLE_CONSENTANTE"){
             if(!hasFlag('prix_noble_accepte')) heroFlags().push('prix_noble_accepte');
           }
@@ -1183,6 +1226,7 @@ function renderContractStep(){
           } else if(o.id==="NEGOCIER"){
             const success = Math.random()<0.5;
             contractState.mods.orMult = success ? 1.3 : 0.85;
+            contractState.prixChoisi = success ? "OR_ET_NOBLE_CONSENTANTE" : "OR";
             body.innerHTML += `<p style="margin-top:12px;color:${success?'var(--onde-bright)':'var(--warn)'};">${success?"La négociation porte ses fruits — de meilleures conditions sont obtenues.":"La négociation tourne court — la maison concède un peu moins que prévu."}</p>
               <div style="margin-top:10px;text-align:right;"><button class="primary" id="audNextBtn">Poursuivre</button></div>`;
             document.getElementById('audNextBtn').onclick = goNextStep;
@@ -1316,24 +1360,24 @@ function renderContractStep(){
       contractState.resolutionSuccess = success;
       document.getElementById('nextStepBtn').onclick = goNextStep;
     } else {
-      const [lo,hi] = DANGER_MAP[c.danger] || [1,2];
-      let pool = BESTIARY_FULL.filter(b=>b.danger>=lo && b.danger<=hi);
-      let forced = BESTIARY_FULL.find(b => c.titre.toLowerCase().includes(b.nom.toLowerCase().split(' ')[0].toLowerCase()));
-      let enemy = JSON.parse(JSON.stringify(forced || (pool.length? pool[Math.floor(Math.random()*pool.length)] : BESTIARY_FULL[0])));
-      if(contractState.mods.enemyPvMult !== 1) enemy.pv = Math.max(1, Math.round(enemy.pv * contractState.mods.enemyPvMult));
+      // Une affaire n'oppose pas une créature tirée au hasard : elle oppose un
+      // groupe cohérent avec son type, son lieu et son Danger.
+      const lieuCourant = LOCATIONS.find(l => l.id === (c.locId || c.ailleurs || hero.position)) || currentLieu;
+      const groupe = composerRencontre(c, lieuCourant);
+      if(contractState.mods.enemyPvMult !== 1)
+        groupe.forEach(g => { g.pv = Math.max(1, Math.round(g.pv * contractState.mods.enemyPvMult)); });
+      const an = annonceRencontre(groupe);
       const recommande = dangerRecommande(hero.niveau);
-      const warnHtml = enemy.danger > recommande+1
-        ? `<p style="margin-top:8px;color:var(--blood-bright);">⚠ Cette menace (Danger ${enemy.danger}) dépasse nettement ce que Yohan affronte habituellement à son niveau (${hero.niveau}, Danger recommandé ${recommande}). Prudence.</p>`
+      const warnHtml = an.danger > recommande+1
+        ? `<p style="margin-top:8px;color:var(--blood-bright);">⚠ Cette menace (Danger ${an.danger}) dépasse nettement ce que Yohan affronte habituellement à son niveau (${hero.niveau}, Danger recommandé ${recommande}). Prudence.</p>`
         : '';
       body.innerHTML = `${compRef}${contractNarrative(c,'Résolution')}
-        <p style="margin-top:10px;color:var(--parchment-dim);font-style:italic;">${RESOLUTION_INTRO[c.type]||''} La menace se révèle : <b>${enemy.nom}</b> (Danger ${enemy.danger}).${contractState.mods.enemyPvMult!==1?" Yohan a déjà l'avantage.":''}</p>
+        <p style="margin-top:10px;color:var(--parchment-dim);font-style:italic;">${RESOLUTION_INTRO[c.type]||''} En face : <b>${an.liste}</b> — ${an.nombre > 1 ? `${an.nombre} adversaires` : 'seul'}, Danger ${an.danger}.${contractState.mods.enemyPvMult!==1?" Yohan a déjà l'avantage.":''}</p>
         ${warnHtml}
         <div style="margin-top:14px;"><button class="primary" id="goCombatBtn">Engager le combat</button></div>`;
       document.getElementById('goCombatBtn').onclick = () => {
         combatReturnTo = () => { contractState.stepIndex++; showScreen('contrat'); renderContractStep(); };
-        // Une menace faible ne se présente pas seule sur un contrat rémunéré
-        const escorte = enemy.danger <= 2 ? [enemy, enemy] : [enemy];
-        startCombat(escorte, contractState.mods.defBonus);
+        startCombat(groupe, contractState.mods.defBonus);
       };
     }
     return;
@@ -1353,13 +1397,8 @@ function renderContractStep(){
       gainPointsSang(5);
       ajusterRenom(3);   // un contrat honoré se sait, et le Renom monte
       msg = fillTemplate(pickVariant(FRAME_RETOUR_SUCCESS), c) + ` Yohan reçoit ${orGagne} pièces d'or.`;
-      if(c.prix_paria && (contractState.prixChoisi==="NOBLE_CONSENTANTE" || contractState.prixChoisi==="OR_ET_NOBLE_CONSENTANTE")){
-        const p = c.prix_paria.noble_proposee;
-        const liaison = p ? nouerLiaison(p.nom, p.maison || c.commanditaire, c.titre) : null;
-        msg += liaison
-          ? ` Une relation persistante se noue avec <b>${p.nom}</b>. ${p.maison || c.commanditaire} soutient désormais celui à qui elle a consenti le Prix — et le temps dira le reste.`
-          : " La relation existait déjà ; on n'en reparle pas.";
-      }
+      if(contractState.prix && contractState.prixChoisi)
+        msg += appliquerPrix(c, contractState.prixChoisi, contractState.prix);
       const looted = grantLoot();
       if(looted) lootHtml = `<p style="margin-top:8px;color:var(--onde-bright);">Butin trouvé : <b>${looted.nom}</b> — ${looted.desc}.</p>`;
     }

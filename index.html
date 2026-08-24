@@ -270,6 +270,8 @@
     font-family:'EB Garamond',serif;font-size:13.5px;padding:12px;border-radius:5px;cursor:pointer;text-align:left;}
   .prix-choices button:hover{border-color:var(--onde-bright);}
   .prix-choices button small{display:block;font-family:'Inter',sans-serif;font-size:10px;color:var(--parchment-dim);margin-top:4px;}
+  .prix-choices button small.prix-detail{color:var(--parchment-dim);opacity:.75;font-style:italic;
+    line-height:1.5;margin-top:6px;text-transform:none;}
 
   /* ---- combat (repris de V0.1) ---- */
   .grid{display:grid;grid-template-columns:300px 1fr 300px;gap:18px;}
@@ -507,6 +509,8 @@
   .offre-tag.susp{border-color:var(--blood-bright);color:var(--blood-bright);}
   .offre-tag.voyage{border-color:var(--onde-bright);color:var(--onde-bright);}
   .offre-tag.ici{opacity:.6;}
+  .offre-tag.paria{border-color:var(--gold);color:var(--gold);background:rgba(198,160,74,.08);}
+  .offre-prix.prix-paria{color:var(--gold);font-family:'Cinzel',serif;letter-spacing:.03em;}
   .offre-btn{width:100%;}
   .offres-vide{font-family:'Inter',sans-serif;font-size:12.5px;color:var(--parchment-dim);
     font-style:italic;margin:0;}
@@ -1141,6 +1145,7 @@
 </div>
 
 <script src="src/data/bestiary.js"></script>
+<script src="src/data/bestiary_2.js"></script>
 <script src="src/data/portraits.js"></script>
 <script src="src/data/champions.js"></script>
 <script src="src/data/units.js"></script>
@@ -1167,12 +1172,14 @@
 <script src="src/data/reputation.js"></script>
 <script src="src/data/epilogue.js"></script>
 <script src="src/ui/art.js"></script>
+<script src="src/rencontres.js"></script>
 <script src="src/combat.js"></script>
 <script src="src/battle.js"></script>
 <script src="src/events_runner.js"></script>
 <script src="src/reputation.js"></script>
 <script src="src/contrats_locaux.js"></script>
 <script src="src/lignee.js"></script>
+<script src="src/prix.js"></script>
 <script src="src/suspicion.js"></script>
 <script src="src/politique.js"></script>
 <script src="src/offres.js"></script>

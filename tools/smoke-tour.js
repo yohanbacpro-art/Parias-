@@ -108,8 +108,14 @@ const verifie = (n, ok, d) => { if(ok) console.log('  ✔', n);
              talent: hero.talentPoints };
   });
   verifie('réclamer le Prix noue une liaison', lignee.apresLiaison.liaisons === 1, lignee.apresLiaison);
-  verifie('la maison le rend en réputation', lignee.apresLiaison.rep > lignee.repAvant, lignee.apresLiaison);
-  verifie('et en soutien chaque tour', lignee.apresLiaison.rente === 60, lignee.apresLiaison.rente);
+  // Ce que la noblesse pense de Yohan dépend de la façon dont il a réclamé son
+  // Prix, pas du seul fait d'avoir noué une liaison : c'est prix.js qui en
+  // décide, et smoke-consolidation.js qui l'éprouve. Nouer la liaison, ici, ne
+  // doit donc rien changer à la réputation.
+  verifie('nouer la liaison ne déplace pas la réputation à elle seule',
+    lignee.apresLiaison.rep === lignee.repAvant, lignee.apresLiaison);
+  verifie('la maison le rend en soutien chaque tour', lignee.apresLiaison.rente === 60, lignee.apresLiaison.rente);
+  verifie('et le marqueur du Prix est posé', lignee.apresLiaison.flag, lignee.apresLiaison);
   verifie('une grossesse menée à terme donne une naissance', lignee.naissances === 1, lignee);
   verifie('l\'enfant porte les deux maisons', !!lignee.enfant && /de /.test(lignee.enfant.nom), lignee.enfant);
   // Les bornes comptent : « Ermengarde de Corven » contient « de de » sans

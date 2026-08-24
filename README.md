@@ -7,7 +7,7 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V1.3** — un seul écran de jeu, trois offres tirées de là où l'on est, des voyages qui sortent des contrats, une Suspicion qui coûte vraiment, le chantier de Karlsberg, et six puissances qui se disputent l'après-Astrah.
+**Version actuelle : V1.4** — un seul écran de jeu, des voyages qui sortent des contrats, une Suspicion qui coûte, le chantier de Karlsberg, six puissances qui se disputent l'après-Astrah, le Prix du Paria dû par toute maison noble, et 75 créatures dont de vrais adversaires humains.
 
 ## Lancer le jeu
 
@@ -53,6 +53,9 @@ lien. Il se régénère avec `node tools/build-standalone.js`.
 | **Suspicion vivante** : 4 paliers, 12 événements dédiés, des couvertures durables | ✅ |
 | **Le chantier de Karlsberg** : 8 ouvrages, 5 200 or et 36 semaines pour tout relever | ✅ |
 | **Politique** : 6 puissances, leur influence, leur posture, et 8 édits qui tombent | ✅ |
+| **Le Prix du Paria** : toute maison noble doit l'Or et le Sang, en trois termes | ✅ |
+| **Bestiaire** : 75 créatures, dont 24 adversaires humains par peuple | ✅ |
+| **Rencontres composées** : meneur, élite, soutien et piétaille selon l'affaire et le lieu | ✅ |
 | 349 scènes, 213 choix, 23 affrontements, 6 batailles au total | ✅ |
 | **Combattants nommés** : 9 champions hors bestiaire | ✅ |
 | Événements générés (200 variantes) — remplissage quand les écrits sont épuisés | ✅ |
@@ -289,6 +292,75 @@ Il n'y en a plus qu'un : **le lieu où l'on se trouve**.
 - **Le reste des onglets redevient ce qu'il aurait dû être** : des fiches qu'on
   consulte, pas des endroits où l'on joue. L'onglet Contrats a disparu ;
   campagnes et affaires personnelles sont passées sous *Quête*.
+
+## Le Prix du Paria
+
+La coutume est ancienne et n'a jamais été abrogée, parce que personne n'a jamais
+voulu l'écrire noir sur blanc : **une maison noble qui emploie un Paria lui doit
+l'Or et le Sang.** Des pièces comptant, et le consentement d'une femme de son
+rang. C'est une humiliation pour la maison, et c'est précisément pour cela que
+la coutume existe : on ne fait pas appel à un Paria de gaieté de cœur.
+
+Ce qui n'allait pas :
+
+- vingt des cinquante affaires du registre étaient commanditées par les **mêmes
+  maisons nobles** que les trente autres, sans offrir le Prix ;
+- réclamer l'Or seul, la noble seule ou le Prix complet **payait exactement la
+  même chose** : le choix n'existait pas ;
+- l'écran du lieu remplaçait « Maison de Vauclair » par « le prévôt de la
+  place », si bien que **plus aucune offre ne portait le Prix**.
+
+Désormais, toute maison noble le doit — les cinquante affaires du registre, et
+les affaires locales commanditées par un intendant, une maison mineure ou une
+délégation d'Astrah. Un commanditaire du commun paie en or : une veuve du
+quartier bas n'a pas de fille de rang à donner, et c'est cohérent. Le nom de la
+maison reste affiché sur l'offre ; l'homme du lieu devient l'entremetteur.
+
+Les trois termes mènent à trois situations différentes :
+
+| Terme | Or | Ce que ça fait |
+|---|---|---|
+| **L'Or seul** | ×1,25 | La maison paie et respire. On vous prend pour un mercenaire — déguisement commode. +Humains, −Parias, −Suspicion. |
+| **Le consentement seul** | ×0,15 | Renoncer à l'or pour du sang. Liaison, rente de 60 or par tour, +Renom, +Parias. |
+| **Le Prix entier** | ×1 | L'Or et le Sang. Liaison, +10 Renom, +20 chez les Parias — et −9 chez les Humains, +9 de Suspicion. |
+
+Une liaison peut donner une descendance (voir *Le temps et la lignée*). Ce que
+la noblesse pense de Yohan ne dépend plus du seul fait d'avoir noué une
+liaison : il dépend de **la façon dont il a réclamé son Prix**.
+
+## Le bestiaire et les rencontres
+
+Le premier bestiaire ne contenait que des bêtes. Un contrat de traque
+commandité par une maison noble finissait donc sur un ours ou une wyverne, quel
+que soit son pitch — « retrouver une cible qui ne veut pas être retrouvée » n'a
+jamais désigné un sanglier.
+
+**75 créatures**, dont 35 nouvelles et surtout **ce contre quoi on se bat
+vraiment dans ce monde : des hommes.** Détrousseurs, brigands, arbalétriers,
+sergents de la Couronne, piquiers d'ordonnance, chevaliers de maison,
+inquisiteurs de la Purge, capitaines de la garde noire, raiders elfes noirs,
+sorciers de Valombre, casse-fers et chamans peaux-verts, cavaliers khesh,
+archers des lisières, Hommes-Bêtes des Pierres, marteaux de Kar-Durak,
+traqueurs de Parias et duellistes de cour.
+
+Chaque créature porte deux champs nouveaux : une **famille** (`homme`, `bete`,
+`monstre`, `mort`) et un **rôle** (`piétaille`, `soutien`, `élite`, `meneur`).
+
+Une rencontre se compose alors comme une vraie opposition :
+
+- le **type** de l'affaire dit à quelle famille on a affaire — une traque, une
+  récupération ou une guerre opposent des hommes ; une chasse oppose une bête ;
+- le **lieu** dit lesquels : on ne croise pas les mêmes hommes chez les nains,
+  dans les dunes khesh et dans la Forêt des Mille Cornes ;
+- le **Danger** dit combien et de quelle trempe : un meneur, ses élites, sa
+  piétaille, et parfois un soutien qui tire ou qui soigne.
+
+Un groupe ne mélange jamais deux familles et ne dépasse jamais cinq
+adversaires. On y gagne des combats qui ressemblent à leur pitch, une
+difficulté qui vient du nombre autant que des chiffres, et une raison mécanique
+de viser le chaman avant les guerriers. Un chasseur de primes, lui, vient
+désormais avec ce qu'il a pu payer sur l'avance : jusqu'à trois hommes de plus
+quand la Suspicion est en chasse ouverte.
 
 ## La Suspicion
 
@@ -601,6 +673,7 @@ src/data/
   items.js            équipement et consommables
   portraits.js        registre des personnages illustrés
   lore.js             prologue, trame, compagnons, codex, calendrier, tensions
+  bestiary_2.js       35 créatures de plus, surtout des hommes, avec famille et rôle
   chantier.js         les 8 ouvrages de Karlsberg, leur coût et leurs effets
   events_suspicion.js 12 événements qui font monter ou redescendre la Suspicion
   politique.js        les 6 puissances, leurs dérives d'influence, leurs édits
@@ -654,7 +727,10 @@ jalon de trame, contrat spécial ou attachement pose le sien. Il contrôle aussi
 **l'épilogue** : aucun verdict ne doit dépendre d'un marqueur inexistant, et
 chaque section à verdict unique doit avoir un repli. Il imprime enfin **la
 couverture par lieu** et échoue si un lieu ne peut déclencher aucun événement
-écrit. Il contrôle enfin **le chantier** (coûts réels, prérequis existants, aucune
+écrit. Il contrôle **le bestiaire** (famille et rôle valides, aucun doublon d'identifiant,
+aucune créature sans attaque) et **les rencontres** (chaque type d'affaire doit
+trouver de quoi se composer à chaque palier, chaque famille doit avoir de la
+piétaille). Il contrôle enfin **le chantier** (coûts réels, prérequis existants, aucune
 chaîne circulaire), **la Suspicion** (chaque palier doit avoir de quoi se produire
 *et* de quoi en sortir) et **la politique** (chaque édit désigne une puissance et
 des peuples qui existent, et chaque puissance finit par décider quelque chose).

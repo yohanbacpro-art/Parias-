@@ -12,7 +12,7 @@ const vm = require('vm');
 
 const racine = path.join(__dirname, '..');
 const fichiers = [
-  'src/data/bestiary.js', 'src/data/portraits.js', 'src/data/locations.js',
+  'src/data/bestiary.js', 'src/data/bestiary_2.js', 'src/data/portraits.js', 'src/data/locations.js',
   'src/data/events.js', 'src/data/contracts.js', 'src/data/powers.js',
   'src/data/items.js', 'src/data/lore.js', 'src/data/champions.js',
   'src/data/units.js', 'src/data/battles.js',
@@ -531,6 +531,44 @@ EPI_LEGS.forEach(l => {
   if(!l.effet || !Object.keys(l.effet).length) err(`EPI_LEGS ${l.id} : legs sans effet`);
 });
 console.log(`Épilogue    ${nbVerdicts} verdicts · ${EPI_LEGS.length} legs transmissibles`);
+console.log('');
+
+/* ---- Le bestiaire et les rencontres ---- */
+const FAMILLES_BST = new Set(['homme', 'bete', 'monstre', 'mort']);
+const ROLES_BST = new Set(['piétaille', 'soutien', 'élite', 'meneur']);
+const bstVus = new Set();
+BESTIARY_FULL.forEach(b => {
+  if(bstVus.has(b.id)) err(`BESTIAIRE : identifiant en double « ${b.id} »`);
+  bstVus.add(b.id);
+  if(!FAMILLES_BST.has(b.famille)) err(`BESTIAIRE ${b.id} : famille inconnue « ${b.famille} »`);
+  if(!ROLES_BST.has(b.role)) err(`BESTIAIRE ${b.id} : rôle inconnu « ${b.role} »`);
+  if(!(b.pv > 0) || !(b.defense > 0)) err(`BESTIAIRE ${b.id} : créature sans PV ni Défense`);
+  if(!b.attaque_base || !(b.attaque_base.degats_base > 0)) err(`BESTIAIRE ${b.id} : créature sans attaque`);
+  (b.capacites_speciales || []).forEach(cap => {
+    if(!cap.nom || !cap.effet) err(`BESTIAIRE ${b.id} : capacité sans nom ou sans effet`);
+  });
+});
+// Une rencontre doit pouvoir se composer pour chaque type d'affaire, à chaque
+// palier de Danger : sinon un contrat tombe sur un vivier vide.
+const FAMILLE_PAR_TYPE_ATTENDU = {
+  chasse:['bete','monstre'], sauvetage:['homme','monstre'], traque:['homme'],
+  "récupération":['homme','mort'], "enquête":['homme'], guerre:['homme'],
+};
+Object.entries(FAMILLE_PAR_TYPE_ATTENDU).forEach(([type, familles]) => {
+  for(let d = 1; d <= 6; d++){
+    const n = BESTIARY_FULL.filter(b => familles.includes(b.famille) && b.danger === d).length;
+    if(!n) warn(`Rencontres : aucune créature de type « ${type} » au Danger ${d}`);
+  }
+});
+// Chaque famille doit avoir de quoi mener et de quoi suivre.
+['homme','bete','monstre','mort'].forEach(f => {
+  const pool = BESTIARY_FULL.filter(b => b.famille === f);
+  if(!pool.some(b => b.role === 'piétaille')) err(`Rencontres : la famille « ${f} » n'a aucune piétaille`);
+  if(f === 'homme' && !pool.some(b => b.role === 'meneur')) err("Rencontres : aucun meneur humain");
+});
+const parFamille = {};
+BESTIARY_FULL.forEach(b => { parFamille[b.famille] = (parFamille[b.famille] || 0) + 1; });
+console.log(`Rencontres  ${Object.entries(parFamille).map(([f, n]) => `${n} ${f}`).join(' · ')}`);
 console.log('');
 
 /* ---- Le chantier de Karlsberg ---- */

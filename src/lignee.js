@@ -48,8 +48,9 @@ function nouerLiaison(nom, maison, origine){
     enfants: [],
   };
   l.liaisons.push(liaison);
-  // Une maison noble qui a consenti au Prix soutient celui à qui elle l'a donné.
-  ajusterReputation('humains', 8);
+  // La maison qui a consenti soutient Yohan — en or, chaque tour (voir
+  // renteDesMaisons). Ce que la noblesse en pense, en revanche, dépend de la
+  // façon dont il a réclamé son Prix : c'est prix.js qui en décide.
   if(!hasFlag('prix_noble_accepte')) heroFlags().push('prix_noble_accepte');
   return liaison;
 }

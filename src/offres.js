@@ -45,13 +45,19 @@ function rhabiller(c, lieu){
   const peuple = peupleDuLieu(lieu);
   const pool = COMMANDITAIRES_LOCAUX[peuple] || COMMANDITAIRES_LOCAUX.null;
   const h = artHash(c.id + lieu.id);
+  // Une maison noble garde son nom : c'est elle qui doit le Prix du Paria, et
+  // la remplacer par « le prévôt de la place » faisait disparaître la coutume
+  // du jeu entier. L'homme du lieu devient alors l'entremetteur, pas le
+  // commanditaire.
+  const noble = (typeof commanditaireNoble === 'function') && commanditaireNoble(c);
   return {
     ...c,
     id: 'G_' + lieu.id + '_' + c.id,
     origine: c.id,
     lieu: lieu.nom,
     locId: lieu.id,
-    commanditaire: pool[h % pool.length],
+    commanditaire: noble ? c.commanditaire : pool[h % pool.length],
+    entremetteur: noble ? pool[h % pool.length] : null,
     tableau: true,          // vient du tableau des mercenaires, pas du lieu
   };
 }
@@ -95,13 +101,18 @@ function offresDuTour(){
                              semainesRoute: semainesDeVoyage(lieu.id, dest) });
   }
 
-  /* 3. Le tableau des mercenaires bouche les trous, rhabillé au lieu. */
+  /* 3. Le tableau des mercenaires bouche les trous, rhabillé au lieu. Le
+   *    registre décline dix archétypes en cinquante affaires : on n'en tire
+   *    jamais deux du même, sans quoi le tableau affiche deux fois la même
+   *    histoire à un mot près. */
   if(liste.length < 3){
-    const pool = CONTRACTS.filter(c => !hero.contratsFaits || !hero.contratsFaits.includes(c.id));
-    const reste = pool.length ? pool : CONTRACTS.slice();
-    const tirage = reste.slice();
+    const base = t => (t || '').split(' — ')[0];
+    const dejaVus = new Set(liste.map(c => base(c.titre)));
+    const tirage = CONTRACTS.slice();
     while(liste.length < 3 && tirage.length){
       const c = tirage.splice(Math.floor(rnd() * tirage.length), 1)[0];
+      if(dejaVus.has(base(c.titre))) continue;
+      dejaVus.add(base(c.titre));
       liste.push(rhabiller(c, lieu));
     }
   }

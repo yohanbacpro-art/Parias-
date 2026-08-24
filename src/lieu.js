@@ -74,20 +74,22 @@ function renderLieu(){
     }
     offres.forEach(c => {
       const ailleurs = c.ailleurs ? LOCATIONS.find(x => x.id === c.ailleurs) : null;
+      const noble = (typeof commanditaireNoble === 'function') && commanditaireNoble(c);
       const trajet = ailleurs ? semainesDeVoyage(hero.position, c.ailleurs) : 0;
       const div = document.createElement('div');
       div.className = 'offre' + (c.locale ? ' locale' : '') + (ailleurs ? ' ailleurs' : '');
       div.innerHTML = `
         <div class="offre-tete">
           <span class="offre-titre">${c.titre}</span>
-          <span class="offre-prix">${c.prix_paria ? 'Prix Paria' : c.or + ' or'}</span>
+          <span class="offre-prix${noble ? ' prix-paria' : ''}">${noble ? 'Or et Sang' : c.or + ' or'}</span>
         </div>
-        <div class="offre-qui">${c.commanditaire}${c.locale ? ' · affaire du lieu' : ' · tableau des mercenaires'}</div>
+        <div class="offre-qui">${c.commanditaire}${c.entremetteur ? ` · par l'entremise de ${c.entremetteur.toLowerCase()}` : ''}${c.locale ? ' · affaire du lieu' : ' · tableau des mercenaires'}</div>
         <p class="offre-pitch">${c.pitch}</p>
         <div class="offre-pied">
           <span class="offre-tag ${c.danger === 'modéré' ? '' : 'chaud'}">${c.danger}</span>
           <span class="offre-tag">${c.type}</span>
           <span class="offre-tag susp">+${c.suspicion} Suspicion</span>
+          ${noble ? `<span class="offre-tag paria">Prix du Paria · ${c.or} or et le consentement</span>` : ''}
           ${ailleurs ? `<span class="offre-tag voyage">${ailleurs.nom} · ${trajet} sem. de route</span>`
                      : `<span class="offre-tag ici">sur place</span>`}
         </div>`;

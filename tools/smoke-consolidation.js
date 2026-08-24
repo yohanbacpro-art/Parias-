@@ -93,6 +93,154 @@ const verifie = (n, ok, d) => { if(ok) console.log('  ✔', n);
   verifie('le voyage se raconte', voyage.modale === 'flex' && /route/.test(voyage.texte), voyage.texte);
   verifie("une offre acceptée quitte le tableau", voyage.retiree, voyage.retiree);
 
+  /* ---------- Accepter une offre lance vraiment l'affaire ---------- */
+  console.log("\nAccepter une offre lance l'affaire");
+  await page.evaluate(() => { closeEventModal(); hero.position = 'LOC_001';
+    currentLieu = LOCATIONS.find(l => l.id === 'LOC_001'); hero.offres = null; renderLieu(); });
+  await page.click('#lieuOffres .offre .offre-btn');
+  await page.waitForTimeout(200);
+  const lance = await page.evaluate(() => ({
+    ecran: [...document.querySelectorAll('.screen')].find(s => s.classList.contains('active')).id,
+    titre: document.getElementById('ctrTitre').textContent,
+    corps: document.getElementById('ctrBody').textContent.replace(/\s+/g,' ').trim(),
+    boutons: [...document.querySelectorAll('#ctrBody button')].length,
+  }));
+  verifie("l'écran du contrat s'ouvre", lance.ecran === 'screen-contrat' && lance.titre.length > 3, lance);
+  verifie("et il est écrit, pas vide", lance.corps.length > 200, lance.corps.length);
+  verifie('il y a quelque chose à choisir', lance.boutons >= 2, lance.boutons);
+  verifie("aucune faute d'accord ni d'élision",
+    !/ reçoit Yohan en personne/.test(lance.corps) && !/s'agit de une/.test(lance.corps), lance.corps.slice(0,160));
+
+  const chaine = await page.evaluate(() => {
+    const vus = [];
+    for(let i = 0; i < 4; i++){
+      vus.push(STEP_NAMES[contractState.stepIndex]);
+      const b = document.querySelector('#ctrBody button');
+      if(!b) break;
+      if(b.id === 'goCombatBtn') break;      // le combat est éprouvé plus bas
+      b.click();
+    }
+    return { vus };
+  });
+  verifie("les phases s'enchaînent jusqu'au combat",
+    chaine.vus.length >= 3 && chaine.vus[0] === 'Audience', chaine);
+
+  /* ---------- Le Prix du Paria ---------- */
+  console.log("\nUne maison noble doit l'Or et le Sang");
+  const prixCouverture = await page.evaluate(() => ({
+    contrats: CONTRACTS.length,
+    avecPrix: CONTRACTS.filter(c => !!prixPariaDe(c)).length,
+    localesNobles: Object.values(CONTRATS_LOCAUX_EXPANSES).flat().filter(c => commanditaireNoble(c)).length,
+    peuple: commanditaireNoble({ commanditaire:"Une veuve du quartier bas" }),
+    stable: prixPariaDe(CONTRACTS[7]).noble_proposee.nom === prixPariaDe(CONTRACTS[7]).noble_proposee.nom,
+  }));
+  verifie('toute maison noble doit le Prix', prixCouverture.avecPrix === prixCouverture.contrats, prixCouverture);
+  verifie("un commanditaire du commun paie en or", prixCouverture.peuple === false, prixCouverture);
+  verifie('des affaires locales le portent aussi', prixCouverture.localesNobles >= 1, prixCouverture);
+  verifie('la même affaire propose toujours la même femme', prixCouverture.stable);
+
+  const nomMaison = await page.evaluate(() => {
+    hero.position = 'LOC_004'; hero.dossiers = {};
+    CONTRATS_LOCAUX_EXPANSES.LOC_004.forEach(c => noterAffaireReglee(c));
+    hero.offres = null;
+    const o = offresDuTour().filter(c => c.tableau);
+    return { total:o.length, maisons: o.filter(c => /^Maison /.test(c.commanditaire)).length,
+             entremetteurs: o.filter(c => c.entremetteur).length,
+             doublons: o.length - new Set(o.map(c => c.titre.split(' — ')[0])).size };
+  });
+  verifie("l'écran du lieu n'efface plus le nom de la maison",
+    nomMaison.total > 0 && nomMaison.maisons === nomMaison.total && nomMaison.entremetteurs === nomMaison.total, nomMaison);
+  verifie('et ne propose jamais deux fois la même histoire', nomMaison.doublons === 0, nomMaison);
+
+  const termes = await page.evaluate(() => {
+    const c = CONTRACTS.find(x => x.or >= 500);
+    const prix = prixPariaDe(c);
+    const essai = choix => {
+      hero.or = 0; hero.renom = 0; hero.suspicion = 20;
+      hero.reputations = { ...REPUTATION_DEPART };
+      hero.lignee = { liaisons:[], enfants:[] };
+      hero.or += Math.round(c.or * multiplicateurDuPrix(choix));
+      appliquerPrix(c, choix, prix);
+      return { choix, or: hero.or, renom: renomActuel(), susp: hero.suspicion,
+               humains: reputationDe('humains'), parias: reputationDe('parias'),
+               liaisons: hero.lignee.liaisons.length };
+    };
+    return ['OR', 'NOBLE_CONSENTANTE', 'OR_ET_NOBLE_CONSENTANTE'].map(essai);
+  });
+  const [orSeul, nobleSeule, entier] = termes;
+  verifie("l'Or seul paie le mieux et ne noue rien",
+    orSeul.or > entier.or && orSeul.liaisons === 0, termes);
+  verifie("le consentement seul renonce à l'or",
+    nobleSeule.or < entier.or / 3 && nobleSeule.liaisons === 1, termes);
+  verifie('le Prix entier prend les deux', entier.liaisons === 1 && entier.or > nobleSeule.or, termes);
+  verifie('et il se paie en réputation et en Suspicion',
+    entier.humains < orSeul.humains && entier.parias > orSeul.parias && entier.susp > orSeul.susp, termes);
+  verifie('réclamer le Prix entier fait le plus de Renom',
+    entier.renom > nobleSeule.renom && nobleSeule.renom > orSeul.renom, termes);
+
+  /* ---------- Les rencontres ---------- */
+  console.log("\nUne affaire oppose ce qu'elle annonce");
+  const bestiaire = await page.evaluate(() => {
+    const f = {};
+    BESTIARY_FULL.forEach(b => { f[b.famille] = (f[b.famille] || 0) + 1; });
+    return { total: BESTIARY_FULL.length, familles: f,
+             sansRole: BESTIARY_FULL.filter(b => !b.role).length };
+  });
+  verifie('le bestiaire compte au moins 75 créatures', bestiaire.total >= 75, bestiaire.total);
+  verifie('dont de vrais adversaires humains', bestiaire.familles.homme >= 20, bestiaire.familles);
+  verifie('toutes ont un rôle de rencontre', bestiaire.sansRole === 0, bestiaire);
+
+  const groupes = await page.evaluate(() => {
+    const res = [];
+    for(const id of ['LOC_001','LOC_008','LOC_005','LOC_010','LOC_016']){
+      const l = LOCATIONS.find(x => x.id === id);
+      for(const type of ['chasse','traque','guerre','récupération']){
+        for(const danger of ['modéré','dangereux','très dangereux','extrême']){
+          const g = composerRencontre({ titre:'x', type, danger, or:300, locId:id }, l);
+          res.push({ id, type, danger, n:g.length,
+                     familles: [...new Set(g.map(b => b.famille))],
+                     annonce: annonceRencontre(g).liste });
+        }
+      }
+    }
+    return res;
+  });
+  verifie('une rencontre est toujours composée', groupes.every(g => g.n >= 1 && g.n <= 5),
+    groupes.filter(g => g.n < 1 || g.n > 5).slice(0,3));
+  verifie('un groupe ne mélange jamais les familles', groupes.every(g => g.familles.length === 1),
+    groupes.filter(g => g.familles.length > 1).slice(0,3));
+  verifie('une traque oppose des hommes, pas un sanglier',
+    groupes.filter(g => g.type === 'traque').every(g => g.familles[0] === 'homme'),
+    groupes.filter(g => g.type === 'traque' && g.familles[0] !== 'homme').slice(0,3));
+  verifie('une chasse oppose une bête ou un monstre',
+    groupes.filter(g => g.type === 'chasse').every(g => ['bete','monstre'].includes(g.familles[0])),
+    groupes.filter(g => g.type === 'chasse' && !['bete','monstre'].includes(g.familles[0])).slice(0,3));
+  // « épéiste à gagess » : un « ss » en fin de mot est la marque d'un pluriel
+  // recollé à un nom déjà pluriel. (\b ne convient pas : « cuirassés » finit
+  // sur un caractère non-ASCII et déclencherait une fausse alerte.)
+  verifie('le pluriel des noms composés est correct',
+    groupes.every(g => !/ss(?= |$)/.test(g.annonce)),
+    groupes.filter(g => /ss(?= |$)/.test(g.annonce)).map(g => g.annonce).slice(0,4));
+  const tablePluriel = await page.evaluate(() => ({
+    compose: pluriel('épéiste à gages'), adj: pluriel('loup déformé'),
+    invariable: pluriel('ours des montagnes'), elide: pluriel("cerf d'écorce"),
+    cheval: pluriel('cheval de guerre'), trait: pluriel('chauve-souris géante'),
+  }));
+  verifie('seul le noyau du nom se met au pluriel',
+    tablePluriel.compose === 'épéistes à gages' && tablePluriel.elide === "cerfs d'écorce"
+    && tablePluriel.invariable === 'ours des montagnes' && tablePluriel.adj === 'loups déformés'
+    && tablePluriel.cheval === 'chevaux de guerre' && tablePluriel.trait === 'chauves-souris géantes',
+    tablePluriel);
+  const varieteGuerre = new Set(groupes.filter(g => g.type === 'guerre').map(g => g.id + '|' + g.annonce.replace(/\d+ /g,''))).size;
+  verifie("deux régions n'opposent pas les mêmes hommes", varieteGuerre >= 8, varieteGuerre);
+
+  const chasseur = await page.evaluate(() => {
+    hero.suspicion = 90;
+    const g = generateBountyHunter();
+    return { n: g.length, chef: g[0].nom };
+  });
+  verifie('un chasseur de primes vient accompagné', chasseur.n >= 3 && /Chasseur/.test(chasseur.chef), chasseur);
+
   /* ---------- La Suspicion coûte, et sait redescendre ---------- */
   console.log("\nLa Suspicion se paie, et on peut la payer");
   await page.evaluate(() => { closeEventModal(); });
