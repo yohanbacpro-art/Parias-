@@ -3533,4 +3533,561 @@ const CHAINES = [
         }}},
   ]},
 
+/* ══════════════════════════════════════════════════════════════════════════
+   24 — LA PORTE DE KAR-DURAK
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_PORTE", type:'contrat', titre:"La Porte de Kar-Durak",
+  commanditaire:"Le maître des Grandes Portes", maison:null,
+  or:3800, danger:"extrême", categorie:"guerre",
+  lieux:["LOC_008","LOC_009"],
+  pitch:"Une offensive Peau-Verte menace de fermer définitivement l'une des grandes portes naines. Kar-Durak n'a jamais perdu de porte.",
+  paye:["porte_tenue","porte_scellee","porte_perdue"],
+  issues:{
+    porte_tenue:"La Troisième Porte de Kar-Durak a tenu.",
+    porte_scellee:"La Troisième Porte a été scellée de l'intérieur. Ce qui était derrière y est resté.",
+    porte_perdue:"La Troisième Porte de Kar-Durak est tombée. C'est la première depuis six cents ans.",
+    abandonnee:"Yohan n'était pas devant la Troisième Porte.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"La Troisième Porte est à deux jours de galeries.",
+      ev:{ id:"CHQ_1", titre:"La Troisième Porte", famille:"NAIN", rarete:"majeur",
+        image:"cg_kardurak",
+        scenes:{
+          start:{ texte:[
+            "Le maître des Grandes Portes ne reçoit pas dans sa salle : il reçoit sur le chemin de ronde intérieur de la Troisième Porte, ce qui est une façon de dire l'urgence.",
+            "« Douze mille. Avec des machines. Ils ont pris trois postes avancés en six jours. »",
+            "Il regarde la vantail — trente pieds de bronze sur un cadre de granit. « Kar-Durak n'a pas perdu de porte depuis six cents ans. Nous en avons scellé deux. Ce n'est pas la même chose. »",
+            "Il se tourne. « Il me faut quelqu'un qui sait ce que vaut une ligne, et qui n'est pas nain. Mes capitaines mourront devant cette porte plutôt que d'admettre qu'elle tombe. »"],
+            choix:[
+              {label:"Demander d'où viennent les machines", detail:"Les Peaux-Vertes ne construisent pas de béliers",
+               suite:"machines"},
+              {label:"Demander ce que veut dire sceller", detail:"Deux portes scellées, et il n'écrit pas pourquoi",
+               suite:"sceller"},
+              {label:"Accepter", detail:"Douze mille et six jours",
+               suite:"termes"},
+            ]},
+          machines:{ texte:[
+            "« Elles sont à nous. »",
+            "Il le dit avec une lenteur de pierre. « Prises au poste de Basse-Enclume il y a quatre ans, quand nous avons reculé d'une galerie. Nous ne les avons jamais reprises et nous n'avons jamais écrit que nous les avions perdues. »",
+            "« Ils ont mis quatre ans à comprendre comment on les monte. Ils y sont arrivés. »"],
+            effets:{xp:24, flag:"porte_nos_machines"}, suite:"termes"},
+          sceller:{ texte:[
+            "« Sceller, c'est couler du plomb dans les gonds et abattre la voûte du sas derrière. »",
+            "Il pose une main sur le bronze. « La porte ne se rouvre plus. Jamais. Ce qui est derrière est perdu pour nous, et ce qui est devant ne passe plus. »",
+            "Un temps. « Derrière la Troisième, il y a quatorze mille des nôtres et la moitié de nos forges. »"],
+            effets:{xp:26, flag:"porte_ce_quil_y_a_derriere"}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Trois mille huit cents. Payés d'avance, parce que je ne sais pas si je serai là pour payer après. »",
+            "Il ajoute, sans que Yohan ait rien demandé : « Et nous savons ce que vous êtes. Nous le savons depuis Hautes-Enclumes. Kar-Durak n'écrit pas ce genre de chose et ne le dit à personne. Battez-vous. »"]},
+        }}},
+
+    { id:"ligne", delai:[2,3], attente:"Six jours avant qu'ils soient devant.",
+      ev:{ id:"CHQ_2", titre:"Ce qu'on peut faire en six jours", famille:"NAIN", rarete:"majeur",
+        image:"evt_tunnel",
+        scenes:{
+          start:{ texte:[
+            "Six jours, une porte de trente pieds, deux mille haches, et douze mille qui montent avec des machines naines.",
+            "La galerie d'approche fait quatre-vingts pas de large sur six cents de long. C'est là que ça se décide, pas devant le bronze."],
+            choix:[
+              {label:"Miner la galerie d'approche", detail:"Jet de Précision (14) · effondrer sur eux plutôt que devant eux",
+               test:{stat:"precision", dc:14}, reussite:"mine_ok", echec:"mine_ko"},
+              {label:"Aller brûler les machines", detail:"Jet d'Agilité (15) · douze mille hommes autour",
+               requis:{flag:"porte_nos_machines"}, test:{stat:"agi", dc:15},
+               reussite:"machines_ok", echec:"machines_ko"},
+              {label:"Tenir la ligne à la porte, sans finesse", detail:"Deux mille haches et du bronze",
+               suite:"ligne", effets:{xp:14}},
+            ]},
+          mine_ok:{ texte:[
+            "Quatre cents pas de galerie, onze charges de poudre naine posées dans les joints d'appareillage, et deux jours à ramper dans le noir avec des artificiers de cent quatre-vingts ans qui ne parlent pas.",
+            "Ils monteront par là. Ils n'ont pas le choix : c'est la seule galerie assez large pour les machines."],
+            effets:{xp:32, fat:16, flag:"porte_minee"}, fin:true},
+          mine_ko:{ texte:["Le granit de cette galerie a été appareillé pour ne pas s'effondrer, et il tient parole. Deux jours de travail pour arracher onze charges qui ne feront rien."],
+            effets:{fat:14, xp:10}, fin:true},
+          machines_ok:{ texte:[
+            "Trois nuits pour approcher, une pour agir. Les machines sont au centre du camp, gardées par des Peaux-Vertes qui savent exactement ce qu'elles valent.",
+            "Il en brûle deux sur quatre et repart par les hauteurs avec la moitié du camp derrière lui.",
+            "Deux machines, ce n'est pas quatre. C'est la différence entre une porte enfoncée en un jour et une porte enfoncée en trois."],
+            effets:{xp:34, fat:20, pv:-16, flag:"porte_machines_brulees"}, fin:true},
+          machines_ko:{ texte:["Le camp est bien tenu. Il ressort sans avoir approché à moins de deux cents pas, avec une flèche dans la cuisse et la certitude qu'ils ont appris à garder ce qu'ils ont pris."],
+            effets:{pv:-18, fat:16, xp:12}, fin:true},
+          ligne:{ texte:["On empile ce qu'on a devant le bronze : trois lignes, des chevaux de frise, et deux mille Nains qui n'ont pas l'intention de reculer."],
+            effets:{flag:"porte_ligne"}, fin:true},
+        }}},
+
+    { id:"assaut", delai:[1,2], attente:"Ils sont dans la galerie d'approche.",
+      ev:{ id:"CHQ_3", titre:"Devant le bronze", famille:"NAIN", rarete:"majeur",
+        image:"cg_kardurak",
+        scenes:{
+          start:{ texte:[
+            "Ils entrent dans la galerie d'approche à la troisième heure, en colonne, machines au centre.",
+            "Le maître des Grandes Portes est sur le chemin de ronde intérieur. Il n'a pas dormi depuis quatre jours et il ne descendra pas."],
+            choix:[
+              {label:"Faire sauter la galerie", detail:"Requiert de l'avoir minée",
+               requis:{flag:"porte_minee"}, suite:"saute"},
+              {label:"Tenir devant la porte", detail:"C'est ce qui reste",
+               suite:"tient"},
+              {label:"Faire sceller la porte maintenant",
+               detail:"Requiert de savoir ce qu'il y a derrière · quatorze mille des leurs restent dehors",
+               requis:{flag:"porte_ce_quil_y_a_derriere"}, test:{stat:"vol", dc:15},
+               reussite:"scelle_ok", echec:"scelle_ko"},
+            ]},
+          saute:{ texte:[
+            "Onze charges, quatre cents pas de granit appareillé, et six cents ans de maçonnerie naine qui descendent d'un seul mouvement.",
+            "Ce qui était dans la galerie y reste. Ce qui était derrière recule de trois niveaux.",
+            "Il faut encore tenir ce qui remonte par les galeries latérales."],
+            effets:{xp:40}, suite:"tient"},
+          tient:{ texte:["Deux mille haches, trois lignes, et trente pieds de bronze derrière."],
+            bataille:{ def:"BAT_KARDURAK", victoire:"tenue", defaite:"tombee" }},
+          tenue:{ fin:true, texte:[
+            "La Troisième Porte tient. Elle tient onze jours, puis la colonne se retire par où elle est venue en laissant deux machines et beaucoup de monde.",
+            "Kar-Durak n'a toujours pas perdu de porte.",
+            "Le maître des Grandes Portes descend enfin du chemin de ronde le douzième jour. Il ne dit rien à Yohan. Il fait graver, sur le montant intérieur, une ligne en runes que Yohan ne sait pas lire.",
+            "Un vieux Nain la lui traduit trois ans plus tard, dans une taverne, et refuse d'expliquer pourquoi il rit."],
+            effets:{xp:90, renom:20, reputation:{nains:30, peaux_vertes:-20},
+                    issue:"porte_tenue", flag:"kardurak_porte_tenue"}},
+          tombee:{ fin:true, texte:[
+            "Le bronze cède au neuvième jour, sous deux machines et beaucoup de morts.",
+            "Ce qui se passe derrière n'a pas de nom dans les registres nains. On y écrit seulement : *la Troisième Porte.*",
+            "Le maître des Grandes Portes meurt sur son chemin de ronde. Il n'était pas descendu."],
+            effets:{xp:40, renom:-8, reputation:{nains:-10}, issue:"porte_perdue"}},
+          scelle_ok:{ fin:true, texte:[
+            "Il faut hurler pour se faire entendre par-dessus la galerie, et hurler une chose qu'aucun Nain n'a hurlée depuis six cents ans.",
+            "« Scellez ! Vous avez quatorze mille des vôtres derrière et douze mille devant ! Scellez maintenant ! »",
+            "Le maître des Grandes Portes met onze secondes à décider. On coule le plomb dans les gonds pendant que la première ligne meurt devant, et on abat la voûte du sas à la quatrième heure.",
+            "Deux mille haches restent dehors. Elles savaient en tenant la ligne.",
+            "Kar-Durak a scellé sa troisième porte. Quatorze mille Nains et la moitié des forges sont sauves. Personne ne remerciera jamais publiquement l'humain qui a crié de sceller."],
+            effets:{xp:80, renom:14, reputation:{nains:16}, issue:"porte_scellee",
+                    flag:"kardurak_troisieme_scellee"}},
+          scelle_ko:{ texte:[
+            "« Kar-Durak ne scelle pas une porte tant qu'il y a des haches devant. »",
+            "Il ne descend pas du chemin de ronde et il ne changera pas d'avis."],
+            effets:{xp:12}, suite:"tient"},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   25 — LES PORTES DE FER
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_FER", type:'contrat', titre:"Les Portes de Fer",
+  commanditaire:"Le conseil des forges", maison:null,
+  or:2600, danger:"très dangereux", categorie:"récupération",
+  lieux:["LOC_008","LOC_012"],
+  pitch:"Une armée Peau-Verte utilise des machines naines capturées pour ouvrir une ancienne porte de fer. Kar-Durak veut ses machines. Le conseil des forges veut autre chose.",
+  paye:["machines_reprises","machines_detruites","porte_ouverte"],
+  issues:{
+    machines_reprises:"Les machines de Basse-Enclume sont revenues à Kar-Durak après quatre ans.",
+    machines_detruites:"Les machines de Basse-Enclume ont brûlé. Personne ne les reprendra.",
+    porte_ouverte:"L'ancienne porte de fer a été ouverte, et ce qu'il y avait derrière est sorti.",
+    abandonnee:"Les machines de Basse-Enclume sont toujours devant la porte de fer.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Le conseil des forges ne dit pas tout.",
+      ev:{ id:"CHF_1", titre:"Ce que le conseil des forges ne dit pas", famille:"NAIN", rarete:"majeur",
+        image:"evt2_forge",
+        scenes:{
+          start:{ texte:[
+            "Le conseil des forges siège à onze et parle d'une seule voix, ce qui est déjà suspect.",
+            "« Quatre machines de siège naines, prises à Basse-Enclume il y a quatre ans. Elles sont devant la porte de fer du niveau moins-quatre. Nous les voulons. »",
+            "Un seul détail dépasse : ils veulent les machines, et ils ne parlent pas de la porte."],
+            choix:[
+              {label:"Demander ce qu'il y a derrière la porte de fer", detail:"Personne n'en a parlé",
+               suite:"derriere"},
+              {label:"Demander pourquoi le maître des Portes n'est pas là", detail:"Jet de Précision (13)",
+               test:{stat:"precision", dc:13}, reussite:"maitre_ok", echec:"maitre_ko"},
+              {label:"Accepter", detail:"Quatre machines",
+               suite:"termes"},
+            ]},
+          derriere:{ texte:[
+            "Les onze se taisent en même temps, ce qui est une réponse.",
+            "Le plus vieux finit par dire : « Une salle. Nous l'avons fermée. C'était avant nous. »",
+            "Un autre ajoute, trop vite : « Les machines. C'est pour les machines que nous vous payons. »"],
+            effets:{xp:24, flag:"fer_salle_fermee"}, suite:"termes"},
+          maitre_ok:{ texte:[
+            "« Parce que le maître des Grandes Portes ferait sceller. »",
+            "Le plus vieux du conseil le dit sans se cacher, et les dix autres ne le contredisent pas. « Sceller le moins-quatre, c'est perdre quatre veines de fer et deux cents ans de galerie. »",
+            "Il croise les mains. « Nous préférons récupérer les machines et refermer la porte. Il préférerait sceller. Nous ne l'avons pas convoqué. »"],
+            effets:{xp:28, flags:["fer_conseil_cache","fer_salle_fermee"]}, suite:"termes"},
+          maitre_ko:{ texte:["« Il a d'autres portes », dit-on, et on passe au point suivant de l'ordre du jour."],
+            effets:{xp:6}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Deux mille six cents écus. Les quatre machines, ou ce qu'il en reste. »",
+            "Le plus vieux ajoute : « Et si la porte de fer est ouverte quand vous arriverez, revenez nous le dire avant de faire quoi que ce soit. »"]},
+        }}},
+
+    { id:"moins_quatre", delai:[2,4], attente:"Le niveau moins-quatre est à un jour et demi.",
+      ev:{ id:"CHF_2", titre:"Devant la porte de fer", famille:"NAIN", rarete:"majeur",
+        image:"evt_galerie",
+        scenes:{
+          start:{ texte:[
+            "Les quatre machines sont là, alignées devant une porte de fer haute de vingt pieds, et elles travaillent.",
+            "Ce n'est pas un siège : c'est un chantier. Trois cents Peaux-Vertes y travaillent par relais depuis des semaines, avec l'application de gens qui savent que ça prendra le temps que ça prendra.",
+            "La porte n'a ni serrure, ni gonds visibles. Elle est scellée depuis l'autre côté."],
+            choix:[
+              {label:"Regarder ce qui est écrit sur la porte", detail:"Jet de Précision (13) · il y a des runes",
+               test:{stat:"precision", dc:13}, reussite:"runes_ok", echec:"runes_ko"},
+              {label:"Saboter les machines", detail:"Jet d'Agilité (14)",
+               test:{stat:"agi", dc:14}, reussite:"sabote_ok", echec:"sabote_ko"},
+              {label:"Prendre un contremaître vivant", detail:"Ils travaillent par relais : il y a des chefs d'équipe",
+               suite:"contremaitre"},
+            ]},
+          runes_ok:{ texte:[
+            "Les runes sont naines et très anciennes. Elles ne disent pas ce qu'il y a derrière : elles disent qui a fermé, et quand.",
+            "*Fermé par le conseil des forges, l'an cent onze. Non rouvrable. Non consignable.*",
+            "*Non consignable* : il était interdit d'écrire pourquoi. Le conseil des forges a fermé cette porte il y a six cents ans et s'est interdit d'en garder la raison."],
+            effets:{xp:32, flags:["fer_runes","fer_salle_fermee"]}, fin:true},
+          runes_ko:{ texte:["Il y a des runes sur le fer, à vingt pieds de haut, derrière trois cents Peaux-Vertes. On ne les lira pas d'ici."],
+            effets:{xp:8}, fin:true},
+          sabote_ok:{ texte:[
+            "Une nuit, quatre machines, et les points faibles d'un engin de siège nain — que tout artificier connaît, y compris les humains qui ont assez traîné à Kar-Durak.",
+            "Il fend trois axes de tourillon sur quatre. La quatrième machine continuera seule, à quart de vitesse.",
+            "Ce n'est pas un arrêt. C'est un délai de quelques semaines."],
+            effets:{xp:30, fat:16, flag:"fer_sabotees"}, fin:true},
+          sabote_ko:{ texte:["Les machines sont gardées de près par des Peaux-Vertes qui ont mis quatre ans à apprendre à s'en servir et qui y tiennent. Il ressort sans avoir touché un axe."],
+            effets:{fat:14, xp:10, suspicion:4}, fin:true},
+          contremaitre:{ texte:[
+            "Le chef d'équipe de la relève de nuit est un vieux Peau-Vert au dos voûté qui compte les coups de bélier sur une tablette de bois.",
+            "Il parle mal le vardhi et il n'a pas peur.",
+            "« Le chef dit : derrière, salle. Grande. Le chef dit : les Nains ont fermé parce que dedans y'a leur honte. »",
+            "Il montre la tablette. « Onze mille coups. Encore trois mille. Après on saura. »"],
+            effets:{xp:28, flags:["fer_leur_honte","fer_trois_mille"]}, fin:true},
+        }}},
+
+    { id:"decision", delai:[1,2], attente:"Trois mille coups, à ce rythme, c'est quelques semaines.",
+      ev:{ id:"CHF_3", titre:"Quatre machines et une porte", famille:"NAIN", rarete:"majeur",
+        image:"evt_tunnel",
+        scenes:{
+          start:{ texte:[
+            "Quatre machines qui valent une campagne, trois cents Peaux-Vertes qui les servent, et une porte que le conseil des forges a fermée il y a six cents ans en s'interdisant d'écrire pourquoi.",
+            "Le conseil paie pour les machines. Il n'a pas demandé ce qu'il y avait derrière, et c'est bien ce qui inquiète."],
+            choix:[
+              {label:"Reprendre les machines par un coup de main naine",
+               detail:"Requiert de les avoir sabotées · elles ne peuvent plus fuir",
+               requis:{flag:"fer_sabotees"}, suite:"reprend"},
+              {label:"Les brûler", detail:"Personne ne les reprendra, ni eux ni le conseil",
+               suite:"brule",
+               effets:{issue:"machines_detruites", reputation:{nains:-8, peaux_vertes:6}, renom:6}},
+              {label:"Prévenir le maître des Grandes Portes",
+               detail:"Requiert de savoir que le conseil l'a écarté · il fera sceller",
+               requis:{flag:"fer_conseil_cache"}, suite:"maitre"},
+              {label:"Laisser faire et regarder ce qui sort",
+               detail:"Requiert de savoir combien de coups il reste",
+               requis:{flag:"fer_trois_mille"}, suite:"regarde",
+               effets:{issue:"porte_ouverte", reputation:{nains:-20}, renom:4, suspicion:8}},
+            ]},
+          reprend:{ texte:[
+            "Deux cents haches par la galerie latérale, à l'aube, sur un chantier dont trois machines sur quatre ne peuvent plus reculer."],
+            combat:{ groupe:[{bst:"BST_054", n:1}, {bst:"BST_053", n:3}], victoire:"reprises", defaite:"echec" }},
+          reprises:{ fin:true, texte:[
+            "Les quatre machines rentrent à Kar-Durak par la grande rampe, sous escorte, quatre ans après en être sorties.",
+            "La porte de fer est rescellée le mois suivant — plomb, granit, et une voûte abattue par-dessus. Le conseil des forges fait graver de nouvelles runes.",
+            "Elles disent la même chose que les anciennes : *fermé par le conseil des forges. Non rouvrable. Non consignable.*",
+            "Personne ne saura jamais ce qu'il y a derrière, et c'est exactement ce que le conseil payait."],
+            effets:{xp:60, renom:12, reputation:{nains:24, peaux_vertes:-14},
+                    issue:"machines_reprises"}},
+          echec:{ fin:true, texte:[
+            "Trois cents Peaux-Vertes qui gardent des machines depuis quatre ans ne les rendent pas à deux cents haches.",
+            "On décroche avec quarante morts. Le chantier reprend le lendemain."],
+            effets:{pv:-24, fat:20, xp:18, issue:"abandonnee"}},
+          brule:{ fin:true, texte:[
+            "De la poix, une nuit de relève, et quatre engins de siège naines qui brûlent pendant onze heures dans une galerie qui n'a pas de tirage.",
+            "Il faut trois jours pour que l'air redevienne respirable au moins-quatre. Le chantier est abandonné.",
+            "Le conseil des forges paie la moitié : il voulait ses machines, pas leurs cendres.",
+            "Le maître des Grandes Portes, lui, envoie une chope de bière et rien d'autre. C'est plus que ce qu'il fait d'habitude."]},
+          maitre:{ fin:true, texte:[
+            "Il écoute onze phrases et il en a assez entendu à la quatrième.",
+            "« Le conseil des forges a fermé cette porte en l'an cent onze et s'est interdit d'écrire pourquoi. Ils veulent que je récupère des machines. »",
+            "Il scelle le moins-quatre en six jours : plomb, granit, deux voûtes abattues, quatre veines de fer perdues et deux cents ans de galerie avec.",
+            "Les machines restent derrière. Trois cents Peaux-Vertes aussi.",
+            "Le conseil des forges refuse de payer. Le maître des Grandes Portes paie de sa propre bourse, moins que le contrat, et il dit une seule chose : « Vous m'avez évité d'apprendre ce que mes prédécesseurs ont enfermé. »"],
+            effets:{issue:"machines_detruites", reputation:{nains:14}, renom:10,
+                    flag:"kardurak_moins_quatre_scelle"}},
+          regarde:{ fin:true, texte:[
+            "Trois mille coups, c'est dix-neuf jours. Il les attend depuis une corniche, à deux cents pas, sans être vu.",
+            "La porte de fer cède au dix-neuvième jour, vers midi. Il y a un long silence, puis les trois cents Peaux-Vertes entrent.",
+            "Onze en ressortent.",
+            "Ce qui sort ensuite met quatre heures à passer la porte, et Yohan ne le décrira jamais à personne — ni au conseil des forges, qui refusera de payer, ni au maître des Grandes Portes, qui ne posera pas la question.",
+            "Kar-Durak scelle trois niveaux dans le mois. On n'écrit pas pourquoi."],
+            effets:{flag:"kardurak_moins_quatre_ouvert"}},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   26 — LE CONVOI D'ANARION
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_CONVOI", type:'contrat', titre:"Le Convoi d'Anarion",
+  commanditaire:"Un courtier de Valombre", maison:null,
+  or:4100, danger:"très dangereux", categorie:"guerre",
+  lieux:["LOC_007","LOC_016","LOC_011"],
+  pitch:"Des agents d'Anarion proposent un contrat lucratif dont la cargaison est volontairement cachée. Le prix est trop élevé pour ce qu'on demande.",
+  paye:["convoi_livre","convoi_ouvert","convoi_detourne"],
+  issues:{
+    convoi_livre:"Le convoi d'Anarion est arrivé à destination, et personne n'a ouvert les caisses.",
+    convoi_ouvert:"Les caisses du convoi d'Anarion ont été ouvertes, et ce qui était dedans a changé de main.",
+    convoi_detourne:"Le convoi d'Anarion n'est jamais arrivé.",
+    abandonnee:"Yohan a rendu le convoi d'Anarion à ses commanditaires.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Le convoi part dans quatre jours.",
+      ev:{ id:"CHC2_1", titre:"Quatre mille cent pour une escorte", famille:"POLITIQUE", rarete:"majeur",
+        image:"evt2_receleur",
+        scenes:{
+          start:{ pnj:"anarion", texte:[
+            "Le courtier de Valombre est humain, ce qui est déjà une information : Anarion n'envoie pas les siens traiter avec des mercenaires.",
+            "« Onze caisses. Quatre-vingts lieues. Vous ne les ouvrez pas, vous ne demandez pas, vous livrez. »",
+            "Il pose une bourse d'avance sur la table. « Quatre mille cent écus. »",
+            "C'est trois fois le tarif d'une escorte de quatre-vingts lieues, et il le sait, et il sait que Yohan le sait."],
+            choix:[
+              {label:"Demander pourquoi trois fois le tarif", detail:"Un prix trop élevé est un aveu",
+               suite:"prix"},
+              {label:"Demander ce qui se passe si une caisse s'ouvre", detail:"Jet de Précision (13)",
+               test:{stat:"precision", dc:13}, reussite:"ouvre_ok", echec:"ouvre_ko"},
+              {label:"Accepter sans poser de question", detail:"C'est ce qu'ils paient",
+               suite:"termes", effets:{suspicion:-3}},
+            ]},
+          prix:{ texte:[
+            "« Parce que trois convois sont partis avant celui-là et qu'aucun n'est arrivé. »",
+            "Il ne se dérobe pas, ce qui est presque honnête. « Deux ont été pris par des gens d'Eltharion. Le troisième, on ne sait pas. »",
+            "Il fait glisser la bourse d'un pouce. « Vous êtes payé pour le risque, pas pour la curiosité. »"],
+            effets:{xp:20, flag:"convoi_trois_perdus"}, suite:"termes"},
+          ouvre_ok:{ texte:[
+            "Il hésite une demi-seconde de trop.",
+            "« Les caisses sont plombées. Si un plomb est rompu à l'arrivée, vous n'êtes pas payé. »",
+            "Puis, parce qu'il est humain et qu'un humain finit toujours par ajouter une phrase de trop : « Et je vous conseille très sincèrement de ne pas être celui qui les ouvre. »"],
+            effets:{xp:24, flag:"convoi_plombees"}, suite:"termes"},
+          ouvre_ko:{ texte:["« Elles ne s'ouvriront pas. » Il ne dira rien d'autre là-dessus."],
+            effets:{xp:6}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Moitié maintenant, moitié à la livraison. »",
+            "Il pousse la bourse. « Et une chose : les gens qui vous paient ne sont pas de ceux qu'on déçoit deux fois. »"]},
+        }}},
+
+    { id:"route", delai:[2,4], attente:"Quatre-vingts lieues, et trois convois n'y sont pas arrivés.",
+      ev:{ id:"CHC2_2", titre:"Onze caisses", famille:"VOYAGE", rarete:"majeur",
+        image:"evt2_convoi",
+        scenes:{
+          start:{ texte:[
+            "Onze caisses de bois cerclé, plombées, sur trois chariots. Elles ne pèsent pas ce qu'elles devraient : trop lourdes pour du tissu, trop légères pour du métal.",
+            "Au troisième jour, la plus grande fait un bruit. Pas un roulement de cargaison : un bruit qui s'arrête quand on s'approche.",
+            "Le cocher, un elfe noir muet qui n'a pas dit trois mots, ne se retourne pas."],
+            choix:[
+              {label:"Ouvrir la grande caisse", detail:"Le plomb sera rompu et le contrat avec",
+               suite:"ouvre"},
+              {label:"Écouter sans ouvrir", detail:"Jet de Volonté (14) · trois nuits à côté",
+               test:{stat:"vol", dc:14}, reussite:"ecoute_ok", echec:"ecoute_ko"},
+              {label:"Faire parler le cocher", detail:"Jet de Volonté (15) · il est muet, pas sourd",
+               test:{stat:"vol", dc:15}, reussite:"cocher_ok", echec:"cocher_ko"},
+            ]},
+          ouvre:{ texte:[
+            "Le plomb saute au levier. Sous le couvercle, de la paille, et sous la paille, une femme elfe de vingt ou trois cents ans, ligotée, bâillonnée, vivante.",
+            "Il y en a une par caisse. Onze.",
+            "Elles ne sont pas des prisonnières de guerre : elles portent les marques de cour d'Eltharion. Ce sont des otages politiques, ou une monnaie d'échange, ou pire.",
+            "Le cocher est descendu de son siège et il s'éloigne sans courir."],
+            effets:{xp:36, flags:["convoi_onze_femmes","convoi_plomb_rompu"]}, fin:true},
+          ecoute_ok:{ texte:[
+            "Trois nuits couché contre la grande caisse, à écouter.",
+            "Ce n'est pas une bête. C'est une respiration, et par moments quelque chose qui ressemble à un mot étouffé dans du tissu.",
+            "Il y a quelqu'un dans cette caisse. Il y a probablement quelqu'un dans chacune."],
+            effets:{xp:32, flag:"convoi_onze_femmes"}, fin:true},
+          ecoute_ko:{ texte:["Le bois cerclé étouffe tout et la route fait plus de bruit que la cargaison. Trois nuits pour n'être sûr de rien."],
+            effets:{fat:12, xp:8}, fin:true},
+          cocher_ok:{ pnj:"anarion", texte:[
+            "Il est muet parce qu'on lui a coupé la langue, et il sait écrire, ce qui est un oubli de la part de ceux qui l'ont engagé.",
+            "Il écrit onze mots sur une planche, avec un clou : *cour d'Eltharion. Filles de maison. Anarion les échange contre des places.*",
+            "Puis il efface, et il remonte sur son siège."],
+            effets:{xp:34, flags:["convoi_onze_femmes","convoi_echange"]}, fin:true},
+          cocher_ko:{ texte:["Il ne se retourne pas. Il ne se retournera pas de tout le voyage, et c'est manifestement pour ça qu'on l'a choisi."],
+            effets:{xp:8}, fin:true},
+        }}},
+
+    { id:"decision", delai:[1,2], attente:"La destination est à trois jours.",
+      ev:{ id:"CHC2_3", titre:"Ce qu'on livre", famille:"POLITIQUE", rarete:"majeur",
+        image:"rc_anarion",
+        scenes:{
+          start:{ texte:[
+            "Trois jours de la destination : un port de la côte, un navire, et des gens qui attendent onze caisses.",
+            "Quatre mille cent écus dont la moitié est déjà touchée."],
+            choix:[
+              {label:"Livrer", detail:"Le contrat est le contrat",
+               suite:"livre",
+               effets:{issue:"convoi_livre", reputation:{elfes_noirs:16, elfes:-20}, renom:4, suspicion:-4}},
+              {label:"Les libérer et disparaître",
+               detail:"Requiert de savoir ce qu'il y a dedans · quatre mille cent écus et Anarion contre vous",
+               requis:{flag:"convoi_onze_femmes"}, suite:"libere"},
+              {label:"Les livrer à Eltharion au lieu d'Anarion",
+               detail:"Requiert de savoir d'où elles viennent · une guerre elfique a deux camps",
+               requis:{flag:"convoi_echange"}, suite:"eltharion",
+               effets:{issue:"convoi_detourne", reputation:{elfes:26, elfes_noirs:-30}, renom:10, suspicion:8}},
+            ]},
+          livre:{ fin:true, pnj:"anarion", texte:[
+            "Onze caisses plombées descendues à quai, comptées, et embarquées avant l'aube.",
+            "On paie la seconde moitié sans un mot. Le courtier de Valombre n'est pas là ; c'est un elfe noir qui compte, et il ne regarde pas Yohan.",
+            "Ce qu'il est advenu des onze, personne ne le dira jamais. Anarion obtient trois places au conseil des Lisières dans l'année, ce qui n'a probablement aucun rapport.",
+            "Yohan garde quatre mille cent écus et une chose qu'il ne raconte pas."]},
+          libere:{ fin:true, pnj:"anarion", texte:[
+            "Onze plombs rompus dans une clairière à trois jours du port, onze femmes qui mettent une demi-journée à tenir debout, et une route de quarante lieues à faire à pied dans le mauvais sens.",
+            "Il en ramène neuf jusqu'aux lisières d'Eltharion. Deux sont mortes en route : elles étaient dans ces caisses depuis trop longtemps.",
+            "La seconde moitié n'est jamais payée. Le courtier de Valombre disparaît de Valombre dans le mois.",
+            "Anarion n'oublie pas. Ce n'est pas une menace formulée : c'est simplement une chose qui est désormais vraie."],
+            effets:{issue:"convoi_detourne", reputation:{elfes:22, elfes_noirs:-26}, renom:12,
+                    suspicion:6, flag:"anarion_offense"}},
+          eltharion:{ fin:true, pnj:"eltharion", texte:[
+            "Trois jours dans l'autre direction, avec onze caisses plombées et un cocher muet qui n'a pas protesté une seule fois.",
+            "La cour d'Eltharion reçoit onze caisses au lieu de onze filles disparues. Les plombs sont rompus devant témoins, à la cour, et ce qui se passe ensuite n'est pas quelque chose qu'un humain devrait voir.",
+            "Eltharion ne remercie pas. Eltharion note.",
+            "Anarion, lui, a perdu onze otages, trois places au conseil, et quatre mille cent écus. Il sait exactement qui les lui a coûtés."],
+            effets:{flag:"anarion_offense"}},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   27 — LA FLÈCHE DE TYRION
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_FLECHE", type:'contrat', titre:"La Flèche de Tyrion",
+  commanditaire:"Un gardien des lisières", maison:null,
+  or:3900, danger:"très dangereux", categorie:"traque",
+  lieux:["LOC_006","LOC_014","LOC_013"],
+  pitch:"Des Elfes recherchent un individu qu'ils jugent dangereux pour l'équilibre magique. Les indices touchent aux Parias, et ils paient très cher.",
+  paye:["cible_livree","cible_cachee","tyrion_trompe"],
+  issues:{
+    cible_livree:"L'enfant que cherchait Tyrion a été livré aux Elfes.",
+    cible_cachee:"L'enfant que cherchait Tyrion n'a jamais été trouvé, officiellement.",
+    tyrion_trompe:"Tyrion a reçu un rapport qui l'a satisfait et qui était faux.",
+    abandonnee:"Yohan a rendu l'avance des Elfes.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Le gardien attend une réponse aux lisières.",
+      ev:{ id:"CHY_1", titre:"Ce que les Elfes appellent un déséquilibre", famille:"ELFE", rarete:"majeur",
+        image:"rc_tyrion",
+        scenes:{
+          start:{ pnj:"tyrion", texte:[
+            "Le gardien des lisières parle au nom de Tyrion, et il le dit tout de suite, ce qui est une courtoisie.",
+            "« Depuis huit mois, il y a une perturbation dans le flux de l'Onde au sud de la Cicatrice. Elle se déplace. Elle est vivante. »",
+            "Il pose une carte où onze relevés sont marqués. « Nous ne savons pas ce que c'est. Nous savons que cela grandit. »",
+            "Il relève les yeux. « Trois mille neuf cents écus pour l'identifier et nous l'amener. Vivant, si c'est possible. »"],
+            choix:[
+              {label:"Demander pourquoi ils ne le font pas eux-mêmes", detail:"Onze relevés, et personne n'y va",
+               suite:"eux"},
+              {label:"Regarder les relevés", detail:"Jet de Précision (13)",
+               test:{stat:"precision", dc:13}, reussite:"releves_ok", echec:"releves_ko"},
+              {label:"Demander ce qui arrive à ce qu'ils ramènent", detail:"Jet de Volonté (13)",
+               test:{stat:"vol", dc:13}, reussite:"apres_ok", echec:"apres_ko"},
+            ]},
+          eux:{ pnj:"tyrion", texte:[
+            "« Parce qu'un gardien des lisières qui entre dans les terres humaines en armes déclenche une crise diplomatique, et parce que Tyrion ne veut pas de crise cette année. »",
+            "Un temps. « Et parce que la perturbation réagit à notre présence. Elle s'éloigne quand nous approchons. Elle ne s'éloigne pas des humains. »"],
+            effets:{xp:22, flag:"fleche_fuit_les_elfes"}, suite:"termes"},
+          releves_ok:{ pnj:"tyrion", texte:[
+            "Onze relevés en huit mois, et ils dessinent quelque chose que le gardien n'a manifestement pas remarqué.",
+            "Ils ne se déplacent pas au hasard : ils suivent une route. Précisément, ils suivent les foires. La foire de Malbrec en avril, celle de Combe-Basse en juin, celle de Port-Noir en août.",
+            "Ce qu'ils traquent voyage avec des marchands. Ou avec une famille."],
+            effets:{xp:30, flag:"fleche_les_foires"}, suite:"termes"},
+          releves_ko:{ pnj:"tyrion", texte:["Onze points sur une carte, huit mois, et une méthode de relevé elfique que Yohan n'a pas les moyens de discuter."],
+            effets:{xp:6}, suite:"termes"},
+          apres_ok:{ pnj:"tyrion", texte:[
+            "La question le met mal à l'aise, ce qui chez un gardien des lisières est presque spectaculaire.",
+            "« Cela dépend de ce que c'est. »",
+            "Il choisit ses mots avec une lenteur pénible. « Si c'est une chose, elle est étudiée. Si c'est une personne… Tyrion considère qu'un déséquilibre vivant doit cesser d'être vivant. Le conseil ne partage pas entièrement cet avis. »"],
+            effets:{xp:28, flag:"fleche_tyrion_veut_la_mort"}, suite:"termes"},
+          apres_ko:{ pnj:"tyrion", texte:["« Cela ne relève pas de votre contrat. » C'est dit poliment et c'est définitif."],
+            effets:{xp:6}, suite:"termes"},
+          termes:{ fin:true, pnj:"tyrion", texte:[
+            "« Trois mille neuf cents. Un tiers d'avance. »",
+            "Le gardien plie sa carte. « Et sachez que nous avons envoyé cette demande à quatre mercenaires humains. Vous êtes le seul à avoir posé des questions. Tyrion en tirera ses conclusions. »"]},
+        }}},
+
+    { id:"foires", delai:[2,4], attente:"La prochaine foire est celle de Port-Noir.",
+      ev:{ id:"CHY_2", titre:"Ce qui voyage avec les foires", famille:"PARIA", rarete:"majeur",
+        image:"evt_enfant",
+        scenes:{
+          start:{ texte:[
+            "La foire de Port-Noir dure onze jours et rassemble quatre mille personnes.",
+            "Il faut trois jours pour trouver, et ce n'est pas une chose : c'est une petite fille de neuf ans qui vend des lacets avec sa grand-mère au bout de la halle aux grains.",
+            "Quand elle rit, les lanternes de la halle vacillent toutes en même temps. Personne ne l'a remarqué en onze jours de foire. Yohan le voit en quatre minutes."],
+            choix:[
+              {label:"Parler à la grand-mère", detail:"Elle sait forcément",
+               suite:"grand_mere"},
+              {label:"Observer trois jours de plus", detail:"Jet de Précision (13) · savoir ce qu'on a devant soi",
+               test:{stat:"precision", dc:13}, reussite:"observe_ok", echec:"observe_ko"},
+              {label:"Les prendre maintenant", detail:"C'est ce pour quoi on est payé",
+               suite:"prend"},
+            ]},
+          grand_mere:{ pnj:"enfant_onde", texte:[
+            "La vieille femme comprend en une seconde et demie et elle ne nie rien, parce qu'à son âge on n'a plus le temps.",
+            "« Sa mère est morte à Karlsberg. Pas pendant la Purge : après, dans les fossés, comme les autres. »",
+            "Elle continue de plier des lacets. « On bouge de foire en foire depuis qu'elle a trois ans. On ne reste jamais. J'ai soixante-dix-huit ans, monsieur, et je marche encore parce que si je m'arrête on la trouve. »",
+            "Elle relève enfin les yeux. « Vous êtes le premier à l'avoir vue en six ans. Vous êtes le premier à savoir ce que vous regardiez. »"],
+            effets:{xp:36, sang:4, flags:["fleche_enfant","fleche_grand_mere"]}, fin:true},
+          observe_ok:{ texte:[
+            "Trois jours. Ce n'est pas dangereux, ce n'est pas conscient, et ce n'est pas contrôlé : les lanternes vacillent quand elle rit, l'eau du seau se ride quand elle a peur, et une fois, quand un homme l'a bousculée, tout le bout de la halle a senti l'orage pendant six secondes.",
+            "Elle a neuf ans. Elle ne sait pas. Sa grand-mère sait, et sa grand-mère la fait déménager toutes les six semaines depuis six ans."],
+            effets:{xp:32, sang:4, flag:"fleche_enfant"}, fin:true},
+          observe_ko:{ texte:["Quatre mille personnes, onze jours, et une foire qui se démonte. Il perd la trace au huitième jour et met deux semaines à la retrouver sur la route de Combe-Basse."],
+            effets:{fat:14, xp:12, flag:"fleche_enfant"}, fin:true},
+          prend:{ texte:[
+            "On ne prend pas une enfant de neuf ans dans une halle aux grains sans que quatre mille personnes s'en aperçoivent.",
+            "Il attend le démontage, la route, et un chemin creux à deux lieues.",
+            "La grand-mère ne se débat pas. Elle dit une seule chose : « Emmenez-moi aussi. Elle ne survivra pas sans moi, et vous serez payé pareil. »"],
+            effets:{xp:26, flags:["fleche_enfant","fleche_prise"]}, fin:true},
+        }}},
+
+    { id:"decision", delai:[1,3], attente:"Les lisières attendent, et l'enfant a neuf ans.",
+      ev:{ id:"CHY_3", titre:"Ce qu'on rapporte aux lisières", famille:"PARIA", rarete:"majeur",
+        image:"rc_tyrion",
+        scenes:{
+          start:{ texte:[
+            "Trois mille neuf cents écus contre une enfant de neuf ans qui fait vaciller les lanternes quand elle rit.",
+            "Elle est ce que Yohan était. Elle est ce qu'on a rayé des registres. Et des Elfes très polis appellent ça un déséquilibre."],
+            choix:[
+              {label:"La livrer", detail:"C'est le contrat, et ils ont dit « vivant si possible »",
+               suite:"livre",
+               effets:{issue:"cible_livree", reputation:{elfes:20, parias:-40}, renom:6, suspicion:-6}},
+              {label:"Rapporter qu'il s'agissait d'une veine d'Onde dans une carrière",
+               detail:"Requiert de savoir ce qu'ils cherchent · un rapport plausible, et faux",
+               requis:{flag:"fleche_les_foires"}, test:{stat:"vol", dc:15},
+               reussite:"ment_ok", echec:"ment_ko"},
+              {label:"Rendre l'avance et dire qu'on n'a rien trouvé",
+               detail:"Ils enverront quelqu'un d'autre",
+               suite:"rend",
+               effets:{issue:"cible_cachee", reputation:{elfes:-10, parias:14}, renom:2}},
+              {label:"Les emmener à Karlsberg",
+               detail:"Requiert d'avoir parlé à la grand-mère · il y a de la place dans des ruines",
+               requis:{flag:"fleche_grand_mere"}, suite:"karlsberg",
+               effets:{issue:"cible_cachee", reputation:{parias:30, elfes:-14}, renom:8,
+                       suspicion:12, flag:"enfant_onde_a_karlsberg"}},
+            ]},
+          livre:{ fin:true, pnj:"tyrion", texte:[
+            "Le gardien des lisières la reçoit aux marches de la Cour lumineuse, s'agenouille pour être à sa hauteur, et lui parle avec une douceur insupportable.",
+            "On paie les trois mille neuf cents écus le jour même.",
+            "Yohan ne saura jamais ce qui lui est arrivé. Il apprendra seulement, deux ans plus tard, que Tyrion a fait relever le flux au sud de la Cicatrice et qu'il n'y a plus de perturbation.",
+            "La grand-mère est morte sur la route du retour. Personne ne l'a tuée : elle avait soixante-dix-huit ans et elle marchait depuis six ans."]},
+          ment_ok:{ fin:true, pnj:"tyrion", texte:[
+            "Le rapport fait quatre pages et il est bon : une veine d'Onde affleurante dans une carrière de Combe-Basse, exploitée par intermittence, déplacée par les fronts de taille — ce qui expliquerait des relevés mobiles.",
+            "Il joint trois échantillons de roche, qu'il a fait prendre par un carrier payé pour ne rien demander.",
+            "Le gardien des lisières lit, hoche la tête, et paie. Tyrion classe l'affaire.",
+            "Onze mois plus tard, un nouveau relevé signale la perturbation à la foire de Malbrec. Le dossier est rouvert et confié à quelqu'un d'autre.",
+            "Il reste onze mois à une petite fille de neuf ans pour disparaître pour de bon, et Yohan est le seul à le savoir."],
+            effets:{issue:"tyrion_trompe", reputation:{elfes:6, parias:18}, renom:6,
+                    flag:"tyrion_rapport_faux"}},
+          ment_ko:{ fin:true, texte:[
+            "Le gardien lit les quatre pages deux fois et repose le rapport.",
+            "« Une veine ne rit pas. »",
+            "Il ne dit rien d'autre. Il rend l'avance à Yohan, ce qui est une insulte elfique très précise, et l'affaire est confiée à quelqu'un d'autre dans la semaine."],
+            effets:{xp:14, issue:"cible_cachee", reputation:{elfes:-16, parias:10}}},
+          rend:{ fin:true, texte:[
+            "Il rend l'avance en main propre, aux lisières, et dit qu'il n'a rien trouvé.",
+            "Le gardien ne le croit pas et ne le dit pas. Les Elfes ont une façon de ne pas vous croire qui est plus polie qu'une accusation et beaucoup plus longue à digérer.",
+            "Ils enverront quelqu'un d'autre. Yohan le sait en redescendant, et il passe le reste de l'année à changer d'itinéraire pour repasser par les foires."]},
+          karlsberg:{ fin:true, pnj:"tyrion", texte:[
+            "Quarante lieues à pied avec une femme de soixante-dix-huit ans et une enfant de neuf, en évitant les routes et les foires.",
+            "Karlsberg n'est pas un refuge : c'est un mur écroulé, une cour déblayée et beaucoup de vent. C'est aussi le premier endroit depuis six ans où la vieille femme dort une nuit entière.",
+            "L'enfant fait vaciller ce qui reste de lanternes. Personne, ici, ne le remarque comme une anomalie.",
+            "Le gardien des lisières apprendra un jour qu'un homme a rendu son avance et que la perturbation a cessé de se déplacer. Il saura mettre les deux ensemble.",
+            "Ce jour-là, il y aura une conversation à avoir avec Tyrion."]},
+        }}},
+  ]},
+
 ];
