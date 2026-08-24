@@ -2322,4 +2322,409 @@ const CHAINES = [
         }}},
   ]},
 
+/* ══════════════════════════════════════════════════════════════════════════
+   15 — LES LOUPS DE VERRE
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_TORCY", type:'contrat', titre:"Les Loups de Verre",
+  commanditaire:"Maison de Torcy", maison:"Maison de Torcy",
+  or:1500, danger:"dangereux", categorie:"chasse", prix:true,
+  lieux:["LOC_011","LOC_004","LOC_013"],
+  pitch:"Des créatures translucides chassent uniquement les voyageurs qui portent des bijoux magiques. Torcy vend des bijoux magiques.",
+  paye:["meute_detruite","source_tarie","route_signalee"],
+  issues:{
+    meute_detruite:"Les Loups de Verre ont été détruits sur la route de Torcy.",
+    source_tarie:"Torcy a cessé d'extraire dans la veine haute, et les Loups de Verre ont cessé de naître.",
+    route_signalee:"La route de Torcy est signalée : on n'y porte plus rien qui brille.",
+    abandonnee:"Les Loups de Verre chassent toujours sur la route de Torcy.",
+    refusee:"Yohan a refusé les termes de Torcy.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Il reste à voir ce que ces choses font vraiment.",
+      ev:{ id:"CHL_1", titre:"Ce qui chasse ce qui brille", famille:"CONTRAT", rarete:"majeur",
+        image:"evt2_veine",
+        scenes:{
+          start:{ texte:[
+            "Dame Aude de Torcy tient les mines de verre depuis qu'elle a enterré son mari, et elle reçoit dans un bureau où l'on voit la veine haute par la fenêtre.",
+            "« Neuf morts en quatre mois sur la route de la mine. Tous portaient une pièce enchantée — une amulette, un anneau, une fiole. Les autres passent sans être touchés. »",
+            "Elle pose une main sur un registre. « Ma maison vend des pièces enchantées. Vous voyez le problème. »"],
+            choix:[
+              {label:"Demander depuis quand", detail:"Quatre mois, ça a commencé quelque part",
+               suite:"depuis"},
+              {label:"Demander à voir un corps", detail:"Jet de Précision (12)",
+               test:{stat:"precision", dc:12}, reussite:"corps_ok", echec:"corps_ko"},
+              {label:"Accepter", detail:"Une route, neuf morts, une meute",
+               suite:"termes"},
+            ]},
+          depuis:{ texte:[
+            "« Depuis qu'on a ouvert la veine haute. »",
+            "Elle le dit tout de suite, ce qui veut dire qu'elle y a déjà pensé cent fois.",
+            "« Le verre de la veine haute est différent. Il tient l'enchantement trois fois mieux. C'est ce qui fait vivre cette maison depuis quatre mois, et c'est peut-être aussi ce qui fait mourir mes voyageurs. »"],
+            effets:{xp:18, flag:"torcy_veine_haute"}, suite:"termes"},
+          corps_ok:{ texte:[
+            "Le neuvième est encore à la chapelle. Il n'a pas été dévoré : il a été vidé.",
+            "Pas de sang. Pas de plaies larges. Une trentaine de perforations fines, régulières, et l'amulette qu'il portait est intacte — mais éteinte. Le verre est laiteux, mort.",
+            "Ils ne mangent pas les gens. Ils mangent ce que les gens portent, et les gens meurent avec."],
+            effets:{xp:24, flag:"torcy_ils_mangent_l_onde"}, suite:"termes"},
+          corps_ko:{ texte:["On lui montre un linceul et on ne l'ouvre pas. La famille est là, et il y a des choses qu'on ne demande pas devant une famille."],
+            effets:{xp:5}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Mille cinq cents. Et je préfère vous prévenir : si votre solution consiste à fermer la veine haute, dites-le-moi avant de me le prouver. »"]},
+        }}},
+
+    { id:"route", delai:[2,4], attente:"La route de la mine, une nuit, avec quelque chose qui brille.",
+      ev:{ id:"CHL_2", titre:"L'appât", famille:"ONDE", rarete:"majeur",
+        image:"evt2_sans_ombre",
+        scenes:{
+          start:{ texte:[
+            "Il n'y a qu'une façon de trouver une chose qui chasse ce qui brille, et c'est de briller.",
+            "Une amulette de Torcy au bout d'une chaîne, posée sur une pierre au milieu de la route, et un homme couché dans le fossé à trente pas.",
+            "Ils viennent à la deuxième heure. On ne les voit pas arriver : on voit la route se déformer, comme à travers une vitre mal coulée."],
+            choix:[
+              {label:"Les affronter", detail:"Ils sont trois, et on ne les voit qu'en bougeant la tête",
+               suite:"combat"},
+              {label:"Regarder ce qu'ils font de l'amulette", detail:"Jet de Volonté (14) · ne pas bouger",
+               test:{stat:"vol", dc:14}, reussite:"regarde_ok", echec:"regarde_ko"},
+              {label:"Suivre celui qui repart", detail:"Jet d'Agilité (14)",
+               test:{stat:"agi", dc:14}, reussite:"suit_ok", echec:"suit_ko"},
+            ]},
+          combat:{ texte:["Ils se retournent tous les trois en même temps, et il comprend qu'ils l'ont vu depuis le début : c'est l'amulette qu'ils attendaient."],
+            combat:{ groupe:[{bst:"BST_038", n:3}], victoire:"tues", defaite:"blesse" }},
+          tues:{ texte:[
+            "Ils ne saignent pas. Ils se fendent, puis se troublent, puis se dissolvent en une poussière de verre qui reste dans l'herbe.",
+            "Il en ramasse une poignée. Sous la lune, elle a exactement la couleur du verre de la veine haute."],
+            effets:{xp:34, flag:"torcy_poussiere"}, fin:true},
+          blesse:{ texte:["Trente perforations fines n'importe où sur le corps, ça ne tue pas tout de suite. Il décroche vers le fossé et ils ne le suivent pas : ils avaient ce qu'ils voulaient."],
+            effets:{pv:-24, fat:14, xp:12}, fin:true},
+          regarde_ok:{ texte:[
+            "Ils l'entourent. Ils ne la prennent pas : ils s'y posent, tous les trois, et restent immobiles pendant six ou sept minutes.",
+            "Quand ils repartent, l'amulette est laiteuse et morte, et le troisième — le plus petit — est devenu un peu plus grand.",
+            "Ils ne chassent pas. Ils se nourrissent, et ce dont ils se nourrissent les fait croître."],
+            effets:{xp:30, flag:"torcy_ils_mangent_l_onde"}, fin:true},
+          regarde_ko:{ texte:["Il tient quatre minutes. À la cinquième, un genou craque dans le fossé, et trois choses translucides tournent la tête en même temps. Il faut courir, et courir dans le noir avec quelque chose qu'on ne voit pas est une expérience."],
+            effets:{fat:18, pv:-10, xp:10}, fin:true},
+          suit_ok:{ texte:[
+            "Le plus grand repart vers l'ouest, sans se presser, et il ne prend pas la route : il coupe droit, vers la mine.",
+            "Il entre dans la veine haute par la gueule de l'ancienne coupe, et il ne ressort pas.",
+            "Ils ne viennent pas de la forêt. Ils viennent de la mine."],
+            effets:{xp:32, flags:["torcy_veine_haute","torcy_ils_sortent_de_la"]}, fin:true},
+          suit_ko:{ texte:["On ne suit pas dans le noir une chose qu'on distingue à peine en plein jour. Il la perd à cent pas et il la cherche jusqu'à l'aube."],
+            effets:{fat:14, xp:8}, fin:true},
+        }}},
+
+    { id:"decision", delai:[1,2], attente:"Torcy attend, et la veine haute tourne toujours.",
+      ev:{ id:"CHL_3", titre:"Ce qui fait vivre cette maison", famille:"CONTRAT", rarete:"majeur",
+        image:"evt2_forge",
+        scenes:{
+          start:{ texte:[
+            "Dame Aude écoute, et elle a l'honnêteté de ne pas faire semblant d'être surprise.",
+            "« La veine haute. » Elle regarde par la fenêtre. « Deux cent quarante ouvriers. Le tiers de mes revenus. »"],
+            choix:[
+              {label:"Nettoyer la veine et la rouvrir", detail:"Ils reviendront, mais plus tard",
+               requis:{flag:"torcy_ils_sortent_de_la"}, suite:"nettoie",
+               effets:{issue:"meute_detruite", reputation:{humains:10}, renom:8}},
+              {label:"Exiger la fermeture de la veine haute",
+               detail:"Requiert de savoir d'où ils viennent · deux cent quarante ouvriers",
+               requis:{flag:"torcy_veine_haute"}, test:{stat:"vol", dc:14},
+               reussite:"ferme_ok", echec:"ferme_ko"},
+              {label:"Faire signaler la route", detail:"On ne porte plus rien qui brille · gratuit, et ça marche",
+               suite:"signale",
+               effets:{issue:"route_signalee", reputation:{humains:6}, renom:4}},
+            ]},
+          nettoie:{ fin:true, texte:[
+            "Trois semaines à descendre dans la veine haute avec des lampes à huile et des hommes qui n'ont pas signé pour ça.",
+            "On en sort dix-neuf. Ils sont plus petits sous terre — ils ne grandissent qu'en mangeant — et ils meurent bien quand on les trouve avant.",
+            "La veine rouvre au printemps. Dame Aude paie en entier et fait interdire le port de pièces enchantées sur la route, par précaution.",
+            "Ils reviendront. Elle le sait. Ce qu'elle a acheté, c'est du temps, et deux cent quarante hommes qui mangent pendant ce temps-là."]},
+          ferme_ok:{ fin:true, texte:[
+            "Il faut trois heures et une phrase qui porte : « Vos ouvriers portent tous une pièce de verre au cou. Combien de temps avant que ça se passe sous terre ? »",
+            "Elle ferme la veine haute en onze jours. Deux cent quarante ouvriers passent sur les veines basses, ce qui veut dire moitié moins de salaire pour la moitié d'entre eux.",
+            "Les Loups de Verre cessent de naître dans l'année. Les derniers meurent de faim sur la route, à mesure que les voyageurs cessent de porter ce qui brille.",
+            "Dame Aude paie en entier. « Vous m'avez coûté le tiers de mes revenus », dit-elle. « Et vous m'avez évité de l'expliquer à deux cent quarante familles. Je ne sais pas comment on compte ça. »"],
+            effets:{issue:"source_tarie", reputation:{humains:6, parias:10}, renom:10,
+                    flag:"torcy_veine_fermee"}},
+          ferme_ko:{ texte:[
+            "« Non. »",
+            "Elle le dit sans hausser le ton. « Deux cent quarante hommes. Je ne ferme pas sur une poignée de poussière de verre et une théorie. »",
+            "Elle a le droit. C'est sa maison."],
+            effets:{xp:10}, suite:"signale"},
+          signale:{ fin:true, texte:[
+            "Des panneaux tous les demi-milles, en trois langues, et une consigne au relais : on dépose ce qui brille, on le reprend au retour.",
+            "Ça marche. Il n'y a plus de morts sur la route de Torcy.",
+            "Il y a toujours des Loups de Verre. Ils grandissent moins vite, ils s'éloignent, et un jour ils trouveront une autre route où l'on n'a pas mis de panneaux.",
+            "Dame Aude paie le contrat en entier et le sait aussi bien que lui."]},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   16 — LE PRISONNIER KHESH
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_ESTREES", type:'contrat', titre:"Le Prisonnier Khesh",
+  commanditaire:"Maison d'Estrées", maison:"Maison d'Estrées",
+  or:2000, danger:"dangereux", categorie:"traque", prix:true,
+  lieux:["LOC_005","LOC_018","LOC_002"],
+  pitch:"Un chef Khesh capturé vaut une fortune en rançon. Sa tribu approche avec plusieurs centaines de cavaliers, et elle sera là dans neuf jours.",
+  paye:["rancon_payee","chef_rendu","chef_execute"],
+  issues:{
+    rancon_payee:"Estrées a touché la rançon du chef khesh, et les cavaliers sont repartis.",
+    chef_rendu:"Le chef khesh a été rendu sans rançon. Les Khesh s'en souviennent.",
+    chef_execute:"Le chef khesh a été exécuté à Estrées, et les cavaliers ne sont pas repartis.",
+    abandonnee:"Yohan a quitté Estrées avant que les cavaliers arrivent.",
+    refusee:"Yohan a refusé les termes d'Estrées.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Neuf jours, et ils avancent.",
+      ev:{ id:"CHE_1", titre:"Neuf jours", famille:"KHESH", rarete:"majeur",
+        image:"evt2_tribut",
+        scenes:{
+          start:{ texte:[
+            "Dame Béatrice d'Estrées parle khesh, elfe et nain, et c'est elle qui reçoit, pas son seigneur — qui est enfermé dans ses appartements depuis quatre jours.",
+            "« Une patrouille de mon frère a pris un chef de tribu il y a trois semaines. Par accident. Ils ne savaient pas qui c'était. »",
+            "Elle pose une carte des Champs de Cendre. « Sa tribu a levé six cents cavaliers. Ils sont à neuf jours. »",
+            "Elle relève les yeux. « Mon frère veut la rançon. Il ne comprend pas que dans neuf jours il n'y aura plus personne pour la lui payer. »"],
+            choix:[
+              {label:"Demander à voir le prisonnier", detail:"C'est de lui qu'on parle",
+               suite:"prisonnier"},
+              {label:"Demander ce que veut vraiment le frère", detail:"Jet de Précision (12)",
+               test:{stat:"precision", dc:12}, reussite:"frere_ok", echec:"frere_ko"},
+              {label:"Accepter", detail:"Neuf jours, ça se compte",
+               suite:"termes"},
+            ]},
+          prisonnier:{ texte:[
+            "Il est dans une cave sèche, pas dans un cachot, et on le nourrit correctement — Dame Béatrice y veille.",
+            "Il a soixante ans, une natte grise, et il ne se lève pas quand Yohan entre.",
+            "« Tu es l'homme qu'on paie », dit-il en vardhi, lentement. « Alors écoute une chose : mes cavaliers ne viennent pas me chercher. Ils viennent chercher ce que la maison me doit pour m'avoir pris sur la piste du sel. »",
+            "Il sourit sans joie. « Me rendre ne suffira pas. Il faudra rendre autre chose. »"],
+            effets:{xp:24, flags:["estrees_piste_du_sel","estrees_chef_parle"]}, suite:"termes"},
+          frere_ok:{ texte:[
+            "« Mon frère veut la rançon parce qu'il a perdu quatre mille écus au jeu à Astrah cet hiver, et qu'il a signé des reconnaissances. »",
+            "Elle le dit à voix basse et sans plaisir. « Il ne veut pas d'une guerre. Il veut quatre mille écus avant la Saint-Aubin. Ce n'est pas la même chose et personne ne peut le lui expliquer. »"],
+            effets:{xp:20, flag:"estrees_dettes_du_frere"}, suite:"termes"},
+          frere_ko:{ texte:["« Il veut la rançon », dit-elle. « C'est tout ce qu'il dit depuis quatre jours, et il le dit à travers une porte. »"],
+            effets:{xp:6}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Deux mille. Et je vous paie sur mes propres fonds, pas sur ceux de la maison, parce que je ne veux pas que mon frère puisse annuler. »",
+            "Elle ajoute : « Quant à la coutume — oui, je sais ce qu'elle dit. Réglons-la maintenant, pendant qu'il nous reste neuf jours et une maison debout. »"]},
+        }}},
+
+    { id:"cavaliers", delai:[2,3], attente:"Six cents cavaliers avancent, et il faut aller à leur rencontre.",
+      ev:{ id:"CHE_2", titre:"Aller au-devant", famille:"KHESH", rarete:"majeur",
+        image:"cg_khesh",
+        scenes:{
+          start:{ texte:[
+            "Six cents cavaliers khesh en marche ne font pas de bruit avant d'être à deux lieues, et alors ils en font beaucoup.",
+            "Yohan va au-devant seul, à découvert, sans bannière — ce qui est la seule façon de ne pas se faire tirer dessus, et une façon très mauvaise de ne pas se faire tuer.",
+            "On l'entoure. On l'amène. Le fils du chef prisonnier a trente ans et l'air de quelqu'un qui a déjà décidé."],
+            choix:[
+              {label:"Proposer la rançon", detail:"C'est ce que la maison veut",
+               suite:"rancon"},
+              {label:"Écouter ce qu'ils réclament vraiment",
+               detail:"Requiert d'avoir parlé au chef · la piste du sel",
+               requis:{flag:"estrees_piste_du_sel"}, suite:"sel"},
+              {label:"Proposer un duel pour le prisonnier", detail:"Jet de Volonté (14) · les Khesh comprennent ça",
+               test:{stat:"vol", dc:14}, reussite:"duel_ok", echec:"duel_ko"},
+            ]},
+          rancon:{ texte:[
+            "Le fils écoute la proposition jusqu'au bout, par politesse.",
+            "« Vous voulez de l'or pour rendre un homme que vous avez pris sur une piste qui est à nous depuis douze générations. »",
+            "Il fait tourner sa monture. « Nous paierons. Et ensuite nous brûlerons Estrées, parce qu'on ne paie pas deux fois pour la même piste. »"],
+            effets:{xp:14, flag:"estrees_ils_paieront_et_bruleront"}, fin:true},
+          sel:{ texte:[
+            "« La piste du sel. »",
+            "Le fils descend de cheval, ce qu'il n'avait pas fait.",
+            "« Votre maison a posé un péage sur la piste du sel il y a deux ans. Nous l'avons payé deux ans. Puis ils ont pris mon père dessus, comme un voleur, sur une piste où nous passons depuis douze générations. »",
+            "Il regarde vers Estrées. « Rendez mon père et levez le péage. Nous repartirons le jour même. Gardez l'un ou l'autre, et nous resterons. »"],
+            effets:{xp:30, flags:["estrees_peage","estrees_condition"]}, fin:true},
+          duel_ok:{ texte:[
+            "Le fils accepte, parce qu'un Khesh n'a pas le droit de refuser devant six cents témoins et parce qu'il a trente ans et Yohan aussi, à peu près.",
+            "Ce n'est pas un duel à mort : c'est un duel au premier sang, à cheval, à la lance courte, et Yohan le perd honorablement au troisième passage.",
+            "« Bien », dit le fils en lui tendant la main pour le relever. « Maintenant on peut parler comme des gens. »",
+            "Ce qu'ils réclament tient en deux points : le père, et le péage sur la piste du sel."],
+            effets:{xp:28, pv:-12, flags:["estrees_peage","estrees_condition","estrees_respecte"]}, fin:true},
+          duel_ko:{ texte:[
+            "« Nous ne nous battons pas pour ce qui est à nous », dit le fils. « Nous le reprenons. »",
+            "On le renvoie vers Estrées avec une escorte de quatre cavaliers et un délai : trois jours."],
+            effets:{xp:12, flag:"estrees_trois_jours"}, fin:true},
+        }}},
+
+    { id:"decision", delai:[1,2], attente:"Le frère est toujours derrière sa porte.",
+      ev:{ id:"CHE_3", titre:"Ce qu'on fait d'un homme de soixante ans", famille:"KHESH", rarete:"majeur",
+        image:"evt_bannieres",
+        scenes:{
+          start:{ texte:[
+            "Le seigneur d'Estrées a fini par sortir de ses appartements, parce que six cents cavaliers à deux lieues font sortir n'importe qui.",
+            "Il veut la rançon. Sa sœur veut la paix. Le prisonnier attend dans une cave sèche, et il a soixante ans."],
+            choix:[
+              {label:"Rendre le chef et lever le péage",
+               detail:"Requiert de connaître leur condition · le frère perdra sa mise",
+               requis:{flag:"estrees_condition"}, test:{stat:"vol", dc:15},
+               reussite:"rend_ok", echec:"rend_ko"},
+              {label:"Négocier la rançon et la faire payer par la sœur",
+               detail:"−800 or de vos deniers pour combler la dette du frère",
+               requis:{or:800}, suite:"rancon", effets:{or:-800}},
+              {label:"Laisser le seigneur exécuter le prisonnier", detail:"Il en parle depuis ce matin",
+               suite:"execute",
+               effets:{issue:"chef_execute", reputation:{khesh:-30, humains:-6}, renom:-6}},
+            ]},
+          rend_ok:{ fin:true, texte:[
+            "Il faut retourner le seigneur d'Estrées contre son propre intérêt devant sa sœur, son intendant et son chapelain, et cela prend une heure et demie.",
+            "Ce qui le décide n'est pas l'argument militaire : c'est sa sœur, qui pose sur la table les reconnaissances de dette qu'il a signées à Astrah et propose de les racheter elle-même, à condition qu'il signe la levée du péage.",
+            "Le chef est rendu au matin, à découvert, sans escorte. Son fils descend de cheval pour l'aider à monter.",
+            "Six cents cavaliers font demi-tour le jour même, exactement comme promis. La piste du sel redevient libre après deux ans.",
+            "Dame Béatrice paie sur ses fonds, comme annoncé. « Mon frère ne me pardonnera pas », dit-elle. « Il est vivant pour ne pas me pardonner. »"],
+            effets:{xp:60, renom:12, reputation:{khesh:26, humains:4},
+                    issue:"chef_rendu", flag:"estrees_peage_leve"}},
+          rend_ko:{ texte:[
+            "Le seigneur d'Estrées ne cède pas. Il a quatre mille écus de dettes et il ne voit plus que ça.",
+            "« La rançon », dit-il. « Ou rien. »"],
+            effets:{xp:10}, suite:"rancon"},
+          rancon:{ fin:true, texte:[
+            "Huit cents écus de la bourse de Yohan pour compléter ce que Dame Béatrice a pu réunir, et une rançon fixée à un chiffre que les Khesh acceptent en trois heures parce qu'ils veulent leur chef.",
+            "Ils paient. Ils reprennent leur homme. Ils repartent.",
+            "Ils reviennent au printemps suivant, quand la maison n'a plus six cents cavaliers devant sa porte pour lui rappeler d'être raisonnable, et ils brûlent les trois relais du péage sur la piste du sel.",
+            "Personne n'est tué. C'est un message, pas une guerre. Le seigneur d'Estrées a compris ; il n'a plus d'argent pour rebâtir."],
+            effets:{issue:"rancon_payee", reputation:{khesh:-8, humains:4}, renom:4}},
+          execute:{ fin:true, texte:[
+            "On le pend dans la cour, devant les gens de la maison, à midi, parce que le seigneur d'Estrées veut que ce soit vu.",
+            "Six cents cavaliers arrivent le surlendemain. Ils ne parlementent pas.",
+            "Dame Béatrice quitte la maison la veille avec les registres et douze personnes. C'est tout ce qui reste d'Estrées.",
+            "Elle paie quand même le contrat, six mois plus tard, depuis Fort-aux-Princes, par lettre de change. Elle n'écrit rien avec."]},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   17 — LE MASSACRE DE BELRIVE
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_BELRIVE", type:'contrat', titre:"Le Massacre de Belrive",
+  commanditaire:"Maison de Belrive", maison:"Maison de Belrive",
+  or:2200, danger:"dangereux", categorie:"enquête", prix:true,
+  lieux:["LOC_010","LOC_020","LOC_016"],
+  pitch:"Un village entier a été massacré, et chaque faction locale accuse une autre espèce. Il ne reste personne à Belrive pour dire ce qui s'est passé.",
+  paye:["verite_etablie","coupable_designe","affaire_close"],
+  issues:{
+    verite_etablie:"On sait ce qui est arrivé à Belrive, et ce n'était aucune des espèces qu'on accusait.",
+    coupable_designe:"Un coupable a été désigné pour Belrive. Il fera l'affaire.",
+    affaire_close:"L'affaire de Belrive a été close sans conclusion.",
+    abandonnee:"Personne n'a jamais su ce qui s'était passé à Belrive.",
+    refusee:"Yohan a refusé les termes de Belrive.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Belrive est à trois jours, et il n'y a plus personne.",
+      ev:{ id:"CHZ_1", titre:"Quatre accusations", famille:"POLITIQUE", rarete:"majeur",
+        image:"evt_chapelle",
+        scenes:{
+          start:{ texte:[
+            "Ce n'est pas un seigneur qui reçoit : c'est un notaire mandaté par les cousins de la maison, parce que la maison de Belrive habitait Belrive.",
+            "« Cent quatre-vingts personnes. Une nuit. Le village n'a pas brûlé — c'est le détail que tout le monde oublie. »",
+            "Il aligne quatre feuillets. « Les bûcherons accusent les Hommes-Bêtes. Le prieuré accuse les Peaux-Vertes. Un capitaine de la Couronne accuse les elfes noirs. Et un marchand accuse les bûcherons. »",
+            "Il les repousse d'un doigt. « Aucun n'y est allé voir. Ils accusent depuis leurs maisons. »"],
+            choix:[
+              {label:"Demander pourquoi le village n'a pas brûlé", detail:"C'est le détail qu'il a souligné",
+               suite:"brule"},
+              {label:"Demander qui hérite de Belrive", detail:"Jet de Précision (12)",
+               test:{stat:"precision", dc:12}, reussite:"herite_ok", echec:"herite_ko"},
+              {label:"Accepter et y aller", detail:"Personne n'y est allé voir",
+               suite:"termes"},
+            ]},
+          brule:{ texte:[
+            "« Parce qu'une harde brûle. Une bande de Peaux-Vertes brûle. Des elfes noirs prennent ce qui vaut et brûlent le reste. »",
+            "Il croise les mains. « À Belrive, les granges sont pleines, le bétail est dans les prés, et il n'y a pas une trace de feu. On a tué cent quatre-vingts personnes et on n'a rien pris. »",
+            "« Voilà pourquoi ma commande est une enquête et non une expédition punitive. »"],
+            effets:{xp:20, flag:"belrive_rien_pris"}, suite:"termes"},
+          herite_ok:{ texte:[
+            "Le notaire répond sans se troubler, parce qu'un notaire a l'habitude qu'on lui pose cette question-là.",
+            "« Trois cousins, en indivision. Ils ne s'aiment pas. Ils sont d'accord sur une seule chose : ils veulent un nom de coupable avant l'ouverture de la succession, parce qu'un village massacré par des Hommes-Bêtes se rachète et un village massacré par ses voisins se plaide pendant dix ans. »"],
+            effets:{xp:22, flag:"belrive_succession"}, suite:"termes"},
+          herite_ko:{ texte:["« Des cousins », dit le notaire. « Comme toujours. » Il n'en dira pas plus, et c'est son métier de n'en pas dire plus."],
+            effets:{xp:5}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Deux mille deux cents. Un nom, et de quoi le tenir devant un tribunal. »",
+            "Il ajoute, gêné pour la première fois : « Et concernant la coutume — la maison de Belrive habitait Belrive, messire. Il n'y a plus de femme adulte dans cette maison. Il n'y a plus de maison. »"]},
+        }}},
+
+    { id:"village", delai:[2,4], attente:"Il faut aller voir, puisque personne n'y est allé.",
+      ev:{ id:"CHZ_2", titre:"Ce qu'on lit dans un village vide", famille:"POLITIQUE", rarete:"majeur",
+        image:"evt2_veillee",
+        scenes:{
+          start:{ texte:[
+            "Belrive est intact. C'est ce qui rend l'endroit insupportable : les volets sont ouverts, le linge est encore sur les cordes, et il y a du pain de six semaines sur les tables.",
+            "Les corps ont été enlevés par le prieuré. Les taches sont restées.",
+            "Elles sont dans les maisons. Presque toutes dans les maisons, presque toutes près des lits."],
+            choix:[
+              {label:"Relever où sont les taches", detail:"Jet de Précision (14)",
+               test:{stat:"precision", dc:14}, reussite:"taches_ok", echec:"taches_ko"},
+              {label:"Fouiller le puits", detail:"Un village qui meurt en une nuit boit tous à la même eau",
+               suite:"puits"},
+              {label:"Aller voir le prieuré qui a enlevé les corps", detail:"Ils les ont tous vus",
+               suite:"prieure"},
+            ]},
+          taches_ok:{ texte:[
+            "Cent soixante-quatre taches dans les maisons, seize dehors. Aucune sur les seuils.",
+            "On ne s'est pas battu. On n'a pas fui. Cent soixante-quatre personnes sont mortes dans leur lit ou à côté, et seize dans la rue — les seize sont toutes du côté de la fontaine.",
+            "Ce n'est pas un massacre. C'est quelque chose qui a tué tout le monde en même temps, et seize personnes ont eu le temps de courir vers l'eau."],
+            effets:{xp:30, flags:["belrive_dans_les_lits","belrive_vers_l_eau"]}, fin:true},
+          taches_ko:{ texte:["Des taches, partout, six semaines de pluie dessus. On voit qu'il y a eu beaucoup de morts et on ne voit pas comment."],
+            effets:{xp:8}, fin:true},
+          puits:{ texte:[
+            "Le puits est propre. L'eau est bonne — il en boit, ce qui est soit du courage soit de la bêtise, et il ne se passe rien.",
+            "Mais la margelle porte une marque : un V profond, taillé au ciseau, à hauteur de main.",
+            "Il l'a déjà vue. Sur onze portes, dans la seigneurie de Vaudreuil, à trente lieues d'ici."],
+            effets:{xp:26, flags:["belrive_marque","belrive_rien_pris"]}, fin:true},
+          prieure:{ texte:[
+            "Le prieur a soixante-dix ans et il a lavé cent quatre-vingts corps de ses mains.",
+            "« Pas une plaie », dit-il. « Pas une seule, sur cent quatre-vingts. »",
+            "Il a du mal à finir. « Ils avaient tous la même chose : la bouche ouverte et les yeux ouverts, et les mains sur les oreilles. Les enfants aussi. »",
+            "Il regarde le sol. « J'ai écrit ça dans mon rapport. Le capitaine de la Couronne m'a demandé de le réécrire en mettant des blessures. J'ai refusé. »"],
+            effets:{xp:32, flags:["belrive_pas_de_plaies","belrive_rapport_reecrit"]}, fin:true},
+        }}},
+
+    { id:"conclusion", delai:[1,3], attente:"Trois cousins attendent un nom.",
+      ev:{ id:"CHZ_3", titre:"Le nom qu'on rapporte", famille:"POLITIQUE", rarete:"majeur",
+        image:"evt_archives",
+        scenes:{
+          start:{ texte:[
+            "Cent quatre-vingts personnes mortes sans une plaie, les mains sur les oreilles, dans leurs lits. Un village intact. Rien de pris.",
+            "Ce n'est aucune des quatre accusations. Ce n'est aucune espèce.",
+            "Et trois cousins en indivision attendent un nom avant l'ouverture de la succession."],
+            choix:[
+              {label:"Dire ce qu'on a trouvé, sans nom",
+               detail:"Requiert d'avoir compris · une vérité sans coupable ne se plaide pas",
+               requis:{flag:"belrive_pas_de_plaies"}, suite:"verite",
+               effets:{issue:"verite_etablie", reputation:{humains:8, parias:10}, renom:8, suspicion:6}},
+              {label:"Suivre la marque jusqu'à Vaudreuil",
+               detail:"Requiert d'avoir vu la marque sur la margelle",
+               requis:{flag:"belrive_marque"}, suite:"vaudreuil",
+               effets:{issue:"verite_etablie", reputation:{humains:6, hommes_betes:-10}, renom:10}},
+              {label:"Désigner les bûcherons", detail:"C'est plaidable, c'est faux, et les cousins paieront",
+               suite:"designe",
+               effets:{issue:"coupable_designe", reputation:{humains:-12, parias:-10}, renom:-6, or:600}},
+              {label:"Rendre l'avance et clore", detail:"On ne met pas un nom sur ce qu'on n'a pas compris",
+               suite:"close", effets:{issue:"affaire_close", reputation:{humains:-4}}},
+            ]},
+          verite:{ fin:true, texte:[
+            "Il dit tout : les cent soixante-quatre dans les lits, les seize vers la fontaine, l'absence de plaies, les mains sur les oreilles, le rapport qu'on a demandé au prieur de réécrire.",
+            "Le notaire écoute, écrit, et à la fin pose sa plume. « Vous me dites qu'un son a tué cent quatre-vingts personnes. »",
+            "« Je vous dis ce que j'ai vu. »",
+            "Le rapport est déposé tel quel. Les trois cousins le refusent, plaident dix ans, et perdent tous les trois. Belrive reste vide.",
+            "Le prieur, lui, fait recopier le rapport à quatre exemplaires et en envoie un à la Cour des Lisières. Quelqu'un, là-bas, saura peut-être ce que c'était."],
+            effets:{flag:"belrive_rapport_lisieres"}},
+          vaudreuil:{ fin:true, texte:[
+            "La même marque, sur onze portes, à trente lieues. Il faut trois semaines pour établir le lien et deux jours pour le faire admettre.",
+            "Ce n'est pas la harde qui a tué Belrive : la harde marque, elle prend, elle ne massacre pas. Mais quelqu'un a copié la marque de la harde sur la margelle de Belrive après coup, et ce quelqu'un savait ce qu'il faisait.",
+            "Le rapport nomme la marque, décrit le procédé, et laisse la conclusion ouverte. Il suffit à écarter les quatre accusations et à ouvrir la succession.",
+            "Trois cousins héritent d'un village vide dont personne ne veut."]},
+          designe:{ fin:true, texte:[
+            "Les bûcherons de la coupe basse. Douze hommes, une histoire de bornes, un mobile plaidable, et aucun alibi parce que personne n'a d'alibi pour une nuit d'il y a six semaines.",
+            "Le rapport tient debout. Les trois cousins paient une prime de six cents écus par-dessus le contrat, et la succession s'ouvre dans le mois.",
+            "Quatre bûcherons sont pendus au printemps. Les huit autres quittent la région.",
+            "Personne ne saura jamais ce qui a tué Belrive, et cela n'a plus d'importance pour personne — sauf pour un homme qui a écrit un nom qu'il savait faux."]},
+          close:{ fin:true, texte:[
+            "« Je n'ai pas de nom à vous donner. »",
+            "Le notaire referme son dossier avec l'air d'un homme qui s'y attendait. Il paie la moitié.",
+            "L'affaire est classée sans conclusion. Les trois cousins plaident quand même. Belrive reste vide et le restera."]},
+        }}},
+  ]},
+
 ];
