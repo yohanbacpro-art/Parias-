@@ -610,4 +610,891 @@ const CHAINES = [
         }}},
   ]},
 
+/* ══════════════════════════════════════════════════════════════════════════
+   04 — LA GUEULE DE FER
+   Une bête cuirassée qui suit le métal chaud. Les forges ne peuvent pas
+   s'éteindre, et c'est tout le problème.
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_ORSENNE", type:'contrat', titre:"La Gueule de Fer",
+  commanditaire:"Maison d'Orsenne", maison:"Maison d'Orsenne",
+  or:1400, danger:"dangereux", categorie:"chasse", prix:true,
+  lieux:["LOC_003","LOC_008","LOC_011"],
+  pitch:"Une bête cuirassée ravage les forges rurales et semble attirée par le métal chauffé. Quatre forges sur sept sont éteintes, et une forge éteinte est un village qui part.",
+  paye:["bete_tuee","bete_deviee","forges_fermees"],
+  issues:{
+    bete_tuee:"La Gueule de Fer est morte devant la forge de Grand-Enclume, et les feux ont repris.",
+    bete_deviee:"On a appris à détourner la Gueule de Fer au lieu de l'affronter. Les forges brûlent la nuit, désormais.",
+    forges_fermees:"Les forges d'Orsenne sont froides. La bête est repartie faute de quoi manger.",
+    abandonnee:"Personne n'a jamais réglé l'affaire des forges d'Orsenne.",
+    refusee:"Yohan a refusé les termes d'Orsenne.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"On attend de voir une forge de près.",
+      ev:{ id:"CHO_1", titre:"Quatre forges sur sept", famille:"CONTRAT", rarete:"majeur",
+        image:"evt2_forge",
+        scenes:{
+          start:{ texte:[
+            "Dame Isabeau d'Orsenne reçoit dans une forge en activité, debout près du foyer, parce qu'elle n'a pas le temps d'aller ailleurs et qu'elle veut qu'on voie ce qu'on va perdre.",
+            "« Quatre forges éteintes en six semaines. Elle vient la nuit, elle arrache la toiture, elle mange le métal dans le foyer. Elle ne touche personne — sauf ceux qui essaient de l'en empêcher, et il y en a eu trois. »",
+            "Elle jette une barre dans les braises et la regarde rougir. « Nous ne pouvons pas éteindre. Une forge froide, c'est un village qui part en deux hivers. »"],
+            choix:[
+              {label:"Demander ce qu'elle a déjà essayé", detail:"Une maîtresse des forges a essayé des choses",
+               suite:"essaye"},
+              {label:"Demander à voir les trois morts", detail:"Jet de Précision (12)",
+               test:{stat:"precision", dc:12}, reussite:"morts_ok", echec:"morts_ko"},
+              {label:"Accepter tout de suite", detail:"Une forge qui refroidit n'attend pas",
+               suite:"accord", effets:{suspicion:-2}},
+            ]},
+          essaye:{ texte:[
+            "« Des pièges à ours : elle les a mangés. Des chiens : elle les a ignorés. Une garde de six hommes : trois sont morts, les autres ont couru et je ne le leur reproche pas. »",
+            "Elle compte sur ses doigts, méthodiquement. « Et une nuit sans feu à Grand-Enclume. Cette nuit-là, elle n'est pas venue. »",
+            "Elle relève la tête. « Ce qui veut dire qu'elle sait où sont les feux. Et je ne sais pas comment. »"],
+            effets:{xp:14, flag:"orsenne_suit_le_feu"}, suite:"accord"},
+          morts_ok:{ texte:[
+            "On les a enterrés vite, mais on n'a pas brûlé leurs affaires, et c'est ce qui compte.",
+            "Aucun n'a été mordu. Les trois portaient des tabliers de forgeron cloutés de fer, et les trois ont été écrasés — d'un seul coup, par-dessus, comme on écrase une chose qu'on veut ouvrir.",
+            "Elle ne les a pas tués pour se défendre. Elle les a pris pour le fer qu'ils portaient."],
+            effets:{xp:18, flag:"orsenne_suit_le_feu"}, suite:"accord"},
+          morts_ko:{ texte:["Trois tombes fraîches, trois noms, et des familles qui ne veulent pas parler à un étranger. On n'apprend rien qu'on ne sache déjà."],
+            effets:{xp:5}, suite:"accord"},
+          accord:{ fin:true, texte:[
+            "« Quatorze cents écus. Et si vous trouvez un moyen qui n'éteint pas mes feux, je paierai davantage — sur mes propres deniers, pas sur ceux de mon frère. »"]},
+        }}},
+
+    { id:"veille", delai:[2,4], attente:"Il faut veiller une forge une nuit entière.",
+      ev:{ id:"CHO_2", titre:"La nuit à Grand-Enclume", famille:"ONDE", rarete:"majeur",
+        image:"evt_galerie",
+        scenes:{
+          start:{ texte:[
+            "La forge de Grand-Enclume tourne toute la nuit, avec deux apprentis qui alimentent et Yohan sur le toit, à plat ventre, depuis quatre heures.",
+            "Elle arrive un peu après minuit. Elle ne rugit pas, elle n'écrase rien : elle descend le versant en ligne droite, sans hésiter une seule fois, comme quelqu'un qui rentre chez lui dans le noir.",
+            "Elle fait la taille d'un chariot. Sa carapace n'est pas de l'écaille : c'est du fer, plaque par plaque, fondu à même la peau au fil des années."],
+            choix:[
+              {label:"Attaquer pendant qu'elle mange", detail:"Elle a la tête dans le foyer et le dos tourné",
+               suite:"attaque"},
+              {label:"L'observer jusqu'au bout", detail:"Jet de Volonté (13) · rester immobile à six pas d'une chose pareille",
+               test:{stat:"vol", dc:13}, reussite:"observe_ok", echec:"observe_ko"},
+              {label:"Déplacer le fer chaud loin de la forge", detail:"Jet d'Agilité (13) · une brouette de braises et beaucoup d'audace",
+               test:{stat:"agi", dc:13}, reussite:"detourne_ok", echec:"detourne_ko"},
+            ]},
+          attaque:{ texte:["Elle se retourne plus vite qu'une chose bardée de fer ne le devrait, et la nuit devient très courte."],
+            combat:{ groupe:[{bst:"BST_040", n:1}, {bst:"BST_037", n:2}], victoire:"abattue", defaite:"repousse" }},
+          abattue:{ texte:[
+            "Elle met longtemps à s'arrêter, et quand elle s'arrête, les deux apprentis n'ont toujours pas lâché leurs pinces.",
+            "Sous les plaques, la chair est parcourue de veines noires et dures. Cette bête ne mangeait pas le fer par goût : elle en avait besoin pour tenir debout."],
+            effets:{xp:34, flag:"orsenne_carcasse"}, fin:true},
+          repousse:{ texte:[
+            "Elle balaie l'atelier d'un coup de flanc et Yohan se retrouve sous une poutre, à respirer de la cendre, pendant qu'elle finit tranquillement le foyer.",
+            "Grand-Enclume est la cinquième forge éteinte. Il reste deux."],
+            effets:{pv:-22, fat:16, xp:10, flag:"orsenne_cinquieme"}, fin:true},
+          observe_ok:{ texte:[
+            "Il tient. Quatre heures de plus, sans bouger, à six pas d'une chose qui pourrait le prendre pour une pièce de fer.",
+            "Elle mange lentement, méthodiquement, et elle s'arrête net quand une plaque de sa carapace se détache et tombe dans la cendre. Elle la regarde. Elle la remange.",
+            "Elle perd son armure. Elle vient la remplacer. Elle ne chasse pas : elle se soigne."],
+            effets:{xp:24, flag:"orsenne_se_soigne"}, fin:true},
+          observe_ko:{ texte:["Une tuile cède sous son coude. La bête lève la tête vers le toit, très longuement, et Yohan passe le reste de la nuit à ne plus respirer du tout. Elle repart avant l'aube."],
+            effets:{fat:14, xp:8}, fin:true},
+          detourne_ok:{ texte:[
+            "Une brouette de braises, deux cents pas dans la nuit, et un tas de fer de rebut au fond d'une carrière abandonnée.",
+            "Elle change de trajectoire à mi-pente, sans hésiter, et passe la nuit dans la carrière. La forge tourne jusqu'au matin sans être touchée pour la première fois depuis six semaines."],
+            effets:{xp:26, flag:"orsenne_detour"}, fin:true},
+          detourne_ko:{ texte:["La brouette verse à cent pas de la forge. La bête vient donc manger à cent pas de la forge, ce qui est mieux que rien et bien pire que prévu, parce qu'elle y trouve aussi le mur de l'atelier."],
+            effets:{pv:-10, fat:10, xp:10}, fin:true},
+        }}},
+
+    { id:"decision", delai:[1,3], attente:"Orsenne attend de savoir si ses feux peuvent rester allumés.",
+      ev:{ id:"CHO_3", titre:"Ce qu'on fait d'une bête qui a faim", famille:"CONTRAT", rarete:"majeur",
+        image:"evt2_veine",
+        scenes:{
+          start:{ texte:[
+            "Sept forges. Trois encore chaudes. Et une bête qui ne chasse personne mais qui a besoin de fer pour ne pas mourir.",
+            "Dame Isabeau écoute tout, sans interrompre, en tournant une barre dans les braises."],
+            choix:[
+              {label:"L'abattre", detail:"Requiert de l'avoir déjà mise à terre · c'est ce qui a été payé",
+               requis:{flag:"orsenne_carcasse"}, suite:"abattre",
+               effets:{issue:"bete_tuee", reputation:{humains:10, nains:4}, renom:8}},
+              {label:"Monter un dépôt de fer de rebut à trois lieues des forges",
+               detail:"Requiert d'avoir compris pourquoi elle vient · −300 or, et les feux restent allumés",
+               requis:{flag:"orsenne_se_soigne"}, suite:"depot",
+               effets:{or:-300, issue:"bete_deviee", reputation:{humains:6, hommes_betes:10}, renom:6}},
+              {label:"Détourner par la carrière, chaque nuit, indéfiniment",
+               detail:"Requiert d'avoir réussi le détour · gratuit, et fragile",
+               requis:{flag:"orsenne_detour"}, suite:"carriere",
+               effets:{issue:"bete_deviee", reputation:{humains:4}, renom:3}},
+              {label:"Conseiller d'éteindre les forges", detail:"La seule chose qui marche à coup sûr, et la pire",
+               suite:"eteindre", effets:{issue:"forges_fermees", reputation:{humains:-12}, renom:-4}},
+            ]},
+          abattre:{ fin:true, texte:[
+            "La carcasse est découpée sur trois jours. Les plaques valent leur poids et repartent en lingots ; le reste est brûlé sur ordre de la maison.",
+            "Les quatre forges éteintes rallument dans le mois. Dame Isabeau paie devant témoins et ajoute deux cents écus de sa bourse, ce qui, chez elle, tient lieu de remerciement."]},
+          depot:{ fin:true, texte:[
+            "Trois cents écus de fer de rebut, empilés dans une combe à trois lieues, et renouvelés tous les deux mois par charretée.",
+            "Elle y va. Chaque nuit. Les sept forges tournent, y compris les quatre qu'on croyait perdues.",
+            "« Nous nourrissons un monstre », dit le frère de Dame Isabeau, offusqué. « Nous payons un péage », répond-elle. « Comme à tout le monde. »"]},
+          carriere:{ fin:true, texte:[
+            "Un homme monte à la carrière chaque soir avec une brouette de braises et redescend au matin. C'est peu de chose et ça tient, tant que l'homme tient.",
+            "Dame Isabeau paie le contrat sans rien ajouter. « Vous m'avez acheté du temps », dit-elle. « Ce n'est pas la même chose qu'une solution, et nous le savons tous les deux. »"]},
+          eteindre:{ fin:true, texte:[
+            "Les sept forges s'éteignent en une semaine. La bête tourne trois nuits autour des ateliers froids, puis remonte vers le nord et ne redescend plus.",
+            "Deux villages se vident dans l'année. Dame Isabeau paie le contrat en entier et ne dit pas un mot de plus.",
+            "Elle avait dit dès le premier jour que c'était la seule chose qu'elle ne pouvait pas faire."]},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   05 — LES SEPT DISPARUS
+   Sept membres d'une même maison en trois mois, sans demande de rançon.
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_CLAIRMONT", type:'contrat', titre:"Les Sept Disparus",
+  commanditaire:"Maison de Clairmont", maison:"Maison de Clairmont",
+  or:1600, danger:"dangereux", categorie:"enquête", prix:true,
+  lieux:["LOC_004","LOC_002","LOC_011"],
+  pitch:"Sept membres d'une même maison noble ont disparu en trois mois. Aucune demande de rançon n'est jamais arrivée, ce qui est la seule chose que tout le monde refuse de commenter.",
+  paye:["heritier_demasque","maison_eteinte","verite_enterree"],
+  issues:{
+    heritier_demasque:"On a fini par savoir qui vidait la maison de Clairmont, et la maison n'a pas survécu à l'apprendre.",
+    maison_eteinte:"La maison de Clairmont s'est éteinte sans qu'on sache jamais pourquoi.",
+    verite_enterree:"Ce qui est arrivé aux sept de Clairmont a été payé pour rester enterré.",
+    abandonnee:"Personne n'a jamais cherché les sept disparus de Clairmont.",
+    refusee:"Yohan a refusé les termes de Clairmont.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Il reste à parler à ceux qui restent.",
+      ev:{ id:"CHC_1", titre:"Ce qu'il reste de Clairmont", famille:"POLITIQUE", rarete:"majeur",
+        image:"evt_archives",
+        scenes:{
+          start:{ texte:[
+            "L'hôtel de Clairmont, à Astrah, est trop grand pour les quatre personnes qui l'habitent encore. On traverse trois salles vides avant d'atteindre celle où quelqu'un a fait du feu.",
+            "Le vieil homme qui reçoit est le grand-oncle : il tient la maison par défaut, parce qu'il est le seul adulte qui reste debout.",
+            "« Sept. Mon neveu et sa femme, leurs deux fils, ma nièce, son mari, et la petite dernière qui avait dix-neuf ans. En trois mois. Aucune rançon. Aucun corps. »",
+            "Il ajoute, très bas : « Et pas une seule enquête de la Couronne. »"],
+            choix:[
+              {label:"Demander pourquoi la Couronne ne bouge pas", detail:"Sept nobles disparus, c'est un scandale d'État",
+               suite:"couronne"},
+              {label:"Demander qui hérite", detail:"Jet de Précision (11) · la question qu'on ne pose pas",
+               test:{stat:"precision", dc:11}, reussite:"herite_ok", echec:"herite_ko"},
+              {label:"Demander à voir les chambres", detail:"Les gens laissent des choses derrière eux",
+               suite:"chambres"},
+            ]},
+          couronne:{ texte:[
+            "Le vieil homme met un long moment à répondre, et la réponse tient en trois mots.",
+            "« Nous ne pesons plus. »",
+            "Il regarde le feu. « Il y a douze ans, une disparition chez nous aurait mobilisé une compagnie. Aujourd'hui, un secrétaire écrit une ligne et referme le registre. C'est peut-être ça qui nous tue, au fond. Pas un assassin : le fait que ça n'intéresse personne. »"],
+            effets:{xp:12, flag:"clairmont_oubliee"}, suite:"termes"},
+          herite_ok:{ texte:[
+            "Il ne se dérobe pas. C'est plus troublant que s'il l'avait fait.",
+            "« Moi. À soixante-treize ans, et sans enfant. Après moi, une branche cadette installée à Fort-aux-Princes, que je n'ai pas vue depuis vingt ans. »",
+            "Il sourit sans joie. « Vous pensez ce que tout le monde pense. Je le pense aussi. C'est pour ça que je paie quelqu'un qui n'est pas d'ici. »"],
+            effets:{xp:18, flag:"clairmont_branche_cadette"}, suite:"termes"},
+          herite_ko:{ texte:["La question passe mal et on la lui rappelle : il a soixante-treize ans, il enterre sa famille, et il n'a pas besoin d'un mercenaire pour lui faire remarquer qu'il en profite."],
+            effets:{xp:4, reputation:{humains:-3}}, suite:"termes"},
+          chambres:{ texte:[
+            "Sept chambres fermées, sept lits faits. Personne n'a rien touché, parce que toucher reviendrait à admettre.",
+            "Dans celle de la plus jeune, une malle de voyage à moitié faite, refermée à la hâte. Dans celle des deux fils, un jeu de cartes interrompu. Dans celle du neveu, un registre de comptes ouvert sur une page où quelqu'un a repassé trois lignes à l'encre noire jusqu'à les rendre illisibles.",
+            "Ils ne sont pas partis. Ils ont été interrompus."],
+            effets:{xp:20, flag:"clairmont_comptes"}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Seize cents écus. Je n'ai pas plus. »",
+            "Il ajoute, avec la politesse exacte d'un homme qui a passé sa vie à la cour : « Et je sais ce que la coutume dit qu'une maison comme la mienne vous doit. Regardez autour de vous. Il ne me reste personne à vous donner. »"]},
+        }}},
+
+    { id:"enquete", delai:[2,5], attente:"Trois lignes raturées, c'est déjà une piste.",
+      ev:{ id:"CHC_2", titre:"Les trois lignes noircies", famille:"POLITIQUE", rarete:"majeur",
+        image:"evt_archives",
+        scenes:{
+          start:{ texte:[
+            "Le registre du neveu s'arrête net à la mi-hiver. Les trois lignes raturées se laissent lire à contre-jour par un copiste patient et mal payé.",
+            "Ce sont trois versements. Trois, à la même personne, sur trois mois — et la personne n'est pas nommée : elle est désignée par une initiale et un chiffre, comme on désigne un fournisseur qu'on préfère ne pas inscrire.",
+            "Le premier versement date de dix jours avant la première disparition."],
+            choix:[
+              {label:"Remonter le fournisseur par les banques d'Astrah", detail:"Jet de Précision (14)",
+               test:{stat:"precision", dc:14}, reussite:"banque_ok", echec:"banque_ko"},
+              {label:"Acheter le nom à un secrétaire du Grand Registre", detail:"−350 or",
+               requis:{or:350}, suite:"achat", effets:{or:-350}},
+              {label:"Aller voir la branche cadette à Fort-aux-Princes",
+               detail:"Requiert de savoir qui hérite après le vieil homme",
+               requis:{flag:"clairmont_branche_cadette"}, suite:"cadette"},
+            ]},
+          banque_ok:{ texte:[
+            "Quatre jours dans les arrière-salles des changeurs d'Astrah, à payer des verres et à poser la même question de six façons.",
+            "L'initiale correspond à une maison de courtage qui ne courte rien : elle sert d'écran à des gens qui paient d'autres gens. Le commis qui tient les écritures accepte de dire une chose et une seule, en regardant la porte : « Ce compte-là paie des hommes de Port-Noir. »"],
+            effets:{xp:24, flag:"clairmont_port_noir"}, fin:true},
+          banque_ko:{ texte:["Les changeurs d'Astrah ont l'habitude des gens qui posent des questions, et une façon polie de ne rien dire qui prend quatre jours à comprendre."],
+            effets:{xp:8, or:-40}, fin:true},
+          achat:{ texte:[
+            "Le secrétaire prend l'argent dans une chapelle, ce qui est sa manière de se tenir.",
+            "« Le compte est ouvert au nom d'un armateur de Port-Noir. Et il est alimenté depuis Fort-aux-Princes, par une lettre de change signée d'un nom que vous connaissez déjà si vous avez lu l'arbre de cette maison. »",
+            "Il se relève. « Je n'ai rien dit. Vous ne m'avez jamais vu. Et si j'étais vous, je ne rentrerais pas à l'hôtel de Clairmont ce soir. »"],
+            effets:{xp:26, flags:["clairmont_port_noir","clairmont_branche_cadette"]}, fin:true},
+          cadette:{ texte:[
+            "La branche cadette tient un hôtel modeste à Fort-aux-Princes et vit correctement pour des gens qu'on dit oubliés.",
+            "Trop correctement. La domesticité est neuve, les tentures ont six mois, et le maître des lieux — un homme de quarante ans au regard fatigué — reçoit Yohan avec une amabilité qui ne cède jamais d'un pouce en une heure d'entretien.",
+            "Sur le manteau de cheminée, un cadeau récent : une pièce de scrimshaw comme on en fabrique à Port-Noir, et nulle part ailleurs."],
+            effets:{xp:28, flags:["clairmont_port_noir","clairmont_cadet_riche"]}, fin:true},
+        }}},
+
+    { id:"port", delai:[2,4], attente:"Port-Noir ne déclare rien et n'oublie personne.",
+      ev:{ id:"CHC_3", titre:"Ce qu'on charge la nuit à Port-Noir", famille:"VILLE", rarete:"majeur",
+        image:"evt_port_noir",
+        scenes:{
+          start:{ texte:[
+            "Port-Noir déclare le tiers de ce qui entre et le quart de ce qui sort, et tout le monde s'en accommode depuis quatre générations.",
+            "L'armateur du compte existe. Il possède deux caraques, un entrepôt sur le quai nord, et une réputation d'homme qui ne pose jamais de questions sur une cargaison.",
+            "L'entrepôt est gardé la nuit. Ce qui est étrange, pour un entrepôt vide."],
+            choix:[
+              {label:"Y entrer", detail:"Jet d'Agilité (14)",
+               test:{stat:"agi", dc:14}, reussite:"entre_ok", echec:"entre_ko"},
+              {label:"Attendre et suivre ce qui en sort", detail:"Jet de Précision (13) · trois nuits sur un toit",
+               test:{stat:"precision", dc:13}, reussite:"suit_ok", echec:"suit_ko"},
+              {label:"Aller trouver l'armateur en face", detail:"Il ne niera pas, et il ne sera pas seul",
+               suite:"face", effets:{suspicion:6}},
+            ]},
+          entre_ok:{ texte:[
+            "L'entrepôt n'est pas vide. Il contient sept malles de voyage, alignées le long du mur du fond, avec les armes de Clairmont peintes au pochoir sur le flanc.",
+            "Elles sont pleines. Vêtements, papiers, une bourse par malle, intacte.",
+            "On n'a pas volé ces gens. On les a embarqués — avec leurs affaires, comme des passagers — et quelqu'un a fait débarquer les affaires."],
+            effets:{xp:30, flag:"clairmont_malles"}, fin:true},
+          entre_ko:{ texte:[
+            "Trois hommes dans le noir, et une porte qui se referme derrière.",
+            "Il sort par le toit avec une entaille au flanc et la certitude qu'on garde très sérieusement un entrepôt vide."],
+            effets:{pv:-16, fat:12, xp:12, suspicion:6}, fin:true},
+          suit_ok:{ texte:[
+            "La troisième nuit, une chaloupe accoste, et l'on charge non pas des caisses mais des gens : quatre silhouettes qui montent d'elles-mêmes, à l'aube, sans qu'on les pousse.",
+            "L'une d'elles porte encore un manteau de coupe noble.",
+            "Ils ne sont pas morts. Ils sont partis. Et quelqu'un les paie pour ça."],
+            effets:{xp:32, flag:"clairmont_vivants"}, fin:true},
+          suit_ko:{ texte:["Trois nuits sur un toit humide, deux chats, un ivrogne, et rien. Certaines veilles ne donnent rien, et il faut le porter aussi."],
+            effets:{fat:14, xp:8}, fin:true},
+          face:{ texte:[
+            "L'armateur ne nie rien. Il fait servir du vin et il parle, parce qu'il a passé l'âge d'avoir peur d'un homme seul.",
+            "« Je transporte. On me paie, je charge, je débarque ailleurs. Ce que sept nobles vont faire de leur vie à quatre cents lieues d'ici ne me regarde pas. »",
+            "Il repose son verre. « Et si vous voulez mon avis, ils n'ont pas eu tort. Cette maison-là était morte avant eux. »"],
+            effets:{xp:28, flags:["clairmont_vivants","clairmont_armateur"], suspicion:4}, fin:true},
+        }}},
+
+    { id:"decision", delai:[1,3], attente:"Il reste à décider ce que le vieil homme apprendra.",
+      ev:{ id:"CHC_4", titre:"Ce qu'on rapporte à un vieil homme", famille:"POLITIQUE", rarete:"majeur",
+        image:"evt_chapelle",
+        scenes:{
+          start:{ texte:[
+            "L'affaire tient debout, et elle est laide autrement que prévu.",
+            "Le cadet de Fort-aux-Princes a payé un armateur pour exfiltrer, un par un, tous ceux qui se trouvaient entre lui et le nom de Clairmont. Il ne les a pas tués. Il leur a offert de l'argent, un bateau et une vie ailleurs — et sept personnes qui n'aimaient pas la leur ont dit oui.",
+            "Le vieil homme, lui, croit enterrer sa famille depuis trois mois."],
+            choix:[
+              {label:"Tout lui dire", detail:"Requiert d'avoir la preuve · il a payé pour savoir",
+               requis:{flag:"clairmont_vivants"}, suite:"dire",
+               effets:{issue:"heritier_demasque", reputation:{humains:8, parias:6}, renom:10}},
+              {label:"Tout lui dire, et aller le dire au cadet ensuite",
+               detail:"Requiert la preuve · il a une maison, des gardes et beaucoup à perdre",
+               requis:{flag:"clairmont_vivants"}, suite:"cadet", effets:{etape:"confrontation"}},
+              {label:"Accepter l'argent du cadet et enterrer l'affaire",
+               detail:"+1200 or · le vieil homme mourra en croyant sa famille morte",
+               suite:"argent",
+               effets:{or:1200, issue:"verite_enterree", reputation:{humains:-10, parias:-12}, renom:-8, suspicion:-6}},
+              {label:"Lui dire qu'on n'a rien trouvé", detail:"C'est faux, et c'est peut-être plus doux",
+               suite:"rien", effets:{issue:"maison_eteinte", reputation:{humains:-4}}},
+            ]},
+          dire:{ fin:true, texte:[
+            "Il écoute sans interrompre, exactement comme la première fois.",
+            "Puis il dit : « Ils sont vivants. » Et il le répète deux fois, comme on essaie une phrase pour voir si elle tient.",
+            "Il paie le contrat en entier. Trois semaines plus tard, une lettre de sa main part vers Fort-aux-Princes : elle ne contient aucune menace, aucune plainte, et elle déshérite le cadet en quatre lignes d'une politesse impeccable.",
+            "La maison de Clairmont s'éteindra avec lui. Mais elle s'éteindra en sachant."]},
+          cadet:{ fin:true, texte:[
+            "Le vieil homme sait. Reste l'autre, qui vit bien à Fort-aux-Princes et se croit à l'abri d'un homme qu'il n'a jamais rencontré."]},
+          argent:{ fin:true, texte:[
+            "Douze cents écus, comptés dans une arrière-salle de Fort-aux-Princes par un homme de quarante ans au regard fatigué qui n'essaie même pas de se justifier.",
+            "« Je ne les ai pas tués », dit-il quand même, à la fin. « Personne ne veut le croire, mais je ne les ai pas tués. »",
+            "Yohan rentre à Astrah annoncer au vieil homme qu'il n'a rien trouvé. Le vieil homme le remercie et paie quand même la moitié.",
+            "C'est cette moitié-là qui reste en travers pendant des années."]},
+          rien:{ fin:true, texte:[
+            "« Je n'ai rien trouvé. »",
+            "Le vieil homme hoche la tête lentement. Il paie la moitié du contrat et raccompagne Yohan lui-même jusqu'à la porte, à travers les trois salles vides.",
+            "« Merci d'avoir cherché », dit-il. « Personne d'autre n'a cherché. »"]},
+        }}},
+
+    { id:"confrontation", delai:[2,4], attente:"Fort-aux-Princes est à quelques jours de route.",
+      ev:{ id:"CHC_5", titre:"L'homme qui n'a tué personne", famille:"POLITIQUE", rarete:"majeur",
+        image:"evt_bannieres",
+        scenes:{
+          start:{ texte:[
+            "Il reçoit dans la même pièce, avec la même amabilité, et il comprend en trois phrases qu'elle ne servira à rien.",
+            "« Vous allez me dire que j'ai vidé ma propre maison. C'est vrai. Vous allez me dire que c'est monstrueux. Ça se discute. »",
+            "Il se lève et va à la fenêtre. « J'ai offert de l'argent et un bateau à sept personnes qui haïssaient ce nom. Sept ont accepté. Pas une n'a hésité plus d'une nuit. Demandez-vous ce que ça dit de la maison de Clairmont, plutôt que de moi. »"],
+            choix:[
+              {label:"Le tuer", detail:"Il a trois gardes et l'habitude d'être détesté",
+               suite:"tuer"},
+              {label:"Le livrer à la Couronne", detail:"Jet de Volonté (14) · encore faut-il qu'elle veuille du dossier",
+               test:{stat:"vol", dc:14}, reussite:"livre_ok", echec:"livre_ko"},
+              {label:"Le laisser vivre avec ce que le vieil homme a écrit",
+               detail:"La lettre de déshéritement est déjà partie",
+               suite:"laisse"},
+            ]},
+          tuer:{ texte:["Il appelle sans se presser. Les trois gardes entrent par la porte du fond, et ils sont payés depuis trois mois pour ce moment précis."],
+            combat:{ groupe:[{bst:"BST_063", n:1}, {bst:"BST_045", n:3}], victoire:"mort", defaite:"echoue" }},
+          mort:{ texte:[
+            "Il meurt dans son propre salon, sous une pièce de scrimshaw de Port-Noir, sans avoir cessé une seule seconde de trouver qu'il avait raison.",
+            "La branche cadette s'éteint avec lui. Le vieil homme d'Astrah n'en saura rien : il mourra deux ans plus tard en croyant seulement avoir déshérité un neveu."],
+            effets:{xp:44, renom:6, reputation:{humains:-10, parias:8}, suspicion:12,
+                    flag:"clairmont_cadet_mort", issue:"heritier_demasque"}, fin:true},
+          echoue:{ texte:[
+            "Trois gardes payés d'avance, un salon trop petit pour reculer, et une fenêtre au premier étage.",
+            "Il sort par la fenêtre. L'homme de Fort-aux-Princes vivra vieux et riche, et il racontera toute sa vie qu'un Paria a essayé de le tuer chez lui."],
+            effets:{pv:-24, fat:18, xp:16, suspicion:16, issue:"heritier_demasque"}, fin:true},
+          livre_ok:{ texte:[
+            "Le dossier est mince — un compte-écran, un armateur qui ne témoignera pas, sept personnes vivantes qu'on ne peut pas produire — et Yohan le porte quand même au prévôt d'Astrah, avec la lettre du vieil homme en pièce jointe.",
+            "La Couronne n'a rien à gagner à poursuivre. Elle a beaucoup à gagner à le tenir.",
+            "Le cadet de Clairmont garde sa maison, ses gardes et son scrimshaw. Il appartient désormais à des gens qu'il n'a pas choisis, et pour toujours."],
+            effets:{xp:40, renom:8, reputation:{humains:12}, flag:"clairmont_cadet_tenu",
+                    issue:"heritier_demasque"}, fin:true},
+          livre_ko:{ texte:[
+            "Le prévôt lit trois pages, referme le dossier, et le rend.",
+            "« Sept adultes sont montés volontairement sur un bateau. Ce n'est pas un crime, messire. C'est un chagrin de famille. »"],
+            effets:{xp:18, issue:"heritier_demasque"}, fin:true},
+          laisse:{ texte:[
+            "Yohan s'en va sans rien faire, et c'est la lettre du vieil homme qui fait le travail : quatre lignes de politesse impeccable qui ôtent au cadet la seule chose pour laquelle il avait tout organisé.",
+            "Il hérite d'un nom vide, d'un hôtel à Astrah que personne n'entretient, et de trois salles où il n'y a plus rien."],
+            effets:{xp:36, renom:4, reputation:{humains:6, parias:6}, issue:"heritier_demasque"}, fin:true},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   06 — LA PRINCESSE ET LE TRAÎTRE
+   Quelqu'un dans sa propre escorte prépare sa mort.
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_RONCEVAL", type:'contrat', titre:"La Princesse et le Traître",
+  commanditaire:"Maison de Ronceval", maison:"Maison de Ronceval",
+  or:2100, danger:"dangereux", categorie:"sauvetage", prix:true,
+  lieux:["LOC_004","LOC_002","LOC_011"],
+  pitch:"Une princesse adulte doit rejoindre une conférence qui décidera d'une paix. Quelqu'un, dans sa propre escorte, prépare sa mort — et l'on ne sait pas qui.",
+  paye:["arrivee_vivante","traitre_demasque","conference_manquee"],
+  issues:{
+    arrivee_vivante:"La princesse de Ronceval est arrivée à la conférence, et la paix a été signée.",
+    traitre_demasque:"Le traître de l'escorte de Ronceval a été démasqué en route, et on a appris qui le payait.",
+    conference_manquee:"Le cortège de Ronceval n'est jamais arrivé. La conférence s'est tenue sans lui.",
+    abandonnee:"Yohan a quitté l'escorte de Ronceval en chemin.",
+    refusee:"Yohan a refusé les termes de Ronceval.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Le cortège part dans quelques jours.",
+      ev:{ id:"CHR_1", titre:"Onze personnes, et l'une d'elles ment", famille:"POLITIQUE", rarete:"majeur",
+        image:"evt_lances",
+        scenes:{
+          start:{ texte:[
+            "Dame Aliénor de Ronceval reçoit dans une écurie de poste, entre deux relais, parce qu'elle n'a pas le temps de faire autrement.",
+            "« Ma nièce doit être à la conférence de Salverne dans six semaines. Si elle n'y est pas, la paix ne se signe pas et trois maisons reprennent la guerre au printemps. »",
+            "Elle pose une liste sur le bat-flanc. « Onze personnes dans l'escorte. Capitaine, sept hommes d'armes, une camériste, un cocher, un chapelain. Tous choisis par moi. »",
+            "Elle attend qu'il lise. « Une lettre interceptée dit que l'un d'eux a été acheté. Elle ne dit pas lequel, et je n'ai pas le temps de les remplacer. »"],
+            choix:[
+              {label:"Demander à voir la lettre", detail:"Jet de Précision (13)",
+               test:{stat:"precision", dc:13}, reussite:"lettre_ok", echec:"lettre_ko"},
+              {label:"Demander qui gagne à ce que la conférence échoue", detail:"On achète toujours pour quelqu'un",
+               suite:"qui"},
+              {label:"Proposer de voyager sans être présenté comme un garde",
+               detail:"Un traître se surveille moins devant un homme qu'il croit inutile",
+               suite:"incognito", effets:{suspicion:-3, flag:"ronceval_incognito"}},
+            ]},
+          lettre_ok:{ texte:[
+            "La lettre est courte, sans sceau, et écrite par quelqu'un qui a l'habitude d'écrire peu.",
+            "« Le prix est accepté. Ce sera avant le pont, pas après. »",
+            "Deux choses : le traître est payé au résultat, et il connaît l'itinéraire assez bien pour parler d'un pont précis. Sur la route de Salverne, il y en a trois."],
+            effets:{xp:18, flag:"ronceval_avant_le_pont"}, suite:"termes"},
+          lettre_ko:{ texte:["Quatre lignes, aucun sceau, une écriture anonyme. Dame Aliénor l'a déjà lue cent fois et n'en a rien tiré de plus."],
+            effets:{xp:5}, suite:"termes"},
+          qui:{ texte:[
+            "« Trois maisons reprennent la guerre si la paix échoue. Deux y perdraient. La troisième a levé des hommes en février et n'a licencié personne depuis. »",
+            "Elle ne dit pas le nom, et Yohan comprend qu'elle ne le dira pas devant un cocher. « Ce que je peux vous dire, c'est que ce n'est pas un fou. C'est un investissement. »"],
+            effets:{xp:14, flag:"ronceval_commanditaire"}, suite:"termes"},
+          incognito:{ texte:[
+            "« Un cousin pauvre qu'on transporte par charité », propose-t-elle après réflexion. « Ça se fait, et personne ne parle jamais à un cousin pauvre. »",
+            "Elle réfléchit encore. « Vous mangerez avec les hommes. Vous entendrez ce qu'ils disent quand ils croient qu'on ne compte pas. »"],
+            effets:{xp:12}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Deux mille cent écus. Elle arrive vivante, ou vous ne touchez rien. »",
+            "Elle serre la liste dans sa main. « Et quand vous saurez lequel c'est, vous me le direz avant de faire quoi que ce soit. Ce sont mes hommes. »"]},
+        }}},
+
+    { id:"route", delai:[2,4], attente:"Six semaines de route, et onze personnes à regarder.",
+      ev:{ id:"CHR_2", titre:"Ce qu'on apprend en mangeant avec les hommes", famille:"VOYAGE", rarete:"majeur",
+        image:"evt2_convoi",
+        scenes:{
+          start:{ texte:[
+            "Trois semaines de route. On dort mal, on mange ensemble, et l'on finit par connaître onze personnes mieux qu'on ne voudrait.",
+            "Le capitaine est un homme de fer qui ne dort presque pas. La camériste hait la princesse pour des raisons de vingt ans. Le chapelain joue aux dés et perd. Deux des hommes d'armes ont une dette. Le cocher parle à ses chevaux et à personne d'autre.",
+            "Il y a cinq raisons de trahir dans ce cortège, et une seule est la bonne."],
+            choix:[
+              {label:"Suivre l'argent : qui a payé une dette récemment", detail:"Jet de Précision (13)",
+               test:{stat:"precision", dc:13}, reussite:"argent_ok", echec:"argent_ko"},
+              {label:"Provoquer une alerte et regarder qui se place", detail:"Jet de Volonté (14) · brutal et rapide",
+               test:{stat:"vol", dc:14}, reussite:"alerte_ok", echec:"alerte_ko"},
+              {label:"Parler à la princesse elle-même", detail:"Personne ne lui a demandé ce qu'elle pensait",
+               suite:"princesse"},
+            ]},
+          argent_ok:{ texte:[
+            "Les deux endettés le sont toujours : l'un pleure dessus tous les soirs, l'autre a écrit à son frère pour emprunter encore.",
+            "Le chapelain, lui, a cessé de perdre aux dés il y a onze jours. Il ne joue plus. Un homme qui a joué toute sa vie et qui s'arrête net a soit trouvé Dieu, soit trouvé de l'argent.",
+            "Sa besace est trop lourde pour un homme qui ne possède qu'un bréviaire."],
+            effets:{xp:22, flag:"ronceval_chapelain"}, fin:true},
+          argent_ko:{ texte:["Onze bourses, onze histoires, et rien qui dépasse. Les gens pauvres ont tous l'air d'avoir une raison, et c'est bien le problème."],
+            effets:{xp:8}, fin:true},
+          alerte_ok:{ texte:[
+            "Un cri dans la nuit, un cheval lâché, et vingt secondes de chaos organisé par Yohan lui-même.",
+            "Dix personnes courent vers la voiture de la princesse. Une seule court vers les bagages — et pas vers les siens.",
+            "Le chapelain revient une minute plus tard, essoufflé, en expliquant qu'il a cru voir quelqu'un dans les arbres."],
+            effets:{xp:24, flag:"ronceval_chapelain"}, fin:true},
+          alerte_ko:{ texte:[
+            "Le cheval lâché coûte une demi-journée à rattraper, le capitaine engueule tout le monde pendant une heure, et Yohan a appris exactement rien.",
+            "Il a aussi appris que le capitaine tient bien ses hommes, ce qui n'est pas rien."],
+            effets:{xp:10, fat:8}, fin:true},
+          princesse:{ texte:[
+            "Elle a vingt-huit ans, elle lit dans une voiture qui tangue depuis trois semaines, et elle referme son livre quand Yohan monte.",
+            "« Ma tante vous a dit qu'il y avait un traître. Elle ne vous a pas dit que je le savais avant elle. »",
+            "Elle regarde par la fenêtre. « Le chapelain a cessé de jouer aux dés. C'est un homme qui a joué pendant trente ans. On ne s'arrête pas comme ça. »",
+            "Puis, plus bas : « Je n'ai rien dit parce que je voulais voir si quelqu'un d'autre le remarquerait. Vous êtes le premier à me poser une question depuis Astrah. »"],
+            effets:{xp:26, flags:["ronceval_chapelain","ronceval_princesse_alliee"]}, fin:true},
+        }}},
+
+    { id:"pont", delai:[2,3], attente:"Le premier pont est à deux jours.",
+      ev:{ id:"CHR_3", titre:"Avant le pont", famille:"VOYAGE", rarete:"majeur",
+        image:"evt_peage",
+        scenes:{
+          start:{ texte:[
+            "Le premier pont de la route de Salverne enjambe une gorge étroite, et l'on n'y passe qu'à une voiture à la fois.",
+            "À deux lieues, le cortège s'arrête pour la nuit dans une clairière que le capitaine n'a pas choisie : c'est le chapelain qui l'a proposée, en expliquant qu'il y avait de l'eau.",
+            "Il y a de l'eau. Il y a aussi trois chemins par lesquels on peut entrer dans cette clairière sans être vu."],
+            choix:[
+              {label:"Prévenir Dame Aliénor et laisser sa maison régler",
+               detail:"Requiert de savoir qui · c'est ce qu'elle a demandé",
+               requis:{flag:"ronceval_chapelain"}, suite:"prevenir"},
+              {label:"Prendre le chapelain à part cette nuit", detail:"Jet de Volonté (14)",
+               requis:{flag:"ronceval_chapelain"}, test:{stat:"vol", dc:14},
+               reussite:"retourne_ok", echec:"retourne_ko"},
+              {label:"Ne rien dire et attendre l'embuscade", detail:"On saura à coup sûr, et il y aura des morts",
+               suite:"attendre"},
+            ]},
+          prevenir:{ texte:[
+            "Dame Aliénor n'est pas là — elle est restée à trois relais en arrière — mais le capitaine porte sa parole, et il l'écoute jusqu'au bout sans changer de visage.",
+            "Le chapelain est désarmé, lié, et mis dans la voiture des bagages avant l'aube. Il ne nie pas. Il ne parle pas non plus.",
+            "L'embuscade a lieu quand même : ceux qui étaient payés pour attendre attendaient."],
+            effets:{xp:20, flag:"ronceval_chapelain_pris"}, suite:"embuscade"},
+          retourne_ok:{ texte:[
+            "Il craque en quatre minutes, à voix basse, derrière la voiture des bagages.",
+            "Douze hommes, avant le pont, à l'aube. Il devait laisser une lanterne allumée du côté est de la clairière. Et il devait, si tout ratait, monter dans la voiture et finir le travail lui-même.",
+            "« Je ne l'aurais pas fait », dit-il. Il le dit comme quelqu'un qui essaie de se convaincre. « La lanterne, oui. Le reste, non. »"],
+            effets:{xp:28, flags:["ronceval_chapelain_pris","ronceval_douze_hommes"]}, suite:"embuscade"},
+          retourne_ko:{ texte:[
+            "Il nie tout, se met à pleurer, appelle le capitaine, et l'affaire devient une scène qui réveille le camp entier.",
+            "Le capitaine tranche : personne ne touche à un homme d'Église sur un soupçon. Le chapelain dort dans la voiture, libre, et il ne dort pas."],
+            effets:{xp:12, suspicion:4}, suite:"embuscade"},
+          attendre:{ texte:["Il ne dit rien à personne et il ne dort pas. À trois heures, une lanterne s'allume du côté est de la clairière."],
+            effets:{xp:14, flag:"ronceval_lanterne"}, suite:"embuscade"},
+          embuscade:{ texte:[
+            "Ils viennent par l'est, comme convenu, et ils sont douze — des épéistes à gages, pas des brigands : payés, équipés, silencieux.",
+            "Ils vont droit à la voiture de la princesse."],
+            combat:{ groupe:[{bst:"BST_061", n:3}, {bst:"BST_043", n:2}], victoire:"tenu", defaite:"perce" }},
+          tenu:{ fin:true, texte:[
+            "Ça dure moins longtemps qu'on ne croit, et il y a trois morts du côté de l'escorte, dont le cocher qui parlait à ses chevaux.",
+            "La voiture n'a pas été ouverte. La princesse en sort d'elle-même, à l'aube, et fait le tour des blessés avant de demander à repartir."]},
+          perce:{ fin:true, texte:[
+            "Ils atteignent la voiture. Yohan les atteint aussi, mais après — et il y a une différence entre après et avant qu'on paie longtemps.",
+            "La princesse est vivante. Elle a une entaille du poignet au coude et elle ne se sert plus de cette main comme avant.",
+            "Cinq morts dans l'escorte. Le capitaine est de ceux-là."]},
+        }}},
+
+    { id:"salverne", delai:[2,4], attente:"Salverne est encore à trois semaines.",
+      ev:{ id:"CHR_4", titre:"Ce qu'on dit à Salverne", famille:"POLITIQUE", rarete:"majeur",
+        image:"evt_bannieres",
+        scenes:{
+          start:{ texte:[
+            "La conférence de Salverne se tient dans une abbaye trop petite pour le nombre de bannières plantées dans la cour.",
+            "La princesse est arrivée. C'est déjà tout ce que Ronceval avait payé.",
+            "Reste ce qu'on fait de ce qu'on sait — un chapelain acheté, douze hommes à gages, et une maison qui a levé des troupes en février sans licencier personne."],
+            choix:[
+              {label:"Ne rien dire et toucher son argent", detail:"Le contrat est rempli",
+               suite:"rien", effets:{issue:"arrivee_vivante", reputation:{humains:8}, renom:6}},
+              {label:"Livrer le chapelain et ce qu'il a dit, devant la conférence",
+               detail:"Requiert de l'avoir pris · la paix se signera autrement",
+               requis:{flag:"ronceval_chapelain_pris"}, suite:"livrer",
+               effets:{issue:"traitre_demasque", reputation:{humains:12, parias:6}, renom:12, suspicion:8}},
+              {label:"Vendre l'information à la maison accusée", detail:"+900 or · elle préfère savoir ce qu'on sait d'elle",
+               suite:"vendre",
+               effets:{or:900, issue:"arrivee_vivante", reputation:{humains:-10}, renom:-6, suspicion:-4}},
+            ]},
+          rien:{ fin:true, texte:[
+            "La paix se signe le quatrième jour. Trois maisons rengainent. Personne ne saura jamais qu'elle a failli ne pas se signer à deux lieues d'un pont.",
+            "Dame Aliénor paie en entier, dans la cour de l'abbaye, et ajoute : « Vous avez ramené onze personnes. J'en avais envoyé onze. Ça ne s'est jamais produit dans ma vie. »"]},
+          livrer:{ fin:true, texte:[
+            "Le chapelain parle devant quatre maisons réunies, parce qu'on lui a promis la vie et qu'il n'a plus rien d'autre à négocier.",
+            "La maison qui a levé des hommes en février nie tout, et se retrouve à négocier une paix qu'elle voulait faire échouer, en position de suppliante.",
+            "La princesse fait signer un texte plus dur que prévu. En sortant, elle dit à Yohan une seule phrase : « Vous m'avez posé une question. Personne d'autre. »"]},
+          vendre:{ fin:true, texte:[
+            "Neuf cents écus, dans une sacristie, comptés par un homme qui ne se présente pas.",
+            "La paix se signe quand même. La maison accusée sait désormais exactement ce que Ronceval sait d'elle, et ce qu'elle doit démentir.",
+            "Yohan touche deux fois : une fois pour avoir sauvé la princesse, une fois pour avoir vendu ce qu'il a appris en la sauvant. Les deux sommes sont propres. Elles ne se mélangent pas bien."]},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   07 — LE ROI SOUS LA MONTAGNE
+   Un chef Peau-Verte inhabituellement discipliné fédère les bandes.
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_KARDURAK", type:'contrat', titre:"Le Roi sous la montagne",
+  commanditaire:"Le maître des Grandes Portes", maison:null,
+  or:2400, danger:"très dangereux", categorie:"guerre",
+  lieux:["LOC_008","LOC_009","LOC_012"],
+  pitch:"Un chef Peau-Verte inhabituellement discipliné fédère plusieurs bandes dans les profondeurs. Kar-Durak a des soldats et pas de temps.",
+  paye:["gharok_tue","gharok_traite","portes_tenues"],
+  issues:{
+    gharok_tue:"Gharok est mort sous la montagne, et sa fédération s'est défaite en trois semaines.",
+    gharok_traite:"Kar-Durak a traité avec un chef Peau-Verte pour la première fois de son histoire.",
+    portes_tenues:"Les Grandes Portes ont tenu. Ce qui vient dessous n'a pas été réglé.",
+    abandonnee:"Kar-Durak a affronté la fédération sans Yohan.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Les Nains attendent une reconnaissance, pas une promesse.",
+      ev:{ id:"CHK_1", titre:"Ce que les Nains ne disent pas", famille:"NAIN", rarete:"majeur",
+        image:"evt_tunnel",
+        scenes:{
+          start:{ texte:[
+            "Le maître des Grandes Portes reçoit dans une salle où l'on entend la ventilation de quatre niveaux de galeries. Il ne s'assoit pas et n'invite pas à le faire.",
+            "« Depuis deux ans, les bandes ne se battent plus entre elles. C'est nouveau. C'est mauvais. »",
+            "Il pose une carte de niveaux sur la table — un dessin de galeries que peu d'humains ont jamais vu.",
+            "« Elles convergent vers le niveau moins-sept. Nous avons perdu trois patrouilles en essayant de savoir pourquoi. »"],
+            choix:[
+              {label:"Demander ce qu'il y a au niveau moins-sept", detail:"Un Nain ne perd pas trois patrouilles pour rien",
+               suite:"niveau"},
+              {label:"Demander pourquoi il paie un humain", detail:"Kar-Durak a des soldats",
+               suite:"humain"},
+              {label:"Accepter et descendre", detail:"On perd moins de temps",
+               suite:"termes"},
+            ]},
+          niveau:{ texte:[
+            "Il met du temps à répondre, ce qui chez un Nain veut dire qu'il pèse ce qu'il doit taire.",
+            "« Une salle. Ancienne. Nous l'avons murée il y a six cents ans et nous n'écrivons pas pourquoi. »",
+            "Il roule la carte. « Ce que je sais, c'est qu'ils ne creusent pas vers nos coffres. Ils creusent vers ça. »"],
+            effets:{xp:16, flag:"kardurak_salle_muree"}, suite:"termes"},
+          humain:{ texte:[
+            "« Parce qu'un Nain qui descend au moins-sept ne remonte pas. Et parce que si un Nain le voit, Kar-Durak devra agir. »",
+            "Il regarde Yohan pour la première fois. « Si c'est un humain qui le voit, Kar-Durak peut encore choisir. C'est ça que j'achète : le droit de ne pas savoir tout de suite. »"],
+            effets:{xp:18, flag:"kardurak_deni"}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Deux mille quatre cents. Payés à la remontée, pas au résultat. »",
+            "Il ajoute, du ton dont on énonce une loi : « Nous ne payons pas en femmes. Nous ne l'avons jamais fait pour personne, et nous ne commencerons pas avec un Paria dont nous savons parfaitement ce qu'il est. »",
+            "C'est la première fois que quelqu'un le dit à voix haute, et il le dit comme on constate la profondeur d'un puits."]},
+        }}},
+
+    { id:"descente", delai:[2,4], attente:"Sept niveaux, et rien qui remonte.",
+      ev:{ id:"CHK_2", titre:"Moins-sept", famille:"NAIN", rarete:"majeur",
+        image:"evt_galerie",
+        scenes:{
+          start:{ texte:[
+            "Six niveaux à descendre par des escaliers taillés pour des jambes plus courtes. Au cinquième, on cesse de croiser des Nains. Au sixième, on cesse de croiser des lampes allumées.",
+            "Le niveau moins-sept n'est pas abandonné : il est occupé. Des feux, de l'ordre, des sentinelles postées à des angles qui se couvrent — et pas un cri, pas une bagarre, pas un chant.",
+            "Des Peaux-Vertes qui ne font pas de bruit. C'est ça qui a coûté trois patrouilles aux Nains : personne ne les a entendus venir."],
+            choix:[
+              {label:"Longer par les galeries hautes", detail:"Jet d'Agilité (14)",
+               test:{stat:"agi", dc:14}, reussite:"haut_ok", echec:"haut_ko"},
+              {label:"Prendre une sentinelle vivante", detail:"Jet de Précision (14)",
+               test:{stat:"precision", dc:14}, reussite:"prise_ok", echec:"prise_ko"},
+              {label:"Traverser à découvert", detail:"On verra bien ce qu'ils font d'un homme seul",
+               suite:"decouvert"},
+            ]},
+          haut_ok:{ texte:[
+            "Une corniche de trente centimètres, huit cents pas au-dessus des feux, et deux heures à ne pas respirer fort.",
+            "De là-haut, tout se lit. Ils ne campent pas : ils travaillent. Ils dégagent un mur — un mur nain, à la pierre appareillée — au fond de la salle, à la pioche et sans hâte, par équipes qui se relaient.",
+            "Devant le mur, un seul d'entre eux ne travaille pas. Il regarde, et les autres travaillent mieux quand il regarde."],
+            effets:{xp:26, flags:["kardurak_mur","kardurak_gharok_vu"]}, suite:"mur"},
+          haut_ko:{ texte:["La corniche cède sur deux mètres. Le bruit se perd dans le fracas des pioches, mais Yohan finit la descente plus vite qu'il ne l'avait prévu et se relève avec un genou qui proteste."],
+            effets:{pv:-12, fat:12, xp:10}, suite:"mur"},
+          prise_ok:{ texte:[
+            "Une sentinelle isolée à un angle, une main sur la bouche, et vingt pas dans une galerie latérale.",
+            "Elle parle. Pas par lâcheté : par étonnement qu'on lui demande.",
+            "« On ouvre. Le chef dit : dessous, il y a des salles. Assez pour tout le monde. Assez pour arrêter de se battre pour un couloir. »",
+            "Elle ajoute, et c'est là que ça devient compliqué : « Y'a des femelles et des petits, dans les niveaux d'après. On les a fait venir. »"],
+            effets:{xp:28, flags:["kardurak_mur","kardurak_familles"]}, suite:"mur"},
+          prise_ko:{ texte:["La sentinelle crie avant qu'on l'atteigne, et il faut reculer de deux galeries et attendre une heure que ça se calme. Ils fouillent bien. Trop bien pour des bandes."],
+            effets:{fat:10, xp:10, suspicion:3}, suite:"mur"},
+          decouvert:{ texte:[
+            "Il traverse à découvert, les mains vides, et il ne se passe rien pendant quarante pas.",
+            "Puis on l'entoure — proprement, sans hurler — et on le mène au fond de la salle, devant le mur qu'on dégage, devant celui qui regarde.",
+            "Ce n'est pas ainsi qu'il avait prévu de le rencontrer, et c'est peut-être mieux."],
+            effets:{xp:20, flags:["kardurak_mur","kardurak_gharok_vu"]}, suite:"mur"},
+          mur:{ fin:true, texte:[
+            "Le mur est nain, et il est vieux de six cents ans. On l'a monté depuis l'autre côté : les Nains n'ont pas fermé une galerie, ils ont enfermé quelque chose.",
+            "Il reste peut-être deux mètres d'épaisseur, et une centaine de Peaux-Vertes qui piochent nuit et jour.",
+            "Il faut remonter, ou aller parler au seul d'entre eux qui ne pioche pas."]},
+        }}},
+
+    { id:"gharok", delai:[1,3], attente:"Il n'y a pas trente-six façons d'aborder un roi.",
+      ev:{ id:"CHK_3", titre:"Celui qui ne pioche pas", famille:"PEAU_VERTE", rarete:"majeur",
+        image:"evt_tambours",
+        scenes:{
+          start:{ pnj:"gruk", texte:[
+            "Il fait deux têtes de plus que Yohan et il parle la langue des hommes lentement, en cherchant ses mots, sans jamais s'excuser de les chercher.",
+            "« Tu es celui que les Portes ont payé. »",
+            "Ce n'est pas une question. Il s'assied sur un bloc de pierre pour être à hauteur, ce qu'aucun chef Peau-Vert n'a jamais fait de mémoire naine.",
+            "« Ils t'ont dit quoi ? Que je fédère pour prendre leurs coffres ? »"],
+            choix:[
+              {label:"Demander ce qu'il y a derrière le mur", detail:"Il le sait, ou il croit le savoir",
+               suite:"derriere"},
+              {label:"Lui dire ce que les Nains ont muré ici", detail:"Requiert de le savoir · une information contre une autre",
+               requis:{flag:"kardurak_salle_muree"}, suite:"echange"},
+              {label:"L'attaquer", detail:"C'est ce pour quoi on est payé",
+               suite:"combat"},
+            ]},
+          derriere:{ pnj:"gruk", texte:[
+            "« De la place. »",
+            "Il laisse le mot poser. « Vingt mille des miens vivent dans des couloirs où on se bat pour dormir. En dessous, y'a des salles. Grandes. Vides depuis longtemps. »",
+            "Il montre le mur. « Les Portes savent. Elles ont fermé. Elles préfèrent qu'on se tue entre nous en haut plutôt qu'on vive en bas. »",
+            "Puis, très calmement : « J'ai amené les femelles et les petits. Tu comprends ce que ça veut dire. Je peux pas reculer. »"],
+            effets:{xp:26, flags:["kardurak_familles","kardurak_raison"]}, fin:true},
+          echange:{ pnj:"gruk", texte:[
+            "« Les Nains ont muré cette salle il y a six cents ans et n'ont jamais écrit pourquoi. »",
+            "Gharok le regarde longtemps. « Ça, ils me l'avaient pas dit. »",
+            "Il se lève, va au mur, pose une main dessus. « Six cents ans. Et pas écrit. »",
+            "Il revient s'asseoir. « J'ai vingt mille bouches qui attendent de l'autre côté de ce mur. Si tu me dis d'arrêter, tu me dis de les renvoyer mourir en haut. Alors donne-moi mieux que ça. »"],
+            effets:{xp:32, flags:["kardurak_raison","kardurak_doute"]}, fin:true},
+          combat:{ texte:["Il se lève sans se presser. Personne d'autre ne bouge : ils regardent, et c'est pire."],
+            combat:{ groupe:[{bst:"BST_026", n:1}, {bst:"BST_054", n:1}], victoire:"vaincu", defaite:"perdu", mortel:true }},
+          vaincu:{ texte:[
+            "Il tombe sur un genou puis sur le flanc, et il met du temps à mourir parce qu'il est fait pour durer.",
+            "Personne ne le venge. Ils reculent, par groupes, et en trois semaines la fédération se défait exactement comme les Nains l'espéraient.",
+            "Il reste un mur à moitié dégagé, et vingt mille Peaux-Vertes qui retournent se battre pour des couloirs."],
+            effets:{xp:70, sang:10, renom:14, reputation:{nains:20, peaux_vertes:-25},
+                    issue:"gharok_tue"}, fin:true},
+          perdu:{ texte:[
+            "Il encaisse deux coups qui auraient couché un ours et il rend le troisième.",
+            "Yohan se réveille dans une galerie haute, désarmé mais entier, avec de l'eau à portée de main. On l'a porté là. On ne l'a pas achevé.",
+            "Il remonte les six niveaux tout seul, et il a beaucoup de temps pour réfléchir à ce que ça veut dire."],
+            effets:{pv:-35, fat:28, xp:25, flag:"kardurak_epargne", issue:"portes_tenues"}, fin:true},
+        }}},
+
+    { id:"portes", delai:[1,3], attente:"Il faut remonter dire aux Portes ce qu'on a vu.",
+      ev:{ id:"CHK_4", titre:"Ce qu'on rapporte aux Grandes Portes", famille:"NAIN", rarete:"majeur",
+        image:"evt2_dette_naine",
+        scenes:{
+          start:{ texte:[
+            "Six niveaux à remonter, et tout le temps de choisir ce qu'on va dire.",
+            "Le maître des Grandes Portes attend dans la même salle, debout, exactement comme on l'avait laissé."],
+            choix:[
+              {label:"Tout dire : le mur, les familles, ce qu'il veut",
+               detail:"Requiert d'avoir compris pourquoi il creuse · les Portes devront choisir",
+               requis:{flag:"kardurak_raison"}, suite:"tout",
+               effets:{issue:"gharok_traite", reputation:{nains:6, peaux_vertes:22}, renom:12}},
+              {label:"Dire qu'ils creusent vers les coffres", detail:"C'est faux, et c'est ce que Kar-Durak veut entendre",
+               suite:"mensonge",
+               effets:{issue:"portes_tenues", reputation:{nains:16, peaux_vertes:-14}, renom:4}},
+              {label:"Ne rien dire du mur et toucher son or",
+               detail:"On a été payé pour descendre et remonter, rien de plus",
+               suite:"muet", effets:{issue:"portes_tenues", reputation:{nains:6}}},
+            ]},
+          tout:{ fin:true, texte:[
+            "Il écoute tout. Le mur, les six cents ans, les familles descendues, les vingt mille bouches.",
+            "Il ne dit rien pendant très longtemps. Puis : « Vous savez ce que vous me demandez. »",
+            "« Je ne vous demande rien. Je vous rapporte ce que j'ai vu, comme convenu. »",
+            "Le conseil des Portes siège onze jours. Au douzième, un émissaire nain descend au niveau moins-sept, pour la première fois depuis six cents ans, avec une proposition écrite.",
+            "Ce qui a été signé ne plaît à personne des deux côtés, ce qui est généralement le signe d'un traité qui tient."]},
+          mensonge:{ fin:true, texte:[
+            "« Ils creusent vers vos coffres. »",
+            "Le maître des Portes hoche la tête, soulagé de la manière dont on est soulagé d'apprendre une mauvaise nouvelle qu'on avait déjà rangée.",
+            "Kar-Durak mobilise. Trois mille haches descendent au moins-sept en formation serrée, et ce qui s'y passe ensuite n'a pas de nom dans les registres nains — on écrit seulement : *les niveaux profonds ont été assainis.*",
+            "Yohan est payé en entier. Il ne redescendra plus jamais à Kar-Durak sans y penser."]},
+          muet:{ fin:true, texte:[
+            "« Ils sont nombreux, organisés, et ils tiennent le moins-sept. Le reste, il faudra le voir vous-mêmes. »",
+            "Le maître des Portes paie sans un mot de plus. Il a acheté le droit de ne pas savoir tout de suite ; il l'a eu.",
+            "Ce qui viendra ensuite viendra sans Yohan, et c'était peut-être le but depuis le début."]},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   08 — LE SANG DANS LES ARCHIVES
+   Des généalogies de Parias ont été volées. Plusieurs puissances les cherchent.
+   Yohan y figure.
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_CHASTEL", type:'contrat', titre:"Le Sang dans les Archives",
+  commanditaire:"Maison de Chastel", maison:"Maison de Chastel",
+  or:1900, danger:"dangereux", categorie:"récupération", prix:true,
+  lieux:["LOC_004","LOC_016","LOC_002"],
+  pitch:"Des documents généalogiques sur les Parias ont été volés dans les archives d'une maison qui en avait la garde. Plusieurs puissances les recherchent, et personne ne dit pourquoi.",
+  paye:["registres_rendus","registres_brules","registres_gardes"],
+  issues:{
+    registres_rendus:"Les généalogies des Parias sont retournées aux archives de Chastel, sous scellés.",
+    registres_brules:"Les généalogies des Parias ont brûlé. Plus personne ne peut prouver qui descend de qui.",
+    registres_gardes:"Quelqu'un détient les généalogies des Parias, et ce quelqu'un est Yohan de Karlsberg.",
+    vendues:"Les généalogies des Parias ont été vendues, et l'acheteur ne s'en est pas vanté.",
+    abandonnee:"Les généalogies volées à Chastel n'ont jamais été retrouvées.",
+    refusee:"Yohan a refusé les termes de Chastel.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"L'archiviste attend de savoir si l'on accepte.",
+      ev:{ id:"CHT_1", titre:"Ce que gardait Chastel", famille:"PARIA", rarete:"majeur",
+        image:"evt_archives",
+        scenes:{
+          start:{ texte:[
+            "Dame Célestine de Chastel reçoit dans la salle des archives, entre deux rangées de casiers, et elle ne fait pas semblant de recevoir un mercenaire ordinaire.",
+            "« Ma maison garde les généalogies depuis la Purge. Toutes. Y compris celles qu'on a officiellement brûlées. »",
+            "Elle ouvre un casier vide. « Onze registres. Volés il y a cinq semaines par quelqu'un qui savait exactement lesquels prendre. »",
+            "Elle referme le casier et regarde Yohan bien en face. « Le sixième contient la descendance des Karlsberg. Je vous le dis maintenant, parce que vous l'apprendriez de toute façon et que je préfère que ce soit de moi. »"],
+            choix:[
+              {label:"Demander qui savait ce que contenaient ces casiers", detail:"Onze registres sur quatre mille",
+               suite:"savait"},
+              {label:"Demander pourquoi elle n'a pas prévenu la Couronne", detail:"Jet de Précision (12)",
+               test:{stat:"precision", dc:12}, reussite:"couronne_ok", echec:"couronne_ko"},
+              {label:"Demander ce qu'elle compte faire du sixième", detail:"La seule question qui compte pour lui",
+               suite:"sixieme"},
+            ]},
+          savait:{ texte:[
+            "« Moi. Mon père, mort. Deux copistes, dont l'un est parti l'an dernier pour Port-Noir sans donner d'adresse. »",
+            "Elle laisse passer un temps. « Et quiconque a lu l'inventaire de 1189, qui a été communiqué à la chancellerie d'Astrah, à la Cour des Lisières, et à trois maisons humaines par courtoisie diplomatique. »",
+            "« Autrement dit : à peu près tout le monde qui compte. »"],
+            effets:{xp:16, flag:"chastel_copiste"}, suite:"termes"},
+          couronne_ok:{ texte:[
+            "Elle ne se dérobe pas.",
+            "« Parce que la Couronne ferait exactement ce que le voleur a fait : elle prendrait les registres et elle ne les rendrait pas. »",
+            "Elle range une pile déjà rangée. « La différence entre une archive et un fichier de proscription tient à une seule chose : qui la détient. Ma maison a passé quarante ans à être cette chose-là. Je n'ai pas envie que ça s'arrête sous moi. »"],
+            effets:{xp:20, flag:"chastel_franche"}, suite:"termes"},
+          couronne_ko:{ texte:["« Affaire de maison », répond-elle, du ton qui clôt le sujet. C'est ce que dit toute maison qui a quelque chose à cacher, et ce n'est pas une preuve."],
+            effets:{xp:5}, suite:"termes"},
+          sixieme:{ texte:[
+            "« Ce que j'en fais depuis quarante ans : je le garde, et je ne le lis pas. »",
+            "Elle croise les mains. « Si vous me le rapportez, je le remets sous scellés. Si vous décidez de le garder, je ne pourrai pas vous en empêcher et je ne le dirai à personne. Si vous le brûlez, personne ne pourra plus jamais prouver que vous êtes qui vous êtes — ni prouver que quiconque est un Paria. »",
+            "Un temps. « Les trois me vont. Je préfère la première. Vous n'êtes pas obligé. »"],
+            effets:{xp:22, flag:"chastel_choix_offert"}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Mille neuf cents écus. Onze registres, ou ce qu'il en reste. »",
+            "Elle hésite pour la première fois de l'entretien. « Et vous savez ce que ma maison vous doit par ailleurs. Nous en reparlerons quand vous saurez ce que ces registres contiennent exactement à votre sujet. »"]},
+        }}},
+
+    { id:"piste", delai:[2,4], attente:"Un copiste parti sans adresse, c'est déjà une adresse.",
+      ev:{ id:"CHT_2", titre:"Le copiste de Port-Noir", famille:"VILLE", rarete:"majeur",
+        image:"evt_receleur" ,
+        scenes:{
+          start:{ texte:[
+            "Le copiste tient une échoppe d'écritures sur le quai nord de Port-Noir : contrats de matelot, testaments, lettres pour les illettrés. Il vit mal.",
+            "Un homme qui a volé onze registres inestimables il y a cinq semaines et qui vit mal, c'est un homme qui n'a pas encore été payé.",
+            "Il lève les yeux quand la porte s'ouvre, et il comprend en une seconde et demie."],
+            choix:[
+              {label:"Le rassurer et le faire parler", detail:"Jet de Volonté (13)",
+               test:{stat:"vol", dc:13}, reussite:"parle_ok", echec:"parle_ko"},
+              {label:"Lui acheter ce qu'il sait", detail:"−200 or · il n'a pas été payé, il ne refusera pas",
+               requis:{or:200}, suite:"achete", effets:{or:-200}},
+              {label:"Le laisser filer et suivre où il court", detail:"Jet d'Agilité (13)",
+               test:{stat:"agi", dc:13}, reussite:"suit_ok", echec:"suit_ko"},
+            ]},
+          parle_ok:{ texte:[
+            "Il parle parce que personne ne lui a demandé depuis cinq semaines et que ça pèse.",
+            "« On m'a payé la moitié. Onze registres, une liste, et un lieu de dépôt. J'ai livré. On devait me payer le reste au bout d'un mois. »",
+            "Il rit sans joie. « Il y a cinq semaines. »",
+            "Le lieu de dépôt est un entrepôt du quai sud. Le commanditaire n'a jamais donné de nom, mais il portait des gants en plein été, et il parlait le vardhi avec un accent de la Cour."],
+            effets:{xp:24, flags:["chastel_entrepot","chastel_accent_cour"]}, fin:true},
+          parle_ko:{ texte:[
+            "Il nie, il bafouille, il finit par pleurer, et il ne dit rien d'utilisable parce qu'il a plus peur de ceux qui l'ont payé que de l'homme en face de lui.",
+            "En sortant, Yohan remarque qu'il a rangé sa plume avant de pleurer. C'est un homme méthodique. Ça se retrouve."],
+            effets:{xp:8}, fin:true},
+          achete:{ texte:[
+            "Deux cents écus, et il compte deux fois avant de parler, ce qui est exactement ce qu'on attend d'un copiste.",
+            "Entrepôt du quai sud, troisième travée. Commanditaire sans nom, gants en plein été, accent de la Cour.",
+            "« Ils ne les ont pas déplacés », ajoute-t-il. « Je le saurais. Je suis payé pour tenir le registre d'entrée de cet entrepôt aussi. »"],
+            effets:{xp:22, flags:["chastel_entrepot","chastel_accent_cour"]}, fin:true},
+          suit_ok:{ texte:[
+            "Il sort par l'arrière dans la minute et il marche vite, en regardant deux fois par-dessus son épaule, ce qui est la meilleure façon de se faire suivre.",
+            "Il ne va pas à l'entrepôt. Il va frapper à une porte de la ville haute, chez un courtier maritime, et il en ressort avec un visage d'homme qu'on vient de renvoyer.",
+            "L'entrepôt, on le trouvera après. Le courtier, lui, sait tout."],
+            effets:{xp:26, flags:["chastel_entrepot","chastel_courtier"]}, fin:true},
+          suit_ko:{ texte:["Le quai nord est un labyrinthe de ruelles et de passerelles, et un copiste qui y vit depuis un an le connaît mieux qu'un étranger. On le perd en trois tournants."],
+            effets:{xp:8, fat:6}, fin:true},
+        }}},
+
+    { id:"entrepot", delai:[2,3], attente:"Onze registres tiennent dans une caisse.",
+      ev:{ id:"CHT_3", titre:"Troisième travée", famille:"VILLE", rarete:"majeur",
+        image:"evt_port_noir",
+        scenes:{
+          start:{ texte:[
+            "L'entrepôt du quai sud sent le chanvre et le poisson séché. La troisième travée contient quarante caisses de morue et une caisse qui n'est pas une caisse de morue.",
+            "Elle est là. Onze registres reliés de veau, aux tranches marquées d'un lys de Chastel.",
+            "Il y a aussi quelqu'un assis à côté d'elle, sur un tonneau, qui attendait manifestement quelqu'un — pas forcément Yohan, mais quelqu'un."],
+            choix:[
+              {label:"Demander ce qu'il attend", detail:"Il ne s'est pas levé, ce qui veut dire quelque chose",
+               suite:"attend"},
+              {label:"Prendre la caisse et sortir", detail:"Jet d'Agilité (14)",
+               test:{stat:"agi", dc:14}, reussite:"prend_ok", echec:"prend_ko"},
+              {label:"Lire le sixième registre avant toute chose",
+               detail:"C'est le sien · on ne repassera peut-être pas",
+               suite:"lire"},
+            ]},
+          attend:{ texte:[
+            "« Le second versement », dit-il sans se lever. « Comme le copiste. Comme les deux hommes qui ont porté la caisse. »",
+            "Il porte des gants, en plein été.",
+            "« On m'a payé pour prendre onze registres et les laisser ici. Rien de plus. Et depuis cinq semaines, personne n'est venu les chercher. »",
+            "Il regarde la caisse. « Je commence à croire qu'on ne les voulait pas. On voulait juste qu'ils ne soient plus chez Chastel. »"],
+            effets:{xp:28, flags:["chastel_gants","chastel_deplacement"]}, suite:"choix_final"},
+          prend_ok:{ texte:[
+            "Une caisse de quarante livres, une passerelle, une barque et deux heures de rame.",
+            "L'homme au tonneau ne bouge pas. Il regarde partir la caisse comme on regarde partir un problème."],
+            effets:{xp:20}, suite:"choix_final"},
+          prend_ko:{ texte:[
+            "La caisse est plus lourde qu'elle n'en a l'air et l'homme au tonneau n'était pas seul dans l'entrepôt.",
+            "Yohan sort avec la caisse et une entaille au flanc, poursuivi sur deux cents mètres de quai par des gens qui n'y tenaient pas beaucoup."],
+            effets:{pv:-14, fat:10, xp:14, suspicion:5}, suite:"choix_final"},
+          lire:{ texte:[
+            "Le sixième registre s'ouvre sur une page de garde où quelqu'un a écrit, à l'encre passée : *branche de Karlsberg — vérifiée, close.*",
+            "Elle n'est pas close. Elle continue sur onze pages, dans quatre écritures différentes, jusqu'à une dernière ligne tracée d'une main récente : un prénom, une date de naissance, et la mention *survivant présumé*.",
+            "Trois pages plus tôt, une branche cadette dont Yohan n'a jamais entendu parler, à Fort-aux-Princes, avec des descendants notés vivants.",
+            "Il n'est pas le dernier. Quelqu'un l'a écrit, et quelqu'un a volé le registre qui le dit."],
+            effets:{xp:34, sang:6, flags:["chastel_lu","karlsberg_branche_cadette"]}, suite:"choix_final"},
+          choix_final:{ fin:true, texte:[
+            "Onze registres dans une caisse, sur un quai, à la nuit tombante.",
+            "Ce qu'on en fait n'appartient plus à personne d'autre."]},
+        }}},
+
+    { id:"decision", delai:[1,2], attente:"La caisse est là. Il faut trancher.",
+      ev:{ id:"CHT_4", titre:"Ce qu'on fait de onze registres", famille:"PARIA", rarete:"majeur",
+        image:"evt_paria",
+        scenes:{
+          start:{ texte:[
+            "Onze registres. Toutes les lignées Parias connues de Vardhen, y compris celles qu'on a officiellement brûlées.",
+            "Entre les mains de Chastel, c'est une archive. Entre celles d'Astrah, c'est une liste de proscription. Dans le feu, c'est quarante ans de mémoire qui disparaissent — et la preuve que Yohan est qui il est.",
+            "Il n'y a pas de bon choix, et c'est probablement pour cela que quelqu'un a payé pour les sortir de leur casier."],
+            choix:[
+              {label:"Les rendre à Chastel", detail:"Elle les remettra sous scellés, et elle tiendra parole",
+               suite:"rendre",
+               effets:{issue:"registres_rendus", reputation:{humains:10, parias:6}, renom:6}},
+              {label:"Les brûler", detail:"Plus personne ne prouve rien — ni contre vous, ni pour vous",
+               suite:"bruler",
+               effets:{issue:"registres_brules", reputation:{parias:16, humains:-8}, renom:4,
+                       suspicion:-14, flag:"genealogies_brulees"}},
+              {label:"Les garder", detail:"Savoir qui sont les Parias vivants est une arme, et elle sera à vous",
+               suite:"garder",
+               effets:{issue:"registres_gardes", reputation:{parias:-6}, renom:8,
+                       suspicion:10, flag:"genealogies_gardees"}},
+              {label:"Les vendre à qui les cherche", detail:"+2500 or · quelqu'un paiera, et ce quelqu'un s'en servira",
+               suite:"vendre",
+               effets:{or:2500, issue:"vendues", reputation:{parias:-30, humains:6}, renom:-10,
+                       suspicion:-8, flag:"genealogies_vendues"}},
+            ]},
+          rendre:{ fin:true, texte:[
+            "Dame Célestine les compte un par un, referme le casier, y appose trois sceaux et note la date.",
+            "« Voilà », dit-elle. « C'est tout ce que ça devait être. »",
+            "Elle paie le contrat en entier. À la porte, elle ajoute une phrase qu'elle a manifestement préparée : « Le sixième registre reste ici, fermé, et je continuerai de ne pas le lire. Mais si un jour vous voulez savoir ce qu'il contient, vous savez où il est et qui en a la clé. »"]},
+          bruler:{ fin:true, texte:[
+            "Onze registres brûlent lentement, parce que le veau relié brûle mal, dans un four à sécher le poisson du quai sud.",
+            "Il reste des cendres et quarante ans de mémoire en moins. Plus personne ne peut prouver qu'un tel descend d'un Paria — ni le prouver contre lui.",
+            "Dame Célestine, quand elle l'apprend, met trois jours à répondre. Sa lettre tient en une ligne : *Vous avez fait ce que ma maison n'a jamais osé faire. Je ne sais pas encore si je vous en veux.*",
+            "Elle paie quand même."]},
+          garder:{ fin:true, texte:[
+            "Onze registres partent pour Karlsberg dans une caisse de morue, et ils y resteront.",
+            "Yohan sait désormais où vivent les Parias de Vardhen — combien ils sont, sous quels noms, dans quels villages. C'est exactement l'information pour laquelle une maison a payé un copiste, et il l'a.",
+            "Dame Célestine ne le dénonce pas. Elle écrit seulement : *Vous avez le casier. Faites-en ce que ma maison en faisait, ou faites-en autre chose. Souvenez-vous que la différence tient à une seule chose : qui le détient.*"]},
+          vendre:{ fin:true, texte:[
+            "L'homme aux gants revient au troisième jour avec le second versement, et il paie sans discuter, ce qui est le pire signe possible.",
+            "Deux mille cinq cents écus, une caisse qui change de mains sur un quai, et onze registres qui partent vers la ville haute.",
+            "Ce qu'on en fera ensuite, Yohan ne le saura pas tout de suite. Il le saura par les nouvelles, village après village, pendant les années qui viennent.",
+            "Dame Célestine n'écrit pas."]},
+        }}},
+  ]},
+
 ];

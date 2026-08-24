@@ -7,7 +7,11 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V1.5** — les affaires deviennent des **chaînes** qui se jouent sur plusieurs tours, les termes se fixent avant tout départ, le Prix du Paria n'engage plus qu'une noble adulte réelle et consentante, et le pack narratif Vardhen entre dans le dépôt comme source d'écriture.
+**Version actuelle : V1.6** — huit affaires écrites en chaînes sur 35 étapes et 200 scènes, un document fondateur (`CLAUDE.md`) qui fait autorité, et la tranche verticale du prompt maître vérifiée en navigateur de bout en bout.
+
+> **`CLAUDE.md` fait autorité.** Il porte le prompt maître du projet, l'audit du
+> code au regard de ce prompt, et la feuille de route. Ce README-ci documente ce
+> qui existe et comment le vérifier.
 
 ## Lancer le jeu
 
@@ -54,8 +58,8 @@ lien. Il se régénère avec `node tools/build-standalone.js`.
 | **Le chantier de Karlsberg** : 8 ouvrages, 5 200 or et 36 semaines pour tout relever | ✅ |
 | **Politique** : 6 puissances, leur influence, leur posture, et 8 édits qui tombent | ✅ |
 | **Le Prix du Paria** : toute maison noble doit l'Or et le Sang, en trois termes | ✅ |
-| **Affaires en chaînes** : 3 affaires écrites en 15 étapes, jouées sur plusieurs tours | ✅ |
-| **Maisons nobles** : 16 maisons, 17 nobles adultes nommées, avec droit de refus | ✅ |
+| **Affaires en chaînes** : 8 affaires écrites en 35 étapes, jouées sur plusieurs tours | ✅ |
+| **Maisons nobles** : 19 maisons, 21 nobles adultes nommées, avec droit de refus | ✅ |
 | **Bestiaire** : 75 créatures, dont 24 adversaires humains par peuple | ✅ |
 | **Rencontres composées** : meneur, élite, soutien et piétaille selon l'affaire et le lieu | ✅ |
 | 349 scènes, 213 choix, 23 affrontements, 6 batailles au total | ✅ |
@@ -322,15 +326,20 @@ Une affaire ne se clique plus : **elle se vit sur plusieurs tours.**
   C'est ça, se souvenir.
 - **Une seule affaire à la fois.** On n'est qu'un homme.
 
-Trois affaires sont écrites, en 15 étapes et 80 scènes :
+Huit affaires sont écrites, en 35 étapes et près de 200 scènes :
 
 | Affaire | Ce qui s'y joue |
 |---|---|
 | **Le Dragon de Valcroix** | Une bête qui brûle tout sauf le château. Le commanditaire ment par omission — et on peut le tuer, lui rendre ce qu'il a volé, ou le faire parler devant sa propre cour. |
 | **Les Mille Gueules** | Une mine de fer, trente-quatre disparus, et des voix qui imitent les morts. Rouvrir, murer, ou ne rien déclarer et rendre les hommes à leurs familles. |
 | **La Fille de Sombreval** | Une disparue dans les marais. Au retour, sa version contredit celle de son père — et l'on décide de ce qui sera dit. |
+| **La Gueule de Fer** | Une bête cuirassée qui mange le métal chaud parce qu'elle en a besoin pour tenir debout. L'abattre, la nourrir ailleurs, ou éteindre les forges et vider deux villages. |
+| **Les Sept Disparus** | Sept nobles évaporés sans rançon. Personne ne les a tués : on leur a offert un bateau, et ils ont dit oui. Reste à décider ce qu'un vieil homme apprendra. |
+| **La Princesse et le Traître** | Onze personnes dans une escorte, et l'une d'elles est achetée. Six semaines pour trouver laquelle avant le pont. |
+| **Le Roi sous la montagne** | Un chef Peau-Verte discipliné creuse vers un mur que les Nains ont monté il y a six cents ans sans écrire pourquoi. Il a fait descendre les familles : il ne peut plus reculer. |
+| **Le Sang dans les Archives** | Onze registres généalogiques volés — dont celui des Karlsberg. Les rendre, les brûler, les garder, ou les vendre à qui les cherche. |
 
-Il en reste vingt-sept à écrire depuis les canevas du pack.
+Il en reste vingt-deux à écrire depuis les canevas du pack.
 
 ### Le pack narratif dans le dépôt
 
@@ -755,6 +764,9 @@ tools/smoke-tour.js        éprouve le tour, le temps, la lignée, la carte, les
 tools/smoke-consolidation.js  éprouve l'écran unique, les offres, les voyages,
                               la Suspicion, le chantier et la politique
 tools/smoke-chaines.js     éprouve les affaires en chaînes, les termes et les issues
+tools/smoke-tranche.js     l'épreuve d'acceptation du document fondateur :
+                           partie → carte → voyage → lieu → récit → combat →
+                           conséquence → sauvegarde → rechargement
 design/narratif/           le pack narratif Vardhen V6 : la source d'écriture
 tools/manifest-assets.js   régénère assets/README.md (avec ce qui est fourni)
 ```
@@ -778,6 +790,7 @@ node tools/smoke-arcs.js                     # Isolde, compagnons, attachements,
 node tools/smoke-tour.js                     # tour, âge, descendance, carte, recrutement
 node tools/smoke-consolidation.js            # écran unique, offres, voyages, Suspicion, chantier, politique
 node tools/smoke-chaines.js                  # affaires en chaînes, termes du Prix, issues durables
+node tools/smoke-tranche.js                  # la tranche verticale, de bout en bout
 
 node tools/manifest-assets.js                # régénère la liste des illustrations
 ```

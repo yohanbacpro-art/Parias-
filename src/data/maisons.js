@@ -137,6 +137,22 @@ const MAISONS = {
     nobles:[] },   // sept disparus : il ne reste plus d'adulte à offrir
   "Maison de Méricourt": { region:'coeur', devise:"Le nom d'abord.",
     nobles:[] },   // trois branches, aucun héritier reconnu, personne pour consentir
+  "Maison de Ronceval": { region:'coeur', devise:"On escorte, on ne trahit pas.",
+    nobles:[
+      { nom:"Dame Aliénor de Ronceval", age:39, rang:"sœur du prince, maîtresse de l'escorte",
+        note:"Elle a mené douze cortèges et perdu un seul homme, dont elle dit encore le nom.",
+        exige:{ renomMin:35, suspicionMax:70 },
+        refus:"« Je confie des vies à des gens dont je connais le dossier. Le vôtre est vide. »",
+        accord:"« Vous avez ramené ma nièce vivante d'une escorte que j'avais montée moi-même. Je paie mes dettes en entier. »" },
+    ]},
+  "Maison d'Estrées": { region:'brulees', devise:"Tout se négocie.",
+    nobles:[
+      { nom:"Dame Béatrice d'Estrées", age:31, rang:"négociatrice de la maison",
+        note:"Elle parle khesh, elfe et nain, et refuse d'apprendre à mentir dans aucune des trois.",
+        exige:{ reputationMin:{ khesh:-10 } },
+        refus:"« Je passe ma vie à réparer ce que les hommes cassent chez les Khesh. Je ne vais pas m'attacher à quelqu'un qui casse. »",
+        accord:"« Une maison qui traite avec tout le monde finit par n'appartenir à personne. Autant choisir. »" },
+    ]},
   "Maison de Chastel": { region:'sylve', devise:"Ce qui est écrit demeure.",
     nobles:[
       { nom:"Dame Célestine de Chastel", age:36, rang:"archiviste de la maison",

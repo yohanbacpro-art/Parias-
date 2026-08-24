@@ -324,8 +324,20 @@ function chargerDepuis(slot){
   if(!enr){ setSaveStatus('Cet emplacement est vide ou illisible.'); return false; }
   hero = reconstruireHero(enr.hero);
   rafraichirToutesLesVues();
+  reprendreLaPartie();
   setSaveStatus(`Partie chargée depuis ${(SLOTS.find(s=>s.id===slot)||{}).nom}.`);
   return true;
+}
+
+/* Charger une partie depuis l'accueil doit rendre la main au jeu, pas laisser
+ * le joueur devant l'écran-titre avec une partie chargée derrière. Depuis
+ * l'intérieur du jeu, en revanche, on ne bouge pas l'écran courant. */
+function reprendreLaPartie(){
+  const actif = [...document.querySelectorAll('.screen')].find(s => s.classList.contains('active'));
+  if(!actif) return;
+  if(actif.id === 'screen-accueil' || actif.id === 'screen-prologue'){
+    if(typeof enterGame === 'function') enterGame();
+  }
 }
 
 function chargerDepuisTexte(texte){

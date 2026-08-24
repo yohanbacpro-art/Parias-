@@ -115,19 +115,23 @@ async function vider(page, max = 40){
   const offre = await page.evaluate(() => {
     hero.position = 'LOC_003'; currentLieu = LOCATIONS.find(l=>l.id==='LOC_003'); hero.offres = null;
     const o = offresDuTour();
-    return { n:o.length, chaine: o.filter(c=>c.chaine).length,
-             titre: (o.find(c=>c.chaine)||{}).titre,
+    const ici = o.find(c=>c.chaine);
+    return { n:o.length, chaine: o.filter(c=>c.chaine).length, titre: ici && ici.titre,
+             // une affaire de Mont-Draken ne doit pas se proposer à Port-Noir
              ailleurs: (() => { hero.position='LOC_016'; hero.offres=null;
-               return offresDuTour().some(c=>c.chaine==='CH_VALCROIX'); })() };
+               const l = CHAINES.find(x=>x.id===(ici||{}).chaine);
+               return !!l && !!l.lieux && !l.lieux.includes('LOC_016')
+                      && offresDuTour().some(c=>c.chaine===l.id); })() };
   });
   verifie('le lieu qui la porte la propose', offre.chaine === 1 && offre.n === 3, offre);
   verifie('un autre lieu ne la propose pas', offre.ailleurs === false, offre);
 
   /* ---------- L'audience, puis les termes, puis l'attente ---------- */
   console.log("\nOn signe avant de partir, et ensuite on attend");
-  await page.evaluate(() => {
+  const menee = await page.evaluate(() => {
     hero.position = 'LOC_003'; currentLieu = LOCATIONS.find(l=>l.id==='LOC_003'); hero.offres = null;
     const c = offresDuTour().find(x=>x.chaine); accepterOffre(c.id);
+    return c.chaine;                       // l'affaire tirée varie : on suit celle-là
   });
   await page.waitForTimeout(150);
   const audience = await page.evaluate(() => ({
@@ -208,19 +212,19 @@ async function vider(page, max = 40){
   verifie("elle a pris plusieurs tours", journal.length >= 3, journal.length);
   console.log('    étapes traversées : ' + journal.map(j => j.etape || 'close').join(' → '));
   verifie("son issue est enregistrée pour toujours",
-    fin.faites.includes('CH_VALCROIX') && !!fin.issues.CH_VALCROIX, fin);
+    fin.faites.includes(menee) && !!fin.issues[menee], { menee, ...fin });
   verifie('elle laisse une ligne dans les chroniques', fin.chroniques.length >= 1, fin.chroniques);
   verifie('le règlement paie ce qui avait été convenu', fin.or > 500, fin.or);
   verifie('et la maison a tenu sa part', fin.liaisons.length === 1, fin.liaisons);
   verifie("plus rien n'est en cours", fin.actives === 0, fin.actives);
 
-  const relire = await page.evaluate(() => ({
-    issue: issueDeChaine('CH_VALCROIX'),
-    faite: chaineFaite('CH_VALCROIX'),
+  const relire = await page.evaluate(id => ({
+    issue: issueDeChaine(id),
+    faite: chaineFaite(id),
     reproposee: (() => { hero.position='LOC_003'; hero.offres=null;
-      return offresDuTour().some(c=>c.chaine==='CH_VALCROIX'); })(),
+      return offresDuTour().some(c=>c.chaine===id); })(),
     menees: chainesMenees(),
-  }));
+  }), menee);
   verifie('une affaire menée ne se repropose jamais', relire.reproposee === false, relire);
   verifie("et reste relisible par ce qui viendra après",
     !!relire.issue && relire.faite && relire.menees >= 1, relire);

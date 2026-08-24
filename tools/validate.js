@@ -481,7 +481,9 @@ tousLesEvenements.forEach(({ ev }) => {
   Object.entries(ev.scenes || {}).forEach(([sid, sc]) => {
     if(sc.pnj) return;
     const txt = (sc.texte || []).join(' ');
-    const cites = NOMS_SCENE.filter(([, m]) => new RegExp('\\b' + m.replace(/-/g, '\\-'), 'i').test(txt));
+    // Bornes des deux côtés : « Orsen » ne doit pas se déclencher sur « Orsenne ».
+    const cites = NOMS_SCENE.filter(([, m]) =>
+      new RegExp('\\b' + m.replace(/-/g, '\\-') + '\\b', 'i').test(txt));
     if(cites.length === 1){
       sansVisage++;
       warn(`${ev.id}/${sid} : ${PORTRAITS[cites[0][0]].nom} est nommé mais aucun portrait n'est affiché (pnj:"${cites[0][0]}")`);
@@ -580,11 +582,17 @@ CHAINES.forEach(ch => {
   });
   // L'enchaînement par défaut relie chaque étape à la suivante, sauf si la
   // précédente redirige toujours ailleurs.
+  // Une étape peut rediriger sur certaines branches et retomber sur l'étape
+  // suivante pour les autres : l'enchaînement par défaut existe dès qu'un
+  // aboutissement ne nomme ni étape ni issue.
   ch.etapes.forEach((e, i) => {
-    const redirige = Object.values(e.ev.scenes || {}).some(sc =>
-      (sc.effets && (sc.effets.etape || sc.effets.issue))
-      || (sc.choix || []).some(c => c.effets && (c.effets.etape || c.effets.issue)));
-    if(!redirige && !e.suite && i + 1 < ch.etapes.length) atteintes.add(ch.etapes[i + 1].id);
+    const nomme = f => !!(f && (f.etape || f.issue));
+    const retombe = Object.values(e.ev.scenes || {}).some(sc => {
+      if(sc.choix && sc.choix.length) return sc.choix.some(c => !nomme(c.effets) && !c.suite && !c.test);
+      if(sc.suite) return false;                       // scène de liaison
+      return !nomme(sc.effets);                        // aboutissement muet
+    });
+    if(retombe && !e.suite && i + 1 < ch.etapes.length) atteintes.add(ch.etapes[i + 1].id);
   });
   ch.etapes.forEach(e => {
     if(!atteintes.has(e.id)) warn(`CHAINE ${ch.id} : étape inatteignable → ${e.id}`);
