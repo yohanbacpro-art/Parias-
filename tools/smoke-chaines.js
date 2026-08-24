@@ -129,9 +129,22 @@ async function vider(page, max = 40){
   /* ---------- L'audience, puis les termes, puis l'attente ---------- */
   console.log("\nOn signe avant de partir, et ensuite on attend");
   const menee = await page.evaluate(() => {
-    hero.position = 'LOC_003'; currentLieu = LOCATIONS.find(l=>l.id==='LOC_003'); hero.offres = null;
-    const c = offresDuTour().find(x=>x.chaine); accepterOffre(c.id);
-    return c.chaine;                       // l'affaire tirée varie : on suit celle-là
+    // Le tirage varie d'une partie à l'autre : on cherche un lieu qui propose
+    // une affaire réclamant le Prix, pour éprouver les termes pour de bon.
+    hero.renom = 60; hero.suspicion = 0; hero.reputations = { ...REPUTATION_DEPART };
+    for(const l of LOCATIONS){
+      hero.position = l.id; currentLieu = l; hero.offres = null;
+      const c = offresDuTour().find(x => {
+        if(!x.chaine) return false;
+        const ch = CHAINES.find(y => y.id === x.chaine);
+        if(!ch || !ch.prix) return false;
+        const p = prixPariaDe({ commanditaire: ch.commanditaire, maisonNoble: ch.maison,
+                                or: ch.or, noble: true });
+        return !!(p && p.noble_proposee);      // une maison qui a quelqu'un à engager
+      });
+      if(c){ accepterOffre(c.id); return c.chaine; }
+    }
+    return null;
   });
   await page.waitForTimeout(150);
   const audience = await page.evaluate(() => ({
@@ -159,16 +172,22 @@ async function vider(page, max = 40){
     prixFixe: !!(hero.chaines.actives[0] && hero.chaines.actives[0].data.prix),
   }));
   verifie('les termes se fixent avant tout départ',
-    /Prix du Paria/.test(termes.titre) && termes.noble && termes.options >= 4 && !termes.prixFixe, termes);
+    !!menee && /Prix du Paria/.test(termes.titre) && !termes.prixFixe, { menee, ...termes });
+  // La règle : soit une femme nommée et les cinq termes, soit une raison écrite
+  // et l'or seul. Jamais un menu qui promet ce que la maison ne peut pas donner.
+  verifie("l'écran montre soit quelqu'un, soit pourquoi personne",
+    (termes.noble && termes.options >= 5) || (!termes.noble && termes.options === 3), termes);
 
   const apresTermes = await page.evaluate(() => {
-    const b = [...document.querySelectorAll('#prixChaine button')].find(x=>/Prix entier/.test(x.textContent));
+    const boutons = [...document.querySelectorAll('#prixChaine button')];
+    const b = boutons.find(x => /Prix entier/.test(x.textContent)) || boutons[0];
+    const attendu = /Prix entier/.test(b.textContent) ? 'OR_ET_NOBLE_CONSENTANTE' : 'OR';
     b.click();
     const a = hero.chaines.actives[0];
-    return { prix: a.data.prix, etape: a.etape, attente: a.echeance - hero.temps.semaines,
+    return { attendu, prix: a.data.prix, etape: a.etape, attente: a.echeance - hero.temps.semaines,
              or: hero.or, liaisons: hero.lignee.liaisons.length };
   });
-  verifie('le terme choisi est retenu', apresTermes.prix === 'OR_ET_NOBLE_CONSENTANTE', apresTermes);
+  verifie('le terme choisi est retenu', apresTermes.prix === apresTermes.attendu, apresTermes);
   verifie("la suite est datée : on ne l'a pas tout de suite", apresTermes.attente > 0, apresTermes);
   verifie("rien n'est payé avant que ce soit fait",
     apresTermes.or < 100 && apresTermes.liaisons === 0, apresTermes);
@@ -203,19 +222,27 @@ async function vider(page, max = 40){
     clos = etat.faites > 0;
   }
   const fin = await page.evaluate(() => ({
+    semaines: hero.temps.semaines,
     faites: hero.chaines.faites, issues: hero.chaines.issues,
     or: hero.or, liaisons: hero.lignee.liaisons.map(l=>l.nom),
     chroniques: hero.chroniques.filter(c=>/❧/.test(c.texte)).map(c=>c.texte),
     actives: hero.chaines.actives.length,
   }));
   verifie("l'affaire se termine sans qu'on ait à la relancer", clos, journal.slice(-3));
-  verifie("elle a pris plusieurs tours", journal.length >= 3, journal.length);
+  // Une affaire de trois étapes joue son audience à l'acceptation : il reste
+  // deux étapes, donc au moins deux tours. Ce qui compte, c'est qu'elle ne se
+  // règle pas d'un coup et que des semaines passent entre les étapes.
+  verifie("elle a pris plusieurs tours", journal.length >= 2, journal.length);
   console.log('    étapes traversées : ' + journal.map(j => j.etape || 'close').join(' → '));
+  verifie("et des semaines ont réellement passé pendant qu'elle courait",
+    fin.semaines >= 4, fin.semaines);
   verifie("son issue est enregistrée pour toujours",
     fin.faites.includes(menee) && !!fin.issues[menee], { menee, ...fin });
   verifie('elle laisse une ligne dans les chroniques', fin.chroniques.length >= 1, fin.chroniques);
   verifie('le règlement paie ce qui avait été convenu', fin.or > 500, fin.or);
-  verifie('et la maison a tenu sa part', fin.liaisons.length === 1, fin.liaisons);
+  verifie('et la maison a tenu sa part si le terme le prévoyait',
+    apresTermes.attendu === 'OR' ? fin.liaisons.length === 0 : fin.liaisons.length === 1,
+    { terme: apresTermes.attendu, liaisons: fin.liaisons });
   verifie("plus rien n'est en cours", fin.actives === 0, fin.actives);
 
   const relire = await page.evaluate(id => ({
