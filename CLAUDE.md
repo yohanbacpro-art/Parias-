@@ -153,7 +153,7 @@ Audit au 24 août. Ce qui est là, ce qui manque, sans complaisance.
 | Bataille existante intégrée, non réécrite | **fait** | `battle.js` (3 fronts, ordres, moral) |
 | Sauvegarde unique et versionnée | **fait** | `save.js`, v8, migrations chaînées |
 | Le temps passe, on vieillit, on a des enfants | **fait** | `lignee.js` |
-| Contrats en aventures, pas en boutons | **partiel** | `chaines.js` — 8 affaires sur 30 |
+| Contrats en aventures, pas en boutons | **fait** | `chaines.js` — 30 affaires sur 30 |
 | Termes fixés avant toute action | **fait** | `prix.js` + `chaines.js` |
 | Noble adulte réelle et consentante | **fait** | `data/maisons.js`, 19 femmes, droit de refus |
 | Karlsberg progressif, jamais « payer X » | **partiel** | `chantier.js` — 8 ouvrages, mais l'or reste la seule monnaie |
@@ -172,8 +172,9 @@ enregistrée → sauvegarde → rechargement — et vérifie au passage qu'aucun
 branche non prise n'apparaît jamais à l'écran.
 
 Inventaire : 20 lieux · 4 régions · 24 routes · 75 créatures · 12 champions ·
-29 troupes · 12 champs de bataille · 130 événements écrits illustrés · 60
-affaires locales + 20 dénouements · 50 contrats au registre · 17 maisons nobles ·
+29 troupes · 12 champs de bataille · 130 événements écrits illustrés · **30
+affaires en chaînes (101 étapes, 564 scènes, 313 choix, 142 issues)** · 60
+affaires locales + 20 dénouements · 50 contrats au registre · 25 maisons nobles ·
 8 ouvrages de Karlsberg · 116 verdicts d'épilogue.
 
 ---
@@ -182,10 +183,8 @@ affaires locales + 20 dénouements · 50 contrats au registre · 17 maisons nobl
 
 Dans cet ordre. À chaque étape, le jeu reste jouable et les épreuves passent.
 
-1. **Les 22 affaires restantes**, écrites en chaînes depuis les canevas du pack
-   (`design/narratif/03_CONTRATS`). Par lots de cinq ou six. *(8/30 faites :
-   Valcroix, Arquenay, Sombreval, Orsenne, Clairmont, Ronceval, Kar-Durak,
-   Chastel.)*
+1. ~~Les 30 affaires écrites en chaînes depuis les canevas du pack.~~ **Fait** :
+   30 affaires, 101 étapes, 564 scènes, 313 choix, 142 issues.
 2. **Les 10 chaînes secrètes** (`design/narratif/02_EVENEMENTS/CHAINES_SECRETS`).
    Le moteur les accepte déjà : elles tournent en arrière-plan, en parallèle de
    l'affaire en cours, et se déclenchent sur un marqueur plutôt que sur une

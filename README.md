@@ -7,7 +7,7 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V1.6** — huit affaires écrites en chaînes sur 35 étapes et 200 scènes, un document fondateur (`CLAUDE.md`) qui fait autorité, et la tranche verticale du prompt maître vérifiée en navigateur de bout en bout.
+**Version actuelle : V1.7** — **les trente affaires du pack narratif écrites en chaînes** — 101 étapes, 564 scènes, 313 choix, 142 issues, 16 combats et 5 batailles rangées — dont la dernière se joue sous vos propres murs.
 
 > **`CLAUDE.md` fait autorité.** Il porte le prompt maître du projet, l'audit du
 > code au regard de ce prompt, et la feuille de route. Ce README-ci documente ce
@@ -58,8 +58,8 @@ lien. Il se régénère avec `node tools/build-standalone.js`.
 | **Le chantier de Karlsberg** : 8 ouvrages, 5 200 or et 36 semaines pour tout relever | ✅ |
 | **Politique** : 6 puissances, leur influence, leur posture, et 8 édits qui tombent | ✅ |
 | **Le Prix du Paria** : toute maison noble doit l'Or et le Sang, en trois termes | ✅ |
-| **Affaires en chaînes** : 8 affaires écrites en 35 étapes, jouées sur plusieurs tours | ✅ |
-| **Maisons nobles** : 19 maisons, 21 nobles adultes nommées, avec droit de refus | ✅ |
+| **Affaires en chaînes** : 30 affaires en 101 étapes, jouées sur plusieurs tours | ✅ |
+| **Maisons nobles** : 25 maisons, 26 nobles adultes nommées, avec droit de refus | ✅ |
 | **Bestiaire** : 75 créatures, dont 24 adversaires humains par peuple | ✅ |
 | **Rencontres composées** : meneur, élite, soutien et piétaille selon l'affaire et le lieu | ✅ |
 | 349 scènes, 213 choix, 23 affrontements, 6 batailles au total | ✅ |
@@ -326,7 +326,7 @@ Une affaire ne se clique plus : **elle se vit sur plusieurs tours.**
   C'est ça, se souvenir.
 - **Une seule affaire à la fois.** On n'est qu'un homme.
 
-Huit affaires sont écrites, en 35 étapes et près de 200 scènes :
+Les trente affaires du pack sont écrites, en 101 étapes et 564 scènes. En voici quelques-unes :
 
 | Affaire | Ce qui s'y joue |
 |---|---|
@@ -339,7 +339,13 @@ Huit affaires sont écrites, en 35 étapes et près de 200 scènes :
 | **Le Roi sous la montagne** | Un chef Peau-Verte discipliné creuse vers un mur que les Nains ont monté il y a six cents ans sans écrire pourquoi. Il a fait descendre les familles : il ne peut plus reculer. |
 | **Le Sang dans les Archives** | Onze registres généalogiques volés — dont celui des Karlsberg. Les rendre, les brûler, les garder, ou les vendre à qui les cherche. |
 
-Il en reste vingt-deux à écrire depuis les canevas du pack.
+| **Le Roi sous la montagne** | Gharok creuse vers un mur que les Nains ont monté il y a six cents ans sans écrire pourquoi. Il a fait descendre les familles : il ne peut plus reculer. |
+| **La Flèche de Tyrion** | Ce que les Elfes appellent un déséquilibre a neuf ans, vend des lacets à la foire de Port-Noir, et fait vaciller les lanternes quand elle rit. |
+| **Le Dragon sans royaume** | Un dragon de quatre cents ans propose des termes écrits et négocie à la baisse. Sept maisons paient pour qu'il meure avant que la nouvelle se répande. |
+| **La Guerre du Loup** | Trois bannières marchent sur Karlsberg. Ce n'est pas un contrat : c'est chez vous, et ce qu'il y a derrière les murs est exactement ce que vous y avez mis. |
+
+Vingt affaires sur trente réclament le Prix du Paria. Cinq mènent à une bataille
+rangée sous le moteur existant.
 
 ### Le pack narratif dans le dépôt
 

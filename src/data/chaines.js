@@ -4090,4 +4090,430 @@ const CHAINES = [
         }}},
   ]},
 
+/* ══════════════════════════════════════════════════════════════════════════
+   28 — LE SERMENT DE KHAL-VAENE
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_SERMENT", type:'contrat', titre:"Le Serment de Khal-Vaene",
+  commanditaire:"Le conseil des tentes", maison:null,
+  or:4500, danger:"très dangereux", categorie:"guerre",
+  lieux:["LOC_005","LOC_015","LOC_018"],
+  pitch:"Khal-Vaene demande une présence étrangère lors d'un affrontement qui décidera du ralliement de plusieurs tribus. Il ne dit pas pourquoi il lui faut un témoin qui ne soit pas khesh.",
+  paye:["serment_tenu","serment_rompu","six_bannieres"],
+  issues:{
+    serment_tenu:"Le serment de Khal-Vaene a été tenu devant un témoin étranger, et six bannières l'ont suivi.",
+    serment_rompu:"Le serment de Khal-Vaene a été rompu, et les tribus se sont dispersées.",
+    six_bannieres:"Six bannières khesh se sont rangées derrière Khal-Vaene.",
+    abandonnee:"Yohan n'était pas dans les Dunes quand Khal-Vaene a prêté serment.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Le conseil des tentes se tient dans onze jours.",
+      ev:{ id:"CHK2_1", titre:"Pourquoi un étranger", famille:"KHESH", rarete:"majeur",
+        image:"rc_khalvaene",
+        scenes:{
+          start:{ pnj:"khalvaene", texte:[
+            "Khal-Vaene reçoit sous une tente ouverte aux quatre vents, ce qui est une manière de dire qu'il n'a rien à cacher, et une manière de vérifier qui écoute.",
+            "« Onze jours. Six tribus viennent au conseil des tentes. Deux me suivront. Deux ne me suivront pas. Deux hésitent. »",
+            "Il fait tourner une coupe sans boire. « Celui qui ne me suit pas me défiera. C'est la coutume : on ne refuse pas un unificateur, on le tue. »",
+            "Il repose la coupe. « Je veux que quelqu'un qui n'est pas khesh soit là. »"],
+            choix:[
+              {label:"Demander pourquoi", detail:"Un Khesh n'a pas besoin d'un témoin étranger",
+               suite:"pourquoi"},
+              {label:"Demander ce qu'il attend de vous exactement", detail:"Quatre mille cinq cents pour regarder ?",
+               suite:"quoi"},
+              {label:"Accepter", detail:"Onze jours",
+               suite:"termes"},
+            ]},
+          pourquoi:{ pnj:"khalvaene", texte:[
+            "« Parce qu'un Khesh qui raconte ce qu'il a vu au conseil des tentes raconte ce qui arrange sa tribu. »",
+            "Il regarde les dunes. « Il y a quarante ans, mon grand-père a unifié quatre tribus. Trois ans plus tard, on racontait qu'il avait triché au duel. On le raconte encore. Il n'y avait pas de témoin étranger. »",
+            "Il se tourne enfin. « Je ne veux pas qu'on raconte. Je veux qu'un homme qui n'a rien à y gagner ait vu. »"],
+            effets:{xp:26, flag:"khesh_temoin"}, suite:"termes"},
+          quoi:{ pnj:"khalvaene", texte:[
+            "« Regarder. Et si je meurs, redescendre dire ce que vous avez vu, aux six tribus, mot pour mot. »",
+            "Il hausse une épaule. « Si je gagne, vous n'aurez rien à faire du tout et vous serez payé pareil. Ce que j'achète, c'est votre présence, pas votre bras. »",
+            "Puis, plus bas : « Et si vous choisissez de vous en servir, de votre bras, sachez que ce serait la pire chose que vous puissiez me faire. »"],
+            effets:{xp:28, flags:["khesh_temoin","khesh_ne_pas_intervenir"]}, suite:"termes"},
+          termes:{ fin:true, pnj:"khalvaene", texte:[
+            "« Quatre mille cinq cents. Payés maintenant, par le conseil des tentes, pas par moi. »",
+            "Il ajoute : « Et nous ne demandons pas de femme et n'en donnons pas. Chez nous, ce que vous appelez le Prix serait une raison de duel. Je vous le dis pour que vous ne le proposiez pas devant les six tribus. »"]},
+        }}},
+
+    { id:"conseil", delai:[2,3], attente:"Le conseil des tentes, dans onze jours.",
+      ev:{ id:"CHK2_2", titre:"Le conseil des tentes", famille:"KHESH", rarete:"majeur",
+        image:"cg_khesh",
+        scenes:{
+          start:{ texte:[
+            "Six tribus, six cercles de tentes, et au centre un espace nu que personne ne traverse.",
+            "Yohan est le seul non-khesh à quarante lieues et tout le monde le sait, ce qui est exactement l'intention.",
+            "Le troisième soir, un chef de la tribu des Lances Rouges se lève et dit ce que tout le monde attendait : il refuse. Et il défie."],
+            choix:[
+              {label:"Regarder", detail:"C'est ce pour quoi on est payé",
+               suite:"regarde"},
+              {label:"Chercher qui a payé le défieur", detail:"Jet de Précision (14) · un refus se prépare",
+               test:{stat:"precision", dc:14}, reussite:"paye_ok", echec:"paye_ko"},
+              {label:"Vérifier les armes avant le duel", detail:"Jet de Précision (13) · le grand-père a été accusé de tricher",
+               test:{stat:"precision", dc:13}, reussite:"armes_ok", echec:"armes_ko"},
+            ]},
+          paye_ok:{ texte:[
+            "Il faut trois jours et beaucoup de thé pour apprendre qu'un marchand d'Astrah est passé chez les Lances Rouges le mois dernier avec onze chevaux en cadeau.",
+            "Onze chevaux, chez les Khesh, ce n'est pas un cadeau : c'est un contrat.",
+            "Astrah paie pour que l'unification échoue. C'est cohérent : six bannières khesh unifiées, c'est une frontière sud que la Couronne ne tient plus."],
+            effets:{xp:32, flag:"khesh_astrah_paie"}, suite:"duel"},
+          paye_ko:{ texte:["Six tribus, beaucoup de thé, et personne qui parle vardhi à un étranger de la façon dont on parle entre soi."],
+            effets:{xp:10}, suite:"duel"},
+          armes_ok:{ pnj:"khalvaene", texte:[
+            "Les deux lances sont posées au centre depuis la veille, comme le veut la coutume, et personne ne les garde parce que personne n'oserait.",
+            "Celle de Khal-Vaene a été entaillée à mi-hampe, proprement, par en dessous. Elle cassera au troisième choc.",
+            "Il reste quatre heures avant le duel."],
+            effets:{xp:34, flag:"khesh_lance_entaillee"}, suite:"duel"},
+          armes_ko:{ texte:["Deux lances posées au centre d'un cercle de six tribus. Il les regarde longuement sans avoir le droit de les toucher."],
+            effets:{xp:10}, suite:"duel"},
+          regarde:{ texte:["Il regarde, parce que c'est ce pour quoi il est payé."],
+            effets:{xp:8}, suite:"duel"},
+          duel:{ fin:true, texte:[
+            "Le duel est à l'aube, à la lance, à cheval, devant six tribus qui ne font aucun bruit.",
+            "C'est la chose la plus silencieuse que Yohan ait jamais vue."]},
+        }}},
+
+    { id:"duel", delai:[1,1], attente:"À l'aube.",
+      ev:{ id:"CHK2_3", titre:"À l'aube, devant six tribus", famille:"KHESH", rarete:"majeur",
+        image:"cg_khesh",
+        scenes:{
+          start:{ texte:[
+            "Les deux hommes prennent leurs lances au centre du cercle et remontent en selle.",
+            "Il reste quelques secondes pour faire quelque chose, ou pour ne rien faire."],
+            choix:[
+              {label:"Dire à voix haute que la lance est entaillée",
+               detail:"Requiert de l'avoir vu · devant six tribus, par un étranger",
+               requis:{flag:"khesh_lance_entaillee"}, test:{stat:"vol", dc:14},
+               reussite:"dit_ok", echec:"dit_ko"},
+              {label:"Dire qui paie le défieur",
+               detail:"Requiert de le savoir · onze chevaux d'Astrah",
+               requis:{flag:"khesh_astrah_paie"}, suite:"astrah"},
+              {label:"Ne rien dire et regarder", detail:"C'est ce qu'il a demandé",
+               suite:"combat"},
+            ]},
+          dit_ok:{ pnj:"khalvaene", texte:[
+            "Il le crie en vardhi, puis en khesh approximatif, et il traverse l'espace nu que personne ne traverse pour poser la main sur la hampe.",
+            "Six tribus voient un étranger faire une chose qu'aucun Khesh n'aurait osé faire. Le silence dure très longtemps.",
+            "Puis le plus vieux des chefs descend, prend la lance, la casse d'un coup de genou à l'endroit exact de l'entaille, et la jette au feu.",
+            "Le duel a lieu quand même, avec deux lances neuves, et Khal-Vaene gagne au quatrième passage."],
+            effets:{xp:44, flag:"khesh_lance_denoncee"}, suite:"apres"},
+          dit_ko:{ texte:[
+            "Il le crie, et il n'a pas les mots. Ce qu'il dit en khesh approximatif ne veut pas dire ce qu'il croit.",
+            "On l'écarte, poliment, fermement. Le duel commence."],
+            effets:{xp:12}, suite:"combat"},
+          astrah:{ pnj:"khalvaene", texte:[
+            "« Onze chevaux d'Astrah, le mois dernier, chez les Lances Rouges. »",
+            "Il le dit sans crier, à celui qui traduit, et ça remonte les six cercles en quatre minutes.",
+            "Le défieur ne nie pas — nier serait pire. Il monte en selle en sachant que ce qu'il gagnera ne vaudra plus rien.",
+            "Le duel a lieu. Khal-Vaene gagne. Personne, dans les six tribus, ne racontera jamais qu'il a triché."],
+            effets:{xp:40, flag:"khesh_astrah_denonce"}, suite:"apres"},
+          combat:{ pnj:"khalvaene", texte:[
+            "Trois passages. Au troisième, la lance de Khal-Vaene casse à mi-hampe.",
+            "Il tient les deux morceaux, il ne descend pas de cheval, et il charge une quatrième fois avec un bâton."],
+            combat:{ groupe:[{bst:"BST_056", n:1}], victoire:"apres", defaite:"mort", sansMort:true }},
+          apres:{ fin:true, pnj:"khalvaene", texte:[
+            "Khal-Vaene descend de cheval et prête serment devant six tribus, à voix haute, sur les noms de quatre générations.",
+            "Deux tribus le suivent. Deux hésitantes le suivent. Les Lances Rouges se dispersent vers l'est dans la nuit.",
+            "Six bannières. C'est la moitié des douze qu'il faudrait, et c'est plus que quiconque depuis son grand-père.",
+            "Le conseil des tentes paie quatre mille cinq cents écus. Khal-Vaene, lui, offre un cheval — ce qui, chez les Khesh, vaut infiniment plus."],
+            effets:{xp:70, renom:14, reputation:{khesh:30}, issue:"six_bannieres",
+                    flag:"khesh_six_bannieres"}},
+          mort:{ fin:true, pnj:"khalvaene", texte:[
+            "Le quatrième passage se termine mal, et Khal-Vaene tombe dans le sable devant six tribus avec la moitié d'une lance dans la poitrine.",
+            "Il faut redescendre dire ce qu'on a vu, mot pour mot, aux six tribus. Yohan le fait pendant deux heures, en vardhi, avec un traducteur.",
+            "Il dit aussi la lance entaillée, s'il l'a vue. Il dit aussi les onze chevaux, s'il les a appris.",
+            "Les six tribus se dispersent sans avoir désigné personne. L'unification khesh est repoussée d'une génération.",
+            "Le conseil des tentes paie. « Vous avez fait ce qu'il avait acheté », dit le plus vieux. « Vous avez vu. »"],
+            effets:{xp:40, reputation:{khesh:12}, issue:"serment_rompu"}},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   29 — LE DRAGON SANS ROYAUME
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_SANS_ROYAUME", type:'contrat', titre:"Le Dragon sans royaume",
+  commanditaire:"Maison de Valombre", maison:"Maison de Valombre",
+  or:4800, danger:"légendaire", categorie:"traque", prix:true,
+  lieux:["LOC_007","LOC_013","LOC_003"],
+  pitch:"Un très vieux dragon propose lui-même des termes au lieu d'attaquer. Plusieurs seigneurs préfèrent qu'il meure avant que la nouvelle se répande.",
+  paye:["dragon_tue","termes_acceptes","nouvelle_repandue"],
+  issues:{
+    dragon_tue:"Le dragon qui parlait est mort avant que ce qu'il proposait soit connu.",
+    termes_acceptes:"Des termes ont été signés avec un dragon. Il n'y a pas de précédent.",
+    nouvelle_repandue:"Tout le monde sait désormais qu'un dragon a proposé des termes, et personne ne sait quoi en faire.",
+    abandonnee:"Yohan a laissé le dragon de Valombre à ses affaires.",
+    refusee:"Yohan a refusé les termes de Valombre.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Valombre veut que ce soit fait vite.",
+      ev:{ id:"CHR2_1", titre:"Avant que la nouvelle se répande", famille:"POLITIQUE", rarete:"majeur",
+        image:"is_offre",
+        scenes:{
+          start:{ texte:[
+            "Dame Éléonore de Valombre tient les créances de sept maisons et elle reçoit comme on reçoit un créancier : vite, poliment, et sans s'asseoir.",
+            "« Il y a onze semaines, un dragon s'est posé devant le poste de Trois-Chênes et il a parlé. »",
+            "Elle laisse la phrase agir. « Il a proposé des termes : un tribut annuel contre la protection de la vallée. Il a laissé onze jours pour répondre. Il en est à la troisième proposition. »",
+            "Elle croise les mains. « Sept maisons paient pour qu'il meure avant que cela se sache. »"],
+            choix:[
+              {label:"Demander pourquoi ça les effraie tant", detail:"Un dragon qui parle et qui ne brûle rien",
+               suite:"effraie"},
+              {label:"Demander quels étaient les termes", detail:"Jet de Précision (13)",
+               test:{stat:"precision", dc:13}, reussite:"termes_ok", echec:"termes_ko"},
+              {label:"Accepter", detail:"Quatre mille huit cents",
+               suite:"accord"},
+            ]},
+          effraie:{ texte:[
+            "« Parce qu'un dragon qui brûle est un fléau. Un dragon qui négocie est un seigneur. »",
+            "Elle le dit avec la précision d'une femme qui compte des créances. « S'il obtient un tribut, il a des sujets. S'il a des sujets, il a un droit. Et s'il a un droit, sept maisons humaines qui tiennent leurs terres par le droit ont un problème que personne ne sait plaider. »",
+            "Un temps. « Il n'a tué personne. C'est exactement ce qui le rend intolérable. »"],
+            effets:{xp:28, flag:"valombre_seigneur"}, suite:"accord"},
+          termes_ok:{ texte:[
+            "Elle sort les trois propositions, écrites — écrites, sur du vélin, d'une écriture qu'aucun humain n'a tracée.",
+            "Un tribut de cent têtes de bétail par an. En échange : la vallée de Trois-Chênes protégée contre tout ce qui vole, et la route de la Combe rouverte au commerce.",
+            "La troisième proposition abaisse le tribut à soixante têtes et ajoute une clause : *je ne demanderai pas de serment et n'en prêterai pas. Ceci est un contrat, non une allégeance.*",
+            "Il négocie. Il négocie bien, et il négocie à la baisse."],
+            effets:{xp:34, flags:["valombre_termes_lus","valombre_seigneur"]}, suite:"accord"},
+          termes_ko:{ texte:["« Un tribut », dit-elle. « Le détail n'a pas d'importance. Ce qui compte, c'est qu'il propose. »"],
+            effets:{xp:6}, suite:"accord"},
+          accord:{ fin:true, texte:[
+            "« Quatre mille huit cents écus. Le plus tôt sera le mieux. »",
+            "Elle raccompagne jusqu'à la porte. « Et si vous vous demandez pourquoi je paie autant : parce que je suis la seule des sept à avoir lu ses propositions en entier. »"]},
+        }}},
+
+    { id:"trois_chenes", delai:[2,4], attente:"Trois-Chênes attend une réponse depuis onze semaines.",
+      ev:{ id:"CHR2_2", titre:"Trois-Chênes", famille:"ONDE", rarete:"majeur",
+        image:"evt2_pierre_blason",
+        scenes:{
+          start:{ texte:[
+            "Il est posé sur la crête au-dessus du poste, à découvert, depuis onze semaines. Les gens de Trois-Chênes ont cessé d'avoir peur vers la sixième et ont commencé à monter lui porter des choses vers la neuvième.",
+            "Il fait cinquante pas. Il est plus vieux que tout ce que Yohan a vu.",
+            "Il attend qu'on ait fini de monter avant de parler. *Tu es le quatrième. Les trois autres avaient des lances.*"],
+            choix:[
+              {label:"Demander ce qu'il veut vraiment", detail:"Onze semaines à négocier avec un poste de garde",
+               suite:"veut"},
+              {label:"L'attaquer", detail:"C'est ce pour quoi sept maisons paient",
+               suite:"combat"},
+              {label:"Descendre demander aux gens de Trois-Chênes", detail:"Ils lui montent des choses depuis trois semaines",
+               suite:"gens"},
+            ]},
+          veut:{ texte:[
+            "*Un endroit où finir.*",
+            "Il laisse ça poser, et une chose de cinquante pas qui laisse poser une phrase, c'est très long.",
+            "*J'ai quatre cents ans. Je ne vole plus bien. Les vôtres m'ont chassé de trois vallées en soixante ans et je ne peux plus en traverser une quatrième.*",
+            "*Alors j'ai proposé de payer. C'est ce que font vos seigneurs quand ils ne peuvent plus prendre : ils achètent. Je croyais que cela vous serait lisible.*"],
+            effets:{xp:36, flags:["valombre_il_finit","valombre_termes_lus"]}, fin:true},
+          gens:{ texte:[
+            "Le poste de Trois-Chênes compte quarante et une personnes et un sergent qui ne sait plus quoi écrire dans son registre.",
+            "« Il a fait partir les wyvernes de la combe en octobre », dit le sergent. « Sans qu'on lui demande. On a rien perdu depuis. »",
+            "Une femme ajoute : « Et il a rouvert la route. Y'a pas eu un brigand sur la Combe depuis neuf semaines. On a jamais vendu autant de sel. »",
+            "Le sergent finit par dire ce qu'il ne devrait pas : « Nous, on paierait. Cent têtes, on paierait. C'est moins cher que le péage de Valombre. »"],
+            effets:{xp:32, flags:["valombre_ils_paieraient","valombre_il_protege"]}, fin:true},
+          combat:{ texte:["Il ne se défend pas tout de suite. C'est ce qui est le plus difficile."],
+            combat:{ groupe:[{bst:"BST_012", n:1}], victoire:"tue", defaite:"repousse", mortel:true }},
+          tue:{ texte:[
+            "Il met très longtemps à mourir et il ne dit plus rien après le premier coup.",
+            "Les quarante et une personnes de Trois-Chênes montent le lendemain. Personne ne parle. Une femme laisse un pain sur la crête, à côté de la tête, et redescend."],
+            effets:{xp:110, sang:16, renom:16, suspicion:12,
+                    issue:"dragon_tue", flag:"valombre_dragon_mort"}, fin:true},
+          repousse:{ texte:[
+            "Il se défend au troisième coup, et quatre cents ans de dragon qui se défend, c'est une chose qu'on ne raconte pas bien.",
+            "Yohan redescend la crête sur le dos, à moitié conscient, et ce sont les gens de Trois-Chênes qui le ramassent."],
+            effets:{pv:-50, fat:32, xp:30}, fin:true},
+        }}},
+
+    { id:"decision", delai:[1,3], attente:"Sept maisons attendent, et quarante et une personnes aussi.",
+      ev:{ id:"CHR2_3", titre:"Ce qu'on fait d'un dragon qui négocie", famille:"POLITIQUE", rarete:"majeur",
+        image:"is_dossier",
+        scenes:{
+          start:{ texte:[
+            "Quatre mille huit cents écus pour tuer une chose de quatre cents ans qui n'a tué personne et qui a rouvert une route.",
+            "Sept maisons paient pour que la nouvelle ne se répande pas. Quarante et une personnes à Trois-Chênes paieraient volontiers le tribut."],
+            choix:[
+              {label:"Remonter et le tuer", detail:"C'est le contrat",
+               suite:"tue", effets:{etape:"trois_chenes"}},
+              {label:"Faire signer les termes par Trois-Chênes",
+               detail:"Requiert de savoir qu'ils paieraient · un contrat, pas une allégeance",
+               requis:{flag:"valombre_ils_paieraient"}, test:{stat:"vol", dc:15},
+               reussite:"signe_ok", echec:"signe_ko"},
+              {label:"Répandre la nouvelle partout",
+               detail:"Requiert d'avoir lu les termes · sept maisons paient pour l'empêcher",
+               requis:{flag:"valombre_termes_lus"}, suite:"repand",
+               effets:{issue:"nouvelle_repandue", reputation:{humains:-16, parias:14}, renom:14,
+                       suspicion:10}},
+              {label:"Rendre l'avance et s'en aller", detail:"Quelqu'un d'autre montera",
+               suite:"rend", effets:{issue:"abandonnee", reputation:{humains:-8}, renom:-4}},
+            ]},
+          tue:{ fin:true, texte:["Il remonte la crête. Il n'y a pas grand-chose à ajouter."]},
+          signe_ok:{ fin:true, texte:[
+            "Il faut convaincre un sergent de poste de signer un contrat avec un dragon au nom de quarante et une personnes, sans mandat, sans sceau et sans précédent.",
+            "Ce qui le décide, c'est la clause : *je ne demanderai pas de serment et n'en prêterai pas. Ceci est un contrat, non une allégeance.*",
+            "« Alors c'est pas un seigneur », dit le sergent. « C'est un péager. On sait faire avec les péagers. »",
+            "Soixante têtes par an, la vallée protégée, la route ouverte. Signé sur du vélin, en deux exemplaires, dont un que le dragon emporte.",
+            "Valombre refuse de payer. Les six autres maisons parlent d'expédition punitive pendant deux ans et n'en montent aucune.",
+            "Le premier tribut est versé à la Saint-Aubin. Quarante et une personnes montent la crête avec soixante bêtes, et redescendent avec une route sûre."],
+            effets:{issue:"termes_acceptes", reputation:{humains:-10, parias:16}, renom:16,
+                    suspicion:8, flag:"trois_chenes_traite"}},
+          signe_ko:{ texte:[
+            "« Je suis sergent de poste », dit-il. « Je n'ai pas mandat pour signer avec un fournisseur de foin, alors avec ça… »",
+            "Il a raison. Personne à Trois-Chênes n'a le pouvoir de signer, et c'est précisément pourquoi le dragon en est à sa troisième proposition."],
+            effets:{xp:12}, suite:"repand"},
+          repand:{ fin:true, texte:[
+            "Il fait recopier les trois propositions à onze exemplaires et les laisse là où on lit : deux tavernes d'Astrah, la chancellerie, une foire, le prieuré de Combe-Basse, et sous la porte de six maisons nobles.",
+            "En six semaines, tout Vardhen sait qu'un dragon a proposé des termes écrits et qu'il négocie à la baisse.",
+            "Personne ne sait quoi en faire. La chancellerie d'Astrah rédige un avis de quarante pages qui ne conclut rien. Deux maisons proposent d'ouvrir des négociations et se rétractent. Une compagnie de mercenaires monte à Trois-Chênes et redescend sans être montée jusqu'en haut.",
+            "Le dragon attend sur sa crête. Il est toujours là l'année suivante.",
+            "Dame Éléonore de Valombre ne paie pas et n'écrit pas. Elle avait dit qu'elle était la seule à les avoir lues en entier ; elle savait donc ce qu'elle faisait en payant pour qu'elles disparaissent."]},
+          rend:{ fin:true, texte:[
+            "Il rend l'avance à Valombre sans explication et prend la route de l'est.",
+            "Une compagnie franche monte à Trois-Chênes six semaines plus tard. Ils sont onze. Ils redescendent à quatre.",
+            "Le dragon est toujours sur sa crête l'hiver suivant, et il en est à sa cinquième proposition."]},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   30 — LA GUERRE DU LOUP
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_LOUP", type:'contrat', titre:"La Guerre du Loup",
+  commanditaire:"Karlsberg", maison:null,
+  or:6000, danger:"légendaire", categorie:"guerre",
+  lieux:["LOC_001"],
+  requis:{ flags:["banniere_haute"] },
+  pitch:"Une coalition locale teste militairement la jeune Maison Karlsberg avant qu'elle ne devienne trop forte. Ce n'est pas un contrat : c'est chez vous.",
+  paye:["coalition_brisee","coalition_negociee","karlsberg_tenue"],
+  issues:{
+    coalition_brisee:"La coalition qui marchait sur Karlsberg a été brisée sous ses murs.",
+    coalition_negociee:"La coalition qui marchait sur Karlsberg est repartie sans combattre.",
+    karlsberg_tenue:"Karlsberg a tenu. On ne l'attaquera plus à la légère.",
+    karlsberg_tombee:"Karlsberg est retombée en ruines. Il faudra tout recommencer.",
+    abandonnee:"Yohan n'était pas à Karlsberg quand ils sont venus.",
+  },
+  etapes:[
+    { id:"avertissement", delai:[0,0], attente:"Ils seront devant les murs dans cinq semaines.",
+      ev:{ id:"CHW2_1", titre:"Trois bannières sur la route du Loup", famille:"PARIA", rarete:"majeur",
+        image:"cg_karlsberg",
+        scenes:{
+          start:{ texte:[
+            "Ce n'est pas un commanditaire qui vient : c'est un homme de la vallée, à pied, qui a couru les six dernières lieues.",
+            "« Trois bannières. Elles se sont rejointes à Vaubien il y a quatre jours. Elles viennent ici. »",
+            "Il reprend son souffle. « Ils disent que la maison Karlsberg n'a pas de titre. Que la bannière que vous avez levée est une usurpation. Qu'ils viennent la faire descendre. »",
+            "Derrière lui, le mur d'enceinte relevé, la cour déblayée, et les gens qui sont venus s'installer parce qu'ici on ne demande pas ce que vous êtes."],
+            choix:[
+              {label:"Demander qui mène", detail:"Trois bannières ont un chef",
+               suite:"qui"},
+              {label:"Demander combien", detail:"Jet de Précision (12)",
+               test:{stat:"precision", dc:12}, reussite:"combien_ok", echec:"combien_ko"},
+              {label:"Faire monter tout le monde derrière les murs", detail:"Cinq semaines",
+               suite:"prepare"},
+            ]},
+          qui:{ texte:[
+            "« Vauclair. Les deux autres suivent parce que Vauclair paie. »",
+            "L'homme s'assied enfin sur une pierre. « On dit qu'il a reçu une lettre d'Astrah. Pas un ordre : un encouragement. Ça revient au même et ça n'engage personne. »"],
+            effets:{xp:20, flag:"loup_vauclair"}, suite:"prepare"},
+          combien_ok:{ texte:[
+            "« Neuf cents, peut-être mille. Dont deux cents cavaliers et quatre pièces de siège légères. »",
+            "Il regarde le mur d'enceinte. « Ils croient trouver un chantier. Ils ont raison à moitié. »"],
+            effets:{xp:22, flag:"loup_mille_hommes"}, suite:"prepare"},
+          combien_ko:{ texte:["« Beaucoup », dit l'homme. « Plus que ce qu'il y a ici. » Il n'a pas compté : il a couru."],
+            effets:{xp:6}, suite:"prepare"},
+          prepare:{ fin:true, texte:[
+            "Cinq semaines. Ce qu'il y a à Karlsberg, c'est ce qu'on y a mis : les murs qu'on a relevés, les hommes qu'on a recrutés, les gens qui sont venus, et ce qu'on a promis à ceux qui doivent quelque chose.",
+            "Personne ne paie ce contrat-là. C'est chez soi."]},
+        }}},
+
+    { id:"appels", delai:[2,3], attente:"Cinq semaines pour appeler ceux qui doivent quelque chose.",
+      ev:{ id:"CHW2_2", titre:"Ceux qui doivent quelque chose", famille:"PARIA", rarete:"majeur",
+        image:"evt_bannieres",
+        scenes:{
+          start:{ texte:[
+            "Cinq semaines et onze cavaliers pour porter des lettres.",
+            "Il y a des gens, dans ce monde, qui doivent quelque chose à Yohan de Karlsberg. Certains l'ont dit. Certains l'ont écrit. Certains ne l'ont jamais formulé et s'en souviennent quand même.",
+            "C'est maintenant qu'on saura combien."],
+            choix:[
+              {label:"Écrire à tout le monde", detail:"On ne trie pas quand mille hommes marchent sur vous",
+               suite:"tous"},
+              {label:"N'écrire qu'à ceux qui ont donné leur parole", detail:"Jet de Volonté (13) · la dignité coûte des hommes",
+               test:{stat:"vol", dc:13}, reussite:"fiers_ok", echec:"fiers_ko"},
+              {label:"N'écrire à personne", detail:"Ce qui est ici suffira ou ne suffira pas",
+               suite:"seul", effets:{renom:6}},
+            ]},
+          tous:{ texte:[
+            "Onze cavaliers, quarante lettres, et cinq semaines.",
+            "Ce qui revient n'est jamais ce qu'on attend. Des gens à qui l'on n'avait rien demandé arrivent avec des charrettes. D'autres, à qui l'on avait sauvé la vie, ne répondent pas.",
+            "Ceux qui viennent viennent parce qu'ils ont décidé, il y a longtemps, qu'ils viendraient si on les appelait un jour."],
+            effets:{xp:30, flag:"loup_appel_large"}, fin:true},
+          fiers_ok:{ texte:[
+            "Onze lettres, à onze personnes qui ont donné leur parole, et pas une de plus.",
+            "Elles arrivent toutes les onze. Ce n'est pas beaucoup d'hommes et c'est exactement les bons.",
+            "Karlsberg n'a pas mendié, et il se trouve que dans une vallée qui regarde, cela compte plus que deux cents hommes de plus."],
+            effets:{xp:34, renom:10, flags:["loup_appel_large","loup_dignite"]}, fin:true},
+          fiers_ko:{ texte:["Onze lettres. Sept réponses. Quatre silences qui pèseront longtemps.", "On fera avec sept."],
+            effets:{xp:16, flag:"loup_appel_large"}, fin:true},
+          seul:{ texte:[
+            "Aucune lettre. Ce qui est à Karlsberg est à Karlsberg, et si cela ne suffit pas, cela n'aura pas suffi.",
+            "La vallée le remarque. Certains trouvent ça fier. D'autres trouvent ça bête. Les deux ont raison."],
+            effets:{xp:20}, fin:true},
+        }}},
+
+    { id:"murs", delai:[1,2], attente:"Ils sont devant.",
+      ev:{ id:"CHW2_3", titre:"Sous les Bannières du Loup", famille:"PARIA", rarete:"majeur",
+        image:"cg_karlsberg",
+        scenes:{
+          start:{ texte:[
+            "Ils arrivent le trente-quatrième jour et se déploient à six cents pas, en bon ordre, avec le temps devant eux.",
+            "Sur le mur relevé, il y a ce qu'on a : les hommes recrutés, ceux qui sont venus, et les gens de la vallée qui n'ont nulle part où aller.",
+            "Vauclair envoie un parlementaire avant midi. Il propose la reddition de la bannière, pas des personnes."],
+            choix:[
+              {label:"Refuser et tenir", detail:"C'est pour ça qu'on a relevé les murs",
+               suite:"tient"},
+              {label:"Négocier", detail:"Jet de Volonté (16) · trois bannières, et une seule qui y tient",
+               requis:{flag:"loup_vauclair"}, test:{stat:"vol", dc:16},
+               reussite:"nego_ok", echec:"nego_ko"},
+              {label:"Descendre la bannière", detail:"Les gens restent. Le nom retombe.",
+               suite:"descend",
+               effets:{issue:"karlsberg_tombee", reputation:{parias:-30, humains:10}, renom:-16}},
+            ]},
+          tient:{ texte:["On ne répond pas au parlementaire. À la place, on hisse la seconde bannière."],
+            bataille:{ def:"BAT_KARLSBERG", victoire:"tenue", defaite:"tombee" }},
+          tenue:{ fin:true, texte:[
+            "Ils tiennent onze jours. Le quatrième, une pièce de siège ouvre une brèche de six pas dans l'enceinte relevée, et la brèche est tenue toute la nuit par des gens dont aucun n'est soldat.",
+            "Le neuvième, l'une des trois bannières se retire — celle qui suivait parce qu'on la payait.",
+            "Le onzième, Vauclair lève le camp.",
+            "Karlsberg n'a pas gagné une bataille : Karlsberg a tenu. C'est très différent et c'est infiniment plus solide. Personne ne remontera cette route à la légère.",
+            "On enterre trente et un morts dans la cour déblayée. Ils ont un nom sur une pierre, et c'est la première fois depuis quarante ans qu'on grave un nom à Karlsberg."],
+            effets:{xp:120, renom:30, reputation:{parias:34, humains:-10}, suspicion:16,
+                    issue:"karlsberg_tenue", flag:"karlsberg_a_tenu"}},
+          tombee:{ fin:true, texte:[
+            "La brèche cède au sixième jour et il n'y a pas de seconde ligne, parce qu'on n'a jamais eu de quoi en faire une.",
+            "Les gens sortent par la poterne nord pendant que ce qui reste tient la cour. Yohan sort avec eux, le dernier, parce qu'un homme qui meurt sur ses murs ne sert plus à personne.",
+            "Vauclair fait abattre l'enceinte relevée et la salle basse. Il laisse le loup de pierre : il dit que c'est plus humiliant.",
+            "Il faudra tout recommencer. On a déjà recommencé une fois."],
+            effets:{xp:60, renom:-10, reputation:{parias:16, humains:-4},
+                    issue:"karlsberg_tombee", flag:"karlsberg_rasee_deux_fois"}},
+          nego_ok:{ fin:true, texte:[
+            "Trois bannières, et une seule qui tient à cette guerre.",
+            "Yohan sort à découvert, seul, à trois cents pas, et il parle aux deux autres — pas à Vauclair : aux deux qui suivent parce qu'on les paie.",
+            "Il leur offre ce que Vauclair ne peut pas leur offrir : le passage libre sur la route du Loup, à perpétuité, sans péage, garanti par écrit devant leurs propres capitaines.",
+            "L'une accepte dans la journée. L'autre le lendemain matin.",
+            "Vauclair reste seul devant des murs relevés avec trois cents hommes. Il lève le camp au trente-huitième jour sans avoir tiré un coup.",
+            "Il n'y a pas eu de bataille. Il y a eu une route ouverte, et deux maisons qui doivent désormais quelque chose à Karlsberg."],
+            effets:{xp:100, renom:26, reputation:{parias:26, humains:8}, suspicion:12,
+                    issue:"coalition_negociee", flag:"karlsberg_route_ouverte"}},
+          nego_ko:{ texte:[
+            "Il sort à découvert et on l'écoute par courtoisie pendant onze minutes.",
+            "Puis le capitaine de la deuxième bannière dit : « Vauclair nous paie aujourd'hui. Vous nous promettez pour dans dix ans. »",
+            "Il remonte sur ses murs."],
+            effets:{xp:20}, suite:"tient"},
+          descend:{ fin:true, texte:[
+            "La bannière descend à midi, devant mille hommes et devant tous ceux qui sont venus s'installer ici parce qu'on y relevait un nom.",
+            "Vauclair accepte : il voulait la bannière, pas les gens. Il repart le lendemain.",
+            "Karlsberg reste debout — les murs, la cour, la salle basse. Ce qui est tombé, c'est le nom.",
+            "Onze familles repartent dans le mois. Elles n'étaient pas venues pour des murs."]},
+        }}},
+  ]},
+
 ];
