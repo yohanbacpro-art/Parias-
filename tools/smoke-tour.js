@@ -112,7 +112,9 @@ const verifie = (n, ok, d) => { if(ok) console.log('  ✔', n);
   verifie('et en soutien chaque tour', lignee.apresLiaison.rente === 60, lignee.apresLiaison.rente);
   verifie('une grossesse menée à terme donne une naissance', lignee.naissances === 1, lignee);
   verifie('l\'enfant porte les deux maisons', !!lignee.enfant && /de /.test(lignee.enfant.nom), lignee.enfant);
-  verifie('sans doublon de particule', !!lignee.enfant && !/de de |de La /.test(lignee.enfant.nom), lignee.enfant);
+  // Les bornes comptent : « Ermengarde de Corven » contient « de de » sans
+  // pour autant doubler la particule.
+  verifie('sans doublon de particule', !!lignee.enfant && !/\sde de\s|\sde La\s/.test(lignee.enfant.nom), lignee.enfant);
   verifie('la première naissance change quelque chose', lignee.flags.includes('descendance'), lignee.flags);
   console.log(`    ${lignee.enfant.nom} · ${lignee.enfant.paria ? 'porte le sang' : 'ne porte rien'}`);
 

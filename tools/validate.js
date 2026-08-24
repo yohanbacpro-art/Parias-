@@ -21,6 +21,7 @@ const fichiers = [
   'src/data/contracts_special.js', 'src/data/contrats_locaux.js', 'src/data/romances.js',
   'src/data/events_compagnons.js', 'src/data/events_nemesis.js', 'src/data/events_isolde.js',
   'src/data/reputation.js', 'src/data/epilogue.js',
+  'src/data/chantier.js', 'src/data/events_suspicion.js', 'src/data/politique.js',
 ];
 
 const ctx = vm.createContext({ console });
@@ -38,6 +39,7 @@ const {
   UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART, REGIONS, ROUTES, LOC_REGION,
   REPUTATION_DEPART, RANGS_REPUTATION, LOC_PEUPLE, REPUTATION_VOIX, SHOPS, BUTIN_PAR_PEUPLE,
   CONTRATS_LOCAUX, CONTRACT_COMPLICATIONS,
+  CHANTIER, EVENTS_SUSPICION, POUVOIRS, EDITS,
   EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_LIGNEE, EPI_ONDE, EPI_LEGS,
 } = vm.runInContext(`({
   BESTIARY_FULL, PORTRAITS, LOCATIONS, EVENTS, CONTRACTS, ITEM_POOL,
@@ -47,6 +49,7 @@ const {
   UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART, REGIONS, ROUTES, LOC_REGION,
   REPUTATION_DEPART, RANGS_REPUTATION, LOC_PEUPLE, REPUTATION_VOIX, SHOPS, BUTIN_PAR_PEUPLE,
   CONTRATS_LOCAUX, CONTRACT_COMPLICATIONS,
+  CHANTIER, EVENTS_SUSPICION, POUVOIRS, EDITS,
   EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_LIGNEE, EPI_ONDE, EPI_LEGS
 })`, ctx);
 
@@ -78,6 +81,7 @@ const tousLesEvenements = [
   ...EVENTS_NEMESIS.map(e => ({ ev:e, cat:'nemesis' })),
   ...EVENTS_ISOLDE.map(e => ({ ev:e, cat:'isolde' })),
   ...EVENTS_COMPAGNONS.map(e => ({ ev:e, cat:'compagnon' })),
+  ...EVENTS_SUSPICION.map(e => ({ ev:e, cat:'suspicion' })),
 ];
 // Certains marqueurs sont posés par le moteur et non par un effet de contenu :
 // on les déclare ici pour que le contrôle des marqueurs orphelins reste utile.
@@ -527,6 +531,88 @@ EPI_LEGS.forEach(l => {
   if(!l.effet || !Object.keys(l.effet).length) err(`EPI_LEGS ${l.id} : legs sans effet`);
 });
 console.log(`Épilogue    ${nbVerdicts} verdicts · ${EPI_LEGS.length} legs transmissibles`);
+console.log('');
+
+/* ---- Le chantier de Karlsberg ---- */
+const ouvrageIds = new Set();
+CHANTIER.forEach(o => {
+  if(!o.id) err('CHANTIER : ouvrage sans identifiant');
+  else if(ouvrageIds.has(o.id)) err(`CHANTIER : identifiant en double « ${o.id} »`);
+  else ouvrageIds.add(o.id);
+  if(!(o.or > 0)) err(`CHANTIER ${o.id} : un ouvrage doit coûter de l'or`);
+  if(!(o.semaines > 0)) err(`CHANTIER ${o.id} : un ouvrage doit coûter des semaines`);
+  if(!o.desc || !o.apres) err(`CHANTIER ${o.id} : il manque la description ou le texte d'achèvement`);
+  if(!o.effet || !Object.keys(o.effet).length) err(`CHANTIER ${o.id} : ouvrage sans effet`);
+  noterMarqueurs(o.effet);
+});
+CHANTIER.forEach(o => {
+  if(o.requis && !ouvrageIds.has(o.requis)) err(`CHANTIER ${o.id} : prérequis inconnu « ${o.requis} »`);
+});
+// Aucun ouvrage ne doit dépendre de lui-même, directement ou non.
+CHANTIER.forEach(o => {
+  const vus = new Set();
+  let cur = o;
+  while(cur && cur.requis){
+    if(vus.has(cur.requis)){ err(`CHANTIER ${o.id} : chaîne de prérequis circulaire`); break; }
+    vus.add(cur.requis);
+    if(cur.requis === o.id){ err(`CHANTIER ${o.id} : dépend de lui-même`); break; }
+    cur = CHANTIER.find(x => x.id === cur.requis);
+  }
+});
+const orTotalChantier = CHANTIER.reduce((s, o) => s + o.or, 0);
+const semTotalChantier = CHANTIER.reduce((s, o) => s + o.semaines, 0);
+console.log(`Chantier    ${CHANTIER.length} ouvrages · ${orTotalChantier} or et ${semTotalChantier} semaines pour tout relever`);
+
+/* ---- La Suspicion ---- */
+const sensValides = new Set(['hausse', 'baisse']);
+EVENTS_SUSPICION.forEach(e => {
+  if(!sensValides.has(e.sens)) err(`EVENTS_SUSPICION ${e.id} : sens inconnu « ${e.sens} »`);
+  if(!e.requis || e.requis.suspicionMin === undefined)
+    err(`EVENTS_SUSPICION ${e.id} : sans requis.suspicionMin, il se déclencherait à zéro de Suspicion`);
+});
+// Chaque palier doit avoir de quoi se produire, et de quoi en sortir.
+[[12, 'Remarqué'], [40, 'Traqué'], [70, 'Chasse ouverte']].forEach(([seuil, nom]) => {
+  const dispo = EVENTS_SUSPICION.filter(e => (e.requis.suspicionMin || 0) <= seuil);
+  if(!dispo.length) err(`Suspicion : aucun événement ne peut se produire au palier « ${nom} » (${seuil})`);
+  const sorties = dispo.filter(e => Object.values(e.scenes).some(sc =>
+    (sc.effets && sc.effets.suspicion < 0) ||
+    (sc.choix || []).some(c => c.effets && c.effets.suspicion < 0)));
+  if(!sorties.length) err(`Suspicion : au palier « ${nom} », aucun moyen de faire redescendre la Suspicion`);
+});
+const nbBaisses = EVENTS_SUSPICION.filter(e => e.sens === 'baisse').length;
+console.log(`Suspicion   ${EVENTS_SUSPICION.length} événements dédiés · ${nbBaisses} offrent une porte de sortie`);
+
+/* ---- La politique des puissances ---- */
+const pouvIds = new Set();
+POUVOIRS.forEach(p => {
+  if(pouvIds.has(p.id)) err(`POUVOIRS : identifiant en double « ${p.id} »`);
+  pouvIds.add(p.id);
+  if(typeof p.derive !== 'function') err(`POUVOIRS ${p.id} : pas de dérive d'influence`);
+  if(typeof p.posture !== 'function') err(`POUVOIRS ${p.id} : pas de posture envers Yohan`);
+  if(!(p.depart >= 0 && p.depart <= 100)) err(`POUVOIRS ${p.id} : influence de départ hors bornes`);
+});
+if(!POUVOIRS.some(p => p.joueur)) err('POUVOIRS : aucune puissance ne représente le joueur');
+const editIds = new Set();
+EDITS.forEach(e => {
+  if(editIds.has(e.id)) err(`EDITS : identifiant en double « ${e.id} »`);
+  editIds.add(e.id);
+  if(!pouvIds.has(e.pouvoir)) err(`EDITS ${e.id} : puissance inconnue « ${e.pouvoir} »`);
+  if(!e.titre || !e.texte) err(`EDITS ${e.id} : édit sans titre ou sans texte`);
+  if(!e.effet || !Object.keys(e.effet).length) err(`EDITS ${e.id} : édit sans effet réel`);
+  if(e.effet && e.effet.tension)
+    Object.keys(e.effet.tension).forEach(k => {
+      if(!PEUPLES_MONDE.includes(k)) err(`EDITS ${e.id} : peuple inconnu « ${k} »`);
+    });
+  if(e.effet && e.effet.reputation)
+    Object.keys(e.effet.reputation).forEach(k => {
+      if(!PEUPLES_MONDE.includes(k)) err(`EDITS ${e.id} : peuple inconnu « ${k} »`);
+    });
+});
+POUVOIRS.forEach(p => {
+  if(!EDITS.some(e => e.pouvoir === p.id))
+    warn(`POUVOIRS ${p.id} : cette puissance ne décide jamais rien`);
+});
+console.log(`Politique   ${POUVOIRS.length} puissances · ${EDITS.length} édits`);
 console.log('');
 
 /* ---- Couverture par lieu ---- */

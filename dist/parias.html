@@ -469,6 +469,117 @@
   .lr-etat.decision{border-color:var(--onde-bright);color:var(--onde-bright);}
   .lr-etat.clos{opacity:.5;}
 
+  /* L'écran du lieu : le seul endroit où l'on joue. */
+  .lieu-desc{color:var(--parchment-dim);font-size:12.5px;font-family:'Inter',sans-serif;margin:2px 0 10px;}
+  .lieu-region{font-family:'Cinzel',serif;color:var(--gold);letter-spacing:.06em;}
+  .lieu-accueil{font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;
+    color:var(--parchment-dim);border-left:2px solid var(--gold-dim);padding:6px 0 6px 11px;
+    margin:0 0 14px;max-width:66ch;font-style:italic;}
+  .lieu-accueil b{color:var(--gold);font-style:normal;}
+  .lieu-accueil.hostile{border-color:var(--blood-bright);color:var(--parchment);}
+  .lieu-actions{display:flex;gap:8px;flex-wrap:wrap;}
+  .lieu-act{display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+    background:#141010;border:1px solid var(--line);border-radius:4px;padding:8px 12px;
+    color:var(--parchment);font-family:'Cinzel',serif;font-size:12.5px;cursor:pointer;
+    text-align:left;}
+  .lieu-act:hover:not([disabled]){border-color:var(--gold);color:var(--gold);}
+  .lieu-act[disabled]{opacity:.35;cursor:not-allowed;}
+  .la-detail{font-family:'Inter',sans-serif;font-size:10px;color:var(--parchment-dim);
+    text-transform:none;letter-spacing:0;}
+
+  .offres{display:grid;gap:10px;margin-bottom:14px;}
+  .offre{border:1px solid var(--line);border-radius:5px;padding:11px 13px;
+    background:rgba(255,255,255,.012);}
+  .offre.locale{border-left:2px solid var(--gold);}
+  .offre.ailleurs{border-left:2px solid var(--onde-bright);}
+  .offre-tete{display:flex;justify-content:space-between;align-items:baseline;gap:10px;}
+  .offre-titre{font-family:'Cinzel',serif;font-size:14px;color:var(--parchment);}
+  .offre-prix{font-family:'Inter',sans-serif;font-size:12px;color:var(--gold);white-space:nowrap;}
+  .offre-qui{font-family:'Inter',sans-serif;font-size:10.5px;color:var(--parchment-dim);
+    letter-spacing:.03em;margin-top:2px;}
+  .offre-pitch{font-family:'Inter',sans-serif;font-size:12.5px;line-height:1.6;
+    color:var(--parchment);margin:7px 0;max-width:66ch;}
+  .offre-pied{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px;}
+  .offre-tag{font-family:'Inter',sans-serif;font-size:9.5px;text-transform:uppercase;
+    letter-spacing:.08em;border:1px solid var(--line);border-radius:3px;padding:2px 6px;
+    color:var(--parchment-dim);}
+  .offre-tag.chaud{border-color:var(--warn);color:var(--warn);}
+  .offre-tag.susp{border-color:var(--blood-bright);color:var(--blood-bright);}
+  .offre-tag.voyage{border-color:var(--onde-bright);color:var(--onde-bright);}
+  .offre-tag.ici{opacity:.6;}
+  .offre-btn{width:100%;}
+  .offres-vide{font-family:'Inter',sans-serif;font-size:12.5px;color:var(--parchment-dim);
+    font-style:italic;margin:0;}
+  .lieu-dossier{margin-top:4px;}
+
+  /* Le chantier de Karlsberg */
+  .chantier-etat{font-family:'Inter',sans-serif;font-size:11px;color:var(--parchment-dim);
+    border:1px solid var(--line);border-radius:4px;padding:7px 10px;margin:10px 0 12px;
+    font-variant-numeric:tabular-nums;}
+  .chantier-liste{display:grid;gap:8px;max-height:46vh;overflow-y:auto;}
+  .ouvrage{display:flex;justify-content:space-between;align-items:center;gap:12px;
+    border:1px solid var(--line);border-radius:4px;padding:9px 11px;text-align:left;}
+  .ouvrage.fait{border-color:var(--gold-dim);background:rgba(198,160,74,.05);}
+  .ouvrage.bloque{opacity:.55;}
+  .ouv-nom{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);}
+  .ouv-desc{font-family:'Inter',sans-serif;font-size:11.5px;line-height:1.55;
+    color:var(--parchment-dim);margin:3px 0;max-width:52ch;}
+  .ouv-cout{font-family:'Inter',sans-serif;font-size:10.5px;color:var(--parchment-dim);
+    font-variant-numeric:tabular-nums;}
+  .ouvrage button{white-space:nowrap;font-size:11px;}
+
+  /* La Suspicion : ce qu'on dit de vous, et ce que ça coûte */
+  .susp-bloc{border:1px solid var(--line);border-left:3px solid var(--parchment-dim);
+    border-radius:4px;padding:9px 12px;margin:10px 0 4px;}
+  .susp-bloc.susp-mid{border-left-color:var(--gold-dim);}
+  .susp-bloc.susp-high{border-left-color:var(--warn);}
+  .susp-bloc.susp-crit{border-left-color:var(--blood-bright);background:rgba(140,30,30,.06);}
+  .susp-tete{display:flex;align-items:center;gap:10px;}
+  .susp-label{font-family:'Cinzel',serif;font-size:12.5px;color:var(--gold);letter-spacing:.04em;}
+  .susp-jauge{flex:1;height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;min-width:60px;}
+  .susp-jauge i{display:block;height:100%;background:var(--parchment-dim);}
+  .susp-bloc.susp-mid .susp-jauge i{background:var(--gold-dim);}
+  .susp-bloc.susp-high .susp-jauge i{background:var(--warn);}
+  .susp-bloc.susp-crit .susp-jauge i{background:var(--blood-bright);}
+  .susp-val{font-family:'Inter',sans-serif;font-size:11px;color:var(--parchment-dim);
+    font-variant-numeric:tabular-nums;}
+  .susp-resume{font-family:'Inter',sans-serif;font-size:12px;line-height:1.55;
+    color:var(--parchment-dim);font-style:italic;margin:6px 0 5px;max-width:64ch;}
+  .susp-effets{list-style:none;margin:0;padding:0;font-family:'Inter',sans-serif;
+    font-size:11.5px;line-height:1.7;color:var(--parchment);}
+  .susp-effets li:before{content:'— ';color:var(--parchment-dim);}
+  .susp-couv{font-family:'Inter',sans-serif;font-size:11px;color:var(--onde-bright);
+    margin-top:6px;line-height:1.5;}
+  .lieu-politique{font-family:'Inter',sans-serif;font-size:11.5px;line-height:1.6;
+    color:var(--parchment-dim);margin:8px 0 0;max-width:64ch;}
+  .renom-susp{font-family:'Inter',sans-serif;font-size:11px;color:var(--warn);}
+
+  /* La politique des puissances */
+  .pol-tete{font-family:'Inter',sans-serif;font-size:13px;color:var(--parchment);
+    margin:0 0 12px;line-height:1.6;}
+  .pouv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;}
+  .pouv{border:1px solid var(--line);border-radius:4px;padding:10px 12px;}
+  .pouv-nous{border-color:var(--gold-dim);background:rgba(198,160,74,.06);}
+  .pouv-hostile,.pouv-guerre{border-left:3px solid var(--blood-bright);}
+  .pouv-appui,.pouv-allie{border-left:3px solid var(--onde-bright);}
+  .pouv-tete{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+  .pouv-nom{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);}
+  .pouv-inf{font-family:'Inter',sans-serif;font-size:13px;color:var(--parchment);
+    font-variant-numeric:tabular-nums;}
+  .pouv-meneur{font-family:'Inter',sans-serif;font-size:11px;color:var(--parchment-dim);margin-top:2px;}
+  .pouv-jauge{height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;margin:7px 0;}
+  .pouv-jauge i{display:block;height:100%;background:var(--gold-dim);}
+  .pouv-credo{font-family:'Inter',sans-serif;font-size:11.5px;line-height:1.55;
+    color:var(--parchment-dim);font-style:italic;margin:0 0 6px;}
+  .pouv-posture{font-family:'Inter',sans-serif;font-size:11px;line-height:1.5;color:var(--parchment);}
+  .pol-sous{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);margin:16px 0 8px;}
+  .pol-edits{list-style:none;margin:0;padding:0;display:grid;gap:9px;}
+  .pol-edits li{border-left:2px solid var(--gold-dim);padding-left:10px;
+    font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;color:var(--gold);}
+  .pol-edits li span{color:var(--parchment-dim);}
+  .pol-edits li.pol-rien{border-left-color:var(--line);color:var(--parchment-dim);font-style:italic;}
+  .pli-politique{color:var(--gold);}
+
   .quete-bandeau{display:flex;justify-content:space-between;align-items:center;gap:14px;
     flex-wrap:wrap;padding:7px 11px;margin-bottom:8px;cursor:pointer;
     border:1px solid var(--gold-dim);border-radius:4px;background:rgba(198,160,74,.07);}
@@ -664,15 +775,15 @@
   <header class="hero">
     <div class="eyebrow">Prototype interne</div>
     <h1>PARIAS — Chroniques de Vardhen</h1>
-    <div class="sub" id="heroSub">V1.2 · Le temps qui passe, la carte, les affaires, les batailles, et ce qu'on transmet · version jouable du 2026-08-23</div>
+    <div class="sub" id="heroSub">V1.2 · Le temps qui passe, la carte, les affaires, les batailles, et ce qu'on transmet · version jouable du 2026-08-24</div>
   </header>
 
   <nav class="tabs" id="tabs" style="display:none;">
     <button data-screen="personnage">Personnage</button>
     <button data-screen="quete">Quête</button>
-    <button data-screen="monde">Monde</button>
+    <button data-screen="lieu">Ici</button>
+    <button data-screen="monde">Carte</button>
     <button data-screen="armee">Armée</button>
-    <button data-screen="contrats">Contrats</button>
     <button data-screen="chroniques">Chroniques</button>
     <button data-screen="codex">Codex</button>
   </nav>
@@ -685,10 +796,8 @@
     </div>
     <div class="cal-row2">
       <div class="ap-pips" id="apPips"></div>
-      <button class="act-btn" id="btnActExplorer">Explorer</button>
-      <button class="act-btn" id="btnActContrats">Contrats</button>
-      <button class="act-btn" id="btnActBoutique">Boutique</button>
-      <button class="act-btn" id="btnActRepos">Se reposer</button>
+      <button class="act-btn" id="btnActIci">Ici</button>
+      <button class="act-btn" id="btnActExplorer">Chercher</button>
       <button class="ghost" id="btnEndTurn">Terminer le tour</button>
     </div>
   </div>
@@ -801,6 +910,17 @@
       <h2>Compagnons</h2>
       <div class="compagnon-list" id="compagnonList"></div>
     </div>
+
+    <div class="panel" id="panelCampagnes">
+      <h2>Campagnes</h2>
+      <p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;">On n'y va pas seul. Elles se débloquent au Renom, pas au niveau — personne ne confie une colonne à un inconnu.</p>
+      <div class="contract-list" id="campagneList"></div>
+    </div>
+    <div class="panel" id="panelPersonnels">
+      <h2>Affaires personnelles</h2>
+      <p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;">Proposées par ceux que Yohan a contrariés. Elles paient mieux que tout le reste, et ce n'est jamais gratuit.</p>
+      <div class="contract-list" id="personnelList"></div>
+    </div>
   </div>
 
   <!-- MONDE -->
@@ -852,38 +972,24 @@
   <!-- LIEU -->
   <div class="screen" id="screen-lieu">
     <div class="panel">
-      <button class="ghost" id="btnBackMonde">← Retour à la carte</button>
+      <button class="ghost" id="btnBackMonde">← Voir la carte</button>
       <h2 id="lieuNom" style="margin-top:14px;">—</h2>
-      <p id="lieuDesc" style="color:var(--parchment-dim);font-style:italic;"></p>
-      <p id="lieuHostile" class="save-warning" style="display:none;"></p>
-      <p style="color:var(--parchment-dim);font-size:13px;">Yohan se trouve ici. Utilisez « Passer le tour » (en haut) pour voir ce qui se passe — le temps continue même sans vous.</p>
+      <p id="lieuDesc" class="lieu-desc"></p>
+      <p id="lieuAccueil" class="lieu-accueil"></p>
+      <div id="lieuPression"></div>
+      <div id="lieuActions" class="lieu-actions"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Ce qu'on cherche ici</h2>
+      <p class="reg-note">Trois offres, tirées de cet endroit. Elles changent à chaque tour.
+        Accepter une affaire qui se déroule ailleurs, c'est partir.</p>
+      <div id="lieuOffres" class="offres"></div>
+      <div id="lieuDossier" class="lieu-dossier"></div>
     </div>
   </div>
 
   <!-- CONTRATS -->
-  <div class="screen" id="screen-contrats">
-    <div class="panel" id="panelCampagnes">
-      <h2>Campagnes</h2>
-      <p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;">On n'y va pas seul. Elles se débloquent au Renom, pas au niveau — personne ne confie une colonne à un inconnu.</p>
-      <div class="contract-list" id="campagneList"></div>
-    </div>
-    <div class="panel" id="panelPersonnels">
-      <h2>Affaires personnelles</h2>
-      <p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;">Proposées par ceux que Yohan a contrariés. Elles paient mieux que tout le reste, et ce n'est jamais gratuit.</p>
-      <div class="contract-list" id="personnelList"></div>
-    </div>
-    <div class="panel">
-      <h2>Registre des Contrats</h2>
-      <h3 class="reg-titre">Affaires du lieu</h3>
-      <p class="reg-note">Ce qui se passe ici, chez les gens d'ici. Trois affaires réglées, et l'on décide de ce que devient l'endroit.</p>
-      <div class="contract-list" id="affairesLocales"></div>
-
-      <h3 class="reg-titre">Registre général</h3>
-      <p class="reg-note">Des affaires venues d'ailleurs, affichées au tableau des mercenaires. Elles paient, et c'est tout ce qu'on leur demande.</p>
-      <div class="contract-list" id="contractList"></div>
-    </div>
-  </div>
-
   <!-- ARMÉE -->
   <div class="screen" id="screen-armee">
     <div class="panel">
@@ -948,7 +1054,7 @@
   <!-- CONTRAT DETAIL -->
   <div class="screen" id="screen-contrat">
     <div class="panel">
-      <button class="ghost" id="btnBackContrats">← Retour au registre</button>
+      <button class="ghost" id="btnBackContrats">← Revenir sur place</button>
       <h2 id="ctrTitre" style="margin-top:14px;">—</h2>
       <div class="step-track" id="stepTrack"></div>
       <div id="ctrBody"></div>
@@ -971,6 +1077,14 @@
         ce qu'on vous vend, à quel prix, et de qui vous laisse passer.</p>
       <div class="rep-grid" id="reputationGrid"></div>
     </div>
+    <div class="panel">
+      <h2>La politique de Vardhen</h2>
+      <p id="politiqueTete" class="pol-tete"></p>
+      <div class="pouv-grid" id="politiqueGrid"></div>
+      <h3 class="pol-sous">Ce qui a été décidé</h3>
+      <ul class="pol-edits" id="politiqueEdits"></ul>
+    </div>
+
     <div class="panel">
       <h2>Chroniques de Vardhen</h2>
       <p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;">Le monde continue d'exister, que Yohan agisse ou non. Ces nouvelles sont générées au fil du temps qui passe.</p>
@@ -11342,6 +11456,995 @@ LOC_020: { peuple:'hommes_betes', dossier:"Les Pierres du Premier Rugissement", 
 
 </script>
 <script>
+/* src/data/chantier.js */
+/* PARIAS — Le chantier de Karlsberg
+ *
+ * On parlait de relever une maison depuis le début sans jamais en poser une
+ * pierre. Voici les pierres.
+ *
+ * Chaque ouvrage coûte de l'or et des semaines — le temps est la vraie monnaie,
+ * parce qu'il fait vieillir Yohan et avancer le monde pendant qu'on bâtit. En
+ * échange, chacun donne un avantage qu'on sent au jeu, pas une ligne de plus
+ * sur une fiche.
+ *
+ * `requis` : l'ouvrage précédent, ou un marqueur d'histoire.
+ * `effet`  : lu par chantierBonus() dans src/chantier.js.
+ */
+
+const CHANTIER = [
+  {
+    id:"ch_cour", nom:"Déblayer la cour", or:200, semaines:2,
+    desc:"Quarante ans d'éboulis, de ronces et d'os d'animaux. Il faut bien commencer par pouvoir marcher.",
+    effet:{ renom:2, flags:["karlsberg_habitable"] },
+    apres:"On peut traverser la cour sans se tordre une cheville. C'est peu. C'est la première fois depuis la Purge.",
+  },
+  {
+    id:"ch_enceinte", nom:"Relever l'enceinte", or:800, semaines:6, requis:"ch_cour",
+    desc:"Avant les toits, les murs : c'est ce qu'on fait quand on compte rester. Trois pans à remonter, et la porte à reposer.",
+    effet:{ defense:2, flags:["karlsberg_enceinte"] },
+    apres:"Il y a une porte, et elle ferme. Ceux qui viennent doivent désormais frapper.",
+  },
+  {
+    id:"ch_puits", nom:"Le puits et les granges", or:500, semaines:4, requis:"ch_cour",
+    desc:"On ne tient pas une place sans eau ni grain. Le vieux puits est comblé, mais il est là.",
+    effet:{ entretienMult:0.7 },
+    apres:"On nourrit chez soi. Une colonne qui mange à Karlsberg coûte un tiers de moins qu'une colonne qui achète en route.",
+  },
+  {
+    id:"ch_salle", nom:"La salle basse", or:600, semaines:4, requis:"ch_enceinte",
+    desc:"Une seule pièce voûtée, sèche, avec un feu. Ce n'est pas du confort : c'est un endroit où l'Onde retombe.",
+    effet:{ fatMax:10, reposMult:2 },
+    apres:"On y dort vraiment. Le bourdonnement s'y calme comme il ne se calme nulle part ailleurs.",
+  },
+  {
+    id:"ch_forge", nom:"La forge", or:900, semaines:5, requis:"ch_puits",
+    desc:"Un forgeron d'un hameau voisin accepte de venir, à condition qu'on lui bâtisse de quoi travailler.",
+    effet:{ prixMult:0.75, flags:["karlsberg_forge"] },
+    apres:"On répare au lieu de racheter. Tout ce qu'on achète ailleurs coûte un quart de moins, parce qu'on n'achète plus que ce qu'on ne sait pas faire.",
+  },
+  {
+    id:"ch_refuge", nom:"Le corps de logis", or:1100, semaines:7, requis:"ch_salle",
+    desc:"De quoi loger trente personnes qui n'ont nulle part où aller. C'est la première décision qui ne sert à rien militairement.",
+    effet:{ reputation:{parias:20, humains:-4}, flags:["refuge_tenu"] },
+    apres:"Trente lits, un four, et une règle : on ne demande pas d'où l'on vient. Le mot circule vite chez ceux qui en ont besoin.",
+  },
+  {
+    id:"ch_banniere", nom:"La bannière au-dessus de la porte", or:400, semaines:3, requis:"ch_enceinte",
+    desc:"Coudre le loup et le pendre en vue de la route. C'est un acte politique, et tout le monde le lira comme tel.",
+    effet:{ renom:10, suspicion:15, reputation:{parias:16}, flags:["banniere_haute"] },
+    apres:"On voit le loup depuis la route à une demi-lieue. Il n'y a plus moyen de prétendre que Karlsberg n'existe pas.",
+  },
+  {
+    id:"ch_pierre", nom:"Graver l'acte de fondation", or:700, semaines:5,
+    requis:"ch_enceinte", requisFlag:"acte_fondation",
+    desc:"Le texte tient en trois lignes : la Maison Karlsberg tient ses terres de son propre chef et non d'une couronne.",
+    effet:{ renom:6, reputation:{parias:18, humains:-10}, flags:["karlsberg_independante"] },
+    apres:"Ce n'est pas une bravade : c'est un document administratif recopié sur une pierre. C'est précisément pour ça que personne ne pourra jamais prétendre qu'il n'a pas existé.",
+  },
+];
+
+</script>
+<script>
+/* src/data/events_suspicion.js */
+/* PARIAS — Ce qu'on dit de vous
+ *
+ * La Suspicion n'était qu'un compteur qui montait quand on frappait fort et
+ * descendait quand on attendait. Elle a maintenant sa propre vie : des
+ * événements qui la font monter parce qu'on a été vu, et d'autres qui la font
+ * baisser parce qu'on a payé, menti, ou laissé quelqu'un d'autre porter le
+ * nom.
+ *
+ * Format identique aux événements écrits (arbre de scènes). Ce qui change :
+ *   requis    { suspicionMin, suspicionMax, … } — la palier décide de l'heure
+ *   sens      'hausse' | 'baisse' — sert au tirage, pas au joueur
+ *   unique    true : ne se reproduit jamais
+ *
+ * Règle d'écriture : aucun de ces événements n'est gratuit. On peut toujours
+ * faire baisser la Suspicion — en or, en sang, en réputation, ou en laissant
+ * faire une chose qu'on préférerait empêcher.
+ */
+
+const EVENTS_SUSPICION = [
+
+/* ══════════════════ ON COMMENCE À VOUS CONNAÎTRE (5–35) ══════════════════ */
+{
+  id:"SU_PORTRAIT", titre:"Un portrait qui ressemble", sens:'hausse',
+  image:"evt_traque", requis:{ suspicionMin:12 },
+  scenes:{
+    start:{
+      texte:[
+        "Le placard est cloué à hauteur d'homme sur le montant de la porte de l'auberge, et il est neuf : l'encre n'a pas encore bavé sous la pluie. Un visage y est dessiné au trait sec, de trois quarts, par quelqu'un qui savait dessiner.",
+        "Ce n'est pas exactement Yohan. Le menton est trop lourd, les cheveux trop courts. Mais la cicatrice est au bon endroit, et le mot sous le dessin ne laisse aucune place au doute : PARIA. Quarante couronnes à qui le mène vivant. La moitié pour le reste.",
+        "Trois hommes boivent à deux pas. Aucun n'a levé les yeux."
+      ],
+      choix:[
+        {label:"Arracher l'affiche et partir",
+         detail:"Le geste le plus simple, et le plus visible",
+         test:{stat:"agi", dc:12}, reussite:"arrache_ok", echec:"arrache_ko"},
+        {label:"Ne rien faire et boire son verre",
+         detail:"Rester est parfois la seule chose qu'on ne soupçonne pas",
+         suite:"reste"},
+        {label:"Payer l'aubergiste pour qu'il en décloue d'autres",
+         detail:"−60 or · il en reste toujours",
+         requis:{or:60}, suite:"achat", effets:{or:-60, suspicion:-8}},
+        {label:"Aller trouver le dessinateur",
+         detail:"Quelqu'un l'a vu d'assez près pour le dessiner",
+         suite:"dessinateur", effets:{suspicion:3}},
+      ]
+    },
+    arrache_ok:{ fin:true,
+      texte:["Le papier vient d'un coup, sans bruit, et disparaît sous le manteau avant que personne ait tourné la tête. Il en reste sûrement dix autres cloués entre ici et la vallée, mais celui-ci ne dira rien à personne."],
+      effets:{suspicion:-4, xp:8}
+    },
+    arrache_ko:{ fin:true,
+      texte:[
+        "Le clou tient mieux que prévu. Le papier se déchire en deux, à mi-hauteur, et le bruit fait se retourner la salle entière.",
+        "« Eh », dit l'un des trois hommes, sans se lever. « C'est pas le tien, ça. »",
+        "Yohan sort avec la moitié du visage à la main et l'autre moitié toujours clouée derrière lui."
+      ],
+      effets:{suspicion:9, xp:5}
+    },
+    reste:{
+      texte:[
+        "Il commande, il boit, il paie. Personne ne regarde l'affiche parce que personne ne regarde jamais les affiches — c'est le mobilier de la porte, au même titre que le loquet.",
+        "En sortant, il constate que l'un des trois hommes est parti avant lui."
+      ],
+      effets:{suspicion:2},
+      choix:[
+        {label:"Le suivre", detail:"Jet de Précision (12)",
+         test:{stat:"precision", dc:12}, reussite:"suivre_ok", echec:"suivre_ko"},
+        {label:"Prendre l'autre route", detail:"On perd du temps, on ne perd pas la tête",
+         suite:"detour", effets:{fat:6, suspicion:-3}},
+      ]
+    },
+    suivre_ok:{ fin:true,
+      texte:[
+        "L'homme marche vite et mal, en regardant deux fois par-dessus son épaule, ce qui est la meilleure façon de se faire suivre. Il s'arrête devant une maison basse, frappe trois coups, et dit un nom à travers la porte.",
+        "Ce n'est pas celui de Yohan. C'est celui de la femme qui tient l'auberge."
+      ],
+      effets:{suspicion:-6, xp:14, flag:"su_denonciateur_connu"}
+    },
+    suivre_ko:{ fin:true,
+      texte:["La rue tourne, se divise, et l'homme n'est plus là. Reste l'impression désagréable d'avoir marché dix minutes en montrant son visage à toute une rue."],
+      effets:{suspicion:6}
+    },
+    detour:{ fin:true,
+      texte:["Deux heures de plus par le chemin des bergers, à contourner un village dont on ne connaît personne. C'est le genre de prudence dont on ne saura jamais si elle a servi à quelque chose."]
+    },
+    achat:{ fin:true,
+      texte:[
+        "L'aubergiste prend les pièces sans les compter, ce qui veut dire qu'il en a déjà pris d'autres pour la raison inverse.",
+        "« Y'en a douze entre ici et le pont », dit-il. « Demain matin y'en aura plus. Après, je sais pas qui les recloue, et je veux pas le savoir. »"
+      ]
+    },
+    dessinateur:{
+      texte:[
+        "Il tient boutique deux rues plus loin, une échoppe de copiste avec trois pots d'encre et l'odeur de la colle chaude. Il a des mains de vieil homme et des yeux qui ont vu ce qu'il fallait voir.",
+        "« Je dessine ce qu'on me décrit », dit-il sans lever la tête. « On m'a décrit un homme brun avec une marque à la joue. Vous voulez que je vous dise qui ? »"
+      ],
+      choix:[
+        {label:"Payer pour le nom", detail:"−120 or",
+         requis:{or:120}, suite:"nom_paye", effets:{or:-120, suspicion:-5, flag:"su_commanditaire_connu"}},
+        {label:"Payer pour un autre visage", detail:"−200 or · il redessinera, en se trompant",
+         requis:{or:200}, suite:"faux_visage", effets:{or:-200, suspicion:-14}},
+        {label:"Le laisser à son encre", detail:"Il n'a rien fait d'autre que son travail",
+         suite:"parti"},
+      ]
+    },
+    nom_paye:{ fin:true,
+      texte:["Il écrit le nom sur une chute de papier, le plie, le pousse du bout du doigt. « Je vous ai pas vu. Vous m'avez rien acheté. » Le nom est celui d'un percepteur de la Couronne, en poste depuis quatre ans dans la vallée."],
+      effets:{xp:16}
+    },
+    faux_visage:{ fin:true,
+      texte:[
+        "« Un homme brun avec une marque à la joue », répète le copiste, et sa main part toute seule. Le menton s'allonge, le nez casse, la cicatrice descend de trois doigts.",
+        "« Voilà. Il y en aura trente comme ça d'ici la fin du mois, et pas un ne vous ressemble. » Il souffle sur l'encre. « Le vôtre, gardez-le pour vous. »"
+      ],
+      effets:{xp:20, flag:"su_faux_portrait"}
+    },
+    parti:{ fin:true,
+      texte:["Yohan sort. Derrière lui, la plume recommence à gratter le papier, et elle ne s'arrêtera pas."],
+      effets:{suspicion:4}
+    },
+  }
+},
+
+{
+  id:"SU_ENFANT", titre:"L'enfant qui a vu", sens:'hausse',
+  image:"evt_paria", requis:{ suspicionMin:20 },
+  scenes:{
+    start:{
+      texte:[
+        "Elle a huit ans peut-être, elle est assise sur le muret depuis un moment, et elle a vu ce qui s'est passé derrière la grange — la lumière bleue, la main levée, l'homme qui est tombé sans qu'on le touche.",
+        "Elle ne crie pas. Elle ne court pas. Elle regarde Yohan avec l'attention terrible des enfants qui ont compris quelque chose que les adultes leur cachent.",
+        "« C'est toi qui fais la foudre », dit-elle. Ce n'est pas une question."
+      ],
+      choix:[
+        {label:"Lui dire la vérité", detail:"Un enfant garde mal un secret, et se souvient bien",
+         suite:"verite"},
+        {label:"Lui faire peur", detail:"Efficace. Sale.",
+         suite:"peur", effets:{suspicion:-8, renom:-3}},
+        {label:"Lui donner une pièce et un mensonge", detail:"−15 or",
+         requis:{or:15}, suite:"piece", effets:{or:-15}},
+        {label:"Aller parler à sa mère avant elle", detail:"Jet de Volonté (13)",
+         test:{stat:"vol", dc:13}, reussite:"mere_ok", echec:"mere_ko"},
+      ]
+    },
+    verite:{ fin:true,
+      texte:[
+        "« Oui. »",
+        "Elle hoche la tête, comme si on venait de lui confirmer que le ciel est bleu. Puis elle dit : « Mon oncle aussi il faisait ça. Ils sont venus le chercher. » Et elle redescend du muret, et elle rentre chez elle.",
+        "Il ne saura jamais si elle en a parlé. Il saura, longtemps, qu'elle aurait pu."
+      ],
+      effets:{suspicion:5, xp:14, flag:"su_enfant_sait"}
+    },
+    peur:{ fin:true,
+      texte:[
+        "Il se penche, et il laisse l'Onde monter juste assez pour que l'air sente l'orage autour d'eux deux. Elle recule d'un pas, puis de trois, puis elle court.",
+        "Elle ne dira rien à personne. C'est exactement ce qu'il voulait, et il met deux jours à s'en remettre."
+      ],
+      effets:{fat:8, xp:6}
+    },
+    piece:{ fin:true,
+      texte:[
+        "« C'était un tour. Regarde. » Il fait sauter la pièce, la referme dans son poing, ouvre la main vide. La pièce est derrière l'oreille de la petite, et elle rit, et le monde redevient un endroit où les hommes ne font pas la foudre.",
+        "Elle repartira en racontant qu'un monsieur fait des tours. C'est une histoire qui voyage moins loin que l'autre."
+      ],
+      effets:{suspicion:-5, xp:10}
+    },
+    mere_ok:{ fin:true,
+      texte:[
+        "La mère écoute, les bras croisés, pendant qu'il explique qu'il y a eu une bagarre derrière la grange et que la petite a pu voir des choses qui font peur.",
+        "« Elle raconte des histoires depuis qu'elle sait parler », dit la femme. « Celle-là, elle la racontera aussi. Personne l'écoutera. » Elle marque un temps. « Et vous, partez avant la nuit. »"
+      ],
+      effets:{suspicion:-10, xp:16}
+    },
+    mere_ko:{ fin:true,
+      texte:[
+        "La mère écoute mal, puis pas du tout, puis elle appelle son mari. Le mari appelle son frère. À aucun moment personne ne prononce le mot, mais tout le monde dans la cour l'a en tête.",
+        "Yohan repart sous des regards qui l'accompagnent jusqu'au tournant."
+      ],
+      effets:{suspicion:12}
+    },
+  }
+},
+
+{
+  id:"SU_PRETRE", titre:"Le prêtre qui compte les têtes", sens:'hausse',
+  image:"evt_traque", requis:{ suspicionMin:30 },
+  scenes:{
+    start:{
+      texte:[
+        "Il fait le tour des hameaux avec un registre et deux gardes, et il inscrit les gens : nom, âge, maison, années de présence. La Purge a laissé ce goût-là aux administrations — savoir exactement qui est où, pour savoir tout de suite qui est en trop.",
+        "Il lève les yeux vers Yohan. « Vous n'êtes pas d'ici. »"
+      ],
+      choix:[
+        {label:"Donner un nom, un vrai métier, une histoire",
+         detail:"Jet de Volonté (14)",
+         test:{stat:"vol", dc:14}, reussite:"histoire_ok", echec:"histoire_ko"},
+        {label:"Acheter une ligne dans le registre", detail:"−150 or · une identité écrite vaut mieux qu'une identité vraie",
+         requis:{or:150}, suite:"achat", effets:{or:-150, suspicion:-16, flag:"su_inscrit_registre"}},
+        {label:"Partir avant qu'il ait fini d'écrire", detail:"+Fatigue · on ne discute pas avec un registre",
+         suite:"partir", effets:{fat:10, suspicion:6}},
+        {label:"Lui demander ce qu'il cherche vraiment",
+         detail:"Requiert du Renom · un homme connu peut poser des questions",
+         requis:{renomMin:20}, suite:"question"},
+      ]
+    },
+    histoire_ok:{ fin:true,
+      texte:[
+        "Charretier, de Malbrec, trois ans sur les routes du sel, une femme morte, pas d'enfant. Il le dit sans hésiter et sans détailler, du ton d'un homme qui a répété cette histoire mille fois parce qu'elle est vraie.",
+        "Le prêtre écrit. Les gardes bâillent. Le registre avale une identité de plus."
+      ],
+      effets:{suspicion:-9, xp:14}
+    },
+    histoire_ko:{ fin:true,
+      texte:[
+        "Il donne un nom, puis un village, et le prêtre relève la tête : « Malbrec a brûlé il y a six ans. Il n'y a plus de charretiers à Malbrec. »",
+        "Le silence dure trop longtemps. La plume ne bouge plus. L'un des gardes s'est déplacé sans qu'on l'entende."
+      ],
+      effets:{suspicion:14, xp:6}
+    },
+    achat:{ fin:true,
+      texte:[
+        "Les pièces passent sous le registre, ce qui est le seul endroit où le prêtre acceptait de les voir.",
+        "« Anselme Vaury, journalier, deux ans de présence », dit-il en écrivant. « Vous existez. Tâchez de ne pas me faire regretter que vous existiez. »"
+      ],
+      effets:{xp:12}
+    },
+    partir:{ fin:true,
+      texte:["Il tourne les talons au milieu d'une phrase, et il entend derrière lui la plume qui s'arrête, puis reprend. Ce qui vient d'être écrit n'est pas un nom : c'est une remarque."]
+    },
+    question:{ fin:true,
+      texte:[
+        "« Ce que je cherche ? » Le prêtre referme son registre sur son doigt. « Des trous. Des maisons où il manque un fils. Des villages où l'on compte quinze personnes et où l'on en nourrit seize. »",
+        "Il regarde Yohan longuement. « Les Parias ne se cachent pas dans les bois, contrairement à ce qu'on raconte. Ils se cachent dans les familles. Et les familles mentent très mal. »"
+      ],
+      effets:{xp:18, suspicion:2, flag:"su_methode_registres"}
+    },
+  }
+},
+
+/* ══════════════════ ON VOUS CHERCHE (35–70) ══════════════════ */
+{
+  id:"SU_RABATTEUR", titre:"Le rabatteur", sens:'baisse',
+  image:"evt_traque", requis:{ suspicionMin:35 },
+  scenes:{
+    start:{
+      texte:[
+        "Il s'assoit en face sans demander, pose ses deux mains à plat sur la table pour montrer qu'elles sont vides, et parle bas.",
+        "« Je travaille pour ceux qui vous cherchent. Je suis payé à la piste, pas à la prise. » Il fait tourner une chope qu'il n'a pas commandée. « Une piste vaut trente couronnes. Une fausse piste, c'est le même prix pour moi. »"
+      ],
+      choix:[
+        {label:"Acheter une fausse piste", detail:"−250 or · ils chercheront trois semaines dans la mauvaise vallée",
+         requis:{or:250}, suite:"achat", effets:{or:-250, suspicion:-20}},
+        {label:"Lui acheter la liste de ce qu'ils savent", detail:"−400 or",
+         requis:{or:400}, suite:"liste", effets:{or:-400, suspicion:-10, flag:"su_liste_traqueurs"}},
+        {label:"Refuser — et le laisser vivre", detail:"Il repartira vendre ce qu'il a vu ici",
+         suite:"refus", effets:{suspicion:8}},
+        {label:"Refuser autrement", detail:"Il n'y a pas de bonne façon de faire ça",
+         suite:"autre"},
+      ]
+    },
+    achat:{ fin:true,
+      texte:[
+        "L'homme empoche, se lève, et devient soudain très bavard : il racontera un homme brun aperçu sur la route du nord, avec une femme et un chariot, il donnera trois noms d'auberge et une date.",
+        "« Ils vont y aller », dit-il. « Ils y vont toujours. C'est bien pour ça qu'on me paie. »"
+      ],
+      effets:{xp:16}
+    },
+    liste:{ fin:true,
+      texte:[
+        "Ce qu'ils savent tient sur deux feuillets, et c'est plus qu'il n'aurait voulu : la vallée, à peu près ; l'âge, à trois ans près ; la cicatrice ; un compagnonnage avec un nain ; et surtout la mention, deux fois soulignée, d'un intérêt de la maison de Varenne.",
+        "Ce dernier mot vaut à lui seul les quatre cents couronnes."
+      ],
+      effets:{xp:24}
+    },
+    refus:{ fin:true,
+      texte:["« Comme vous voulez. » Il finit la chope qu'il n'a pas commandée et s'en va d'un pas tranquille. Ce qu'il vient de voir vaut trente couronnes, et il ira les toucher avant la fin de la semaine."]
+    },
+    autre:{ fin:true,
+      texte:["Il n'y a pas de bonne façon de faire ça. Il y a une ruelle, une main sur une bouche, et un homme qui ne rapportera rien à personne.", "Yohan met deux jours à cesser de revoir ses deux mains posées à plat sur la table."],
+      effets:{suspicion:-12, renom:-6, fat:10, flag:"su_rabatteur_mort"}
+    },
+  }
+},
+
+{
+  id:"SU_FAUX_PARIA", titre:"Un autre porte le nom", sens:'baisse',
+  image:"evt_paria", requis:{ suspicionMin:40 },
+  scenes:{
+    start:{
+      texte:[
+        "Ils l'ont pris ce matin sur la place. Un homme de vingt-cinq ans, maigre, terrorisé, qui n'a jamais fait tomber personne d'un geste de la main et qui a le malheur d'avoir une marque de naissance sur la joue gauche.",
+        "La foule y croit. Les gardes aussi, à peu près. Le sergent de la Couronne, lui, sait très bien que ce n'est pas lui — mais il a un rapport à rendre et une prime à toucher.",
+        "Si on le laisse pendre, plus personne ne cherchera de Paria dans cette vallée avant longtemps."
+      ],
+      choix:[
+        {label:"Le laisser porter le nom", detail:"−25 Suspicion · et il meurt à votre place",
+         suite:"laisser", effets:{suspicion:-25, renom:-10, reputation:{parias:-14}, flag:"su_innocent_pendu"}},
+        {label:"Payer sa rançon au sergent", detail:"−500 or · un rapport peut se réécrire",
+         requis:{or:500}, suite:"rancon", effets:{or:-500, suspicion:-6, reputation:{humains:4}}},
+        {label:"Le sortir de là, de nuit et sans bruit", detail:"Jet d'Agilité (15)",
+         test:{stat:"agi", dc:15}, reussite:"evasion_ok", echec:"evasion_ko"},
+        {label:"Se montrer, et faire la démonstration", detail:"Ils sauront qui est le vrai · très cher en visibilité",
+         suite:"montrer", effets:{suspicion:22, renom:12, reputation:{parias:18}}},
+      ]
+    },
+    laisser:{ fin:true,
+      texte:[
+        "Il regarde depuis le fond de la place, le capuchon relevé, et il ne bouge pas. Ça dure moins longtemps qu'on ne croit.",
+        "Le soir même, un courrier part vers la capitale annonçant que le Paria de la vallée a été pris et exécuté. Pendant six mois, personne ne cherchera plus rien ici.",
+        "Il y a des choses qu'on achète avec de l'or, et d'autres qu'on achète autrement."
+      ],
+      effets:{xp:12}
+    },
+    rancon:{ fin:true,
+      texte:[
+        "Le sergent compte les pièces deux fois, ce qui est le signe d'un homme honnête à sa manière.",
+        "« Erreur d'identification », dit-il en déchirant la première page de son rapport. « Ça arrive plus souvent qu'on croit. » Le garçon est relâché à l'aube, sans un mot, et il court sans se retourner.",
+        "La Couronne, elle, continuera de chercher."
+      ],
+      effets:{xp:20}
+    },
+    evasion_ok:{ fin:true,
+      texte:[
+        "Un toit, une lucarne, un verrou qui cède sous la lame, et un garçon qu'il faut porter les cinquante premiers pas parce que ses jambes ne le tiennent plus.",
+        "À l'aube, la cellule est vide et le sergent a un problème. Le rapport dira ce qu'il pourra : un Paria qui s'évade d'une cellule fermée, ça se raconte."
+      ],
+      effets:{xp:26, suspicion:5, reputation:{parias:10}, flag:"su_evasion_reussie"}
+    },
+    evasion_ko:{ fin:true,
+      texte:[
+        "Le verrou tient, le chien aboie, et il faut redescendre du toit plus vite qu'on n'y est monté.",
+        "Le garçon est pendu le lendemain, et cette fois il y a en plus la certitude, dans toute la vallée, que quelqu'un a essayé de le faire sortir."
+      ],
+      effets:{suspicion:16, renom:-4, fat:12}
+    },
+    montrer:{ fin:true,
+      texte:[
+        "Il monte sur la margelle du puits, au milieu de la place, et il lève la main.",
+        "L'air se met à sentir l'orage. La corde du gibet prend feu à mi-hauteur, proprement, sans que rien d'autre ne brûle. Deux cents personnes voient exactement la même chose au même instant, et deux cents personnes en parleront pour le restant de leur vie.",
+        "Le garçon est libre. Yohan ne l'est plus du tout."
+      ],
+      effets:{xp:30, fat:20, flag:"su_demonstration_publique"}
+    },
+  }
+},
+
+{
+  id:"SU_MEDECIN", titre:"Le médecin des pauvres", sens:'baisse',
+  image:"evt_paria", requis:{ suspicionMin:25 },
+  scenes:{
+    start:{
+      texte:[
+        "Il soigne à l'arrière d'une remise, pour rien, ceux que les barbiers-chirurgiens de la ville ne recevraient pas. Il a des mains sales et des instruments propres, ce qui est l'inverse de tous ses confrères.",
+        "« Vous êtes venu pour le bras », dit-il sans lever les yeux, « ou pour l'autre chose ? »",
+        "Il pose son couteau. « Parce que la brûlure que vous avez à l'intérieur du poignet, j'en ai vu quatre dans ma vie. Trois appartenaient à des gens qui sont morts pendus. »"
+      ],
+      choix:[
+        {label:"Le laisser vous soigner et se taire", detail:"Il sait déjà · le reste dépend de lui",
+         suite:"soigne"},
+        {label:"L'acheter", detail:"−180 or · un homme qui soigne gratuitement a des dettes",
+         requis:{or:180}, suite:"achete", effets:{or:-180, suspicion:-12}},
+        {label:"Lui proposer autre chose que de l'or",
+         detail:"Sa remise manque de tout · +Réputation, −Suspicion à retardement",
+         suite:"echange", effets:{suspicion:-8, reputation:{parias:8, humains:5}}},
+        {label:"Partir immédiatement", detail:"Il reste un homme qui a vu la marque",
+         suite:"fuite", effets:{suspicion:7}},
+      ]
+    },
+    soigne:{ fin:true,
+      texte:[
+        "Il recoud sans parler, serre le bandage, essuie ses mains. Puis, au moment où Yohan passe la porte :",
+        "« Le quatrième n'est pas mort. Il tient une forge à Thal-Varen et il porte des manches longues même en été. » Il range son fil. « Ce que je veux dire, c'est que ça se fait. »"
+      ],
+      effets:{pv:14, xp:14, suspicion:-4, flag:"su_medecin_allie"}
+    },
+    achete:{ fin:true,
+      texte:["L'or disparaît dans une boîte à instruments. « Ça paiera l'opium pour l'hiver », dit-il. « Et pour ce qui est de ce que j'ai vu : je vois soixante bras par semaine, monsieur. Je ne me souviens d'aucun. »"],
+      effets:{pv:10, xp:10, flag:"su_medecin_allie"}
+    },
+    echange:{ fin:true,
+      texte:[
+        "Deux jours à porter, à charger, à ramener d'une ville voisine ce qui manquait : de la toile, de l'alcool, du fil, une seconde table.",
+        "Le troisième jour, la remise reçoit douze personnes au lieu de quatre, et douze personnes verront un homme qui aide le médecin des pauvres. Aucune ne verra un Paria. C'est ainsi qu'on se cache le mieux : en étant vu en train de faire autre chose."
+      ],
+      effets:{xp:18, fat:8, flag:"su_medecin_allie"}
+    },
+    fuite:{ fin:true,
+      texte:["Il sort sans se faire soigner, le bras toujours ouvert sous la manche. Derrière lui, un homme qui n'a rien demandé se retrouve avec un secret qu'il n'a pas choisi."]
+    },
+  }
+},
+
+/* ══════════════════ CHASSE OUVERTE (70+) ══════════════════ */
+{
+  id:"SU_CORDON", titre:"Le cordon", sens:'hausse',
+  image:"evt_traque", requis:{ suspicionMin:65 },
+  scenes:{
+    start:{
+      texte:[
+        "Ils ne cherchent plus un homme : ils ferment une vallée. Deux compagnies de la Couronne tiennent les trois routes, on fouille les charrettes, on compte les gens à l'entrée et à la sortie des villages.",
+        "Ce n'est plus une prime, c'est une opération. Quelqu'un, quelque part, a signé un ordre et débloqué de l'argent.",
+        "Le cordon se resserre d'un village par jour."
+      ],
+      choix:[
+        {label:"Passer par la montagne", detail:"Jet d'Agilité (15) · trois jours de rocaille",
+         test:{stat:"agi", dc:15}, reussite:"montagne_ok", echec:"montagne_ko", effets:{fat:14}},
+        {label:"Se faire passer pour un des leurs", detail:"Jet de Volonté (16)",
+         test:{stat:"vol", dc:16}, reussite:"uniforme_ok", echec:"uniforme_ko"},
+        {label:"Acheter le passage à un officier", detail:"−700 or",
+         requis:{or:700}, suite:"achat", effets:{or:-700, suspicion:-18}},
+        {label:"Rester, et laisser le cordon se refermer sur rien",
+         detail:"Ne rien faire pendant qu'on vous cherche · coûteux en nerfs",
+         suite:"attendre", effets:{fat:18, suspicion:-10}},
+      ]
+    },
+    montagne_ok:{ fin:true,
+      texte:["Trois jours de pierre, de vent et d'eau glacée, et un col que les cartes de la Couronne ne mentionnent pas parce que personne de sensé ne le prend. Il redescend de l'autre côté, sale, vidé, et hors du filet."],
+      effets:{suspicion:-22, xp:20}
+    },
+    montagne_ko:{ fin:true,
+      texte:["Le col est tenu. Ils ne sont que quatre, ils ont froid, ils ne s'attendaient à personne — mais ils sont quatre, et il faut redescendre par où l'on est monté en les laissant faire leur rapport."],
+      effets:{suspicion:10, fat:12, xp:10}
+    },
+    uniforme_ok:{ fin:true,
+      texte:[
+        "Un manteau pris sur une corde à linge, une hallebarde ramassée contre un mur, et l'aplomb de traverser le poste de contrôle en engueulant un sergent sur la lenteur des fouilles.",
+        "On lui répond « oui, monsieur ». On lui ouvre la barrière. Il continue de marcher pendant deux lieues sans respirer normalement."
+      ],
+      effets:{suspicion:-20, xp:24}
+    },
+    uniforme_ko:{ fin:true,
+      texte:["Le manteau n'est pas de la bonne compagnie. Un caporal le remarque avant même de regarder le visage, et la seule sortie passe par un fossé, une haie, et une demi-journée à plat ventre dans l'eau."],
+      effets:{suspicion:14, fat:16, pv:-10}
+    },
+    achat:{ fin:true,
+      texte:[
+        "L'officier prend l'argent dans le noir, sans compter, et regarde ailleurs pendant très exactement le temps qu'il faut.",
+        "« Le cordon tient jusqu'à la Saint-Aubin », dit-il quand même. « Après, ils redéploient au nord. Vous avez neuf jours. »"
+      ],
+      effets:{xp:14, flag:"su_officier_achete"}
+    },
+    attendre:{ fin:true,
+      texte:[
+        "Il ne bouge pas. Il dort dans une cave, mange ce qu'on lui descend, et écoute pendant onze jours des bottes passer au-dessus de sa tête.",
+        "Le cordon se referme, ne trouve rien, et se défait. Un rapport partira disant que le Paria a quitté la vallée depuis longtemps. Yohan sort d'une cave avec l'impression d'avoir vieilli de deux ans."
+      ],
+      effets:{xp:18}
+    },
+  }
+},
+
+{
+  id:"SU_MARCHE", titre:"On vous offre un marché", sens:'baisse',
+  image:"evt_traque", requis:{ suspicionMin:70 },
+  scenes:{
+    start:{
+      texte:[
+        "L'homme attend au bout de la jetée, seul, sans arme visible, avec la certitude tranquille de ceux qui ne sont jamais seuls.",
+        "« Vous êtes fatigant à chercher », dit-il. « Alors on va arrêter. Ma maison peut faire disparaître votre nom des registres, éteindre la prime et rappeler deux compagnies. En trois semaines, vous n'existez plus. »",
+        "Il laisse le silence faire son travail. « En échange, quand nous vous appellerons, vous viendrez. »"
+      ],
+      choix:[
+        {label:"Accepter", detail:"−40 Suspicion · et une dette qu'on vous rappellera",
+         suite:"accepte", effets:{suspicion:-40, flag:"su_dette_maison", reputation:{humains:8, parias:-10}}},
+        {label:"Refuser", detail:"Refuser un marché, c'est en devenir un",
+         suite:"refuse", effets:{suspicion:10, renom:6}},
+        {label:"Demander le nom de la maison", detail:"Jet de Précision (14)",
+         test:{stat:"precision", dc:14}, reussite:"nom_ok", echec:"nom_ko"},
+        {label:"Négocier autre chose que soi", detail:"Requiert du Renom · on ne marchande qu'avec ce qu'on a",
+         requis:{renomMin:40}, suite:"negocie", effets:{suspicion:-22, or:-800}},
+      ]
+    },
+    accepte:{ fin:true,
+      texte:[
+        "Il n'y a pas de papier, pas de sceau, pas de témoin. Il y a une phrase dite à voix basse au bout d'une jetée, et c'est amplement suffisant.",
+        "Trois semaines plus tard, les placards ont disparu des portes d'auberge. Les compagnies sont reparties vers le nord. Un homme brun avec une marque à la joue peut de nouveau traverser un village sans qu'on lève la tête.",
+        "Un jour, on l'appellera. Ce jour-là, il n'aura pas le choix, et il le sait déjà."
+      ],
+      effets:{xp:20}
+    },
+    refuse:{ fin:true,
+      texte:[
+        "« Non. »",
+        "L'homme hoche la tête, comme si c'était la réponse attendue et qu'elle ne changeait pas grand-chose. « Alors nous continuerons de vous chercher, et un jour nous vous trouverons, et ce jour-là il n'y aura plus d'offre. »",
+        "Il s'en va. Il ne se retourne pas. C'est la partie la plus désagréable."
+      ],
+      effets:{xp:16}
+    },
+    nom_ok:{
+      texte:[
+        "Il y a une bague, sous le gant, dont la forme se devine — et un pli d'habitude, dans la façon dont l'homme tient les mains derrière le dos, qu'on ne prend qu'en servant une maison qui exige la tenue.",
+        "Varenne. Ce n'est pas la Couronne qui le traque : c'est une duchesse qui le collectionne."
+      ],
+      effets:{xp:24, flag:"su_varenne_derriere"},
+      choix:[
+        {label:"Accepter, maintenant qu'on sait", detail:"−40 Suspicion",
+         suite:"accepte", effets:{suspicion:-40, flag:"su_dette_maison"}},
+        {label:"Refuser en connaissance de cause", suite:"refuse", effets:{suspicion:8}},
+      ]
+    },
+    nom_ko:{
+      texte:["Rien. Pas une bague, pas un accent, pas un pli. L'homme a été choisi précisément pour ne rien laisser lire, et il attend la réponse avec une patience de fonctionnaire."],
+      choix:[
+        {label:"Accepter", suite:"accepte", effets:{suspicion:-40, flag:"su_dette_maison"}},
+        {label:"Refuser", suite:"refuse", effets:{suspicion:10}},
+      ]
+    },
+    negocie:{ fin:true,
+      texte:[
+        "« Ma personne n'est pas à vendre. Mon bras l'est, à la pièce, et il coûte cher. »",
+        "L'homme sourit pour la première fois. On ne signe rien, on ne promet rien : on paie huit cents couronnes pour trois interventions d'écritures dans des registres, et le nom s'efface à moitié.",
+        "Ce n'est pas une dette. C'est une relation d'affaires, ce qui est plus cher et beaucoup plus sûr."
+      ],
+      effets:{xp:26, renom:8, flag:"su_affaires_maison"}
+    },
+  }
+},
+
+/* ══════════════════ CE QUI FAIT BAISSER, TRANQUILLEMENT ══════════════════ */
+{
+  id:"SU_MOISSON", titre:"Deux semaines aux moissons", sens:'baisse',
+  image:"evt_paria", requis:{ suspicionMin:15 },
+  scenes:{
+    start:{
+      texte:[
+        "La ferme manque de bras et ne pose pas de questions : c'est la définition même d'un bon endroit.",
+        "Quatorze jours à faucher, lier, charger, dormir dans la grange et manger à la table commune. Personne ne demande d'où vient l'homme silencieux qui travaille pour la nourriture — dans ce pays, la moitié des journaliers vient d'un endroit dont ils ne parlent pas."
+      ],
+      choix:[
+        {label:"Faire les deux semaines entières",
+         detail:"Du temps perdu, un visage oublié",
+         suite:"complet"},
+        {label:"Une semaine, puis reprendre la route",
+         detail:"Moitié moins de temps, moitié moins d'effet",
+         suite:"moitie"},
+        {label:"Se servir de l'Onde pour aller plus vite",
+         detail:"Trois jours au lieu de quatorze · et quatorze témoins",
+         requis:{pouvoir:"foudre"}, suite:"onde"},
+      ]
+    },
+    complet:{ fin:true,
+      texte:[
+        "Il apprend le nom des chiens, la façon dont le vieux tient sa faux, et à quel moment exact la fille aînée sert la soupe. Il ne dit presque rien pendant deux semaines et c'est la période la plus reposante depuis des mois.",
+        "En partant, on lui donne du pain et un chapeau. Personne dans cette vallée ne se souviendra de lui, et c'est exactement ce qu'il était venu chercher."
+      ],
+      effets:{suspicion:-18, fat:-20, or:40, xp:8}
+    },
+    moitie:{ fin:true,
+      texte:["Sept jours, la moitié du champ, et une paie honnête. Il repart avant qu'on ait eu le temps de s'habituer à lui — ce qui, tout compte fait, est la même chose que ne pas être venu."],
+      effets:{suspicion:-9, fat:-10, or:20, xp:4}
+    },
+    onde:{ fin:true,
+      texte:[
+        "Le champ est fauché en trois jours par un homme seul, et personne dans la ferme ne comprend comment, mais tout le monde a une idée.",
+        "Le vieux le paie quand même. Il le paie en le regardant dans les yeux, et il dit : « Partez ce soir. » Ce n'est pas de l'hostilité, c'est de la prudence, et c'est pire."
+      ],
+      effets:{suspicion:12, fat:16, or:60, xp:12}
+    },
+  }
+},
+
+{
+  id:"SU_CONFESSION", titre:"Celui qui savait déjà", sens:'baisse',
+  image:"evt_paria", requis:{ suspicionMin:20, reputationMin:{ parias:10 } },
+  scenes:{
+    start:{
+      texte:[
+        "Ils sont quatre dans la cave, et ils attendaient depuis un moment. Pas des soldats : un tonnelier, deux femmes, un garçon de quinze ans. Des gens qui ont tous perdu la même chose au même moment.",
+        "« On sait qui vous êtes », dit le tonnelier. « On le sait depuis le début de l'été. On n'a rien dit à personne et on ne dira rien. »",
+        "Il pose une main sur la table. « Mais on aimerait savoir ce que vous comptez faire. Parce que nous, on a des enfants, et si vous vous faites prendre dans cette vallée, c'est nous qu'on interrogera. »"
+      ],
+      choix:[
+        {label:"Leur dire la vérité, entièrement",
+         detail:"Un réseau qui sait est un réseau qui protège",
+         suite:"verite", effets:{suspicion:-14, reputation:{parias:12}, flag:"su_reseau_vallee"}},
+        {label:"Leur promettre de partir", detail:"−Suspicion, et un lieu de moins où revenir",
+         suite:"partir", effets:{suspicion:-10, fat:8}},
+        {label:"Leur demander de l'aide", detail:"Jet de Volonté (13)",
+         test:{stat:"vol", dc:13}, reussite:"aide_ok", echec:"aide_ko"},
+        {label:"Nier jusqu'au bout", detail:"Ils n'y croiront pas, et ils cesseront de couvrir",
+         suite:"nie", effets:{suspicion:9, reputation:{parias:-8}}},
+      ]
+    },
+    verite:{ fin:true,
+      texte:[
+        "Il parle une heure. La Purge, Karlsberg, l'Onde, ce qu'il cherche et pourquoi. Personne ne l'interrompt.",
+        "À la fin, la plus âgée des deux femmes dit simplement : « Ma sœur est morte dans la grange de Vaubien en l'an dix-sept. » Puis, après un silence : « Vous logerez chez moi quand vous repasserez. »",
+        "Il y a désormais quatre personnes dans cette vallée qui mentiront pour lui sans qu'on ait besoin de le leur demander."
+      ],
+      effets:{xp:22}
+    },
+    partir:{ fin:true,
+      texte:["Il promet, et il tient : trois jours plus tard il est à quinze lieues. Le tonnelier avait raison — c'était la demande d'un homme raisonnable, et c'est aussi la fin d'un endroit où il aurait pu revenir."],
+      effets:{xp:10}
+    },
+    aide_ok:{ fin:true,
+      texte:[
+        "Ce qu'il demande est modeste et c'est pour ça que ça marche : une cave, un nom d'emprunt tenu par quatre bouches, et quelqu'un pour dire au prévôt qu'on a vu passer un homme brun sur la route de l'ouest.",
+        "Le garçon de quinze ans se propose pour le mensonge. Il le fera très bien."
+      ],
+      effets:{suspicion:-20, reputation:{parias:14}, xp:20, flag:"su_reseau_vallee"}
+    },
+    aide_ko:{ fin:true,
+      texte:["Le tonnelier écoute, puis secoue la tête. « On vous couvre. On ne travaille pas pour vous. Ce n'est pas la même chose et je ne veux pas que ça le devienne. » C'est un refus honnête, et il n'y a rien à répondre."],
+      effets:{suspicion:-4, xp:8}
+    },
+    nie:{ fin:true,
+      texte:[
+        "Il nie calmement, avec des mots simples, et il voit dans leurs yeux le moment exact où ils cessent de le croire — et, juste après, le moment où ils cessent de vouloir le protéger.",
+        "Le tonnelier se lève le premier. « Alors on s'est trompés. Bonne route. »"
+      ],
+      effets:{xp:6}
+    },
+  }
+},
+
+{
+  id:"SU_TAVERNE", titre:"L'histoire qu'on raconte", sens:'hausse',
+  image:"evt_paria", requis:{ suspicionMin:18 },
+  scenes:{
+    start:{
+      texte:[
+        "Le conteur travaille bien : il fait taire la salle avant de commencer, et il a le sens du moment où l'on jette une bûche dans le feu.",
+        "L'histoire qu'il raconte ce soir est celle d'un homme qui traverse les vallées, qui prend l'argent des puissants et qui fait tomber les hommes d'un geste. Il l'appelle « le Loup de Karlsberg ». La salle adore.",
+        "Il y a trois détails dans son récit que seules quatre personnes vivantes peuvent connaître."
+      ],
+      choix:[
+        {label:"Le laisser finir et payer sa tournée",
+         detail:"Une légende bien racontée protège l'homme qui la vit",
+         suite:"laisse", effets:{or:-30, renom:8, suspicion:6}},
+        {label:"L'interrompre et corriger l'histoire",
+         detail:"Jet de Volonté (13) · faire de la légende quelque chose d'inoffensif",
+         test:{stat:"vol", dc:13}, reussite:"corrige_ok", echec:"corrige_ko"},
+        {label:"Attendre la fin et lui demander où il a entendu ça",
+         detail:"Trois détails ne se devinent pas",
+         suite:"source", effets:{suspicion:3}},
+        {label:"Sortir avant la fin", detail:"L'histoire continuera sans lui, et elle grandira",
+         suite:"sort", effets:{suspicion:8, renom:4}},
+      ]
+    },
+    laisse:{ fin:true,
+      texte:[
+        "Il paie la tournée du conteur comme n'importe quel client content, et il écoute la fin d'une histoire dont il est le sujet en hochant la tête aux bons endroits.",
+        "Le Loup de Karlsberg fait deux têtes de plus que lui et ne saigne jamais. Tant mieux : plus la légende est grande, moins elle ressemble à l'homme assis au fond."
+      ],
+      effets:{xp:12}
+    },
+    corrige_ok:{ fin:true,
+      texte:[
+        "« C'est pas comme ça. » La salle se tourne. « Moi j'y étais, à Vaubien. Le type était petit, il puait, et il s'est enfui en laissant la bourse. »",
+        "Il raconte dix minutes d'une histoire médiocre où le héros a peur, se trompe et gagne mal. Personne n'applaudit. Le conteur le déteste. C'est parfait : une légende qui ennuie est une légende qui meurt."
+      ],
+      effets:{suspicion:-14, renom:-6, xp:16}
+    },
+    corrige_ko:{ fin:true,
+      texte:[
+        "Il l'interrompt et se rend compte, à la troisième phrase, qu'il en sait trop et qu'il vient de le montrer à quarante personnes.",
+        "« Et vous savez ça comment, vous ? » demande quelqu'un au fond. La question reste dans la salle bien après que Yohan en soit sorti."
+      ],
+      effets:{suspicion:16, xp:6}
+    },
+    source:{ fin:true,
+      texte:[
+        "Le conteur boit, s'essuie la bouche, et n'a aucune raison de mentir : « Un homme de Varenne. Il paie pour que je la raconte dans les auberges de la vallée. Deux couronnes par soir. »",
+        "Quelqu'un est en train de fabriquer une légende, exprès, et il paie pour ça. Reste à savoir si c'est pour le rendre populaire ou pour le rendre repérable."
+      ],
+      effets:{xp:20, flag:"su_legende_fabriquee"}
+    },
+    sort:{ fin:true,
+      texte:["Il sort au milieu d'une phrase, dans le froid, pendant que quarante personnes apprennent son histoire par cœur. Elle sera à trois vallées d'ici avant la fin du mois."]
+    },
+  }
+},
+
+{
+  id:"SU_DELATION", titre:"Celui qui vous a vendu", sens:'hausse',
+  image:"evt_traque", requis:{ suspicionMin:45 },
+  scenes:{
+    start:{
+      texte:[
+        "On l'apprend par hasard, comme toujours : une phrase de trop chez un maréchal-ferrant, un nom qui revient deux fois.",
+        "L'homme qui a parlé n'est pas un ennemi. C'est un aubergiste chez qui Yohan a dormi trois nuits l'hiver dernier, qui a une femme malade et qui avait besoin de quarante couronnes plus qu'il n'avait besoin de sa tranquillité.",
+        "Il est chez lui, en ce moment, à deux rues."
+      ],
+      choix:[
+        {label:"Aller lui parler", detail:"Jet de Volonté (13) · il pourrait encore servir",
+         test:{stat:"vol", dc:13}, reussite:"parle_ok", echec:"parle_ko"},
+        {label:"Le payer plus cher qu'eux", detail:"−300 or · un homme qui se vend se rachète",
+         requis:{or:300}, suite:"rachat", effets:{or:-300, suspicion:-14}},
+        {label:"Ne rien faire", detail:"Il recommencera",
+         suite:"rien", effets:{suspicion:10}},
+        {label:"Régler la question", detail:"Définitivement · et tout le quartier comprendra pourquoi",
+         suite:"regle", effets:{suspicion:-6, renom:-8, reputation:{humains:-10}, flag:"su_delateur_mort"}},
+      ]
+    },
+    parle_ok:{ fin:true,
+      texte:[
+        "Il ne l'accuse pas. Il s'assoit, demande des nouvelles de la femme, écoute la réponse, et attend.",
+        "L'aubergiste craque au bout de quatre minutes. Il pleure, il explique, il propose de rendre l'argent qu'il a déjà dépensé en remèdes.",
+        "« Gardez-le », dit Yohan. « Et la prochaine fois qu'ils reviennent, dites-leur que je suis parti vers le sud. »"
+      ],
+      effets:{suspicion:-16, xp:20, flag:"su_aubergiste_retourne"}
+    },
+    parle_ko:{ fin:true,
+      texte:[
+        "Il s'assoit, et l'aubergiste comprend immédiatement pourquoi. La panique fait le reste : l'homme hurle avant même qu'on lui ait rien demandé, et deux voisins sortent sur le pas de leur porte.",
+        "Il faut partir vite, et tout le monde dans la rue sait maintenant qu'il y avait une raison de hurler."
+      ],
+      effets:{suspicion:14, fat:8}
+    },
+    rachat:{ fin:true,
+      texte:[
+        "Trois cents couronnes, c'est sept fois ce qu'ils lui ont donné, et l'aubergiste les regarde comme on regarde une porte de sortie.",
+        "« Ils repassent tous les mois », dit-il enfin. « Je leur dirai ce que vous voudrez. » C'est un homme qu'on a acheté deux fois : il se vendra une troisième. Mais pas cette saison."
+      ],
+      effets:{xp:14, flag:"su_aubergiste_retourne"}
+    },
+    rien:{ fin:true,
+      texte:["Il n'y va pas. Il change d'auberge, de route, d'habitudes. Quelque part derrière lui, un homme continue de raconter à des gens qui paient tout ce dont il se souvient."]
+    },
+    regle:{ fin:true,
+      texte:[
+        "C'est rapide et ça ne ressemble à rien de ce qu'on raconte dans les histoires.",
+        "L'aubergiste ne parlera plus. Sa femme, elle, parlera beaucoup, et tout un quartier saura qu'on ne dénonce pas impunément — ce qui protège Yohan, et le rend exactement aussi effrayant que ce qu'ils disent de lui."
+      ],
+      effets:{xp:10, fat:6}
+    },
+  }
+},
+
+];
+
+</script>
+<script>
+/* src/data/politique.js */
+/* PARIAS — Les puissances, et ce qu'elles font pendant que vous travaillez
+ *
+ * Les *peuples* ont des tensions (lore.js) et une opinion de Yohan
+ * (reputation.js). Ce sont deux choses lentes et larges. Ce qui manquait, c'est
+ * ce qui se joue vraiment : cinq puissances qui se disputent l'après-Astrah, et
+ * une sixième qui n'existe pas encore — la sienne, à Karlsberg.
+ *
+ * Chaque puissance a une **influence** (0–100) qui bouge toute seule selon
+ * l'état du monde, une **posture** envers Yohan qui découle de ce qu'il fait, et
+ * des **édits** : des décisions politiques qui tombent d'elles-mêmes quand leur
+ * heure vient, et qui changent le jeu.
+ *
+ * Le Second Empire n'est pas un événement : c'est le nom qu'on donnera à celle
+ * de ces puissances qui aura gagné.
+ */
+
+const POUVOIRS = [
+  {
+    id:'astrah', nom:"La Couronne d'Astrah", meneur:"Léopold IV — le Roi de Cendre",
+    credo:"Tenir. Ne rien céder qu'on ne puisse reprendre.",
+    depart:56,
+    /* Elle s'effrite du seul fait que le temps passe et que personne n'y croit. */
+    derive(){
+      let d = -0.6;
+      if((hero.tensions||{}).humains >= 60) d -= 0.8;
+      if(hasFlag('lucius_reporte')) d += 0.4;
+      if(influencePouvoir('varenne') > 60) d -= 0.5;
+      return d;
+    },
+    posture(){
+      let n = -reputationDe('humains') / 4 - (hero.suspicion || 0) / 3;
+      if(hasFlag('su_demonstration_publique')) n -= 20;
+      if(hasFlag('su_officier_achete')) n += 6;
+      if(hasFlag('banniere_haute')) n -= 12;
+      return n;
+    },
+  },
+  {
+    id:'lucius', nom:"Le parti de Lucius", meneur:"Lucius Furius Augustus",
+    credo:"Un État ne se répare pas : il se refonde, et il se refonde par les armes.",
+    depart:34,
+    derive(){
+      let d = 0.5;
+      if((hero.tensions||{}).humains >= 50) d += 1.0;
+      if(hasFlag('incident_frontiere')) d += 0.8;
+      if(hasFlag('lucius_reporte')) d -= 1.2;
+      if(influencePouvoir('astrah') < 40) d += 0.6;
+      return d;
+    },
+    posture(){
+      /* Il ne hait pas Yohan : il hait ce qu'il est. Plus Yohan compte, pire c'est. */
+      let n = -20 - renomActuel() / 3 - (hero.chantier || []).length * 4;
+      if(reputationDe('parias') > 50) n -= 12;
+      if(hasFlag('lucius_reporte')) n += 25;
+      return n;
+    },
+  },
+  {
+    id:'varenne', nom:"La maison de Varenne", meneur:"Isolde de Varenne",
+    credo:"On ne prend pas un empire. On le laisse tomber dans la main qu'on tend.",
+    depart:41,
+    derive(){
+      let d = 0.7;
+      if(influencePouvoir('astrah') < 50) d += 0.5;
+      if(hasFlag('su_dette_maison')) d += 1.0;
+      if(hasFlag('vauclair_apaisee')) d += 0.4;
+      if(hasFlag('isolde_rompue')) d -= 1.5;
+      return d;
+    },
+    posture(){
+      /* Elle collectionne ce qui est rare. Un Paria traqué a de la valeur. */
+      let n = 10 + (hero.suspicion || 0) / 4 + renomActuel() / 5;
+      if(hasFlag('su_dette_maison')) n += 25;
+      if(hasFlag('su_affaires_maison')) n += 15;
+      if(hasFlag('isolde_rompue')) n -= 60;
+      return n;
+    },
+  },
+  {
+    id:'lisieres', nom:"La Cour des Lisières", meneur:"Le conseil des gardiens",
+    credo:"Ce qui se décide chez les hommes finit toujours par entrer dans la forêt.",
+    depart:38,
+    derive(){
+      let d = -0.1;
+      if((hero.tensions||{}).elfes >= 55) d += 0.7;
+      if((hero.tensions||{}).elfes_noirs >= 60) d += 0.5;
+      return d;
+    },
+    posture(){ return reputationDe('elfes') / 1.5 + reputationDe('elfes_noirs') / 4; },
+  },
+  {
+    id:'portes', nom:"Les Portes de Kar-Durak", meneur:"Le maître des Portes",
+    credo:"On ne fait pas de politique. On fait des contrats, et on les tient.",
+    depart:44,
+    derive(){
+      let d = 0.1;
+      if((hero.tensions||{}).nains >= 60) d -= 0.8;
+      if((hero.tensions||{}).peaux_vertes >= 70) d -= 0.5;
+      return d;
+    },
+    posture(){ return reputationDe('nains') / 1.4 + (hero.chantier || []).length * 3; },
+  },
+  {
+    id:'karlsberg', nom:"Karlsberg", meneur:"Yohan de Karlsberg",
+    joueur:true,
+    credo:"Un nom qu'on avait rayé, et des murs qu'on relève à la main.",
+    depart:2,
+    /* La seule puissance dont l'influence dépend entièrement de ce que fait le
+     * joueur : les murs qu'il relève, les lieux qu'il a réglés, ce qu'on pense
+     * de lui chez les Parias. */
+    derive(){
+      const murs = (hero.chantier || []).length;
+      const clos = (typeof dossiersClos === 'function') ? dossiersClos() : 0;
+      let d = -0.3 + murs * 0.45 + clos * 0.35 + renomActuel() / 90;
+      if(reputationDe('parias') > 40) d += 0.4;
+      if((hero.suspicion || 0) > 75) d -= 0.6;   // une capitale traquée n'attire personne
+      return d;
+    },
+    posture(){ return 100; },
+  },
+];
+
+function pouvoirParId(id){ return POUVOIRS.find(p => p.id === id); }
+
+/* ============================= LES ÉDITS ============================= */
+/* Une décision politique qui tombe quand ses conditions sont réunies. Elle a un
+ * texte, un effet réel, et elle ne se produit qu'une fois. */
+
+const EDITS = [
+  {
+    id:'ed_conscription', pouvoir:'astrah', influenceMin:0, requis:{ tension:{ humains:45 } },
+    titre:"Édit de conscription",
+    texte:"Astrah lève un homme sur douze dans les vallées du Nord. Les fermes perdent leurs bras, les routes se couvrent de colonnes mal nourries, et le prix du blé double en trois semaines.",
+    effet:{ tension:{ humains:6 }, prixChoc:1.15, chronique:"Astrah lève un homme sur douze dans le Nord." },
+  },
+  {
+    id:'ed_edit_purge', pouvoir:'lucius', influenceMin:55,
+    titre:"Le rappel de la Purge",
+    texte:"Lucius fait relire publiquement les édits de la Purge devant la garnison de Vaubien. Il ne demande rien, il ne signe rien : il rappelle simplement que le texte n'a jamais été abrogé. Dans la semaine, trois familles de Parias quittent la vallée.",
+    effet:{ suspicion:12, reputation:{ parias:6, humains:-4 }, tension:{ parias:8 },
+            chronique:"Lucius fait relire les édits de la Purge devant ses troupes." },
+  },
+  {
+    id:'ed_mariage', pouvoir:'varenne', influenceMin:58,
+    titre:"Le troisième mariage",
+    texte:"Isolde de Varenne marie sa nièce au fils cadet d'Astrah. Aucune armée n'a bougé. Quatre provinces viennent pourtant de changer de main, sur du papier, devant notaire.",
+    effet:{ tension:{ humains:5 }, chronique:"Un mariage fait passer quatre provinces à la maison de Varenne." },
+  },
+  {
+    id:'ed_ferme_lisieres', pouvoir:'lisieres', influenceMin:52, requis:{ tension:{ elfes:50 } },
+    titre:"Fermeture des lisières",
+    texte:"La Cour ferme ses frontières aux hommes. Les routes du sud contournent désormais la Sylve, ce qui allonge tout de deux jours et rend certaines marchandises introuvables.",
+    effet:{ prixChoc:1.10, chronique:"La Cour des Lisières ferme ses frontières aux hommes." },
+  },
+  {
+    id:'ed_contrats_portes', pouvoir:'portes', influenceMin:55,
+    titre:"Les Portes rouvrent leurs registres",
+    texte:"Kar-Durak recommence à signer avec la surface. Les armes naines redeviennent achetables — cher, mais achetables.",
+    effet:{ prixChoc:0.92, reputation:{ nains:4 },
+            chronique:"Kar-Durak rouvre ses registres commerciaux à la surface." },
+  },
+  {
+    id:'ed_karlsberg_nom', pouvoir:'karlsberg', influenceMin:25,
+    titre:"On prononce le nom de nouveau",
+    texte:"Un notaire de la vallée écrit « Karlsberg » dans un acte de vente, sans guillemets et sans commentaire, pour la première fois depuis quarante ans. Ce n'est rien. C'est aussi la seule chose qui compte.",
+    effet:{ renom:8, reputation:{ parias:10 }, chronique:"Le nom de Karlsberg réapparaît dans un acte notarié." },
+  },
+  {
+    id:'ed_karlsberg_refuge', pouvoir:'karlsberg', influenceMin:45,
+    titre:"Ils arrivent par la route du bas",
+    texte:"Ils sont onze le premier mois, vingt-neuf le deuxième. Des Parias, des familles de Parias, des gens qui n'ont plus de village. Personne ne les a appelés. Ils ont juste entendu qu'à Karlsberg on ne demandait pas ce que vous étiez.",
+    effet:{ renom:10, reputation:{ parias:14 }, suspicion:8, tension:{ parias:-6 },
+            chronique:"Des familles de Parias s'installent aux Ruines du Loup." },
+  },
+  {
+    id:'ed_karlsberg_puissance', pouvoir:'karlsberg', influenceMin:65,
+    titre:"On vous compte",
+    texte:"Une carte dressée à Astrah pour l'usage du conseil porte, dans la marge du Cœur, une annotation à l'encre : « Karlsberg — à considérer ». Trois mots. C'est ainsi qu'on entre dans la politique d'un empire.",
+    effet:{ renom:14, suspicion:10, chronique:"Astrah annote ses cartes : « Karlsberg — à considérer »." },
+  },
+];
+
+</script>
+<script>
 /* src/data/romances.js */
 /* PARIAS — Attachements
  *
@@ -13129,6 +14232,8 @@ function buildYohan(extraDef){
   };
 
   if(armure){ y.defenseBase += (armure.def||0); y.agi += (armure.agi||0); }
+  // Une place forte derrière soi change la façon de se battre devant.
+  if(typeof chantierBonus === 'function') y.defenseBase += chantierBonus().defense || 0;
   if(accessoire){ y.precision += (accessoire.prec||0); y.vol += (accessoire.vol||0); y.fatMax += (accessoire.fatMax||0); }
   if(extraDef) y.defenseBase += extraDef;
 
@@ -14507,6 +15612,9 @@ function renderScene(sceneId){
     document.getElementById('eventModal').style.display='flex';
     document.getElementById('scFinBtn').onclick = () => {
       renderPersonnage(); renderQuete(); closeEventModal(); saveGame(true);
+      // Un événement de Suspicion s'intercale avant autre chose (le pli du
+      // tour, une arrivée) : on rend la main à ce qui attendait.
+      if(suspicionRetour){ const suite = suspicionRetour; suspicionRetour = null; suite(); }
     };
     return;
   }
@@ -14755,7 +15863,7 @@ function contratsSpeciauxDisponibles(categorie){
 function ouvrirContratSpecial(id){
   const c = CONTRATS_SPECIAUX.find(x=>x.id===id);
   if(!c) return;
-  ecritState = { ev:c, lieu:null, retourEcran:'contrats', dernierJet:null };
+  ecritState = { ev:c, lieu:null, retourEcran:'lieu', dernierJet:null };
   renderScene('start');
 }
 
@@ -15204,6 +16312,735 @@ function renderLignee(){
 
 </script>
 <script>
+/* src/suspicion.js */
+/* PARIAS — La Suspicion, et ce qu'elle coûte
+ *
+ * Elle ne se contente plus d'être un nombre dans la barre du haut. Elle fait
+ * trois choses :
+ *
+ *   1. ELLE SE PAIE, en permanence. Un homme recherché paie plus cher, se fait
+ *      moins bien recruter, et voit son armée coûter davantage : nourrir vingt
+ *      hommes sans attirer l'attention, ça se facture.
+ *   2. ELLE PARLE. À chaque fin de tour, plus la Suspicion est haute, plus il
+ *      arrive quelque chose à cause d'elle — un portrait cloué sur une porte,
+ *      un rabatteur, un cordon de troupes. Ces événements-là sont aussi les
+ *      seuls endroits où l'on peut la faire redescendre vite.
+ *   3. ELLE SE VOIT. L'écran du lieu dit toujours, en clair, ce que la
+ *      Suspicion actuelle change pour vous ici et maintenant.
+ *
+ * Rien n'est jamais gratuit : faire baisser la Suspicion coûte de l'or, du
+ * temps, du Renom, ou quelque chose qu'on préférerait ne pas avoir fait.
+ */
+
+/* ============================= LES QUATRE PALIERS ============================= */
+
+const SUSPICION_PALIERS = [
+  { max:29,  cle:'low',  label:"Discret",
+    resume:"Un visage parmi d'autres. Personne ne relie encore les histoires entre elles.",
+    prixMult:1,    entretienMult:1,    chasse:0,    recrutement:0 },
+  { max:59,  cle:'mid',  label:"Remarqué",
+    resume:"On vous a décrit à deux ou trois personnes qui écrivent ce qu'on leur dit.",
+    prixMult:1.08, entretienMult:1.10, chasse:0.10, recrutement:-10 },
+  { max:84,  cle:'high', label:"Traqué",
+    resume:"Votre nom circule avec un prix à côté. Les marchands surfacturent le risque de vous servir.",
+    prixMult:1.20, entretienMult:1.25, chasse:0.25, recrutement:-25 },
+  { max:100, cle:'crit', label:"Chasse ouverte",
+    resume:"Ce n'est plus une prime, c'est une opération. On ferme des vallées pour vous.",
+    prixMult:1.40, entretienMult:1.50, chasse:0.40, recrutement:-45 },
+];
+
+function palierSuspicion(v){
+  const s = v === undefined ? (hero.suspicion || 0) : v;
+  return SUSPICION_PALIERS.find(p => s <= p.max) || SUSPICION_PALIERS[SUSPICION_PALIERS.length - 1];
+}
+
+/* Ce que la Suspicion change, tout de suite. Certaines choses la tempèrent :
+ * un faux portrait qui circule, un nom inscrit dans un registre, un réseau
+ * qui ment pour vous. */
+function suspicionEffets(){
+  const p = palierSuspicion();
+  const e = { cle:p.cle, label:p.label, resume:p.resume,
+              prixMult:p.prixMult, entretienMult:p.entretienMult,
+              chasse:p.chasse, recrutement:p.recrutement, couvertures:[] };
+  const couv = [
+    ['su_faux_portrait',    "un faux portrait circule à votre place", 0.35],
+    ['su_inscrit_registre', "vous existez dans un registre sous un autre nom", 0.25],
+    ['su_reseau_vallee',    "quatre personnes mentent pour vous sans qu'on le leur demande", 0.30],
+    ['su_medecin_allie',    "un médecin ne se souvient d'aucun bras", 0.15],
+    ['su_dette_maison',     "une maison a fait effacer votre nom — et vous le rappellera", 0.50],
+  ];
+  couv.forEach(([f, texte, force]) => {
+    if(typeof hasFlag === 'function' && hasFlag(f)){
+      e.couvertures.push(texte);
+      e.chasse *= (1 - force);
+      e.prixMult = 1 + (e.prixMult - 1) * (1 - force * 0.6);
+      e.recrutement = Math.round(e.recrutement * (1 - force * 0.6));
+    }
+  });
+  return e;
+}
+
+/* Multiplicateurs lus par la boutique et par la solde. */
+function suspicionPrixMult(){ return suspicionEffets().prixMult; }
+function suspicionEntretienMult(){ return suspicionEffets().entretienMult; }
+
+/* ============================= LES ÉVÉNEMENTS ============================= */
+
+/* Probabilité qu'un événement de Suspicion se produise en fin de tour. À zéro
+ * on est tranquille ; en chasse ouverte, il arrive presque toujours quelque
+ * chose. Une couverture solide réduit la pression. */
+function chanceEvenementSuspicion(){
+  const s = hero.suspicion || 0;
+  if(s < 12) return 0;
+  const e = suspicionEffets();
+  const base = Math.min(0.75, 0.10 + s / 140);
+  const abri = e.couvertures.length ? 0.75 : 1;
+  return base * abri;
+}
+
+function evenementsSuspicionDisponibles(){
+  const vus = heroVus();
+  return EVENTS_SUSPICION.filter(ev => !vus.includes(ev.id) && conditionsRemplies(ev.requis));
+}
+
+/* Choisit un événement en penchant vers ce dont le joueur a besoin : au-dessus
+ * de 60 de Suspicion, on lui offre plus souvent une porte de sortie. */
+function tirerEvenementSuspicion(){
+  const pool = evenementsSuspicionDisponibles();
+  if(!pool.length) return null;
+  const veutSortie = (hero.suspicion || 0) >= 60;
+  const sens = veutSortie ? 'baisse' : 'hausse';
+  const prefere = pool.filter(e => e.sens === sens);
+  const liste = (prefere.length && Math.random() < 0.65) ? prefere : pool;
+  return liste[Math.floor(Math.random() * liste.length)];
+}
+
+/* Rend true si un événement a été ouvert. `apres` est rappelé à sa fermeture. */
+let suspicionRetour = null;
+function tenterEvenementSuspicion(apres){
+  if(Math.random() >= chanceEvenementSuspicion()) return false;
+  const ev = tirerEvenementSuspicion();
+  if(!ev) return false;
+  suspicionRetour = apres || null;
+  openWrittenEvent(ev, LOCATIONS.find(l => l.id === hero.position) || null);
+  return true;
+}
+
+/* ============================= CE QU'ON EN VOIT ============================= */
+
+function blocSuspicion(){
+  const e = suspicionEffets();
+  const s = hero.suspicion || 0;
+  const lignes = [];
+  if(e.prixMult > 1.001)     lignes.push(`Les marchands vous vendent ${Math.round((e.prixMult - 1) * 100)} % plus cher`);
+  if(e.entretienMult > 1.001) lignes.push(`Entretenir votre troupe coûte ${Math.round((e.entretienMult - 1) * 100)} % de plus`);
+  if(e.recrutement < 0)      lignes.push(`On hésite à s'engager auprès de vous (${e.recrutement} au recrutement)`);
+  if(e.chasse > 0)           lignes.push(`Environ ${Math.round(e.chasse * 100)} % de chances qu'on vous cherche activement chaque tour`);
+  if(!lignes.length)         lignes.push("Rien ne change pour l'instant. C'est le but.");
+
+  return `<div class="susp-bloc susp-${e.cle}">
+    <div class="susp-tete"><span class="susp-label">${e.label}</span>
+      <span class="susp-jauge"><i style="width:${s}%"></i></span>
+      <span class="susp-val">${s}/100</span></div>
+    <p class="susp-resume">${e.resume}</p>
+    <ul class="susp-effets">${lignes.map(l => `<li>${l}</li>`).join('')}</ul>
+    ${e.couvertures.length
+      ? `<div class="susp-couv">Ce qui vous couvre : ${e.couvertures.join(' · ')}.</div>` : ''}
+  </div>`;
+}
+
+</script>
+<script>
+/* src/politique.js */
+/* PARIAS — Moteur politique
+ *
+ * Ce que fait ce fichier, tour après tour :
+ *   1. il fait bouger l'influence des six puissances selon l'état du monde et
+ *      selon ce que le joueur a fait ;
+ *   2. il calcule leur posture envers Yohan, qui décide de ce qu'on lui propose
+ *      et de qui lui tombe dessus ;
+ *   3. il déclenche les édits — des décisions qui changent réellement quelque
+ *      chose — et les fait remonter dans le pli du tour ;
+ *   4. il dit, en clair, qui est en train de gagner. Parce que celui qui gagne
+ *      donnera son nom au Second Empire.
+ */
+
+function heroPolitique(){
+  if(!hero.politique) hero.politique = { influence:{}, edits:[], choc:1 };
+  const p = hero.politique;
+  if(!p.influence) p.influence = {};
+  if(!p.edits) p.edits = [];
+  if(p.choc === undefined) p.choc = 1;
+  POUVOIRS.forEach(x => { if(p.influence[x.id] === undefined) p.influence[x.id] = x.depart; });
+  return p;
+}
+
+function influencePouvoir(id){ return heroPolitique().influence[id] || 0; }
+
+/* La posture, ramenée sur une échelle lisible. */
+const POSTURES = [
+  { min:-100, id:'guerre',  nom:"Vous veut mort",   note:"Ils ne cherchent plus à comprendre ce que vous êtes." },
+  { min:-45,  id:'hostile', nom:"Hostile",          note:"On vous refuse tout, et on écrit votre nom quelque part." },
+  { min:-15,  id:'froid',   nom:"Méfiant",          note:"On vous tolère parce qu'on n'a pas encore de raison de faire autrement." },
+  { min:15,   id:'interet', nom:"Vous surveille",   note:"On vous trouve utile, ce qui n'est pas la même chose qu'ami." },
+  { min:45,   id:'appui',   nom:"Vous soutient",    note:"On vous ouvre des portes, et on attendra quelque chose en retour." },
+  { min:80,   id:'allie',   nom:"Vous appartient",  note:"Votre cause est devenue la leur, ou l'inverse." },
+];
+function postureDe(id){
+  const p = pouvoirParId(id);
+  if(!p) return POSTURES[2];
+  const n = Math.max(-100, Math.min(100, p.posture()));
+  let r = POSTURES[0];
+  POSTURES.forEach(x => { if(n >= x.min) r = x; });
+  return { ...r, valeur: Math.round(n) };
+}
+
+/* Qui l'emporte, si rien ne change. */
+function puissanceDominante(){
+  const pol = heroPolitique();
+  return POUVOIRS.slice().sort((a, b) => pol.influence[b.id] - pol.influence[a.id])[0];
+}
+
+/* ============================= LE TOUR POLITIQUE ============================= */
+/* Appelé une fois par tour, depuis advanceTime. Rend les lignes à afficher dans
+ * le pli. */
+function politiqueTick(semaines){
+  const pol = heroPolitique();
+  const lignes = [];
+  const facteur = Math.max(1, semaines) / 4;   // la dérive est mensuelle
+
+  POUVOIRS.forEach(p => {
+    let d = 0;
+    try { d = p.derive(); } catch(e){ d = 0; }
+    pol.influence[p.id] = Math.max(0, Math.min(100, pol.influence[p.id] + d * facteur));
+  });
+
+  // Le choc des prix se résorbe : une crise ne dure pas éternellement.
+  pol.choc = pol.choc + (1 - pol.choc) * 0.25;
+  if(Math.abs(pol.choc - 1) < 0.01) pol.choc = 1;
+
+  const edit = editDisponible();
+  if(edit) lignes.push(appliquerEdit(edit));
+
+  return lignes;
+}
+
+function editConditionsOk(e){
+  if(heroPolitique().edits.includes(e.id)) return false;
+  if(influencePouvoir(e.pouvoir) < (e.influenceMin || 0)) return false;
+  if(e.requis && e.requis.tension){
+    for(const [k, n] of Object.entries(e.requis.tension))
+      if(((hero.tensions || {})[k] || 0) < n) return false;
+  }
+  if(e.requis && e.requis.flags && !e.requis.flags.every(f => hasFlag(f))) return false;
+  return true;
+}
+
+function editDisponible(){
+  const prets = EDITS.filter(editConditionsOk);
+  if(!prets.length) return null;
+  // Un édit par tour au plus, et pas systématiquement : la politique est lente.
+  if(Math.random() > 0.45) return null;
+  return prets[Math.floor(Math.random() * prets.length)];
+}
+
+function appliquerEdit(e){
+  const pol = heroPolitique();
+  pol.edits.push(e.id);
+  const f = e.effet || {};
+  if(f.suspicion) adjustSuspicion(f.suspicion);
+  if(f.renom) ajusterRenom(f.renom);
+  if(f.prixChoc) pol.choc = f.prixChoc;
+  for(const [k, n] of Object.entries(f.reputation || {})) ajusterReputation(k, n);
+  for(const [k, n] of Object.entries(f.tension || {})){
+    if(hero.tensions && hero.tensions[k] !== undefined)
+      hero.tensions[k] = Math.max(0, Math.min(100, hero.tensions[k] + n));
+  }
+  if(f.chronique && hero.chroniques){
+    const d = dateFromSemaines(hero.temps ? hero.temps.semaines : 0);
+    hero.chroniques.push({ date:`${d.saison}, An ${d.an}`, texte: '⚖ ' + f.chronique });
+  }
+
+  const p = pouvoirParId(e.pouvoir);
+  return { edit:e, pouvoir:p, texte:`<b>${p ? p.nom : ''} — ${e.titre}.</b> ${e.texte}` };
+}
+
+/* Le choc politique se répercute sur les prix, comme le reste. */
+function politiquePrixMult(){ return heroPolitique().choc || 1; }
+
+/* ============================= L'ÉCRAN ============================= */
+
+function renderPolitique(){
+  const bloc = document.getElementById('politiqueGrid');
+  if(!bloc) return;
+  const pol = heroPolitique();
+  const dom = puissanceDominante();
+
+  const tete = document.getElementById('politiqueTete');
+  if(tete){
+    tete.innerHTML = dom.joueur
+      ? `Aucune puissance humaine ne domine plus nettement que <b>Karlsberg</b>. C'est absurde, et c'est vrai.`
+      : `Si rien ne change, le Second Empire portera le nom de <b>${dom.nom}</b>.`;
+  }
+
+  bloc.innerHTML = POUVOIRS.map(p => {
+    const inf = Math.round(pol.influence[p.id] || 0);
+    const po = postureDe(p.id);
+    return `<div class="pouv${p.joueur ? ' pouv-nous' : ''} pouv-${po.id}">
+      <div class="pouv-tete"><span class="pouv-nom">${p.nom}</span><span class="pouv-inf">${inf}</span></div>
+      <div class="pouv-meneur">${p.meneur}</div>
+      <div class="pouv-jauge"><i style="width:${inf}%"></i></div>
+      <p class="pouv-credo">« ${p.credo} »</p>
+      <div class="pouv-posture">${p.joueur ? "C'est vous." : `${po.nom} — ${po.note}`}</div>
+    </div>`;
+  }).join('');
+
+  const hist = document.getElementById('politiqueEdits');
+  if(hist){
+    const faits = pol.edits.map(id => EDITS.find(e => e.id === id)).filter(Boolean);
+    hist.innerHTML = faits.length
+      ? faits.slice().reverse().map(e => {
+          const p = pouvoirParId(e.pouvoir);
+          return `<li><b>${p ? p.nom : ''} — ${e.titre}</b><br><span>${e.texte}</span></li>`;
+        }).join('')
+      : `<li class="pol-rien">Rien n'a encore été décidé. Ce qui ne veut pas dire que rien ne se prépare.</li>`;
+  }
+}
+
+</script>
+<script>
+/* src/offres.js */
+/* PARIAS — Ce qu'on vous propose ici
+ *
+ * Il y avait trois systèmes de contrats qui se marchaient dessus : un registre
+ * général de cinquante affaires situées nulle part, des affaires locales dans un
+ * autre onglet, et un pli de fin de tour qui proposait des contrats d'autres
+ * régions à un homme qui n'y était pas.
+ *
+ * Il n'y en a plus qu'un. À chaque tour, l'endroit où se trouve Yohan propose
+ * **trois offres** — les siennes d'abord, complétées par ce que le tableau des
+ * mercenaires apporte quand le dossier du lieu est épuisé. Les offres sont
+ * fixes pour le tour : on ne rafraîchit pas un tableau d'affichage en le
+ * regardant.
+ *
+ * Une offre dit toujours quatre choses avant qu'on l'accepte : qui paie, ce
+ * qu'il faut faire, **où** (ici, ou ailleurs — et alors c'est un voyage), et ce
+ * que ça coûtera en Suspicion. Accepter, c'est partir.
+ */
+
+/* Combien une affaire fait monter la Suspicion, selon ce qu'elle demande. */
+const SUSPICION_PAR_TYPE = {
+  chasse: 2, sauvetage: 3, traque: 5, "récupération": 6, "enquête": 4, guerre: 8,
+};
+const SUSPICION_PAR_DANGER = {
+  "modéré": 0, dangereux: 2, "très dangereux": 4, "extrême": 6, "légendaire": 8,
+};
+function suspicionDeLOffre(c){
+  return (SUSPICION_PAR_TYPE[c.type] || 3) + (SUSPICION_PAR_DANGER[c.danger] || 0);
+}
+
+/* Un contrat du registre général, rhabillé aux couleurs d'un lieu réel. Le
+ * réservoir reste utile ; ce qui ne l'était pas, c'est de l'afficher tel quel
+ * avec des lieux qui n'existent pas sur la carte. */
+const COMMANDITAIRES_LOCAUX = {
+  humains:     ["Le prévôt de la place", "Une maison marchande", "Le capitaine de garde"],
+  parias:      ["Un homme qui ne donne pas son nom", "Une famille de la vallée"],
+  khesh:       ["Le conseil des tentes", "Un maître de caravane"],
+  elfes:       ["Un gardien des lisières", "Un conseiller de la Cour"],
+  elfes_noirs: ["Un courtier de Valombre", "Une maison mineure"],
+  nains:       ["Une compagnie de galerie", "Le maître des Portes"],
+  peaux_vertes:["Un chef de tribu", "Un éclaireur qui n'a pas dormi"],
+  hommes_betes:["Un ancien des Pierres", "Un passeur de la forêt"],
+  null:        ["Un voyageur qui paie comptant", "La guilde des rouliers"],
+};
+function rhabiller(c, lieu){
+  const peuple = peupleDuLieu(lieu);
+  const pool = COMMANDITAIRES_LOCAUX[peuple] || COMMANDITAIRES_LOCAUX.null;
+  const h = artHash(c.id + lieu.id);
+  return {
+    ...c,
+    id: 'G_' + lieu.id + '_' + c.id,
+    origine: c.id,
+    lieu: lieu.nom,
+    locId: lieu.id,
+    commanditaire: pool[h % pool.length],
+    tableau: true,          // vient du tableau des mercenaires, pas du lieu
+  };
+}
+
+/* ============================= LES TROIS OFFRES ============================= */
+
+function heroOffres(){
+  if(!hero.offres) hero.offres = { semaine: -1, locId: null, liste: [] };
+  return hero.offres;
+}
+
+/* Stables pour un tour et un lieu : elles ne se retirent pas au sort à chaque
+ * fois qu'on regarde l'écran. */
+function offresDuTour(){
+  const lieu = LOCATIONS.find(l => l.id === hero.position);
+  if(!lieu) return [];
+  const o = heroOffres();
+  const semaine = hero.temps ? hero.temps.semaines : 0;
+  if(o.semaine === semaine && o.locId === lieu.id && o.liste.length) return o.liste;
+
+  const rnd = artSuite(lieu.id + '_' + semaine);
+  const liste = [];
+
+  /* 1. Le dossier du lieu d'abord — c'est ce qu'on est venu régler.
+   *    On en garde deux au plus, pour laisser la place à ce qui vient
+   *    d'ailleurs : un homme qui ne bouge jamais n'a pas d'histoire. */
+  const ici = affairesDuLieu(lieu.id);
+  ici.slice(0, ici.length >= 3 ? 2 : 3).forEach(a => liste.push({ ...a, locale: true }));
+
+  /* 2. Ce qu'un voisin fait dire jusqu'ici. Une vraie affaire de son dossier :
+   *    accepter, c'est prendre la route, et le dossier de là-bas avance. */
+  const voisins = ROUTES.filter(r => r.includes(lieu.id))
+    .map(r => r[0] === lieu.id ? r[1] : r[0])
+    .filter(id => affairesDuLieu(id).length);
+  if(voisins.length && liste.length < 3){
+    const dest = voisins[Math.floor(rnd() * voisins.length)];
+    const l2 = LOCATIONS.find(x => x.id === dest);
+    const pool = affairesDuLieu(dest);
+    const a = pool[Math.floor(rnd() * pool.length)];
+    if(l2 && a) liste.push({ ...a, locale:true, ailleurs: dest, lieu: l2.nom,
+                             semainesRoute: semainesDeVoyage(lieu.id, dest) });
+  }
+
+  /* 3. Le tableau des mercenaires bouche les trous, rhabillé au lieu. */
+  if(liste.length < 3){
+    const pool = CONTRACTS.filter(c => !hero.contratsFaits || !hero.contratsFaits.includes(c.id));
+    const reste = pool.length ? pool : CONTRACTS.slice();
+    const tirage = reste.slice();
+    while(liste.length < 3 && tirage.length){
+      const c = tirage.splice(Math.floor(rnd() * tirage.length), 1)[0];
+      liste.push(rhabiller(c, lieu));
+    }
+  }
+
+  liste.forEach(c => { c.suspicion = suspicionDeLOffre(c); });
+  o.semaine = semaine; o.locId = lieu.id; o.liste = liste;
+  return liste;
+}
+
+/* Une offre acceptée disparaît du tableau : on ne la reprend pas deux fois. */
+function retirerOffre(id){
+  const o = heroOffres();
+  o.liste = o.liste.filter(c => c.id !== id);
+}
+
+/* ============================= LE VOYAGE ============================= */
+/* Accepter un contrat qui se déroule ailleurs, c'est partir. Le trajet coûte du
+ * temps et n'est pas toujours tranquille. */
+
+function distanceEntre(a, b){
+  const p1 = LOC_COORDS[a], p2 = LOC_COORDS[b];
+  if(!p1 || !p2) return 1;
+  return Math.hypot(p1.x - p2.x, p1.y - p2.y);
+}
+function semainesDeVoyage(a, b){
+  return Math.max(1, Math.round(distanceEntre(a, b) / 14));
+}
+
+/* Rend true si un incident de route s'est produit (et l'a affiché). */
+function voyagerVers(destId, apres){
+  const depart = hero.position;
+  const l = LOCATIONS.find(x => x.id === destId);
+  if(!l){ if(apres) apres(); return false; }
+  const semaines = semainesDeVoyage(depart, destId);
+
+  hero.position = destId;
+  currentLieu = l;
+  const resume = advanceTime(semaines);
+  // La route se paie en fatigue, et elle fait un peu oublier.
+  hero.fat = Math.min(hero.fatMax, hero.fat + 4 * semaines);
+  adjustSuspicion(-2);
+  saveGame(true);
+
+  const box = document.getElementById('eventModalBox');
+  box.innerHTML = `${artEventBanner('evt_voyage', 'VOYAGE')}
+    <span class="event-tag">Voyage</span><h3>Vers ${l.nom}</h3>
+    <p class="narrative">${semaines} semaine${semaines > 1 ? 's' : ''} de route. ${
+      pickVariant([
+        "On dort où l'on peut et on parle le moins possible.",
+        "La route est longue et sans histoire, ce qui est la meilleure chose qu'on puisse en dire.",
+        "Deux contrôles, un péage, et personne qui regarde de trop près.",
+      ])}</p>
+    <div class="reward-tags"><span class="reward-tag neg">+${4 * semaines} Fatigue</span>
+      <span class="reward-tag">−2 Suspicion</span></div>
+    ${resume && resume.nouvelle ? `<p class="narrative" style="color:var(--parchment-dim);font-style:italic;">${resume.nouvelle}</p>` : ''}
+    <div style="margin-top:16px;text-align:right;"><button class="primary" id="voyBtn">Arriver</button></div>`;
+  document.getElementById('eventModal').style.display = 'flex';
+  document.getElementById('voyBtn').onclick = () => { closeEventModal(); if(apres) apres(); };
+  return true;
+}
+
+/* ============================= ACCEPTER ============================= */
+
+function accepterOffre(id){
+  const c = offresDuTour().find(x => x.id === id);
+  if(!c) return;
+  retirerOffre(id);
+  const lancer = () => {
+    // Une affaire se paie en visibilité avant même d'avoir commencé.
+    adjustSuspicion(c.suspicion || 0);
+    openContract(c);
+  };
+  if(c.ailleurs) voyagerVers(c.ailleurs, lancer);
+  else lancer();
+}
+
+</script>
+<script>
+/* src/lieu.js */
+/* PARIAS — L'écran du lieu, seul écran de jeu
+ *
+ * Avant : un onglet Contrats avec deux registres, un écran de lieu qui ne
+ * servait à rien (« Yohan se trouve ici »), et un pli de fin de tour qui
+ * proposait des affaires d'autres régions. On ne savait plus où regarder.
+ *
+ * Maintenant tout se passe ici. L'endroit où Yohan se trouve montre :
+ *   · son état — ce qu'on pense de lui ici, ce qu'il risque à y rester ;
+ *   · ses trois offres du tour, avec ce qu'elles paient et ce qu'elles coûtent ;
+ *   · ce qu'on peut y faire — chercher, se reposer, commercer, bâtir ;
+ *   · le dossier du lieu, et la décision quand les trois affaires sont closes.
+ *
+ * Les autres onglets redeviennent ce qu'ils auraient toujours dû être : des
+ * fiches qu'on consulte, pas des endroits où l'on joue.
+ */
+
+function renderLieu(){
+  const l = currentLieu || LOCATIONS.find(x => x.id === hero.position);
+  if(!l) return;
+  currentLieu = l;
+
+  const peuple = peupleDuLieu(l);
+  const rang = peuple ? rangReputation(peuple) : null;
+  const region = REGIONS.find(r => r.lieux.includes(l.id));
+
+  /* --- En-tête : où l'on est, et comment on y est reçu --- */
+  document.getElementById('lieuNom').textContent = l.nom;
+  document.getElementById('lieuDesc').innerHTML =
+    `<span class="lieu-region">${region ? region.nom : '—'}</span> · ${l.description_courte}
+     · Danger ${l.danger_range.min}–${l.danger_range.max}`;
+
+  const accueil = document.getElementById('lieuAccueil');
+  if(accueil){
+    accueil.className = 'lieu-accueil' + (rang && rang.hostile ? ' hostile' : '');
+    accueil.innerHTML = peuple
+      ? `<b>${PEUPLE_LABELS[peuple]}</b> · ${rang.nom} — ${(REPUTATION_VOIX[peuple] || {})[rang.id] || rang.note}`
+      : `<b>Terre de personne.</b> Personne ne tient ce lieu, personne n'y protège personne.`;
+  }
+
+  /* --- Ce qu'on dit de vous, et ce que ça coûte ici --- */
+  const pres = document.getElementById('lieuPression');
+  if(pres){
+    const dom = (typeof puissanceDominante === 'function') ? puissanceDominante() : null;
+    const po = dom && !dom.joueur ? postureDe(dom.id) : null;
+    pres.innerHTML = (typeof blocSuspicion === 'function' ? blocSuspicion() : '')
+      + (dom ? `<p class="lieu-politique">Dans cette vallée, c'est <b>${dom.nom}</b> qui pèse le plus lourd.
+          ${dom.joueur ? "C'est-à-dire vous." : `${po.nom} — ${po.note}`}</p>` : '');
+  }
+
+  /* --- Le dossier du lieu --- */
+  const dos = document.getElementById('lieuDossier');
+  const fait = dossierDe(l.id).length;
+  const total = (CONTRATS_LOCAUX_EXPANSES[l.id] || []).length;
+  const den = denouementDisponible(l.id);
+  if(dos){
+    dos.innerHTML = `<div class="dossier-tete">
+        <span class="dossier-nom">${(CONTRATS_LOCAUX[l.id] || {}).dossier || l.nom}</span>
+        <span class="dossier-compte">${fait}/${total} affaires réglées</span></div>` +
+      (den ? `<div class="dossier-den">Les trois affaires sont closes. Ce qui reste ne se paie pas en or.
+              <button class="primary" id="btnDenouement">${den.titre}</button></div>`
+           : (fait >= total ? `<p class="dossier-clos">Ce lieu est réglé. Ce qui s'y passe désormais vous doit quelque chose.</p>` : ''));
+    const b = document.getElementById('btnDenouement');
+    if(b) b.onclick = () => openWrittenEvent(den, l);
+  }
+
+  /* --- Les trois offres du tour --- */
+  const off = document.getElementById('lieuOffres');
+  if(off){
+    off.innerHTML = '';
+    const offres = offresDuTour();
+    if(!offres.length){
+      off.innerHTML = `<p class="offres-vide">Personne ne cherche personne aujourd'hui. Terminez le tour :
+        les semaines apportent toujours quelque chose.</p>`;
+    }
+    offres.forEach(c => {
+      const ailleurs = c.ailleurs ? LOCATIONS.find(x => x.id === c.ailleurs) : null;
+      const trajet = ailleurs ? semainesDeVoyage(hero.position, c.ailleurs) : 0;
+      const div = document.createElement('div');
+      div.className = 'offre' + (c.locale ? ' locale' : '') + (ailleurs ? ' ailleurs' : '');
+      div.innerHTML = `
+        <div class="offre-tete">
+          <span class="offre-titre">${c.titre}</span>
+          <span class="offre-prix">${c.prix_paria ? 'Prix Paria' : c.or + ' or'}</span>
+        </div>
+        <div class="offre-qui">${c.commanditaire}${c.locale ? ' · affaire du lieu' : ' · tableau des mercenaires'}</div>
+        <p class="offre-pitch">${c.pitch}</p>
+        <div class="offre-pied">
+          <span class="offre-tag ${c.danger === 'modéré' ? '' : 'chaud'}">${c.danger}</span>
+          <span class="offre-tag">${c.type}</span>
+          <span class="offre-tag susp">+${c.suspicion} Suspicion</span>
+          ${ailleurs ? `<span class="offre-tag voyage">${ailleurs.nom} · ${trajet} sem. de route</span>`
+                     : `<span class="offre-tag ici">sur place</span>`}
+        </div>`;
+      const b = document.createElement('button');
+      b.className = 'ghost offre-btn';
+      b.textContent = ailleurs ? 'Accepter et partir' : 'Accepter';
+      b.onclick = () => accepterOffre(c.id);
+      div.appendChild(b);
+      off.appendChild(div);
+    });
+  }
+
+  /* --- Ce qu'on peut faire ici --- */
+  const act = document.getElementById('lieuActions');
+  if(act){
+    const zone = fatZone(hero.fat);
+    act.innerHTML = '';
+    const bouton = (label, detail, fn, off) => {
+      const d = document.createElement('button');
+      d.className = 'lieu-act';
+      d.disabled = !!off;
+      d.innerHTML = `<span>${label}</span><span class="la-detail">${detail}</span>`;
+      d.onclick = fn;
+      act.appendChild(d);
+    };
+    bouton("Chercher quelque chose", "1 action · ce que l'endroit cache",
+      () => useAction('explorer'), hero.actionsTour <= 0);
+    bouton("Se reposer", `Plusieurs jours · Fatigue ${hero.fat} → ${Math.max(0, hero.fat - 35)}`,
+      () => doRepos(), false);
+    bouton("Se faire oublier", `Une saison entière · Suspicion ${hero.suspicion} → ${Math.max(0, hero.suspicion - 30)}`,
+      () => seFaireOublier(), hero.suspicion < 25);
+    if(peuple !== null || SHOPS[peuple]) bouton("Voir le marchand", "Ce qu'on vend ici",
+      () => { showScreen('personnage'); renderEquipement(); }, false);
+    if(l.id === 'LOC_001') bouton("Le chantier de Karlsberg", "Ce qu'on relève, et ce que ça coûte",
+      () => ouvrirChantier(), false);
+  }
+}
+
+</script>
+<script>
+/* src/chantier.js */
+/* PARIAS — Moteur du chantier
+ *
+ * Bâtir coûte de l'or et des semaines. Les semaines sont la vraie dépense :
+ * pendant qu'on bâtit, Yohan vieillit et le monde avance sans lui.
+ */
+
+function heroChantier(){
+  if(!hero.chantier) hero.chantier = [];
+  return hero.chantier;
+}
+function ouvrageFait(id){ return heroChantier().includes(id); }
+
+function ouvrageDisponible(o){
+  if(ouvrageFait(o.id)) return null;
+  if(o.requis && !ouvrageFait(o.requis)){
+    const p = CHANTIER.find(x => x.id === o.requis);
+    return { bloque:`Demande d'abord : ${p ? p.nom : o.requis}` };
+  }
+  if(o.requisFlag && !hasFlag(o.requisFlag)) return { bloque:"Ce qu'il faudrait graver n'existe pas encore" };
+  if(hero.or < o.or) return { bloque:`${o.or} or requis (vous en avez ${hero.or})` };
+  return { ok:true };
+}
+
+/* Le cumul de tout ce qui est bâti — lu par le combat, la boutique, l'armée. */
+function chantierBonus(){
+  const b = { defense:0, fatMax:0, entretienMult:1, prixMult:1, reposMult:1 };
+  heroChantier().forEach(id => {
+    const o = CHANTIER.find(x => x.id === id);
+    if(!o || !o.effet) return;
+    b.defense       += o.effet.defense || 0;
+    b.fatMax        += o.effet.fatMax || 0;
+    b.entretienMult *= (o.effet.entretienMult !== undefined ? o.effet.entretienMult : 1);
+    b.prixMult      *= (o.effet.prixMult !== undefined ? o.effet.prixMult : 1);
+    b.reposMult      = Math.max(b.reposMult, o.effet.reposMult || 1);
+  });
+  return b;
+}
+
+function batir(id){
+  const o = CHANTIER.find(x => x.id === id);
+  if(!o) return;
+  const d = ouvrageDisponible(o);
+  if(!d || !d.ok) return;
+
+  hero.or -= o.or;
+  heroChantier().push(o.id);
+  const e = o.effet || {};
+  if(e.renom) ajusterRenom(e.renom);
+  if(e.suspicion) adjustSuspicion(e.suspicion);
+  for(const [p, n] of Object.entries(e.reputation || {})) ajusterReputation(p, n);
+  (e.flags || []).forEach(f => { if(!hasFlag(f)) heroFlags().push(f); });
+
+  // Bâtir prend des semaines : le monde avance, et Yohan vieillit avec.
+  const resume = advanceTime(o.semaines);
+  gainPointsSang(4);
+  applyPassiveEffects();
+  saveGame(true);
+
+  const box = document.getElementById('eventModalBox');
+  const tags = [];
+  if(e.defense) tags.push(`<span class="reward-tag">+${e.defense} Défense</span>`);
+  if(e.fatMax) tags.push(`<span class="reward-tag">+${e.fatMax} Fatigue max</span>`);
+  if(e.entretienMult) tags.push(`<span class="reward-tag">Entretien ×${e.entretienMult}</span>`);
+  if(e.prixMult) tags.push(`<span class="reward-tag">Prix ×${e.prixMult}</span>`);
+  if(e.renom) tags.push(`<span class="reward-tag">+${e.renom} Renom</span>`);
+  if(e.suspicion) tags.push(`<span class="reward-tag neg">+${e.suspicion} Suspicion</span>`);
+  for(const [p, n] of Object.entries(e.reputation || {}))
+    tags.push(`<span class="reward-tag${n < 0 ? ' neg' : ''}">${n > 0 ? '+' : '−'}${Math.abs(n)} chez les ${PEUPLE_LABELS[p]}</span>`);
+
+  box.innerHTML = `${artEventBanner('evt_paria', 'PARIA')}
+    <span class="event-tag">Chantier · ${o.semaines} semaines</span><h3>${o.nom}</h3>
+    <p class="narrative">${o.apres}</p>
+    <div class="reward-tags"><span class="reward-tag neg">−${o.or} or</span>${tags.join('')}</div>
+    ${resume && resume.nouvelle ? `<p class="narrative" style="color:var(--parchment-dim);font-style:italic;">Pendant ce temps : ${resume.nouvelle}</p>` : ''}
+    <div style="margin-top:16px;text-align:right;"><button class="primary" id="chBtn">Continuer</button></div>`;
+  document.getElementById('eventModal').style.display = 'flex';
+  document.getElementById('chBtn').onclick = () => { closeEventModal(); ouvrirChantier(); };
+}
+
+function ouvrirChantier(){
+  const b = chantierBonus();
+  const faits = heroChantier().length;
+  const box = document.getElementById('eventModalBox');
+  box.innerHTML = `<span class="event-tag">Karlsberg — Les Ruines du Loup</span>
+    <h3>Le chantier</h3>
+    <p class="narrative">${faits === 0
+      ? "Trois pans de mur, un loup de pierre fendu, et de l'herbe rase. Tout est à faire, et personne ne le fera à votre place."
+      : `${faits} ouvrage${faits > 1 ? 's' : ''} debout. ${faits >= CHANTIER.length ? "Il n'y a plus rien à relever : Karlsberg tient." : "Le reste attend."}`}</p>
+    <div class="chantier-etat">Défense +${b.defense} · Fatigue max +${b.fatMax}
+      · Entretien ×${b.entretienMult.toFixed(2)} · Prix ×${b.prixMult.toFixed(2)}
+      · Repos ×${b.reposMult}</div>
+    <div class="chantier-liste" id="chantierListe"></div>
+    <div style="margin-top:16px;text-align:right;"><button class="primary" id="chFermer">Fermer</button></div>`;
+
+  const holder = document.getElementById('chantierListe');
+  CHANTIER.forEach(o => {
+    const etat = ouvrageDisponible(o);
+    const div = document.createElement('div');
+    div.className = 'ouvrage' + (etat === null ? ' fait' : '') + (etat && etat.bloque ? ' bloque' : '');
+    div.innerHTML = `<div><div class="ouv-nom">${o.nom}</div>
+      <div class="ouv-desc">${etat === null ? o.apres : o.desc}</div>
+      <div class="ouv-cout">${o.or} or · ${o.semaines} semaines</div></div>`;
+    const btn = document.createElement('button');
+    btn.className = 'ghost';
+    if(etat === null){ btn.textContent = 'Debout'; btn.disabled = true; }
+    else if(etat.bloque){ btn.textContent = etat.bloque; btn.disabled = true; }
+    else { btn.textContent = 'Bâtir'; btn.onclick = () => { closeEventModal(); batir(o.id); }; }
+    div.appendChild(btn);
+    holder.appendChild(div);
+  });
+
+  document.getElementById('eventModal').style.display = 'flex';
+  document.getElementById('chFermer').onclick = () => { closeEventModal(); renderLieu(); };
+}
+
+</script>
+<script>
 /* src/tour.js */
 /* PARIAS — Le pli du tour, et la quête au centre
  *
@@ -15250,29 +17087,12 @@ function propositionsDuTour(){
     }
   }
 
-  // 3. Une affaire du lieu où l'on se trouve.
-  if(lieu){
-    const locales = affairesDuLieu(lieu.id);
-    if(locales.length){
-      const a = locales[Math.floor(Math.random() * locales.length)];
-      props.push({
-        cle:'affaire_' + a.id, titre:a.titre,
-        texte:`${a.commanditaire} — ${a.pitch}`,
-        action:'contrat', cible:a.id, bouton:`${a.or} or`,
-      });
-    }
-  }
-
-  // 4. Une affaire d'ailleurs, portée par un courrier — il faut bien que le
-  //    monde vienne à Yohan de temps en temps.
-  const ailleurs = LOCATIONS.filter(l => l.id !== hero.position && affairesDuLieu(l.id).length);
-  if(ailleurs.length && props.length < 3){
-    const l = ailleurs[Math.floor(Math.random() * ailleurs.length)];
-    const a = affairesDuLieu(l.id)[0];
+  // 3. Ce qu'on cherche là où l'on se trouve : trois offres attendent déjà.
+  if(lieu && props.length < 3){
     props.push({
-      cle:'ailleurs_' + a.id, titre:a.titre,
-      texte:`On demande quelqu'un à ${l.nom}. ${a.pitch}`,
-      action:'lieu', cible:l.id, bouton:"S'y rendre",
+      cle:'offres', titre:`Ce qu'on cherche à ${lieu.nom}`,
+      texte:"Trois offres au tableau. Certaines se règlent sur place, d'autres demandent de partir.",
+      action:'lieu', cible:lieu.id, bouton:"Voir",
     });
   }
 
@@ -15312,6 +17132,7 @@ function ouvrirPliDuTour(resume){
   const lignes = [];
   if(resume && resume.nouvelle) lignes.push(`<li class="pli-monde">${resume.nouvelle}</li>`);
   (resume && resume.lignee || []).forEach(e => lignes.push(`<li class="pli-lignee">${e.texte}</li>`));
+  (resume && resume.politique || []).forEach(e => lignes.push(`<li class="pli-politique">${e.texte}</li>`));
   if(resume && resume.solde) lignes.push(`<li class="pli-solde">${resume.solde}</li>`);
   if(resume && resume.rente) lignes.push(`<li class="pli-or">${resume.rente}</li>`);
 
@@ -15367,13 +17188,9 @@ function suivreProposition(p){
     if(l) openLieu(l);
     return;
   }
-  if(p.action === 'contrat'){
-    const c = Object.values(CONTRATS_LOCAUX_EXPANSES).flat().find(x => x.id === p.cible);
-    if(c) openContract(c);
-    return;
-  }
+  if(p.action === 'contrat'){ accepterOffre(p.cible); return; }
   if(p.action === 'special'){ ouvrirContratSpecial(p.cible); return; }
-  showScreen('contrats'); renderContracts();
+  showScreen('lieu'); renderLieu();
 }
 
 /* ============================= LE BANDEAU DE QUÊTE ============================= */
@@ -15719,7 +17536,9 @@ function nouvelleChronique(){
  * reconstruits au chargement (voir CHAMPS_SET).
  */
 
-const SAVE_VERSION = 6;
+const SAVE_VERSION = 7;
+/* Le préfixe est un espace de noms de stockage, pas le numéro de version : il
+ * reste figé pour que les parties commencées avant soient relues puis migrées. */
 const SAVE_PREFIX  = 'parias_save_v6_';
 const SAVE_LEGACY  = 'parias_vardhen_save_v1';   // format d'avant les emplacements
 const SAVE_PREFIXES_ANCIENS = ['parias_save_v5_', 'parias_save_v4_', 'parias_save_v3_'];   // relus une fois, puis migrés
@@ -15771,6 +17590,9 @@ function reconstruireHero(brut){
   h.affinites         = h.affinites || {};
   h.reputations       = { ...REPUTATION_DEPART, ...(h.reputations || {}) };
   h.dossiers          = h.dossiers || {};
+  h.chantier          = h.chantier || [];
+  h.offres            = h.offres || { semaine: -1, locId: null, liste: [] };
+  h.politique         = h.politique || {};
   h.lignee            = h.lignee || { liaisons: [], enfants: [] };
   if(typeof h.age !== 'number') h.age = AGE_DEPART;
   h.compagnons        = (h.compagnons || []).map(c => COMPANIONS_POOL[c.id] || c);
@@ -15831,6 +17653,13 @@ const MIGRATIONS = {
       enr.hero.age = AGE_DEPART + Math.floor(sem / 52);
     }
     enr.version = 6;
+    return enr;
+  },
+  6: enr => {           // v6 → v7 : le chantier de Karlsberg et les offres du lieu
+    enr.hero.chantier = enr.hero.chantier || [];
+    enr.hero.offres   = { semaine: -1, locId: null, liste: [] };  // on retire un tableau neuf
+    enr.hero.politique = enr.hero.politique || {};
+    enr.version = 7;
     return enr;
   },
 };
@@ -16203,6 +18032,7 @@ function triggerChapitre(idx){
 }
 
 function renderQuete(){
+  renderContratsSpeciaux();
   const ch = TRAME_CHAPITRES[hero.trame.chapitre];
   const next = TRAME_CHAPITRES[hero.trame.chapitre+1];
   document.getElementById('queteChapitre').innerHTML = `<span class="qc-num">Chapitre ${hero.trame.chapitre+1}</span>${ch.titre}<p style="color:var(--parchment-dim);font-style:italic;font-size:14px;margin-top:8px;">${ch.objectif}</p>`;
@@ -16428,12 +18258,11 @@ function enterGame(){
   cal.dataset.gameStarted='1';
   renderPersonnage();
   renderMonde();
-  renderContracts();
   renderCalendar();
   renderChroniques();
   renderQuete();
   renderArmee();
-  showScreen('personnage');
+  openLieu(LOCATIONS.find(l => l.id === hero.position) || LOCATIONS[0]);
 }
 
 initSaveScreen();
@@ -16451,6 +18280,7 @@ document.getElementById('btnStart').onclick = () => {
 document.querySelectorAll('nav.tabs button').forEach(b=>{
   b.onclick = () => {
     showScreen(b.dataset.screen);
+    if(b.dataset.screen==='lieu') renderLieu();
     if(b.dataset.screen==='chroniques') renderChroniques();
     if(b.dataset.screen==='quete') renderQuete();
     if(b.dataset.screen==='personnage') renderEquipement();
@@ -16458,11 +18288,10 @@ document.querySelectorAll('nav.tabs button').forEach(b=>{
     if(b.dataset.screen==='armee') renderArmee();
     // Les campagnes et affaires personnelles s'ouvrent au fil du Renom et des
     // marqueurs : il faut refaire le tri à chaque visite, pas seulement au départ.
-    if(b.dataset.screen==='contrats') renderContracts();
   };
 });
 document.getElementById('btnBackMonde').onclick = () => showScreen('monde');
-document.getElementById('btnBackContrats').onclick = () => showScreen('contrats');
+document.getElementById('btnBackContrats').onclick = () => { showScreen('lieu'); renderLieu(); };
 
 /* ============================= TEMPS & CHRONIQUES ============================= */
 hero.temps = { semaines: 0 };
@@ -16506,8 +18335,11 @@ function advanceTime(semaines){
   lignee.filter(e => e.type !== 'age').forEach(e => {
     hero.chroniques.push({ date: `${after.saison}, An ${after.an}`, texte: '◆ ' + e.texte });
   });
+  // Pendant ce temps, cinq puissances se disputent l'après-Astrah — et une
+  // sixième se relève dans le dos de tout le monde.
+  const politique = (typeof politiqueTick === 'function') ? politiqueTick(semaines) : [];
   renderCalendar();
-  return { nouvelle, lignee };
+  return { nouvelle, lignee, politique };
 }
 
 function progressTensions(dateInfo){
@@ -16551,6 +18383,7 @@ function renderTensions(){
 function renderChroniques(){
   renderTensions();
   renderReputations();
+  if(typeof renderPolitique === 'function') renderPolitique();
   const list = document.getElementById('newsList');
   if(!hero.chroniques.length){
     list.innerHTML = `<p class="news-empty">Rien à signaler pour l'instant — le temps n'a pas encore assez avancé.</p>`;
@@ -16562,11 +18395,14 @@ function renderChroniques(){
 /* ============================= PERSONNAGE / TALENTS ============================= */
 function applyPassiveEffects(){
   const age = (typeof malusAge === 'function') ? malusAge() : {agi:0, pvMax:0};
+  const ch  = (typeof chantierBonus === 'function') ? chantierBonus() : {fatMax:0};
   const basePv = 42 + (hero.niveau-3)*5 + age.pvMax; // 42 au niveau 3, +5/niveau au-delà
   hero.pvMax = basePv;
   hero.renaissanceUsed = false;
   if(hero.unlocked.has('resilience')) hero.pvMax += 15;
   hero.pv = Math.min(hero.pv, hero.pvMax);
+  hero.fatMax = 100 + (ch.fatMax || 0);
+  hero.fat = Math.min(hero.fat, hero.fatMax);
 }
 
 function renderPersonnage(){
@@ -16576,8 +18412,9 @@ function renderPersonnage(){
   document.getElementById('charLvl').textContent = hero.niveau;
   document.getElementById('charPvText').textContent = `${hero.pv} / ${hero.pvMax}`;
   document.getElementById('charPvBar').style.width = (100*hero.pv/hero.pvMax)+'%';
-  document.getElementById('charFatText').textContent = `0 / ${hero.fatMax}`;
-  document.getElementById('charFatBar').style.width = '0%';
+  const zf = fatZone(hero.fat);
+  document.getElementById('charFatText').innerHTML = `${hero.fat} / ${hero.fatMax} <span class="${zf.txtCls}">${zf.name}</span>`;
+  document.getElementById('charFatBar').style.width = (100*hero.fat/hero.fatMax)+'%';
   const xpSeuil = hero.niveau<20 ? XP_SEUILS[hero.niveau] : hero.xp;
   document.getElementById('charStatsText').textContent = `Préc +${hero.precision} (+${bonusDeNiveau(hero.niveau)} niv.) / VOL ${hero.vol} · XP ${hero.xp}/${xpSeuil} · Danger recommandé : ${dangerRecommande(hero.niveau)}`;
   document.getElementById('talentPointsText').textContent = hero.talentPoints;
@@ -16710,7 +18547,10 @@ function renderShop(){
   }
 
   stock.forEach(item => {
-    const prix = peuple ? prixPour(item, peuple) : item.prix;
+    const ch = (typeof chantierBonus === 'function') ? chantierBonus() : { prixMult:1 };
+    const su = (typeof suspicionPrixMult === 'function') ? suspicionPrixMult() : 1;
+    const po = (typeof politiquePrixMult === 'function') ? politiquePrixMult() : 1;
+    const prix = Math.max(1, Math.round((peuple ? prixPour(item, peuple) : item.prix) * ch.prixMult * su * po));
     const row = document.createElement('div');
     row.className = 'inv-item';
     row.innerHTML = `<div><div class="ii-nom">${item.nom} — ${prix} or${
@@ -16765,12 +18605,15 @@ function grantLoot(){
 /* ============================= ARMÉE ============================= */
 
 function entretienTotal(){
-  return (hero.armee||[]).filter(u=>u.effectif>0).reduce((s,u)=>{
+  const ch = (typeof chantierBonus === 'function') ? chantierBonus() : { entretienMult:1 };
+  // Nourrir vingt hommes sans attirer l'attention se facture.
+  const su = (typeof suspicionEntretienMult === 'function') ? suspicionEntretienMult() : 1;
+  return Math.round(ch.entretienMult * su * (hero.armee||[]).filter(u=>u.effectif>0).reduce((s,u)=>{
     const t = UNIT_TYPES[u.type];
     if(!t || !t.entretien) return s;
     // On paie au prorata de l'effectif restant : une unité décimée coûte moins cher.
     return s + Math.round(t.entretien * (u.effectif/u.effectifMax));
-  }, 0);
+  }, 0));
 }
 
 /* Une troupe qu'on ne paie pas finit par s'en aller. */
@@ -16808,11 +18651,18 @@ function verrouReputation(t){
   return null;
 }
 
+/* Un homme recherché recrute mal : ce qu'on lui accorde de Renom, la Suspicion
+ * le lui retire au moment de signer. */
+function renomDeRecrutement(){
+  const su = (typeof suspicionEffets === 'function') ? suspicionEffets().recrutement : 0;
+  return Math.max(0, renomActuel() + su);
+}
+
 function recruterUnite(typeId){
   const t = UNIT_TYPES[typeId];
   if(!t || t.ennemi) return;
   if(hero.or < (t.prix||0)) return;
-  if(renomActuel() < (t.renomRequis||0)) return;
+  if(renomDeRecrutement() < (t.renomRequis||0)) return;
   if(t.requisFlag && !hasFlag(t.requisFlag)) return;
   if(verrouReputation(t)) return;
   if(t.unique && (hero.armee||[]).some(u=>u.type===typeId)) return;
@@ -16833,7 +18683,9 @@ function renderArmee(){
   const rn = renomActuel();
   const tRenom = document.getElementById('renomTexte');
   if(!tRenom) return;
-  tRenom.textContent = `${rn} · ${rangMilitaire(rn)}`;
+  const rrec = renomDeRecrutement();
+  tRenom.innerHTML = `${rn} · ${rangMilitaire(rn)}` + (rrec < rn
+    ? ` <span class="renom-susp">— on ne vous en accorde que ${rrec} au moment de signer : vous êtes recherché</span>` : '');
   document.getElementById('renomBar').style.width = Math.min(100, rn) + '%';
 
   const vivantes = (hero.armee||[]).filter(u=>u.effectif>0);
@@ -16870,7 +18722,7 @@ function renderArmee(){
   rec.innerHTML = '';
   unitesRecrutables().forEach(t=>{
     const dejaUnique = t.unique && (hero.armee||[]).some(u=>u.type===t.id);
-    const verrouRenom = renomActuel() < (t.renomRequis||0);
+    const verrouRenom = renomDeRecrutement() < (t.renomRequis||0);
     const verrouFlag  = t.requisFlag && !hasFlag(t.requisFlag);
     const verrouRep   = verrouReputation(t);
     const tropCher    = hero.or < (t.prix||0);
@@ -16888,7 +18740,7 @@ function renderArmee(){
     btn.style.marginTop = '8px';
     if(dejaUnique){ btn.textContent = 'Déjà au rôle'; btn.disabled = true; }
     else if(verrouFlag){ btn.textContent = 'Ils ne vous suivront pas encore'; btn.disabled = true; }
-    else if(verrouRenom){ btn.textContent = `Renom ${t.renomRequis} requis (vous avez ${renomActuel()})`; btn.disabled = true; }
+    else if(verrouRenom){ btn.textContent = `Renom ${t.renomRequis} requis (vous pesez ${renomDeRecrutement()})`; btn.disabled = true; }
     else if(verrouRep){ btn.textContent = verrouRep; btn.disabled = true; }
     else if(tropCher){ btn.textContent = `${t.prix} or requis`; btn.disabled = true; }
     else { btn.textContent = 'Recruter'; btn.onclick = () => recruterUnite(t.id); }
@@ -17006,30 +18858,14 @@ function renderListeLieux(){
 function openLieu(l){
   currentLieu = l;
   hero.position = l.id;
-  document.getElementById('lieuNom').textContent = l.nom;
-  const peuple = peupleDuLieu(l);
-  let ligne = l.description_courte + " — Peuple dominant : " + l.peuple_dominant + ".";
-  const avert = document.getElementById('lieuHostile');
-  if(avert){
-    if(peuple && rangReputation(peuple).hostile){
-      // Un peuple qui vous tient pour ennemi ne se contente pas de mal vous parler.
-      avert.style.display = 'block';
-      avert.innerHTML = `Les ${PEUPLE_LABELS[peuple]} vous tiennent pour un ennemi.
-        On ne vous vendra rien ici, et rester est un risque pris en connaissance de cause.`;
-    } else {
-      avert.style.display = 'none';
-    }
-  }
-  document.getElementById('lieuDesc').textContent = ligne;
   showScreen('lieu');
+  renderLieu();
 }
 
 /* ============================= SUSPICION (pression de Paria traqué) ============================= */
 function suspicionInfo(v){
-  if(v<30) return {label:"Discret", cls:""};
-  if(v<60) return {label:"Remarqué", cls:"mid"};
-  if(v<85) return {label:"Traqué", cls:"high"};
-  return {label:"Chasse ouverte", cls:"critical"};
+  const p = palierSuspicion(v);
+  return { label:p.label, cls:{ low:'', mid:'mid', high:'high', crit:'critical' }[p.cle] };
 }
 function adjustSuspicion(n){
   hero.suspicion = Math.max(0, Math.min(100, hero.suspicion + n));
@@ -17068,10 +18904,8 @@ function buildNarrativeBlock(ev, lieu){
 }
 
 /* ============================= BOUCLE DE TOUR : 3 ACTIONS ============================= */
+document.getElementById('btnActIci').onclick = () => { showScreen('lieu'); renderLieu(); };
 document.getElementById('btnActExplorer').onclick = () => useAction('explorer');
-document.getElementById('btnActContrats').onclick = () => useAction('contrats');
-document.getElementById('btnActBoutique').onclick = () => useAction('boutique');
-document.getElementById('btnActRepos').onclick = () => useAction('repos');
 document.getElementById('btnEndTurn').onclick = () => endTurnMeta();
 
 function renderApPips(){
@@ -17083,10 +18917,8 @@ function renderApPips(){
     p.className = 'pip'+(i<hero.actionsTour?' filled':'');
     holder.appendChild(p);
   }
-  ['btnActExplorer','btnActContrats','btnActBoutique','btnActRepos'].forEach(id=>{
-    const b = document.getElementById(id);
-    if(b) b.disabled = hero.actionsTour<=0;
-  });
+  const bx = document.getElementById('btnActExplorer');
+  if(bx) bx.disabled = hero.actionsTour <= 0;
 }
 
 function useAction(kind){
@@ -17094,23 +18926,74 @@ function useAction(kind){
   hero.actionsTour--;
   renderCalendar();
   if(kind==='explorer') triggerExploration();
-  else if(kind==='contrats'){ showScreen('contrats'); renderContracts(); }
-  else if(kind==='boutique'){ showScreen('personnage'); renderEquipement(); }
-  else if(kind==='repos') doRepos();
   if(hero.actionsTour<=0) endTurnMeta();
 }
 
+/* Se reposer n'est plus une action gratuite : cela prend des jours, et le monde
+ * ne s'arrête pas pendant ce temps. C'est ce qui donne un prix à l'Onde — brûler
+ * sa Fatigue en combat se paie en semaines de calendrier. */
 function doRepos(){
-  hero.fat = Math.max(0, hero.fat-20);
-  hero.pv = Math.min(hero.pvMax, hero.pv + Math.round(hero.pvMax*0.1));
-  adjustSuspicion(-8);
+  const ch = (typeof chantierBonus === 'function') ? chantierBonus() : { reposMult:1 };
+  const chezSoi = hero.position === 'LOC_001' && ch.reposMult > 1;
+  const semaines = chezSoi ? 1 : 2;
+  const baisse = Math.round(35 * (chezSoi ? ch.reposMult : 1));
+
+  const avant = hero.fat;
+  hero.fat = Math.max(0, hero.fat - baisse);
+  hero.pv = Math.min(hero.pvMax, hero.pv + Math.round(hero.pvMax * 0.25));
+  adjustSuspicion(-6);
+  const resume = advanceTime(semaines);
+  payerLaSolde(true);
+  saveGame(true);
+
+  const zone = fatZone(hero.fat);
   const box = document.getElementById('eventModalBox');
-  box.innerHTML = `<h3>Un moment de répit</h3>
-    <p class="narrative">${pickVariant(["Yohan trouve un coin tranquille — une arrière-cour, une chapelle vide, un simple recoin loin des regards — et laisse son corps souffler.", "Le temps d'une pause, Yohan redevient simplement un homme fatigué, pas un Paria traqué.", "Il ne se passe rien de notable. C'est exactement ce dont Yohan avait besoin."])}</p>
-    <div class="reward-tags"><span class="reward-tag">−20 Fatigue</span><span class="reward-tag neg" style="border-color:var(--onde-bright);color:var(--onde-bright);">−8 Suspicion</span></div>
+  box.innerHTML = `<span class="event-tag">${semaines} semaine${semaines > 1 ? 's' : ''}</span>
+    <h3>Un moment de répit</h3>
+    <p class="narrative">${chezSoi
+      ? "La salle basse est sèche et le feu tient toute la nuit. Le bourdonnement y retombe comme il ne retombe nulle part ailleurs."
+      : pickVariant([
+          "Yohan trouve un coin tranquille — une arrière-cour, une chapelle vide, un recoin loin des regards — et laisse son corps souffler.",
+          "Le temps d'une pause, Yohan redevient simplement un homme fatigué, pas un Paria traqué.",
+          "Il ne se passe rien de notable. C'est exactement ce dont Yohan avait besoin.",
+        ])}</p>
+    <div class="reward-tags">
+      <span class="reward-tag">Fatigue ${avant} → ${hero.fat} · ${zone.name}</span>
+      <span class="reward-tag">+${Math.round(hero.pvMax*0.25)} PV</span>
+      <span class="reward-tag">−6 Suspicion</span></div>
+    ${resume && resume.nouvelle ? `<p class="narrative" style="color:var(--parchment-dim);font-style:italic;">Pendant ce temps : ${resume.nouvelle}</p>` : ''}
     <div style="margin-top:16px;text-align:right;"><button class="primary" id="closeRepBtn">Continuer</button></div>`;
   document.getElementById('eventModal').style.display='flex';
-  document.getElementById('closeRepBtn').onclick = () => { renderPersonnage(); closeEventModal(); saveGame(true); };
+  document.getElementById('closeRepBtn').onclick = () => { closeEventModal(); renderLieu(); renderCalendar(); };
+}
+
+/* Disparaître un moment : la seule manière de faire vraiment retomber une
+ * chasse ouverte, et elle coûte une saison. */
+function seFaireOublier(){
+  const avant = hero.suspicion;
+  adjustSuspicion(-30);
+  hero.fat = Math.max(0, hero.fat - 50);
+  hero.pv = hero.pvMax;
+  const resume = advanceTime(13);
+  payerLaSolde(true);
+  saveGame(true);
+
+  const box = document.getElementById('eventModalBox');
+  box.innerHTML = `<span class="event-tag">Une saison entière</span><h3>Se faire oublier</h3>
+    <p class="narrative">${pickVariant([
+      "Trois mois dans une vallée sans nom, à couper du bois pour des gens qui ne posent pas de questions. Personne ne cherche un bûcheron.",
+      "Une saison à ne rien faire de remarquable, ce qui est exactement le travail. Les avis de recherche jaunissent vite quand rien ne les alimente.",
+      "Yohan disparaît. Pas de fuite, pas de cachette : il devient simplement quelqu'un d'ordinaire quelque part, et cela suffit.",
+    ])}</p>
+    <p class="narrative" style="color:var(--parchment-dim);font-style:italic;">Le monde, lui, n'a pas attendu.</p>
+    <div class="reward-tags">
+      <span class="reward-tag">Suspicion ${avant} → ${hero.suspicion}</span>
+      <span class="reward-tag">Fatigue remise à ${hero.fat}</span>
+      <span class="reward-tag neg">13 semaines perdues</span></div>
+    ${resume && resume.nouvelle ? `<p class="narrative" style="color:var(--parchment-dim);font-style:italic;">${resume.nouvelle}</p>` : ''}
+    <div style="margin-top:16px;text-align:right;"><button class="primary" id="oublieBtn">Reparaître</button></div>`;
+  document.getElementById('eventModal').style.display='flex';
+  document.getElementById('oublieBtn').onclick = () => { closeEventModal(); renderLieu(); renderCalendar(); };
 }
 
 function endTurnMeta(){
@@ -17134,6 +19017,9 @@ function endTurnMeta(){
   // Un tour ne se termine jamais sur rien : le pli dit ce qui a changé et ce
   // qu'on propose. Un jalon prêt se déclenche en le refermant.
   armerTrameSansOuvrir();
+  // Ce qu'on dit de vous s'invite avant le pli : plus la Suspicion est haute,
+  // plus il arrive quelque chose à cause d'elle.
+  if(tenterEvenementSuspicion(() => ouvrirPliDuTour(resume))) return;
   ouvrirPliDuTour(resume);
 }
 
@@ -17141,7 +19027,7 @@ function triggerExploration(){
   const lieu = LOCATIONS.find(l=>l.id===hero.position) || null;
 
   // Sous forte suspicion, la traque peut se manifester directement
-  if(hero.suspicion>=60 && Math.random()<0.25){
+  if(Math.random() < suspicionEffets().chasse){
     const box = document.getElementById('eventModalBox');
     box.innerHTML = `${artEventBanner('evt_traque', 'PARIA')}<span class="event-tag">Traque</span><h3>Ils l'ont retrouvé</h3>
       ${artPortraitCard('chasseur_prime')}
@@ -17200,42 +19086,12 @@ function renderContratsSpeciaux(){
     "Personne n'a encore assez de raisons de vous en vouloir pour vous proposer quelque chose de tordu.");
 }
 
+/* Le registre général n'est plus un écran : ses cinquante affaires servent de
+ * réservoir aux offres des lieux (voir src/offres.js). Ne restent affichés que
+ * les contrats d'histoire — campagnes et affaires personnelles —, sur l'écran
+ * de Quête, à leur place. */
 function renderContracts(){
   renderContratsSpeciaux();
-  renderAffairesLocales();
-  const list = document.getElementById('contractList');
-  list.innerHTML = '';
-  CONTRACTS.forEach(c=>{
-    const row = document.createElement('div');
-    row.className = 'contract-row';
-    row.innerHTML = `<div><div class="cr-titre">${c.titre}</div>
-      <div class="cr-meta">${c.commanditaire} · ${c.lieu} · ${c.type} · ${c.danger}</div></div>
-      <span class="cr-badge ${c.prix_paria?'paria':''}">${c.prix_paria?'Prix Paria':c.or+' or'}</span>`;
-    row.onclick = () => openContract(c);
-    list.appendChild(row);
-  });
-}
-
-function fillTemplate(str, c){
-  return str.replace(/\{titre\}/g, c.titre).replace(/\{lieu\}/g, c.lieu).replace(/\{commanditaire\}/g, c.commanditaire);
-}
-
-function contractNarrative(c, step){
-  const qualif = DANGER_QUALIF[c.danger] || "une affaire à ne pas prendre à la légère";
-  const enjeu = TYPE_ENJEU[c.type] || "mener cette mission à bien";
-  const fill = (str) => fillTemplate(str, c).replace(/\{qualif\}/g, qualif).replace(/\{enjeu\}/g, enjeu);
-  switch(step){
-    case "Audience":
-      return `<p><b>${c.commanditaire}</b> reçoit Yohan en personne, sans intermédiaire — signe que l'affaire compte réellement pour la maison. L'affaire porte déjà un nom, murmuré à mots couverts dans certains cercles : <b>${c.titre}</b>. Ce que l'on en dit suffit à comprendre qu'il s'agit de ${qualif}.</p><p>${c.pitch}</p><p style="color:var(--parchment-dim);font-style:italic;">Au fond, il ne s'agit que de ${enjeu} — mais Yohan sait mieux que quiconque que ce genre de mission cache toujours plus qu'il n'y paraît.</p>`;
-    case "Préparation": return `<p>${fill(pickVariant(FRAME_PREP))}</p>`;
-    case "Approche":    return `<p>${fill(pickVariant(FRAME_APPROCHE))}</p>`;
-    case "Résolution":  return `<p>${fill(pickVariant(FRAME_RESOLUTION))}</p>`;
-    default: return '';
-  }
-}
-
-function flavorFor(type, key, fallback){
-  return (CONTRACT_FLAVOR[type] && CONTRACT_FLAVOR[type][key]) || fallback;
 }
 
 function openContract(c){
@@ -17489,8 +19345,8 @@ function renderContractStep(){
     }
     // Une affaire locale ratée reste une affaire réglée pour ceux qui vivent là.
     noterAffaireReglee(c);
-    body.innerHTML = `<p class="narrative">${msg}</p>${lootHtml}<div style="margin-top:14px;"><button class="ghost" id="doneBtn">Retour au registre</button></div>`;
-    document.getElementById('doneBtn').onclick = () => { renderEquipement(); showScreen('contrats'); };
+    body.innerHTML = `<p class="narrative">${msg}</p>${lootHtml}<div style="margin-top:14px;"><button class="ghost" id="doneBtn">Revenir sur place</button></div>`;
+    document.getElementById('doneBtn').onclick = () => { renderEquipement(); showScreen('lieu'); renderLieu(); };
     return;
   }
 }

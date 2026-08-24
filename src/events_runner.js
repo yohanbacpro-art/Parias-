@@ -252,6 +252,9 @@ function renderScene(sceneId){
     document.getElementById('eventModal').style.display='flex';
     document.getElementById('scFinBtn').onclick = () => {
       renderPersonnage(); renderQuete(); closeEventModal(); saveGame(true);
+      // Un événement de Suspicion s'intercale avant autre chose (le pli du
+      // tour, une arrivée) : on rend la main à ce qui attendait.
+      if(suspicionRetour){ const suite = suspicionRetour; suspicionRetour = null; suite(); }
     };
     return;
   }
@@ -500,6 +503,6 @@ function contratsSpeciauxDisponibles(categorie){
 function ouvrirContratSpecial(id){
   const c = CONTRATS_SPECIAUX.find(x=>x.id===id);
   if(!c) return;
-  ecritState = { ev:c, lieu:null, retourEcran:'contrats', dernierJet:null };
+  ecritState = { ev:c, lieu:null, retourEcran:'lieu', dernierJet:null };
   renderScene('start');
 }

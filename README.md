@@ -7,7 +7,7 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V1.2** — le temps qui passe, la descendance, une carte qui se lit, un tour qui apporte toujours quelque chose, et huit troupes de plus.
+**Version actuelle : V1.3** — un seul écran de jeu, trois offres tirées de là où l'on est, des voyages qui sortent des contrats, une Suspicion qui coûte vraiment, le chantier de Karlsberg, et six puissances qui se disputent l'après-Astrah.
 
 ## Lancer le jeu
 
@@ -48,6 +48,11 @@ lien. Il se régénère avec `node tools/build-standalone.js`.
 | **L'arc d'Isolde** : le Second Empire par les registres, 5 jalons, 5 issues | ✅ |
 | **Affaires locales** : 60 contrats sur les 20 lieux, 20 dénouements qui changent l'endroit | ✅ |
 | **Recrutement consenti** : chaque compagnon s'accepte, se refuse, et se congédie | ✅ |
+| **Un seul écran de jeu** : le lieu, ses trois offres du tour, ce qu'on y fait | ✅ |
+| **Voyages par contrat** : accepter une affaire lointaine, c'est prendre la route | ✅ |
+| **Suspicion vivante** : 4 paliers, 12 événements dédiés, des couvertures durables | ✅ |
+| **Le chantier de Karlsberg** : 8 ouvrages, 5 200 or et 36 semaines pour tout relever | ✅ |
+| **Politique** : 6 puissances, leur influence, leur posture, et 8 édits qui tombent | ✅ |
 | 349 scènes, 213 choix, 23 affrontements, 6 batailles au total | ✅ |
 | **Combattants nommés** : 9 champions hors bestiaire | ✅ |
 | Événements générés (200 variantes) — remplissage quand les écrits sont épuisés | ✅ |
@@ -258,6 +263,102 @@ manuel libre — elle reste jouable — et transmet ce qu'elle a mérité : de l
 pour un nom reconnu, du Renom pour une réputation d'armes, un point de talent
 pour avoir compris le cycle ou sorti les siens de l'ombre. On garde le legs le
 plus riche jamais obtenu, pas le dernier : recommencer ne fait jamais reculer.
+
+## Un seul écran de jeu
+
+Il y avait trois systèmes de contrats qui se marchaient dessus : un registre
+général de cinquante affaires situées nulle part, des affaires locales dans un
+autre onglet, et un pli de fin de tour qui proposait des contrats d'autres
+régions à un homme qui n'y était pas. On ne savait plus où regarder.
+
+Il n'y en a plus qu'un : **le lieu où l'on se trouve**.
+
+- **Trois offres par tour**, tirées de là où Yohan est. Le dossier du lieu
+  d'abord — ce sont ses affaires à lui — puis, quand il se vide, ce qu'un voisin
+  relié par la route fait dire jusqu'ici, puis le tableau des mercenaires,
+  rhabillé aux couleurs de l'endroit et de son peuple.
+- **Les offres sont stables pour le tour.** On ne rafraîchit pas un tableau
+  d'affichage en le regardant. Le tour suivant en apporte d'autres.
+- **Une offre annonce quatre choses avant d'être acceptée** : qui paie, ce qu'il
+  faut faire, **où**, et ce que ça coûtera en Suspicion.
+- **Les voyages sortent des contrats.** Accepter une affaire qui se déroule
+  ailleurs, c'est partir : le trajet coûte des semaines de calendrier calculées
+  sur la distance réelle, fatigue de 4 points par semaine, et fait un peu
+  oublier. On ne se promène plus sur la carte pour qu'un inconnu vous propose
+  une affaire à trois régions de là.
+- **Le reste des onglets redevient ce qu'il aurait dû être** : des fiches qu'on
+  consulte, pas des endroits où l'on joue. L'onglet Contrats a disparu ;
+  campagnes et affaires personnelles sont passées sous *Quête*.
+
+## La Suspicion
+
+Elle n'était qu'un compteur qui montait quand on frappait fort. Elle fait
+maintenant trois choses.
+
+**Elle se paie, en permanence.** Quatre paliers — *Discret*, *Remarqué*,
+*Traqué*, *Chasse ouverte* — qui décident des prix chez les marchands (jusqu'à
++40 %), du coût d'entretien de la troupe (jusqu'à +50 % : nourrir vingt hommes
+sans attirer l'attention se facture), du Renom qu'on vous accorde vraiment au
+moment de signer un engagement (jusqu'à −45), et de la probabilité qu'on vous
+cherche activement chaque tour.
+
+**Elle parle.** Douze événements écrits ne servent qu'à elle : un portrait cloué
+sur une porte d'auberge, un enfant qui a vu la foudre, un prêtre qui compte les
+têtes, un rabatteur qui vend de fausses pistes, un innocent qu'on va pendre à
+votre place, un cordon de troupes qui ferme une vallée, un marché qu'une maison
+vous propose. Plus la Suspicion est haute, plus il en arrive ; au-dessus de 60,
+le tirage penche vers ceux qui offrent une porte de sortie.
+
+**Rien n'est gratuit.** On fait toujours redescendre la Suspicion — en or, en
+temps, en Renom, ou en laissant faire une chose qu'on préférerait empêcher.
+Certaines issues laissent une **couverture durable** : un faux portrait qui
+circule, un nom inscrit dans un registre, un réseau de quatre personnes qui
+mentent pour vous. Une couverture réduit la traque et adoucit les prix — et
+celle qu'une maison vous offre se paiera un jour.
+
+Deux actions sur place complètent le tableau : **se reposer** (une à deux
+semaines, −35 de Fatigue, un quart des PV, −6 de Suspicion) et **se faire
+oublier** (une saison entière, −30 de Suspicion, Fatigue à zéro). C'est ainsi
+que l'Onde se paie : la Fatigue survit au combat, et elle ne redescend qu'en
+semaines de calendrier.
+
+## Le chantier de Karlsberg
+
+Huit ouvrages, 5 200 or et 36 semaines pour tout relever — la cour, l'enceinte,
+le puits, la salle basse, la forge, le refuge, la bannière et la pierre gravée.
+Chacun a un prérequis, un coût en semaines pendant lesquelles Yohan vieillit et
+le monde avance sans lui, et un effet réel : Défense au combat, Fatigue maximale,
+entretien de la troupe, prix chez les marchands, vitesse du repos. Lever la
+bannière rapporte du Renom et de l'estime chez les Parias, et coûte 15 de
+Suspicion : on ne relève pas une maison Paria discrètement.
+
+## La politique des puissances
+
+Les peuples ont des tensions et une opinion de Yohan. Ce qui manquait, c'est ce
+qui se joue vraiment : **cinq puissances qui se disputent l'après-Astrah**, et
+une sixième qui n'existait pas encore — la sienne.
+
+| Puissance | Ce qu'elle veut |
+|---|---|
+| La Couronne d'Astrah | Tenir. Elle s'effrite du seul fait que le temps passe. |
+| Le parti de Lucius | Refonder l'État par les armes. Grandit avec la tension humaine. |
+| La maison de Varenne | Laisser l'empire tomber dans la main qu'elle tend. Grandit avec votre Suspicion : elle vous collectionne. |
+| La Cour des Lisières | Ce qui se décide chez les hommes finit par entrer dans la forêt. |
+| Les Portes de Kar-Durak | Pas de politique : des contrats, et on les tient. |
+| **Karlsberg** | La seule dont l'influence dépend entièrement de vous : les murs relevés, les lieux réglés, ce qu'on pense de vous chez les Parias. |
+
+Chaque tour, les influences dérivent selon l'état du monde et selon ce que vous
+avez fait. Quand les conditions d'un **édit** sont réunies, il tombe : une
+conscription qui double le prix du blé, une relecture publique des édits de la
+Purge, un mariage qui fait passer quatre provinces sans qu'une armée bouge, un
+notaire qui écrit « Karlsberg » sans guillemets pour la première fois depuis
+quarante ans. Les édits arrivent dans le pli du tour, s'inscrivent aux
+Chroniques, et changent réellement quelque chose — prix, tensions, réputations,
+Suspicion.
+
+L'onglet *Chroniques* dit qui est en train de gagner. **Le Second Empire n'est
+pas un événement : c'est le nom qu'on donnera à celle de ces puissances qui
+l'aura emporté.**
 
 ## Le tour, et la quête au centre
 
@@ -500,6 +601,9 @@ src/data/
   items.js            équipement et consommables
   portraits.js        registre des personnages illustrés
   lore.js             prologue, trame, compagnons, codex, calendrier, tensions
+  chantier.js         les 8 ouvrages de Karlsberg, leur coût et leurs effets
+  events_suspicion.js 12 événements qui font monter ou redescendre la Suspicion
+  politique.js        les 6 puissances, leurs dérives d'influence, leurs édits
 assets/sources/       les planches d'origine, dont les découpes sont tirées
 assets/portraits/     13 portraits fournis · assets/events/ 10 bandeaux
 tools/decoupe-affiche.py   refait les découpes depuis les planches
@@ -513,6 +617,8 @@ tools/smoke-nemesis.js     éprouve l'arc du Livré, le Sillage et ses issues
 tools/smoke-monde.js       éprouve la réputation, les marchands et la 2e vague
 tools/smoke-arcs.js        éprouve Isolde, les compagnons, les liens et les dossiers
 tools/smoke-tour.js        éprouve le tour, le temps, la lignée, la carte, les troupes
+tools/smoke-consolidation.js  éprouve l'écran unique, les offres, les voyages,
+                              la Suspicion, le chantier et la politique
 tools/manifest-assets.js   régénère assets/README.md (avec ce qui est fourni)
 ```
 
@@ -533,6 +639,7 @@ node tools/smoke-nemesis.js                  # l'arc du Livré, le Sillage, ses 
 node tools/smoke-monde.js                    # réputation, marchands, couverture des lieux
 node tools/smoke-arcs.js                     # Isolde, compagnons, attachements, dossiers
 node tools/smoke-tour.js                     # tour, âge, descendance, carte, recrutement
+node tools/smoke-consolidation.js            # écran unique, offres, voyages, Suspicion, chantier, politique
 
 node tools/manifest-assets.js                # régénère la liste des illustrations
 ```
@@ -547,7 +654,10 @@ jalon de trame, contrat spécial ou attachement pose le sien. Il contrôle aussi
 **l'épilogue** : aucun verdict ne doit dépendre d'un marqueur inexistant, et
 chaque section à verdict unique doit avoir un repli. Il imprime enfin **la
 couverture par lieu** et échoue si un lieu ne peut déclencher aucun événement
-écrit.
+écrit. Il contrôle enfin **le chantier** (coûts réels, prérequis existants, aucune
+chaîne circulaire), **la Suspicion** (chaque palier doit avoir de quoi se produire
+*et* de quoi en sortir) et **la politique** (chaque édit désigne une puissance et
+des peuples qui existent, et chaque puissance finit par décider quelque chose).
 
 ## Écrire un événement
 

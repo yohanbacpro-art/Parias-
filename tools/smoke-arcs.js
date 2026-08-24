@@ -170,16 +170,21 @@ async function derouler(page, cible){
 
   const dossier = await page.evaluate(() => {
     openLieu(LOCATIONS.find(l => l.id === 'LOC_016'));
-    renderContracts();
-    const avant = document.querySelectorAll('#affairesLocales .cr-titre').length;
+    const offres = [...document.querySelectorAll('#lieuOffres .offre')].length;
+    const dici = offresDuTour().filter(c => c.locale && !c.ailleurs).length;
+    const avant = affairesDuLieu('LOC_016').length;
     CONTRATS_LOCAUX_EXPANSES.LOC_016.forEach(c => noterAffaireReglee(c));
-    renderContracts();
-    return { avant, restantes: document.querySelectorAll('#affairesLocales .cr-titre').length,
+    hero.offres = null;                    // le tableau se retire après coup
+    renderLieu();
+    return { offres, dici, avant,
+             restantes: affairesDuLieu('LOC_016').length,
              complet: dossierComplet('LOC_016'),
              den: (denouementDisponible('LOC_016') || {}).id,
              bouton: !!document.getElementById('btnDenouement') };
   });
-  verifie('le lieu propose ses trois affaires', dossier.avant === 3, dossier);
+  verifie("l'écran du lieu propose toujours trois offres", dossier.offres === 3, dossier);
+  verifie('le lieu a bien ses trois affaires au dossier', dossier.avant === 3, dossier);
+  verifie('et il en propose au moins une de chez lui', dossier.dici >= 1, dossier);
   verifie('les régler vide le dossier', dossier.restantes === 0 && dossier.complet, dossier);
   verifie('et ouvre un dénouement', dossier.den === 'DL_016' && dossier.bouton, dossier);
 

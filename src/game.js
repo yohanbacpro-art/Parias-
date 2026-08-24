@@ -52,6 +52,7 @@ function triggerChapitre(idx){
 }
 
 function renderQuete(){
+  renderContratsSpeciaux();
   const ch = TRAME_CHAPITRES[hero.trame.chapitre];
   const next = TRAME_CHAPITRES[hero.trame.chapitre+1];
   document.getElementById('queteChapitre').innerHTML = `<span class="qc-num">Chapitre ${hero.trame.chapitre+1}</span>${ch.titre}<p style="color:var(--parchment-dim);font-style:italic;font-size:14px;margin-top:8px;">${ch.objectif}</p>`;
@@ -277,12 +278,11 @@ function enterGame(){
   cal.dataset.gameStarted='1';
   renderPersonnage();
   renderMonde();
-  renderContracts();
   renderCalendar();
   renderChroniques();
   renderQuete();
   renderArmee();
-  showScreen('personnage');
+  openLieu(LOCATIONS.find(l => l.id === hero.position) || LOCATIONS[0]);
 }
 
 initSaveScreen();
@@ -300,6 +300,7 @@ document.getElementById('btnStart').onclick = () => {
 document.querySelectorAll('nav.tabs button').forEach(b=>{
   b.onclick = () => {
     showScreen(b.dataset.screen);
+    if(b.dataset.screen==='lieu') renderLieu();
     if(b.dataset.screen==='chroniques') renderChroniques();
     if(b.dataset.screen==='quete') renderQuete();
     if(b.dataset.screen==='personnage') renderEquipement();
@@ -307,11 +308,10 @@ document.querySelectorAll('nav.tabs button').forEach(b=>{
     if(b.dataset.screen==='armee') renderArmee();
     // Les campagnes et affaires personnelles s'ouvrent au fil du Renom et des
     // marqueurs : il faut refaire le tri à chaque visite, pas seulement au départ.
-    if(b.dataset.screen==='contrats') renderContracts();
   };
 });
 document.getElementById('btnBackMonde').onclick = () => showScreen('monde');
-document.getElementById('btnBackContrats').onclick = () => showScreen('contrats');
+document.getElementById('btnBackContrats').onclick = () => { showScreen('lieu'); renderLieu(); };
 
 /* ============================= TEMPS & CHRONIQUES ============================= */
 hero.temps = { semaines: 0 };
@@ -355,8 +355,11 @@ function advanceTime(semaines){
   lignee.filter(e => e.type !== 'age').forEach(e => {
     hero.chroniques.push({ date: `${after.saison}, An ${after.an}`, texte: '◆ ' + e.texte });
   });
+  // Pendant ce temps, cinq puissances se disputent l'après-Astrah — et une
+  // sixième se relève dans le dos de tout le monde.
+  const politique = (typeof politiqueTick === 'function') ? politiqueTick(semaines) : [];
   renderCalendar();
-  return { nouvelle, lignee };
+  return { nouvelle, lignee, politique };
 }
 
 function progressTensions(dateInfo){
@@ -400,6 +403,7 @@ function renderTensions(){
 function renderChroniques(){
   renderTensions();
   renderReputations();
+  if(typeof renderPolitique === 'function') renderPolitique();
   const list = document.getElementById('newsList');
   if(!hero.chroniques.length){
     list.innerHTML = `<p class="news-empty">Rien à signaler pour l'instant — le temps n'a pas encore assez avancé.</p>`;
@@ -411,11 +415,14 @@ function renderChroniques(){
 /* ============================= PERSONNAGE / TALENTS ============================= */
 function applyPassiveEffects(){
   const age = (typeof malusAge === 'function') ? malusAge() : {agi:0, pvMax:0};
+  const ch  = (typeof chantierBonus === 'function') ? chantierBonus() : {fatMax:0};
   const basePv = 42 + (hero.niveau-3)*5 + age.pvMax; // 42 au niveau 3, +5/niveau au-delà
   hero.pvMax = basePv;
   hero.renaissanceUsed = false;
   if(hero.unlocked.has('resilience')) hero.pvMax += 15;
   hero.pv = Math.min(hero.pv, hero.pvMax);
+  hero.fatMax = 100 + (ch.fatMax || 0);
+  hero.fat = Math.min(hero.fat, hero.fatMax);
 }
 
 function renderPersonnage(){
@@ -425,8 +432,9 @@ function renderPersonnage(){
   document.getElementById('charLvl').textContent = hero.niveau;
   document.getElementById('charPvText').textContent = `${hero.pv} / ${hero.pvMax}`;
   document.getElementById('charPvBar').style.width = (100*hero.pv/hero.pvMax)+'%';
-  document.getElementById('charFatText').textContent = `0 / ${hero.fatMax}`;
-  document.getElementById('charFatBar').style.width = '0%';
+  const zf = fatZone(hero.fat);
+  document.getElementById('charFatText').innerHTML = `${hero.fat} / ${hero.fatMax} <span class="${zf.txtCls}">${zf.name}</span>`;
+  document.getElementById('charFatBar').style.width = (100*hero.fat/hero.fatMax)+'%';
   const xpSeuil = hero.niveau<20 ? XP_SEUILS[hero.niveau] : hero.xp;
   document.getElementById('charStatsText').textContent = `Préc +${hero.precision} (+${bonusDeNiveau(hero.niveau)} niv.) / VOL ${hero.vol} · XP ${hero.xp}/${xpSeuil} · Danger recommandé : ${dangerRecommande(hero.niveau)}`;
   document.getElementById('talentPointsText').textContent = hero.talentPoints;
@@ -559,7 +567,10 @@ function renderShop(){
   }
 
   stock.forEach(item => {
-    const prix = peuple ? prixPour(item, peuple) : item.prix;
+    const ch = (typeof chantierBonus === 'function') ? chantierBonus() : { prixMult:1 };
+    const su = (typeof suspicionPrixMult === 'function') ? suspicionPrixMult() : 1;
+    const po = (typeof politiquePrixMult === 'function') ? politiquePrixMult() : 1;
+    const prix = Math.max(1, Math.round((peuple ? prixPour(item, peuple) : item.prix) * ch.prixMult * su * po));
     const row = document.createElement('div');
     row.className = 'inv-item';
     row.innerHTML = `<div><div class="ii-nom">${item.nom} — ${prix} or${
@@ -614,12 +625,15 @@ function grantLoot(){
 /* ============================= ARMÉE ============================= */
 
 function entretienTotal(){
-  return (hero.armee||[]).filter(u=>u.effectif>0).reduce((s,u)=>{
+  const ch = (typeof chantierBonus === 'function') ? chantierBonus() : { entretienMult:1 };
+  // Nourrir vingt hommes sans attirer l'attention se facture.
+  const su = (typeof suspicionEntretienMult === 'function') ? suspicionEntretienMult() : 1;
+  return Math.round(ch.entretienMult * su * (hero.armee||[]).filter(u=>u.effectif>0).reduce((s,u)=>{
     const t = UNIT_TYPES[u.type];
     if(!t || !t.entretien) return s;
     // On paie au prorata de l'effectif restant : une unité décimée coûte moins cher.
     return s + Math.round(t.entretien * (u.effectif/u.effectifMax));
-  }, 0);
+  }, 0));
 }
 
 /* Une troupe qu'on ne paie pas finit par s'en aller. */
@@ -657,11 +671,18 @@ function verrouReputation(t){
   return null;
 }
 
+/* Un homme recherché recrute mal : ce qu'on lui accorde de Renom, la Suspicion
+ * le lui retire au moment de signer. */
+function renomDeRecrutement(){
+  const su = (typeof suspicionEffets === 'function') ? suspicionEffets().recrutement : 0;
+  return Math.max(0, renomActuel() + su);
+}
+
 function recruterUnite(typeId){
   const t = UNIT_TYPES[typeId];
   if(!t || t.ennemi) return;
   if(hero.or < (t.prix||0)) return;
-  if(renomActuel() < (t.renomRequis||0)) return;
+  if(renomDeRecrutement() < (t.renomRequis||0)) return;
   if(t.requisFlag && !hasFlag(t.requisFlag)) return;
   if(verrouReputation(t)) return;
   if(t.unique && (hero.armee||[]).some(u=>u.type===typeId)) return;
@@ -682,7 +703,9 @@ function renderArmee(){
   const rn = renomActuel();
   const tRenom = document.getElementById('renomTexte');
   if(!tRenom) return;
-  tRenom.textContent = `${rn} · ${rangMilitaire(rn)}`;
+  const rrec = renomDeRecrutement();
+  tRenom.innerHTML = `${rn} · ${rangMilitaire(rn)}` + (rrec < rn
+    ? ` <span class="renom-susp">— on ne vous en accorde que ${rrec} au moment de signer : vous êtes recherché</span>` : '');
   document.getElementById('renomBar').style.width = Math.min(100, rn) + '%';
 
   const vivantes = (hero.armee||[]).filter(u=>u.effectif>0);
@@ -719,7 +742,7 @@ function renderArmee(){
   rec.innerHTML = '';
   unitesRecrutables().forEach(t=>{
     const dejaUnique = t.unique && (hero.armee||[]).some(u=>u.type===t.id);
-    const verrouRenom = renomActuel() < (t.renomRequis||0);
+    const verrouRenom = renomDeRecrutement() < (t.renomRequis||0);
     const verrouFlag  = t.requisFlag && !hasFlag(t.requisFlag);
     const verrouRep   = verrouReputation(t);
     const tropCher    = hero.or < (t.prix||0);
@@ -737,7 +760,7 @@ function renderArmee(){
     btn.style.marginTop = '8px';
     if(dejaUnique){ btn.textContent = 'Déjà au rôle'; btn.disabled = true; }
     else if(verrouFlag){ btn.textContent = 'Ils ne vous suivront pas encore'; btn.disabled = true; }
-    else if(verrouRenom){ btn.textContent = `Renom ${t.renomRequis} requis (vous avez ${renomActuel()})`; btn.disabled = true; }
+    else if(verrouRenom){ btn.textContent = `Renom ${t.renomRequis} requis (vous pesez ${renomDeRecrutement()})`; btn.disabled = true; }
     else if(verrouRep){ btn.textContent = verrouRep; btn.disabled = true; }
     else if(tropCher){ btn.textContent = `${t.prix} or requis`; btn.disabled = true; }
     else { btn.textContent = 'Recruter'; btn.onclick = () => recruterUnite(t.id); }
@@ -855,30 +878,14 @@ function renderListeLieux(){
 function openLieu(l){
   currentLieu = l;
   hero.position = l.id;
-  document.getElementById('lieuNom').textContent = l.nom;
-  const peuple = peupleDuLieu(l);
-  let ligne = l.description_courte + " — Peuple dominant : " + l.peuple_dominant + ".";
-  const avert = document.getElementById('lieuHostile');
-  if(avert){
-    if(peuple && rangReputation(peuple).hostile){
-      // Un peuple qui vous tient pour ennemi ne se contente pas de mal vous parler.
-      avert.style.display = 'block';
-      avert.innerHTML = `Les ${PEUPLE_LABELS[peuple]} vous tiennent pour un ennemi.
-        On ne vous vendra rien ici, et rester est un risque pris en connaissance de cause.`;
-    } else {
-      avert.style.display = 'none';
-    }
-  }
-  document.getElementById('lieuDesc').textContent = ligne;
   showScreen('lieu');
+  renderLieu();
 }
 
 /* ============================= SUSPICION (pression de Paria traqué) ============================= */
 function suspicionInfo(v){
-  if(v<30) return {label:"Discret", cls:""};
-  if(v<60) return {label:"Remarqué", cls:"mid"};
-  if(v<85) return {label:"Traqué", cls:"high"};
-  return {label:"Chasse ouverte", cls:"critical"};
+  const p = palierSuspicion(v);
+  return { label:p.label, cls:{ low:'', mid:'mid', high:'high', crit:'critical' }[p.cle] };
 }
 function adjustSuspicion(n){
   hero.suspicion = Math.max(0, Math.min(100, hero.suspicion + n));
@@ -917,10 +924,8 @@ function buildNarrativeBlock(ev, lieu){
 }
 
 /* ============================= BOUCLE DE TOUR : 3 ACTIONS ============================= */
+document.getElementById('btnActIci').onclick = () => { showScreen('lieu'); renderLieu(); };
 document.getElementById('btnActExplorer').onclick = () => useAction('explorer');
-document.getElementById('btnActContrats').onclick = () => useAction('contrats');
-document.getElementById('btnActBoutique').onclick = () => useAction('boutique');
-document.getElementById('btnActRepos').onclick = () => useAction('repos');
 document.getElementById('btnEndTurn').onclick = () => endTurnMeta();
 
 function renderApPips(){
@@ -932,10 +937,8 @@ function renderApPips(){
     p.className = 'pip'+(i<hero.actionsTour?' filled':'');
     holder.appendChild(p);
   }
-  ['btnActExplorer','btnActContrats','btnActBoutique','btnActRepos'].forEach(id=>{
-    const b = document.getElementById(id);
-    if(b) b.disabled = hero.actionsTour<=0;
-  });
+  const bx = document.getElementById('btnActExplorer');
+  if(bx) bx.disabled = hero.actionsTour <= 0;
 }
 
 function useAction(kind){
@@ -943,23 +946,74 @@ function useAction(kind){
   hero.actionsTour--;
   renderCalendar();
   if(kind==='explorer') triggerExploration();
-  else if(kind==='contrats'){ showScreen('contrats'); renderContracts(); }
-  else if(kind==='boutique'){ showScreen('personnage'); renderEquipement(); }
-  else if(kind==='repos') doRepos();
   if(hero.actionsTour<=0) endTurnMeta();
 }
 
+/* Se reposer n'est plus une action gratuite : cela prend des jours, et le monde
+ * ne s'arrête pas pendant ce temps. C'est ce qui donne un prix à l'Onde — brûler
+ * sa Fatigue en combat se paie en semaines de calendrier. */
 function doRepos(){
-  hero.fat = Math.max(0, hero.fat-20);
-  hero.pv = Math.min(hero.pvMax, hero.pv + Math.round(hero.pvMax*0.1));
-  adjustSuspicion(-8);
+  const ch = (typeof chantierBonus === 'function') ? chantierBonus() : { reposMult:1 };
+  const chezSoi = hero.position === 'LOC_001' && ch.reposMult > 1;
+  const semaines = chezSoi ? 1 : 2;
+  const baisse = Math.round(35 * (chezSoi ? ch.reposMult : 1));
+
+  const avant = hero.fat;
+  hero.fat = Math.max(0, hero.fat - baisse);
+  hero.pv = Math.min(hero.pvMax, hero.pv + Math.round(hero.pvMax * 0.25));
+  adjustSuspicion(-6);
+  const resume = advanceTime(semaines);
+  payerLaSolde(true);
+  saveGame(true);
+
+  const zone = fatZone(hero.fat);
   const box = document.getElementById('eventModalBox');
-  box.innerHTML = `<h3>Un moment de répit</h3>
-    <p class="narrative">${pickVariant(["Yohan trouve un coin tranquille — une arrière-cour, une chapelle vide, un simple recoin loin des regards — et laisse son corps souffler.", "Le temps d'une pause, Yohan redevient simplement un homme fatigué, pas un Paria traqué.", "Il ne se passe rien de notable. C'est exactement ce dont Yohan avait besoin."])}</p>
-    <div class="reward-tags"><span class="reward-tag">−20 Fatigue</span><span class="reward-tag neg" style="border-color:var(--onde-bright);color:var(--onde-bright);">−8 Suspicion</span></div>
+  box.innerHTML = `<span class="event-tag">${semaines} semaine${semaines > 1 ? 's' : ''}</span>
+    <h3>Un moment de répit</h3>
+    <p class="narrative">${chezSoi
+      ? "La salle basse est sèche et le feu tient toute la nuit. Le bourdonnement y retombe comme il ne retombe nulle part ailleurs."
+      : pickVariant([
+          "Yohan trouve un coin tranquille — une arrière-cour, une chapelle vide, un recoin loin des regards — et laisse son corps souffler.",
+          "Le temps d'une pause, Yohan redevient simplement un homme fatigué, pas un Paria traqué.",
+          "Il ne se passe rien de notable. C'est exactement ce dont Yohan avait besoin.",
+        ])}</p>
+    <div class="reward-tags">
+      <span class="reward-tag">Fatigue ${avant} → ${hero.fat} · ${zone.name}</span>
+      <span class="reward-tag">+${Math.round(hero.pvMax*0.25)} PV</span>
+      <span class="reward-tag">−6 Suspicion</span></div>
+    ${resume && resume.nouvelle ? `<p class="narrative" style="color:var(--parchment-dim);font-style:italic;">Pendant ce temps : ${resume.nouvelle}</p>` : ''}
     <div style="margin-top:16px;text-align:right;"><button class="primary" id="closeRepBtn">Continuer</button></div>`;
   document.getElementById('eventModal').style.display='flex';
-  document.getElementById('closeRepBtn').onclick = () => { renderPersonnage(); closeEventModal(); saveGame(true); };
+  document.getElementById('closeRepBtn').onclick = () => { closeEventModal(); renderLieu(); renderCalendar(); };
+}
+
+/* Disparaître un moment : la seule manière de faire vraiment retomber une
+ * chasse ouverte, et elle coûte une saison. */
+function seFaireOublier(){
+  const avant = hero.suspicion;
+  adjustSuspicion(-30);
+  hero.fat = Math.max(0, hero.fat - 50);
+  hero.pv = hero.pvMax;
+  const resume = advanceTime(13);
+  payerLaSolde(true);
+  saveGame(true);
+
+  const box = document.getElementById('eventModalBox');
+  box.innerHTML = `<span class="event-tag">Une saison entière</span><h3>Se faire oublier</h3>
+    <p class="narrative">${pickVariant([
+      "Trois mois dans une vallée sans nom, à couper du bois pour des gens qui ne posent pas de questions. Personne ne cherche un bûcheron.",
+      "Une saison à ne rien faire de remarquable, ce qui est exactement le travail. Les avis de recherche jaunissent vite quand rien ne les alimente.",
+      "Yohan disparaît. Pas de fuite, pas de cachette : il devient simplement quelqu'un d'ordinaire quelque part, et cela suffit.",
+    ])}</p>
+    <p class="narrative" style="color:var(--parchment-dim);font-style:italic;">Le monde, lui, n'a pas attendu.</p>
+    <div class="reward-tags">
+      <span class="reward-tag">Suspicion ${avant} → ${hero.suspicion}</span>
+      <span class="reward-tag">Fatigue remise à ${hero.fat}</span>
+      <span class="reward-tag neg">13 semaines perdues</span></div>
+    ${resume && resume.nouvelle ? `<p class="narrative" style="color:var(--parchment-dim);font-style:italic;">${resume.nouvelle}</p>` : ''}
+    <div style="margin-top:16px;text-align:right;"><button class="primary" id="oublieBtn">Reparaître</button></div>`;
+  document.getElementById('eventModal').style.display='flex';
+  document.getElementById('oublieBtn').onclick = () => { closeEventModal(); renderLieu(); renderCalendar(); };
 }
 
 function endTurnMeta(){
@@ -983,6 +1037,9 @@ function endTurnMeta(){
   // Un tour ne se termine jamais sur rien : le pli dit ce qui a changé et ce
   // qu'on propose. Un jalon prêt se déclenche en le refermant.
   armerTrameSansOuvrir();
+  // Ce qu'on dit de vous s'invite avant le pli : plus la Suspicion est haute,
+  // plus il arrive quelque chose à cause d'elle.
+  if(tenterEvenementSuspicion(() => ouvrirPliDuTour(resume))) return;
   ouvrirPliDuTour(resume);
 }
 
@@ -990,7 +1047,7 @@ function triggerExploration(){
   const lieu = LOCATIONS.find(l=>l.id===hero.position) || null;
 
   // Sous forte suspicion, la traque peut se manifester directement
-  if(hero.suspicion>=60 && Math.random()<0.25){
+  if(Math.random() < suspicionEffets().chasse){
     const box = document.getElementById('eventModalBox');
     box.innerHTML = `${artEventBanner('evt_traque', 'PARIA')}<span class="event-tag">Traque</span><h3>Ils l'ont retrouvé</h3>
       ${artPortraitCard('chasseur_prime')}
@@ -1049,42 +1106,12 @@ function renderContratsSpeciaux(){
     "Personne n'a encore assez de raisons de vous en vouloir pour vous proposer quelque chose de tordu.");
 }
 
+/* Le registre général n'est plus un écran : ses cinquante affaires servent de
+ * réservoir aux offres des lieux (voir src/offres.js). Ne restent affichés que
+ * les contrats d'histoire — campagnes et affaires personnelles —, sur l'écran
+ * de Quête, à leur place. */
 function renderContracts(){
   renderContratsSpeciaux();
-  renderAffairesLocales();
-  const list = document.getElementById('contractList');
-  list.innerHTML = '';
-  CONTRACTS.forEach(c=>{
-    const row = document.createElement('div');
-    row.className = 'contract-row';
-    row.innerHTML = `<div><div class="cr-titre">${c.titre}</div>
-      <div class="cr-meta">${c.commanditaire} · ${c.lieu} · ${c.type} · ${c.danger}</div></div>
-      <span class="cr-badge ${c.prix_paria?'paria':''}">${c.prix_paria?'Prix Paria':c.or+' or'}</span>`;
-    row.onclick = () => openContract(c);
-    list.appendChild(row);
-  });
-}
-
-function fillTemplate(str, c){
-  return str.replace(/\{titre\}/g, c.titre).replace(/\{lieu\}/g, c.lieu).replace(/\{commanditaire\}/g, c.commanditaire);
-}
-
-function contractNarrative(c, step){
-  const qualif = DANGER_QUALIF[c.danger] || "une affaire à ne pas prendre à la légère";
-  const enjeu = TYPE_ENJEU[c.type] || "mener cette mission à bien";
-  const fill = (str) => fillTemplate(str, c).replace(/\{qualif\}/g, qualif).replace(/\{enjeu\}/g, enjeu);
-  switch(step){
-    case "Audience":
-      return `<p><b>${c.commanditaire}</b> reçoit Yohan en personne, sans intermédiaire — signe que l'affaire compte réellement pour la maison. L'affaire porte déjà un nom, murmuré à mots couverts dans certains cercles : <b>${c.titre}</b>. Ce que l'on en dit suffit à comprendre qu'il s'agit de ${qualif}.</p><p>${c.pitch}</p><p style="color:var(--parchment-dim);font-style:italic;">Au fond, il ne s'agit que de ${enjeu} — mais Yohan sait mieux que quiconque que ce genre de mission cache toujours plus qu'il n'y paraît.</p>`;
-    case "Préparation": return `<p>${fill(pickVariant(FRAME_PREP))}</p>`;
-    case "Approche":    return `<p>${fill(pickVariant(FRAME_APPROCHE))}</p>`;
-    case "Résolution":  return `<p>${fill(pickVariant(FRAME_RESOLUTION))}</p>`;
-    default: return '';
-  }
-}
-
-function flavorFor(type, key, fallback){
-  return (CONTRACT_FLAVOR[type] && CONTRACT_FLAVOR[type][key]) || fallback;
 }
 
 function openContract(c){
@@ -1338,8 +1365,8 @@ function renderContractStep(){
     }
     // Une affaire locale ratée reste une affaire réglée pour ceux qui vivent là.
     noterAffaireReglee(c);
-    body.innerHTML = `<p class="narrative">${msg}</p>${lootHtml}<div style="margin-top:14px;"><button class="ghost" id="doneBtn">Retour au registre</button></div>`;
-    document.getElementById('doneBtn').onclick = () => { renderEquipement(); showScreen('contrats'); };
+    body.innerHTML = `<p class="narrative">${msg}</p>${lootHtml}<div style="margin-top:14px;"><button class="ghost" id="doneBtn">Revenir sur place</button></div>`;
+    document.getElementById('doneBtn').onclick = () => { renderEquipement(); showScreen('lieu'); renderLieu(); };
     return;
   }
 }

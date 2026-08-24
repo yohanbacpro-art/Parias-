@@ -119,6 +119,8 @@ function buildYohan(extraDef){
   };
 
   if(armure){ y.defenseBase += (armure.def||0); y.agi += (armure.agi||0); }
+  // Une place forte derrière soi change la façon de se battre devant.
+  if(typeof chantierBonus === 'function') y.defenseBase += chantierBonus().defense || 0;
   if(accessoire){ y.precision += (accessoire.prec||0); y.vol += (accessoire.vol||0); y.fatMax += (accessoire.fatMax||0); }
   if(extraDef) y.defenseBase += extraDef;
 

@@ -43,29 +43,12 @@ function propositionsDuTour(){
     }
   }
 
-  // 3. Une affaire du lieu où l'on se trouve.
-  if(lieu){
-    const locales = affairesDuLieu(lieu.id);
-    if(locales.length){
-      const a = locales[Math.floor(Math.random() * locales.length)];
-      props.push({
-        cle:'affaire_' + a.id, titre:a.titre,
-        texte:`${a.commanditaire} — ${a.pitch}`,
-        action:'contrat', cible:a.id, bouton:`${a.or} or`,
-      });
-    }
-  }
-
-  // 4. Une affaire d'ailleurs, portée par un courrier — il faut bien que le
-  //    monde vienne à Yohan de temps en temps.
-  const ailleurs = LOCATIONS.filter(l => l.id !== hero.position && affairesDuLieu(l.id).length);
-  if(ailleurs.length && props.length < 3){
-    const l = ailleurs[Math.floor(Math.random() * ailleurs.length)];
-    const a = affairesDuLieu(l.id)[0];
+  // 3. Ce qu'on cherche là où l'on se trouve : trois offres attendent déjà.
+  if(lieu && props.length < 3){
     props.push({
-      cle:'ailleurs_' + a.id, titre:a.titre,
-      texte:`On demande quelqu'un à ${l.nom}. ${a.pitch}`,
-      action:'lieu', cible:l.id, bouton:"S'y rendre",
+      cle:'offres', titre:`Ce qu'on cherche à ${lieu.nom}`,
+      texte:"Trois offres au tableau. Certaines se règlent sur place, d'autres demandent de partir.",
+      action:'lieu', cible:lieu.id, bouton:"Voir",
     });
   }
 
@@ -105,6 +88,7 @@ function ouvrirPliDuTour(resume){
   const lignes = [];
   if(resume && resume.nouvelle) lignes.push(`<li class="pli-monde">${resume.nouvelle}</li>`);
   (resume && resume.lignee || []).forEach(e => lignes.push(`<li class="pli-lignee">${e.texte}</li>`));
+  (resume && resume.politique || []).forEach(e => lignes.push(`<li class="pli-politique">${e.texte}</li>`));
   if(resume && resume.solde) lignes.push(`<li class="pli-solde">${resume.solde}</li>`);
   if(resume && resume.rente) lignes.push(`<li class="pli-or">${resume.rente}</li>`);
 
@@ -160,13 +144,9 @@ function suivreProposition(p){
     if(l) openLieu(l);
     return;
   }
-  if(p.action === 'contrat'){
-    const c = Object.values(CONTRATS_LOCAUX_EXPANSES).flat().find(x => x.id === p.cible);
-    if(c) openContract(c);
-    return;
-  }
+  if(p.action === 'contrat'){ accepterOffre(p.cible); return; }
   if(p.action === 'special'){ ouvrirContratSpecial(p.cible); return; }
-  showScreen('contrats'); renderContracts();
+  showScreen('lieu'); renderLieu();
 }
 
 /* ============================= LE BANDEAU DE QUÊTE ============================= */

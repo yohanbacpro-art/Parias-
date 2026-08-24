@@ -19,7 +19,9 @@
  * reconstruits au chargement (voir CHAMPS_SET).
  */
 
-const SAVE_VERSION = 6;
+const SAVE_VERSION = 7;
+/* Le préfixe est un espace de noms de stockage, pas le numéro de version : il
+ * reste figé pour que les parties commencées avant soient relues puis migrées. */
 const SAVE_PREFIX  = 'parias_save_v6_';
 const SAVE_LEGACY  = 'parias_vardhen_save_v1';   // format d'avant les emplacements
 const SAVE_PREFIXES_ANCIENS = ['parias_save_v5_', 'parias_save_v4_', 'parias_save_v3_'];   // relus une fois, puis migrés
@@ -71,6 +73,9 @@ function reconstruireHero(brut){
   h.affinites         = h.affinites || {};
   h.reputations       = { ...REPUTATION_DEPART, ...(h.reputations || {}) };
   h.dossiers          = h.dossiers || {};
+  h.chantier          = h.chantier || [];
+  h.offres            = h.offres || { semaine: -1, locId: null, liste: [] };
+  h.politique         = h.politique || {};
   h.lignee            = h.lignee || { liaisons: [], enfants: [] };
   if(typeof h.age !== 'number') h.age = AGE_DEPART;
   h.compagnons        = (h.compagnons || []).map(c => COMPANIONS_POOL[c.id] || c);
@@ -131,6 +136,13 @@ const MIGRATIONS = {
       enr.hero.age = AGE_DEPART + Math.floor(sem / 52);
     }
     enr.version = 6;
+    return enr;
+  },
+  6: enr => {           // v6 → v7 : le chantier de Karlsberg et les offres du lieu
+    enr.hero.chantier = enr.hero.chantier || [];
+    enr.hero.offres   = { semaine: -1, locId: null, liste: [] };  // on retire un tableau neuf
+    enr.hero.politique = enr.hero.politique || {};
+    enr.version = 7;
     return enr;
   },
 };

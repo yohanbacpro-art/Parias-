@@ -27,7 +27,7 @@ const verifie = (n, ok, d) => { if(ok) console.log('  ✔', n);
       return { rang: rangReputation('nains').nom,
                prix: prixPour(itemById('armure_maille_naine'), 'nains'),
                articles: document.querySelectorAll('#shopList .ii-nom').length,
-               hostile: document.getElementById('lieuHostile').style.display !== 'none' };
+               hostile: document.getElementById('lieuAccueil').classList.contains('hostile') };
     };
     return { neutre: etat(0), estime: etat(40), allie: etat(85), honni: etat(-40), ennemi: etat(-80) };
   });
