@@ -136,7 +136,7 @@ const MAISONS = {
   "Maison de Clairmont": { region:'coeur', devise:"Sept fois plutôt qu'une.",
     nobles:[] },   // sept disparus : il ne reste plus d'adulte à offrir
   "Maison de Méricourt": { region:'coeur', devise:"Le nom d'abord.",
-    nobles:[] },   // trois branches, aucun héritier reconnu, personne pour consentir
+    nobles:[] },   // trois branches se disputent le nom : aucune n'a d'adulte reconnue
   "Maison de Ronceval": { region:'coeur', devise:"On escorte, on ne trahit pas.",
     nobles:[
       { nom:"Dame Aliénor de Ronceval", age:39, rang:"sœur du prince, maîtresse de l'escorte",
@@ -152,6 +152,48 @@ const MAISONS = {
         exige:{ reputationMin:{ khesh:-10 } },
         refus:"« Je passe ma vie à réparer ce que les hommes cassent chez les Khesh. Je ne vais pas m'attacher à quelqu'un qui casse. »",
         accord:"« Une maison qui traite avec tout le monde finit par n'appartenir à personne. Autant choisir. »" },
+    ]},
+  "Maison d'Aubremont": { region:'nord', devise:"La tour tient ou tombe.",
+    nobles:[
+      { nom:"Dame Sibylle d'Aubremont", age:33, rang:"capitaine des tours frontalières",
+        note:"Elle commande six tours et n'a jamais dormi deux nuits dans la même.",
+        exige:{ renomMin:30 },
+        refus:"« Je couche avec des soldats, pas avec des noms. Faites-vous un nom. »",
+        accord:"« Six tours, trente ans, et pas un homme qui soit resté. Vous ne resterez pas non plus. C'est justement pour ça. »" },
+    ]},
+  "Maison de Vaudreuil": { region:'sylve', devise:"On ferme les volets et on prie.",
+    nobles:[
+      { nom:"Dame Mahaut de Vaudreuil", age:26, rang:"fille du seigneur",
+        note:"Sa porte a été marquée deux fois. Deux fois, quelqu'un d'autre est mort à sa place.",
+        exige:{ suspicionMax:60 },
+        refus:"« On me cherche déjà. Je ne vais pas ajouter ceux qui vous cherchent, vous. »",
+        accord:"« On a marqué ma porte deux fois. Je ne compte plus sur la protection de mon père. »" },
+    ]},
+  "Maison de Torcy": { region:'coeur', devise:"Ce qui brille se paie.",
+    nobles:[
+      { nom:"Dame Aude de Torcy", age:37, rang:"veuve, tient les mines de verre",
+        note:"Elle a enterré un mari, deux frères, et pas une seule dette.",
+        exige:{ renomMin:25, reputationMin:{ humains:-15 } },
+        refus:"« J'ai une maison à tenir et une réputation à ne pas perdre. La vôtre est trop lourde. »",
+        accord:"« Mon mari trouvait la coutume dégradante. Il trouvait aussi dégradant de payer ses ouvriers. »" },
+    ]},
+  "Maison de Salverne": { region:'coeur', devise:"Le pont d'abord.",
+    nobles:[
+      { nom:"Dame Guiraude de Salverne", age:41, rang:"sœur du seigneur, maîtresse des péages",
+        note:"Elle a vu passer trois guerres sur le même pont et compté chaque homme.",
+        exige:{ renomMin:40, suspicionMax:70 },
+        refus:"« Ce pont vaut une province. On ne l'engage pas avec un inconnu. »",
+        accord:"« Trois guerres sur ce pont. La quatrième, je préfère la faire avec quelqu'un qui sait ce que c'est. »" },
+    ]},
+  "Maison de Belrive": { region:'sylve', devise:"Nous étions là avant.",
+    nobles:[] },   // le village entier a été massacré : il ne reste personne à engager
+  "Maison de Brécourt": { region:'sylve', devise:"On ne rompt pas ce qu'on a juré.",
+    nobles:[
+      { nom:"Dame Ysoré de Brécourt", age:30, rang:"seconde fille, gardienne des bornes",
+        note:"Elle connaît chaque borne de la trêve avec les Hommes-Bêtes, et sait laquelle a bougé.",
+        exige:{ reputationMin:{ hommes_betes:-25 } },
+        refus:"« Vous avez du sang de harde sur vous. Je garde une trêve, moi. »",
+        accord:"« Mon père a juré cette trêve à genoux devant une harde. Je peux bien faire un peu moins. »" },
     ]},
   "Maison de Chastel": { region:'sylve', devise:"Ce qui est écrit demeure.",
     nobles:[

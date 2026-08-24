@@ -1497,4 +1497,413 @@ const CHAINES = [
         }}},
   ]},
 
+/* ══════════════════════════════════════════════════════════════════════════
+   09 — LA GUERRE DE ROCHEBRUNE  ·  une querelle d'héritage devenue guerre privée
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_ROCHEBRUNE", type:'contrat', titre:"La Guerre de Rochebrune",
+  commanditaire:"Maison Rochebrune", maison:"Maison Rochebrune",
+  or:2600, danger:"très dangereux", categorie:"guerre", prix:true,
+  lieux:["LOC_004","LOC_018","LOC_011"],
+  pitch:"Une querelle d'héritage est devenue une guerre privée. Le commanditaire ne demande pas un assassin : il demande à Yohan de prendre part à la campagne et de briser l'armée de son cousin.",
+  paye:["cousin_brise","cousin_epargne","paix_negociee"],
+  issues:{
+    cousin_brise:"L'armée du cousin de Rochebrune a été brisée aux Champs de Cendre.",
+    cousin_epargne:"Le cousin de Rochebrune a rendu les armes et vit encore, ce que personne n'avait prévu.",
+    paix_negociee:"Rochebrune et son cousin ont partagé l'héritage plutôt que la terre brûlée.",
+    abandonnee:"Yohan a quitté la campagne de Rochebrune avant la bataille.",
+    refusee:"Yohan a refusé les termes de Rochebrune.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"L'armée se rassemble, et il faut la rejoindre.",
+      ev:{ id:"CHB_1", titre:"Deux versions du même testament", famille:"POLITIQUE", rarete:"majeur",
+        image:"evt_bannieres",
+        scenes:{
+          start:{ texte:[
+            "Le seigneur de Rochebrune reçoit sous une tente de campagne, entouré de cartes et de deux capitaines qui n'ont pas dormi.",
+            "« Mon oncle est mort en laissant deux testaments. Le mien est le vrai. Celui de mon cousin est daté de trois jours plus tard et signé d'une main qui tremblait déjà. »",
+            "Il montre la carte. « Il tient les hauts. J'ai plus d'hommes. Il a le meilleur terrain. Voilà où nous en sommes depuis quatre mois. »",
+            "Il relève la tête. « Je ne cherche pas un assassin. J'en ai déjà envoyé deux et ils sont morts. Je cherche quelqu'un qui casse une armée. »"],
+            choix:[
+              {label:"Demander à voir les deux testaments", detail:"Jet de Précision (13)",
+               test:{stat:"precision", dc:13}, reussite:"testament_ok", echec:"testament_ko"},
+              {label:"Demander combien de morts jusqu'ici", detail:"Quatre mois, ça se compte",
+               suite:"morts"},
+              {label:"Accepter sans commentaire", detail:"Une guerre privée ne demande pas d'avis",
+               suite:"termes", effets:{suspicion:-2}},
+            ]},
+          testament_ok:{ texte:[
+            "Les deux sont là, dans un coffret, et le seigneur les sort sans hésiter — ce qui est déjà une réponse.",
+            "Le second est authentique. La main tremble, mais c'est bien la sienne, et le notaire est le même. Le vieil homme a changé d'avis trois jours avant de mourir.",
+            "« Vous voyez ? » dit le seigneur, qui n'a manifestement jamais fait lire le second à personne. « Il n'était plus lui-même. »"],
+            effets:{xp:20, flag:"rochebrune_second_vrai"}, suite:"termes"},
+          testament_ko:{ texte:["Deux parchemins, deux sceaux, une écriture qui se ressemble. Yohan n'est pas notaire, et le seigneur le sait."],
+            effets:{xp:5}, suite:"termes"},
+          morts:{ texte:[
+            "Un des capitaines répond avant son seigneur, ce qui en dit long sur l'état de cette maison.",
+            "« Quatre cents. Deux cent quarante de notre côté. Trois villages brûlés, dont deux par nous. »",
+            "Le seigneur ne le contredit pas. « C'est une guerre », dit-il seulement. « Il n'y en a pas de propres. »"],
+            effets:{xp:14, flag:"rochebrune_quatre_cents"}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Deux mille six cents écus. Vous serez sous mes ordres, mais pas dans ma ligne : vous ferez ce que vous savez faire, où vous jugerez utile. »",
+            "Il ajoute, du ton qu'on prend pour une formalité : « Et nous réglerons la coutume avant que vous montiez en selle. Je préfère qu'elle soit derrière nous. »"]},
+        }}},
+
+    { id:"conseil", delai:[2,4], attente:"Le conseil de guerre se tient dans trois jours.",
+      ev:{ id:"CHB_2", titre:"Le conseil de guerre", famille:"GUERRE", rarete:"majeur",
+        image:"evt_lances",
+        scenes:{
+          start:{ texte:[
+            "Neuf hommes autour d'une table, une carte des Champs de Cendre, et quatre mois de rancune accumulée.",
+            "Le plan de Rochebrune est frontal : monter la pente, encaisser, rompre la ligne au centre. C'est ce qu'on fait quand on a plus d'hommes et qu'on est pressé.",
+            "L'un des capitaines regarde la carte comme on regarde sa propre tombe."],
+            choix:[
+              {label:"Proposer de tourner les hauts par la vieille carrière",
+               detail:"Jet de Précision (13) · plus long, moins cher en hommes",
+               test:{stat:"precision", dc:13}, reussite:"carriere_ok", echec:"carriere_ko"},
+              {label:"Demander à parler au capitaine qui se tait", detail:"Il sait quelque chose",
+               suite:"capitaine"},
+              {label:"Approuver le plan frontal", detail:"Ce n'est pas votre armée",
+               suite:"frontal"},
+            ]},
+          carriere_ok:{ texte:[
+            "La vieille carrière contourne les hauts par le nord et débouche derrière la ligne du cousin. Elle est impraticable pour une charrette et parfaite pour trois cents hommes à pied.",
+            "Rochebrune met une heure à accepter, parce qu'accepter veut dire que son plan était mauvais. Il finit par accepter.",
+            "Le capitaine qui se taisait sort de la tente en regardant Yohan une seconde de trop."],
+            effets:{xp:24, flag:"rochebrune_carriere"}, fin:true},
+          carriere_ko:{ texte:["Le plan est bon et la carte est mauvaise : la carrière s'est effondrée il y a six ans, et deux capitaines le savent. On perd une heure et un peu de crédit."],
+            effets:{xp:8}, fin:true},
+          capitaine:{ texte:[
+            "Il parle dehors, à l'écart des feux, en tenant son casque des deux mains.",
+            "« Le cousin a envoyé un homme il y a douze jours. Il propose le partage : les terres hautes à lui, la vallée et le nom à nous. Notre seigneur n'a pas répondu. »",
+            "Il regarde la ligne des feux ennemis. « Quatre cents morts pour un nom. Moi j'ai des gens dans les deux camps, messire. »"],
+            effets:{xp:22, flags:["rochebrune_partage_propose","rochebrune_capitaine_lassé"]}, fin:true},
+          frontal:{ texte:["Le plan reste ce qu'il est. On monte la pente, on encaisse, on rompt au centre. Les capitaines s'en vont préparer leurs hommes sans un mot de plus."],
+            effets:{xp:6}, fin:true},
+        }}},
+
+    { id:"bataille", delai:[1,3], attente:"On monte à l'aube.",
+      ev:{ id:"CHB_3", titre:"Les Champs de Cendre", famille:"GUERRE", rarete:"majeur",
+        image:"cg_cendre",
+        scenes:{
+          start:{ texte:[
+            "Deux armées sur une pente grise, à l'aube, avec le brouillard qui tient jusqu'à la troisième heure.",
+            "Ce n'est pas une guerre de royaumes : c'est deux cousins qui ont hérité du même homme. Cela ne change rien à ce qui va se passer sur cette pente."],
+            choix:[
+              {label:"Prendre le commandement", detail:"Requiert une armée · c'est ce pour quoi on est payé",
+               suite:"engage"},
+              {label:"Proposer une dernière fois le partage",
+               detail:"Requiert de savoir que le cousin l'a offert · Jet de Volonté (15)",
+               requis:{flag:"rochebrune_partage_propose"}, test:{stat:"vol", dc:15},
+               reussite:"paix_ok", echec:"paix_ko"},
+            ]},
+          engage:{ texte:["Les bannières se lèvent. Rochebrune donne le signal sans regarder personne."],
+            bataille:{ def:"BAT_CENDRE", victoire:"gagnee", defaite:"perdue" }},
+          paix_ok:{ fin:true, texte:[
+            "Il le dit devant les capitaines, à l'aube, alors que les hommes sont déjà en ligne, et c'est précisément pour ça que ça marche.",
+            "« Votre cousin vous a offert le partage il y a douze jours. Vos capitaines le savent. Vos hommes le sauront ce soir, d'une façon ou d'une autre. Vous allez les faire monter cette pente en le sachant ? »",
+            "Rochebrune ne répond pas pendant très longtemps. Puis il envoie un cavalier.",
+            "Le partage est signé à midi sur la pente, entre les deux lignes, par deux cousins qui ne se regardent pas. Les terres hautes à l'un, la vallée et le nom à l'autre.",
+            "Quatre cents morts. Il n'y en aura pas d'autres."],
+            effets:{xp:70, renom:12, reputation:{humains:16, parias:8},
+                    issue:"paix_negociee", flag:"rochebrune_partage"}},
+          paix_ko:{ texte:[
+            "« Vous n'êtes pas de cette maison », dit Rochebrune, et il le dit assez fort pour que trois capitaines l'entendent.",
+            "« Mon oncle est mort. Mon cousin a fabriqué un testament. Et vous, on vous paie pour casser une armée, pas pour porter des messages. »",
+            "Le signal part. La pente est grise et les hommes montent."],
+            effets:{xp:10}, suite:"engage"},
+          gagnee:{ texte:[
+            "La ligne du cousin rompt à la quatrième heure, et ce qui suit n'est plus une bataille.",
+            "On le prend vivant au pied des hauts, désarmé, avec onze hommes autour de lui qui refusent de s'écarter."],
+            effets:{xp:60, renom:14}, suite:"vaincu"},
+          perdue:{ fin:true, texte:[
+            "La pente était mauvaise, le brouillard a levé trop tôt, et trois cents hommes sont restés dessus.",
+            "Rochebrune se retire vers la vallée avec ce qui lui reste. Il paie la moitié du contrat, parce qu'il a promis, et il ne dit pas un mot.",
+            "La guerre continuera sans Yohan."],
+            effets:{xp:25, renom:-4, issue:"abandonnee"}},
+          vaincu:{ texte:[
+            "Le cousin a cinquante ans, une blessure au flanc et l'air d'un homme qui a très bien compris comment ça finit.",
+            "Rochebrune se tourne vers Yohan. « Vous avez cassé son armée. Le reste vous regarde autant que moi. »"],
+            choix:[
+              {label:"Le laisser à son cousin", detail:"Ce n'est pas votre héritage",
+               suite:"laisse", effets:{issue:"cousin_brise", reputation:{humains:6}, renom:4}},
+              {label:"Exiger qu'il vive", detail:"Jet de Volonté (14) · un vaincu vivant est une dette",
+               test:{stat:"vol", dc:14}, reussite:"vit_ok", echec:"vit_ko"},
+            ]},
+          laisse:{ fin:true, texte:[
+            "On l'emmène sous la tente de son cousin. Ce qui s'y dit ne sort pas.",
+            "Au matin, la maison Rochebrune n'a plus qu'un héritier, et deux mille six cents écus changent de main sans commentaire."]},
+          vit_ok:{ fin:true, texte:[
+            "« Il a rendu les armes devant trois cents hommes. Si vous l'égorgez, c'est ce qu'on retiendra de vous, pas la bataille. »",
+            "Rochebrune le regarde longtemps, puis fait signe qu'on le soigne.",
+            "Le cousin passera le reste de sa vie dans une maison de la vallée, sans titre et sans gardes, et il enverra chaque année une lettre à Yohan qu'il ne signera jamais."],
+            effets:{issue:"cousin_epargne", reputation:{humains:10, parias:8}, renom:10,
+                    flag:"rochebrune_cousin_vivant"}},
+          vit_ko:{ fin:true, texte:[
+            "« Ce n'est pas votre maison », dit Rochebrune, sans hausser la voix. « Ni votre nom. Ni votre oncle. »",
+            "On l'emmène. Yohan touche son or le lendemain matin et prend la route avant que la fosse soit refermée."],
+            effets:{issue:"cousin_brise", reputation:{humains:4}, renom:2}},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   10 — LA GORGE VERTE  ·  une armée Peau-Verte remonte vers les routes naines
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_GORGE", type:'contrat', titre:"La Gorge Verte",
+  commanditaire:"Un clan allié de Kar-Durak", maison:null,
+  or:2200, danger:"très dangereux", categorie:"guerre",
+  lieux:["LOC_008","LOC_012","LOC_009"],
+  pitch:"Une armée Peau-Verte remonte une gorge qui donne directement accès aux routes naines. Les Nains ont des soldats. Ils manquent de temps et d'informations.",
+  paye:["gorge_tenue","gorge_perdue","colonne_deviee"],
+  issues:{
+    gorge_tenue:"La Gorge Verte a été tenue, et les routes naines sont restées ouvertes.",
+    gorge_perdue:"La Gorge Verte est tombée. Kar-Durak a fermé deux portes de plus.",
+    colonne_deviee:"La colonne Peau-Verte a été détournée de la Gorge Verte sans qu'on livre bataille.",
+    abandonnee:"Personne n'a tenu la Gorge Verte.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Il faut aller voir la gorge de ses yeux.",
+      ev:{ id:"CHG_1", titre:"Ce que les Nains n'ont pas le temps de faire", famille:"NAIN", rarete:"majeur",
+        image:"evt2_dette_naine",
+        scenes:{
+          start:{ texte:[
+            "Le chef de clan est un Nain trapu de deux cent quarante ans qui parle en regardant une maquette de la gorge taillée dans le calcaire.",
+            "« Six mille, peut-être huit. Ils remontent depuis onze jours. À ce rythme, ils sont à la gorge dans trois semaines. »",
+            "Il pose un doigt sur la maquette. « Derrière, c'est la route de Hautes-Enclumes. Si elle tombe, quatre clans sont coupés du reste. »",
+            "Il relève les yeux. « J'ai deux mille haches. Je peux tenir la gorge. Ce que je ne peux pas faire, c'est savoir ce qu'ils comptent faire. »"],
+            choix:[
+              {label:"Proposer d'aller voir de près", detail:"Une reconnaissance vaut mille suppositions",
+               suite:"termes"},
+              {label:"Demander pourquoi ils remontent maintenant", detail:"Onze jours, ça a commencé quelque part",
+               suite:"pourquoi"},
+              {label:"Demander ce qu'il paiera", detail:"Un Nain aime qu'on parle chiffres",
+               suite:"argent"},
+            ]},
+          pourquoi:{ texte:[
+            "« Parce que quelqu'un les rassemble. »",
+            "Il gratte la maquette du pouce. « Depuis deux ans, ils ne se battent plus entre eux. Vous savez ce que ça coûte, à un peuple qui se bat entre lui depuis mille ans, d'arrêter ? »",
+            "Il se redresse. « Ça coûte quelqu'un qui vaut la peine qu'on l'écoute. Et ça, ça m'inquiète bien plus que huit mille haches. »"],
+            effets:{xp:16, flag:"gorge_federation"}, suite:"termes"},
+          argent:{ texte:[
+            "« Deux mille deux cents. Payés à la fin, en pièces frappées, pas en promesses. »",
+            "Il ajoute : « Et nous ne payons pas en femmes. Je sais que les maisons humaines le font avec vous. Chez nous, une dette se paie en métal ou en sang, et jamais en gens. »"],
+            effets:{xp:8}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Vous descendez, vous regardez, vous remontez. Ensuite nous décidons ensemble, et si nous décidons de tenir la gorge, vous y serez avec nous. »",
+            "Il repose son ciseau à pierre. « Un homme qui donne un conseil doit être là quand le conseil se paie. »"]},
+        }}},
+
+    { id:"reconnaissance", delai:[2,4], attente:"La colonne remonte, et il faut la voir.",
+      ev:{ id:"CHG_2", titre:"Ce qui remonte la gorge", famille:"PEAU_VERTE", rarete:"majeur",
+        image:"evt_tambours",
+        scenes:{
+          start:{ texte:[
+            "Quatre jours de crête au-dessus de la gorge, à plat ventre dans les genévriers, à compter.",
+            "Ce n'est pas une horde. Une horde se voit à trois lieues et s'entend à cinq. Ceci avance en colonne, avec des éclaireurs sur les flancs, un train de bagages au centre, et des feux éteints avant l'aube.",
+            "Et derrière les guerriers, sur deux cents pas, des vieux, des femelles et des petits."],
+            choix:[
+              {label:"Prendre un éclaireur vivant", detail:"Jet d'Agilité (14)",
+               test:{stat:"agi", dc:14}, reussite:"prise_ok", echec:"prise_ko"},
+              {label:"Suivre le train de bagages", detail:"Jet de Précision (13) · ce qu'on emporte dit où l'on va",
+               test:{stat:"precision", dc:13}, reussite:"bagage_ok", echec:"bagage_ko"},
+              {label:"Compter et remonter", detail:"Un chiffre exact vaut mieux qu'une intuition",
+               suite:"compte", effets:{xp:12, fat:8}},
+            ]},
+          prise_ok:{ texte:[
+            "Un éclaireur isolé sur le flanc est, une main sur la bouche, et cinquante pas dans les genévriers.",
+            "Il parle vite, parce qu'il croit qu'on va le tuer et qu'il a des choses à dire avant.",
+            "« On passe. On passe seulement. La gorge, c'est le chemin, pas le but. Le chef dit : au-delà, il y a de la place. »",
+            "Il ajoute, comme si c'était une évidence : « Les Nains vont nous bloquer. Ils bloquent toujours. Et après ils diront que c'est nous. »"],
+            effets:{xp:26, flags:["gorge_passage","gorge_familles"]}, fin:true},
+          prise_ko:{ texte:["L'éclaireur crie. Il faut décrocher par la crête et attendre la nuit, et la colonne double ses flancs pour le reste de la remontée."],
+            effets:{fat:12, xp:10}, fin:true},
+          bagage_ok:{ texte:[
+            "Le train de bagages n'est pas un train de guerre. Il n'y a ni béliers, ni échelles, ni machines.",
+            "Il y a des sacs de grain, des outils, des peaux, et deux charrettes chargées de ce qui ressemble à des semences.",
+            "Une armée qui vient prendre une gorge n'emporte pas de semences. Une armée qui déménage, si."],
+            effets:{xp:24, flags:["gorge_passage","gorge_familles"]}, fin:true},
+          bagage_ko:{ texte:["Le train est bien gardé et la crête s'arrête net au-dessus. On voit des charrettes bâchées, et une charrette bâchée peut contenir n'importe quoi."],
+            effets:{xp:8}, fin:true},
+          compte:{ texte:[
+            "Sept mille quatre cents, à trois cents près. Quatre jours de comptage et un dos qui ne se déplie plus.",
+            "Le chiffre est bon, et un chiffre bon vaut une bataille de moins ou une bataille mieux menée."],
+            effets:{flag:"gorge_chiffre"}, fin:true},
+        }}},
+
+    { id:"decision", delai:[1,2], attente:"Deux mille haches attendent une réponse.",
+      ev:{ id:"CHG_3", titre:"Tenir, ou ouvrir", famille:"NAIN", rarete:"majeur",
+        image:"cg_kardurak",
+        scenes:{
+          start:{ texte:[
+            "Le chef de clan écoute tout, sans interrompre, en tournant son ciseau à pierre entre deux doigts.",
+            "Puis il pose la question qu'il fallait bien poser : « Alors ? On tient, ou on ouvre ? »"],
+            choix:[
+              {label:"Tenir la gorge", detail:"Deux mille haches sur un défilé étroit : c'est jouable",
+               suite:"tenir"},
+              {label:"Les laisser passer, sous escorte naine",
+               detail:"Requiert de savoir qu'ils ne font que passer · aucun Nain ne l'a jamais fait",
+               requis:{flag:"gorge_passage"}, test:{stat:"vol", dc:15},
+               reussite:"ouvrir_ok", echec:"ouvrir_ko"},
+              {label:"Rendre l'avance et s'en aller", detail:"Ce n'est pas votre gorge",
+               suite:"partir", effets:{issue:"abandonnee", reputation:{nains:-14}, renom:-6}},
+            ]},
+          tenir:{ texte:[
+            "Deux mille haches en travers d'un défilé de quarante pas, trois lignes profondes, et l'ordre de ne pas céder un pouce.",
+            "Ils arrivent au douzième jour."],
+            bataille:{ def:"BAT_DEFILE", victoire:"tenue", defaite:"tombee" }},
+          tenue:{ fin:true, texte:[
+            "La gorge tient. Elle tient parce qu'elle est étroite, parce que les Nains ne reculent pas, et parce que quelqu'un avait donné le bon chiffre.",
+            "Au troisième jour, la colonne se retire vers le sud, en emmenant ses vieux et ses petits, et laisse onze cents morts dans le défilé.",
+            "Le chef de clan paie en pièces frappées, comme promis. Il ne dit pas merci — les Nains ne disent pas merci — mais il fait graver le nom de Yohan sur le linteau du poste de garde, ce qui est mieux."],
+            effets:{xp:70, renom:16, reputation:{nains:22, peaux_vertes:-18}, issue:"gorge_tenue"}},
+          tombee:{ fin:true, texte:[
+            "La troisième ligne cède avant midi et la gorge se vide en une heure.",
+            "Kar-Durak ferme Hautes-Enclumes et deux portes de plus dans le mois. Quatre clans sont coupés pour une génération.",
+            "Le chef de clan paie quand même. « Vous étiez là », dit-il. « C'est ce qui avait été convenu. »"],
+            effets:{xp:35, renom:-6, reputation:{nains:-8}, issue:"gorge_perdue"}},
+          ouvrir_ok:{ fin:true, texte:[
+            "Il faut deux jours pour convaincre un Nain de deux cent quarante ans de laisser passer sept mille Peaux-Vertes sur sa route.",
+            "Ce qui le décide n'est pas l'argument militaire : ce sont les semences. « On ne plante pas ce qu'on vient brûler », finit-il par dire, à contrecœur.",
+            "Quatre cents haches escortent la colonne pendant onze jours, à cent pas, sans qu'un coup soit échangé. C'est la première fois depuis mille ans.",
+            "Deux clans nains cesseront de parler à celui-là. Le chef le savait avant de dire oui."],
+            effets:{xp:60, renom:12, reputation:{nains:-6, peaux_vertes:26}, issue:"colonne_deviee",
+                    flag:"gorge_ouverte"}},
+          ouvrir_ko:{ texte:[
+            "« Vous me demandez d'ouvrir une route naine à sept mille Peaux-Vertes sur la parole d'un éclaireur qu'on a tenu par la gorge. »",
+            "Il repose son ciseau. « Non. »",
+            "Deux mille haches se mettent en travers du défilé le lendemain matin."],
+            suite:"tenir"},
+          partir:{ fin:true, texte:[
+            "Il rend l'avance et il s'en va. Le chef de clan ne discute pas et ne le raccompagne pas.",
+            "La gorge sera tenue ou perdue sans lui, et il ne saura ce qui s'y est passé que par les nouvelles, six mois plus tard."]},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   11 — LE WYRM AVEUGLE  ·  quelque chose d'ancien s'est réveillé sous une forteresse
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_WYRM", type:'contrat', titre:"Le Wyrm aveugle",
+  commanditaire:"Charles de Mont-Draken", maison:null,
+  or:3000, danger:"extrême", categorie:"chasse",
+  lieux:["LOC_003","LOC_012"],
+  pitch:"Quelque chose d'ancien s'est réveillé sous une forteresse. Charles ne demande pas de sauver les pierres : il veut savoir si la créature peut atteindre les vallées humaines.",
+  paye:["wyrm_tue","wyrm_muré","wyrm_libre"],
+  issues:{
+    wyrm_tue:"Le Wyrm aveugle est mort sous Mont-Draken. Charles a fait combler la galerie par-dessus.",
+    "wyrm_muré":"Le Wyrm aveugle a été muré vivant sous Mont-Draken. On l'entend encore, certaines nuits.",
+    wyrm_libre:"Le Wyrm aveugle est descendu vers les vallées. Trois villages ont été évacués.",
+    abandonnee:"Personne n'est redescendu sous Mont-Draken.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Charles attend qu'on descende.",
+      ev:{ id:"CHW_1", titre:"Ce que Charles veut savoir", famille:"POLITIQUE", rarete:"majeur",
+        image:"rc_charles",
+        scenes:{
+          start:{ pnj:"charles", texte:[
+            "Charles de Mont-Draken reçoit debout, dans une salle d'armes, avec la carte des vallées basses étalée sur une table à tréteaux.",
+            "« Une galerie s'est ouverte sous la forteresse en février. Quelque chose est monté dedans. Nous avons perdu neuf hommes en trois descentes. »",
+            "Il ne dramatise pas. C'est ce qui le rend crédible.",
+            "« Je me moque de la forteresse. Ce que je veux savoir tient en une phrase : est-ce que cette chose peut atteindre les vallées ? Si oui, je vide trois villages avant l'hiver. Si non, je mure et je passe à autre chose. »"],
+            choix:[
+              {label:"Demander ce que les neuf ont vu", detail:"Neuf hommes, ça laisse des récits",
+               suite:"neuf"},
+              {label:"Demander pourquoi il ne mure pas tout de suite", detail:"C'est la solution évidente",
+               suite:"mure"},
+              {label:"Accepter", detail:"Il a posé la question juste",
+               suite:"termes"},
+            ]},
+          neuf:{ pnj:"charles", texte:[
+            "« Trois sont revenus. Aucun ne l'a vue. »",
+            "Il laisse ça poser. « Ils ont senti l'air bouger. Ils ont entendu quelque chose de très gros se déplacer sans faire de bruit. Et l'un d'eux dit que sa lanterne s'est éteinte sans souffle, trois fois, toujours au même endroit. »",
+            "« Elle est aveugle. Nous en sommes à peu près sûrs. Ce qui veut dire qu'elle n'a pas besoin de voir. »"],
+            effets:{xp:16, flag:"wyrm_aveugle"}, suite:"termes"},
+          mure:{ pnj:"charles", texte:[
+            "« Parce que murer une galerie qu'on n'a pas explorée, c'est parier que c'est la seule. »",
+            "Il pose un doigt sur la carte. « Sous Mont-Draken, il y a de la roche creuse sur quatre lieues. Si je mure ici et qu'elle sort là, j'aurai transformé une question en catastrophe. »"],
+            effets:{xp:14}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Trois mille. Et si vous redescendez sans réponse, je paie quand même : je paie la descente, pas le résultat. »",
+            "Il roule la carte. « Je n'ai pas d'or à vous faire perdre et je n'ai pas de femme à vous offrir. Ma maison ne pratique pas la coutume et ne la pratiquera pas. Si cela vous pose un problème, dites-le maintenant. »"]},
+        }}},
+
+    { id:"galeries", delai:[2,4], attente:"La galerie est ouverte, et elle attend.",
+      ev:{ id:"CHW_2", titre:"Sous la forteresse", famille:"ONDE", rarete:"majeur",
+        image:"evt_tunnel",
+        scenes:{
+          start:{ texte:[
+            "La galerie de février n'est pas une galerie : c'est une fissure ouverte dans une salle basse, assez large pour un homme, et l'air qui en sort est tiède.",
+            "Deux cents pas plus bas, elle débouche dans quelque chose qui n'a pas été creusé par des mains. Les parois sont polies, ondulées, comme un boyau.",
+            "La lanterne éclaire à six pas et pas un de plus. Au-delà, ce n'est pas noir : c'est vide."],
+            choix:[
+              {label:"Avancer en comptant les pas", detail:"Jet de Volonté (14) · pour savoir revenir",
+               test:{stat:"vol", dc:14}, reussite:"compte_ok", echec:"compte_ko"},
+              {label:"Chercher d'où l'air arrive", detail:"Jet de Précision (14) · l'air tiède vient de quelque part",
+               test:{stat:"precision", dc:14}, reussite:"air_ok", echec:"air_ko"},
+              {label:"Éteindre la lanterne et écouter", detail:"Elle est aveugle. Autant l'être aussi.",
+               suite:"noir"},
+            ]},
+          compte_ok:{ texte:[
+            "Onze cents pas de boyau, en pente douce, toujours vers le sud. Vers les vallées.",
+            "À onze cents pas, le boyau s'élargit en une salle où l'on tient debout, et où le sol est jonché d'ossements polis — pas rongés : polis, comme des galets.",
+            "Elle avale, elle digère, elle recrache. Elle fait ça depuis très longtemps."],
+            effets:{xp:26, flags:["wyrm_vers_le_sud","wyrm_salle"]}, fin:true},
+          compte_ko:{ texte:["Au bout de quatre cents pas, il n'est plus certain d'avoir compté juste, et un homme qui n'est plus certain de savoir revenir remonte. C'est la bonne décision et elle coûte quand même quelque chose."],
+            effets:{fat:14, xp:10}, fin:true},
+          air_ok:{ pnj:"charles", texte:[
+            "L'air tiède ne vient pas du fond : il vient d'en dessous, par une centaine de fissures dans le sol du boyau, régulièrement espacées.",
+            "Ce ne sont pas des fissures. C'est une respiration. Le boyau lui-même est vivant, ou l'a été.",
+            "Ce que Charles appelle un wyrm n'habite pas cette galerie. Cette galerie *est* le wyrm, ou ce qu'il en reste, et quelque chose de plus petit vit dedans."],
+            effets:{xp:30, flags:["wyrm_galerie_vivante"]}, fin:true},
+          air_ko:{ texte:["L'air est tiède partout et vient de nulle part. Deux heures à tâter des parois pour n'en rien tirer, sinon que la roche est chaude au toucher."],
+            effets:{xp:8, fat:10}, fin:true},
+          noir:{ texte:[
+            "Il éteint. Le noir sous la terre n'est pas une absence de lumière : c'est une matière.",
+            "Au bout de dix minutes, il l'entend. Ce n'est pas un déplacement : c'est un frottement continu, très lent, à quarante ou cinquante pas, qui va du sud vers le nord.",
+            "Elle remonte. Elle remonte vers la forteresse, lentement, et elle le fait sans doute depuis février."],
+            effets:{xp:28, fat:14, flag:"wyrm_remonte"}, fin:true},
+        }}},
+
+    { id:"choix", delai:[1,3], attente:"Charles attend une réponse, pas un rapport.",
+      ev:{ id:"CHW_3", titre:"La réponse à la question de Charles", famille:"ONDE", rarete:"majeur",
+        image:"evt2_ossements",
+        scenes:{
+          start:{ texte:[
+            "Il faut redescendre pour trancher, et cette fois avec l'intention d'en finir.",
+            "Elle est dans la salle aux ossements polis. Elle fait la longueur de trois chariots et elle n'a pas d'yeux — pas de cavités, pas de cicatrices : elle n'en a jamais eu."],
+            choix:[
+              {label:"L'affronter", detail:"Elle est aveugle. C'est le seul avantage disponible.",
+               suite:"combat"},
+              {label:"Faire sauter la voûte du boyau au-dessus d'elle",
+               detail:"Requiert de savoir où mène le boyau · −400 or de poudre naine",
+               requis:{flag:"wyrm_vers_le_sud", or:400}, suite:"murer", effets:{or:-400}},
+              {label:"Remonter et dire à Charles de vider les villages",
+               detail:"C'est la réponse honnête si l'on ne peut pas la tuer",
+               suite:"vider", effets:{issue:"wyrm_libre", reputation:{humains:-6}, renom:2}},
+            ]},
+          combat:{ texte:["Elle sait exactement où il est depuis qu'il est entré dans la salle. L'obscurité ne le protège de rien."],
+            combat:{ groupe:[{bst:"BST_016", n:1}, {bst:"BST_015", n:2}], victoire:"morte", defaite:"fuite", mortel:true }},
+          morte:{ fin:true, pnj:"charles", texte:[
+            "Elle met une demi-heure à mourir et elle ne crie pas une seule fois.",
+            "Charles fait combler le boyau sur trois cents pas, et grave la date sur le linteau de la salle basse. Il paie en entier et ne pose aucune question sur la façon dont un homme seul a tué ça.",
+            "« Je note ce genre de chose », dit-il seulement. « Pas pour vous nuire. Pour savoir à qui écrire, un jour, quand j'aurai un vrai problème. »"],
+            effets:{xp:80, sang:12, renom:16, suspicion:10, issue:"wyrm_tue",
+                    flag:"charles_note_yohan"}},
+          fuite:{ fin:true, pnj:"charles", texte:[
+            "Elle le prend en travers du dos et il fait onze cents pas dans le noir sans se rappeler comment.",
+            "Il ressort à l'aube, sanglant, et il dit à Charles la seule chose qu'il peut honnêtement dire : « Videz les villages. »"],
+            effets:{pv:-40, fat:30, xp:25, issue:"wyrm_libre"}},
+          murer:{ fin:true, pnj:"charles", texte:[
+            "Quatre cents écus de poudre naine, posés dans les fissures de la voûte à onze cents pas, et une mèche de trente pieds.",
+            "La voûte descend sur soixante pas de boyau, et ce qui est dessous n'en sortira pas par là.",
+            "Charles fait murer l'entrée par-dessus, par principe. « Vous ne l'avez pas tuée », dit-il en payant. « Vous avez répondu à ma question, ce que je vous avais demandé. »",
+            "Certaines nuits d'hiver, la garnison de Mont-Draken entend quelque chose de très gros se retourner sous la pierre. On a cessé de le noter au registre."],
+            effets:{xp:55, renom:10, issue:"wyrm_muré", flag:"wyrm_sous_mont_draken"}},
+          vider:{ fin:true, pnj:"charles", texte:[
+            "Charles écoute, hoche la tête, et donne l'ordre dans l'heure. Trois villages sont vidés avant l'hiver, sans un mort.",
+            "Il paie en entier. « C'est ce que j'avais acheté », dit-il. « Une réponse. Elle est mauvaise, mais elle est arrivée à temps. »"]},
+        }}},
+  ]},
+
 ];
