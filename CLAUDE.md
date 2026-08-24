@@ -159,7 +159,7 @@ Audit au 24 août. Ce qui est là, ce qui manque, sans complaisance.
 | Karlsberg progressif, jamais « payer X » | **partiel** | `chantier.js` — 8 ouvrages, mais l'or reste la seule monnaie |
 | Suspicion qui change le monde | **fait** | `suspicion.js`, 4 paliers, 12 événements dédiés |
 | Romances à axes séparés | **partiel** | `romances.js` — arcs écrits, un seul axe d'affinité |
-| Mémoire narrative longue | **partiel** | marqueurs + issues de chaînes ; aucune chaîne d'arrière-plan écrite |
+| Mémoire narrative longue | **fait** | `chaines_secretes.js` — 10 chaînes armées sur marqueur, en arrière-plan |
 | PNJ majeurs qui agissent seuls | **manquant** | `politique.js` simule 6 puissances, pas 9 personnes |
 | Crises régionales en étapes | **manquant** | `tensions` n'est qu'un nombre qui imprime une ligne |
 | Fin lisant l'état réel du monde | **fait** | `epilogue.js`, 116 verdicts, 8 legs |
@@ -173,8 +173,9 @@ branche non prise n'apparaît jamais à l'écran.
 
 Inventaire : 20 lieux · 4 régions · 24 routes · 75 créatures · 12 champions ·
 29 troupes · 12 champs de bataille · 130 événements écrits illustrés · **30
-affaires en chaînes (101 étapes, 564 scènes, 313 choix, 142 issues)** · 60
-affaires locales + 20 dénouements · 50 contrats au registre · 25 maisons nobles ·
+affaires en chaînes (101 étapes, 564 scènes, 313 choix, 142 issues)** · **10
+chaînes secrètes armées sur marqueur (30 étapes, 184 scènes, 110 choix, 32
+issues)** · 60 affaires locales + 20 dénouements · 50 contrats au registre · 25 maisons nobles ·
 8 ouvrages de Karlsberg · 116 verdicts d'épilogue.
 
 ---
@@ -185,10 +186,12 @@ Dans cet ordre. À chaque étape, le jeu reste jouable et les épreuves passent.
 
 1. ~~Les 30 affaires écrites en chaînes depuis les canevas du pack.~~ **Fait** :
    30 affaires, 101 étapes, 564 scènes, 313 choix, 142 issues.
-2. **Les 10 chaînes secrètes** (`design/narratif/02_EVENEMENTS/CHAINES_SECRETS`).
-   Le moteur les accepte déjà : elles tournent en arrière-plan, en parallèle de
-   l'affaire en cours, et se déclenchent sur un marqueur plutôt que sur une
-   acceptation. C'est le pilier « conséquences longues » rendu visible.
+2. ~~Les 10 chaînes secrètes.~~ **Fait** : `src/data/chaines_secretes.js`,
+   30 étapes, 184 scènes, 110 choix, 32 issues. Elles ne se proposent ni ne
+   s'acceptent : `armerChainesDeFond()` les arme en silence sur un marqueur
+   (`declencheur:{flags,sansFlags,apres}`), trois au plus de front, et elles
+   reviennent des mois plus tard pendant qu'on est occupé ailleurs. C'est le
+   pilier « conséquences longues » rendu visible.
 3. **Les crises régionales en cinq étapes**
    (`design/narratif/05_GRANDE_HISTOIRE/CRISES_REGIONALES`), qui remplacent les
    tensions numériques : Elfes, Astrah, Khesh, Peaux-Vertes, Hommes-Bêtes.

@@ -7,7 +7,14 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V1.7** — **les trente affaires du pack narratif écrites en chaînes** — 101 étapes, 564 scènes, 313 choix, 142 issues, 16 combats et 5 batailles rangées — dont la dernière se joue sous vos propres murs.
+**Version actuelle : V1.8** — **les dix chaînes secrètes**. Elles ne se proposent
+pas et ne s'acceptent pas : elles s'arment en silence sur ce que vous avez fait —
+un seigneur humilié, un dragon épargné, une route rouverte, une chope payée à un
+vieux nain — et elles reviennent vous chercher des mois plus tard, pendant que
+vous êtes occupé ailleurs. 30 étapes, 184 scènes, 110 choix, 32 issues.
+
+*(V1.7 : les trente affaires du pack narratif écrites en chaînes — 101 étapes,
+564 scènes, 313 choix, 142 issues, 16 combats et 5 batailles rangées.)*
 
 > **`CLAUDE.md` fait autorité.** Il porte le prompt maître du projet, l'audit du
 > code au regard de ce prompt, et la feuille de route. Ce README-ci documente ce
@@ -59,6 +66,7 @@ lien. Il se régénère avec `node tools/build-standalone.js`.
 | **Politique** : 6 puissances, leur influence, leur posture, et 8 édits qui tombent | ✅ |
 | **Le Prix du Paria** : toute maison noble doit l'Or et le Sang, en trois termes | ✅ |
 | **Affaires en chaînes** : 30 affaires en 101 étapes, jouées sur plusieurs tours | ✅ |
+| **Chaînes secrètes** : 10 chaînes armées sur marqueur, en arrière-plan, jamais proposées | ✅ |
 | **Maisons nobles** : 25 maisons, 26 nobles adultes nommées, avec droit de refus | ✅ |
 | **Bestiaire** : 75 créatures, dont 24 adversaires humains par peuple | ✅ |
 | **Rencontres composées** : meneur, élite, soutien et piétaille selon l'affaire et le lieu | ✅ |
@@ -346,6 +354,42 @@ Les trente affaires du pack sont écrites, en 101 étapes et 564 scènes. En voi
 
 Vingt affaires sur trente réclament le Prix du Paria. Cinq mènent à une bataille
 rangée sous le moteur existant.
+
+## Les chaînes secrètes
+
+> *« Une décision importante ne se réduit pas à relation −20. Elle pose un
+> marqueur. Des mois plus tard, cet homme peut envoyer des tueurs, provoquer en
+> duel, marcher sur Karlsberg — ou renoncer. »*
+
+Une affaire commence parce qu'on l'accepte. **Une chaîne secrète commence parce
+qu'on a fait quelque chose** — et personne ne vous prévient.
+
+- Elle porte un `declencheur:{ flags, sansFlags, apres }` au lieu d'une offre.
+  `armerChainesDeFond()` tourne en fin de tour, vérifie les marqueurs posés, et
+  arme la chaîne **en silence** : rien ne s'affiche, rien ne se propose, rien ne
+  s'accepte. La première étape tombe six à vingt-quatre semaines plus tard.
+- **Trois au plus courent de front** (`FOND_MAX`), pour qu'on sache encore
+  laquelle est laquelle — et elles courent *en parallèle* de l'affaire en cours,
+  qui reste limitée à une.
+- Une fois armée, c'est le moteur ordinaire : des étapes datées, des scènes
+  écrites, des choix, des combats, des batailles, une issue enregistrée pour
+  toujours.
+
+| Chaîne | Ce qui l'arme | Ce qui revient |
+|---|---|---|
+| **Le Seigneur humilié** | avoir fait parler Valcroix devant sa cour | des tueurs, un duel, puis des bannières |
+| **Les Enfants du fossé** | avoir sauvé une enfant sur la route | elle revient adulte, et elle n'est pas venue seule |
+| **Le Dragon de Cendre** | avoir épargné le dragon de la combe | quatre cents ans de mémoire, et une dette qui vole |
+| **Le Sang de Callensbourg** | avoir pris publiquement la cause des Parias | onze chasseurs de Parias disparus en quatre ans |
+| **Les Fils perdus du Loup** | avoir lu le registre de la branche cadette | onze Vaury vivants, dont trois portent la marque |
+| **La Maison offensée** | avoir vendu ce qu'Artois-Noir avait payé | un espion qui compte des lèvres, puis trois cents hommes |
+| **La Route du Loup** | avoir rouvert la route de la vallée | des convois, un vieux sergent brigand, un village neuf |
+| **Le Vieux Nain** | une chope d'étain payée à un inconnu | deux cents boucliers de Kar-Durak, au bon défilé |
+| **Douze Feux** | six bannières khesh derrière Khal-Vaene | un puits, un conseil de lances, un cercle de sel |
+| **Le Portrait brûlé** | l'anneau des Karlsberg retrouvé | qui a dégarni la porte basse, et sur ordre de qui |
+
+Ce dernier n'est pas un contrat : c'est la réponse à la question que le jeu pose
+depuis la première ligne. Karlsberg n'est pas tombée sous des monstres.
 
 ### Le pack narratif dans le dépôt
 
