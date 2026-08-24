@@ -71,6 +71,58 @@ function chaineDisponible(ch){
   return true;
 }
 
+/* ================== CE QUI S'OUVRE TOUT SEUL ==================
+ * Une affaire s'ouvre parce qu'on l'accepte. Une **chaîne d'arrière-plan**
+ * s'ouvre parce qu'on a fait quelque chose : humilier un seigneur dans une
+ * taverne ouvre une vendetta, sauver deux enfants ouvre une dette, blesser un
+ * dragon ouvre son retour.
+ *
+ * C'est le pilier « conséquences longues » du document fondateur, et c'est la
+ * seule différence de moteur : on ne les propose jamais, on ne les accepte
+ * jamais. Elles se déclenchent sur un marqueur, elles courent en parallèle de
+ * l'affaire en cours, et elles reviennent vous chercher des mois plus tard.
+ *
+ * `declencheur` : { flags:[…], sansFlags:[…], apres:[semaines], … }
+ *   — mêmes conditions qu'un événement écrit (conditionsRemplies), plus
+ *   `apres` : le nombre de semaines qui s'écoulent avant la première étape.
+ */
+const CHAINES_FOND = () => CHAINES.filter(c => c.type !== 'contrat' && c.declencheur);
+
+function chaineArmable(ch){
+  if(chaineFaite(ch.id) || chaineEnCours(ch.id)) return false;
+  const d = ch.declencheur || {};
+  if(!conditionsRemplies(d)) return false;
+  return true;
+}
+
+/* Combien de chaînes d'arrière-plan peuvent courir de front. Au-delà, le joueur
+ * ne sait plus laquelle est laquelle. */
+const FOND_MAX = 3;
+
+/* Appelé à chaque fin de tour : arme ce qui doit l'être, en silence. Une chaîne
+ * qui s'arme ne s'annonce pas — c'est ce qui la rend inquiétante quand elle
+ * refait surface. */
+function armerChainesDeFond(){
+  const c = heroChaines();
+  const enCours = c.actives.filter(a => {
+    const ch = chaineParId(a.id);
+    return ch && ch.type !== 'contrat';
+  }).length;
+  if(enCours >= FOND_MAX) return [];
+
+  const armees = [];
+  for(const ch of CHAINES_FOND()){
+    if(enCours + armees.length >= FOND_MAX) break;
+    if(!chaineArmable(ch)) continue;
+    const d = ch.declencheur.apres || [4, 12];
+    const delai = d[0] + Math.floor(Math.random() * (d[1] - d[0] + 1));
+    c.actives.push({ id: ch.id, etape: ch.etapes[0].id,
+                     echeance: semaineCourante() + delai, data:{} });
+    armees.push(ch.id);
+  }
+  return armees;
+}
+
 /* Les chaînes qu'un lieu peut proposer ce tour-ci. */
 function chainesDuLieu(locId){
   return CHAINES.filter(ch => ch.type === 'contrat'
@@ -289,6 +341,24 @@ function blocAffaireEnCours(){
     <p class="ac-attente">${reste > 0
       ? `${et && et.attente ? et.attente : "Il n'y a plus qu'à attendre."} <b>Environ ${reste} semaine${reste > 1 ? 's' : ''}.</b>`
       : `<b>La suite vous attend.</b> Terminez le tour.`}</p>
+  </div>`;
+}
+
+/* Ce qui court en arrière-plan, pour l'écran du lieu. On ne dit pas ce que
+ * c'est ni d'où ça vient : on dit qu'il y a quelque chose. */
+function blocChainesDeFond(){
+  const fond = heroChaines().actives.filter(a => {
+    const ch = chaineParId(a.id);
+    return ch && ch.type !== 'contrat';
+  });
+  if(!fond.length) return '';
+  const proches = fond.filter(a => a.echeance - semaineCourante() <= 3).length;
+  return `<div class="fond-bloc">
+    <span class="fond-tete">Quelque chose court</span>
+    <p>${fond.length === 1
+      ? "Une affaire ancienne n'est pas close. Vous ne savez pas laquelle."
+      : `${fond.length} affaires anciennes ne sont pas closes.`}
+      ${proches ? "<b>Quelque chose approche.</b>" : "Rien ne presse — pour l'instant."}</p>
   </div>`;
 }
 

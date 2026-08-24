@@ -1053,6 +1053,9 @@ function endTurnMeta(){
   // Un tour ne se termine jamais sur rien : le pli dit ce qui a changé et ce
   // qu'on propose. Un jalon prêt se déclenche en le refermant.
   armerTrameSansOuvrir();
+  // Ce qu'on a fait il y a des mois s'arme en silence : un seigneur humilié,
+  // deux enfants sauvés, un dragon blessé. Personne n'en est averti.
+  if(typeof armerChainesDeFond === 'function') armerChainesDeFond();
   // Ce qui vous rattrape d'abord : l'affaire en cours. Une chaîne dont l'heure
   // est venue passe avant tout, y compris avant le pli — c'est elle qu'on
   // attendait en laissant filer les semaines.

@@ -66,7 +66,8 @@ function renderLieu(){
   /* --- Les trois offres du tour --- */
   const off = document.getElementById('lieuOffres');
   if(off){
-    off.innerHTML = (typeof blocAffaireEnCours === 'function') ? blocAffaireEnCours() : '';
+    off.innerHTML = ((typeof blocAffaireEnCours === 'function') ? blocAffaireEnCours() : '')
+                  + ((typeof blocChainesDeFond === 'function') ? blocChainesDeFond() : '');
     const offres = offresDuTour();
     if(!offres.length){
       off.innerHTML = `<p class="offres-vide">Personne ne cherche personne aujourd'hui. Terminez le tour :

@@ -22,7 +22,7 @@ const fichiers = [
   'src/data/events_compagnons.js', 'src/data/events_nemesis.js', 'src/data/events_isolde.js',
   'src/data/reputation.js', 'src/data/epilogue.js',
   'src/data/chantier.js', 'src/data/events_suspicion.js', 'src/data/politique.js',
-  'src/data/maisons.js', 'src/data/chaines.js',
+  'src/data/maisons.js', 'src/data/chaines.js', 'src/data/chaines_secretes.js',
 ];
 
 const ctx = vm.createContext({ console });
@@ -548,7 +548,24 @@ CHAINES.forEach(ch => {
   if(chaineIds.has(ch.id)) err(`CHAINES : identifiant en double « ${ch.id} »`);
   chaineIds.add(ch.id);
   if(!ch.etapes || !ch.etapes.length) err(`CHAINE ${ch.id} : aucune étape`);
-  if(!ch.pitch) err(`CHAINE ${ch.id} : pas de pitch — elle ne peut pas s'afficher en offre`);
+  if(ch.type === 'contrat' && !ch.pitch)
+    err(`CHAINE ${ch.id} : pas de pitch — elle ne peut pas s'afficher en offre`);
+  // Une chaîne d'arrière-plan ne se propose jamais : elle se déclenche.
+  if(ch.type !== 'contrat' && !ch.declencheur)
+    err(`CHAINE ${ch.id} : ni contrat ni déclencheur — rien ne pourrait l'ouvrir`);
+  if(ch.declencheur){
+    const d = ch.declencheur;
+    (d.flags || []).forEach(f => {
+      if(!marqueursPoses.has(f))
+        err(`CHAINE ${ch.id} : se déclenche sur « ${f} », que rien ne pose — elle dormirait pour toujours`);
+    });
+    (d.sansFlags || []).forEach(f => {
+      if(!marqueursPoses.has(f))
+        warn(`CHAINE ${ch.id} : exclue par « ${f} », que rien ne pose`);
+    });
+    if(d.apres && (d.apres[0] > d.apres[1] || d.apres[0] < 0))
+      err(`CHAINE ${ch.id} : délai de déclenchement incohérent`);
+  }
   (ch.lieux || []).forEach(l => { if(!locIds.has(l)) err(`CHAINE ${ch.id} : lieu inconnu ${l}`); });
   if(ch.maison && !MAISONS[ch.maison]) err(`CHAINE ${ch.id} : maison inconnue « ${ch.maison} »`);
   if(ch.prix && !ch.maison) err(`CHAINE ${ch.id} : réclame le Prix du Paria sans maison noble`);
