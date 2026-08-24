@@ -15064,6 +15064,409 @@ const CHAINES = [
         }}},
   ]},
 
+/* ══════════════════════════════════════════════════════════════════════════
+   21 — LA DETTE DE MONT-DRAKEN
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_DETTE", type:'contrat', titre:"La Dette de Mont-Draken",
+  commanditaire:"Charles de Mont-Draken", maison:null,
+  or:3400, danger:"extrême", categorie:"chasse",
+  lieux:["LOC_003","LOC_012"],
+  pitch:"Un ancien dragon que Charles croyait mort revient sur une terre qu'il considère comme sienne. Charles l'a blessé il y a vingt-deux ans, et il s'en souvient chaque jour.",
+  paye:["dette_soldee","dette_reportee","charles_tenu"],
+  issues:{
+    dette_soldee:"Le dragon de Mont-Draken est mort. Charles a payé ce qu'il devait depuis vingt-deux ans.",
+    dette_reportee:"Le dragon de Mont-Draken est reparti. Il reviendra, et Charles le sait.",
+    charles_tenu:"Charles de Mont-Draken a réglé sa dette lui-même, et il ne s'en est pas remis.",
+    abandonnee:"Le dragon tient toujours les hauteurs de Mont-Draken.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Charles ne dort plus depuis onze jours.",
+      ev:{ id:"CHN_1", titre:"Vingt-deux ans", famille:"POLITIQUE", rarete:"majeur",
+        image:"rc_charles",
+        scenes:{
+          start:{ pnj:"charles", texte:[
+            "Charles de Mont-Draken reçoit seul, sans carte, sans capitaine, et c'est la première chose qui inquiète.",
+            "« J'avais vingt-trois ans. Nous étions onze. Nous l'avons trouvé endormi dans la combe haute et nous lui avons mis quatre lances dans le flanc gauche. »",
+            "Il regarde ses mains. « Il en a tué neuf. Je suis redescendu avec un autre, qui est mort dans le mois. Et j'ai raconté toute ma vie que nous l'avions tué. »",
+            "Il relève la tête. « Il est revenu il y a onze jours. Il n'a rien brûlé. Il s'est posé sur la combe haute et il attend. »"],
+            choix:[
+              {label:"Demander ce qu'il attend", detail:"Onze jours à attendre, c'est une intention",
+               suite:"attend"},
+              {label:"Demander pourquoi il ne monte pas lui-même", detail:"Jet de Volonté (13)",
+               test:{stat:"vol", dc:13}, reussite:"lui_ok", echec:"lui_ko"},
+              {label:"Accepter", detail:"Il n'a demandé qu'une fois",
+               suite:"termes"},
+            ]},
+          attend:{ pnj:"charles", texte:[
+            "« Moi. »",
+            "Il le dit sans emphase. « Il attend que je monte. Il ne descendra pas : il l'aurait déjà fait. Il s'est posé sur l'endroit exact où nous l'avons trouvé, et il attend. »",
+            "Un temps. « J'ai envoyé deux hommes voir. Ils sont redescendus. Il ne les a pas touchés. »"],
+            effets:{xp:20, flag:"draken_il_attend_charles"}, suite:"termes"},
+          lui_ok:{ pnj:"charles", texte:[
+            "La question le prend de flanc, et il a l'honnêteté de ne pas la contourner.",
+            "« Parce que si je monte, je ne redescends pas, et Mont-Draken a besoin d'un seigneur cet hiver. »",
+            "Il ajoute, plus bas : « Et parce que j'ai peur. J'ai cinquante-cinq ans, j'ai mené quatre campagnes, et j'ai peur d'une combe où je suis monté à vingt-trois ans. Vous pouvez le noter quelque part si ça vous amuse. »"],
+            effets:{xp:26, flags:["draken_il_attend_charles","draken_charles_a_peur"]}, suite:"termes"},
+          lui_ko:{ pnj:"charles", texte:["« Parce que je vous paie », dit-il, et le sujet est clos."],
+            effets:{xp:6}, suite:"termes"},
+          termes:{ fin:true, pnj:"charles", texte:[
+            "« Trois mille quatre cents. C'est tout ce que j'ai de disponible et je ne le regrette pas. »",
+            "Il raccompagne lui-même jusqu'à la porte. « Et si vous montez et que vous redescendez sans l'avoir tué, je paierai quand même. Je sais ce qu'il y a là-haut. »"]},
+        }}},
+
+    { id:"combe", delai:[2,4], attente:"La combe haute est à deux jours, et il attend.",
+      ev:{ id:"CHN_2", titre:"La combe haute", famille:"ONDE", rarete:"majeur",
+        image:"evt2_ossements",
+        scenes:{
+          start:{ texte:[
+            "Il est là. Il fait quarante pas et il est vieux — vraiment vieux : l'écaille grise, l'œil laiteux, et quatre cicatrices alignées sur le flanc gauche.",
+            "Il regarde Yohan monter les six cents derniers pas sans bouger d'un pouce.",
+            "Puis il parle. Ce n'est pas de la parole : c'est quelque chose qui arrive dans la tête, et qui a le goût du fer chaud.",
+            "*Tu n'es pas lui.*"],
+            choix:[
+              {label:"Répondre", detail:"Il a parlé le premier",
+               suite:"parle"},
+              {label:"L'attaquer", detail:"C'est ce pour quoi on est monté",
+               suite:"combat"},
+              {label:"Se servir de l'Onde pour répondre en nature",
+               detail:"Requiert un pouvoir · il saura exactement ce que vous êtes",
+               requis:{pouvoir:"foudre"}, suite:"onde"},
+            ]},
+          parle:{ texte:[
+            "« Non. Je suis payé par lui. »",
+            "*Alors redescends. Dis-lui que j'attends. J'ai attendu vingt-deux ans, je peux attendre l'hiver.*",
+            "Un silence, et puis, plus lent : *Il a dit qu'il m'avait tué. Je l'ai entendu dire dans les vallées pendant vingt-deux ans. Je veux qu'il monte le dire ici.*"],
+            effets:{xp:30, flag:"draken_il_veut_charles"}, fin:true},
+          onde:{ texte:[
+            "Il laisse l'Onde monter — pas pour frapper : pour être vu.",
+            "La chose vieille lève la tête de six pouces, ce qui chez elle est un mouvement énorme.",
+            "*Ah.* Un temps. *Il en reste donc.*",
+            "*Redescends, sang de Karlsberg. Cette dette n'est pas la tienne et je ne veux pas de ce qui t'arrivera si tu la prends.*"],
+            effets:{xp:34, sang:6, suspicion:6, flags:["draken_il_veut_charles","draken_reconnu"]}, fin:true},
+          combat:{ texte:["Il ne bouge pas quand Yohan tire. Il bouge après, et c'est très vite pour quelque chose d'aussi vieux."],
+            combat:{ groupe:[{bst:"BST_012", n:1}], victoire:"tue", defaite:"repousse", mortel:true }},
+          tue:{ texte:[
+            "Il met une heure à mourir dans la combe haute, sur l'endroit exact où onze hommes l'ont trouvé endormi il y a vingt-deux ans.",
+            "À la fin, il tourne l'œil laiteux vers Yohan et il n'y a plus rien dedans qui ressemble à une intention."],
+            effets:{xp:90, sang:14, issue:"dette_soldee", renom:18, suspicion:10}, fin:true},
+          repousse:{ texte:[
+            "Il n'achève pas. Il aurait pu — il aurait dû — et il ne le fait pas.",
+            "Yohan redescend les six cents pas sur le ventre, avec trois côtes cassées, et il entend derrière lui, très distinctement :",
+            "*Dis-lui que j'attends.*"],
+            effets:{pv:-45, fat:30, xp:25, flag:"draken_il_veut_charles"}, fin:true},
+        }}},
+
+    { id:"retour", delai:[1,2], attente:"Il faut redescendre le lui dire.",
+      ev:{ id:"CHN_3", titre:"Ce qu'on rapporte à un homme qui a menti vingt-deux ans", famille:"POLITIQUE", rarete:"majeur",
+        image:"rc_charles",
+        scenes:{
+          start:{ pnj:"charles", texte:[
+            "Charles écoute sans s'asseoir. Quand Yohan a fini, il reste debout un long moment devant la fenêtre qui donne sur les hauteurs.",
+            "« Vingt-deux ans que je raconte que je l'ai tué. J'ai été fait chevalier pour ça. »"],
+            choix:[
+              {label:"Lui dire de monter", detail:"Requiert de savoir ce que le dragon veut",
+               requis:{flag:"draken_il_veut_charles"}, suite:"monte"},
+              {label:"Proposer d'y retourner", detail:"Une seconde tentative, mieux préparée",
+               suite:"retourne", effets:{etape:"combe"}},
+              {label:"Lui conseiller de ne rien faire", detail:"Il attend depuis vingt-deux ans. Il peut attendre encore.",
+               suite:"rien",
+               effets:{issue:"dette_reportee", reputation:{humains:-4}, renom:2}},
+            ]},
+          monte:{ pnj:"charles", texte:[
+            "Il ne discute pas. C'est ce qui est terrible : il ne discute pas une seconde.",
+            "« Bien. »",
+            "Il met deux jours à mettre ses affaires en ordre — testament, garnison, lettre à sa sœur — et il monte le troisième matin, seul, à pied, sans armure.",
+            "Yohan l'accompagne jusqu'à la limite des arbres. Charles lui serre la main là, et ne dit rien de particulier."],
+            suite:"apres"},
+          apres:{ fin:true, pnj:"charles", texte:[
+            "Il redescend le lendemain soir.",
+            "Il ne dit pas ce qui s'est passé là-haut et il ne le dira jamais à personne. Ce qu'on sait, c'est que le dragon est reparti dans la nuit vers l'est, et qu'on ne l'a plus revu sur les terres de Mont-Draken.",
+            "Charles paie les trois mille quatre cents écus en entier, alors que Yohan n'a rien tué.",
+            "« Vous m'avez fait monter », dit-il. « C'est plus que ce que je vous demandais. »",
+            "Il ne raconte plus jamais l'histoire du dragon."],
+            effets:{issue:"charles_tenu", reputation:{humains:12}, renom:14,
+                    flag:"charles_est_monte"}},
+          retourne:{ fin:true, pnj:"charles", texte:[
+            "« Alors remontez », dit Charles. « Et prenez ce qu'il vous faut dans mes arsenaux. »"]},
+          rien:{ fin:true, pnj:"charles", texte:[
+            "« Ne rien faire. »",
+            "Il répète les mots comme s'il les essayait. « Vingt-deux ans, et votre conseil est de ne rien faire. »",
+            "Il paie en entier, parce qu'il l'avait dit.",
+            "Le dragon reste sur la combe haute tout l'hiver. Au printemps, il descend d'une lieue. L'hiver suivant, d'une autre.",
+            "Charles ne parle plus jamais de cette affaire, et il cesse de recevoir Yohan."]},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   22 — LE PONT DES TROIS ARMÉES
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_SALVERNE", type:'contrat', titre:"Le Pont des Trois Armées",
+  commanditaire:"Maison de Salverne", maison:"Maison de Salverne",
+  or:3200, danger:"très dangereux", categorie:"guerre", prix:true,
+  lieux:["LOC_018","LOC_011","LOC_004"],
+  pitch:"Trois forces convergent vers le même pont et aucune ne peut se permettre de céder. Salverne possède le pont et n'a pas d'armée.",
+  paye:["pont_tenu","pont_partage","pont_detruit"],
+  issues:{
+    pont_tenu:"Salverne a tenu son pont contre deux armées, et fait payer le passage à la troisième.",
+    pont_partage:"Le pont de Salverne a été ouvert aux trois, sous garde neutre.",
+    pont_detruit:"Le pont de Salverne a sauté. Il n'y a plus de passage à quarante lieues.",
+    abandonnee:"Le pont de Salverne a été pris par la première armée arrivée.",
+    refusee:"Yohan a refusé les termes de Salverne.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Trois colonnes convergent, et la plus proche est à onze jours.",
+      ev:{ id:"CHS2_1", titre:"Un pont et pas d'armée", famille:"GUERRE", rarete:"majeur",
+        image:"evt_peage",
+        scenes:{
+          start:{ texte:[
+            "Dame Guiraude de Salverne a vu passer trois guerres sur ce pont et compté chaque homme. Elle reçoit sur le pont lui-même, au milieu, parce que c'est là qu'on comprend le problème.",
+            "« Quarante lieues sans autre passage. Trois colonnes convergent : Rochebrune par le nord, Vaubrun par l'est, et une compagnie franche que personne ne revendique par le sud. »",
+            "Elle regarde l'eau. « J'ai soixante hommes et un pont. Celui qui le prend gagne la campagne, et les trois le savent. »"],
+            choix:[
+              {label:"Demander qui paie la compagnie franche", detail:"Une compagnie que personne ne revendique est payée par quelqu'un",
+               suite:"franche"},
+              {label:"Demander si le pont peut sauter", detail:"Jet de Précision (13)",
+               test:{stat:"precision", dc:13}, reussite:"saute_ok", echec:"saute_ko"},
+              {label:"Accepter", detail:"Onze jours",
+               suite:"termes"},
+            ]},
+          franche:{ texte:[
+            "« Astrah. »",
+            "Elle le dit à voix basse, bien qu'il n'y ait personne à cent pas. « Pas officiellement, évidemment. Six cents hommes payés par la chancellerie pour se trouver sur un pont dont la Couronne veut le contrôle depuis quarante ans. »",
+            "Elle se redresse. « Rochebrune et Vaubrun se battent pour une campagne. Astrah se bat pour le pont. Ce n'est pas la même chose, et c'est la seule qui compte pour moi. »"],
+            effets:{xp:26, flag:"salverne_astrah"}, suite:"termes"},
+          saute_ok:{ texte:[
+            "« Trois arches, romaines, sept cents ans. »",
+            "Elle tape du talon. « La deuxième arche a été reprise il y a soixante ans, mal. On peut la faire tomber avec quarante livres de poudre et deux hommes qui savent où poser. »",
+            "Elle regarde l'eau. « Mon arrière-grand-père l'a fait en l'an vingt-neuf. Il a fallu onze ans pour rebâtir. »"],
+            effets:{xp:24, flag:"salverne_deuxieme_arche"}, suite:"termes"},
+          saute_ko:{ texte:["« Trois arches, sept cents ans, et je ne veux pas en parler. » Elle change de sujet et ne le laisse pas revenir dessus."],
+            effets:{xp:5}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Trois mille deux cents écus. Le pont reste à Salverne. »",
+            "Elle ajoute, très droite : « Et nous réglerons la coutume ce soir. Je ne veux pas mourir en devant quelque chose à quelqu'un. »"]},
+        }}},
+
+    { id:"onze", delai:[2,3], attente:"Onze jours, et trois colonnes qui avancent.",
+      ev:{ id:"CHS2_2", titre:"Onze jours", famille:"GUERRE", rarete:"majeur",
+        image:"evt_lances",
+        scenes:{
+          start:{ texte:[
+            "Soixante hommes, un pont de trois arches, et onze jours.",
+            "Rochebrune arrivera le neuvième. Vaubrun le dixième. La compagnie franche le douzième — ce qui veut dire qu'elle attend que les deux autres se soient usées."],
+            choix:[
+              {label:"Fortifier la tête de pont", detail:"Soixante hommes derrière un ouvrage valent trois cents à découvert",
+               suite:"fortifie", effets:{fat:12, xp:20, flag:"salverne_fortifie"}},
+              {label:"Aller au-devant de Rochebrune", detail:"Jet de Volonté (14) · négocier avant qu'ils voient le pont",
+               test:{stat:"vol", dc:14}, reussite:"parle_ok", echec:"parle_ko"},
+              {label:"Faire savoir aux deux premiers que la troisième est payée par Astrah",
+               detail:"Requiert de le savoir · deux ennemis qui découvrent un troisième larron",
+               requis:{flag:"salverne_astrah"}, suite:"revele"},
+            ]},
+          fortifie:{ fin:true, texte:[
+            "Onze jours de terrassement : un fossé, une palissade, deux redans, et des chevaux de frise pris sur les charrettes du village.",
+            "Le neuvième jour, Rochebrune arrive et s'arrête à six cents pas. On ne charge pas une tête de pont fortifiée avec des hommes fatigués par onze jours de marche.",
+            "Ils campent. Vaubrun campe le lendemain, à une lieue. Deux armées immobiles devant soixante hommes derrière un fossé."]},
+          parle_ok:{ fin:true, texte:[
+            "Il les rencontre à deux jours du pont, sous bannière blanche, et il parle une heure.",
+            "L'argument qui porte n'est pas le pont : c'est que Vaubrun arrivera le lendemain, et qu'une armée qui vient de forcer un pont est une armée qui reçoit la suivante en désordre.",
+            "Rochebrune ralentit d'une journée. Une journée, sur un pont, c'est tout."],
+            effets:{xp:28, flag:"salverne_rochebrune_ralenti"}},
+          parle_ko:{ fin:true, texte:["On l'écoute par courtoisie et on continue d'avancer. Une armée en marche n'aime pas les gens qui lui disent d'attendre."],
+            effets:{xp:10}},
+          revele:{ fin:true, texte:[
+            "Deux messages, portés par deux hommes différents, disant la même chose : *la troisième colonne est payée par la chancellerie d'Astrah et arrivera quand vous serez usés.*",
+            "Rochebrune n'y croit pas. Vaubrun y croit tout de suite, parce qu'il a un cousin à la chancellerie et qu'il connaît l'écriture.",
+            "Le neuvième jour, il n'y a qu'une armée devant le pont au lieu de deux."],
+            effets:{xp:32, flag:"salverne_vaubrun_recule"}},
+        }}},
+
+    { id:"pont", delai:[1,2], attente:"Ils sont devant le pont.",
+      ev:{ id:"CHS2_3", titre:"Ce qu'on fait d'un pont de sept cents ans", famille:"GUERRE", rarete:"majeur",
+        image:"evt_peage",
+        scenes:{
+          start:{ texte:[
+            "Ils sont là. Une armée au moins, deux si rien n'a été fait, et la compagnie franche à deux jours derrière.",
+            "Dame Guiraude est sur le pont, au milieu, comme au premier jour."],
+            choix:[
+              {label:"Tenir", detail:"Soixante hommes, et ce qu'on a préparé",
+               suite:"tenir"},
+              {label:"Ouvrir le pont aux trois, sous garde de Salverne",
+               detail:"Jet de Volonté (15) · un péage neutre plutôt qu'une prise",
+               test:{stat:"vol", dc:15}, reussite:"ouvre_ok", echec:"ouvre_ko"},
+              {label:"Faire sauter la deuxième arche",
+               detail:"Requiert de savoir où poser · plus de pont, plus de campagne",
+               requis:{flag:"salverne_deuxieme_arche"}, suite:"saute",
+               effets:{issue:"pont_detruit", reputation:{humains:-14}, renom:6}},
+            ]},
+          tenir:{ texte:["Soixante hommes en travers d'une tête de pont, contre ce qui vient."],
+            bataille:{ def:"BAT_ROUTE", victoire:"tenu", defaite:"pris" }},
+          tenu:{ fin:true, texte:[
+            "Le pont tient. Il tient parce qu'il est étroit, parce qu'une tête de pont fortifiée coûte cher, et parce qu'une armée qui sait qu'une troisième arrive n'insiste pas.",
+            "Rochebrune se retire au sixième jour. Vaubrun ne charge jamais. La compagnie franche arrive, trouve un pont tenu et deux armées parties, et repart vers le nord sans un mot.",
+            "Salverne fait payer le passage à Rochebrune trois semaines plus tard, au tarif d'avant-guerre.",
+            "Dame Guiraude paie en entier. « Trois guerres sur ce pont », dit-elle. « C'est la première où je n'ai pas eu à choisir un camp. »"],
+            effets:{issue:"pont_tenu", reputation:{humains:14}, renom:14}},
+          pris:{ fin:true, texte:[
+            "La tête de pont cède le deuxième jour. On ne tient pas soixante contre quinze cents, même sur un pont.",
+            "Dame Guiraude est prise sur le pont, au milieu, où elle était restée. On ne la tue pas — on ne tue pas une maîtresse de péage — mais Salverne perd le pont, et avec lui à peu près tout.",
+            "Elle paie la moitié du contrat six mois plus tard, depuis Astrah, où elle vit maintenant."],
+            effets:{issue:"abandonnee", renom:-6}},
+          ouvre_ok:{ fin:true, texte:[
+            "L'idée est absurde et c'est ce qui la sauve : Salverne ouvre le pont aux trois forces, l'une après l'autre, à raison d'une par jour, sous garde de ses soixante hommes et au tarif du péage ordinaire.",
+            "Aucune ne peut refuser sans se donner le tort. Aucune ne peut forcer sans se mettre les deux autres à dos.",
+            "Rochebrune passe le premier, Vaubrun le deuxième, la compagnie franche le troisième et repart aussitôt vers le nord, sa mission étant devenue sans objet.",
+            "La campagne se décide quarante lieues plus loin, ce qui ne regarde plus Salverne.",
+            "Dame Guiraude paie en entier. « Personne n'a pris mon pont », dit-elle. « Personne ne l'a défendu non plus. C'est très supérieur. »"],
+            effets:{issue:"pont_partage", reputation:{humains:16}, renom:12,
+                    flag:"salverne_pont_neutre"}},
+          ouvre_ko:{ texte:["« Ouvrir à trois armées ennemies. » Dame Guiraude le regarde comme s'il avait proposé de brûler le pont lui-même. « Non. »"],
+            effets:{xp:10}, suite:"tenir"},
+          saute:{ fin:true, texte:[
+            "Quarante livres de poudre sous la deuxième arche, deux hommes qui savent où poser, et sept cents ans qui tombent dans l'eau en quatre secondes.",
+            "Les trois armées restent sur leurs rives respectives. La campagne s'arrête faute de passage. Personne ne gagne.",
+            "Quarante lieues sans pont. Le commerce du sel meurt en deux ans. Onze villages se vident.",
+            "Dame Guiraude paie en entier et quitte Salverne le mois suivant. Elle avait dit qu'elle ne voulait pas en parler."]},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   23 — LA COURONNE DANS LA BOUE
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_ARTOIS", type:'contrat', titre:"La Couronne dans la boue",
+  commanditaire:"Maison d'Artois-Noir", maison:"Maison d'Artois-Noir",
+  or:3600, danger:"dangereux", categorie:"récupération", prix:true,
+  lieux:["LOC_018","LOC_002","LOC_004"],
+  pitch:"Une couronne princière a disparu pendant une défaite. La récupérer peut décider qui possède une revendication politique — et trois maisons la cherchent.",
+  paye:["couronne_rendue","couronne_fondue","couronne_vendue"],
+  issues:{
+    couronne_rendue:"La couronne d'Artois-Noir est revenue à la maison, et la revendication tient.",
+    couronne_fondue:"La couronne princière a été fondue. Il n'y a plus de revendication à porter.",
+    couronne_vendue:"La couronne princière a changé de camp, et quelqu'un d'autre porte la revendication.",
+    abandonnee:"La couronne princière est encore quelque part dans la boue des Champs de Cendre.",
+    refusee:"Yohan a refusé les termes d'Artois-Noir.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Les Champs de Cendre sont vastes et il a plu.",
+      ev:{ id:"CHA2_1", titre:"Ce qui vaut une province", famille:"POLITIQUE", rarete:"majeur",
+        image:"cg_cendre",
+        scenes:{
+          start:{ texte:[
+            "Dame Ermengarde d'Artois-Noir a tenu la maison pendant les quatre ans où son frère était prisonnier, et cela se voit à la façon dont elle range ses papiers.",
+            "« La déroute de la Grande Fosse, il y a sept mois. Mon frère portait la couronne princière — pas pour la parade : parce qu'une revendication se porte physiquement, c'est la coutume d'Astrah. »",
+            "Elle joint les mains. « Il l'a perdue dans la boue en fuyant. Quatre mille hommes ont fui sur le même quart de lieue. »",
+            "Elle relève les yeux. « Sans elle, notre revendication ne vaut rien devant la chancellerie. Deux autres maisons la cherchent depuis sept mois. »"],
+            choix:[
+              {label:"Demander à quoi elle ressemble", detail:"Il y a de la ferraille partout sur un champ de bataille",
+               suite:"ressemble"},
+              {label:"Demander qui d'autre cherche", detail:"Jet de Précision (12)",
+               test:{stat:"precision", dc:12}, reussite:"qui_ok", echec:"qui_ko"},
+              {label:"Accepter", detail:"Sept mois, et personne ne l'a trouvée",
+               suite:"termes"},
+            ]},
+          ressemble:{ texte:[
+            "« Un cercle de fer. Pas d'or, pas de pierres : du fer noirci, avec sept encoches. »",
+            "Elle a un sourire sans joie. « C'est ce qui la rend introuvable. Quatre mille hommes ont perdu de la ferraille dans cette boue. Un cercle de fer noirci ressemble à un cercle de fer noirci. »",
+            "« Sauf que les sept encoches sont numérotées à l'intérieur, au poinçon. Personne ne le sait sauf nous et la chancellerie. »"],
+            effets:{xp:24, flag:"artois_sept_encoches"}, suite:"termes"},
+          qui_ok:{ texte:[
+            "« Vauclair et Cendrepont. Vauclair par ambition, Cendrepont pour la revendre à Vauclair. »",
+            "Elle marque un temps. « Et il y a les glaneurs. Depuis sept mois, une soixantaine de gens du pays retournent cette boue tous les jours. Si elle sort, elle sortira de là. »"],
+            effets:{xp:22, flag:"artois_glaneurs"}, suite:"termes"},
+          qui_ko:{ texte:["« D'autres maisons », dit-elle. « Vous les rencontrerez peut-être. Ne leur dites pas ce que vous cherchez. »"],
+            effets:{xp:5}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Trois mille six cents écus. Le cercle de fer, dans ma main. »",
+            "Elle ajoute, sans détour : « Et la coutume — oui. Ma maison la doit, ma maison la paiera, et j'aimerais autant que ce soit réglé pendant que nous avons encore une maison. »"]},
+        }}},
+
+    { id:"fosse", delai:[2,4], attente:"Il faut retourner la boue de la Grande Fosse.",
+      ev:{ id:"CHA2_2", titre:"La boue de la Grande Fosse", famille:"POLITIQUE", rarete:"majeur",
+        image:"cg_cendre",
+        scenes:{
+          start:{ texte:[
+            "Sept mois après, la Grande Fosse est un champ de boue grise où soixante personnes fouillent tous les jours avec des crochets.",
+            "Ils vendent ce qu'ils trouvent au poids : fer aux forges, cuir aux tanneurs, dents aux barbiers.",
+            "Ils savent exactement ce qui est sorti de cette boue depuis sept mois, parce que c'est leur métier."],
+            choix:[
+              {label:"Acheter le registre des glaneurs", detail:"−250 or · ils tiennent des comptes",
+               requis:{or:250}, suite:"registre", effets:{or:-250}},
+              {label:"Chercher soi-même", detail:"Jet de Précision (15) · un quart de lieue de boue",
+               test:{stat:"precision", dc:15}, reussite:"trouve_ok", echec:"trouve_ko"},
+              {label:"Demander qui a acheté du fer noirci ces sept mois", detail:"Jet de Volonté (13) · les forges tiennent des livres",
+               test:{stat:"vol", dc:13}, reussite:"forge_ok", echec:"forge_ko"},
+            ]},
+          registre:{ texte:[
+            "Ils ne tiennent pas un registre : ils en tiennent trois, un par famille de glaneurs, et ils se surveillent mutuellement.",
+            "Un cercle de fer noirci est sorti au deuxième mois. Il a été vendu quatre sous à un ferrailleur ambulant qui passe tous les quarante jours.",
+            "Le ferrailleur repassera dans onze jours."],
+            effets:{xp:28, flag:"artois_ferrailleur"}, fin:true},
+          trouve_ok:{ texte:[
+            "Onze jours de boue, un crochet, et une méthode : ne pas chercher la couronne, chercher où un homme qui fuit à cheval passerait.",
+            "Il la trouve au onzième jour, à quatre pieds de profondeur, dans l'ornière d'un chemin de charrette que quatre mille hommes ont piétiné.",
+            "Sept encoches, numérotées au poinçon à l'intérieur."],
+            effets:{xp:40, fat:20, flag:"artois_couronne"}, fin:true},
+          trouve_ko:{ texte:["Onze jours de boue et deux cent quarante livres de ferraille inutile. La Grande Fosse fait un quart de lieue et il a plu sept mois."],
+            effets:{fat:22, xp:12}, fin:true},
+          forge_ok:{ texte:[
+            "Les forges de la région tiennent des livres, et un ferrailleur ambulant vend toujours au même endroit.",
+            "Il y a onze semaines, quatre livres de fer noirci ont été vendues à la forge de Combe-Basse — dont un cercle que le maître de forge n'a pas fondu, parce qu'il était trop bien fait pour un cercle de charrette.",
+            "Il l'a mis de côté. Il l'a toujours."],
+            effets:{xp:34, flags:["artois_forge","artois_couronne"]}, fin:true},
+          forge_ko:{ texte:["Onze forges, onze livres de comptes, et des maîtres de forge qui n'aiment pas qu'on lise leurs écritures. On apprend qu'il passe beaucoup de fer noirci et rien de plus."],
+            effets:{xp:10}, fin:true},
+        }}},
+
+    { id:"decision", delai:[1,3], attente:"Un cercle de fer, et trois maisons qui le cherchent.",
+      ev:{ id:"CHA2_3", titre:"Un cercle de fer noirci", famille:"POLITIQUE", rarete:"majeur",
+        image:"evt_bannieres",
+        scenes:{
+          start:{ texte:[
+            "Un cercle de fer noirci à sept encoches, dans une bourse, sur une table d'auberge.",
+            "Il vaut une province, une revendication, et probablement une guerre — et il ressemble à un cercle de charrette."],
+            choix:[
+              {label:"Le rendre à Artois-Noir",
+               detail:"Requiert de l'avoir · c'est ce qui a été payé",
+               requis:{flag:"artois_couronne"}, suite:"rend",
+               effets:{issue:"couronne_rendue", reputation:{humains:10}, renom:10}},
+              {label:"Le vendre à Vauclair",
+               detail:"Requiert de l'avoir · +2800 or, et une revendication qui change de main",
+               requis:{flag:"artois_couronne"}, suite:"vend",
+               effets:{or:2800, issue:"couronne_vendue", reputation:{humains:-12}, renom:-6}},
+              {label:"Le faire fondre",
+               detail:"Requiert de l'avoir · plus de couronne, plus de revendication, plus de guerre",
+               requis:{flag:"artois_couronne"}, suite:"fond",
+               effets:{issue:"couronne_fondue", reputation:{humains:-8, parias:12}, renom:4}},
+              {label:"Rendre l'avance : il n'est pas sorti de la boue",
+               detail:"C'est vrai si l'on n'a rien trouvé",
+               suite:"rien", effets:{issue:"abandonnee", reputation:{humains:-4}}},
+            ]},
+          rend:{ fin:true, texte:[
+            "Dame Ermengarde le prend à deux mains, le retourne, et compte les sept encoches numérotées à l'intérieur.",
+            "Elle ne pleure pas et elle ne remercie pas. Elle dit : « Bien », et elle le pose sur la table.",
+            "La revendication d'Artois-Noir est déposée devant la chancellerie six semaines plus tard. Elle sera plaidée neuf ans.",
+            "Son frère porte la couronne à la première audience. Elle reste debout derrière lui, comme elle l'a fait pendant quatre ans."]},
+          vend:{ fin:true, texte:[
+            "Vauclair paie deux mille huit cents écus sans marchander, ce qui veut dire qu'il en aurait donné le double.",
+            "La revendication passe à Vauclair au printemps. Artois-Noir perd tout : le titre, la province, et les quatre ans que Dame Ermengarde a tenus.",
+            "Elle apprend qui a vendu la couronne dix-huit mois plus tard, par un greffier bavard.",
+            "Elle n'écrit pas. Elle fait mieux : elle envoie à Yohan une copie de l'acte de vente, sans un mot, et laisse le papier parler."],
+            effets:{flag:"artois_trahie"}},
+          fond:{ fin:true, texte:[
+            "Un four de forge, quatre livres de fer, et sept cents ans de revendication qui deviennent une flaque.",
+            "Il n'y a plus de couronne princière. Il n'y a donc plus de revendication à porter — ni pour Artois-Noir, ni pour Vauclair, ni pour Cendrepont.",
+            "La province reste à la Couronne d'Astrah faute de prétendant en état de se présenter. Trois maisons cessent de lever des hommes.",
+            "Dame Ermengarde ne paie pas le contrat. Elle a raison : ce n'est pas ce qu'elle avait acheté."]},
+          rien:{ fin:true, texte:[
+            "« Elle n'est pas sortie de la boue. »",
+            "Dame Ermengarde encaisse sans broncher, ce qu'elle fait manifestement depuis quatre ans.",
+            "Elle paie la moitié. « Sept mois que soixante personnes la cherchent », dit-elle. « Vous n'êtes pas le premier à revenir sans. »"]},
+        }}},
+  ]},
+
 ];
 
 </script>
