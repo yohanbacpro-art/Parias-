@@ -1906,4 +1906,420 @@ const CHAINES = [
         }}},
   ]},
 
+/* ══════════════════════════════════════════════════════════════════════════
+   12 — LE DRAGON ET LA DOT
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_BELLAC", type:'contrat', titre:"Le Dragon et la Dot",
+  commanditaire:"Maison de Bellac", maison:"Maison de Bellac",
+  or:2300, danger:"très dangereux", categorie:"chasse", prix:true,
+  lieux:["LOC_016","LOC_010","LOC_011"],
+  pitch:"Un dragon s'est installé sur la route qu'un cortège matrimonial doit emprunter dans cinq semaines. Reporter l'union déclencherait une crise politique que trois maisons ne veulent pas.",
+  paye:["route_libre","route_contournee","union_reportee"],
+  issues:{
+    route_libre:"La route de Bellac a été dégagée, et le cortège est passé à l'heure.",
+    route_contournee:"Le cortège de Bellac a pris la côte. Six jours de plus, et personne n'est mort.",
+    union_reportee:"L'union de Bellac a été reportée, et trois maisons ont recommencé à compter leurs hommes.",
+    abandonnee:"Personne n'a dégagé la route de Bellac.",
+    refusee:"Yohan a refusé les termes de Bellac.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Cinq semaines, et le cortège n'attendra pas.",
+      ev:{ id:"CHD_1", titre:"Cinq semaines", famille:"POLITIQUE", rarete:"majeur",
+        image:"evt_bannieres",
+        scenes:{
+          start:{ texte:[
+            "Dame Rosamonde de Bellac gouverne au nom d'un enfant de six ans et reçoit avec un calendrier ouvert sur les genoux.",
+            "« Ma pupille — ma nièce, vingt-deux ans — épouse le second fils de Torcy dans cinq semaines. Le contrat est signé, la dot est levée, et trois maisons ont accepté de ne pas se faire la guerre à cause de ce mariage. »",
+            "Elle referme le calendrier. « Depuis onze jours, un dragon dort sur la route de la Combe. C'est la seule route carrossable. Un cortège matrimonial ne passe pas par les sentiers de chèvre : ce serait une insulte, et l'insulte coûterait exactement ce que le mariage devait éviter. »"],
+            choix:[
+              {label:"Demander pourquoi il s'est installé là", detail:"Onze jours, c'est récent",
+               suite:"pourquoi"},
+              {label:"Demander ce qu'il y a sur la côte", detail:"Il y a toujours une autre route",
+               suite:"cote"},
+              {label:"Accepter", detail:"Cinq semaines, ça se compte",
+               suite:"termes"},
+            ]},
+          pourquoi:{ texte:[
+            "« Personne ne sait. Il dort. Il n'attaque rien, il ne brûle rien, il dort en travers de la route sur trente pas. »",
+            "Elle hésite, puis : « Le passeur de la Combe dit qu'il saigne. Qu'il y a du sang séché sur le flanc gauche et que ça sent mauvais. »",
+            "Elle ne sait pas si ça arrange les choses ou si ça les aggrave. Yohan non plus."],
+            effets:{xp:16, flag:"bellac_dragon_blesse"}, suite:"termes"},
+          cote:{ texte:[
+            "« Six jours de plus, deux gués, et la Côte des Dents. »",
+            "Elle croise les mains. « Torcy prendrait ça pour une reculade. Et six jours de plus, c'est six jours pendant lesquels trois maisons peuvent changer d'avis. »",
+            "Un temps. « Cela dit, six jours de plus valent mieux qu'un cortège brûlé. Je ne suis pas déraisonnable ; je suis pressée. »"],
+            effets:{xp:12, flag:"bellac_route_cote"}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Deux mille trois cents écus. La route dégagée avant le vingt-troisième jour du mois. »",
+            "Elle ajoute, très droite : « Et je tiens ma maison à bout de bras pour un enfant de six ans. Nous parlerons de la coutume, puisqu'il le faut, mais vous comprendrez que je regarde d'abord ce que ça coûte à mon fils. »"]},
+        }}},
+
+    { id:"combe", delai:[2,4], attente:"La Combe est à quatre jours.",
+      ev:{ id:"CHD_2", titre:"Ce qui dort en travers de la route", famille:"VOYAGE", rarete:"majeur",
+        image:"evt2_ossements",
+        scenes:{
+          start:{ texte:[
+            "Il dort. C'est la première chose et c'est la plus dérangeante : trente pas de dragon en travers d'une route de terre battue, la tête sur les pattes, et une respiration qu'on entend à deux cents mètres.",
+            "Le flanc gauche est ouvert sur trois pieds. La plaie est vieille de plusieurs semaines et elle est noire.",
+            "Ce n'est pas un dragon qui tient une route. C'est un dragon qui n'a pas la force d'aller plus loin."],
+            choix:[
+              {label:"Le tuer pendant qu'il dort", detail:"Ce sera plus facile que jamais, et jamais facile",
+               suite:"combat"},
+              {label:"Examiner la plaie", detail:"Jet de Précision (13) · à douze pas d'un dragon endormi",
+               test:{stat:"precision", dc:13}, reussite:"plaie_ok", echec:"plaie_ko"},
+              {label:"Attendre qu'il se réveille et voir", detail:"Jet de Volonté (14) · une nuit entière assis sur une pierre",
+               test:{stat:"vol", dc:14}, reussite:"eveil_ok", echec:"eveil_ko"},
+            ]},
+          combat:{ texte:["Il se réveille au troisième pas, parce qu'un dragon blessé dort mal."],
+            combat:{ groupe:[{bst:"BST_010", n:1}], victoire:"tue", defaite:"chasse", mortel:true }},
+          tue:{ texte:[
+            "Il meurt mal, et longuement, parce qu'il était déjà en train de mourir.",
+            "Il faut onze jours et quarante paires de bœufs pour dégager trente pas de route."],
+            effets:{xp:60, sang:8, issue:"route_libre", renom:12, reputation:{humains:10}}, fin:true},
+          chasse:{ texte:[
+            "Un dragon mourant reste un dragon. Yohan décroche à cent pas de la route avec une brûlure au bras qui laissera une marque.",
+            "Il redescend annoncer à Bellac que la route n'est pas dégageable."],
+            effets:{pv:-30, fat:20, xp:20, issue:"union_reportee"}, fin:true},
+          plaie_ok:{ texte:[
+            "Ce n'est pas une plaie de combat. C'est une plaie de harpon : l'entrée est nette, ronde, et il reste une pointe de fer barbelée à trois doigts sous l'écaille.",
+            "Un harpon de baleinier. On tire ça depuis un pont de navire.",
+            "Il n'est pas venu tenir une route. Il est venu s'échouer, comme une bête qui remonte mourir loin de l'eau."],
+            effets:{xp:26, flags:["bellac_harpon","bellac_dragon_blesse"]}, fin:true},
+          plaie_ko:{ texte:["À douze pas d'un dragon endormi, on voit ce qu'on peut voir et on recule quand la respiration change de rythme. La plaie est noire, large, et c'est tout ce qu'on saura."],
+            effets:{xp:8, fat:8}, fin:true},
+          eveil_ok:{ texte:[
+            "Il se réveille avant l'aube. Il ne charge pas, il ne rugit pas : il essaie de se lever, trois fois, et il n'y arrive pas.",
+            "À la quatrième, il y arrive à moitié, avance de vingt pas vers l'est, et se recouche.",
+            "Il ne tient pas la route. Il la traverse, à raison de vingt pas par nuit, en direction des hauteurs. Dans cinq semaines, il ne sera plus là."],
+            effets:{xp:28, flag:"bellac_il_avance"}, fin:true},
+          eveil_ko:{ texte:["Il tient trois heures, puis le froid et la peur ont raison de lui et il se replie dans les rochers. Le dragon dort toujours au matin."],
+            effets:{fat:12, xp:8}, fin:true},
+        }}},
+
+    { id:"decision", delai:[1,2], attente:"Bellac veut savoir si le cortège part.",
+      ev:{ id:"CHD_3", titre:"Ce qu'on répond à une régente pressée", famille:"POLITIQUE", rarete:"majeur",
+        image:"is_invitation",
+        scenes:{
+          start:{ texte:[
+            "Trois semaines avant le cortège. Dame Rosamonde a le calendrier ouvert et les yeux d'une femme qui n'a pas dormi.",
+            "Ce qu'on va lui dire décide d'un mariage, d'une dot, et de trois maisons qui comptent leurs hommes."],
+            choix:[
+              {label:"Dire que la route sera libre à temps",
+               detail:"Requiert de savoir qu'il avance · c'est vrai, et c'est un pari",
+               requis:{flag:"bellac_il_avance"}, suite:"attendre",
+               effets:{issue:"route_libre", reputation:{humains:12}, renom:8}},
+              {label:"Retirer le harpon et le soigner",
+               detail:"Requiert d'avoir vu le harpon · Jet de Volonté (15) · c'est absurde et c'est faisable",
+               requis:{flag:"bellac_harpon"}, test:{stat:"vol", dc:15},
+               reussite:"soigne_ok", echec:"soigne_ko"},
+              {label:"Conseiller la route de la côte", detail:"Six jours de plus, aucun mort",
+               suite:"cote", effets:{issue:"route_contournee", reputation:{humains:4}, renom:3}},
+              {label:"Conseiller de reporter", detail:"La solution sûre, et la plus chère politiquement",
+               suite:"reporte", effets:{issue:"union_reportee", reputation:{humains:-8}, renom:-4}},
+            ]},
+          attendre:{ fin:true, texte:[
+            "« Il avance de vingt pas par nuit vers l'est. Dans trois semaines, il sera dans les hauteurs. Faites partir votre cortège au jour dit. »",
+            "Elle le regarde comme on regarde quelqu'un qui vient de vous demander de parier une province.",
+            "Le cortège passe le vingt-troisième jour. La route est vide depuis quatre jours. On voit, très haut sur le versant est, quelque chose d'immense qui ne bouge plus.",
+            "Dame Rosamonde paie en entier et ajoute : « Je n'ai pas dormi pendant trois semaines. C'est le plus beau service qu'on m'ait rendu. »"]},
+          soigne_ok:{ fin:true, texte:[
+            "Un harpon barbelé de baleinier, à trois doigts sous l'écaille, sur une bête de trente pas qui pourrait le tuer d'un mouvement d'épaule.",
+            "Il faut quatre jours pour l'approcher, deux pour qu'il tolère la main, et une matinée entière pour arracher le fer avec une chaîne et un treuil de charretier.",
+            "Le dragon se lève le sixième jour. Il regarde longuement l'homme en bas, sans rien exprimer que Yohan puisse lire, puis il s'en va vers l'est et ne revient pas.",
+            "La route est libre. Le cortège passe. Et quelque part au-dessus de la Combe, quelque chose de très vieux sait à quoi ressemble un Paria."],
+            effets:{xp:70, sang:12, renom:14, reputation:{humains:10}, suspicion:8,
+                    issue:"route_libre", flag:"dragon_de_la_combe_sauve"}},
+          soigne_ko:{ texte:[
+            "Il tolère la main pendant quatre jours et pas le cinquième. Le treuil part en morceaux, Yohan avec, et il faut ramper cinquante pas sous la pluie de ferraille.",
+            "Le dragon se rendort. La plaie est toujours noire et le cortège est dans deux semaines."],
+            effets:{pv:-25, fat:22, xp:20}, suite:"cote"},
+          cote:{ fin:true, texte:[
+            "Le cortège prend la Côte des Dents : six jours de plus, deux gués, et un passage sous les falaises où l'on ne parle pas fort.",
+            "Torcy fait remarquer le retard par écrit, dans une lettre d'une politesse exacte. Le mariage se célèbre avec neuf jours de décalage et une froideur que les deux maisons mettront trois ans à oublier.",
+            "Personne n'est mort. Dame Rosamonde paie en entier et ne commente pas."]},
+          reporte:{ fin:true, texte:[
+            "L'union est reportée au printemps. La dot reste levée, ce qui coûte à Bellac quatre mois d'intérêts.",
+            "Trois maisons recommencent à compter leurs hommes dès la semaine suivante. Ce n'est pas la guerre — c'est ce qu'on fait juste avant.",
+            "Dame Rosamonde paie la moitié. « Vous m'avez dit la vérité », dit-elle. « Je ne peux pas vous payer le prix d'une solution pour un constat. »"]},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   13 — LA TOUR DES CORBEAUX
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_AUBREMONT", type:'contrat', titre:"La Tour des Corbeaux",
+  commanditaire:"Maison d'Aubremont", maison:"Maison d'Aubremont",
+  or:1800, danger:"dangereux", categorie:"récupération", prix:true,
+  lieux:["LOC_002","LOC_012","LOC_011"],
+  pitch:"Une tour frontalière tenue par des renégats contrôle le passage d'une armée. Ils étaient de la garnison il y a huit mois, et personne ne veut expliquer pourquoi ils ne le sont plus.",
+  paye:["tour_reprise","tour_rendue","tour_brulee"],
+  issues:{
+    tour_reprise:"La Tour des Corbeaux a été reprise d'assaut, et la colonne est passée.",
+    tour_rendue:"Les renégats de la Tour des Corbeaux ont rendu la place et obtenu ce qu'on leur devait.",
+    tour_brulee:"La Tour des Corbeaux a brûlé avec ce qu'elle contenait.",
+    abandonnee:"La Tour des Corbeaux tient toujours le passage.",
+    refusee:"Yohan a refusé les termes d'Aubremont.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"La colonne attend au sud, et elle compte les jours.",
+      ev:{ id:"CHU_1", titre:"Ceux qui étaient de la garnison", famille:"GUERRE", rarete:"majeur",
+        image:"evt_lances",
+        scenes:{
+          start:{ texte:[
+            "Dame Sibylle d'Aubremont commande six tours frontalières et reçoit dans la cinquième, debout sur un chemin de ronde balayé par le vent.",
+            "« La sixième est tenue contre moi depuis huit mois. Vingt-trois hommes. Ils étaient de ma garnison. »",
+            "Elle laisse le vent remplir le silence. « Une colonne de quinze cents hommes doit passer le col dans six semaines. La Tour des Corbeaux verrouille le col. »"],
+            choix:[
+              {label:"Demander pourquoi ils se sont mutinés", detail:"Huit mois, c'est long pour un caprice",
+               suite:"pourquoi"},
+              {label:"Demander ce qu'elle a déjà tenté", detail:"Six tours, une capitaine, huit mois",
+               suite:"tente"},
+              {label:"Accepter", detail:"Une tour, vingt-trois hommes, six semaines",
+               suite:"termes"},
+            ]},
+          pourquoi:{ texte:[
+            "Elle met du temps, et ce qu'elle dit, elle ne l'a manifestement dit à personne.",
+            "« Vingt-deux mois de solde impayée. Mon frère tient les comptes de la maison. Il a détourné les soldes des tours pendant deux ans pour couvrir autre chose. »",
+            "Elle regarde le col. « Je l'ai appris après la mutinerie. Ils avaient raison. Ça ne change rien à ce que je dois faire. »"],
+            effets:{xp:22, flag:"aubremont_solde"}, suite:"termes"},
+          tente:{ texte:[
+            "« Deux assauts. Onze morts chez moi, quatre chez eux. Une tour frontalière est faite pour tenir contre une armée : elle tient très bien contre soixante hommes. »",
+            "Elle ajoute : « Et un parlementaire. Il est ressorti avec une liste de doléances que je n'ai pas pu satisfaire. »"],
+            effets:{xp:14, flag:"aubremont_doleances"}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Mille huit cents écus. La tour ouverte avant que la colonne arrive. Comment, je m'en moque. »",
+            "Elle se tourne enfin vers lui. « Et je sais ce que ma maison doit à quelqu'un comme vous. Nous en parlerons ce soir, et pas sur un chemin de ronde. »"]},
+        }}},
+
+    { id:"tour", delai:[2,4], attente:"La tour est au bout du col, et elle voit venir.",
+      ev:{ id:"CHU_2", titre:"Vingt-trois hommes et une porte", famille:"GUERRE", rarete:"majeur",
+        image:"evt_peage",
+        scenes:{
+          start:{ texte:[
+            "La Tour des Corbeaux fait quarante pieds, sur un éperon, avec une porte unique et un puits intérieur. Elle a été bâtie pour tenir un an contre mille hommes.",
+            "Il y a du linge qui sèche sur le chemin de ronde. Des gens vivent là.",
+            "Un homme sort sur le parapet quand Yohan apparaît au bas du col, et il crie, sans hostilité particulière : « Vous êtes le troisième. Les deux autres sont enterrés là-bas, à gauche. »"],
+            choix:[
+              {label:"Demander à parler", detail:"Personne ne l'a fait sans armure",
+               suite:"parler"},
+              {label:"Chercher une autre entrée", detail:"Jet de Précision (14) · une tour a toujours un défaut",
+               test:{stat:"precision", dc:14}, reussite:"defaut_ok", echec:"defaut_ko"},
+              {label:"Entrer de nuit par le puits", detail:"Jet d'Agilité (15) · le puits descend jusqu'à la nappe",
+               test:{stat:"agi", dc:15}, reussite:"puits_ok", echec:"puits_ko"},
+            ]},
+          parler:{ texte:[
+            "Ils le laissent entrer seul et désarmé, et ils ne sont pas vingt-trois : ils sont vingt-trois plus neuf femmes et six enfants.",
+            "Leur chef a soixante ans et une jambe raide. « Vingt-deux mois de solde. On a des familles au village en bas. Le village nous a nourris six mois, puis il a arrêté, parce qu'un village n'a pas de quoi nourrir trente-huit personnes. »",
+            "Il montre le col. « On tient la tour parce que c'est la seule chose qu'on ait à vendre. On la rendra le jour où on sera payés. Pas avant. »"],
+            effets:{xp:26, flags:["aubremont_familles","aubremont_solde"]}, fin:true},
+          defaut_ok:{ texte:[
+            "Le défaut est au nord : une poterne murée il y a quarante ans, dont le mortier a gelé et dégelé quarante hivers.",
+            "Trois hommes peuvent l'ouvrir en une nuit. Vingt peuvent entrer avant l'aube.",
+            "De là, on voit aussi ce que le parapet cache : du linge d'enfant."],
+            effets:{xp:24, flags:["aubremont_poterne","aubremont_familles"]}, fin:true},
+          defaut_ko:{ texte:["Quarante pieds de granit sans un défaut visible, et un éperon qui ne laisse approcher que par un seul côté. Ceux qui l'ont bâtie savaient ce qu'ils faisaient."],
+            effets:{xp:8}, fin:true},
+          puits_ok:{ texte:[
+            "Le puits descend à la nappe, et la nappe communique avec une résurgence à trois cents pas en contrebas. Il faut nager quarante pas dans le noir et remonter quarante pieds à la corde.",
+            "Il ressort dans la cour intérieure à trois heures du matin, seul, au milieu de trente-huit personnes endormies dont six enfants.",
+            "Il aurait pu ouvrir la porte. Il redescend par où il est venu."],
+            effets:{xp:30, fat:16, flags:["aubremont_puits","aubremont_familles"]}, fin:true},
+          puits_ko:{ texte:["Quarante pas dans le noir sous l'eau, et une chatière qui se referme sur l'épaule. Il ressort par la résurgence en ayant perdu sa lanterne et quatre minutes de sa vie qu'il ne veut pas revivre."],
+            effets:{pv:-12, fat:20, xp:12}, fin:true},
+        }}},
+
+    { id:"decision", delai:[1,2], attente:"La colonne arrive dans quinze jours.",
+      ev:{ id:"CHU_3", titre:"Ouvrir la tour", famille:"GUERRE", rarete:"majeur",
+        image:"evt_bannieres",
+        scenes:{
+          start:{ texte:[
+            "Quinze jours. Une tour, trente-huit personnes dedans, et une capitaine qui a dit qu'elle se moquait du comment.",
+            "Elle ne se moquera pas du comment. Personne ne s'en moque jamais après."],
+            choix:[
+              {label:"L'assaut par la poterne ou le puits",
+               detail:"Requiert d'avoir trouvé la faille · rapide, propre, définitif",
+               requis:{flag:"aubremont_poterne"}, suite:"assaut"},
+              {label:"Payer les vingt-deux mois de solde soi-même",
+               detail:"Requiert de savoir ce qu'on leur doit · −1400 or",
+               requis:{flag:"aubremont_solde", or:1400}, suite:"payer",
+               effets:{or:-1400, issue:"tour_rendue", reputation:{humains:14, parias:12}, renom:12}},
+              {label:"Dire à Dame Sibylle ce que son frère a fait",
+               detail:"Requiert de le savoir · ce sera à elle de trancher",
+               requis:{flag:"aubremont_solde"}, suite:"frere"},
+              {label:"Brûler la tour", detail:"Le col sera libre. Il n'y aura plus de tour.",
+               suite:"bruler",
+               effets:{issue:"tour_brulee", reputation:{humains:-14, parias:-10}, renom:-8, suspicion:6}},
+            ]},
+          assaut:{ texte:["Vingt hommes par la poterne avant l'aube, dans une cour où dorment six enfants."],
+            combat:{ groupe:[{bst:"BST_045", n:3}, {bst:"BST_043", n:1}], victoire:"prise", defaite:"repoussee" }},
+          prise:{ fin:true, texte:[
+            "La tour est prise en vingt minutes. Sept morts chez les renégats, dont leur chef à la jambe raide, tué sur le seuil de la salle basse où il s'était mis en travers.",
+            "Aucun enfant n'est touché. C'est le seul détail que Yohan retiendra avec précision.",
+            "La colonne passe le col à la date prévue. Dame Sibylle paie en entier et fait pendre les quatre survivants, parce que c'est ce qu'on fait aux mutins et qu'elle commande six tours qui regardent."],
+            effets:{xp:45, renom:8, reputation:{humains:8, parias:-12}, issue:"tour_reprise"}},
+          repoussee:{ fin:true, texte:[
+            "La poterne s'ouvre, la cour se remplit, et vingt-trois hommes qui n'ont plus rien à perdre défendent l'endroit où dorment leurs enfants.",
+            "On décroche à l'aube avec neuf morts. La tour tient encore.",
+            "La colonne prendra le détour du sud : douze jours de plus, et une campagne qui commencera mal."],
+            effets:{pv:-20, fat:18, xp:20, renom:-6, issue:"abandonnee"}},
+          payer:{ fin:true, texte:[
+            "Quatorze cents écus, comptés dans la salle basse de la tour, devant vingt-trois hommes qui n'y croient pas jusqu'à la dernière pièce.",
+            "Ils rendent la place le lendemain, en bon ordre, et descendent au village chercher leurs familles.",
+            "Dame Sibylle reprend sa tour sans un mort et paie le contrat en entier — ce qui laisse Yohan en perte de quatre cents écus, et il le sait depuis le début.",
+            "Sur le chemin de ronde, elle dit une seule chose : « Vous avez payé la dette de mon frère. Je vais devoir m'occuper de mon frère. »"]},
+          frere:{ fin:true, texte:[
+            "Elle écoute jusqu'au bout, sur le chemin de ronde, sans rien montrer.",
+            "« Vingt-deux mois. » Elle le répète une fois. « J'ai fait deux assauts. Onze de mes hommes sont morts pour couvrir les comptes de mon frère. »",
+            "Elle paie les soldes sur les fonds des six tours, ce qui n'est pas légal, et les renégats rendent la place dans la semaine. Son frère est démis du contrôle des comptes par le conseil de famille au printemps.",
+            "Elle paie le contrat en entier. « Vous m'avez coûté un frère », dit-elle. « Gardez l'argent, je ne veux plus en entendre parler. »"],
+            effets:{issue:"tour_rendue", reputation:{humains:10, parias:10}, renom:10,
+                    flag:"aubremont_frere_demis"}},
+          bruler:{ fin:true, texte:[
+            "Le feu prend par la charpente, à la poix, une nuit de vent du nord.",
+            "Il en sort dix-neuf personnes. Les autres non.",
+            "Le col est libre. La colonne passe le douzième jour, entre deux pans de granit noirci. Dame Sibylle paie sans lever les yeux du parapet et ne redemandera jamais rien à Yohan."]},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   14 — LES CORNES DE MINUIT
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_VAUDREUIL", type:'contrat', titre:"Les Cornes de Minuit",
+  commanditaire:"Maison de Vaudreuil", maison:"Maison de Vaudreuil",
+  or:1700, danger:"dangereux", categorie:"traque", prix:true,
+  lieux:["LOC_010","LOC_020","LOC_011"],
+  pitch:"Une harde marque les portes de certaines familles avant de venir les chercher la nuit. Onze portes marquées, sept familles prises. Personne ne sait comment elle choisit.",
+  paye:["harde_brisee","dette_payee","marques_effacees"],
+  issues:{
+    harde_brisee:"La harde des Cornes de Minuit a été brisée dans la Forêt des Mille Cornes.",
+    dette_payee:"Vaudreuil a payé ce qu'elle devait aux Hommes-Bêtes, et les portes ont cessé d'être marquées.",
+    marques_effacees:"Les marques de Vaudreuil ont été effacées, et personne n'a jamais dit ce qu'elles voulaient dire.",
+    abandonnee:"Les portes de Vaudreuil se marquent encore.",
+    refusee:"Yohan a refusé les termes de Vaudreuil.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Onze portes marquées, et il faut les voir.",
+      ev:{ id:"CHV2_1", titre:"Onze portes", famille:"HOMME_BETE", rarete:"majeur",
+        image:"evt2_marque",
+        scenes:{
+          start:{ texte:[
+            "Dame Mahaut de Vaudreuil a vingt-six ans et sa porte a été marquée deux fois. Deux fois, quelqu'un d'autre est mort à sa place.",
+            "« Une entaille en V, à hauteur de main, sur le montant droit. On la trouve au matin. Entre cinq et neuf nuits plus tard, ils viennent. »",
+            "Elle pose une liste. « Onze portes en deux ans. Sept familles prises. Quatre ont eu le temps de fuir. »",
+            "Elle relève les yeux. « Mon père dit que c'est le hasard. Mon père n'a pas regardé la liste. »"],
+            choix:[
+              {label:"Regarder la liste", detail:"Jet de Précision (13)",
+               test:{stat:"precision", dc:13}, reussite:"liste_ok", echec:"liste_ko"},
+              {label:"Demander ce qu'ont en commun les quatre qui ont fui", detail:"Fuir, ça s'organise",
+               suite:"fuis"},
+              {label:"Accepter et aller dans la forêt", detail:"C'est là qu'ils sont",
+               suite:"termes"},
+            ]},
+          liste_ok:{ texte:[
+            "Onze noms, onze dates, onze hameaux. Ce n'est pas géographique : les onze sont dispersés sur toute la seigneurie.",
+            "Il faut deux heures pour trouver le lien, et il est dans les registres de la maison, pas dans la liste : les onze familles descendent, à une ou deux générations près, des hommes qui ont défriché le bois des Cornes en l'an dix-neuf.",
+            "Trois cents arpents de forêt ancienne, abattus en une saison. Il y a quarante ans."],
+            effets:{xp:26, flag:"vaudreuil_defrichement"}, suite:"termes"},
+          liste_ko:{ texte:["Onze noms, onze dates, aucun ordre apparent. Dame Mahaut a raison sur un point : ce n'est pas le hasard. Elle n'a pas raison sur le reste : on ne voit pas quoi."],
+            effets:{xp:6}, suite:"termes"},
+          fuis:{ texte:[
+            "« Les quatre qui ont fui ? Ils avaient un endroit où aller. »",
+            "Elle marque un temps. « Et ils ont tous les quatre laissé quelque chose sur le seuil avant de partir. Du grain, une chèvre, du sel. La cinquième famille aussi a laissé du grain — mais elle n'est pas partie, et on l'a prise quand même. »",
+            "Un temps. « Alors non, je ne sais pas ce qu'ils veulent. Mais ils prennent, et ils acceptent qu'on leur donne. »"],
+            effets:{xp:20, flag:"vaudreuil_tribut"}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Mille sept cents. Que ça s'arrête. »",
+            "Elle croise les bras. « Et si vous rentrez en me disant qu'il faut leur donner quelque chose, dites-le-moi à moi et pas à mon père. Il ferait brûler la forêt. »"]},
+        }}},
+
+    { id:"foret", delai:[2,4], attente:"La Forêt des Mille Cornes est vaste et elle regarde.",
+      ev:{ id:"CHV2_2", titre:"Ce que la harde a gardé", famille:"HOMME_BETE", rarete:"majeur",
+        image:"evt_harde",
+        scenes:{
+          start:{ texte:[
+            "On ne trouve pas une harde dans la Forêt des Mille Cornes : on se laisse trouver. Cela prend six jours et il faut cesser d'être armé le quatrième.",
+            "Le camp est autour d'une clairière que personne n'a faite : les arbres n'y poussent pas, et ils n'y poussent pas depuis longtemps.",
+            "Au centre, alignés, sept humains vivants. Maigres, sales, terrifiés — et vivants."],
+            choix:[
+              {label:"Demander à parler à l'ancien", detail:"Il y en a toujours un",
+               suite:"ancien"},
+              {label:"Libérer les sept maintenant", detail:"Jet d'Agilité (15) · sept personnes, une clairière, une harde",
+               test:{stat:"agi", dc:15}, reussite:"libere_ok", echec:"libere_ko"},
+              {label:"Attaquer", detail:"C'est ce qu'on est venu faire",
+               suite:"combat"},
+            ]},
+          ancien:{ pnj:"gruk", texte:[
+            "Le Doyen des Pierres a des cornes cassées aux deux tiers et parle la langue des hommes comme on parle une langue apprise dans sa jeunesse et jamais oubliée.",
+            "« Trois cents arpents. En l'an dix-neuf. »",
+            "Il montre la clairière stérile. « C'était le bois des naissances. On y venait mettre bas depuis avant qu'il y ait des hommes ici. Vos gens l'ont abattu en une saison pour faire des barriques. »",
+            "« On prend un pour un. Onze familles ont abattu. Onze familles rendent. Quand ce sera fini, ce sera fini. »",
+            "Il ajoute, et c'est ce qui déchire : « On ne les tue pas. On les garde. Ils vivent. C'est plus que ce que vos pères ont laissé aux nôtres. »"],
+            effets:{xp:32, flags:["vaudreuil_defrichement","vaudreuil_sept_vivants"]}, fin:true},
+          libere_ok:{ texte:[
+            "Six nuits d'observation, une corde, un versant, et sept personnes qui ne crient pas parce qu'elles ont compris avant qu'on leur explique.",
+            "Personne ne les poursuit. Yohan met trois jours à comprendre qu'on les a laissés partir."],
+            effets:{xp:34, fat:18, flag:"vaudreuil_sept_libres"}, fin:true},
+          libere_ko:{ texte:[
+            "Quatre sortent. Trois non — et l'un d'eux, un homme de cinquante ans, refuse la corde en secouant la tête, sans un mot.",
+            "Il faut partir avec quatre et le regard de celui qui reste."],
+            effets:{xp:20, fat:16, flag:"vaudreuil_quatre_libres"}, fin:true},
+          combat:{ texte:["Il y a une manière d'entrer dans une clairière qui ne laisse pas d'autre issue, et il vient de la prendre."],
+            combat:{ groupe:[{bst:"BST_059", n:1}, {bst:"BST_058", n:3}], victoire:"brisee", defaite:"chasse" }},
+          brisee:{ texte:[
+            "Le Doyen tombe le dernier, sur la clairière stérile, et la harde se disperse dans l'heure.",
+            "Les sept prisonniers sont détachés. Trois embrassent Yohan. Les quatre autres regardent les corps et ne disent rien du tout."],
+            effets:{xp:50, renom:10, reputation:{humains:12, hommes_betes:-28},
+                    issue:"harde_brisee"}, fin:true},
+          chasse:{ texte:[
+            "On ne gagne pas une clairière contre ceux qui la connaissent depuis mille ans.",
+            "Yohan sort de la forêt par où il peut, trois jours plus tard, sans les sept et sans réponse."],
+            effets:{pv:-26, fat:22, xp:18, issue:"abandonnee"}, fin:true},
+        }}},
+
+    { id:"decision", delai:[1,2], attente:"Vaudreuil attend, et onze portes aussi.",
+      ev:{ id:"CHV2_3", titre:"Un pour un", famille:"HOMME_BETE", rarete:"majeur",
+        image:"evt_pierres",
+        scenes:{
+          start:{ texte:[
+            "Dame Mahaut écoute tout, y compris ce qu'elle n'avait pas demandé : trois cents arpents, l'an dix-neuf, le bois des naissances, et onze familles qui rendent un pour un.",
+            "Son père, dans la pièce d'à côté, ne sait rien de tout cela."],
+            choix:[
+              {label:"Rendre les trois cents arpents", detail:"Requiert de connaître la dette · Jet de Volonté (15) · elle n'a pas le pouvoir de le faire",
+               requis:{flag:"vaudreuil_defrichement"}, test:{stat:"vol", dc:15},
+               reussite:"rend_ok", echec:"rend_ko"},
+              {label:"Établir un tribut annuel : grain, sel, bêtes",
+               detail:"Requiert de savoir qu'ils acceptent qu'on donne · −500 or la première année",
+               requis:{flag:"vaudreuil_tribut", or:500}, suite:"tribut", effets:{or:-500}},
+              {label:"Effacer les marques et se taire", detail:"Onze portes, un ciseau à bois, et rien de réglé",
+               suite:"effacer",
+               effets:{issue:"marques_effacees", reputation:{humains:4, hommes_betes:-6}, renom:2}},
+            ]},
+          rend_ok:{ fin:true, texte:[
+            "Il faut une nuit entière pour convaincre une fille de vingt-six ans qu'elle peut faire une chose que son père refusera.",
+            "Elle la fait quand même. Elle réunit les onze familles — les quatre qui ont fui compris — et leur pose la question directement, sans passer par la seigneurie.",
+            "Ils votent la restitution. Trois cents arpents de coupe rendus au bois, sans replantation, sans exploitation, à perpétuité. Le père de Dame Mahaut l'apprend par le notaire et ne lui adresse plus la parole pendant deux ans.",
+            "Les sept prisonniers redescendent au printemps. Aucune porte n'est marquée cette année-là, ni les suivantes."],
+            effets:{xp:70, renom:14, reputation:{hommes_betes:30, humains:-6},
+                    issue:"dette_payee", flag:"vaudreuil_arpents_rendus"}},
+          rend_ko:{ texte:[
+            "« Je ne peux pas », dit-elle. « Je n'ai pas la seigneurie. Mon père l'a, et il fera brûler la forêt plutôt que de rendre un arpent. »",
+            "Elle a raison, et c'est la fin de cette solution-là."],
+            effets:{xp:12}, suite:"tribut"},
+          tribut:{ fin:true, texte:[
+            "Un tribut, alors. Cinq cents écus la première année : du grain, du sel, douze chèvres, déposés à la lisière au premier quartier de chaque saison.",
+            "Le Doyen accepte. Ce n'est pas ce qu'il voulait — ce n'est pas un pour un — mais un Homme-Bête de son âge sait ce qu'est un compromis, et il a des jeunes à nourrir.",
+            "Quatre des sept prisonniers redescendent. Les trois autres sont morts avant, de faim et d'hiver, et la harde le dit sans s'en excuser.",
+            "Les portes cessent d'être marquées. Dame Mahaut paie le contrat et ne dit rien à son père."],
+            effets:{issue:"dette_payee", reputation:{hommes_betes:18, humains:4}, renom:8,
+                    flag:"vaudreuil_tribut_etabli"}},
+          effacer:{ fin:true, texte:[
+            "Onze portes, un ciseau à bois, une matinée. Les marques disparaissent.",
+            "Elles réapparaissent dans le mois, plus profondes, et sur trois portes de plus.",
+            "Dame Mahaut paie la moitié du contrat. « Vous avez fait ce que je vous ai demandé », dit-elle. « Vous saviez que ça ne servirait à rien. Moi aussi. »"]},
+        }}},
+  ]},
+
 ];

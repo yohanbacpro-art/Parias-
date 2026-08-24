@@ -601,6 +601,24 @@ CHAINES.forEach(ch => {
   (ch.paye || []).forEach(i => {
     if(!(ch.issues || {})[i]) err(`CHAINE ${ch.id} : l'issue payée « ${i} » n'existe pas`);
   });
+  // Un choix verrouillé par un marqueur que rien ne pose est un choix mort :
+  // il s'affiche grisé pour toujours et l'auteur ne s'en aperçoit jamais.
+  ch.etapes.forEach(e => {
+    Object.entries(e.ev.scenes || {}).forEach(([sid, sc]) => {
+      (sc.choix || []).forEach(c => {
+        const f = c.requis && c.requis.flag;
+        if(f && !marqueursPoses.has(f))
+          err(`CHAINE ${ch.id}/${e.id}/${sid} : le choix « ${c.label} » exige le marqueur `
+              + `« ${f} », que rien ne pose — il resterait grisé pour toujours`);
+      });
+      // Même chose pour une étape verrouillée par un marqueur fantôme.
+    });
+    const rf = e.requis && e.requis.flags;
+    (rf || []).forEach(f => {
+      if(!marqueursPoses.has(f))
+        err(`CHAINE ${ch.id}/${e.id} : étape conditionnée au marqueur « ${f} », que rien ne pose`);
+    });
+  });
   if(ch.or && !(ch.paye || []).length) warn(`CHAINE ${ch.id} : de l'or annoncé, aucune issue qui paie`);
 });
 
