@@ -270,6 +270,12 @@
     font-family:'EB Garamond',serif;font-size:13.5px;padding:12px;border-radius:5px;cursor:pointer;text-align:left;}
   .prix-choices button:hover{border-color:var(--onde-bright);}
   .prix-choices button small{display:block;font-family:'Inter',sans-serif;font-size:10px;color:var(--parchment-dim);margin-top:4px;}
+  .prix-noble{border:1px solid var(--gold-dim);border-radius:4px;padding:9px 12px;margin:10px 0 4px;
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--gold);background:rgba(198,160,74,.06);}
+  .prix-noble span{display:block;color:var(--parchment-dim);font-style:italic;margin-top:4px;line-height:1.55;}
+  .prix-indispo{border:1px solid var(--line);border-left:3px solid var(--blood-bright);border-radius:4px;
+    padding:9px 12px;margin:10px 0 4px;font-family:'Inter',sans-serif;font-size:12px;
+    line-height:1.6;color:var(--parchment-dim);}
   .prix-choices button small.prix-detail{color:var(--parchment-dim);opacity:.75;font-style:italic;
     line-height:1.5;margin-top:6px;text-transform:none;}
 
@@ -509,6 +515,17 @@
   .offre-tag.susp{border-color:var(--blood-bright);color:var(--blood-bright);}
   .offre-tag.voyage{border-color:var(--onde-bright);color:var(--onde-bright);}
   .offre-tag.ici{opacity:.6;}
+  .affaire-cours{border:1px solid var(--gold-dim);border-radius:4px;padding:10px 12px;margin:0 0 12px;
+    background:rgba(198,160,74,.06);}
+  .ac-tete{display:flex;justify-content:space-between;align-items:baseline;gap:10px;}
+  .ac-titre{font-family:'Cinzel',serif;font-size:13.5px;color:var(--gold);}
+  .ac-etape{font-family:'Inter',sans-serif;font-size:11px;color:var(--parchment-dim);
+    font-variant-numeric:tabular-nums;}
+  .ac-qui{font-family:'Inter',sans-serif;font-size:11px;color:var(--parchment-dim);margin-top:2px;}
+  .ac-attente{font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;
+    color:var(--parchment);margin:7px 0 0;max-width:64ch;}
+  .offre.affaire{border-left:3px solid var(--gold);}
+  .offre-tag.chaine{border-color:var(--gold);color:var(--gold);}
   .offre-tag.paria{border-color:var(--gold);color:var(--gold);background:rgba(198,160,74,.08);}
   .offre-prix.prix-paria{color:var(--gold);font-family:'Cinzel',serif;letter-spacing:.03em;}
   .offre-btn{width:100%;}
@@ -11684,6 +11701,795 @@ LOC_020: { peuple:'hommes_betes', dossier:"Les Pierres du Premier Rugissement", 
 
 </script>
 <script>
+/* src/data/maisons.js */
+/* PARIAS — Les maisons nobles, et qui les compose
+ *
+ * Le pack narratif est formel sur un point que le jeu tranchait à la légère :
+ *
+ *   « Pour une maison humaine noble, le moteur recherche une noble adulte
+ *     réelle de la maison, disponible dans l'état courant de la sauvegarde.
+ *     Elle doit consentir explicitement à entrer dans les termes ancestraux.
+ *     Si aucune candidate adulte consentante n'existe, cette partie du prix
+ *     est indisponible. »
+ *
+ * Autrement dit : le Prix du Paria n'est pas une option de menu. C'est une
+ * femme qui a un nom, un âge, une position dans sa maison, et le droit de dire
+ * non. Une maison peut n'avoir personne à offrir — elle paie alors en or, et
+ * elle en est soulagée.
+ *
+ * Chaque candidate porte ce qu'elle exige avant de consentir. Ce ne sont pas
+ * des serrures de gameplay : ce sont ses raisons. La cadette qui étouffe veut
+ * qu'on soit quelqu'un ; la veuve qui tient les comptes ne veut pas d'un homme
+ * traqué chez elle ; l'aînée promise ailleurs ne peut pas, quoi qu'elle pense.
+ */
+
+const MAISONS = {
+  "Maison de Valombre": { region:'sylve', devise:"On ne prête qu'aux riches, et jamais gratuitement.",
+    nobles:[
+      { nom:"Dame Éléonore de Valombre", age:34, rang:"maîtresse des créances",
+        note:"Elle tient les dettes de sept maisons humaines et le sait mieux qu'elles.",
+        exige:{ renomMin:20, suspicionMax:65 },
+        refus:"« Je prête à des gens dont je peux estimer la valeur. La vôtre est illisible. »",
+        accord:"« Une créance sur un Paria vivant vaut mieux qu'une créance sur une maison morte. Je prends. »" },
+      { nom:"Dame Ysabeau de Valombre", age:29, rang:"cousine, tenue à l'écart des comptes",
+        note:"On lui a appris quatre langues et rien de ce qui compte dans cette maison.",
+        exige:{ reputationMin:{ elfes_noirs:-30 } },
+        refus:"« Ma famille a déjà assez d'ennemis chez les nôtres. Elle n'a pas besoin des vôtres. »",
+        accord:"« On m'a appris quatre langues pour que je me taise dans toutes. Alors non, je ne vais pas me taire là-dessus. »" },
+    ]},
+  "Maison de Valcroix": { region:'nord', devise:"Ce qui brûle éclaire.",
+    nobles:[
+      { nom:"Dame Ysoré de Valcroix", age:31, rang:"cadette du seigneur",
+        note:"Elle tient les greniers depuis la mort de sa mère et n'a jamais quitté la vallée.",
+        exige:{ renomMin:10 },
+        refus:"Elle vous regarde longuement, puis secoue la tête : « On ne connaît pas votre nom ici. Revenez quand on le connaîtra. »",
+        accord:"« La coutume est la coutume », dit-elle sans baisser les yeux. « Et je préfère la payer moi-même plutôt que de la voir payer par une autre. »" },
+      { nom:"Dame Aveline de Valcroix", age:44, rang:"veuve du frère aîné",
+        note:"Veuve, sans enfant, et la seule de la maison à savoir combien elle doit exactement.",
+        exige:{ suspicionMax:55 },
+        refus:"« On vous cherche », dit-elle en refermant son registre. « Je ne fais pas entrer chez moi ce qu'on cherche. »",
+        accord:"« Mon défunt mari trouvait la coutume barbare. Il trouvait aussi barbare de payer ses dettes. Asseyez-vous. »" },
+    ]},
+  "Maison Rochebrune": { region:'coeur', devise:"La pierre avant le sang.",
+    nobles:[
+      { nom:"Dame Constance de Rochebrune", age:27, rang:"sœur du seigneur",
+        note:"On la marie depuis ses quinze ans à des hommes qui meurent avant les noces.",
+        exige:{},
+        accord:"« Trois fiancés enterrés, messire. Vous avez au moins l'avantage d'être vivant. »" },
+    ]},
+  "Maison d'Arquenay": { region:'nord', devise:"Sous la terre aussi.",
+    nobles:[
+      { nom:"Dame Mélisende d'Arquenay", age:23, rang:"fille cadette",
+        note:"Élevée pour un couvent qu'elle refuse d'entendre nommer.",
+        exige:{ reputationMin:{ humains:-20 } },
+        refus:"Son père a répondu avant elle : « Pas celle-là. Pas à quelqu'un que la province déteste. »",
+        accord:"« Le couvent ou vous », dit-elle. « Ce n'est pas un compliment, mais c'est un choix, et c'est le premier qu'on me laisse. »" },
+      { nom:"Dame Blanche d'Arquenay", age:38, rang:"intendante des mines",
+        note:"Elle connaît le poids exact de chaque galerie et le nom de chaque veuve.",
+        exige:{ renomMin:25, suspicionMax:70 },
+        refus:"« Vous ne pesez pas encore assez pour qu'on vous doive quelque chose », dit-elle sans méchanceté.",
+        accord:"« Les mineurs disent du bien de vous. C'est plus rare que l'or, et ça se paie plus cher. »" },
+    ]},
+  "Maison de Vauclair": { region:'coeur', devise:"On tient ce qu'on prend.",
+    nobles:[
+      { nom:"Dame Mathilde de Vauclair", age:29, rang:"nièce du seigneur",
+        note:"Élevée à la cour d'Astrah, renvoyée pour une raison que personne ne dit.",
+        exige:{ suspicionMax:80 },
+        refus:"« On m'a déjà renvoyée d'un endroit pour moins que ça. »",
+        accord:"« À Astrah, on m'a appris que les coutumes anciennes servent à humilier les vieilles maisons. Celle-ci humilie la mienne. Alors oui. »" },
+    ]},
+  "Maison de Sombreval": { region:'sylve', devise:"Nous savons attendre.",
+    nobles:[
+      { nom:"Dame Héloïse de Sombreval", age:26, rang:"fille aînée",
+        note:"Celle qui a disparu dans les marais, si elle en revient.",
+        exige:{ flag:"sombreval_fille_ramenee" },
+        refus:"La fille aînée de la maison n'est pas là pour répondre. C'est précisément le problème.",
+        accord:"« Vous m'avez sortie de la boue. Je sais ce que la coutume demande, et je sais ce que mon père en pense. Ça ne me fait pas changer d'avis. »" },
+      { nom:"Dame Clarisse de Sombreval", age:52, rang:"tante du seigneur",
+        note:"Elle a passé l'âge d'en attendre quoi que ce soit et le dit à qui veut.",
+        exige:{},
+        accord:"« À mon âge, la coutume ne coûte plus rien à personne, sauf à l'orgueil de mon neveu. Raison suffisante. »" },
+    ]},
+  "Maison de Hauterive": { region:'nord', devise:"Plus haut que le vent.",
+    nobles:[
+      { nom:"Dame Ophélie de Hauterive", age:24, rang:"fille du seigneur",
+        note:"Fiancée depuis l'enfance à un cousin qu'elle n'a vu que deux fois.",
+        exige:{ renomMin:45 },
+        refus:"« Je suis promise. Il faudrait que vous pesiez plus lourd qu'un contrat de mariage — et ce n'est pas le cas. »",
+        accord:"« Mon fiancé a écrit trois lettres en neuf ans. Vous, vous êtes venu. »" },
+    ]},
+  "Maison de Cendrepont": { region:'brulees', devise:"Ce que le feu laisse.",
+    nobles:[
+      { nom:"Dame Diane de Cendrepont", age:33, rang:"sœur bâtarde reconnue",
+        note:"Reconnue tard, tolérée mal, indispensable aux comptes de la maison.",
+        exige:{ reputationMin:{ parias:20 } },
+        refus:"« Vous ne défendez personne. Moi, je suis quelqu'un qu'on ne défend pas. Nous n'avons rien à faire ensemble. »",
+        accord:"« On m'a reconnue à dix-neuf ans, comme on reconnaît une dette. Vous savez ce que c'est. »" },
+    ]},
+  "Maison de Bellac": { region:'sylve', devise:"Le sel et la parole.",
+    nobles:[
+      { nom:"Dame Rosamonde de Bellac", age:35, rang:"veuve, régente pour son fils",
+        note:"Elle gouverne au nom d'un enfant de six ans et compte bien continuer.",
+        exige:{ suspicionMax:45, renomMin:20 },
+        refus:"« Je tiens cette maison à bout de bras pour un enfant. Je ne vais pas y faire entrer un scandale. »",
+        accord:"« Mon fils héritera d'une maison qui aura tenu parole. C'est tout ce que j'ai à lui laisser. »" },
+    ]},
+  "Maison de Corven": { region:'coeur', devise:"Rien ne se perd.",
+    nobles:[
+      { nom:"Dame Agnès de Corven", age:28, rang:"fille du seigneur",
+        note:"Elle a lu tous les registres de la maison, y compris ceux qu'on cache.",
+        exige:{},
+        accord:"« J'ai lu les actes de la Purge dans nos archives. Ma maison a signé. Considérez ceci comme un acompte. »" },
+    ]},
+  "Maison de Brézé": { region:'brulees', devise:"Debout dans le sable.",
+    nobles:[
+      { nom:"Dame Philippa de Brézé", age:41, rang:"cousine du seigneur",
+        note:"Elle a mené une caravane pendant onze ans avant qu'on la rappelle au domaine.",
+        exige:{ renomMin:15 },
+        refus:"« J'ai commandé des hommes. Je ne me donne pas à quelqu'un dont personne n'a entendu parler. »",
+        accord:"« Onze ans de sable, et on me rappelle pour me marier à un voisin. La coutume, au moins, ne ment pas sur ce qu'elle est. »" },
+    ]},
+  "Maison d'Orsenne": { region:'nord', devise:"Le fer chaud.",
+    nobles:[
+      { nom:"Dame Isabeau d'Orsenne", age:30, rang:"maîtresse des forges",
+        note:"Elle dirige quatre forges rurales et n'a jamais laissé un homme parler à sa place.",
+        exige:{ renomMin:30 },
+        refus:"« Je choisis mes associés. Revenez quand on saura pourquoi je vous aurais choisi. »",
+        accord:"« Vous avez sauvé mes forges. Mon frère aurait préféré payer. Il n'a pas voix au chapitre. »" },
+    ]},
+  "Maison de Clairmont": { region:'coeur', devise:"Sept fois plutôt qu'une.",
+    nobles:[] },   // sept disparus : il ne reste plus d'adulte à offrir
+  "Maison de Méricourt": { region:'coeur', devise:"Le nom d'abord.",
+    nobles:[] },   // trois branches, aucun héritier reconnu, personne pour consentir
+  "Maison de Chastel": { region:'sylve', devise:"Ce qui est écrit demeure.",
+    nobles:[
+      { nom:"Dame Célestine de Chastel", age:36, rang:"archiviste de la maison",
+        note:"Elle a la garde des généalogies, et sait donc ce que Yohan est.",
+        exige:{ reputationMin:{ parias:10 } },
+        refus:"« Je sais lire un arbre généalogique, messire. Je sais donc à quoi je m'engagerais. Pas comme ça. »",
+        accord:"« Je tiens les registres où votre maison a été rayée. Je peux aussi tenir celui où elle réapparaît. »" },
+    ]},
+  "Maison de Hautecour": { region:'nord', devise:"On ne rend pas les armes.",
+    nobles:[
+      { nom:"Dame Marguerite de Hautecour", age:25, rang:"fille du général",
+        note:"Celle qui est passée à l'ennemi, si on la ramène — et si elle y consent.",
+        exige:{ flag:"hautecour_fille_ramenee", reputationMin:{ humains:-10 } },
+        refus:"Elle n'est pas ici, et son père n'a personne d'autre à proposer.",
+        accord:"« Mon père croit m'avoir récupérée. Qu'il découvre ce que ça lui coûte. »" },
+    ]},
+  "Maison d'Artois-Noir": { region:'brulees', devise:"La boue aussi porte des couronnes.",
+    nobles:[
+      { nom:"Dame Ermengarde d'Artois-Noir", age:47, rang:"sœur du prétendant",
+        note:"Elle a tenu la maison pendant les quatre ans où son frère était prisonnier.",
+        exige:{ renomMin:40, suspicionMax:75 },
+        refus:"« Nous avons une revendication à défendre. On ne la défend pas avec un inconnu. »",
+        accord:"« Mon frère veut une couronne. Moi je veux que la maison existe encore quand il l'aura. Vous servez la seconde chose. »" },
+    ]},
+};
+
+/* Les maisons qui ne figurent pas ici n'ont pas de rôle écrit : elles paient
+ * en or, comme n'importe quel commanditaire. */
+function maisonDe(nom){ return MAISONS[nom] || null; }
+
+</script>
+<script>
+/* src/data/chaines.js */
+/* PARIAS — Les affaires, écrites comme des chaînes
+ *
+ * Tirées du pack narratif Vardhen (design/narratif/03_CONTRATS). Le pack donne
+ * le commanditaire, l'or, le pitch et le canevas de scènes ; ce fichier écrit
+ * les scènes, les choix et ce qu'ils coûtent.
+ *
+ * ── Format ────────────────────────────────────────────────────────────────
+ * id, titre, type:'contrat', categorie (= type d'affaire pour les rencontres),
+ * commanditaire, maison (si noble : déclenche le Prix du Paria), or, danger,
+ * lieux (où l'affaire se propose), pitch (ce qu'on lit sur la carte d'offre),
+ * prix:true      les termes se fixent après l'audience, avant tout départ
+ * paye:[...]     les issues qui donnent lieu à règlement
+ * issues:{}      la ligne de chronique écrite à la clôture
+ * etapes:[{ id, delai:[minSem,maxSem], attente, requis, sinon, suite, ev }]
+ *
+ * `ev` est un événement écrit ordinaire : mêmes scènes, mêmes jets, mêmes
+ * combats. Une scène pilote la chaîne par ses effets :
+ *   effets:{ etape:"x" }   l'étape suivante sera x
+ *   effets:{ issue:"y" }   la chaîne se referme sur l'issue y
+ */
+
+const CHAINES = [
+
+/* ══════════════════════════════════════════════════════════════════════════
+   01 — LE DRAGON DE VALCROIX
+   Un dragon qui brûle tout sauf le château. Le commanditaire ment par omission.
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_VALCROIX", type:'contrat', titre:"Le Dragon de Valcroix",
+  commanditaire:"Maison de Valcroix", maison:"Maison de Valcroix",
+  or:1850, danger:"très dangereux", categorie:"chasse", prix:true,
+  lieux:["LOC_003","LOC_011","LOC_002"],
+  pitch:"Depuis trois semaines, un dragon descend des montagnes au coucher du soleil. Granges, troupeaux et tours de guet brûlent — le château, jamais.",
+  paye:["dragon_tue","dragon_epargne","seigneur_confronte"],
+  issues:{
+    dragon_tue:"Le dragon de Valcroix est mort sur son nid, et la maison a payé sans regarder personne en face.",
+    dragon_epargne:"Le dragon de Valcroix vit encore. On dit qu'il ne descend plus.",
+    seigneur_confronte:"Le seigneur de Valcroix a dû dire devant témoins ce qu'il avait volé.",
+    abandonnee:"L'affaire de Valcroix est restée en plan. La montagne brûle toujours.",
+    refusee:"Yohan a refusé les termes de Valcroix.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"On attend l'inventaire des pertes.",
+      ev:{ id:"CHV_1", titre:"Ce qui brûle et ce qui ne brûle pas", famille:"CONTRAT", rarete:"majeur",
+        image:"evt_pierres",
+        scenes:{
+          start:{ texte:[
+            "La grande salle de Valcroix sent la cire froide. Le seigneur est un homme de cinquante ans aux mains soignées, qui parle debout et ne propose pas de siège. Derrière lui, une carte de la vallée est piquée d'épingles noires : chaque épingle est une chose qui a brûlé.",
+            "« Trois semaines. Il descend au coucher du soleil, il brûle, il remonte. Granges, troupeaux, deux tours de guet. Nous perdons la moisson dans un mois si cela continue. »",
+            "Yohan regarde la carte plus longtemps que le seigneur ne l'aurait voulu. Les épingles font un arc régulier autour du château. Aucune ne le touche."],
+            choix:[
+              {label:"Demander pourquoi le château est épargné", detail:"La carte pose la question toute seule",
+               suite:"question"},
+              {label:"Demander à voir les pertes plutôt qu'à les entendre", detail:"Jet de Précision (12)",
+               test:{stat:"precision", dc:12}, reussite:"pertes_ok", echec:"pertes_ko"},
+              {label:"Ne rien demander et parler d'argent", detail:"Un homme qui ne pose pas de questions coûte moins cher à recevoir",
+               suite:"argent", effets:{suspicion:-2}},
+            ]},
+          question:{ texte:[
+            "Le seigneur ne se retourne pas vers la carte. Il n'en a pas besoin : il sait exactement où sont les épingles.",
+            "« Les murs sont en pierre. Les granges sont en bois. »",
+            "C'est une réponse d'homme qui a préparé la réponse."],
+            effets:{xp:8, flag:"valcroix_soupcon"},
+            choix:[
+              {label:"Laisser passer, pour l'instant", suite:"argent"},
+              {label:"Insister", detail:"Jet de Volonté (14)",
+               test:{stat:"vol", dc:14}, reussite:"insiste_ok", echec:"insiste_ko"},
+            ]},
+          insiste_ok:{ texte:[
+            "« Les tours de guet aussi étaient en pierre, messire. »",
+            "Le silence dure trois secondes de trop. Le seigneur pose une main à plat sur la table, se ravise, la retire.",
+            "« Tuez-le. Le reste ne vous regarde pas. »",
+            "C'est la première phrase honnête de l'entretien."],
+            effets:{xp:14, flag:"valcroix_ment"}, suite:"argent"},
+          insiste_ko:{ texte:[
+            "Le seigneur le laisse finir, puis appelle son intendant d'un geste, comme on éteint une chandelle.",
+            "« On vous montrera les comptes des pertes. Faites votre travail. »"],
+            effets:{xp:4}, suite:"argent"},
+          pertes_ok:{ texte:[
+            "On le mène aux ruines de la tour nord, et il passe une heure dans les cendres pendant que l'intendant s'impatiente.",
+            "Le feu est parti d'en bas. Une tour brûlée par un dragon brûle par le haut : le toit, les planchers, puis les murs qui s'effondrent vers l'intérieur. Ici, la pierre est fendue à la base, et la fente est nette.",
+            "Quelque chose a brûlé cette tour depuis le sol. Ou quelqu'un."],
+            effets:{xp:16, flag:"valcroix_soupcon"}, suite:"argent"},
+          pertes_ko:{ texte:[
+            "On lui montre des cendres, et des cendres se ressemblent toutes. L'intendant récite des chiffres qu'il connaît par cœur, ce qui n'est jamais bon signe et ne prouve rien."],
+            effets:{xp:5}, suite:"argent"},
+          argent:{ fin:true, texte:[
+            "« Mille huit cent cinquante écus. La moitié si la bête part sans mourir. Rien si elle revient. »",
+            "Le seigneur tend la main pour conclure, puis la laisse retomber en se rappelant à qui il a affaire. Il y a une autre conversation à avoir avant celle-là, et il sait laquelle."]},
+        }}},
+
+    { id:"villages", delai:[2,4], attente:"Il faut d'abord parler à ceux qui ont vu.",
+      ev:{ id:"CHV_2", titre:"Ceux qui ont vu descendre la bête", famille:"CONTRAT", rarete:"majeur",
+        image:"evt2_moisson",
+        scenes:{
+          start:{ texte:[
+            "Trois hameaux, quatre jours. Partout la même chose : on a vu l'ombre passer, on a entendu le bruit — « comme une voile qui claque, mais grande » — et le lendemain il manquait une grange.",
+            "Au quatrième hameau, une vieille femme qui trie des lentilles dit sans lever la tête : « Il prend les moutons. Il prend jamais les gens. »",
+            "Personne, dans aucun des trois hameaux, n'est mort."],
+            choix:[
+              {label:"Demander ce qui a changé il y a trois semaines", detail:"Une bête qui vit là depuis toujours ne commence pas un mardi",
+               suite:"change"},
+              {label:"Suivre les traces jusqu'au départ de l'ascension", detail:"Jet d'Agilité (12)",
+               test:{stat:"agi", dc:12}, reussite:"traces_ok", echec:"traces_ko"},
+              {label:"Payer pour qu'on parle vraiment", detail:"−80 or",
+               requis:{or:80}, suite:"paye", effets:{or:-80}},
+            ]},
+          change:{ texte:[
+            "La vieille femme réfléchit longtemps, ce qui à son âge est un luxe qu'on peut se permettre.",
+            "« Les hommes du seigneur sont montés. Fin de l'hiver. Ils sont redescendus avec des charrettes bâchées, et deux jours après, la première grange a brûlé. »",
+            "Elle reprend ses lentilles. « On a rien dit, parce qu'on nous demande rien. »"],
+            effets:{xp:16, flag:"valcroix_pillage"}, fin:true},
+          traces_ok:{ texte:[
+            "Il trouve l'endroit où la bête pose avant de reprendre l'air : une plate-forme de rocher noircie, à deux lieues du dernier hameau, et un chemin qui monte.",
+            "Le chemin est marqué. Pas par le dragon : par des roues. Quelqu'un est monté là-haut avec des charrettes, et récemment."],
+            effets:{xp:18, flag:"valcroix_pillage"}, fin:true},
+          traces_ko:{ texte:[
+            "Deux jours de rocaille pour retrouver un chemin qu'on perd chaque fois qu'il quitte la terre meuble. Il finit par savoir dans quelle direction monter, et c'est déjà quelque chose."],
+            effets:{xp:6, fat:8}, fin:true},
+          paye:{ texte:[
+            "Quatre-vingts écus, dans ce hameau, c'est deux hivers. Le tonnelier parle pendant une demi-heure sans reprendre son souffle.",
+            "Les hommes du seigneur sont montés à la fin de l'hiver. Ils ont trouvé quelque chose là-haut — une grotte, des choses anciennes, de l'or peut-être. Ils sont redescendus chargés. Deux d'entre eux ne sont pas redescendus du tout.",
+            "« Et depuis, la bête cherche », dit-il. « Vous comprenez ? Elle cherche. »"],
+            effets:{xp:22, flag:"valcroix_pillage"}, fin:true},
+        }}},
+
+    { id:"ascension", delai:[2,4], attente:"La montagne attend, et elle est haute.",
+      ev:{ id:"CHV_3", titre:"L'ascension", famille:"VOYAGE", rarete:"majeur",
+        image:"evt2_ossements",
+        scenes:{
+          start:{ texte:[
+            "Deux jours de montée. Le troisième matin, l'air sent le soufre et la charogne, et il n'y a plus un oiseau.",
+            "Le nid est dans une faille ouverte au flanc de la montagne, et ce qui l'entoure raconte tout : des ossements de mouton par centaines, empilés sans être mangés. Une bête qui tue pour manger ne fait pas de tas.",
+            "Au fond de la faille, quelque chose bouge dans le noir — plus petit que ce qu'on attendait."],
+            choix:[
+              {label:"Entrer", detail:"Il faudra bien",
+               suite:"faille"},
+              {label:"Observer d'abord, une journée entière", detail:"+Fatigue · on apprend en regardant",
+               suite:"observe", effets:{fat:10, xp:12}},
+            ]},
+          observe:{ texte:[
+            "Il attend jusqu'au soir, à plat ventre dans la rocaille. Au coucher du soleil, la bête sort — quinze mètres de l'aile à l'aile, l'écaille terne, une aile percée qui siffle — s'élève lourdement et part vers la vallée.",
+            "Elle laisse quelque chose derrière elle. Dans la faille, deux formes plus petites remuent et crient jusqu'à ce qu'elle revienne.",
+            "Ce n'est pas un dragon qui terrorise une vallée. C'est une mère qui nourrit."],
+            effets:{flag:"valcroix_petits", xp:14}, suite:"faille"},
+          faille:{ texte:[
+            "L'intérieur de la faille est une grotte, et la grotte a été fouillée. Des marques de pioche sur la paroi. Une caisse éventrée, du bois de charrette, une corde neuve pourrissant dans un coin.",
+            "Et, au centre, ce qui reste d'un amas de pièces et d'objets anciens : creusé en son milieu, comme une bourse retournée.",
+            "Deux squelettes portent encore les couleurs de Valcroix."],
+            effets:{flag:"valcroix_preuve", xp:18},
+            combat:{ groupe:[{bst:"BST_014", n:3}], victoire:"apres_combat", defaite:"replie" }},
+          apres_combat:{ texte:[
+            "Ce qui vivait dans les recoins de la grotte est mort. Yohan ramasse, dans les cendres d'un feu de camp vieux de plusieurs semaines, un sceau de plomb aux armes de la maison.",
+            "Il le glisse dans sa ceinture. Un objet pareil ne sert qu'une fois, et il vaut mieux savoir quand."],
+            effets:{item:"potion_vigueur", xp:12}, fin:true},
+          replie:{ texte:[
+            "Il redescend de vingt pas, à moitié aveugle, et attend que ça passe. Ça passe. Mais il a laissé la moitié de son avance là-haut, et la grotte garde ce qu'elle voulait garder."],
+            effets:{pv:-12, fat:14, xp:6}, fin:true},
+        }}},
+
+    { id:"choix", delai:[1,3], attente:"Il reste à décider ce qu'on fait de tout ça.",
+      ev:{ id:"CHV_4", titre:"La bête, ou l'homme qui l'a réveillée", famille:"CONTRAT", rarete:"majeur",
+        image:"evt_traque",
+        scenes:{
+          start:{ texte:[
+            "Il redescend avec ce qu'il sait : les hommes de Valcroix ont pillé un nid à la fin de l'hiver, et depuis, la mère cherche ce qu'on lui a pris en brûlant tout ce qui appartient à ceux qui l'ont prise.",
+            "Le seigneur a payé pour qu'on tue la bête. Il n'a pas payé pour qu'on sache pourquoi elle est descendue.",
+            "Deux routes, à partir d'ici."],
+            choix:[
+              {label:"Monter tuer le dragon", detail:"C'est le contrat, et le contrat paie",
+               suite:"tuer", effets:{etape:"combat_dragon"}},
+              {label:"Rendre ce qui a été pris", detail:"Requiert la preuve · une bête qui retrouve son bien cesse de chercher",
+               requis:{flag:"valcroix_preuve"}, suite:"rendre", effets:{etape:"rendre"}},
+              {label:"Redescendre confronter le seigneur devant sa maison",
+               detail:"Requiert la preuve · c'est lui qui devra parler",
+               requis:{flag:"valcroix_preuve"}, suite:"confronter", effets:{etape:"confronter"}},
+              {label:"Laisser tomber l'affaire", detail:"On rend l'avance et on s'en va",
+               suite:"partir", effets:{issue:"abandonnee", renom:-6, reputation:{humains:-8}}},
+            ]},
+          tuer:{ fin:true, texte:[
+            "Il remonte. Ce qu'il a compris ne change rien à ce qu'il a promis, et un contrat honoré vaut mieux qu'un homme qui a raison."]},
+          rendre:{ fin:true, texte:[
+            "Il faut d'abord récupérer ce que Valcroix a descendu de la montagne. Le seigneur ne le rendra pas de bon gré, et ce sera peut-être plus dangereux que le dragon."]},
+          confronter:{ fin:true, texte:[
+            "Il redescend vers le château avec un sceau de plomb dans la ceinture et l'intention de le poser sur une table devant témoins."]},
+          partir:{ fin:true, texte:[
+            "Il rend l'avance à l'intendant, sans explication, et prend la route avant midi. Derrière lui, la montagne continuera de descendre au coucher du soleil, et ce n'est plus son affaire.",
+            "Il pense au tas d'ossements pendant trois jours."]},
+        }}},
+
+    { id:"combat_dragon", delai:[1,2], attente:"Il faut remonter, et cette fois pour de bon.",
+      ev:{ id:"CHV_5A", titre:"Le nid", famille:"ONDE", rarete:"majeur",
+        image:"evt2_ossements",
+        scenes:{
+          start:{ texte:[
+            "Elle l'attend. Une bête blessée à l'aile n'a pas la ressource de chasser un homme dans la rocaille : elle se plante devant sa faille et elle attend.",
+            "Elle est vieille, terne, et deux fois plus grande que ce que la peur avait fait dire aux paysans."],
+            combat:{ groupe:[{bst:"BST_011", n:1}], victoire:"morte", defaite:"perdu", mortel:true }},
+          morte:{ texte:[
+            "Elle tombe sur le flanc, et la montagne rend un son qu'on entend depuis la vallée.",
+            "Dans la faille, deux formes plus petites cessent de crier au bout d'un moment. Yohan ne s'approche pas. Il redescend."],
+            effets:{xp:60, sang:8, issue:"dragon_tue"}, fin:true},
+          perdu:{ texte:[
+            "L'aile percée siffle, la queue balaie la rocaille, et il se retrouve à trente pas plus bas, sur le dos, sans savoir comment il y est arrivé.",
+            "Il rampe jusqu'à un surplomb et il attend la nuit. La bête ne le poursuit pas : elle rentre chez elle."],
+            effets:{pv:-30, fat:25, xp:15, issue:"abandonnee"}, fin:true},
+        }}},
+
+    { id:"rendre", delai:[2,4], attente:"Il faut arracher à Valcroix ce que Valcroix a volé.",
+      ev:{ id:"CHV_5B", titre:"Ce qu'on lui a pris", famille:"CONTRAT", rarete:"majeur",
+        image:"evt2_veine",
+        scenes:{
+          start:{ texte:[
+            "Le butin de la montagne est dans les caves du château, dans trois caisses que personne n'a ouvertes depuis la fin de l'hiver. L'intendant jure ses grands dieux qu'il ignore de quoi on parle.",
+            "Il y a deux façons de sortir trois caisses d'un château."],
+            choix:[
+              {label:"Les acheter au seigneur", detail:"−900 or · il préfère l'argent au scandale",
+               requis:{or:900}, suite:"achete", effets:{or:-900}},
+              {label:"Les prendre de nuit", detail:"Jet d'Agilité (14)",
+               test:{stat:"agi", dc:14}, reussite:"vole_ok", echec:"vole_ko"},
+              {label:"Le forcer devant ses gens", detail:"Requiert du Renom · très voyant",
+               requis:{renomMin:25}, suite:"force", effets:{suspicion:12, renom:6}},
+            ]},
+          achete:{ texte:["Il paie sa propre prime pour racheter un vol qu'il n'a pas commis. Le seigneur signe le reçu sans lever les yeux, et c'est peut-être la chose la plus honteuse qu'il ait faite de sa vie."],
+            effets:{xp:14}, suite:"remonte"},
+          vole_ok:{ texte:["Trois caisses, une charrette, une porte de service et un chien qu'on achète avec du lard. Au matin, la cave est vide et personne n'ose le dire au seigneur."],
+            effets:{xp:20, suspicion:5}, suite:"remonte"},
+          vole_ko:{ texte:["Le chien n'était pas seul. Il sort avec deux caisses sur trois et une entaille au bras qui mettra un mois à se fermer."],
+            effets:{xp:10, pv:-14, suspicion:10}, suite:"remonte"},
+          force:{ texte:[
+            "Il pose le sceau de plomb sur la table de la grande salle, devant l'intendant, le chapelain et deux capitaines.",
+            "« Vos hommes ont pillé un nid. Deux d'entre eux sont encore là-haut. Rendez ce qui a été pris, ou j'irai le dire ailleurs. »",
+            "Le seigneur rend les caisses. Il ne le pardonnera jamais."],
+            effets:{xp:24, reputation:{humains:-6}, flag:"valcroix_humilie"}, suite:"remonte"},
+          remonte:{ texte:[
+            "Remonter chargé prend quatre jours au lieu de deux. Il dépose les caisses à l'entrée de la faille, ouvertes, et redescend de cent pas.",
+            "La bête sort au crépuscule. Elle regarde longtemps l'homme en bas, puis les caisses, puis l'homme encore.",
+            "Puis elle rentre son butin, une caisse à la fois, comme une paysanne rentre du bois avant la pluie. Elle ne redescendra plus dans la vallée."],
+            effets:{xp:55, sang:10, renom:8, issue:"dragon_epargne"}, fin:true},
+        }}},
+
+    { id:"confronter", delai:[1,3], attente:"Le seigneur ne sait pas encore ce qui l'attend.",
+      ev:{ id:"CHV_5C", titre:"Devant sa propre maison", famille:"POLITIQUE", rarete:"majeur",
+        image:"evt_bannieres",
+        scenes:{
+          start:{ texte:[
+            "Il choisit le jour du marché, quand la cour est pleine, et il pose le sceau de plomb sur la margelle du puits sans hausser la voix.",
+            "« Deux de vos hommes sont morts dans une grotte à trois lieues d'ici, à la fin de l'hiver. Ils y ont pris quelque chose. C'est pour ça que ça brûle. »",
+            "La cour se tait. Le seigneur, à sa fenêtre, comprend en une seconde qu'il n'a plus le choix qu'entre trois façons de perdre."],
+            choix:[
+              {label:"Exiger qu'il le dise lui-même, à voix haute", detail:"Jet de Volonté (15)",
+               test:{stat:"vol", dc:15}, reussite:"dit_ok", echec:"dit_ko"},
+              {label:"Lui laisser une sortie honorable", detail:"Il paiera, et il s'en souviendra autrement",
+               suite:"sortie"},
+            ]},
+          dit_ok:{ texte:[
+            "Il descend. Il met plus longtemps que nécessaire, et quand il parle, c'est à la cour, pas à Yohan.",
+            "« Mes hommes ont pillé un nid. Je le savais. J'ai laissé faire. »",
+            "Personne n'applaudit, personne ne crie. Trois cents personnes rentrent chez elles avec une phrase qu'elles répéteront pendant vingt ans.",
+            "Les caisses remontent la montagne le lendemain, portées par ses propres gens."],
+            effets:{xp:40, renom:14, reputation:{humains:-10, parias:12},
+                                suspicion:10, flag:"valcroix_humilie", issue:"seigneur_confronte"}, fin:true},
+          dit_ko:{ texte:[
+            "Il ne descend pas. Il fait fermer les volets, et la garde repousse la foule sans violence, avec cette lenteur d'hommes qui ont honte.",
+            "Rien n'a été dit à voix haute. Mais toute la vallée sait, désormais, et une vallée qui sait est une chose que le seigneur ne contrôlera plus.",
+            "Les caisses remonteront quand même. Discrètement, de nuit, comme tout ce que fait cette maison."],
+            effets:{xp:28, renom:8, reputation:{humains:-6}, suspicion:6,
+                    flag:"valcroix_humilie", issue:"seigneur_confronte"}, fin:true},
+          sortie:{ texte:[
+            "Il ramasse le sceau et le lui rend en main propre, à l'écart, sans un mot pour la galerie.",
+            "Le seigneur paie le contrat en entier, plus deux cents écus qui ne figurent sur aucun registre, et fait remonter les caisses lui-même.",
+            "« Vous auriez pu me détruire ce matin », dit-il à la porte. « Je ne sais pas encore si je dois vous en remercier. »"],
+            effets:{xp:32, or:200, reputation:{humains:8}, flag:"valcroix_oblige",
+                    issue:"seigneur_confronte"}, fin:true},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   02 — LES MILLE GUEULES
+   Une mine de fer, des disparus, et des voix qui imitent les proches.
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_ARQUENAY", type:'contrat', titre:"Les Mille Gueules",
+  commanditaire:"Maison d'Arquenay", maison:"Maison d'Arquenay",
+  or:1100, danger:"dangereux", categorie:"sauvetage", prix:true,
+  lieux:["LOC_008","LOC_011","LOC_003"],
+  pitch:"Des dizaines de mineurs ont disparu sous une exploitation de fer. Les survivants parlent de voix qui imitent leurs proches. La maison veut rouvrir avant la fin du mois.",
+  paye:["mine_rouverte","mine_murée","mineurs_ramenes"],
+  issues:{
+    mine_rouverte:"La mine d'Arquenay a rouvert. On y descend en groupe, et on ne répond plus quand on vous appelle.",
+    "mine_murée":"La mine d'Arquenay a été murée. La maison a perdu son fer et gardé ses hommes.",
+    mineurs_ramenes:"Onze mineurs d'Arquenay sont remontés vivants d'un endroit d'où l'on ne remonte pas.",
+    abandonnee:"Personne n'est jamais redescendu chercher les mineurs d'Arquenay.",
+    refusee:"Yohan a refusé les termes d'Arquenay.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"On attend d'entendre les survivants.",
+      ev:{ id:"CHA_1", titre:"Ce que disent les survivants", famille:"CONTRAT", rarete:"majeur",
+        image:"evt_galerie",
+        scenes:{
+          start:{ texte:[
+            "La maison d'Arquenay reçoit dans une pièce où l'on a fait du feu exprès, et l'on comprend en entrant que ce n'est pas une pièce qu'on chauffe d'habitude.",
+            "« Trente-quatre hommes en dix jours. Onze remontés. Nous avons cessé la descente. »",
+            "L'homme qui parle n'est pas le seigneur : c'est son intendante des mines, une femme d'une quarantaine d'années aux ongles noirs de fer. Le seigneur, lui, regarde le feu.",
+            "« Les onze racontent tous la même chose et refusent tous d'en reparler. »"],
+            choix:[
+              {label:"Demander à voir les onze", detail:"Ils diront à un étranger ce qu'ils ne disent plus à leur maison",
+               suite:"onze"},
+              {label:"Demander ce qu'on a creusé récemment", detail:"Jet de Précision (12)",
+               test:{stat:"precision", dc:12}, reussite:"veine_ok", echec:"veine_ko"},
+              {label:"Accepter sans en savoir plus", detail:"−2 Suspicion · un homme qui descend sans discuter",
+               suite:"vite", effets:{suspicion:-2}},
+            ]},
+          onze:{ texte:[
+            "Ils sont dans la grange commune, tous les onze, et aucun ne veut être seul. Ça, c'est la première chose qu'on remarque.",
+            "Le plus vieux finit par parler, en regardant le sol : « On entend nos gens. En bas. Ma femme est morte il y a six ans et je l'ai entendue m'appeler par mon nom de jeunesse, celui que plus personne connaît. »",
+            "« On y va. On y va toujours. C'est comme ça qu'on les perd. »"],
+            effets:{xp:16, flag:"arquenay_voix"}, suite:"vite"},
+          veine_ok:{ texte:[
+            "L'intendante déroule un plan de galerie et son doigt s'arrête net avant d'y arriver.",
+            "« On a percé sur une cavité. Fin de l'hiver. Elle n'était pas sur les plans anciens et elle est trop régulière pour être naturelle. »",
+            "Elle relève les yeux. « J'ai dit qu'il fallait la murer. On m'a dit qu'il y avait du fer derrière. »"],
+            effets:{xp:18, flag:"arquenay_cavite"}, suite:"vite"},
+          veine_ko:{ texte:["On lui montre un plan de galerie, et un plan de galerie ressemble à un plan de galerie. L'intendante répond aux questions ; le seigneur regarde le feu."],
+            effets:{xp:5}, suite:"vite"},
+          vite:{ fin:true, texte:[
+            "« Onze cents écus. Nous voulons rouvrir avant la fin du mois. »",
+            "L'intendante ajoute, sans que personne le lui demande : « Et moi je veux que mes hommes remontent. Ce n'est pas la même commande, messire. Souvenez-vous-en en bas. »"]}
+        }}},
+
+    { id:"descente", delai:[2,4], attente:"Il faut descendre, et personne ne veut descendre avec vous.",
+      ev:{ id:"CHA_2", titre:"La descente", famille:"NAIN", rarete:"majeur",
+        image:"evt_tunnel",
+        scenes:{
+          start:{ texte:[
+            "Le puits fait cent vingt mètres. La cage descend en grinçant pendant tout ce temps, et le rond de ciel au-dessus devient une pièce de monnaie, puis rien.",
+            "En bas, l'air est tiède et sent le fer mouillé. Deux mineurs volontaires ont accepté d'accompagner Yohan jusqu'à la galerie basse, pas plus loin. Ils ont pris des lampes en trop.",
+            "À trois cents pas, le plus jeune s'arrête net. « Vous avez entendu ? »",
+            "Yohan n'a rien entendu."],
+            choix:[
+              {label:"Continuer, et interdire de répondre", detail:"Jet de Volonté (13) · tenir deux hommes qui ont peur",
+               test:{stat:"vol", dc:13}, reussite:"tenir_ok", echec:"tenir_ko"},
+              {label:"Les renvoyer en haut tout de suite", detail:"Seul, mais personne à perdre",
+               suite:"seul", effets:{xp:10}},
+              {label:"Écouter ce qui appelle", detail:"Ce qui parle finit toujours par dire quelque chose",
+               suite:"ecoute"},
+            ]},
+          tenir_ok:{ texte:[
+            "« Vous n'entendez rien. Vous ne répondez pas. Vous marchez derrière moi et vous regardez mon dos. »",
+            "Il le dit d'une voix qui ne laisse pas de place, et les deux hommes le suivent jusqu'à la galerie basse sans lever la tête une seule fois.",
+            "Quelque chose les appelle deux fois. Personne ne répond. C'est la première fois que ça arrive dans cette mine."],
+            effets:{xp:18, flag:"arquenay_discipline"}, suite:"cavite"},
+          tenir_ko:{ texte:[
+            "Le plus jeune répond. Un seul mot — un prénom — et il part dans une galerie latérale en courant, la lampe battant contre sa cuisse.",
+            "Quand Yohan le rattrape, cent mètres plus loin, il est debout devant une paroi nue, et il pleure, et il ne sait pas dire pourquoi."],
+            effets:{xp:8, fat:10}, suite:"cavite"},
+          seul:{ texte:[
+            "Ils remontent en le remerciant trois fois de trop. Il continue seul, avec deux lampes, et le silence d'une mine où l'on est le seul à respirer est une chose qu'on n'oublie pas."],
+            effets:{fat:6}, suite:"cavite"},
+          ecoute:{ texte:[
+            "Il s'arrête et il écoute. Ça vient d'en bas et de partout, très loin et très près, et ça n'imite pas une voix : ça imite l'idée d'une voix, comme quelqu'un qui n'aurait jamais entendu parler mais aurait vu des gens le faire.",
+            "Puis, très clairement, dans le noir : le nom de sa mère. Prononcé correctement.",
+            "Les deux mineurs le regardent. Ils n'ont pas entendu la même chose que lui."],
+            effets:{xp:20, fat:12, flag:"arquenay_appelle"}, suite:"cavite"},
+          cavite:{ texte:[
+            "La galerie basse s'arrête sur un mur de moellons montés à la hâte, et le mur est percé.",
+            "Derrière, la cavité : une salle ronde, trop régulière, dont les parois sont creusées de milliers de petites alvéoles. Le sol est jonché de lampes de mineur. Quarante, cinquante peut-être, toutes éteintes, toutes posées à l'endroit.",
+            "Personne ne les a jetées. On les a posées."],
+            effets:{xp:14, flag:"arquenay_cavite"}, fin:true},
+        }}},
+
+    { id:"colonie", delai:[1,3], attente:"Ce qui vit là-dessous n'a pas fini.",
+      ev:{ id:"CHA_3", titre:"Ce qui vit sous la mine", famille:"NAIN", rarete:"majeur",
+        image:"evt2_echo",
+        scenes:{
+          start:{ texte:[
+            "Les alvéoles ne sont pas vides. Chacune contient une chose molle et pâle de la taille d'un poing, et chacune de ces choses respire.",
+            "Au centre de la salle, ce qui les a pondues occupe l'espace comme un arbre couché. C'est aveugle. Ça n'a pas besoin de voir : ça écoute, et ça rend ce qu'elle entend.",
+            "Contre la paroi du fond, attachés par des fils épais et gris, onze hommes vivants. Certains regardent. Aucun ne crie."],
+            choix:[
+              {label:"Attaquer maintenant, avant qu'elle finisse de se retourner",
+               detail:"C'est ce pour quoi on est descendu",
+               suite:"combat"},
+              {label:"Couper d'abord les fils, prendre les hommes, et courir",
+               detail:"Jet d'Agilité (14) · onze hommes, un couloir, une chose derrière",
+               test:{stat:"agi", dc:14}, reussite:"sauve_ok", echec:"sauve_ko"},
+              {label:"Se servir de l'Onde dans un endroit clos", detail:"Requiert un pouvoir · efficace et très cher",
+               requis:{pouvoir:"foudre"}, suite:"onde"},
+            ]},
+          combat:{ texte:["Elle se retourne plus vite qu'une chose de cette taille ne devrait."],
+            combat:{ groupe:[{bst:"BST_074", n:1}, {bst:"BST_014", n:2}], victoire:"morte", defaite:"fuite" }},
+          onde:{ texte:[
+            "Dans une salle close, l'Onde n'a nulle part où aller. Elle rebondit sur la pierre et revient.",
+            "La chose au centre se fend en trois endroits et cesse d'écouter. Les alvéoles éclatent le long des parois comme une rangée de fenêtres.",
+            "Yohan tient debout jusqu'à ce que le silence revienne, puis s'assoit par terre, et met un long moment à se relever."],
+            effets:{fat:35, xp:35, sang:6}, suite:"morte"},
+          morte:{ texte:[
+            "Elle met longtemps à s'arrêter. Longtemps après ça, la salle continue de rendre des voix, de plus en plus faibles, comme une pièce qui se vide.",
+            "Les onze hommes sont détachés un par un. Trois marchent. Les autres, il faut les porter."],
+            effets:{xp:40, flag:"arquenay_reine_morte"}, suite:"remontee"},
+          sauve_ok:{ texte:[
+            "Onze fils coupés, onze hommes debout, et cent vingt mètres de galerie à remonter avec une chose aveugle qui appelle derrière soi avec la voix de leurs femmes.",
+            "Aucun ne se retourne. C'est le plus dur qu'ils aient jamais fait."],
+            effets:{xp:38, fat:18, flag:"arquenay_sauves"}, suite:"remontee"},
+          sauve_ko:{ texte:[
+            "Il en sort sept. Les quatre autres étaient déjà trop loin — non pas morts, mais quelque part où le fait qu'on leur coupe les fils ne changeait plus rien.",
+            "Il les laisse. C'est la décision qu'il faut prendre et personne n'en sortira indemne."],
+            effets:{xp:24, fat:20, pv:-15, flag:"arquenay_sauves"}, suite:"remontee"},
+          fuite:{ texte:[
+            "Il remonte les cent vingt mètres à la corde, une main après l'autre, avec l'impression que le noir en dessous monte plus vite que lui.",
+            "Personne n'a été sauvé. Mais quelqu'un est remonté, et c'est déjà plus que les trente-quatre autres."],
+            effets:{pv:-20, fat:22, xp:12}, suite:"remontee"},
+          remontee:{ fin:true, texte:[
+            "Le rond de ciel redevient une pièce de monnaie, puis une porte. Dehors, il fait un jour tellement ordinaire que c'en est indécent."]},
+        }}},
+
+    { id:"decision", delai:[1,2], attente:"La maison attend de savoir si elle rouvre.",
+      ev:{ id:"CHA_4", titre:"Rouvrir, ou murer", famille:"CONTRAT", rarete:"majeur",
+        image:"evt2_veine",
+        scenes:{
+          start:{ texte:[
+            "La maison d'Arquenay veut savoir une seule chose : est-ce qu'on peut redescendre.",
+            "L'intendante veut savoir autre chose, et elle a le tact de ne pas le demander devant son seigneur.",
+            "Le fer de cette mine fait vivre quatre villages. La cavité, elle, ne s'est pas creusée toute seule, et rien ne dit qu'elle soit la seule."],
+            choix:[
+              {label:"Déclarer la mine sûre", detail:"Requiert d'avoir tué ce qui vivait là · le fer coule de nouveau",
+               requis:{flag:"arquenay_reine_morte"}, suite:"rouvre",
+               effets:{issue:"mine_rouverte", reputation:{humains:10, nains:6}, renom:8}},
+              {label:"Exiger qu'on mure la galerie basse", detail:"La maison perd son fer et garde ses hommes",
+               suite:"mure", effets:{issue:"mine_murée", reputation:{humains:-8, parias:10}, renom:4}},
+              {label:"Ne rien déclarer et remettre les onze à leurs familles",
+               detail:"Requiert de les avoir ramenés · le reste ne vous regarde pas",
+               requis:{flag:"arquenay_sauves"}, suite:"hommes",
+               effets:{issue:"mineurs_ramenes", reputation:{humains:6, parias:14}, renom:6}},
+            ]},
+          rouvre:{ fin:true, texte:[
+            "On redescend le lundi suivant. Par groupes de six, jamais seul, avec ordre formel de ne répondre à aucune voix.",
+            "Le fer remonte. Les quatre villages mangent. L'intendante serre la main de Yohan et ne dit rien du tout, ce qui en dit long."]},
+          mure:{ fin:true, texte:[
+            "Il faut trois semaines et deux cents charretées de pierre pour fermer une galerie qu'on a mis quarante ans à ouvrir.",
+            "Le seigneur ne salue pas Yohan à son départ. L'intendante l'accompagne jusqu'à la route.",
+            "« Quatre villages vont avoir faim », dit-elle. « Et trente-quatre hommes ne remonteront pas. Je ne sais pas lequel des deux je pourrai me pardonner. »"]},
+          hommes:{ fin:true, texte:[
+            "Onze hommes rendus à onze maisons, dont trois qui ne diront plus jamais un mot. Yohan ne signe aucun rapport et ne déclare rien à personne.",
+            "La maison d'Arquenay décidera toute seule si elle rouvre. Ce n'est pas ce pour quoi il a été payé, et c'est très exactement ce qu'on lui avait demandé en bas."]},
+        }}},
+  ]},
+
+/* ══════════════════════════════════════════════════════════════════════════
+   03 — LA FILLE DE SOMBREVAL
+   Une disparue dans les marais. Au retour, sa version contredit celle du père.
+   ══════════════════════════════════════════════════════════════════════════ */
+{
+  id:"CH_SOMBREVAL", type:'contrat', titre:"La Fille de Sombreval",
+  commanditaire:"Maison de Sombreval", maison:"Maison de Sombreval",
+  or:900, danger:"dangereux", categorie:"sauvetage", prix:true,
+  lieux:["LOC_010","LOC_016","LOC_011"],
+  pitch:"La fille adulte du seigneur a disparu dans les marais avec quatre gardes. Un seul cheval est revenu. Le père la veut vivante et interdit d'avertir les voisins.",
+  paye:["rendue_au_pere","laissee_libre","verite_dite"],
+  issues:{
+    rendue_au_pere:"La fille de Sombreval est rentrée chez son père. On ne l'a plus revue aux fenêtres.",
+    laissee_libre:"La fille de Sombreval n'est jamais rentrée, et son père a payé quand même.",
+    verite_dite:"Ce que la fille de Sombreval avait à dire a été dit, et la maison ne s'en est pas remise.",
+    abandonnee:"La fille de Sombreval est restée dans les marais.",
+    refusee:"Yohan a refusé les termes de Sombreval.",
+  },
+  etapes:[
+    { id:"audience", delai:[0,0], attente:"Un seul cheval est revenu, et il est encore à l'écurie.",
+      ev:{ id:"CHS_1", titre:"Le cheval qui est revenu seul", famille:"CONTRAT", rarete:"majeur",
+        image:"evt2_maree",
+        scenes:{
+          start:{ texte:[
+            "Le seigneur de Sombreval reçoit dans son écurie, ce qui n'est pas une manière de faire, et dit tout de suite pourquoi : le cheval est là.",
+            "« Ma fille est partie chasser aux marais avec quatre hommes. Neuf jours. Seul ce cheval est rentré. »",
+            "C'est un homme sec, gris, poli, et il ajoute la phrase suivante sans changer de ton :",
+            "« Vous ne préviendrez pas Bellac, ni Torcy, ni personne. C'est une affaire de maison. »"],
+            choix:[
+              {label:"Examiner le cheval", detail:"Jet de Précision (12) · une bête revenue seule raconte le voyage",
+               test:{stat:"precision", dc:12}, reussite:"cheval_ok", echec:"cheval_ko"},
+              {label:"Demander pourquoi il ne veut pas de voisins", detail:"C'est une drôle de façon de chercher sa fille",
+               suite:"voisins"},
+              {label:"Demander si elle voulait rentrer", detail:"Jet de Volonté (13)",
+               test:{stat:"vol", dc:13}, reussite:"veut_ok", echec:"veut_ko"},
+            ]},
+          cheval_ok:{ texte:[
+            "La selle est intacte. Les sangles sont défaites — proprement, par en dessous, par quelqu'un qui savait ce qu'il faisait. Une bête qui s'échappe ne desselle pas.",
+            "Les jambes sont couvertes de vase jusqu'au poitrail, mais les fers sont neufs et sans une éraflure. Ce cheval n'a pas galopé dans les marais : on l'a fait marcher, et on l'a renvoyé.",
+            "Quelqu'un a voulu qu'on croie à un accident."],
+            effets:{xp:18, flag:"sombreval_renvoye"}, suite:"termes"},
+          cheval_ko:{ texte:["Un cheval boueux, une selle vide, et l'odeur de marais. On ne lit pas dans une bête ce qu'on n'a pas déjà en tête."],
+            effets:{xp:5}, suite:"termes"},
+          voisins:{ texte:[
+            "« Parce que ma fille a vingt-six ans et qu'elle n'est pas mariée », dit-il, « et que si Torcy apprend qu'elle a passé neuf nuits dehors avec quatre hommes d'armes, il n'y aura plus rien à négocier. »",
+            "C'est une réponse cohérente. C'est aussi la première fois qu'il parle d'elle comme d'une chose qu'on négocie."],
+            effets:{xp:12, flag:"sombreval_mariage"}, suite:"termes"},
+          veut_ok:{ texte:[
+            "La question le prend de flanc. Il regarde le cheval un long moment.",
+            "« Elle n'aimait pas ce mariage. Elle me l'a dit. Elle me l'a même écrit. » Il redresse les épaules. « Cela ne change rien : elle est ma fille et elle est dehors. Ramenez-la. »",
+            "Ce qu'il vient d'admettre, il ne l'aurait dit à personne de sa maison."],
+            effets:{xp:16, flags:["sombreval_mariage","sombreval_partie_seule"]}, suite:"termes"},
+          veut_ko:{ texte:["« Ce qu'elle voulait ne vous concerne pas. Elle est dehors. Ramenez-la. » Le ton se ferme comme une porte."],
+            effets:{xp:4}, suite:"termes"},
+          termes:{ fin:true, texte:[
+            "« Neuf cents écus. Vivante. Et discrètement. »",
+            "Il caresse l'encolure du cheval, une fois, machinalement, et Yohan comprend que cet homme n'a pas dormi depuis neuf jours."]},
+        }}},
+
+    { id:"marais", delai:[2,4], attente:"Les marais sont vastes et personne n'y va deux fois.",
+      ev:{ id:"CHS_2", titre:"Les marais", famille:"VOYAGE", rarete:"majeur",
+        image:"evt2_naufrages",
+        scenes:{
+          start:{ texte:[
+            "Quatre jours de tourbe et d'eau brune. Le guide s'arrête à la limite de ce qu'il connaît, montre l'est, et refuse d'aller plus loin même contre de l'argent.",
+            "Au sixième jour, Yohan trouve les gardes.",
+            "Ils sont trois, alignés sur une langue de terre ferme, chacun sous un tumulus de mottes soigneusement empilées. On les a enterrés. Avec application."],
+            choix:[
+              {label:"Ouvrir les tumulus", detail:"Jet de Volonté (12) · ce n'est pas agréable et c'est nécessaire",
+               test:{stat:"vol", dc:12}, reussite:"ouvre_ok", echec:"ouvre_ko"},
+              {label:"Chercher le quatrième", detail:"Trois tombes, quatre gardes",
+               suite:"quatrieme"},
+              {label:"Suivre les traces qui repartent vers l'est", detail:"Quelqu'un est reparti d'ici, et à pied",
+               suite:"traces"},
+            ]},
+          ouvre_ok:{ texte:[
+            "Deux sont morts de la fièvre des marais : on le voit aux mains. Le troisième a reçu un carreau d'arbalète entre les omoplates, tiré de près, par derrière.",
+            "Le carreau porte une encoche de propriété. Ce n'est pas celle de Sombreval."],
+            effets:{xp:20, flag:"sombreval_carreau"}, suite:"quatrieme"},
+          ouvre_ko:{ texte:["Il referme au bout de deux. Certaines choses on peut les faire ; on n'est pas obligé de les faire deux fois."],
+            effets:{xp:8, fat:6}, suite:"quatrieme"},
+          quatrieme:{ texte:[
+            "Le quatrième n'est pas enterré. Il est trois cents pas plus loin, dans l'eau jusqu'à la taille, tenu debout par les roseaux depuis assez longtemps pour qu'on ne puisse plus rien lire sur son visage.",
+            "Il tenait encore une arbalète. Déchargée."],
+            effets:{xp:12, flag:"sombreval_quatrieme"}, suite:"traces"},
+          traces:{ fin:true, texte:[
+            "Deux personnes sont reparties d'ici vers l'est, à pied, sans se cacher. Les traces sont vieilles de cinq jours et elles ne vont pas au hasard : elles vont quelque part.",
+            "À l'est, il n'y a rien sur les cartes de Sombreval. Ce qui ne veut pas dire qu'il n'y a rien."]},
+        }}},
+
+    { id:"tiers", delai:[1,3], attente:"À l'est, quelqu'un vit là où les cartes s'arrêtent.",
+      ev:{ id:"CHS_3", titre:"Ceux que les cartes ne montrent pas", famille:"HOMME_BETE", rarete:"majeur",
+        image:"evt_harde",
+        scenes:{
+          start:{ texte:[
+            "Le village est bâti sur pilotis au milieu de l'eau, et il n'a pas de nom parce qu'il n'a jamais eu besoin d'en avoir un. Une soixantaine d'âmes, la moitié qui n'est pas tout à fait humaine, et personne qui paie d'impôt à personne depuis quatre générations.",
+            "On le laisse approcher. On ne le laisse pas entrer.",
+            "Une femme d'une trentaine d'années s'avance sur la passerelle. Elle porte des vêtements de marais, une arbalète en bandoulière, et elle a exactement le visage du portrait qu'on a montré à Yohan avant son départ."],
+            choix:[
+              {label:"Dire pourquoi il est là", detail:"La franchise, avec quelqu'un qui tient une arbalète",
+               suite:"franc"},
+              {label:"Mentir sur ce qu'on lui veut", detail:"Jet de Volonté (14)",
+               test:{stat:"vol", dc:14}, reussite:"ment_ok", echec:"ment_ko"},
+              {label:"Montrer le carreau trouvé dans le dos du garde",
+               detail:"Requiert le carreau · savoir qui a tiré change la conversation",
+               requis:{flag:"sombreval_carreau"}, suite:"carreau"},
+            ]},
+          franc:{ texte:[
+            "« Votre père m'envoie vous ramener. »",
+            "Elle ne bouge pas d'un pouce. Derrière elle, sur la passerelle, quatre personnes se sont levées sans bruit.",
+            "« Je sais. Il envoie quelqu'un tous les deux ans. » Elle incline la tête. « Vous êtes le premier à me le dire en face. Ça vaut une conversation. »"],
+            effets:{xp:16, flag:"sombreval_confiance"}, suite:"verite"},
+          ment_ok:{ texte:[
+            "Il raconte un contrat de chasse, une bête dans les marais, un guide perdu. C'est bien raconté et il ne la regarde pas trop.",
+            "Elle l'écoute, hoche la tête, et le fait entrer. Il dormira à couvert et mangera à leur table avant de comprendre qu'elle n'en a pas cru un mot et qu'elle voulait simplement le voir de près."],
+            effets:{xp:14}, suite:"verite"},
+          ment_ko:{ texte:[
+            "Elle lève l'arbalète à mi-course, sans la pointer, comme on montre un outil.",
+            "« Mon père paie mieux que ça, d'habitude. Le dernier a essayé de m'emmener de nuit. Il est dans les roseaux. »",
+            "Il faudra parler vite, et vrai."],
+            effets:{xp:8, suspicion:3}, suite:"verite"},
+          carreau:{ texte:[
+            "Il tend le carreau, l'encoche vers elle. Elle le prend, le retourne, et son visage change pour la première fois.",
+            "« C'est le mien. » Un temps. « Il avait ordre de me ramener morte si je refusais de rentrer. Il me l'a dit lui-même, en s'excusant, avant de bander son arme. Il pleurait. »",
+            "Elle rend le carreau. « Vous savez maintenant pourquoi je ne rentre pas. »"],
+            effets:{xp:24, flags:["sombreval_confiance","sombreval_ordre_de_tuer"]}, suite:"verite"},
+          verite:{ fin:true, texte:[
+            "Ce qu'elle raconte tient en peu de mots. Le mariage avec Torcy était signé depuis deux ans sans qu'elle le sache. Elle a appris qu'on l'expédiait au printemps. Elle est partie avec ceux des gardes qui ont bien voulu la suivre, deux sont morts de la fièvre en route, et le quatrième a reçu l'ordre de la ramener quoi qu'il arrive.",
+            "« Vous êtes payé pour me ramener vivante », dit-elle enfin. « Alors voilà : je suis vivante. Décidez. »"]},
+        }}},
+
+    { id:"decision", delai:[1,2], attente:"Elle attend de savoir ce qu'on va faire d'elle.",
+      ev:{ id:"CHS_4", titre:"Ce qu'on rapporte à Sombreval", famille:"CONTRAT", rarete:"majeur",
+        image:"evt_bannieres",
+        scenes:{
+          start:{ texte:[
+            "Neuf cents écus contre une femme de vingt-six ans qui n'a rien fait d'illégal, sinon partir.",
+            "Le contrat est clair. Ce qui l'est moins, c'est ce qu'un contrat vaut quand on connaît la fin de l'histoire."],
+            choix:[
+              {label:"La ramener à son père", detail:"C'est ce qui a été payé, et ce sera payé",
+               suite:"ramene", effets:{issue:"rendue_au_pere", reputation:{humains:10, parias:-12}, renom:4}},
+              {label:"La laisser, et aller le dire à son père", detail:"Il ne paiera peut-être pas. Peut-être que si.",
+               suite:"laisse", effets:{issue:"laissee_libre", reputation:{humains:-6, parias:14}, renom:6}},
+              {label:"La ramener, et dire devant témoins ce que le quatrième garde avait pour ordre",
+               detail:"Requiert de le savoir · elle rentre, mais pas dans la même maison",
+               requis:{flag:"sombreval_ordre_de_tuer"}, suite:"dire",
+               effets:{issue:"verite_dite", reputation:{humains:-4, parias:16}, renom:12, suspicion:8}},
+            ]},
+          ramene:{ fin:true, texte:[
+            "Elle ne se débat pas et ne parle pas du trajet. Ça dure six jours.",
+            "Le seigneur paie devant l'écurie où tout a commencé, compte deux fois, et ne remercie pas. La porte se referme sur elle.",
+            "Le mariage avec Torcy est célébré à l'automne. On dit que la mariée s'est bien tenue."]},
+          laisse:{ fin:true, texte:[
+            "Il redescend seul et il le dit en face, dans la même écurie : elle est vivante, elle va bien, elle ne rentrera pas, et non, il ne dira pas où.",
+            "Le seigneur reste longtemps sans rien dire. Puis il paie. En entier.",
+            "« Elle m'a écrit », dit-il enfin, la bourse encore dans la main. « Je n'ai pas répondu. Voilà ce que ça donne. »"]},
+          dire:{ fin:true, texte:[
+            "Ils rentrent ensemble, et elle entre dans la grande salle par la grande porte, devant le chapelain, l'intendant et deux cousins de la maison.",
+            "Yohan pose l'affaire à plat en six phrases : le mariage signé sans elle, le départ, la fièvre, et l'ordre donné au dernier garde de la ramener morte plutôt que libre.",
+            "Le seigneur ne nie pas. C'est ce qui achève tout le monde.",
+            "Elle reste à Sombreval. Le mariage avec Torcy est rompu dans le mois, et ce n'est plus son père qui décide de grand-chose dans cette maison."]},
+        }}},
+  ]},
+
+];
+
+</script>
+<script>
 /* src/data/chantier.js */
 /* PARIAS — Le chantier de Karlsberg
  *
@@ -15774,7 +16580,13 @@ function renderBattle(){
 
 /* ============================= ÉVÉNEMENTS ÉCRITS ============================= */
 
-let ecritState = null;   // { ev, lieu, retourEcran, dernierJet }
+let ecritState = null;   // { ev, lieu, retourEcran, dernierJet, sceneId }
+
+/* Un seul récit écrit peut être en vol à la fois : ils partagent ecritState, et
+ * deux événements ouverts en même temps se marchent dessus — au retour d'un
+ * combat, on rendrait la scène suivante du mauvais récit. Ce qui veut ouvrir
+ * un événement demande d'abord si la place est libre. */
+function evenementEnCours(){ return !!ecritState; }
 
 function heroFlags(){ if(!hero.flags) hero.flags = []; return hero.flags; }
 function heroVus(){ if(!hero.evenementsVus) hero.evenementsVus = []; return hero.evenementsVus; }
@@ -15939,7 +16751,22 @@ function applyEffets(e){
   }
   if(e.flag && !hasFlag(e.flag)) heroFlags().push(e.flag);
   (e.flags || []).forEach(f => { if(!hasFlag(f)) heroFlags().push(f); });
+  // Une scène appartenant à une chaîne peut dire où va la suite, ou refermer
+  // la chaîne sur une issue. C'est ce qui remplace les branches en dur.
+  if(e.etape) chaineSuite = e.etape;
+  if(e.issue) chaineIssue = e.issue;
   return tags;
+}
+
+/* ---- Ce qui attend derrière l'événement en cours ----
+ * Plusieurs choses peuvent vouloir la main après une scène terminale : l'étape
+ * suivante d'une chaîne, un événement de Suspicion qui s'est intercalé, le pli
+ * de fin de tour. Une file, plutôt qu'une variable que chacun écrase. */
+let fileApresEvenement = [];
+function filerApres(fn){ if(typeof fn === 'function') fileApresEvenement.push(fn); }
+function reprendreApresEvenement(){
+  const suite = fileApresEvenement.shift();
+  if(suite) suite();
 }
 
 const STAT_NOMS = { agi:"Agilité", precision:"Précision", vol:"Volonté" };
@@ -15947,7 +16774,12 @@ const STAT_NOMS = { agi:"Agilité", precision:"Précision", vol:"Volonté" };
 function renderScene(sceneId){
   const { ev, lieu } = ecritState;
   const sc = ev.scenes[sceneId];
-  if(!sc){ console.warn('Scène introuvable :', ev.id, sceneId); closeEventModal(); return; }
+  if(!sc){
+    console.warn('Scène introuvable :', ev.id, sceneId);
+    ecritState = null; closeEventModal(); showScreen('lieu');
+    reprendreApresEvenement();
+    return;
+  }
   ecritState.sceneId = sceneId;
 
   // Une scène de combat peut être atteinte au retour de l'écran d'affrontement
@@ -15975,7 +16807,9 @@ function renderScene(sceneId){
         <div style="margin-top:16px;text-align:right;"><button class="primary" id="scRetourBtn">Revenir</button></div>`;
       box.innerHTML = html;
       document.getElementById('eventModal').style.display='flex';
-      document.getElementById('scRetourBtn').onclick = closeEventModal;
+      document.getElementById('scRetourBtn').onclick = () => {
+        ecritState = null; closeEventModal(); reprendreApresEvenement();
+      };
       return;
     }
     html += `<div style="margin-top:16px;text-align:right;"><button class="primary" id="scBatailleBtn">Prendre le commandement</button></div>`;
@@ -15984,7 +16818,8 @@ function renderScene(sceneId){
     document.getElementById('scBatailleBtn').onclick = () => {
       closeEventModal();
       const suiteV = sc.bataille.victoire, suiteD = sc.bataille.defaite;
-      startBattle(def, (gagnee) => renderScene(gagnee ? suiteV : suiteD));
+      const etat = ecritState;
+      startBattle(def, (gagnee) => { ecritState = etat; renderScene(gagnee ? suiteV : suiteD); });
     };
     return;
   }
@@ -15997,15 +16832,31 @@ function renderScene(sceneId){
     document.getElementById('scCombatBtn').onclick = () => {
       closeEventModal();
       const suiteV = sc.combat.victoire, suiteD = sc.combat.defaite;
+      // On capture le récit en cours : si autre chose s'est ouvert pendant le
+      // combat, c'est bien à celui-ci qu'on doit revenir.
+      const etat = ecritState;
       combatReturnTo = () => {
+        ecritState = etat;
         if(lastCombatVictory && suiteV) renderScene(suiteV);
         else if(!lastCombatVictory && suiteD) renderScene(suiteD);
-        else { closeEventModal(); showScreen(ecritState.retourEcran); }
+        else { ecritState = null; closeEventModal(); showScreen(etat.retourEcran); }
       };
       // Une scène de combat définit déjà ce qui arrive en cas de défaite : on
       // désactive la mort permanente, sauf si l'événement la réclame (mortel:true).
       startCombat(sc.combat.groupe, undefined, { sansMort: !sc.combat.mortel });
     };
+    return;
+  }
+
+  // --- Scène de liaison : un simple temps, puis la suite ---
+  // Une scène peut porter `suite` sans offrir de choix : c'est un battement de
+  // récit (on descend, on marche, on arrive) qui mène à la scène suivante sans
+  // refermer l'événement.
+  if((!sc.choix || !sc.choix.length) && sc.suite){
+    html += `<div style="margin-top:18px;text-align:right;"><button class="primary" id="scSuiteBtn">Continuer</button></div>`;
+    box.innerHTML = html;
+    document.getElementById('eventModal').style.display='flex';
+    document.getElementById('scSuiteBtn').onclick = () => renderScene(sc.suite);
     return;
   }
 
@@ -16015,10 +16866,12 @@ function renderScene(sceneId){
     box.innerHTML = html;
     document.getElementById('eventModal').style.display='flex';
     document.getElementById('scFinBtn').onclick = () => {
+      ecritState = null;              // le récit est fini : la place est libre
       renderPersonnage(); renderQuete(); closeEventModal(); saveGame(true);
-      // Un événement de Suspicion s'intercale avant autre chose (le pli du
-      // tour, une arrivée) : on rend la main à ce qui attendait.
-      if(suspicionRetour){ const suite = suspicionRetour; suspicionRetour = null; suite(); }
+      // Un événement peut s'intercaler devant autre chose — une étape de
+      // chaîne, un événement de Suspicion, le pli du tour. On rend la main à
+      // ce qui attendait, dans l'ordre où ça s'est mis en file.
+      reprendreApresEvenement();
     };
     return;
   }
@@ -16754,28 +17607,58 @@ function commanditaireNoble(c){
   return MARQUES_NOBLES.some(r => r.test(q));
 }
 
-/* ---- Quelle femme la maison propose ---- */
-const NOBLES_PROPOSEES = [
-  "Lady Éléonore", "Lady Isabeau", "Lady Adélaïde", "Lady Mathilde", "Lady Aliénor",
-  "Lady Constance", "Lady Marguerite", "Lady Héloïse", "Lady Blanche", "Lady Célestine",
-  "Lady Agnès", "Lady Philippa", "Lady Ysabeau", "Lady Aveline", "Lady Béatrice",
-  "Lady Rosamonde", "Lady Mélisende", "Lady Clarisse", "Lady Diane", "Lady Ophélie",
-];
+/* ---- Qui, dans la maison, peut consentir ----
+ * Règle du pack narratif : une noble **adulte, réelle, de cette maison**, qui
+ * consent explicitement. Faute de quoi cette moitié du Prix n'existe pas.
+ *
+ * Rend { candidate, refus } : `candidate` si quelqu'un accepte, sinon `refus`
+ * porte la raison — celle de la personne qui a dit non, ou le fait que la
+ * maison n'a personne d'adulte à proposer. */
+const AGE_ADULTE = 18;
 
-/* Le Prix d'une affaire : celui qu'elle déclare, ou celui que sa maison doit de
- * toute façon. Déterministe : la même affaire propose toujours la même femme. */
+function nobleRefuse(n){
+  const e = n.exige || {};
+  if(e.renomMin !== undefined && renomActuel() < e.renomMin) return true;
+  if(e.suspicionMax !== undefined && (hero.suspicion || 0) > e.suspicionMax) return true;
+  if(e.flag && !hasFlag(e.flag)) return true;
+  for(const [p, v] of Object.entries(e.reputationMin || {}))
+    if(reputationDe(p) < v) return true;
+  return false;
+}
+
+function dejaLiee(nom){
+  return ((hero.lignee && hero.lignee.liaisons) || []).some(l => l.nom === nom);
+}
+
+function candidateDeLaMaison(nomMaison){
+  const m = maisonDe(nomMaison);
+  if(!m) return { refus:"Cette maison n'a personne dont le nom figure aux registres : elle paiera en or." };
+  const adultes = (m.nobles || []).filter(n => n.age >= AGE_ADULTE && !dejaLiee(n.nom));
+  if(!adultes.length)
+    return { refus:`${nomMaison} n'a plus aucune femme adulte à engager. La coutume ne s'applique pas faute de personne pour la porter.` };
+  const consentantes = adultes.filter(n => !nobleRefuse(n));
+  if(consentantes.length) return { candidate: consentantes[0], maison: nomMaison };
+  return { refus: adultes[0].refus || "Aucune n'y consent, et la coutume ne se prend pas de force." };
+}
+
+/* Le Prix d'une affaire : celui que sa maison doit, et la personne qui accepte
+ * — ou la raison pour laquelle personne n'accepte. */
 function prixPariaDe(c){
   if(!commanditaireNoble(c)) return null;
-  if(c.prix_paria && c.prix_paria.noble_proposee) return c.prix_paria;
-  const h = artHash((c.origine || c.id || c.titre || '') + '|' + (c.commanditaire || ''));
+  const nomMaison = c.maisonNoble || c.commanditaire;
+  const r = candidateDeLaMaison(nomMaison);
   return {
     negocie_avant_depart: true,
-    noble_proposee: {
-      nom: NOBLES_PROPOSEES[h % NOBLES_PROPOSEES.length],
-      maison: c.maisonNoble || c.commanditaire,
+    maison: nomMaison,
+    indisponible: r.refus || null,
+    noble_proposee: r.candidate ? {
+      nom: r.candidate.nom, maison: nomMaison, age: r.candidate.age,
+      rang: r.candidate.rang, note: r.candidate.note, accord: r.candidate.accord,
       adulte: true, consentement_requis: true,
-    },
-    choix: ["OR", "NOBLE_CONSENTANTE", "OR_ET_NOBLE_CONSENTANTE", "NEGOCIER", "REFUSER"],
+    } : null,
+    choix: r.candidate
+      ? ["OR", "NOBLE_CONSENTANTE", "OR_ET_NOBLE_CONSENTANTE", "NEGOCIER", "REFUSER"]
+      : ["OR", "NEGOCIER", "REFUSER"],
   };
 }
 
@@ -16807,10 +17690,12 @@ const TERMES_DU_PRIX = {
 
 function optionsDuPrix(c, prix){
   const p = prix.noble_proposee;
-  const opts = Object.entries(TERMES_DU_PRIX).map(([id, t]) => ({
-    id, label: id === 'NOBLE_CONSENTANTE' ? `Réclamer ${p.nom}` : t.label,
-    sub: t.sub(c), detail: t.detail,
-  }));
+  const opts = Object.entries(TERMES_DU_PRIX)
+    .filter(([id]) => p || id === 'OR')      // sans personne pour consentir, il ne reste que l'or
+    .map(([id, t]) => ({
+      id, label: id === 'NOBLE_CONSENTANTE' ? `Réclamer ${p.nom}` : t.label,
+      sub: t.sub(c), detail: t.detail,
+    }));
   opts.push({ id:"NEGOCIER", label:"Négocier les termes", sub:"Issue incertaine", detail:"On peut toujours essayer d'obtenir mieux. On obtient parfois moins." });
   opts.push({ id:"REFUSER", label:"Refuser l'affaire", sub:"Met fin à la mission", detail:"Une maison qu'on refuse s'en souvient." });
   return opts;
@@ -16834,10 +17719,11 @@ function appliquerPrix(c, choix, prix){
     return ` La maison paie en or, sans un mot de plus. On n'a pas eu à parler du reste, et chacun préfère qu'il en soit ainsi.`;
   }
   const p = prix.noble_proposee;
+  if(!p) return ` La maison n'avait personne à engager : tout s'est réglé en or.`;
   const liaison = nouerLiaison(p.nom, p.maison || c.commanditaire, c.titre);
   return liaison
     ? ` <b>${p.nom}</b> consent devant témoins, comme la coutume l'exige — et comme sa maison espérait n'avoir jamais à le faire.
-       ${p.maison || c.commanditaire} soutient désormais celui à qui elle a donné l'Or et le Sang, et le temps dira le reste.`
+       ${p.accord ? `<i>${p.accord}</i> ` : ''}${p.maison || c.commanditaire} soutient désormais celui à qui elle a donné l'Or et le Sang.`
     : ` La femme que la maison propose est déjà liée à Yohan. On règle en or, et l'on n'en reparle pas.`;
 }
 
@@ -16845,6 +17731,307 @@ function appliquerPrix(c, choix, prix){
 function mentionDuPrix(c){
   return commanditaireNoble(c) ? "Prix du Paria" : (c.or + ' or');
 }
+
+</script>
+<script>
+/* src/chaines.js */
+/* PARIAS — Les chaînes
+ *
+ * C'est le moteur que le pack narratif réclame depuis la V4 :
+ *
+ *   « Les contrats sont conçus comme des chaînes et non comme des missions
+ *     instantanées. »
+ *   « L'objectif est que le jeu se souvienne réellement des décisions : un
+ *     enfant sauvé, un noble humilié, un dragon blessé peuvent réapparaître
+ *     bien plus tard. »
+ *
+ * Une chaîne est une histoire qui se joue **sur plusieurs tours**. Chaque étape
+ * est un événement écrit ordinaire — donc illustré, avec des jets, des combats
+ * et des branches, sans une ligne de rendu nouvelle. Ce que la chaîne ajoute,
+ * c'est le temps : l'étape suivante n'arrive pas tout de suite. On l'accepte,
+ * on voyage, on se bat ailleurs, on se repose, et un jour un homme vous
+ * rattrape sur la route pour vous dire ce qui s'est passé pendant ce temps.
+ *
+ * Trois règles :
+ *
+ *   1. UNE SEULE AFFAIRE À LA FOIS. On ne mène pas deux contrats de front ; on
+ *      n'est qu'un homme. Les chaînes d'arrière-plan (vendettas, secrets), en
+ *      revanche, courent en parallèle et se rappellent à vous toutes seules.
+ *   2. LES BRANCHES SONT DES DONNÉES. Une scène dit `effets:{ etape:"x" }` pour
+ *      choisir la suite, `effets:{ issue:"y" }` pour refermer la chaîne. Aucun
+ *      code par contrat.
+ *   3. L'ISSUE SURVIT À TOUT. `hero.chaines.issues[id]` est écrit une fois et
+ *      relu pour toujours — par d'autres chaînes, par les offres, par
+ *      l'épilogue. C'est ça, se souvenir.
+ */
+
+/* Variables lues par le moteur après une scène : voir applyEffets. */
+let chaineSuite = null;
+let chaineIssue = null;
+
+function heroChaines(){
+  if(!hero.chaines) hero.chaines = { actives:[], faites:[], issues:{} };
+  const c = hero.chaines;
+  if(!c.actives) c.actives = [];
+  if(!c.faites)  c.faites = [];
+  if(!c.issues)  c.issues = {};
+  return c;
+}
+
+function chaineParId(id){ return CHAINES.find(c => c.id === id) || null; }
+function etapeParId(ch, id){ return ch.etapes.find(e => e.id === id) || null; }
+
+/* Combien de semaines se sont écoulées depuis le début de la partie. */
+function semaineCourante(){ return (hero.temps && hero.temps.semaines) || 0; }
+
+/* ============================= ÉTAT ============================= */
+
+function chaineEnCours(id){ return heroChaines().actives.find(a => a.id === id) || null; }
+function chaineFaite(id){ return heroChaines().faites.includes(id); }
+function issueDeChaine(id){ return heroChaines().issues[id] || null; }
+
+/* L'affaire en cours — celle qui occupe Yohan. Il n'y en a jamais deux. */
+function affaireEnCours(){
+  return heroChaines().actives.find(a => {
+    const ch = chaineParId(a.id);
+    return ch && ch.type === 'contrat';
+  }) || null;
+}
+
+/* Une chaîne est proposable si elle n'a jamais été menée, n'est pas en cours,
+ * et que ses conditions sont réunies. */
+function chaineDisponible(ch){
+  if(chaineFaite(ch.id) || chaineEnCours(ch.id)) return false;
+  if(ch.type === 'contrat' && affaireEnCours()) return false;
+  if(ch.requis && !conditionsRemplies(ch.requis)) return false;
+  if(ch.avant && !ch.avant()) return false;
+  return true;
+}
+
+/* Les chaînes qu'un lieu peut proposer ce tour-ci. */
+function chainesDuLieu(locId){
+  return CHAINES.filter(ch => ch.type === 'contrat'
+    && (!ch.lieux || ch.lieux.includes(locId))
+    && chaineDisponible(ch));
+}
+
+/* Une chaîne rhabillée en offre, pour l'écran du lieu. */
+function chaineEnOffre(ch, locId){
+  const l = LOCATIONS.find(x => x.id === locId);
+  return {
+    id: 'CH_' + ch.id, chaine: ch.id, titre: ch.titre,
+    commanditaire: ch.commanditaire, maisonNoble: ch.maison || null,
+    lieu: l ? l.nom : '', locId, or: ch.or, type: ch.categorie || 'traque',
+    danger: ch.danger || 'dangereux', pitch: ch.pitch, affaire: true,
+  };
+}
+
+/* ============================= OUVRIR ET AVANCER ============================= */
+
+function ouvrirChaine(id, apres){
+  const ch = chaineParId(id);
+  if(!ch || chaineEnCours(id)) return false;
+  heroChaines().actives.push({ id, etape: ch.etapes[0].id, echeance: semaineCourante(), data:{} });
+  return jouerEtapeChaine(id, apres);
+}
+
+/* Joue l'étape due d'une chaîne. Rend true si un événement s'est ouvert. */
+function jouerEtapeChaine(id, apres){
+  if(evenementEnCours()) return false;
+  const a = chaineEnCours(id);
+  const ch = chaineParId(id);
+  if(!a || !ch) return false;
+  const et = etapeParId(ch, a.etape);
+  if(!et){ cloreChaine(id, 'interrompue'); return false; }
+
+  chaineSuite = null; chaineIssue = null;
+  chaineActiveId = id;
+
+  // Une étape dont les conditions ne tiennent plus saute à son repli : un PNJ
+  // mort ne revient pas parler, et la chaîne doit pouvoir s'en remettre.
+  if(et.requis && !conditionsRemplies(et.requis) && et.sinon){
+    a.etape = et.sinon;
+    return jouerEtapeChaine(id, apres);
+  }
+
+  filerApres(() => { conclureEtape(id); if(apres) apres(); });
+  openWrittenEvent(et.ev, LOCATIONS.find(l => l.id === hero.position) || null);
+  return true;
+}
+let chaineActiveId = null;
+
+/* Appelé à la fermeture de l'événement d'étape : on lit où la scène a dit
+ * d'aller, et on date la suite. */
+function conclureEtape(id){
+  const a = chaineEnCours(id);
+  const ch = chaineParId(id);
+  if(!a || !ch) return;
+
+  if(chaineIssue){ const i = chaineIssue; chaineIssue = null; chaineSuite = null; cloreChaine(id, i); return; }
+
+  const et = etapeParId(ch, a.etape);
+  const suivante = chaineSuite || (et && et.suite) || etapeApres(ch, a.etape);
+  chaineSuite = null;
+
+  // Les termes se fixent une fois, juste après l'audience, avant tout départ.
+  if(ch.prix && !a.data.prix && suivante){
+    a.etape = suivante;
+    a.echeance = semaineCourante();
+    ouvrirTermesDuPrix(ch, a, () => { programmerEtape(ch, a, suivante); });
+    return;
+  }
+
+  if(!suivante){ cloreChaine(id, (et && et.issue) || 'menee'); return; }
+
+  programmerEtape(ch, a, suivante);
+}
+
+/* Date l'étape suivante. C'est ce délai qui fait qu'une affaire se vit au lieu
+ * de se cliquer : entre deux étapes, on a le temps de voyager, de se battre
+ * ailleurs, de se reposer, et de recevoir de mauvaises nouvelles. */
+function programmerEtape(ch, a, suivante){
+  const cible = etapeParId(ch, suivante);
+  if(!cible){ cloreChaine(ch.id, 'menee'); return; }
+  a.etape = suivante;
+  const d = cible.delai || [2, 5];
+  a.echeance = semaineCourante() + d[0] + Math.floor(Math.random() * (d[1] - d[0] + 1));
+  saveGame(true);
+  if(typeof renderLieu === 'function' && document.getElementById('screen-lieu')) renderLieu();
+}
+
+function etapeApres(ch, id){
+  const i = ch.etapes.findIndex(e => e.id === id);
+  return (i >= 0 && i + 1 < ch.etapes.length) ? ch.etapes[i + 1].id : null;
+}
+
+/* ---- Les termes, avant tout départ ----
+ * Le pack est explicite : « Les termes sont établis avant tout départ et toute
+ * action contractuelle. » On les fixe donc entre l'audience et la mise en
+ * route, jamais après coup. */
+function ouvrirTermesDuPrix(ch, a, apres){
+  const faux = { titre: ch.titre, commanditaire: ch.commanditaire,
+                 maisonNoble: ch.maison, or: ch.or, noble: true };
+  const prix = prixPariaDe(faux);
+  if(!prix){ a.data.prix = 'OR'; apres(); return false; }
+
+  const p = prix.noble_proposee;
+  const box = document.getElementById('eventModalBox');
+  box.innerHTML = `${artEventBanner('tr_prix', 'PARIA')}
+    <span class="event-tag">Les termes</span><h3>Le Prix du Paria</h3>
+    <p class="narrative">La coutume n'a jamais été abrogée, et ${ch.commanditaire} le sait mieux
+      que personne : une maison noble qui emploie un Paria lui doit <b>l'Or et le Sang</b>.
+      Rien ne commence avant que les termes soient dits.</p>
+    ${p ? `<div class="prix-noble"><b>${p.nom}</b> · ${p.rang}, ${p.age} ans<span>${p.note}</span></div>`
+        : `<div class="prix-indispo">${prix.indisponible}</div>`}
+    <div class="prix-choices" id="prixChaine"></div>`;
+
+  const holder = document.getElementById('prixChaine');
+  optionsDuPrix(faux, prix).forEach(o => {
+    const b = document.createElement('button');
+    b.innerHTML = `${o.label}<small>${o.sub}</small><small class="prix-detail">${o.detail}</small>`;
+    b.onclick = () => {
+      if(o.id === 'REFUSER'){ cloreChaine(ch.id, 'refusee'); closeEventModal(); renderLieu(); return; }
+      a.data.prix = o.id === 'NEGOCIER' ? (Math.random() < 0.5 ? 'OR_ET_NOBLE_CONSENTANTE' : 'OR') : o.id;
+      a.data.prixDonnees = prix;
+      if(o.id === 'NOBLE_CONSENTANTE' || o.id === 'OR_ET_NOBLE_CONSENTANTE'){
+        if(!hasFlag('prix_noble_accepte')) heroFlags().push('prix_noble_accepte');
+      }
+      closeEventModal();
+      apres();
+    };
+    holder.appendChild(b);
+  });
+  document.getElementById('eventModal').style.display = 'flex';
+  return true;
+}
+
+/* Ce que l'affaire rapporte, une fois et une seule, aux termes convenus. */
+function payerLaChaine(ch, data){
+  if(!ch.or) return '';
+  const mult = data && data.prix ? multiplicateurDuPrix(data.prix) : 1;
+  const or = Math.round(ch.or * mult);
+  hero.or += or;
+  gainPointsSang(6);
+  ajusterRenom(5);
+  let msg = `<b>${or} pièces d'or</b> changent de main.`;
+  if(data && data.prix && data.prixDonnees)
+    msg += appliquerPrix({ titre: ch.titre, commanditaire: ch.commanditaire, or: ch.or },
+                         data.prix, data.prixDonnees);
+  return msg;
+}
+
+function cloreChaine(id, issue){
+  const c = heroChaines();
+  const a = chaineEnCours(id);
+  const chp = chaineParId(id);
+  let paiement = '';
+  if(chp && (chp.paye || []).includes(issue)) paiement = payerLaChaine(chp, a && a.data);
+  c.actives = c.actives.filter(a => a.id !== id);
+  if(!c.faites.includes(id)) c.faites.push(id);
+  c.issues[id] = issue;
+  const ch = chaineParId(id);
+  if(ch && ch.fin) { try { ch.fin(issue); } catch(e){ /* une fin ne doit jamais casser le tour */ } }
+  if(ch && hero.chroniques){
+    const d = dateFromSemaines(semaineCourante());
+    const ligne = (ch.issues && ch.issues[issue]) || `${ch.titre} — l'affaire est close.`;
+    hero.chroniques.push({ date:`${d.saison}, An ${d.an}`, texte:'❧ ' + ligne });
+  }
+  saveGame(true);
+  if(paiement){
+    const box = document.getElementById('eventModalBox');
+    box.innerHTML = `${artEventBanner('tr_prix', 'CONTRAT')}
+      <span class="event-tag">Règlement</span><h3>${ch.titre}</h3>
+      <p class="narrative">${paiement}</p>
+      <div style="margin-top:16px;text-align:right;"><button class="primary" id="chPayeBtn">Continuer</button></div>`;
+    document.getElementById('eventModal').style.display = 'flex';
+    document.getElementById('chPayeBtn').onclick = () => {
+      closeEventModal(); renderPersonnage(); showScreen('lieu'); renderLieu();
+    };
+  }
+}
+
+/* ============================= LE TEMPS QUI RATTRAPE ============================= */
+
+/* Les étapes dont l'heure est venue. Appelé en fin de tour. */
+function etapesMures(){
+  return heroChaines().actives.filter(a => a.echeance <= semaineCourante());
+}
+
+/* Rend true si une étape s'est ouverte ; `apres` reprend derrière. */
+function tenterEtapeDeChaine(apres){
+  if(evenementEnCours()) return false;      // un récit est déjà en vol
+  const mures = etapesMures();
+  if(!mures.length) return false;
+  // L'affaire en cours passe avant les chaînes d'arrière-plan : c'est elle
+  // qu'on attend.
+  const a = mures.find(x => { const ch = chaineParId(x.id); return ch && ch.type === 'contrat'; }) || mures[0];
+  return jouerEtapeChaine(a.id, apres);
+}
+
+/* ============================= CE QU'ON EN VOIT ============================= */
+
+/* La ligne d'état d'une affaire en cours, pour l'écran du lieu. */
+function blocAffaireEnCours(){
+  const a = affaireEnCours();
+  if(!a) return '';
+  const ch = chaineParId(a.id);
+  if(!ch) return '';
+  const et = etapeParId(ch, a.etape);
+  const reste = Math.max(0, a.echeance - semaineCourante());
+  const i = ch.etapes.findIndex(e => e.id === a.etape) + 1;
+  return `<div class="affaire-cours">
+    <div class="ac-tete"><span class="ac-titre">${ch.titre}</span>
+      <span class="ac-etape">${i}/${ch.etapes.length}</span></div>
+    <div class="ac-qui">${ch.commanditaire}</div>
+    <p class="ac-attente">${reste > 0
+      ? `${et && et.attente ? et.attente : "Il n'y a plus qu'à attendre."} <b>Environ ${reste} semaine${reste > 1 ? 's' : ''}.</b>`
+      : `<b>La suite vous attend.</b> Terminez le tour.`}</p>
+  </div>`;
+}
+
+/* Ce que l'épilogue et les autres chaînes relisent. */
+function chainesMenees(){ return heroChaines().faites.length; }
+function chaineFinieAinsi(id, issue){ return issueDeChaine(id) === issue; }
 
 </script>
 <script>
@@ -16952,12 +18139,12 @@ function tirerEvenementSuspicion(){
 }
 
 /* Rend true si un événement a été ouvert. `apres` est rappelé à sa fermeture. */
-let suspicionRetour = null;
 function tenterEvenementSuspicion(apres){
+  if(evenementEnCours()) return false;      // un récit est déjà en vol
   if(Math.random() >= chanceEvenementSuspicion()) return false;
   const ev = tirerEvenementSuspicion();
   if(!ev) return false;
-  suspicionRetour = apres || null;
+  filerApres(apres);
   openWrittenEvent(ev, LOCATIONS.find(l => l.id === hero.position) || null);
   return true;
 }
@@ -17229,11 +18416,21 @@ function offresDuTour(){
   const rnd = artSuite(lieu.id + '_' + semaine);
   const liste = [];
 
-  /* 1. Le dossier du lieu d'abord — c'est ce qu'on est venu régler.
+  /* 0. Une affaire écrite passe avant tout le reste : c'est une histoire qui
+   *    se joue sur plusieurs tours, pas une mission qu'on expédie. Une seule à
+   *    la fois — on n'est qu'un homme. */
+  if(typeof chainesDuLieu === 'function'){
+    const dispo = chainesDuLieu(lieu.id);
+    if(dispo.length) liste.push(chaineEnOffre(dispo[Math.floor(rnd() * dispo.length)], lieu.id));
+  }
+
+  /* 1. Le dossier du lieu ensuite — c'est ce qu'on est venu régler.
    *    On en garde deux au plus, pour laisser la place à ce qui vient
    *    d'ailleurs : un homme qui ne bouge jamais n'a pas d'histoire. */
   const ici = affairesDuLieu(lieu.id);
-  ici.slice(0, ici.length >= 3 ? 2 : 3).forEach(a => liste.push({ ...a, locale: true }));
+  const place = 3 - liste.length;
+  ici.slice(0, ici.length >= place ? Math.max(1, place - 1) : place)
+     .forEach(a => liste.push({ ...a, locale: true }));
 
   /* 2. Ce qu'un voisin fait dire jusqu'ici. Une vraie affaire de son dossier :
    *    accepter, c'est prendre la route, et le dossier de là-bas avance. */
@@ -17331,6 +18528,9 @@ function accepterOffre(id){
   const lancer = () => {
     // Une affaire se paie en visibilité avant même d'avoir commencé.
     adjustSuspicion(c.suspicion || 0);
+    // Une affaire écrite est une chaîne : elle s'ouvre sur son audience et
+    // reviendra vous chercher dans quelques semaines.
+    if(c.chaine){ ouvrirChaine(c.chaine); return; }
     openContract(c);
   };
   if(c.ailleurs) voyagerVers(c.ailleurs, lancer);
@@ -17408,7 +18608,7 @@ function renderLieu(){
   /* --- Les trois offres du tour --- */
   const off = document.getElementById('lieuOffres');
   if(off){
-    off.innerHTML = '';
+    off.innerHTML = (typeof blocAffaireEnCours === 'function') ? blocAffaireEnCours() : '';
     const offres = offresDuTour();
     if(!offres.length){
       off.innerHTML = `<p class="offres-vide">Personne ne cherche personne aujourd'hui. Terminez le tour :
@@ -17419,19 +18619,21 @@ function renderLieu(){
       const noble = (typeof commanditaireNoble === 'function') && commanditaireNoble(c);
       const trajet = ailleurs ? semainesDeVoyage(hero.position, c.ailleurs) : 0;
       const div = document.createElement('div');
-      div.className = 'offre' + (c.locale ? ' locale' : '') + (ailleurs ? ' ailleurs' : '');
+      div.className = 'offre' + (c.locale ? ' locale' : '') + (ailleurs ? ' ailleurs' : '')
+                    + (c.affaire ? ' affaire' : '');
       div.innerHTML = `
         <div class="offre-tete">
           <span class="offre-titre">${c.titre}</span>
           <span class="offre-prix${noble ? ' prix-paria' : ''}">${noble ? 'Or et Sang' : c.or + ' or'}</span>
         </div>
-        <div class="offre-qui">${c.commanditaire}${c.entremetteur ? ` · par l'entremise de ${c.entremetteur.toLowerCase()}` : ''}${c.locale ? ' · affaire du lieu' : ' · tableau des mercenaires'}</div>
+        <div class="offre-qui">${c.commanditaire}${c.entremetteur ? ` · par l'entremise de ${c.entremetteur.toLowerCase()}` : ''}${c.affaire ? ' · affaire suivie' : (c.locale ? ' · affaire du lieu' : ' · tableau des mercenaires')}</div>
         <p class="offre-pitch">${c.pitch}</p>
         <div class="offre-pied">
           <span class="offre-tag ${c.danger === 'modéré' ? '' : 'chaud'}">${c.danger}</span>
           <span class="offre-tag">${c.type}</span>
           <span class="offre-tag susp">+${c.suspicion} Suspicion</span>
           ${noble ? `<span class="offre-tag paria">Prix du Paria · ${c.or} or et le consentement</span>` : ''}
+          ${c.affaire ? `<span class="offre-tag chaine">Se joue sur plusieurs tours</span>` : ''}
           ${ailleurs ? `<span class="offre-tag voyage">${ailleurs.nom} · ${trajet} sem. de route</span>`
                      : `<span class="offre-tag ici">sur place</span>`}
         </div>`;
@@ -18085,7 +19287,7 @@ function nouvelleChronique(){
  * reconstruits au chargement (voir CHAMPS_SET).
  */
 
-const SAVE_VERSION = 7;
+const SAVE_VERSION = 8;
 /* Le préfixe est un espace de noms de stockage, pas le numéro de version : il
  * reste figé pour que les parties commencées avant soient relues puis migrées. */
 const SAVE_PREFIX  = 'parias_save_v6_';
@@ -18142,6 +19344,7 @@ function reconstruireHero(brut){
   h.chantier          = h.chantier || [];
   h.offres            = h.offres || { semaine: -1, locId: null, liste: [] };
   h.politique         = h.politique || {};
+  h.chaines           = h.chaines || { actives:[], faites:[], issues:{} };
   h.lignee            = h.lignee || { liaisons: [], enfants: [] };
   if(typeof h.age !== 'number') h.age = AGE_DEPART;
   h.compagnons        = (h.compagnons || []).map(c => COMPANIONS_POOL[c.id] || c);
@@ -18209,6 +19412,11 @@ const MIGRATIONS = {
     enr.hero.offres   = { semaine: -1, locId: null, liste: [] };  // on retire un tableau neuf
     enr.hero.politique = enr.hero.politique || {};
     enr.version = 7;
+    return enr;
+  },
+  7: enr => {           // v7 → v8 : les affaires qui se jouent sur plusieurs tours
+    enr.hero.chaines = enr.hero.chaines || { actives:[], faites:[], issues:{} };
+    enr.version = 8;
     return enr;
   },
 };
@@ -19555,6 +20763,13 @@ function seFaireOublier(){
 }
 
 function endTurnMeta(){
+  // Filet : si un récit a été quitté sans passer par sa scène terminale, il ne
+  // doit pas bloquer indéfiniment ce qui veut s'ouvrir au tour suivant.
+  if(evenementEnCours() && document.getElementById('eventModal').style.display !== 'flex'
+     && !document.getElementById('screen-combat').classList.contains('active')
+     && !document.getElementById('screen-bataille').classList.contains('active')){
+    ecritState = null;
+  }
   const lieu = LOCATIONS.find(l=>l.id===hero.position) || null;
   const resume = advanceTime(2 + Math.floor(Math.random()*5)); // 2 à 6 semaines
   adjustSuspicion(-1); // le temps qui passe aide un peu à se faire oublier
@@ -19575,8 +20790,13 @@ function endTurnMeta(){
   // Un tour ne se termine jamais sur rien : le pli dit ce qui a changé et ce
   // qu'on propose. Un jalon prêt se déclenche en le refermant.
   armerTrameSansOuvrir();
-  // Ce qu'on dit de vous s'invite avant le pli : plus la Suspicion est haute,
-  // plus il arrive quelque chose à cause d'elle.
+  // Ce qui vous rattrape d'abord : l'affaire en cours. Une chaîne dont l'heure
+  // est venue passe avant tout, y compris avant le pli — c'est elle qu'on
+  // attendait en laissant filer les semaines.
+  if(typeof tenterEtapeDeChaine === 'function'
+     && tenterEtapeDeChaine(() => ouvrirPliDuTour(resume))) return;
+  // Puis ce qu'on dit de vous : plus la Suspicion est haute, plus il arrive
+  // quelque chose à cause d'elle.
   if(tenterEvenementSuspicion(() => ouvrirPliDuTour(resume))) return;
   ouvrirPliDuTour(resume);
 }
@@ -19736,8 +20956,10 @@ function renderContractStep(){
       const p = prix.noble_proposee;
       extra.innerHTML = `<h3>Le Prix du Paria</h3>
         <p style="color:var(--parchment-dim);font-size:13.5px;">La coutume n'a jamais été abrogée : une maison noble qui emploie un Paria lui doit
-          <b>l'Or et le Sang</b> — des pièces comptant, et le consentement d'une femme de son rang.
-          ${p.maison} propose ${p.nom}. À Yohan de dire ce qu'il réclame.</p>
+          <b>l'Or et le Sang</b> — des pièces comptant, et le consentement d'une femme de son rang.</p>
+        ${p ? `<div class="prix-noble"><b>${p.nom}</b> · ${p.rang}, ${p.age} ans
+                 <span>${p.note}</span></div>`
+            : `<div class="prix-indispo">${prix.indisponible}</div>`}
         <div class="prix-choices" id="prixChoices"></div>`;
       const opts = optionsDuPrix(c, prix);
       const holder = document.getElementById('prixChoices');

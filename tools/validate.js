@@ -22,6 +22,7 @@ const fichiers = [
   'src/data/events_compagnons.js', 'src/data/events_nemesis.js', 'src/data/events_isolde.js',
   'src/data/reputation.js', 'src/data/epilogue.js',
   'src/data/chantier.js', 'src/data/events_suspicion.js', 'src/data/politique.js',
+  'src/data/maisons.js', 'src/data/chaines.js',
 ];
 
 const ctx = vm.createContext({ console });
@@ -39,7 +40,7 @@ const {
   UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART, REGIONS, ROUTES, LOC_REGION,
   REPUTATION_DEPART, RANGS_REPUTATION, LOC_PEUPLE, REPUTATION_VOIX, SHOPS, BUTIN_PAR_PEUPLE,
   CONTRATS_LOCAUX, CONTRACT_COMPLICATIONS,
-  CHANTIER, EVENTS_SUSPICION, POUVOIRS, EDITS,
+  CHANTIER, EVENTS_SUSPICION, POUVOIRS, EDITS, MAISONS, CHAINES,
   EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_LIGNEE, EPI_ONDE, EPI_LEGS,
 } = vm.runInContext(`({
   BESTIARY_FULL, PORTRAITS, LOCATIONS, EVENTS, CONTRACTS, ITEM_POOL,
@@ -49,7 +50,7 @@ const {
   UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART, REGIONS, ROUTES, LOC_REGION,
   REPUTATION_DEPART, RANGS_REPUTATION, LOC_PEUPLE, REPUTATION_VOIX, SHOPS, BUTIN_PAR_PEUPLE,
   CONTRATS_LOCAUX, CONTRACT_COMPLICATIONS,
-  CHANTIER, EVENTS_SUSPICION, POUVOIRS, EDITS,
+  CHANTIER, EVENTS_SUSPICION, POUVOIRS, EDITS, MAISONS, CHAINES,
   EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_LIGNEE, EPI_ONDE, EPI_LEGS
 })`, ctx);
 
@@ -82,6 +83,9 @@ const tousLesEvenements = [
   ...EVENTS_ISOLDE.map(e => ({ ev:e, cat:'isolde' })),
   ...EVENTS_COMPAGNONS.map(e => ({ ev:e, cat:'compagnon' })),
   ...EVENTS_SUSPICION.map(e => ({ ev:e, cat:'suspicion' })),
+  // Une étape de chaîne est un événement écrit ordinaire : elle passe par les
+  // mêmes contrôles de scènes, de créatures, d'objets et de portraits.
+  ...CHAINES.flatMap(ch => ch.etapes.map(e => ({ ev:e.ev, cat:'chaine' }))),
 ];
 // Certains marqueurs sont posés par le moteur et non par un effet de contenu :
 // on les déclare ici pour que le contrôle des marqueurs orphelins reste utile.
@@ -192,6 +196,9 @@ for(const { ev, cat } of tousLesEvenements){
           err(`${ref} : affinité inconnue ${c.effets.affinite.qui}`);
         noterMarqueurs(c.effets);
       });
+    } else if(sc.suite){
+      // Scène de liaison : un battement de récit qui mène ailleurs sans choix.
+      suivantes.push(sc.suite);
     } else if(!sc.fin){
       warn(`${nom}/${id} : scène sans choix ni combat, et non marquée fin:true`);
     }
@@ -531,6 +538,86 @@ EPI_LEGS.forEach(l => {
   if(!l.effet || !Object.keys(l.effet).length) err(`EPI_LEGS ${l.id} : legs sans effet`);
 });
 console.log(`Épilogue    ${nbVerdicts} verdicts · ${EPI_LEGS.length} legs transmissibles`);
+console.log('');
+
+/* ---- Les affaires écrites en chaînes ---- */
+const chaineIds = new Set();
+CHAINES.forEach(ch => {
+  if(chaineIds.has(ch.id)) err(`CHAINES : identifiant en double « ${ch.id} »`);
+  chaineIds.add(ch.id);
+  if(!ch.etapes || !ch.etapes.length) err(`CHAINE ${ch.id} : aucune étape`);
+  if(!ch.pitch) err(`CHAINE ${ch.id} : pas de pitch — elle ne peut pas s'afficher en offre`);
+  (ch.lieux || []).forEach(l => { if(!locIds.has(l)) err(`CHAINE ${ch.id} : lieu inconnu ${l}`); });
+  if(ch.maison && !MAISONS[ch.maison]) err(`CHAINE ${ch.id} : maison inconnue « ${ch.maison} »`);
+  if(ch.prix && !ch.maison) err(`CHAINE ${ch.id} : réclame le Prix du Paria sans maison noble`);
+
+  const etIds = new Set();
+  ch.etapes.forEach(e => {
+    if(etIds.has(e.id)) err(`CHAINE ${ch.id} : étape en double « ${e.id} »`);
+    etIds.add(e.id);
+    if(e.delai && (e.delai[0] > e.delai[1] || e.delai[0] < 0))
+      err(`CHAINE ${ch.id}/${e.id} : délai incohérent`);
+  });
+  // Toute étape nommée par une autre doit exister, et toute étape doit être
+  // atteignable depuis la première — sinon on écrit dans le vide.
+  const atteintes = new Set([ch.etapes[0].id]);
+  const nomme = [];
+  ch.etapes.forEach(e => {
+    if(e.suite) nomme.push([e.id, e.suite]);
+    if(e.sinon) nomme.push([e.id, e.sinon]);
+    Object.values(e.ev.scenes || {}).forEach(sc => {
+      const eff = [sc.effets, ...(sc.choix || []).map(c => c.effets)].filter(Boolean);
+      eff.forEach(f => {
+        if(f.etape) nomme.push([e.id, f.etape]);
+        if(f.issue && !(ch.issues || {})[f.issue])
+          err(`CHAINE ${ch.id}/${e.id} : issue « ${f.issue} » sans ligne de chronique`);
+      });
+    });
+  });
+  nomme.forEach(([de, vers]) => {
+    if(!etIds.has(vers)) err(`CHAINE ${ch.id}/${de} : renvoie vers l'étape inconnue « ${vers} »`);
+    else atteintes.add(vers);
+  });
+  // L'enchaînement par défaut relie chaque étape à la suivante, sauf si la
+  // précédente redirige toujours ailleurs.
+  ch.etapes.forEach((e, i) => {
+    const redirige = Object.values(e.ev.scenes || {}).some(sc =>
+      (sc.effets && (sc.effets.etape || sc.effets.issue))
+      || (sc.choix || []).some(c => c.effets && (c.effets.etape || c.effets.issue)));
+    if(!redirige && !e.suite && i + 1 < ch.etapes.length) atteintes.add(ch.etapes[i + 1].id);
+  });
+  ch.etapes.forEach(e => {
+    if(!atteintes.has(e.id)) warn(`CHAINE ${ch.id} : étape inatteignable → ${e.id}`);
+  });
+  // Une chaîne payée doit pouvoir l'être.
+  (ch.paye || []).forEach(i => {
+    if(!(ch.issues || {})[i]) err(`CHAINE ${ch.id} : l'issue payée « ${i} » n'existe pas`);
+  });
+  if(ch.or && !(ch.paye || []).length) warn(`CHAINE ${ch.id} : de l'or annoncé, aucune issue qui paie`);
+});
+
+/* ---- Les maisons nobles et le Prix ---- */
+let nbNobles = 0, maisonsVides = 0;
+Object.entries(MAISONS).forEach(([nom, m]) => {
+  if(!Array.isArray(m.nobles)) { err(`MAISONS ${nom} : pas de liste de nobles`); return; }
+  if(!m.nobles.length){ maisonsVides++; return; }
+  m.nobles.forEach(n => {
+    nbNobles++;
+    if(!n.nom || !n.rang || !n.note) err(`MAISONS ${nom} : une noble sans nom, rang ou note`);
+    if(!(n.age >= 18)) err(`MAISONS ${nom}/${n.nom} : le Prix ne peut engager qu'une adulte`);
+    if(!n.accord) err(`MAISONS ${nom}/${n.nom} : aucune phrase de consentement`);
+    const exigeante = n.exige && Object.keys(n.exige).length;
+    if(exigeante && !n.refus) err(`MAISONS ${nom}/${n.nom} : elle peut refuser sans dire pourquoi`);
+  });
+});
+if(!maisonsVides) warn("MAISONS : aucune maison sans candidate — le Prix n'est jamais indisponible");
+// Toute maison qui commandite au registre doit avoir un rôle écrit, sinon la
+// moitié « Sang » du Prix disparaît sans que personne s'en aperçoive.
+[...new Set(CONTRACTS.map(c => c.commanditaire))]
+  .filter(q => /^Maison /.test(q))
+  .forEach(q => { if(!MAISONS[q]) err(`MAISONS : « ${q} » commandite au registre sans avoir de rôle écrit`); });
+console.log(`Chaînes     ${CHAINES.length} affaires · ${CHAINES.reduce((s,c)=>s+c.etapes.length,0)} étapes`);
+console.log(`Maisons     ${Object.keys(MAISONS).length} maisons · ${nbNobles} nobles adultes · ${maisonsVides} sans candidate`);
 console.log('');
 
 /* ---- Le bestiaire et les rencontres ---- */

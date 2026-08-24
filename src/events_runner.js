@@ -10,7 +10,13 @@
 
 /* ============================= ÉVÉNEMENTS ÉCRITS ============================= */
 
-let ecritState = null;   // { ev, lieu, retourEcran, dernierJet }
+let ecritState = null;   // { ev, lieu, retourEcran, dernierJet, sceneId }
+
+/* Un seul récit écrit peut être en vol à la fois : ils partagent ecritState, et
+ * deux événements ouverts en même temps se marchent dessus — au retour d'un
+ * combat, on rendrait la scène suivante du mauvais récit. Ce qui veut ouvrir
+ * un événement demande d'abord si la place est libre. */
+function evenementEnCours(){ return !!ecritState; }
 
 function heroFlags(){ if(!hero.flags) hero.flags = []; return hero.flags; }
 function heroVus(){ if(!hero.evenementsVus) hero.evenementsVus = []; return hero.evenementsVus; }
@@ -175,7 +181,22 @@ function applyEffets(e){
   }
   if(e.flag && !hasFlag(e.flag)) heroFlags().push(e.flag);
   (e.flags || []).forEach(f => { if(!hasFlag(f)) heroFlags().push(f); });
+  // Une scène appartenant à une chaîne peut dire où va la suite, ou refermer
+  // la chaîne sur une issue. C'est ce qui remplace les branches en dur.
+  if(e.etape) chaineSuite = e.etape;
+  if(e.issue) chaineIssue = e.issue;
   return tags;
+}
+
+/* ---- Ce qui attend derrière l'événement en cours ----
+ * Plusieurs choses peuvent vouloir la main après une scène terminale : l'étape
+ * suivante d'une chaîne, un événement de Suspicion qui s'est intercalé, le pli
+ * de fin de tour. Une file, plutôt qu'une variable que chacun écrase. */
+let fileApresEvenement = [];
+function filerApres(fn){ if(typeof fn === 'function') fileApresEvenement.push(fn); }
+function reprendreApresEvenement(){
+  const suite = fileApresEvenement.shift();
+  if(suite) suite();
 }
 
 const STAT_NOMS = { agi:"Agilité", precision:"Précision", vol:"Volonté" };
@@ -183,7 +204,12 @@ const STAT_NOMS = { agi:"Agilité", precision:"Précision", vol:"Volonté" };
 function renderScene(sceneId){
   const { ev, lieu } = ecritState;
   const sc = ev.scenes[sceneId];
-  if(!sc){ console.warn('Scène introuvable :', ev.id, sceneId); closeEventModal(); return; }
+  if(!sc){
+    console.warn('Scène introuvable :', ev.id, sceneId);
+    ecritState = null; closeEventModal(); showScreen('lieu');
+    reprendreApresEvenement();
+    return;
+  }
   ecritState.sceneId = sceneId;
 
   // Une scène de combat peut être atteinte au retour de l'écran d'affrontement
@@ -211,7 +237,9 @@ function renderScene(sceneId){
         <div style="margin-top:16px;text-align:right;"><button class="primary" id="scRetourBtn">Revenir</button></div>`;
       box.innerHTML = html;
       document.getElementById('eventModal').style.display='flex';
-      document.getElementById('scRetourBtn').onclick = closeEventModal;
+      document.getElementById('scRetourBtn').onclick = () => {
+        ecritState = null; closeEventModal(); reprendreApresEvenement();
+      };
       return;
     }
     html += `<div style="margin-top:16px;text-align:right;"><button class="primary" id="scBatailleBtn">Prendre le commandement</button></div>`;
@@ -220,7 +248,8 @@ function renderScene(sceneId){
     document.getElementById('scBatailleBtn').onclick = () => {
       closeEventModal();
       const suiteV = sc.bataille.victoire, suiteD = sc.bataille.defaite;
-      startBattle(def, (gagnee) => renderScene(gagnee ? suiteV : suiteD));
+      const etat = ecritState;
+      startBattle(def, (gagnee) => { ecritState = etat; renderScene(gagnee ? suiteV : suiteD); });
     };
     return;
   }
@@ -233,15 +262,31 @@ function renderScene(sceneId){
     document.getElementById('scCombatBtn').onclick = () => {
       closeEventModal();
       const suiteV = sc.combat.victoire, suiteD = sc.combat.defaite;
+      // On capture le récit en cours : si autre chose s'est ouvert pendant le
+      // combat, c'est bien à celui-ci qu'on doit revenir.
+      const etat = ecritState;
       combatReturnTo = () => {
+        ecritState = etat;
         if(lastCombatVictory && suiteV) renderScene(suiteV);
         else if(!lastCombatVictory && suiteD) renderScene(suiteD);
-        else { closeEventModal(); showScreen(ecritState.retourEcran); }
+        else { ecritState = null; closeEventModal(); showScreen(etat.retourEcran); }
       };
       // Une scène de combat définit déjà ce qui arrive en cas de défaite : on
       // désactive la mort permanente, sauf si l'événement la réclame (mortel:true).
       startCombat(sc.combat.groupe, undefined, { sansMort: !sc.combat.mortel });
     };
+    return;
+  }
+
+  // --- Scène de liaison : un simple temps, puis la suite ---
+  // Une scène peut porter `suite` sans offrir de choix : c'est un battement de
+  // récit (on descend, on marche, on arrive) qui mène à la scène suivante sans
+  // refermer l'événement.
+  if((!sc.choix || !sc.choix.length) && sc.suite){
+    html += `<div style="margin-top:18px;text-align:right;"><button class="primary" id="scSuiteBtn">Continuer</button></div>`;
+    box.innerHTML = html;
+    document.getElementById('eventModal').style.display='flex';
+    document.getElementById('scSuiteBtn').onclick = () => renderScene(sc.suite);
     return;
   }
 
@@ -251,10 +296,12 @@ function renderScene(sceneId){
     box.innerHTML = html;
     document.getElementById('eventModal').style.display='flex';
     document.getElementById('scFinBtn').onclick = () => {
+      ecritState = null;              // le récit est fini : la place est libre
       renderPersonnage(); renderQuete(); closeEventModal(); saveGame(true);
-      // Un événement de Suspicion s'intercale avant autre chose (le pli du
-      // tour, une arrivée) : on rend la main à ce qui attendait.
-      if(suspicionRetour){ const suite = suspicionRetour; suspicionRetour = null; suite(); }
+      // Un événement peut s'intercaler devant autre chose — une étape de
+      // chaîne, un événement de Suspicion, le pli du tour. On rend la main à
+      // ce qui attendait, dans l'ordre où ça s'est mis en file.
+      reprendreApresEvenement();
     };
     return;
   }

@@ -1,0 +1,19 @@
+{
+  "Alycia de Callensbourg": {
+    "goals": [
+      "protéger les derniers Parias",
+      "identifier leurs ennemis",
+      "préserver sa liberté"
+    ],
+    "tone": "séductrice, manipulatrice, puissante; capable d'aimer sans cesser d'être dangereuse"
+  },
+  "Alarielle": {
+    "goals": [
+      "protéger sa famille",
+      "réparer la faute historique elfique",
+      "éviter une nouvelle catastrophe magique",
+      "aider les Parias"
+    ],
+    "tone": "princesse elfique convoitée; empathique mais tenue par son peuple et ses devoirs"
+  }
+}

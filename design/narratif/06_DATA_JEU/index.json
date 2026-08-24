@@ -1,0 +1,169 @@
+{
+  "version": "3.0",
+  "events": [
+    {
+      "id": "EVT_001",
+      "title": "Le prix du silence",
+      "file": "02_EVENEMENTS/01_Le_prix_du_silence.md"
+    },
+    {
+      "id": "EVT_002",
+      "title": "Les enfants du fossé",
+      "file": "02_EVENEMENTS/02_Les_enfants_du_fossé.md"
+    },
+    {
+      "id": "EVT_003",
+      "title": "Une dent dans la bière",
+      "file": "02_EVENEMENTS/03_Une_dent_dans_la_bière.md"
+    },
+    {
+      "id": "EVT_004",
+      "title": "Le chevalier du pont",
+      "file": "02_EVENEMENTS/04_Le_chevalier_du_pont.md"
+    },
+    {
+      "id": "EVT_005",
+      "title": "La cloche sous terre",
+      "file": "02_EVENEMENTS/05_La_cloche_sous_terre.md"
+    },
+    {
+      "id": "EVT_006",
+      "title": "Le ciel a des griffes",
+      "file": "02_EVENEMENTS/06_Le_ciel_a_des_griffes.md"
+    },
+    {
+      "id": "EVT_007",
+      "title": "Les chaînes neuves",
+      "file": "02_EVENEMENTS/07_Les_chaînes_neuves.md"
+    },
+    {
+      "id": "EVT_008",
+      "title": "Le banquet des couteaux",
+      "file": "02_EVENEMENTS/08_Le_banquet_des_couteaux.md"
+    },
+    {
+      "id": "EVT_009",
+      "title": "La bannière dans la grange",
+      "file": "02_EVENEMENTS/09_La_bannière_dans_la_grange.md"
+    },
+    {
+      "id": "EVT_010",
+      "title": "La harde au crépuscule",
+      "file": "02_EVENEMENTS/10_La_harde_au_crépuscule.md"
+    }
+  ],
+  "contracts": [
+    {
+      "id": "CONTRACT_01",
+      "title": "Le Dragon de Valcroix",
+      "house": "Maison de Valcroix",
+      "gold": 1850,
+      "stages": [
+        "Audience et vérification des pertes",
+        "Négociation du Prix du Paria",
+        "Enquête dans les villages brûlés",
+        "Ascension vers le nid",
+        "Découverte d'une raison cachée aux attaques",
+        "Combat contre créatures secondaires",
+        "Choix : poursuivre le dragon ou retourner confronter le commanditaire",
+        "Combat/BATAILLE possible contre le dragon",
+        "Retour et règlement du contrat"
+      ]
+    },
+    {
+      "id": "CONTRACT_02",
+      "title": "Les Mille Gueules",
+      "house": "Maison d'Arquenay",
+      "gold": 1100,
+      "stages": [
+        "Audience",
+        "Prix du Paria",
+        "Interroger les survivants",
+        "Descente dans la mine",
+        "Séparation possible du groupe",
+        "Découverte de la colonie",
+        "Combat",
+        "Décision concernant la mine",
+        "Retour"
+      ]
+    },
+    {
+      "id": "CONTRACT_03",
+      "title": "La Guerre de Rochebrune",
+      "house": "Maison Rochebrune",
+      "gold": 2600,
+      "stages": [
+        "Audience politique",
+        "Prix du Paria",
+        "Choix d'accepter ou non la version du commanditaire",
+        "Rejoindre l'armée",
+        "Conseil de guerre",
+        "Escarmouche",
+        "BATAILLE rangée",
+        "Sort du cousin vaincu",
+        "Retour et conséquences dynastiques"
+      ]
+    },
+    {
+      "id": "CONTRACT_04",
+      "title": "La Fille de Sombreval",
+      "house": "Maison de Sombreval",
+      "gold": 900,
+      "stages": [
+        "Audience",
+        "Prix du Paria",
+        "Inspection du cheval",
+        "Marais",
+        "Découverte des gardes",
+        "Rencontre avec une faction tierce",
+        "Choix de négociation ou combat",
+        "Retrouver la disparue",
+        "Retour où sa version peut contredire celle de son père"
+      ]
+    },
+    {
+      "id": "CONTRACT_05",
+      "title": "La Gorge Verte",
+      "house": "Clan allié de Kar-Durak",
+      "gold": 2200,
+      "stages": [
+        "Audience naine",
+        "Conditions de paiement adaptées au commanditaire",
+        "Reconnaissance",
+        "Capture possible d'un éclaireur Peau-Verte",
+        "Conseil militaire",
+        "Choix du terrain",
+        "BATAILLE",
+        "Poursuite ou consolidation",
+        "Conséquences sur Kar-Durak"
+      ]
+    },
+    {
+      "id": "CONTRACT_06",
+      "title": "Le Wyrm aveugle",
+      "house": "Prince de Mont-Draken",
+      "gold": 3000,
+      "stages": [
+        "Audience avec Charles",
+        "Négociation",
+        "Exploration souterraine",
+        "Découverte d'anciennes galeries",
+        "Premier contact",
+        "Retour possible pour demander des troupes",
+        "Combat ou BATAILLE selon préparation",
+        "Sort du Wyrm",
+        "Réaction de Charles"
+      ]
+    }
+  ],
+  "systems": [
+    "suspicion",
+    "persistent_memory",
+    "combat_hook",
+    "battle_hook",
+    "karlsberg_restoration"
+  ],
+  "spoiler_files": [
+    "05_GRANDE_HISTOIRE/CAMPAGNE_YOHAN_SPOILERS.md"
+  ]
+}

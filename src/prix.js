@@ -34,28 +34,58 @@ function commanditaireNoble(c){
   return MARQUES_NOBLES.some(r => r.test(q));
 }
 
-/* ---- Quelle femme la maison propose ---- */
-const NOBLES_PROPOSEES = [
-  "Lady Éléonore", "Lady Isabeau", "Lady Adélaïde", "Lady Mathilde", "Lady Aliénor",
-  "Lady Constance", "Lady Marguerite", "Lady Héloïse", "Lady Blanche", "Lady Célestine",
-  "Lady Agnès", "Lady Philippa", "Lady Ysabeau", "Lady Aveline", "Lady Béatrice",
-  "Lady Rosamonde", "Lady Mélisende", "Lady Clarisse", "Lady Diane", "Lady Ophélie",
-];
+/* ---- Qui, dans la maison, peut consentir ----
+ * Règle du pack narratif : une noble **adulte, réelle, de cette maison**, qui
+ * consent explicitement. Faute de quoi cette moitié du Prix n'existe pas.
+ *
+ * Rend { candidate, refus } : `candidate` si quelqu'un accepte, sinon `refus`
+ * porte la raison — celle de la personne qui a dit non, ou le fait que la
+ * maison n'a personne d'adulte à proposer. */
+const AGE_ADULTE = 18;
 
-/* Le Prix d'une affaire : celui qu'elle déclare, ou celui que sa maison doit de
- * toute façon. Déterministe : la même affaire propose toujours la même femme. */
+function nobleRefuse(n){
+  const e = n.exige || {};
+  if(e.renomMin !== undefined && renomActuel() < e.renomMin) return true;
+  if(e.suspicionMax !== undefined && (hero.suspicion || 0) > e.suspicionMax) return true;
+  if(e.flag && !hasFlag(e.flag)) return true;
+  for(const [p, v] of Object.entries(e.reputationMin || {}))
+    if(reputationDe(p) < v) return true;
+  return false;
+}
+
+function dejaLiee(nom){
+  return ((hero.lignee && hero.lignee.liaisons) || []).some(l => l.nom === nom);
+}
+
+function candidateDeLaMaison(nomMaison){
+  const m = maisonDe(nomMaison);
+  if(!m) return { refus:"Cette maison n'a personne dont le nom figure aux registres : elle paiera en or." };
+  const adultes = (m.nobles || []).filter(n => n.age >= AGE_ADULTE && !dejaLiee(n.nom));
+  if(!adultes.length)
+    return { refus:`${nomMaison} n'a plus aucune femme adulte à engager. La coutume ne s'applique pas faute de personne pour la porter.` };
+  const consentantes = adultes.filter(n => !nobleRefuse(n));
+  if(consentantes.length) return { candidate: consentantes[0], maison: nomMaison };
+  return { refus: adultes[0].refus || "Aucune n'y consent, et la coutume ne se prend pas de force." };
+}
+
+/* Le Prix d'une affaire : celui que sa maison doit, et la personne qui accepte
+ * — ou la raison pour laquelle personne n'accepte. */
 function prixPariaDe(c){
   if(!commanditaireNoble(c)) return null;
-  if(c.prix_paria && c.prix_paria.noble_proposee) return c.prix_paria;
-  const h = artHash((c.origine || c.id || c.titre || '') + '|' + (c.commanditaire || ''));
+  const nomMaison = c.maisonNoble || c.commanditaire;
+  const r = candidateDeLaMaison(nomMaison);
   return {
     negocie_avant_depart: true,
-    noble_proposee: {
-      nom: NOBLES_PROPOSEES[h % NOBLES_PROPOSEES.length],
-      maison: c.maisonNoble || c.commanditaire,
+    maison: nomMaison,
+    indisponible: r.refus || null,
+    noble_proposee: r.candidate ? {
+      nom: r.candidate.nom, maison: nomMaison, age: r.candidate.age,
+      rang: r.candidate.rang, note: r.candidate.note, accord: r.candidate.accord,
       adulte: true, consentement_requis: true,
-    },
-    choix: ["OR", "NOBLE_CONSENTANTE", "OR_ET_NOBLE_CONSENTANTE", "NEGOCIER", "REFUSER"],
+    } : null,
+    choix: r.candidate
+      ? ["OR", "NOBLE_CONSENTANTE", "OR_ET_NOBLE_CONSENTANTE", "NEGOCIER", "REFUSER"]
+      : ["OR", "NEGOCIER", "REFUSER"],
   };
 }
 
@@ -87,10 +117,12 @@ const TERMES_DU_PRIX = {
 
 function optionsDuPrix(c, prix){
   const p = prix.noble_proposee;
-  const opts = Object.entries(TERMES_DU_PRIX).map(([id, t]) => ({
-    id, label: id === 'NOBLE_CONSENTANTE' ? `Réclamer ${p.nom}` : t.label,
-    sub: t.sub(c), detail: t.detail,
-  }));
+  const opts = Object.entries(TERMES_DU_PRIX)
+    .filter(([id]) => p || id === 'OR')      // sans personne pour consentir, il ne reste que l'or
+    .map(([id, t]) => ({
+      id, label: id === 'NOBLE_CONSENTANTE' ? `Réclamer ${p.nom}` : t.label,
+      sub: t.sub(c), detail: t.detail,
+    }));
   opts.push({ id:"NEGOCIER", label:"Négocier les termes", sub:"Issue incertaine", detail:"On peut toujours essayer d'obtenir mieux. On obtient parfois moins." });
   opts.push({ id:"REFUSER", label:"Refuser l'affaire", sub:"Met fin à la mission", detail:"Une maison qu'on refuse s'en souvient." });
   return opts;
@@ -114,10 +146,11 @@ function appliquerPrix(c, choix, prix){
     return ` La maison paie en or, sans un mot de plus. On n'a pas eu à parler du reste, et chacun préfère qu'il en soit ainsi.`;
   }
   const p = prix.noble_proposee;
+  if(!p) return ` La maison n'avait personne à engager : tout s'est réglé en or.`;
   const liaison = nouerLiaison(p.nom, p.maison || c.commanditaire, c.titre);
   return liaison
     ? ` <b>${p.nom}</b> consent devant témoins, comme la coutume l'exige — et comme sa maison espérait n'avoir jamais à le faire.
-       ${p.maison || c.commanditaire} soutient désormais celui à qui elle a donné l'Or et le Sang, et le temps dira le reste.`
+       ${p.accord ? `<i>${p.accord}</i> ` : ''}${p.maison || c.commanditaire} soutient désormais celui à qui elle a donné l'Or et le Sang.`
     : ` La femme que la maison propose est déjà liée à Yohan. On règle en or, et l'on n'en reparle pas.`;
 }
 

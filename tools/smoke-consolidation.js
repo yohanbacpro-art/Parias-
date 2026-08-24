@@ -127,14 +127,30 @@ const verifie = (n, ok, d) => { if(ok) console.log('  ✔', n);
 
   /* ---------- Le Prix du Paria ---------- */
   console.log("\nUne maison noble doit l'Or et le Sang");
-  const prixCouverture = await page.evaluate(() => ({
-    contrats: CONTRACTS.length,
-    avecPrix: CONTRACTS.filter(c => !!prixPariaDe(c)).length,
-    localesNobles: Object.values(CONTRATS_LOCAUX_EXPANSES).flat().filter(c => commanditaireNoble(c)).length,
-    peuple: commanditaireNoble({ commanditaire:"Une veuve du quartier bas" }),
-    stable: prixPariaDe(CONTRACTS[7]).noble_proposee.nom === prixPariaDe(CONTRACTS[7]).noble_proposee.nom,
-  }));
+  const prixCouverture = await page.evaluate(() => {
+    hero.renom = 60; hero.suspicion = 0; hero.reputations = { ...REPUTATION_DEPART };
+    hero.lignee = { liaisons:[], enfants:[] };
+    const prix = CONTRACTS.map(c => prixPariaDe(c));
+    return {
+      contrats: CONTRACTS.length,
+      avecPrix: prix.filter(Boolean).length,
+      avecCandidate: prix.filter(p => p && p.noble_proposee).length,
+      toutesAdultes: prix.every(p => !p || !p.noble_proposee || p.noble_proposee.age >= 18),
+      maisonsInconnues: [...new Set(CONTRACTS.map(c => c.commanditaire))].filter(q => !MAISONS[q]),
+      localesNobles: Object.values(CONTRATS_LOCAUX_EXPANSES).flat().filter(c => commanditaireNoble(c)).length,
+      peuple: commanditaireNoble({ commanditaire:"Une veuve du quartier bas" }),
+      stable: prixPariaDe(CONTRACTS[7]).noble_proposee.nom === prixPariaDe(CONTRACTS[7]).noble_proposee.nom,
+    };
+  });
   verifie('toute maison noble doit le Prix', prixCouverture.avecPrix === prixCouverture.contrats, prixCouverture);
+  verifie('et chacune a un rôle écrit', prixCouverture.maisonsInconnues.length === 0, prixCouverture.maisonsInconnues);
+  verifie("le Sang n'engage que des adultes réelles", prixCouverture.toutesAdultes, prixCouverture);
+  // La règle a des dents : à réputation de départ, certaines maisons n'ont
+  // personne qui consente, et le Prix s'y limite alors à l'or.
+  verifie("la plupart des maisons ont quelqu'un à engager",
+    prixCouverture.avecCandidate >= prixCouverture.contrats * 0.7, prixCouverture);
+  verifie("mais pas toutes — le refus existe vraiment",
+    prixCouverture.avecCandidate < prixCouverture.contrats, prixCouverture);
   verifie("un commanditaire du commun paie en or", prixCouverture.peuple === false, prixCouverture);
   verifie('des affaires locales le portent aussi', prixCouverture.localesNobles >= 1, prixCouverture);
   verifie('la même affaire propose toujours la même femme', prixCouverture.stable);

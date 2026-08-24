@@ -1,0 +1,429 @@
+{
+  "version": "4.0",
+  "new_content": {
+    "events": [
+      {
+        "id": "EVT_V4_011",
+        "title": "La chambre du fond",
+        "category": "VIE_COURANTE",
+        "file": "02_EVENEMENTS/VIE_COURANTE/011_La_chambre_du_fond.md"
+      },
+      {
+        "id": "EVT_V4_012",
+        "title": "Les dés pipés",
+        "category": "VIE_COURANTE",
+        "file": "02_EVENEMENTS/VIE_COURANTE/012_Les_d_s_pip_s.md"
+      },
+      {
+        "id": "EVT_V4_013",
+        "title": "Le pain noir",
+        "category": "VIE_COURANTE",
+        "file": "02_EVENEMENTS/VIE_COURANTE/013_Le_pain_noir.md"
+      },
+      {
+        "id": "EVT_V4_014",
+        "title": "Le chien du pendu",
+        "category": "VIE_COURANTE",
+        "file": "02_EVENEMENTS/VIE_COURANTE/014_Le_chien_du_pendu.md"
+      },
+      {
+        "id": "EVT_V4_015",
+        "title": "Une place au feu",
+        "category": "VIE_COURANTE",
+        "file": "02_EVENEMENTS/VIE_COURANTE/015_Une_place_au_feu.md"
+      },
+      {
+        "id": "EVT_V4_016",
+        "title": "Le percepteur",
+        "category": "VIE_COURANTE",
+        "file": "02_EVENEMENTS/VIE_COURANTE/016_Le_percepteur.md"
+      },
+      {
+        "id": "EVT_V4_017",
+        "title": "La fille au couteau",
+        "category": "VIE_COURANTE",
+        "file": "02_EVENEMENTS/VIE_COURANTE/017_La_fille_au_couteau.md"
+      },
+      {
+        "id": "EVT_V4_018",
+        "title": "Le fossoyeur",
+        "category": "VIE_COURANTE",
+        "file": "02_EVENEMENTS/VIE_COURANTE/018_Le_fossoyeur.md"
+      },
+      {
+        "id": "EVT_V4_019",
+        "title": "La dernière bouteille",
+        "category": "VIE_COURANTE",
+        "file": "02_EVENEMENTS/VIE_COURANTE/019_La_derni_re_bouteille.md"
+      },
+      {
+        "id": "EVT_V4_020",
+        "title": "Le médecin de guerre",
+        "category": "VIE_COURANTE",
+        "file": "02_EVENEMENTS/VIE_COURANTE/020_Le_m_decin_de_guerre.md"
+      },
+      {
+        "id": "EVT_V4_021",
+        "title": "La borne brisée",
+        "category": "ROUTES",
+        "file": "02_EVENEMENTS/ROUTES/021_La_borne_bris_e.md"
+      },
+      {
+        "id": "EVT_V4_022",
+        "title": "Le convoi muet",
+        "category": "ROUTES",
+        "file": "02_EVENEMENTS/ROUTES/022_Le_convoi_muet.md"
+      },
+      {
+        "id": "EVT_V4_023",
+        "title": "Le péage des morts",
+        "category": "ROUTES",
+        "file": "02_EVENEMENTS/ROUTES/023_Le_p_age_des_morts.md"
+      },
+      {
+        "id": "EVT_V4_024",
+        "title": "La neige rouge",
+        "category": "ROUTES",
+        "file": "02_EVENEMENTS/ROUTES/024_La_neige_rouge.md"
+      },
+      {
+        "id": "EVT_V4_025",
+        "title": "Le pont brûle",
+        "category": "ROUTES",
+        "file": "02_EVENEMENTS/ROUTES/025_Le_pont_br_le.md"
+      },
+      {
+        "id": "EVT_V4_026",
+        "title": "Le messager sans langue",
+        "category": "ROUTES",
+        "file": "02_EVENEMENTS/ROUTES/026_Le_messager_sans_langue.md"
+      },
+      {
+        "id": "EVT_V4_027",
+        "title": "Le loup blanc",
+        "category": "ROUTES",
+        "file": "02_EVENEMENTS/ROUTES/027_Le_loup_blanc.md"
+      },
+      {
+        "id": "EVT_V4_028",
+        "title": "Les pierres chaudes",
+        "category": "ROUTES",
+        "file": "02_EVENEMENTS/ROUTES/028_Les_pierres_chaudes.md"
+      },
+      {
+        "id": "EVT_V4_029",
+        "title": "Le camp abandonné",
+        "category": "ROUTES",
+        "file": "02_EVENEMENTS/ROUTES/029_Le_camp_abandonn.md"
+      },
+      {
+        "id": "EVT_V4_030",
+        "title": "Les lanternes du marais",
+        "category": "ROUTES",
+        "file": "02_EVENEMENTS/ROUTES/030_Les_lanternes_du_marais.md"
+      },
+      {
+        "id": "EVT_V4_031",
+        "title": "Le fils inutile",
+        "category": "NOBLESSE",
+        "file": "02_EVENEMENTS/NOBLESSE/031_Le_fils_inutile.md"
+      },
+      {
+        "id": "EVT_V4_032",
+        "title": "La veuve et le sceau",
+        "category": "NOBLESSE",
+        "file": "02_EVENEMENTS/NOBLESSE/032_La_veuve_et_le_sceau.md"
+      },
+      {
+        "id": "EVT_V4_033",
+        "title": "Le mariage des loups",
+        "category": "NOBLESSE",
+        "file": "02_EVENEMENTS/NOBLESSE/033_Le_mariage_des_loups.md"
+      },
+      {
+        "id": "EVT_V4_034",
+        "title": "La chasse du prince",
+        "category": "NOBLESSE",
+        "file": "02_EVENEMENTS/NOBLESSE/034_La_chasse_du_prince.md"
+      },
+      {
+        "id": "EVT_V4_035",
+        "title": "Le bâtard reconnu",
+        "category": "NOBLESSE",
+        "file": "02_EVENEMENTS/NOBLESSE/035_Le_b_tard_reconnu.md"
+      },
+      {
+        "id": "EVT_V4_036",
+        "title": "Le portrait brûlé",
+        "category": "NOBLESSE",
+        "file": "02_EVENEMENTS/NOBLESSE/036_Le_portrait_br_l.md"
+      },
+      {
+        "id": "EVT_V4_037",
+        "title": "La table des prétendants",
+        "category": "NOBLESSE",
+        "file": "02_EVENEMENTS/NOBLESSE/037_La_table_des_pr_tendants.md"
+      },
+      {
+        "id": "EVT_V4_038",
+        "title": "La rançon",
+        "category": "NOBLESSE",
+        "file": "02_EVENEMENTS/NOBLESSE/038_La_ran_on.md"
+      },
+      {
+        "id": "EVT_V4_039",
+        "title": "Le dernier témoin",
+        "category": "PARIAS",
+        "file": "02_EVENEMENTS/PARIAS/039_Le_dernier_t_moin.md"
+      },
+      {
+        "id": "EVT_V4_040",
+        "title": "Une femme nommée Alycia",
+        "category": "PARIAS",
+        "file": "02_EVENEMENTS/PARIAS/040_Une_femme_nomm_e_Alycia.md"
+      },
+      {
+        "id": "EVT_V4_041",
+        "title": "Les cendres du sang",
+        "category": "PARIAS",
+        "file": "02_EVENEMENTS/PARIAS/041_Les_cendres_du_sang.md"
+      },
+      {
+        "id": "EVT_V4_042",
+        "title": "Le chasseur reconnaît sa proie",
+        "category": "PARIAS",
+        "file": "02_EVENEMENTS/PARIAS/042_Le_chasseur_reconna_t_sa_proie.md"
+      },
+      {
+        "id": "EVT_V4_043",
+        "title": "Le sang répond",
+        "category": "PARIAS",
+        "file": "02_EVENEMENTS/PARIAS/043_Le_sang_r_pond.md"
+      },
+      {
+        "id": "EVT_V4_044",
+        "title": "Le nid sous les os",
+        "category": "CREATURES",
+        "file": "02_EVENEMENTS/CREATURES/044_Le_nid_sous_les_os.md"
+      },
+      {
+        "id": "EVT_V4_045",
+        "title": "Le dragon blessé",
+        "category": "CREATURES",
+        "file": "02_EVENEMENTS/CREATURES/045_Le_dragon_bless.md"
+      },
+      {
+        "id": "EVT_V4_046",
+        "title": "La chose dans le puits",
+        "category": "CREATURES",
+        "file": "02_EVENEMENTS/CREATURES/046_La_chose_dans_le_puits.md"
+      },
+      {
+        "id": "EVT_V4_047",
+        "title": "Le troupeau immobile",
+        "category": "CREATURES",
+        "file": "02_EVENEMENTS/CREATURES/047_Le_troupeau_immobile.md"
+      },
+      {
+        "id": "EVT_V4_048",
+        "title": "La peau qui parle",
+        "category": "CREATURES",
+        "file": "02_EVENEMENTS/CREATURES/048_La_peau_qui_parle.md"
+      },
+      {
+        "id": "EVT_V4_049",
+        "title": "Le tambour des profondeurs",
+        "category": "FACTIONS",
+        "file": "02_EVENEMENTS/FACTIONS/049_Le_tambour_des_profondeurs.md"
+      },
+      {
+        "id": "EVT_V4_050",
+        "title": "Douze feux dans le désert",
+        "category": "FACTIONS",
+        "file": "02_EVENEMENTS/FACTIONS/050_Douze_feux_dans_le_d_sert.md"
+      }
+    ],
+    "contracts": [
+      {
+        "id": "CTR_V4_07",
+        "title": "La Gueule de Fer",
+        "house": "Maison d'Orsenne",
+        "type": "chasse",
+        "gold": 1450,
+        "file": "03_CONTRATS/CONTRATS_V4/07_La_Gueule_de_Fer.md"
+      },
+      {
+        "id": "CTR_V4_08",
+        "title": "Les Sept Disparus",
+        "house": "Maison de Clairmont",
+        "type": "enquête",
+        "gold": 1250,
+        "file": "03_CONTRATS/CONTRATS_V4/08_Les_Sept_Disparus.md"
+      },
+      {
+        "id": "CTR_V4_09",
+        "title": "Le Dragon et la Dot",
+        "house": "Maison de Bellac",
+        "type": "dragon",
+        "gold": 2800,
+        "file": "03_CONTRATS/CONTRATS_V4/09_Le_Dragon_et_la_Dot.md"
+      },
+      {
+        "id": "CTR_V4_10",
+        "title": "La Tour des Corbeaux",
+        "house": "Maison d'Aubremont",
+        "type": "siège",
+        "gold": 2100,
+        "file": "03_CONTRATS/CONTRATS_V4/10_La_Tour_des_Corbeaux.md"
+      },
+      {
+        "id": "CTR_V4_11",
+        "title": "Les Cornes de Minuit",
+        "house": "Maison de Vaudreuil",
+        "type": "homme-bête",
+        "gold": 2400,
+        "file": "03_CONTRATS/CONTRATS_V4/11_Les_Cornes_de_Minuit.md"
+      },
+      {
+        "id": "CTR_V4_12",
+        "title": "La Princesse et le Traître",
+        "house": "Maison de Ronceval",
+        "type": "protection",
+        "gold": 1700,
+        "file": "03_CONTRATS/CONTRATS_V4/12_La_Princesse_et_le_Tra_tre.md"
+      },
+      {
+        "id": "CTR_V4_13",
+        "title": "Le Roi sous la montagne",
+        "house": "Kar-Durak",
+        "type": "peaux-vertes",
+        "gold": 3200,
+        "file": "03_CONTRATS/CONTRATS_V4/13_Le_Roi_sous_la_montagne.md"
+      },
+      {
+        "id": "CTR_V4_14",
+        "title": "La Dette de Mont-Draken",
+        "house": "Mont-Draken",
+        "type": "dragon",
+        "gold": 3500,
+        "file": "03_CONTRATS/CONTRATS_V4/14_La_Dette_de_Mont-Draken.md"
+      },
+      {
+        "id": "CTR_V4_15",
+        "title": "Le Pont des Trois Armées",
+        "house": "Maison de Salverne",
+        "type": "bataille",
+        "gold": 3000,
+        "file": "03_CONTRATS/CONTRATS_V4/15_Le_Pont_des_Trois_Arm_es.md"
+      },
+      {
+        "id": "CTR_V4_16",
+        "title": "La Maison sans héritier",
+        "house": "Maison de Méricourt",
+        "type": "intrigue",
+        "gold": 1000,
+        "file": "03_CONTRATS/CONTRATS_V4/16_La_Maison_sans_h_ritier.md"
+      },
+      {
+        "id": "CTR_V4_17",
+        "title": "Les Loups de Verre",
+        "house": "Maison de Torcy",
+        "type": "monstre",
+        "gold": 1600,
+        "file": "03_CONTRATS/CONTRATS_V4/17_Les_Loups_de_Verre.md"
+      },
+      {
+        "id": "CTR_V4_18",
+        "title": "Le Prisonnier Khesh",
+        "house": "Maison d'Estrées",
+        "type": "diplomatie",
+        "gold": 1300,
+        "file": "03_CONTRATS/CONTRATS_V4/18_Le_Prisonnier_Khesh.md"
+      },
+      {
+        "id": "CTR_V4_19",
+        "title": "Le Sang dans les Archives",
+        "house": "Maison de Chastel",
+        "type": "paria",
+        "gold": 1900,
+        "file": "03_CONTRATS/CONTRATS_V4/19_Le_Sang_dans_les_Archives.md"
+      },
+      {
+        "id": "CTR_V4_20",
+        "title": "La Porte de Kar-Durak",
+        "house": "Kar-Durak",
+        "type": "bataille",
+        "gold": 4200,
+        "file": "03_CONTRATS/CONTRATS_V4/20_La_Porte_de_Kar-Durak.md"
+      }
+    ],
+    "karlsberg_events": [
+      {
+        "id": "KAR_V4_01",
+        "title": "Les premiers marteaux",
+        "file": "04_KARLSBERG/EVENEMENTS_V4/01_Les_premiers_marteaux.md"
+      },
+      {
+        "id": "KAR_V4_02",
+        "title": "Le maître maçon",
+        "file": "04_KARLSBERG/EVENEMENTS_V4/02_Le_ma_tre_ma_on.md"
+      },
+      {
+        "id": "KAR_V4_03",
+        "title": "La Route du Loup",
+        "file": "04_KARLSBERG/EVENEMENTS_V4/03_La_Route_du_Loup.md"
+      },
+      {
+        "id": "KAR_V4_04",
+        "title": "Le puits empoisonné",
+        "file": "04_KARLSBERG/EVENEMENTS_V4/04_Le_puits_empoisonn.md"
+      },
+      {
+        "id": "KAR_V4_05",
+        "title": "Ceux qui reviennent",
+        "file": "04_KARLSBERG/EVENEMENTS_V4/05_Ceux_qui_reviennent.md"
+      },
+      {
+        "id": "KAR_V4_06",
+        "title": "La première paie",
+        "file": "04_KARLSBERG/EVENEMENTS_V4/06_La_premi_re_paie.md"
+      },
+      {
+        "id": "KAR_V4_07",
+        "title": "Un voisin à la porte",
+        "file": "04_KARLSBERG/EVENEMENTS_V4/07_Un_voisin_la_porte.md"
+      },
+      {
+        "id": "KAR_V4_08",
+        "title": "Le premier serment",
+        "file": "04_KARLSBERG/EVENEMENTS_V4/08_Le_premier_serment.md"
+      },
+      {
+        "id": "KAR_V4_09",
+        "title": "La bannière noire",
+        "file": "04_KARLSBERG/EVENEMENTS_V4/09_La_banni_re_noire.md"
+      },
+      {
+        "id": "KAR_V4_10",
+        "title": "Le marché sous les murs",
+        "file": "04_KARLSBERG/EVENEMENTS_V4/10_Le_march_sous_les_murs.md"
+      },
+      {
+        "id": "KAR_V4_11",
+        "title": "Des Parias à la porte",
+        "file": "04_KARLSBERG/EVENEMENTS_V4/11_Des_Parias_la_porte.md"
+      },
+      {
+        "id": "KAR_V4_12",
+        "title": "Les Bannières du Loup",
+        "file": "04_KARLSBERG/EVENEMENTS_V4/12_Les_Banni_res_du_Loup.md"
+      }
+    ]
+  },
+  "totals_added": {
+    "events": 40,
+    "contracts": 14,
+    "karlsberg_events": 12
+  },
+  "design_rule": "Only active scene/choices are exposed to player; developer branches remain hidden."
+}

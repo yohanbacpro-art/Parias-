@@ -81,11 +81,21 @@ function offresDuTour(){
   const rnd = artSuite(lieu.id + '_' + semaine);
   const liste = [];
 
-  /* 1. Le dossier du lieu d'abord — c'est ce qu'on est venu régler.
+  /* 0. Une affaire écrite passe avant tout le reste : c'est une histoire qui
+   *    se joue sur plusieurs tours, pas une mission qu'on expédie. Une seule à
+   *    la fois — on n'est qu'un homme. */
+  if(typeof chainesDuLieu === 'function'){
+    const dispo = chainesDuLieu(lieu.id);
+    if(dispo.length) liste.push(chaineEnOffre(dispo[Math.floor(rnd() * dispo.length)], lieu.id));
+  }
+
+  /* 1. Le dossier du lieu ensuite — c'est ce qu'on est venu régler.
    *    On en garde deux au plus, pour laisser la place à ce qui vient
    *    d'ailleurs : un homme qui ne bouge jamais n'a pas d'histoire. */
   const ici = affairesDuLieu(lieu.id);
-  ici.slice(0, ici.length >= 3 ? 2 : 3).forEach(a => liste.push({ ...a, locale: true }));
+  const place = 3 - liste.length;
+  ici.slice(0, ici.length >= place ? Math.max(1, place - 1) : place)
+     .forEach(a => liste.push({ ...a, locale: true }));
 
   /* 2. Ce qu'un voisin fait dire jusqu'ici. Une vraie affaire de son dossier :
    *    accepter, c'est prendre la route, et le dossier de là-bas avance. */
@@ -183,6 +193,9 @@ function accepterOffre(id){
   const lancer = () => {
     // Une affaire se paie en visibilité avant même d'avoir commencé.
     adjustSuspicion(c.suspicion || 0);
+    // Une affaire écrite est une chaîne : elle s'ouvre sur son audience et
+    // reviendra vous chercher dans quelques semaines.
+    if(c.chaine){ ouvrirChaine(c.chaine); return; }
     openContract(c);
   };
   if(c.ailleurs) voyagerVers(c.ailleurs, lancer);

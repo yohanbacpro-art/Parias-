@@ -7,7 +7,7 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V1.4** — un seul écran de jeu, des voyages qui sortent des contrats, une Suspicion qui coûte, le chantier de Karlsberg, six puissances qui se disputent l'après-Astrah, le Prix du Paria dû par toute maison noble, et 75 créatures dont de vrais adversaires humains.
+**Version actuelle : V1.5** — les affaires deviennent des **chaînes** qui se jouent sur plusieurs tours, les termes se fixent avant tout départ, le Prix du Paria n'engage plus qu'une noble adulte réelle et consentante, et le pack narratif Vardhen entre dans le dépôt comme source d'écriture.
 
 ## Lancer le jeu
 
@@ -54,6 +54,8 @@ lien. Il se régénère avec `node tools/build-standalone.js`.
 | **Le chantier de Karlsberg** : 8 ouvrages, 5 200 or et 36 semaines pour tout relever | ✅ |
 | **Politique** : 6 puissances, leur influence, leur posture, et 8 édits qui tombent | ✅ |
 | **Le Prix du Paria** : toute maison noble doit l'Or et le Sang, en trois termes | ✅ |
+| **Affaires en chaînes** : 3 affaires écrites en 15 étapes, jouées sur plusieurs tours | ✅ |
+| **Maisons nobles** : 16 maisons, 17 nobles adultes nommées, avec droit de refus | ✅ |
 | **Bestiaire** : 75 créatures, dont 24 adversaires humains par peuple | ✅ |
 | **Rencontres composées** : meneur, élite, soutien et piétaille selon l'affaire et le lieu | ✅ |
 | 349 scènes, 213 choix, 23 affrontements, 6 batailles au total | ✅ |
@@ -293,6 +295,52 @@ Il n'y en a plus qu'un : **le lieu où l'on se trouve**.
   consulte, pas des endroits où l'on joue. L'onglet Contrats a disparu ;
   campagnes et affaires personnelles sont passées sous *Quête*.
 
+## Les affaires sont des chaînes
+
+Le pack narratif Vardhen le demandait depuis sa V4 : *« Les contrats sont conçus
+comme des chaînes et non comme des missions instantanées. »* C'était le vrai
+manque du jeu — la boucle principale, celle où passe tout le temps de jeu, était
+la chose la moins écrite.
+
+Une affaire ne se clique plus : **elle se vit sur plusieurs tours.**
+
+- **L'audience se joue en toutes lettres.** Le commanditaire est un vrai
+  personnage : on peut le questionner, examiner ce qu'il montre, refuser
+  d'écouter, ou parler d'argent tout de suite. Ce qu'on apprend là ouvre ou
+  ferme des branches quatre étapes plus tard.
+- **Les termes se fixent avant tout départ**, jamais après coup — la règle du
+  pack, appliquée à la lettre.
+- **Chaque étape suivante est datée.** Deux à cinq semaines. Entre-temps on
+  voyage, on se bat ailleurs, on relève un mur, on se repose — et un jour la
+  suite vous rattrape en fin de tour. L'écran du lieu rappelle en permanence
+  quelle affaire court et combien de semaines il reste.
+- **Les branches sont des données, pas du code.** Une scène dit
+  `effets:{ etape:"x" }` pour choisir la suite, `effets:{ issue:"y" }` pour
+  refermer l'affaire. Aucune ligne de moteur par contrat.
+- **L'issue survit à tout.** `hero.chaines.issues[id]` est écrit une fois et
+  relu pour toujours : par les offres, par les autres affaires, par l'épilogue.
+  C'est ça, se souvenir.
+- **Une seule affaire à la fois.** On n'est qu'un homme.
+
+Trois affaires sont écrites, en 15 étapes et 80 scènes :
+
+| Affaire | Ce qui s'y joue |
+|---|---|
+| **Le Dragon de Valcroix** | Une bête qui brûle tout sauf le château. Le commanditaire ment par omission — et on peut le tuer, lui rendre ce qu'il a volé, ou le faire parler devant sa propre cour. |
+| **Les Mille Gueules** | Une mine de fer, trente-quatre disparus, et des voix qui imitent les morts. Rouvrir, murer, ou ne rien déclarer et rendre les hommes à leurs familles. |
+| **La Fille de Sombreval** | Une disparue dans les marais. Au retour, sa version contredit celle de son père — et l'on décide de ce qui sera dit. |
+
+Il en reste vingt-sept à écrire depuis les canevas du pack.
+
+### Le pack narratif dans le dépôt
+
+`design/narratif/` contient le **Vardhen Narrative Pack V6** (qui inclut V3, V4
+et V5) : les canevas des trente contrats, les catégories d'événements, les dix
+chaînes secrètes, les crises régionales en cinq étapes, la matrice de réaction à
+la Suspicion, les PNJ autonomes et les deux arcs de romance. C'est la source
+d'écriture — le canon — pas du contenu jouable en l'état : les scènes, les choix
+et leurs coûts s'écrivent dans `src/data/`.
+
 ## Le Prix du Paria
 
 La coutume est ancienne et n'a jamais été abrogée, parce que personne n'a jamais
@@ -315,6 +363,18 @@ les affaires locales commanditées par un intendant, une maison mineure ou une
 délégation d'Astrah. Un commanditaire du commun paie en or : une veuve du
 quartier bas n'a pas de fille de rang à donner, et c'est cohérent. Le nom de la
 maison reste affiché sur l'offre ; l'homme du lieu devient l'entremetteur.
+
+**Et le Sang n'est plus une option de menu.** Le pack est formel : le moteur doit
+chercher *une noble adulte réelle de la maison, disponible dans l'état courant de
+la sauvegarde, qui consent explicitement ; faute de quoi cette partie du prix est
+indisponible.* Seize maisons ont donc un vrai rôle — dix-sept femmes qui ont un
+nom, un âge, une position et des raisons. Dame Aveline de Valcroix, veuve et
+seule à savoir ce que sa maison doit, refuse d'héberger un homme qu'on cherche
+activement. Dame Ophélie de Hauterive est promise ailleurs depuis l'enfance et
+ne se déliera que pour quelqu'un qui pèse plus lourd qu'un contrat de mariage.
+La maison de Clairmont a perdu sept adultes en trois mois et n'a plus personne à
+engager : elle paiera en or, et elle en est soulagée. Quand personne ne consent,
+l'option disparaît de l'écran avec la raison écrite en clair.
 
 Les trois termes mènent à trois situations différentes :
 
@@ -674,6 +734,8 @@ src/data/
   portraits.js        registre des personnages illustrés
   lore.js             prologue, trame, compagnons, codex, calendrier, tensions
   bestiary_2.js       35 créatures de plus, surtout des hommes, avec famille et rôle
+  chaines.js          les affaires écrites, étape par étape et scène par scène
+  maisons.js          les maisons nobles et les femmes qui peuvent consentir
   chantier.js         les 8 ouvrages de Karlsberg, leur coût et leurs effets
   events_suspicion.js 12 événements qui font monter ou redescendre la Suspicion
   politique.js        les 6 puissances, leurs dérives d'influence, leurs édits
@@ -692,6 +754,8 @@ tools/smoke-arcs.js        éprouve Isolde, les compagnons, les liens et les dos
 tools/smoke-tour.js        éprouve le tour, le temps, la lignée, la carte, les troupes
 tools/smoke-consolidation.js  éprouve l'écran unique, les offres, les voyages,
                               la Suspicion, le chantier et la politique
+tools/smoke-chaines.js     éprouve les affaires en chaînes, les termes et les issues
+design/narratif/           le pack narratif Vardhen V6 : la source d'écriture
 tools/manifest-assets.js   régénère assets/README.md (avec ce qui est fourni)
 ```
 
@@ -713,6 +777,7 @@ node tools/smoke-monde.js                    # réputation, marchands, couvertur
 node tools/smoke-arcs.js                     # Isolde, compagnons, attachements, dossiers
 node tools/smoke-tour.js                     # tour, âge, descendance, carte, recrutement
 node tools/smoke-consolidation.js            # écran unique, offres, voyages, Suspicion, chantier, politique
+node tools/smoke-chaines.js                  # affaires en chaînes, termes du Prix, issues durables
 
 node tools/manifest-assets.js                # régénère la liste des illustrations
 ```
@@ -727,7 +792,11 @@ jalon de trame, contrat spécial ou attachement pose le sien. Il contrôle aussi
 **l'épilogue** : aucun verdict ne doit dépendre d'un marqueur inexistant, et
 chaque section à verdict unique doit avoir un repli. Il imprime enfin **la
 couverture par lieu** et échoue si un lieu ne peut déclencher aucun événement
-écrit. Il contrôle **le bestiaire** (famille et rôle valides, aucun doublon d'identifiant,
+écrit. Il contrôle **les chaînes** (aucune étape orpheline ou inatteignable, toute issue
+nommée par une scène doit avoir sa ligne de chronique, toute affaire payée doit
+pouvoir l'être) et **les maisons** (aucune noble mineure, aucune qui puisse
+refuser sans dire pourquoi, et au moins une maison sans candidate pour que
+l'indisponibilité du Prix existe vraiment). Il contrôle **le bestiaire** (famille et rôle valides, aucun doublon d'identifiant,
 aucune créature sans attaque) et **les rencontres** (chaque type d'affaire doit
 trouver de quoi se composer à chaque palier, chaque famille doit avoir de la
 piétaille). Il contrôle enfin **le chantier** (coûts réels, prérequis existants, aucune

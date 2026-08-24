@@ -1,0 +1,435 @@
+{
+  "version": "5.0",
+  "added": {
+    "secret_chains": 10,
+    "secret_event_nodes": 50,
+    "major_contracts": 10,
+    "identity_reaction_matrix": true,
+    "dynasty_rules": true,
+    "regional_crisis_system": true
+  },
+  "chains": [
+    {
+      "id": "CHAIN_01",
+      "name": "Le Seigneur humilié",
+      "file": "02_EVENEMENTS/CHAINES_SECRETS/01_Le_Seigneur_humili.md",
+      "nodes": [
+        {
+          "stage": 1,
+          "title": "L'affront public",
+          "delay_months_hint": 0,
+          "flag": "LE_SEIGNEUR_HUMILI_1"
+        },
+        {
+          "stage": 2,
+          "title": "Les hommes dans l'ombre",
+          "delay_months_hint": 1,
+          "flag": "LE_SEIGNEUR_HUMILI_2"
+        },
+        {
+          "stage": 3,
+          "title": "La dette de sang",
+          "delay_months_hint": 3,
+          "flag": "LE_SEIGNEUR_HUMILI_3"
+        },
+        {
+          "stage": 4,
+          "title": "Le choix de l'héritier",
+          "delay_months_hint": 8,
+          "flag": "LE_SEIGNEUR_HUMILI_4"
+        },
+        {
+          "stage": 5,
+          "title": "La dernière table",
+          "delay_months_hint": 18,
+          "flag": "LE_SEIGNEUR_HUMILI_5"
+        }
+      ]
+    },
+    {
+      "id": "CHAIN_02",
+      "name": "Les Enfants du fossé",
+      "file": "02_EVENEMENTS/CHAINES_SECRETS/02_Les_Enfants_du_foss.md",
+      "nodes": [
+        {
+          "stage": 1,
+          "title": "Le chariot brûlé",
+          "delay_months_hint": 0,
+          "flag": "LES_ENFANTS_DU_FOSS_1"
+        },
+        {
+          "stage": 2,
+          "title": "Une famille retrouvée",
+          "delay_months_hint": 1,
+          "flag": "LES_ENFANTS_DU_FOSS_2"
+        },
+        {
+          "stage": 3,
+          "title": "Le garçon grandit",
+          "delay_months_hint": 3,
+          "flag": "LES_ENFANTS_DU_FOSS_3"
+        },
+        {
+          "stage": 4,
+          "title": "La dette ancienne",
+          "delay_months_hint": 8,
+          "flag": "LES_ENFANTS_DU_FOSS_4"
+        },
+        {
+          "stage": 5,
+          "title": "Sous une autre bannière",
+          "delay_months_hint": 18,
+          "flag": "LES_ENFANTS_DU_FOSS_5"
+        }
+      ]
+    },
+    {
+      "id": "CHAIN_03",
+      "name": "Le Dragon de Cendre",
+      "file": "02_EVENEMENTS/CHAINES_SECRETS/03_Le_Dragon_de_Cendre.md",
+      "nodes": [
+        {
+          "stage": 1,
+          "title": "L'ombre sur les champs",
+          "delay_months_hint": 0,
+          "flag": "LE_DRAGON_DE_CENDRE_1"
+        },
+        {
+          "stage": 2,
+          "title": "La chasse ratée",
+          "delay_months_hint": 1,
+          "flag": "LE_DRAGON_DE_CENDRE_2"
+        },
+        {
+          "stage": 3,
+          "title": "Le repaire vide",
+          "delay_months_hint": 3,
+          "flag": "LE_DRAGON_DE_CENDRE_3"
+        },
+        {
+          "stage": 4,
+          "title": "Le tribut du dragon",
+          "delay_months_hint": 8,
+          "flag": "LE_DRAGON_DE_CENDRE_4"
+        },
+        {
+          "stage": 5,
+          "title": "Le dernier vol",
+          "delay_months_hint": 18,
+          "flag": "LE_DRAGON_DE_CENDRE_5"
+        }
+      ]
+    },
+    {
+      "id": "CHAIN_04",
+      "name": "Le Sang de Callensbourg",
+      "file": "02_EVENEMENTS/CHAINES_SECRETS/04_Le_Sang_de_Callensbourg.md",
+      "nodes": [
+        {
+          "stage": 1,
+          "title": "Un nom murmuré",
+          "delay_months_hint": 0,
+          "flag": "LE_SANG_DE_CALLENSBOURG_1"
+        },
+        {
+          "stage": 2,
+          "title": "Les chasseurs disparus",
+          "delay_months_hint": 1,
+          "flag": "LE_SANG_DE_CALLENSBOURG_2"
+        },
+        {
+          "stage": 3,
+          "title": "La lettre sans sceau",
+          "delay_months_hint": 3,
+          "flag": "LE_SANG_DE_CALLENSBOURG_3"
+        },
+        {
+          "stage": 4,
+          "title": "La femme sous la capuche",
+          "delay_months_hint": 8,
+          "flag": "LE_SANG_DE_CALLENSBOURG_4"
+        },
+        {
+          "stage": 5,
+          "title": "Alycia de Callensbourg",
+          "delay_months_hint": 18,
+          "flag": "LE_SANG_DE_CALLENSBOURG_5"
+        }
+      ]
+    },
+    {
+      "id": "CHAIN_05",
+      "name": "Les Fils perdus du Loup",
+      "file": "02_EVENEMENTS/CHAINES_SECRETS/05_Les_Fils_perdus_du_Loup.md",
+      "nodes": [
+        {
+          "stage": 1,
+          "title": "Les lettres brûlées",
+          "delay_months_hint": 0,
+          "flag": "LES_FILS_PERDUS_DU_LOUP_1"
+        },
+        {
+          "stage": 2,
+          "title": "Un nom différent",
+          "delay_months_hint": 1,
+          "flag": "LES_FILS_PERDUS_DU_LOUP_2"
+        },
+        {
+          "stage": 3,
+          "title": "Le premier descendant",
+          "delay_months_hint": 3,
+          "flag": "LES_FILS_PERDUS_DU_LOUP_3"
+        },
+        {
+          "stage": 4,
+          "title": "Ceux qui refusent Karlsberg",
+          "delay_months_hint": 8,
+          "flag": "LES_FILS_PERDUS_DU_LOUP_4"
+        },
+        {
+          "stage": 5,
+          "title": "Le rassemblement",
+          "delay_months_hint": 18,
+          "flag": "LES_FILS_PERDUS_DU_LOUP_5"
+        }
+      ]
+    },
+    {
+      "id": "CHAIN_06",
+      "name": "La Maison offensée",
+      "file": "02_EVENEMENTS/CHAINES_SECRETS/06_La_Maison_offens_e.md",
+      "nodes": [
+        {
+          "stage": 1,
+          "title": "Une dette sociale",
+          "delay_months_hint": 0,
+          "flag": "LA_MAISON_OFFENS_E_1"
+        },
+        {
+          "stage": 2,
+          "title": "Le duel refusé",
+          "delay_months_hint": 1,
+          "flag": "LA_MAISON_OFFENS_E_2"
+        },
+        {
+          "stage": 3,
+          "title": "L'espion",
+          "delay_months_hint": 3,
+          "flag": "LA_MAISON_OFFENS_E_3"
+        },
+        {
+          "stage": 4,
+          "title": "Le meurtre attribué",
+          "delay_months_hint": 8,
+          "flag": "LA_MAISON_OFFENS_E_4"
+        },
+        {
+          "stage": 5,
+          "title": "Bannières aux frontières",
+          "delay_months_hint": 18,
+          "flag": "LA_MAISON_OFFENS_E_5"
+        }
+      ]
+    },
+    {
+      "id": "CHAIN_07",
+      "name": "La Route du Loup",
+      "file": "02_EVENEMENTS/CHAINES_SECRETS/07_La_Route_du_Loup.md",
+      "nodes": [
+        {
+          "stage": 1,
+          "title": "Les premiers convois",
+          "delay_months_hint": 0,
+          "flag": "LA_ROUTE_DU_LOUP_1"
+        },
+        {
+          "stage": 2,
+          "title": "Le chef des brigands",
+          "delay_months_hint": 1,
+          "flag": "LA_ROUTE_DU_LOUP_2"
+        },
+        {
+          "stage": 3,
+          "title": "Le relais fortifié",
+          "delay_months_hint": 3,
+          "flag": "LA_ROUTE_DU_LOUP_3"
+        },
+        {
+          "stage": 4,
+          "title": "Le village neuf",
+          "delay_months_hint": 8,
+          "flag": "LA_ROUTE_DU_LOUP_4"
+        },
+        {
+          "stage": 5,
+          "title": "La route royale",
+          "delay_months_hint": 18,
+          "flag": "LA_ROUTE_DU_LOUP_5"
+        }
+      ]
+    },
+    {
+      "id": "CHAIN_08",
+      "name": "Le Vieux Nain",
+      "file": "02_EVENEMENTS/CHAINES_SECRETS/08_Le_Vieux_Nain.md",
+      "nodes": [
+        {
+          "stage": 1,
+          "title": "La chope cassée",
+          "delay_months_hint": 0,
+          "flag": "LE_VIEUX_NAIN_1"
+        },
+        {
+          "stage": 2,
+          "title": "Une dette naine",
+          "delay_months_hint": 1,
+          "flag": "LE_VIEUX_NAIN_2"
+        },
+        {
+          "stage": 3,
+          "title": "Kar-Durak appelle",
+          "delay_months_hint": 3,
+          "flag": "LE_VIEUX_NAIN_3"
+        },
+        {
+          "stage": 4,
+          "title": "Le fils du vieux Nain",
+          "delay_months_hint": 8,
+          "flag": "LE_VIEUX_NAIN_4"
+        },
+        {
+          "stage": 5,
+          "title": "Les boucliers devant Karlsberg",
+          "delay_months_hint": 18,
+          "flag": "LE_VIEUX_NAIN_5"
+        }
+      ]
+    },
+    {
+      "id": "CHAIN_09",
+      "name": "Douze Feux",
+      "file": "02_EVENEMENTS/CHAINES_SECRETS/09_Douze_Feux.md",
+      "nodes": [
+        {
+          "stage": 1,
+          "title": "Deux tribus",
+          "delay_months_hint": 0,
+          "flag": "DOUZE_FEUX_1"
+        },
+        {
+          "stage": 2,
+          "title": "Le Conseil des Lances",
+          "delay_months_hint": 1,
+          "flag": "DOUZE_FEUX_2"
+        },
+        {
+          "stage": 3,
+          "title": "Six bannières",
+          "delay_months_hint": 3,
+          "flag": "DOUZE_FEUX_3"
+        },
+        {
+          "stage": 4,
+          "title": "Le choix de Khal-Vaene",
+          "delay_months_hint": 8,
+          "flag": "DOUZE_FEUX_4"
+        },
+        {
+          "stage": 5,
+          "title": "Les Douze Feux",
+          "delay_months_hint": 18,
+          "flag": "DOUZE_FEUX_5"
+        }
+      ]
+    },
+    {
+      "id": "CHAIN_10",
+      "name": "Le Portrait brûlé",
+      "file": "02_EVENEMENTS/CHAINES_SECRETS/10_Le_Portrait_br_l.md",
+      "nodes": [
+        {
+          "stage": 1,
+          "title": "La toile calcinée",
+          "delay_months_hint": 0,
+          "flag": "LE_PORTRAIT_BR_L_1"
+        },
+        {
+          "stage": 2,
+          "title": "Les archives manquantes",
+          "delay_months_hint": 1,
+          "flag": "LE_PORTRAIT_BR_L_2"
+        },
+        {
+          "stage": 3,
+          "title": "Le nom d'un ancêtre",
+          "delay_months_hint": 3,
+          "flag": "LE_PORTRAIT_BR_L_3"
+        },
+        {
+          "stage": 4,
+          "title": "Le coffre du témoin",
+          "delay_months_hint": 8,
+          "flag": "LE_PORTRAIT_BR_L_4"
+        },
+        {
+          "stage": 5,
+          "title": "La vérité utile",
+          "delay_months_hint": 18,
+          "flag": "LE_PORTRAIT_BR_L_5"
+        }
+      ]
+    }
+  ],
+  "contracts": [
+    {
+      "id": "CTR_21",
+      "title": "Le Dragon sans royaume",
+      "file": "03_CONTRATS/CONTRATS_V5/21_Le_Dragon_sans_royaume.md"
+    },
+    {
+      "id": "CTR_22",
+      "title": "La Couronne dans la boue",
+      "file": "03_CONTRATS/CONTRATS_V5/22_La_Couronne_dans_la_boue.md"
+    },
+    {
+      "id": "CTR_23",
+      "title": "Le Massacre de Belrive",
+      "file": "03_CONTRATS/CONTRATS_V5/23_Le_Massacre_de_Belrive.md"
+    },
+    {
+      "id": "CTR_24",
+      "title": "La Fille du général",
+      "file": "03_CONTRATS/CONTRATS_V5/24_La_Fille_du_g_n_ral.md"
+    },
+    {
+      "id": "CTR_25",
+      "title": "Les Portes de Fer",
+      "file": "03_CONTRATS/CONTRATS_V5/25_Les_Portes_de_Fer.md"
+    },
+    {
+      "id": "CTR_26",
+      "title": "Le Pacte de la Harde",
+      "file": "03_CONTRATS/CONTRATS_V5/26_Le_Pacte_de_la_Harde.md"
+    },
+    {
+      "id": "CTR_27",
+      "title": "Le Convoi d'Anarion",
+      "file": "03_CONTRATS/CONTRATS_V5/27_Le_Convoi_d_Anarion.md"
+    },
+    {
+      "id": "CTR_28",
+      "title": "La Flèche de Tyrion",
+      "file": "03_CONTRATS/CONTRATS_V5/28_La_Fl_che_de_Tyrion.md"
+    },
+    {
+      "id": "CTR_29",
+      "title": "Le Serment de Khal-Vaene",
+      "file": "03_CONTRATS/CONTRATS_V5/29_Le_Serment_de_Khal-Vaene.md"
+    },
+    {
+      "id": "CTR_30",
+      "title": "La Guerre du Loup",
+      "file": "03_CONTRATS/CONTRATS_V5/30_La_Guerre_du_Loup.md"
+    }
+  ]
+}

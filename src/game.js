@@ -1026,6 +1026,13 @@ function seFaireOublier(){
 }
 
 function endTurnMeta(){
+  // Filet : si un récit a été quitté sans passer par sa scène terminale, il ne
+  // doit pas bloquer indéfiniment ce qui veut s'ouvrir au tour suivant.
+  if(evenementEnCours() && document.getElementById('eventModal').style.display !== 'flex'
+     && !document.getElementById('screen-combat').classList.contains('active')
+     && !document.getElementById('screen-bataille').classList.contains('active')){
+    ecritState = null;
+  }
   const lieu = LOCATIONS.find(l=>l.id===hero.position) || null;
   const resume = advanceTime(2 + Math.floor(Math.random()*5)); // 2 à 6 semaines
   adjustSuspicion(-1); // le temps qui passe aide un peu à se faire oublier
@@ -1046,8 +1053,13 @@ function endTurnMeta(){
   // Un tour ne se termine jamais sur rien : le pli dit ce qui a changé et ce
   // qu'on propose. Un jalon prêt se déclenche en le refermant.
   armerTrameSansOuvrir();
-  // Ce qu'on dit de vous s'invite avant le pli : plus la Suspicion est haute,
-  // plus il arrive quelque chose à cause d'elle.
+  // Ce qui vous rattrape d'abord : l'affaire en cours. Une chaîne dont l'heure
+  // est venue passe avant tout, y compris avant le pli — c'est elle qu'on
+  // attendait en laissant filer les semaines.
+  if(typeof tenterEtapeDeChaine === 'function'
+     && tenterEtapeDeChaine(() => ouvrirPliDuTour(resume))) return;
+  // Puis ce qu'on dit de vous : plus la Suspicion est haute, plus il arrive
+  // quelque chose à cause d'elle.
   if(tenterEvenementSuspicion(() => ouvrirPliDuTour(resume))) return;
   ouvrirPliDuTour(resume);
 }
@@ -1207,8 +1219,10 @@ function renderContractStep(){
       const p = prix.noble_proposee;
       extra.innerHTML = `<h3>Le Prix du Paria</h3>
         <p style="color:var(--parchment-dim);font-size:13.5px;">La coutume n'a jamais été abrogée : une maison noble qui emploie un Paria lui doit
-          <b>l'Or et le Sang</b> — des pièces comptant, et le consentement d'une femme de son rang.
-          ${p.maison} propose ${p.nom}. À Yohan de dire ce qu'il réclame.</p>
+          <b>l'Or et le Sang</b> — des pièces comptant, et le consentement d'une femme de son rang.</p>
+        ${p ? `<div class="prix-noble"><b>${p.nom}</b> · ${p.rang}, ${p.age} ans
+                 <span>${p.note}</span></div>`
+            : `<div class="prix-indispo">${prix.indisponible}</div>`}
         <div class="prix-choices" id="prixChoices"></div>`;
       const opts = optionsDuPrix(c, prix);
       const holder = document.getElementById('prixChoices');

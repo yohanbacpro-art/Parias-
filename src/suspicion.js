@@ -101,12 +101,12 @@ function tirerEvenementSuspicion(){
 }
 
 /* Rend true si un événement a été ouvert. `apres` est rappelé à sa fermeture. */
-let suspicionRetour = null;
 function tenterEvenementSuspicion(apres){
+  if(evenementEnCours()) return false;      // un récit est déjà en vol
   if(Math.random() >= chanceEvenementSuspicion()) return false;
   const ev = tirerEvenementSuspicion();
   if(!ev) return false;
-  suspicionRetour = apres || null;
+  filerApres(apres);
   openWrittenEvent(ev, LOCATIONS.find(l => l.id === hero.position) || null);
   return true;
 }

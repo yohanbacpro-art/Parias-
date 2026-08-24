@@ -270,6 +270,12 @@
     font-family:'EB Garamond',serif;font-size:13.5px;padding:12px;border-radius:5px;cursor:pointer;text-align:left;}
   .prix-choices button:hover{border-color:var(--onde-bright);}
   .prix-choices button small{display:block;font-family:'Inter',sans-serif;font-size:10px;color:var(--parchment-dim);margin-top:4px;}
+  .prix-noble{border:1px solid var(--gold-dim);border-radius:4px;padding:9px 12px;margin:10px 0 4px;
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--gold);background:rgba(198,160,74,.06);}
+  .prix-noble span{display:block;color:var(--parchment-dim);font-style:italic;margin-top:4px;line-height:1.55;}
+  .prix-indispo{border:1px solid var(--line);border-left:3px solid var(--blood-bright);border-radius:4px;
+    padding:9px 12px;margin:10px 0 4px;font-family:'Inter',sans-serif;font-size:12px;
+    line-height:1.6;color:var(--parchment-dim);}
   .prix-choices button small.prix-detail{color:var(--parchment-dim);opacity:.75;font-style:italic;
     line-height:1.5;margin-top:6px;text-transform:none;}
 
@@ -509,6 +515,17 @@
   .offre-tag.susp{border-color:var(--blood-bright);color:var(--blood-bright);}
   .offre-tag.voyage{border-color:var(--onde-bright);color:var(--onde-bright);}
   .offre-tag.ici{opacity:.6;}
+  .affaire-cours{border:1px solid var(--gold-dim);border-radius:4px;padding:10px 12px;margin:0 0 12px;
+    background:rgba(198,160,74,.06);}
+  .ac-tete{display:flex;justify-content:space-between;align-items:baseline;gap:10px;}
+  .ac-titre{font-family:'Cinzel',serif;font-size:13.5px;color:var(--gold);}
+  .ac-etape{font-family:'Inter',sans-serif;font-size:11px;color:var(--parchment-dim);
+    font-variant-numeric:tabular-nums;}
+  .ac-qui{font-family:'Inter',sans-serif;font-size:11px;color:var(--parchment-dim);margin-top:2px;}
+  .ac-attente{font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;
+    color:var(--parchment);margin:7px 0 0;max-width:64ch;}
+  .offre.affaire{border-left:3px solid var(--gold);}
+  .offre-tag.chaine{border-color:var(--gold);color:var(--gold);}
   .offre-tag.paria{border-color:var(--gold);color:var(--gold);background:rgba(198,160,74,.08);}
   .offre-prix.prix-paria{color:var(--gold);font-family:'Cinzel',serif;letter-spacing:.03em;}
   .offre-btn{width:100%;}
@@ -1165,6 +1182,8 @@
 <script src="src/data/events_isolde.js"></script>
 <script src="src/data/contracts_special.js"></script>
 <script src="src/data/contrats_locaux.js"></script>
+<script src="src/data/maisons.js"></script>
+<script src="src/data/chaines.js"></script>
 <script src="src/data/chantier.js"></script>
 <script src="src/data/events_suspicion.js"></script>
 <script src="src/data/politique.js"></script>
@@ -1180,6 +1199,7 @@
 <script src="src/contrats_locaux.js"></script>
 <script src="src/lignee.js"></script>
 <script src="src/prix.js"></script>
+<script src="src/chaines.js"></script>
 <script src="src/suspicion.js"></script>
 <script src="src/politique.js"></script>
 <script src="src/offres.js"></script>

@@ -1,0 +1,77 @@
+[
+  {
+    "name": "Charles de Mont-Draken",
+    "ambitions": [
+      "protéger les humains",
+      "détruire les menaces non humaines"
+    ],
+    "dynamic": "peut soutenir Karlsberg s'il la juge utile à l'humanité"
+  },
+  {
+    "name": "Lucius Furius Augustus",
+    "ambitions": [
+      "restaurer Astrah",
+      "accumuler soutiens"
+    ],
+    "dynamic": "déteste les Parias; adversaire ou manipulateur potentiel"
+  },
+  {
+    "name": "Alycia de Callensbourg",
+    "ambitions": [
+      "protéger les derniers Parias",
+      "identifier leurs ennemis",
+      "préserver sa liberté"
+    ],
+    "dynamic": "romance, alliée, rivale ou ennemie"
+  },
+  {
+    "name": "Caleb de Fort-aux-Princes",
+    "ambitions": [
+      "protéger sa maison",
+      "limiter ses concurrents"
+    ],
+    "dynamic": "rivalité ou alliance Paria"
+  },
+  {
+    "name": "Tyrion",
+    "ambitions": [
+      "anéantir les Elfes noirs",
+      "protéger son peuple"
+    ],
+    "dynamic": "opposition possible à Yohan et à sa proximité avec Alarielle"
+  },
+  {
+    "name": "Alarielle",
+    "ambitions": [
+      "protéger sa famille",
+      "réparer la faute historique elfique",
+      "éviter une nouvelle catastrophe magique",
+      "aider les Parias"
+    ],
+    "dynamic": "romance, médiation ou opposition selon choix"
+  },
+  {
+    "name": "Anarion",
+    "ambitions": [
+      "vaincre Eltharion",
+      "étendre son pouvoir"
+    ],
+    "dynamic": "cherche potentiellement à enrôler Yohan"
+  },
+  {
+    "name": "Eltharion",
+    "ambitions": [
+      "vaincre Anarion",
+      "préserver son peuple"
+    ],
+    "dynamic": "allié circonstanciel ou adversaire"
+  },
+  {
+    "name": "Khal-Vaene",
+    "ambitions": [
+      "unifier les Khesh",
+      "garantir leur puissance"
+    ],
+    "dynamic": "alliance fondée sur respect et intérêts"
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "version": "6.0",
+  "added": {
+    "major_romances": [
+      "Yohan/Alycia",
+      "Yohan/Alarielle"
+    ],
+    "romance_stages": 20,
+    "autonomous_major_npcs": 9,
+    "cross_romance_system": true
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "ELFES": {
+    "stages": [
+      "incidents frontaliers",
+      "assassinats et raids",
+      "mobilisation",
+      "guerre ouverte",
+      "grande bataille"
+    ],
+    "actors": [
+      "Eltharion",
+      "Anarion",
+      "Tyrion",
+      "Alarielle"
+    ]
+  },
+  "ASTRAH": {
+    "stages": [
+      "propagande dynastique",
+      "alliances",
+      "ultimatums",
+      "guerres humaines",
+      "restauration ou échec"
+    ],
+    "actors": [
+      "Lucius Furius Augustus",
+      "princes humains"
+    ]
+  },
+  "PEAUX_VERTES": {
+    "stages": [
+      "tambours",
+      "raids miniers",
+      "chef fédérateur",
+      "siège de Kar-Durak",
+      "contre-offensive ou chute"
+    ],
+    "actors": [
+      "Kar-Durak",
+      "Peaux-Vertes"
+    ]
+  },
+  "KHESH": {
+    "stages": [
+      "duels tribaux",
+      "conseil",
+      "six bannières",
+      "guerre d'unification",
+      "douze bannières ou fragmentation"
+    ],
+    "actors": [
+      "Khal-Vaene"
+    ]
+  },
+  "HOMMES_BETES": {
+    "stages": [
+      "hardes isolées",
+      "signes communs",
+      "massacres coordonnés",
+      "Grande Chasse",
+      "dispersion ou dévastation"
+    ],
+    "actors": [
+      "Horde Homme-Bête"
+    ]
+  }
+}
