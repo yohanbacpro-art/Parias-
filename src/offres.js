@@ -97,11 +97,14 @@ function offresDuTour(){
   ici.slice(0, ici.length >= place ? Math.max(1, place - 1) : place)
      .forEach(a => liste.push({ ...a, locale: true }));
 
+  /* Les lieux qu'on atteint d'ici en une route : ce qu'ils ont à proposer
+   *    remonte jusqu'ici, dossier local d'abord, affaire écrite ensuite. */
+  const attenants = ROUTES.filter(r => r.includes(lieu.id))
+    .map(r => r[0] === lieu.id ? r[1] : r[0]);
+  const voisins = attenants.filter(id => affairesDuLieu(id).length);
+
   /* 2. Ce qu'un voisin fait dire jusqu'ici. Une vraie affaire de son dossier :
    *    accepter, c'est prendre la route, et le dossier de là-bas avance. */
-  const voisins = ROUTES.filter(r => r.includes(lieu.id))
-    .map(r => r[0] === lieu.id ? r[1] : r[0])
-    .filter(id => affairesDuLieu(id).length);
   if(voisins.length && liste.length < 3){
     const dest = voisins[Math.floor(rnd() * voisins.length)];
     const l2 = LOCATIONS.find(x => x.id === dest);
@@ -111,19 +114,23 @@ function offresDuTour(){
                              semainesRoute: semainesDeVoyage(lieu.id, dest) });
   }
 
-  /* 3. Le tableau des mercenaires bouche les trous, rhabillé au lieu. Le
-   *    registre décline dix archétypes en cinquante affaires : on n'en tire
-   *    jamais deux du même, sans quoi le tableau affiche deux fois la même
-   *    histoire à un mot près. */
-  if(liste.length < 3){
-    const base = t => (t || '').split(' — ')[0];
-    const dejaVus = new Set(liste.map(c => base(c.titre)));
-    const tirage = CONTRACTS.slice();
-    while(liste.length < 3 && tirage.length){
-      const c = tirage.splice(Math.floor(rnd() * tirage.length), 1)[0];
-      if(dejaVus.has(base(c.titre))) continue;
-      dejaVus.add(base(c.titre));
-      liste.push(rhabiller(c, lieu));
+  /* 3. Le registre général de cinquante contrats génériques a été supprimé : il
+   *    déclinait dix archétypes en cinquante affaires aux mêmes étapes, aux
+   *    mêmes complications et aux mêmes issues, et ça se voyait. On bouche donc
+   *    les trous avec ce qui est écrit ailleurs : une affaire d'un lieu voisin,
+   *    que quelqu'un fait dire jusqu'ici. Accepter, c'est prendre la route. */
+  if(liste.length < 3 && typeof chainesDuLieu === 'function'){
+    const dejaLa = new Set(liste.map(c => c.chaine || c.id));
+    for(const id of attenants){
+      if(liste.length >= 3) break;
+      const dispo = chainesDuLieu(id).filter(ch => !dejaLa.has(ch.id));
+      if(!dispo.length) continue;
+      const l2 = LOCATIONS.find(x => x.id === id);
+      const ch = dispo[Math.floor(rnd() * dispo.length)];
+      const offre = chaineEnOffre(ch, id);
+      dejaLa.add(ch.id);
+      liste.push({ ...offre, ailleurs: id, lieu: l2 ? l2.nom : offre.lieu,
+                   semainesRoute: semainesDeVoyage(lieu.id, id) });
     }
   }
 

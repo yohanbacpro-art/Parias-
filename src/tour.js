@@ -64,13 +64,14 @@ function propositionsDuTour(){
     }
   }
 
-  // 6. Filet : le registre général a toujours quelque chose.
+  // 6. Filet : rien à proposer ici. On ne fabrique pas une affaire pour occuper
+  //    la place — on dit la vérité et on montre la carte. C'est ce que ferait
+  //    n'importe qui à qui personne n'a rien demandé cette semaine-là.
   if(!props.length){
-    const c = CONTRACTS[Math.floor(Math.random() * CONTRACTS.length)];
     props.push({
-      cle:'general_' + c.id, titre:c.titre,
-      texte:`${c.commanditaire} — ${c.pitch}`,
-      action:'registre', bouton:"Au registre",
+      cle:'rien', titre:"Personne n'a rien à vous demander",
+      texte:"Pas cette semaine, pas ici. Les routes partent dans quatre directions et il y a du monde au bout de chacune.",
+      action:'carte', bouton:"Voir la carte",
     });
   }
 
@@ -151,6 +152,7 @@ function suivreProposition(p){
   }
   if(p.action === 'contrat'){ accepterOffre(p.cible); return; }
   if(p.action === 'special'){ ouvrirContratSpecial(p.cible); return; }
+  if(p.action === 'carte'){ showScreen('monde'); renderMonde(); return; }
   showScreen('lieu'); renderLieu();
 }
 

@@ -172,9 +172,14 @@ carte → voyage → lieu → récit à embranchements → combat → conséquen
 enregistrée → sauvegarde → rechargement — et vérifie au passage qu'aucune
 branche non prise n'apparaît jamais à l'écran.
 
+Plus aucun contenu générique : le registre de 50 contrats dérivés de 10
+archétypes et les 200 variantes d'événements générés ont été supprimés, et
+remplacés par 9 affaires écrites placées là où le jeu manquait, plus 8 passages
+courts pour un lieu qu'on a vidé.
+
 Inventaire : 20 lieux · 4 régions · 24 routes · 75 créatures · 12 champions ·
-29 troupes · 12 champs de bataille · 130 événements écrits illustrés · **30
-affaires en chaînes (101 étapes, 564 scènes, 313 choix, 142 issues)** · **10
+29 troupes · 12 champs de bataille · 130 événements écrits illustrés · **39
+affaires en chaînes (124 étapes)** · **10
 chaînes secrètes armées sur marqueur (30 étapes, 184 scènes, 110 choix, 32
 issues)** · **5 crises régionales en 25 étapes nommées** · **9 acteurs autonomes
 (32 actes, 45 souvenirs possibles)** · 60 affaires locales + 20 dénouements · 50 contrats au registre · 25 maisons nobles ·

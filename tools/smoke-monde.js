@@ -156,7 +156,7 @@ const verifie = (n, ok, d) => { if(ok) console.log('  ✔', n);
   const art = await page.evaluate(() => {
     const embarquees = Object.keys(ART_INLINE);
     const portraitsFournis = Object.keys(PORTRAITS).filter(id => ART_INLINE['portrait/' + id]);
-    const familles = [...new Set(EVENTS.map(e => e.famille))];
+    const familles = [...new Set(LOCATIONS.flatMap(l => l.familles_evenements_compatibles))];
     const famillesFournies = familles.filter(f => ART_INLINE['event/evt_' + f.toLowerCase()]);
     return {
       embarquees: embarquees.length,
@@ -170,7 +170,7 @@ const verifie = (n, ok, d) => { if(ok) console.log('  ✔', n);
   verifie(`${art.embarquees} illustrations sont embarquées dans le fichier unique`, art.embarquees >= 20, art.embarquees);
   verifie('Yohan est servi depuis les données embarquées', art.yohanEmbarque);
   verifie('les 13 personnages majeurs ont leur portrait', art.portraitsFournis.length >= 13, art.portraitsFournis.length);
-  verifie('les 8 familles d\'événements générés ont leur bandeau',
+  verifie('les 8 familles d\'événements ont leur bandeau',
     art.famillesFournies.length >= 8, art.famillesFournies);
   verifie('un portrait absent retombe sur son fichier', art.absentSurFichier, art);
   verifie('et le dessin de repli reste disponible', art.repliDessine);

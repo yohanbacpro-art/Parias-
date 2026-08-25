@@ -7,7 +7,15 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V2.3** — **la succession se joue**. Yohan meurt de
+**Version actuelle : V2.4** — **plus rien de générique**. Le registre de
+cinquante contrats dérivés de dix archétypes et les deux cents variantes
+d'événements générés ont été supprimés. À leur place : neuf affaires écrites,
+placées exactement là où le jeu manquait, et huit passages courts pour un lieu
+qu'on a vidé.
+
+*V2.3 : la succession se joue.*
+
+**V2.3** — **la succession se joue**. Yohan meurt de
 vieillesse ou transmet de son vivant ; la partie continue avec son héritier,
 dans le même monde, où neuf personnes se souviennent encore de ce que son père
 leur a fait.
@@ -81,8 +89,8 @@ lien. Il se régénère avec `node tools/build-standalone.js`.
 | **Rencontres composées** : meneur, élite, soutien et piétaille selon l'affaire et le lieu | ✅ |
 | 349 scènes, 213 choix, 23 affrontements, 6 batailles au total | ✅ |
 | **Combattants nommés** : 9 champions hors bestiaire | ✅ |
-| Événements générés (200 variantes) — remplissage quand les écrits sont épuisés | ✅ |
-| Contrats en 5 phases (Audience → Retour), 50 au registre | ✅ |
+| **Aucun contenu générique** : 49 affaires écrites, 8 passages de lieu épuisé | ✅ |
+| Cadre en 5 phases (Audience → Retour) pour les 60 dossiers locaux écrits | ✅ |
 | **Combat de groupe** : party contre plusieurs adversaires, cibles au clic | ✅ |
 | Pouvoirs de zone, à cibles multiples, de soin et de protection | ✅ |
 | Combat tour par tour : 3 PA, d20 + Précision/VOL vs Défense | ✅ |

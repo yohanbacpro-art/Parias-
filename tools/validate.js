@@ -13,16 +13,17 @@ const vm = require('vm');
 const racine = path.join(__dirname, '..');
 const fichiers = [
   'src/data/bestiary.js', 'src/data/bestiary_2.js', 'src/data/portraits.js', 'src/data/locations.js',
-  'src/data/events.js', 'src/data/contracts.js', 'src/data/powers.js',
+  'src/data/powers.js',
   'src/data/items.js', 'src/data/lore.js', 'src/data/champions.js',
   'src/data/units.js', 'src/data/battles.js',
   'src/data/events_written.js', 'src/data/events_written_2.js',
   'src/data/events_meetings.js', 'src/data/events_trame.js',
-  'src/data/contracts_special.js', 'src/data/contrats_locaux.js', 'src/data/romances.js',
+  'src/data/cadres.js', 'src/data/contracts_special.js', 'src/data/contrats_locaux.js', 'src/data/romances.js',
   'src/data/events_compagnons.js', 'src/data/events_nemesis.js', 'src/data/events_isolde.js',
   'src/data/reputation.js', 'src/data/epilogue.js',
   'src/data/chantier.js', 'src/data/events_suspicion.js', 'src/data/politique.js',
-  'src/data/maisons.js', 'src/data/chaines.js', 'src/data/chaines_secretes.js',
+  'src/data/maisons.js', 'src/data/chaines.js', 'src/data/chaines_2.js',
+  'src/data/chaines_secretes.js', 'src/data/explorations_vides.js',
   'src/data/crises.js', 'src/data/pnj_autonomes.js', 'src/data/ressources.js',
   'src/data/succession.js',
 ];
@@ -35,8 +36,8 @@ for(const f of fichiers){
 // Les `const` de haut niveau vivent dans la portée lexicale du contexte, pas sur
 // l'objet global : on les récupère en évaluant une expression dans ce même contexte.
 const {
-  BESTIARY_FULL, PORTRAITS, LOCATIONS, EVENTS, CONTRACTS, ITEM_POOL,
-  EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME, CONTRATS_SPECIAUX, EVENTS_ROMANCE,
+  BESTIARY_FULL, PORTRAITS, LOCATIONS, ITEM_POOL,
+  EVENTS_WRITTEN, EVENTS_RENCONTRE, EXPLORATIONS_VIDES, EVENTS_TRAME, CONTRATS_SPECIAUX, EVENTS_ROMANCE,
   EVENTS_NEMESIS, EVENTS_ISOLDE, EVENTS_COMPAGNONS,
   TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS,
   UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART, REGIONS, ROUTES, LOC_REGION,
@@ -47,8 +48,8 @@ const {
   SUCCESSION_PROFILS, SUCCESSION_ETATS, SUCCESSION_FINS,
   EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_LIGNEE, EPI_ONDE, EPI_LEGS,
 } = vm.runInContext(`({
-  BESTIARY_FULL, PORTRAITS, LOCATIONS, EVENTS, CONTRACTS, ITEM_POOL,
-  EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME, CONTRATS_SPECIAUX, EVENTS_ROMANCE,
+  BESTIARY_FULL, PORTRAITS, LOCATIONS, ITEM_POOL,
+  EVENTS_WRITTEN, EVENTS_RENCONTRE, EXPLORATIONS_VIDES, EVENTS_TRAME, CONTRATS_SPECIAUX, EVENTS_ROMANCE,
   EVENTS_NEMESIS, EVENTS_ISOLDE, EVENTS_COMPAGNONS,
   TREE, TREE_ELFES, COMPANIONS_POOL, LOC_COORDS, CHAMPIONS,
   UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART, REGIONS, ROUTES, LOC_REGION,
@@ -296,16 +297,27 @@ for(const [id, c] of Object.entries(COMPANIONS_POOL)){
 
 /* ---- Reste du contenu ---- */
 LOCATIONS.forEach(l => { if(!LOC_COORDS[l.id]) err(`Lieu ${l.id} : aucune coordonnée sur la carte`); });
-CONTRACTS.forEach(c => { if(!c.etapes || c.etapes.length !== 5) err(`Contrat ${c.id} : ${c.etapes?c.etapes.length:0} étapes au lieu de 5`); });
-EVENTS.forEach(e => { if(!e.choix || !e.choix.length) err(`Événement généré ${e.id} : aucun choix`); });
+/* Les huit passages de lieu épuisé : ils remplacent deux cents variantes
+ * générées, et ils doivent rester ce qu'ils sont — courts, écrits, sans
+ * conséquence, et sans choix qui ferait croire à une décision. */
+EXPLORATIONS_VIDES.forEach(e => {
+  const ou = `EXPLORATION VIDE ${e.id}`;
+  const sc = (e.scenes || {}).start;
+  if(!sc) err(`${ou} : pas de scène start`);
+  else {
+    if(!sc.fin) err(`${ou} : doit se terminer tout de suite`);
+    if(sc.choix) err(`${ou} : ne doit pas offrir de choix — il ne se passe rien`);
+    if(sc.effets) err(`${ou} : ne doit rien changer au monde`);
+    if(!sc.texte || sc.texte.length < 2) err(`${ou} : trop court pour être lu`);
+  }
+});
 
 /* ---- Rapport ---- */
 console.log(`Bestiaire   ${BESTIARY_FULL.length} créatures`);
 console.log(`Lieux       ${LOCATIONS.length}`);
-console.log(`Contrats    ${CONTRACTS.length}`);
 console.log(`Événements  ${EVENTS_WRITTEN.length} de lieu · ${EVENTS_RENCONTRE.length} rencontres · ${EVENTS_TRAME.length} jalons de trame`);
 console.log(`            ${CONTRATS_SPECIAUX.length} contrats spéciaux · ${EVENTS_ROMANCE.length} attachements`);
-console.log(`            ${nbScenes} scènes, ${nbChoix} choix, ${nbCombats} affrontements, ${nbBatailles} batailles · + ${EVENTS.length} générés`);
+console.log(`            ${nbScenes} scènes, ${nbChoix} choix, ${nbCombats} affrontements, ${nbBatailles} batailles · + ${EXPLORATIONS_VIDES.length} passages de lieu épuisé`);
 console.log(`Troupes     ${Object.keys(UNIT_TYPES).length} types · ${Object.keys(BATTLES).length} champs de bataille`);
 console.log(`Pouvoirs    ${powerIds.size} · Objets ${itemIds.size} · Portraits ${portrIds.size} · Champions ${champIds.size}`);
 console.log('');
@@ -839,11 +851,11 @@ Object.entries(MAISONS).forEach(([nom, m]) => {
   });
 });
 if(!maisonsVides) warn("MAISONS : aucune maison sans candidate — le Prix n'est jamais indisponible");
-// Toute maison qui commandite au registre doit avoir un rôle écrit, sinon la
+// Toute maison qui commandite une affaire doit avoir un rôle écrit, sinon la
 // moitié « Sang » du Prix disparaît sans que personne s'en aperçoive.
-[...new Set(CONTRACTS.map(c => c.commanditaire))]
-  .filter(q => /^Maison /.test(q))
-  .forEach(q => { if(!MAISONS[q]) err(`MAISONS : « ${q} » commandite au registre sans avoir de rôle écrit`); });
+[...new Set(CHAINES.map(c => c.commanditaire).concat(CHAINES.map(c => c.maison)))]
+  .filter(q => q && /^Maison /.test(q))
+  .forEach(q => { if(!MAISONS[q]) err(`MAISONS : « ${q} » commandite une affaire sans avoir de rôle écrit`); });
 console.log(`Chaînes     ${CHAINES.length} affaires · ${CHAINES.reduce((s,c)=>s+c.etapes.length,0)} étapes`);
 console.log(`Maisons     ${Object.keys(MAISONS).length} maisons · ${nbNobles} nobles adultes · ${maisonsVides} sans candidate`);
 console.log('');

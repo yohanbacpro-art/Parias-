@@ -1,7 +1,7 @@
 /* PARIAS — Chroniques de Vardhen · moteur de jeu V0.2
  *
  * Dépend des fichiers de src/data/ chargés avant celui-ci (BESTIARY_FULL,
- * LOCATIONS, EVENTS, CONTRACTS, TREE, ITEM_POOL, TRAME_CHAPITRES, …).
+ * LOCATIONS, CHAINES, TREE, ITEM_POOL, TRAME_CHAPITRES, …).
  *
  * Boucle principale : 3 actions par tour → « Terminer le tour » fait avancer
  * le calendrier de 2 à 6 semaines. Le monde progresse indépendamment du joueur.
@@ -917,14 +917,6 @@ function suspicionTier(v){ if(v<30) return 'low'; if(v<60) return 'mid'; if(v<85
 
 function pickVariant(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
-function buildNarrativeBlock(ev, lieu){
-  const introPool = FAMILLE_INTRO[ev.famille] || ["Quelque chose retient l'attention de Yohan."];
-  const outroPool = SUSPICION_OUTRO[suspicionTier(hero.suspicion)];
-  const intro = pickVariant(introPool);
-  const outro = pickVariant(outroPool);
-  const lieuLine = lieu ? `<p class="narrative" style="font-size:14px;color:var(--parchment-dim);font-style:italic;">${lieu.description_courte}</p>` : '';
-  return `<p class="narrative">${intro}</p>${lieuLine}<p class="narrative">${ev.texte}</p><p class="narrative" style="color:var(--parchment-dim);font-style:italic;font-size:14.5px;">${outro}</p>`;
-}
 
 /* ============================= BOUCLE DE TOUR : 3 ACTIONS ============================= */
 document.getElementById('btnActIci').onclick = () => { showScreen('lieu'); renderLieu(); };
@@ -1086,10 +1078,14 @@ function triggerExploration(){
   const ecrit = pickWrittenEvent(lieu);
   if(ecrit){ openWrittenEvent(ecrit, lieu); return; }
 
-  const pool = lieu ? EVENTS.filter(e => lieu.familles_evenements_compatibles.includes(e.famille)) : EVENTS;
-  const list = pool.length ? pool : EVENTS;
-  const ev = list[Math.floor(Math.random()*list.length)];
-  openEventModal(ev, lieu);
+  /* Le catalogue écrit de l'endroit est épuisé. On ne fabrique pas une histoire
+     de remplissage : on dit qu'il n'y a rien, en quelques lignes, et on laisse
+     le joueur regarder la carte. Un lieu qu'on a vidé doit se sentir vidé. */
+  const vides = (typeof EXPLORATIONS_VIDES !== 'undefined') ? EXPLORATIONS_VIDES : [];
+  if(vides.length){
+    const ev = vides[Math.floor(Math.random() * vides.length)];
+    openWrittenEvent(ev, lieu);
+  }
 }
 
 function closeEventModal(){

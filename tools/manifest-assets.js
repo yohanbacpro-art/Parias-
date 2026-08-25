@@ -12,11 +12,11 @@ const path = require('path');
 const vm = require('vm');
 
 const racine = path.join(__dirname, '..');
-const fichiers = ['portraits','locations','events','lore','champions',
+const fichiers = ['portraits','locations','lore','champions',
   'events_written','events_written_2','events_meetings','events_trame','events_compagnons','events_nemesis','events_isolde','contracts_special','romances'];
 const ctx = vm.createContext({ console });
 fichiers.forEach(f => vm.runInContext(fs.readFileSync(path.join(racine,'src/data',f+'.js'),'utf8'), ctx, {filename:f}));
-const G = vm.runInContext(`({PORTRAITS, EVENTS, EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME,
+const G = vm.runInContext(`({PORTRAITS, LOCATIONS, EVENTS_WRITTEN, EVENTS_RENCONTRE, EVENTS_TRAME,
   EVENTS_NEMESIS, EVENTS_ISOLDE, EVENTS_COMPAGNONS, CONTRATS_SPECIAUX, EVENTS_ROMANCE, CHAMPIONS})`, ctx);
 
 /* Marque les fichiers réellement présents : la liste sert à savoir ce qu'il
@@ -33,8 +33,8 @@ const section = (titre, liste) => liste.length
       liste.map(e => [`\`${e.image}.webp\``, present('events', e.image), e.titre.replace(/\|/g,'\\|')]))}\n`
   : '';
 
-/* Les familles servent au dessin de repli ET aux événements générés. */
-const familles = [...new Set(G.EVENTS.map(e => e.famille))].sort();
+/* Les familles servent au dessin de repli des bandeaux d'événement. */
+const familles = [...new Set(G.LOCATIONS.flatMap(l => l.familles_evenements_compatibles))].sort();
 
 const doc = `# Illustrations
 
@@ -66,10 +66,10 @@ ${section("L'arc d'Isolde", G.EVENTS_ISOLDE)}
 ${section('Rencontres de compagnons', G.EVENTS_COMPAGNONS)}
 ${section('Campagnes et affaires personnelles', G.CONTRATS_SPECIAUX)}
 ${section('Attachements', G.EVENTS_ROMANCE)}
-### Événements générés
+### Bandeaux par famille
 
-Les ${G.EVENTS.length} variantes de \`src/data/events.js\` cherchent un bandeau par
-famille :
+Tout événement écrit qui ne déclare pas d'illustration propre cherche un bandeau
+au nom de sa famille :
 
 ${tableau(['Fichier attendu','Fourni','Famille'],
   familles.map(f => [`\`evt_${f.toLowerCase()}.webp\``, present('events', 'evt_' + f.toLowerCase()), f]))}

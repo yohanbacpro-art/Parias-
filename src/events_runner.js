@@ -361,88 +361,10 @@ function renderScene(sceneId){
   });
 }
 
-/* ============================= ÉVÉNEMENTS GÉNÉRÉS (repli) ============================= */
+/* ============================= COMPOSITION DES RENCONTRES ============================= */
 
-function classifyChoice(label){
-  const l = label.toLowerCase();
-  if(/enquêt|examin|inspect|chercher|questionn|observ|analys/.test(l)) return 'enquete';
-  if(/négoci|marchand|convaincre|persuad|parle|discut|propos/.test(l)) return 'negociation';
-  if(/évit|fuir|ignor|s'éloign|reculer|renonc|laisse/.test(l)) return 'evitement';
-  if(/aid|secour|protég|sauv|défend/.test(l)) return 'aide';
-  if(/menac|intimid|forcer|imposer/.test(l)) return 'intimidation';
-  return 'generique';
-}
 
-function resolveEventChoice(label, ev){
-  const cat = classifyChoice(label);
-  const mult = RARETE_MULT[ev.rarete] || 1;
-  let statUsed, statNom, dc, orGain=0, xpGain=0, fatCost=0, pvCost=0;
 
-  switch(cat){
-    case 'enquete':      statUsed=hero.precision; statNom='Précision'; dc=11; orGain=Math.round(8*mult);  xpGain=Math.round(6*mult); break;
-    case 'negociation':  statUsed=hero.precision; statNom='Précision'; dc=12; orGain=Math.round(15*mult); break;
-    case 'evitement':    statUsed=hero.agi;       statNom='Agilité';   dc=9;  fatCost=5; break;
-    case 'aide':         statUsed=hero.vol;       statNom='Volonté';   dc=12; orGain=Math.round(5*mult);  xpGain=Math.round(8*mult); break;
-    case 'intimidation': statUsed=hero.precision; statNom='Précision'; dc=13; orGain=Math.round(10*mult); pvCost=Math.round(3*mult); break;
-    default:              statUsed=hero.precision; statNom='Précision'; dc=11; orGain=Math.round(6*mult);  xpGain=Math.round(4*mult);
-  }
-
-  const roll = rollDie(20);
-  const total = roll + statUsed;
-  const success = total >= dc;
-  const variants = NARRATIVE_VARIANTS[cat] || NARRATIVE_VARIANTS.generique;
-  const narrative = pickVariant(success ? variants.success : variants.fail);
-
-  if(cat==='intimidation') adjustSuspicion(3); // se faire remarquer, réussite ou non
-  if(cat==='evitement' && success) adjustSuspicion(-2);
-
-  let html = `<p class="narrative ${success?'success':'fail'}">${narrative}</p>`;
-
-  const tags = [];
-  if(success){
-    if(orGain){ hero.or += orGain; tags.push(`<span class="reward-tag">+${orGain} or</span>`); }
-    if(xpGain){ gainXP(xpGain); tags.push(`<span class="reward-tag">+${xpGain} XP</span>`); }
-  } else {
-    if(fatCost){ hero.fat = Math.min(hero.fatMax, hero.fat+fatCost); tags.push(`<span class="reward-tag neg">+${fatCost} Fatigue</span>`); }
-    if(pvCost){ hero.pv = Math.max(1, hero.pv-pvCost); tags.push(`<span class="reward-tag neg">−${pvCost} PV</span>`); }
-  }
-  if(tags.length) html += `<div class="reward-tags">${tags.join('')}</div>`;
-  html += `<p class="mech-line">Jet de ${statNom} : ${roll}+${statUsed} = ${total} (seuil ${dc})</p>`;
-  return html;
-}
-
-function openEventModal(ev, lieu){
-  const box = document.getElementById('eventModalBox');
-  box.innerHTML = `${artEventBanner('evt_'+ev.famille.toLowerCase(), ev.famille)}
-    <span class="event-tag">${ev.famille} · ${ev.rarete}${lieu?' · '+lieu.nom:''}</span>
-    <h3>${ev.titre}</h3>
-    ${buildNarrativeBlock(ev, lieu)}
-    <div class="choix-list" id="choixList"></div>`;
-  document.getElementById('eventModal').style.display='flex';
-  const cl = document.getElementById('choixList');
-  ev.choix.forEach((label, idx)=>{
-    const btn = document.createElement('button');
-    btn.innerHTML = `<span class="ch-label">${label}</span>`;
-    btn.onclick = () => {
-      // On se fie à l'indicateur peut_declencher_affrontement (ev.combat), plus fiable
-      // que la famille d'issue seule (certains "traque" ne combattent pas, certains
-      // "escorte"/"enquête" le peuvent).
-      if(idx===0 && ev.combat){
-        const zoneRef = lieu || {danger_range:{min:1,max:3}};
-        const groupe = pickEnemyGroupForZone(zoneRef, ev.rarete);
-        closeEventModal();
-        combatReturnTo = () => { if(lieu) openLieu(lieu); else showScreen('monde'); };
-        startCombat(groupe);
-      } else {
-        const resultHtml = resolveEventChoice(label, ev);
-        cl.innerHTML = `<p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;margin-top:10px;">« ${label} »</p>${resultHtml}
-          <div style="margin-top:14px;text-align:right;"><button class="primary" id="closeEvBtn">Continuer</button></div>`;
-        document.getElementById('closeEvBtn').onclick = () => { renderPersonnage(); closeEventModal(); saveGame(true); };
-      }
-    };
-    cl.appendChild(btn);
-  });
-}
 
 function rarityToDangerRange(rarete, base){
   // Ajuste la fourchette de Danger de la zone selon la rareté de l'événement

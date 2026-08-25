@@ -99,17 +99,38 @@ const verifie = (n, ok, d) => { if(ok) console.log('  ✔', n);
     currentLieu = LOCATIONS.find(l => l.id === 'LOC_001'); hero.offres = null; renderLieu(); });
   await page.click('#lieuOffres .offre .offre-btn');
   await page.waitForTimeout(200);
-  const lance = await page.evaluate(() => ({
-    ecran: [...document.querySelectorAll('.screen')].find(s => s.classList.contains('active')).id,
-    titre: document.getElementById('ctrTitre').textContent,
-    corps: document.getElementById('ctrBody').textContent.replace(/\s+/g,' ').trim(),
-    boutons: [...document.querySelectorAll('#ctrBody button')].length,
-  }));
-  verifie("l'écran du contrat s'ouvre", lance.ecran === 'screen-contrat' && lance.titre.length > 3, lance);
-  verifie("et il est écrit, pas vide", lance.corps.length > 200, lance.corps.length);
+  /* Depuis que le registre générique a disparu, une offre est soit une affaire
+     écrite en chaîne — qui s'ouvre sur sa première scène — soit un dossier
+     local, qui se joue dans le cadre en cinq phases. Les deux sont des
+     démarrages valides ; ce qui ne l'est pas, c'est qu'il ne se passe rien. */
+  const lance = await page.evaluate(() => {
+    const chaine = document.getElementById('eventModal').style.display === 'flex';
+    return {
+      chaine,
+      ecran: [...document.querySelectorAll('.screen')].find(s => s.classList.contains('active')).id,
+      titre: chaine ? (document.querySelector('#eventModalBox h3') || {}).textContent || ''
+                    : document.getElementById('ctrTitre').textContent,
+      corps: (chaine ? document.getElementById('eventModalBox')
+                     : document.getElementById('ctrBody')).textContent.replace(/\s+/g,' ').trim(),
+      boutons: [...document.querySelectorAll(chaine ? '#scChoix button' : '#ctrBody button')].length,
+    };
+  });
+  verifie("accepter ouvre quelque chose d'écrit",
+    (lance.chaine || lance.ecran === 'screen-contrat') && lance.titre.length > 3, lance);
+  verifie("et c'est écrit, pas vide", lance.corps.length > 200, lance.corps.length);
   verifie('il y a quelque chose à choisir', lance.boutons >= 2, lance.boutons);
   verifie("aucune faute d'accord ni d'élision",
     !/ reçoit Yohan en personne/.test(lance.corps) && !/s'agit de une/.test(lance.corps), lance.corps.slice(0,160));
+  if(lance.chaine){
+    /* Une chaîne a démarré : on la referme et on prend un dossier local pour
+       vérifier le cadre en cinq phases juste après. */
+    await page.evaluate(() => { closeEventModal();
+      hero.position = 'LOC_011'; currentLieu = LOCATIONS.find(l => l.id === 'LOC_011');
+      const a = affairesDuLieu('LOC_011')[0];
+      if(a) openContract({ ...a, locale:true });
+    });
+    await page.waitForTimeout(150);
+  }
 
   const chaine = await page.evaluate(() => {
     const vus = [];
@@ -130,16 +151,20 @@ const verifie = (n, ok, d) => { if(ok) console.log('  ✔', n);
   const prixCouverture = await page.evaluate(() => {
     hero.renom = 60; hero.suspicion = 0; hero.reputations = { ...REPUTATION_DEPART };
     hero.lignee = { liaisons:[], enfants:[] };
-    const prix = CONTRACTS.map(c => prixPariaDe(c));
+    /* Le registre générique a disparu : ce sont désormais les affaires écrites
+       en chaînes qui portent le Prix. */
+    const affaires = CHAINES.filter(c => c.maison);
+    const prix = affaires.map(c => prixPariaDe(c));
     return {
-      contrats: CONTRACTS.length,
+      contrats: affaires.length,
       avecPrix: prix.filter(Boolean).length,
       avecCandidate: prix.filter(p => p && p.noble_proposee).length,
       toutesAdultes: prix.every(p => !p || !p.noble_proposee || p.noble_proposee.age >= 18),
-      maisonsInconnues: [...new Set(CONTRACTS.map(c => c.commanditaire))].filter(q => !MAISONS[q]),
+      maisonsInconnues: [...new Set(affaires.map(c => c.maison))].filter(q => !MAISONS[q]),
       localesNobles: Object.values(CONTRATS_LOCAUX_EXPANSES).flat().filter(c => commanditaireNoble(c)).length,
       peuple: commanditaireNoble({ commanditaire:"Une veuve du quartier bas" }),
-      stable: prixPariaDe(CONTRACTS[7]).noble_proposee.nom === prixPariaDe(CONTRACTS[7]).noble_proposee.nom,
+      stable: (() => { const a = affaires.find(c => prixPariaDe(c) && prixPariaDe(c).noble_proposee);
+                       return !a || prixPariaDe(a).noble_proposee.nom === prixPariaDe(a).noble_proposee.nom; })(),
     };
   });
   verifie('toute maison noble doit le Prix', prixCouverture.avecPrix === prixCouverture.contrats, prixCouverture);
@@ -155,21 +180,26 @@ const verifie = (n, ok, d) => { if(ok) console.log('  ✔', n);
   verifie('des affaires locales le portent aussi', prixCouverture.localesNobles >= 1, prixCouverture);
   verifie('la même affaire propose toujours la même femme', prixCouverture.stable);
 
-  const nomMaison = await page.evaluate(() => {
-    hero.position = 'LOC_004'; hero.dossiers = {};
+  /* Un lieu dont le dossier est vidé ne retombe plus sur un registre générique :
+     il propose ce qui est écrit chez le voisin, et le voyage se voit. */
+  const voisinage = await page.evaluate(() => {
+    hero.position = 'LOC_004'; hero.dossiers = {}; hero.chaines = null; heroChaines();
     CONTRATS_LOCAUX_EXPANSES.LOC_004.forEach(c => noterAffaireReglee(c));
     hero.offres = null;
-    const o = offresDuTour().filter(c => c.tableau);
-    return { total:o.length, maisons: o.filter(c => /^Maison /.test(c.commanditaire)).length,
-             entremetteurs: o.filter(c => c.entremetteur).length,
-             doublons: o.length - new Set(o.map(c => c.titre.split(' — ')[0])).size };
+    const o = offresDuTour();
+    return { total:o.length, ailleurs: o.filter(c => c.ailleurs).length,
+             ecrites: o.filter(c => c.chaine).length,
+             generiques: o.filter(c => c.tableau).length,
+             titres: o.map(c => c.titre) };
   });
-  verifie("l'écran du lieu n'efface plus le nom de la maison",
-    nomMaison.total > 0 && nomMaison.maisons === nomMaison.total && nomMaison.entremetteurs === nomMaison.total, nomMaison);
-  verifie('et ne propose jamais deux fois la même histoire', nomMaison.doublons === 0, nomMaison);
+  verifie('un lieu vidé propose encore quelque chose', voisinage.total > 0, voisinage);
+  verifie('et plus rien ne vient d\'un registre générique',
+    voisinage.generiques === 0, voisinage);
+  verifie('ce qui bouche les trous est écrit, et vient d\'ailleurs',
+    voisinage.ecrites + voisinage.ailleurs >= 1, voisinage);
 
   const termes = await page.evaluate(() => {
-    const c = CONTRACTS.find(x => x.or >= 500);
+    const c = CHAINES.find(x => x.maison && x.or >= 500);
     const prix = prixPariaDe(c);
     const essai = choix => {
       hero.or = 0; hero.renom = 0; hero.suspicion = 20;

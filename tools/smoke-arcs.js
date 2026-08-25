@@ -159,14 +159,17 @@ async function derouler(page, cible){
     Object.values(CONTRATS_LOCAUX_EXPANSES).flat().forEach(c => {
       if(!noms.includes(c.lieu)) mauvais.push(c.id + ' → ' + c.lieu);
     });
-    // Le registre général, lui, parle d'ailleurs — c'est assumé.
-    const generauxHorsCarte = CONTRACTS.filter(c => !noms.includes(c.lieu)).length;
-    return { affaires: Object.values(CONTRATS_LOCAUX_EXPANSES).flat().length, mauvais, generauxHorsCarte,
+    // Les affaires écrites en chaînes déclarent, elles, les lieux où elles se
+    // proposent : aucune ne doit viser un lieu qui n'est pas sur la carte.
+    const chainesHorsCarte = CHAINES.filter(c => c.lieux)
+      .flatMap(c => c.lieux.filter(id => !LOCATIONS.some(l => l.id === id)));
+    return { affaires: Object.values(CONTRATS_LOCAUX_EXPANSES).flat().length, mauvais, chainesHorsCarte,
              lieuxCouverts: Object.keys(CONTRATS_LOCAUX_EXPANSES).length };
   });
   verifie('60 affaires locales sur les 20 lieux', loc.affaires === 60 && loc.lieuxCouverts === 20, loc);
   verifie('toutes se déroulent dans un lieu de la carte', loc.mauvais.length === 0, loc.mauvais.slice(0,4));
-  console.log(`    (le registre général garde ${loc.generauxHorsCarte} affaires venues d'ailleurs, c'est voulu)`);
+  verifie('aucune affaire écrite ne se propose dans un lieu inexistant',
+    loc.chainesHorsCarte.length === 0, loc.chainesHorsCarte.slice(0,4));
 
   const dossier = await page.evaluate(() => {
     openLieu(LOCATIONS.find(l => l.id === 'LOC_016'));

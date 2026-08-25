@@ -162,17 +162,20 @@ et se refont avec `python3 tools/decoupe-affiche.py`.
 | `ro_alycia_4.webp` | — | Ce qu'on décide de garder |
 | `ro_alarielle_3.webp` | — | La troisième convocation |
 | `ro_eleonore_3.webp` | — | Ce qu'une maison peut porter |
+| `ro_alycia_1.webp` | — | Ce qu'elle demande, et ce qu'elle vérifie |
+| `ro_alarielle_1.webp` | — | Ce que ça coûterait, et à qui |
+| `ro_alycia_2.webp` | — | Un pas de plus |
+| `ro_alycia_3.webp` | — | Ce qui a été promis |
 
-### Événements générés
+### Bandeaux par famille
 
-Les 200 variantes de `src/data/events.js` cherchent un bandeau par
-famille :
+Tout événement écrit qui ne déclare pas d'illustration propre cherche un bandeau
+au nom de sa famille :
 
 | Fichier attendu | Fourni | Famille |
 |---|---|---|
 | `evt_contrat.webp` | — | CONTRAT |
 | `evt_elfe.webp` | ✅ | ELFE |
-| `evt_elfe_noir.webp` | ✅ | ELFE_NOIR |
 | `evt_guerre.webp` | — | GUERRE |
 | `evt_homme_bete.webp` | ✅ | HOMME_BETE |
 | `evt_khesh.webp` | ✅ | KHESH |
