@@ -272,6 +272,7 @@ document.getElementById('importFileInput').onchange = (e) => {
 };
 
 function enterGame(){
+  if(typeof syncTensions === 'function') syncTensions();
   document.getElementById('tabs').style.display='flex';
   const cal = document.getElementById('calendarBar');
   cal.style.display='flex';
@@ -316,9 +317,13 @@ document.getElementById('btnBackContrats').onclick = () => { showScreen('lieu');
 /* ============================= TEMPS & CHRONIQUES ============================= */
 hero.temps = { semaines: 0 };
 hero.chroniques = [];
+/* Les tensions ne se saisissent plus à la main : elles sont dérivées de l'état
+ * des cinq crises régionales (src/crises.js). On garde le champ parce que les
+ * édits, les événements écrits et l'épilogue le lisent. */
 hero.tensions = {
-  humains:12, parias:6, khesh:12, elfes:6, elfes_noirs:8, nains:8, peaux_vertes:14, hommes_betes:14
+  humains:0, parias:0, khesh:0, elfes:0, elfes_noirs:0, nains:0, peaux_vertes:0, hommes_betes:0
 };
+hero.crises = {};
 hero.crisesDeclenchees = new Set();
 hero.reputations = { ...REPUTATION_DEPART };
 hero.dossiers = {};   // affaires locales réglées, par lieu
@@ -344,11 +349,12 @@ function advanceTime(semaines){
   hero.temps.semaines += semaines;
   const after = dateFromSemaines(hero.temps.semaines);
   let nouvelle = null;
+  let crises = [];
   if(after.saisonIdx !== before.saisonIdx || after.an !== before.an){
     const region = LOCATIONS[Math.floor(Math.random()*LOCATIONS.length)].nom;
     nouvelle = NEWS_POOL[Math.floor(Math.random()*NEWS_POOL.length)](region);
     hero.chroniques.push({ date: `${after.saison}, An ${after.an}`, texte: nouvelle });
-    progressTensions(after);
+    crises = (typeof criseTick === 'function') ? criseTick(after) : [];
   }
   // Le temps ne fait pas que tourner un compteur : on vieillit, et il naît des gens.
   const lignee = passerLeTemps(semaines);
@@ -359,49 +365,11 @@ function advanceTime(semaines){
   // sixième se relève dans le dos de tout le monde.
   const politique = (typeof politiqueTick === 'function') ? politiqueTick(semaines) : [];
   renderCalendar();
-  return { nouvelle, lignee, politique };
-}
-
-function progressTensions(dateInfo){
-  const keys = Object.keys(hero.tensions);
-  const nbTouches = 1 + Math.floor(Math.random()*2); // 1 ou 2 peuples avancent ce tick
-  for(let i=0;i<nbTouches;i++){
-    const k = keys[Math.floor(Math.random()*keys.length)];
-    const before = hero.tensions[k];
-    hero.tensions[k] = Math.min(100, hero.tensions[k] + 3 + Math.floor(Math.random()*8));
-    if(before<90 && hero.tensions[k]>=90 && !hero.crisesDeclenchees.has(k)){
-      hero.crisesDeclenchees.add(k);
-      hero.chroniques.push({
-        date: `${dateInfo.saison}, An ${dateInfo.an}`,
-        texte: `⚠ ${PEUPLE_LABELS[k]} — La ${CRISE_NOMS[k]} menace désormais d'éclater ouvertement.`
-      });
-    }
-  }
-}
-
-function tensionColor(v){
-  if(v<50) return 'var(--onde-bright)';
-  if(v<80) return 'var(--warn)';
-  return 'var(--blood-bright)';
-}
-
-function renderTensions(){
-  const grid = document.getElementById('tensionGrid');
-  grid.innerHTML = '';
-  Object.entries(hero.tensions).forEach(([k,v])=>{
-    const div = document.createElement('div');
-    div.className = 'tension-card';
-    const color = tensionColor(v);
-    const crise = v>=70 ? `<span class="tc-crise active">Vers : ${CRISE_NOMS[k]}</span>` : `<span class="tc-crise">Stable</span>`;
-    div.innerHTML = `<div class="tc-nom">${PEUPLE_LABELS[k]}<b style="color:${color}">${v}</b></div>
-      <div class="tension-bar"><div class="tension-fill" style="width:${v}%;background:${color};"></div></div>
-      ${crise}`;
-    grid.appendChild(div);
-  });
+  return { nouvelle, lignee, politique, crises };
 }
 
 function renderChroniques(){
-  renderTensions();
+  if(typeof renderCrises === 'function') renderCrises();
   renderReputations();
   if(typeof renderPolitique === 'function') renderPolitique();
   const list = document.getElementById('newsList');

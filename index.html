@@ -102,14 +102,27 @@
   .news-item .ni-date{display:block;font-family:'Inter',sans-serif;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--parchment-dim);margin-bottom:3px;}
   .news-empty{color:var(--parchment-dim);font-style:italic;font-size:13.5px;}
 
-  .tension-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
-  .tension-card{background:#0f0c0a;border:1px solid var(--line);border-radius:5px;padding:10px 12px;}
-  .tension-card .tc-nom{font-family:'Cinzel',serif;font-size:12.5px;color:var(--parchment);margin-bottom:6px;display:flex;justify-content:space-between;}
-  .tension-card .tc-nom b{font-family:'Inter',sans-serif;font-weight:700;font-size:11px;}
-  .tension-bar{height:8px;border-radius:3px;background:#0a0807;border:1px solid var(--line);overflow:hidden;margin-bottom:5px;}
-  .tension-fill{height:100%;transition:width .4s;}
-  .tc-crise{font-family:'Inter',sans-serif;font-size:10px;font-style:italic;color:var(--parchment-dim);}
-  .tc-crise.active{color:var(--blood-bright);font-style:normal;}
+  /* Les crises régionales : une étape nommée, jamais un nombre. */
+  .crise-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px;}
+  .crise{background:#0f0c0a;border:1px solid var(--line);border-left:2px solid var(--line);border-radius:5px;padding:11px 13px;}
+  .crise.active{border-left-color:var(--warn);}
+  .crise.close{border-left-color:var(--blood-bright);opacity:.85;}
+  .cr-tete{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:3px;}
+  .cr-nom{font-family:'Cinzel',serif;font-size:13px;color:var(--parchment);}
+  .cr-pas-rang{display:flex;gap:3px;flex:0 0 auto;}
+  .cr-pas{width:12px;height:4px;border-radius:2px;background:#241c17;border:1px solid var(--line);display:block;}
+  .cr-pas.passe{background:var(--blood-bright);border-color:var(--blood-bright);}
+  .cr-pas.suivant{background:#241c17;border-color:var(--warn);}
+  .cr-acteurs{font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.03em;color:var(--parchment-dim);margin-bottom:8px;}
+  .cr-etape{font-family:'Cinzel',serif;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--warn);margin-bottom:4px;}
+  .crise.close .cr-etape{color:var(--blood-bright);}
+  .crise:not(.active) .cr-etape{color:var(--parchment-dim);}
+  .cr-resume{font-size:12px;line-height:1.5;color:var(--parchment);margin:0 0 8px;}
+  .cr-causes{list-style:none;margin:0;padding:0;border-top:1px solid var(--line);padding-top:7px;}
+  .cr-causes li{font-family:'Inter',sans-serif;font-size:10.5px;line-height:1.5;color:var(--parchment-dim);padding-left:12px;position:relative;}
+  .cr-causes li::before{position:absolute;left:0;top:0;}
+  .cr-causes li.pousse::before{content:'▲';color:var(--blood-bright);font-size:8px;}
+  .cr-causes li.freine::before{content:'▼';color:var(--onde-bright);font-size:8px;}
 
   /* ---- quête principale ---- */
   .quete-chapitre{font-family:'Cinzel',serif;font-size:15px;color:var(--gold);}
@@ -606,6 +619,7 @@
   .pol-edits li span{color:var(--parchment-dim);}
   .pol-edits li.pol-rien{border-left-color:var(--line);color:var(--parchment-dim);font-style:italic;}
   .pli-politique{color:var(--gold);}
+  .pli-crise{color:var(--blood-bright);}
 
   .quete-bandeau{display:flex;justify-content:space-between;align-items:center;gap:14px;
     flex-wrap:wrap;padding:7px 11px;margin-bottom:8px;cursor:pointer;
@@ -1091,9 +1105,9 @@
   <!-- CHRONIQUES -->
   <div class="screen" id="screen-chroniques">
     <div class="panel">
-      <h2>Tensions du Monde</h2>
-      <p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;">Chaque peuple avance, avec ou sans Yohan, vers sa propre crise.</p>
-      <div class="tension-grid" id="tensionGrid"></div>
+      <h2>Les crises du monde</h2>
+      <p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;">Cinq crises avancent sans Yohan, en cinq étapes chacune. Ce qui les pousse n'est jamais le hasard.</p>
+      <div class="crise-grid" id="criseGrid"></div>
     </div>
 
     <div class="panel">
@@ -1194,6 +1208,7 @@
 <script src="src/data/chantier.js"></script>
 <script src="src/data/events_suspicion.js"></script>
 <script src="src/data/politique.js"></script>
+<script src="src/data/crises.js"></script>
 <script src="src/data/romances.js"></script>
 <script src="src/data/reputation.js"></script>
 <script src="src/data/epilogue.js"></script>
@@ -1209,6 +1224,7 @@
 <script src="src/chaines.js"></script>
 <script src="src/suspicion.js"></script>
 <script src="src/politique.js"></script>
+<script src="src/crises.js"></script>
 <script src="src/offres.js"></script>
 <script src="src/lieu.js"></script>
 <script src="src/chantier.js"></script>

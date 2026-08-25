@@ -19,7 +19,7 @@
  * reconstruits au chargement (voir CHAMPS_SET).
  */
 
-const SAVE_VERSION = 8;
+const SAVE_VERSION = 9;
 /* Le préfixe est un espace de noms de stockage, pas le numéro de version : il
  * reste figé pour que les parties commencées avant soient relues puis migrées. */
 const SAVE_PREFIX  = 'parias_save_v6_';
@@ -77,6 +77,7 @@ function reconstruireHero(brut){
   h.offres            = h.offres || { semaine: -1, locId: null, liste: [] };
   h.politique         = h.politique || {};
   h.chaines           = h.chaines || { actives:[], faites:[], issues:{} };
+  h.crises            = h.crises || {};
   h.lignee            = h.lignee || { liaisons: [], enfants: [] };
   if(typeof h.age !== 'number') h.age = AGE_DEPART;
   h.compagnons        = (h.compagnons || []).map(c => COMPANIONS_POOL[c.id] || c);
@@ -149,6 +150,24 @@ const MIGRATIONS = {
   7: enr => {           // v7 → v8 : les affaires qui se jouent sur plusieurs tours
     enr.hero.chaines = enr.hero.chaines || { actives:[], faites:[], issues:{} };
     enr.version = 8;
+    return enr;
+  },
+  8: enr => {           // v8 → v9 : les tensions chiffrées deviennent cinq crises
+    /* Une partie en cours avait des nombres. On les relit comme un état du
+     * monde : une tension de 60 chez un peuple, c'est une crise arrivée à sa
+     * troisième étape. Personne ne perd sa partie parce que le monde a
+     * gagné des raisons. */
+    const t = enr.hero.tensions || {};
+    enr.hero.crises = enr.hero.crises || {};
+    const lecture = { ELFES:'elfes', ASTRAH:'humains', PEAUX_VERTES:'peaux_vertes',
+                      KHESH:'khesh', HOMMES_BETES:'hommes_betes' };
+    for(const [id, peuple] of Object.entries(lecture)){
+      if(enr.hero.crises[id]) continue;
+      const v = t[peuple] || 0;
+      enr.hero.crises[id] = { palier: Math.max(0, Math.min(5, Math.floor(v / 18))),
+                              pression: 0, causes: [] };
+    }
+    enr.version = 9;
     return enr;
   },
 };

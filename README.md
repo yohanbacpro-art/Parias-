@@ -7,14 +7,16 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V1.8** — **les dix chaînes secrètes**. Elles ne se proposent
-pas et ne s'acceptent pas : elles s'arment en silence sur ce que vous avez fait —
-un seigneur humilié, un dragon épargné, une route rouverte, une chope payée à un
-vieux nain — et elles reviennent vous chercher des mois plus tard, pendant que
-vous êtes occupé ailleurs. 30 étapes, 184 scènes, 110 choix, 32 issues.
+**Version actuelle : V1.9** — **les cinq crises régionales**. Le monde n'avance
+plus par huit compteurs qui montent au hasard : cinq crises franchissent cinq
+étapes nommées chacune, et ce qui les pousse se lit dans l'état réel de la
+partie — les marqueurs posés par vos affaires, l'influence des puissances, votre
+réputation, et l'état des autres crises.
 
-*(V1.7 : les trente affaires du pack narratif écrites en chaînes — 101 étapes,
-564 scènes, 313 choix, 142 issues, 16 combats et 5 batailles rangées.)*
+*V1.8 : les dix chaînes secrètes — elles ne se proposent pas et ne s'acceptent
+pas, elles s'arment en silence sur ce que vous avez fait et reviennent vous
+chercher des mois plus tard. V1.7 : les trente affaires du pack narratif écrites
+en chaînes.*
 
 > **`CLAUDE.md` fait autorité.** Il porte le prompt maître du projet, l'audit du
 > code au regard de ce prompt, et la feuille de route. Ce README-ci documente ce
@@ -67,6 +69,7 @@ lien. Il se régénère avec `node tools/build-standalone.js`.
 | **Le Prix du Paria** : toute maison noble doit l'Or et le Sang, en trois termes | ✅ |
 | **Affaires en chaînes** : 30 affaires en 101 étapes, jouées sur plusieurs tours | ✅ |
 | **Chaînes secrètes** : 10 chaînes armées sur marqueur, en arrière-plan, jamais proposées | ✅ |
+| **Crises régionales** : 5 crises en 5 étapes nommées, poussées par l'état du monde | ✅ |
 | **Maisons nobles** : 25 maisons, 26 nobles adultes nommées, avec droit de refus | ✅ |
 | **Bestiaire** : 75 créatures, dont 24 adversaires humains par peuple | ✅ |
 | **Rencontres composées** : meneur, élite, soutien et piétaille selon l'affaire et le lieu | ✅ |
@@ -390,6 +393,47 @@ qu'on a fait quelque chose** — et personne ne vous prévient.
 
 Ce dernier n'est pas un contrat : c'est la réponse à la question que le jeu pose
 depuis la première ligne. Karlsberg n'est pas tombée sous des monstres.
+
+## Les crises régionales
+
+Avant : huit nombres. Ils montaient de 3 à 10 au hasard une fois par saison, et
+en franchissant 90 ils imprimaient une ligne. Le monde ne vivait pas — il tirait
+aux dés, ce que le document fondateur interdit en toutes lettres.
+
+Maintenant : **cinq crises, cinq étapes nommées chacune**, franchies dans
+l'ordre, jamais sautées.
+
+| Crise | Ses acteurs | Ses cinq étapes |
+|---|---|---|
+| **La Guerre des Deux Cours** | Eltharion · Anarion · Tyrion · Alarielle | incidents frontaliers → assassinats et raids → mobilisation → guerre ouverte → la bataille des Mille Cornes |
+| **La Question du Second Empire** | Lucius · Léopold IV · les princes humains | propagande dynastique → alliances → ultimatums → les guerres humaines → restauration ou effondrement |
+| **La Remontée vers la Surface** | Gharok · les clans · Kar-Durak | les tambours → raids miniers → un chef fédérateur → le siège de Kar-Durak → contre-offensive ou chute |
+| **La Grande Unification** | Khal-Vaene · les douze tribus | duels tribaux → le Conseil des Lances → six bannières → la guerre d'unification → douze feux ou la dispersion |
+| **La Grande Chasse** | les hardes des lisières | hardes isolées → des signes communs → massacres coordonnés → la Grande Chasse → dispersion ou dévastation |
+
+Ce qui les pousse n'est jamais un tirage. Chaque crise a une fonction
+`pression()` qui lit l'état réel de la partie et rend une liste de **raisons** :
+
+- *« Anarion a été offensé publiquement et ne l'a pas oublié »* — +12
+- *« les humains sont occupés à s'entre-tuer, ce qui laisse le champ libre »* — +9
+- *« le traité des Trois Chênes tient encore »* — −22
+
+Le joueur voit les raisons, jamais les nombres. L'écran des Chroniques affiche,
+pour chaque crise, l'étape en cours **par son nom**, cinq repères pour dire où
+l'on en est, et les trois causes qui pèsent le plus — celles qui poussent en
+rouge, celles qui freinent en turquoise.
+
+Le hasard n'a plus qu'un rôle, et il est mince : l'ordre dans lequel deux crises
+également mûres franchissent leur étape le même trimestre. Une partie ne se
+rejoue donc pas à l'identique, mais elle ne dérive jamais sans raison.
+
+**Rien n'a été cassé pour autant.** `hero.tensions` existe toujours — il est
+désormais *dérivé* de l'état des crises à chaque saison. Les édits politiques,
+les événements écrits conditionnés par `tensionMin` et les 116 verdicts
+d'épilogue continuent de le lire sans une ligne de changement, mais ils lisent un
+monde qui a des raisons. Une sauvegarde d'avant la bascule est relue en v9 : une
+tension de 72 chez les humains devient une Question du Second Empire arrivée à sa
+quatrième étape.
 
 ### Le pack narratif dans le dépôt
 
@@ -814,6 +858,8 @@ tools/smoke-tour.js        éprouve le tour, le temps, la lignée, la carte, les
 tools/smoke-consolidation.js  éprouve l'écran unique, les offres, les voyages,
                               la Suspicion, le chantier et la politique
 tools/smoke-chaines.js     éprouve les affaires en chaînes, les termes et les issues
+tools/smoke-crises.js      éprouve les cinq crises, leurs étapes et leurs raisons
+tools/build-artifact.js    fabrique dist/parias-artifact.html (page publiable)
 tools/smoke-tranche.js     l'épreuve d'acceptation du document fondateur :
                            partie → carte → voyage → lieu → récit → combat →
                            conséquence → sauvegarde → rechargement
@@ -840,6 +886,7 @@ node tools/smoke-arcs.js                     # Isolde, compagnons, attachements,
 node tools/smoke-tour.js                     # tour, âge, descendance, carte, recrutement
 node tools/smoke-consolidation.js            # écran unique, offres, voyages, Suspicion, chantier, politique
 node tools/smoke-chaines.js                  # affaires en chaînes, termes du Prix, issues durables
+node tools/smoke-crises.js                   # crises régionales : étapes, raisons, tensions dérivées
 node tools/smoke-tranche.js                  # la tranche verticale, de bout en bout
 
 node tools/manifest-assets.js                # régénère la liste des illustrations

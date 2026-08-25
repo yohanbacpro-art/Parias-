@@ -23,6 +23,7 @@ const fichiers = [
   'src/data/reputation.js', 'src/data/epilogue.js',
   'src/data/chantier.js', 'src/data/events_suspicion.js', 'src/data/politique.js',
   'src/data/maisons.js', 'src/data/chaines.js', 'src/data/chaines_secretes.js',
+  'src/data/crises.js',
 ];
 
 const ctx = vm.createContext({ console });
@@ -40,7 +41,7 @@ const {
   UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART, REGIONS, ROUTES, LOC_REGION,
   REPUTATION_DEPART, RANGS_REPUTATION, LOC_PEUPLE, REPUTATION_VOIX, SHOPS, BUTIN_PAR_PEUPLE,
   CONTRATS_LOCAUX, CONTRACT_COMPLICATIONS,
-  CHANTIER, EVENTS_SUSPICION, POUVOIRS, EDITS, MAISONS, CHAINES,
+  CHANTIER, EVENTS_SUSPICION, POUVOIRS, EDITS, MAISONS, CHAINES, CRISES,
   EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_LIGNEE, EPI_ONDE, EPI_LEGS,
 } = vm.runInContext(`({
   BESTIARY_FULL, PORTRAITS, LOCATIONS, EVENTS, CONTRACTS, ITEM_POOL,
@@ -50,7 +51,7 @@ const {
   UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART, REGIONS, ROUTES, LOC_REGION,
   REPUTATION_DEPART, RANGS_REPUTATION, LOC_PEUPLE, REPUTATION_VOIX, SHOPS, BUTIN_PAR_PEUPLE,
   CONTRATS_LOCAUX, CONTRACT_COMPLICATIONS,
-  CHANTIER, EVENTS_SUSPICION, POUVOIRS, EDITS, MAISONS, CHAINES,
+  CHANTIER, EVENTS_SUSPICION, POUVOIRS, EDITS, MAISONS, CHAINES, CRISES,
   EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_LIGNEE, EPI_ONDE, EPI_LEGS
 })`, ctx);
 
@@ -639,6 +640,52 @@ CHAINES.forEach(ch => {
   if(ch.or && !(ch.paye || []).length) warn(`CHAINE ${ch.id} : de l'or annoncé, aucune issue qui paie`);
 });
 
+/* ---- Les cinq crises régionales ----
+ * Une crise doit avoir cinq étapes nommées, écrites, franchissables dans
+ * l'ordre — et ce qui la pousse doit se lire dans des marqueurs qui existent
+ * vraiment. Une condition sur un marqueur fantôme est une raison qui n'arrive
+ * jamais : la crise retomberait au tirage de base, c'est-à-dire au hasard. */
+const peuplesConnus = new Set(Object.keys(REPUTATION_DEPART));
+const criseIds = new Set();
+CRISES.forEach(c => {
+  if(criseIds.has(c.id)) err(`CRISE ${c.id} : identifiant en double`);
+  criseIds.add(c.id);
+  if(!c.nom || !c.acteurs || !c.veille) err(`CRISE ${c.id} : nom, acteurs ou ligne de veille manquants`);
+  (c.peuples || []).forEach(p => {
+    if(!peuplesConnus.has(p)) err(`CRISE ${c.id} : peuple « ${p} » inconnu de la réputation`);
+  });
+  if(!Array.isArray(c.paliers) || c.paliers.length !== 5)
+    err(`CRISE ${c.id} : ${(c.paliers||[]).length} étapes au lieu de cinq`);
+  (c.paliers || []).forEach((p, i) => {
+    const ou = `CRISE ${c.id}/${i+1}`;
+    if(!p.nom)       err(`${ou} : étape sans nom`);
+    if(!p.resume)    err(`${ou} : étape sans résumé affichable`);
+    if(!p.chronique) err(`${ou} : étape sans chronique écrite`);
+    if(p.chronique && p.chronique.length < 40) warn(`${ou} : chronique très courte`);
+    if(typeof p.seuil !== 'number' || p.seuil <= 0) err(`${ou} : seuil absent ou nul`);
+    if(i < 4 && (c.paliers[i+1].seuil || 0) < p.seuil)
+      warn(`${ou} : l'étape suivante est moins chère à franchir que celle-ci`);
+    noterMarqueurs(p.effets);
+    for(const k of Object.keys((p.effets || {}).reputation || {}))
+      if(!peuplesConnus.has(k)) err(`${ou} : peuple « ${k} » inconnu de la réputation`);
+  });
+  if(typeof c.pression !== 'function') err(`CRISE ${c.id} : pas de fonction pression()`);
+});
+
+/* Les marqueurs lus par pression() sont dans le corps des fonctions : on les
+ * relit à la source, c'est la seule façon de les attraper. */
+const sourceCrises = fs.readFileSync(path.join(racine, 'src/data/crises.js'), 'utf8');
+const marqueursDeCrise = new Set();
+for(const m of sourceCrises.matchAll(/hasFlag\('([a-z0-9_]+)'\)/g)) marqueursDeCrise.add(m[1]);
+marqueursDeCrise.forEach(f => {
+  if(!marqueursPoses.has(f))
+    err(`CRISES : la pression lit le marqueur « ${f} », que rien ne pose — cette raison n'arriverait jamais`);
+});
+/* Et les crises qu'elles se lisent entre elles doivent exister. */
+for(const m of sourceCrises.matchAll(/criseEtape\('([A-Z_]+)'\)/g)){
+  if(!criseIds.has(m[1])) err(`CRISES : pression lue sur la crise « ${m[1]} », qui n'existe pas`);
+}
+
 /* ---- Les maisons nobles et le Prix ---- */
 let nbNobles = 0, maisonsVides = 0;
 Object.entries(MAISONS).forEach(([nom, m]) => {
@@ -781,6 +828,7 @@ POUVOIRS.forEach(p => {
     warn(`POUVOIRS ${p.id} : cette puissance ne décide jamais rien`);
 });
 console.log(`Politique   ${POUVOIRS.length} puissances · ${EDITS.length} édits`);
+console.log(`Crises      ${CRISES.length} régionales · ${CRISES.reduce((s,c)=>s+c.paliers.length,0)} étapes nommées`);
 console.log('');
 
 /* ---- Couverture par lieu ---- */

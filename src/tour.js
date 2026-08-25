@@ -89,6 +89,10 @@ function ouvrirPliDuTour(resume){
   if(resume && resume.nouvelle) lignes.push(`<li class="pli-monde">${resume.nouvelle}</li>`);
   (resume && resume.lignee || []).forEach(e => lignes.push(`<li class="pli-lignee">${e.texte}</li>`));
   (resume && resume.politique || []).forEach(e => lignes.push(`<li class="pli-politique">${e.texte}</li>`));
+  /* Une crise qui franchit une étape n'annonce pas un chiffre : elle raconte
+     ce qui vient de se produire, et laisse le joueur en tirer les conséquences. */
+  (resume && resume.crises || []).forEach(c =>
+    lignes.push(`<li class="pli-crise"><b>${c.crise.nom} — ${c.nom}.</b> ${c.chronique}</li>`));
   if(resume && resume.solde) lignes.push(`<li class="pli-solde">${resume.solde}</li>`);
   if(resume && resume.rente) lignes.push(`<li class="pli-or">${resume.rente}</li>`);
 

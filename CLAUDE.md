@@ -161,7 +161,7 @@ Audit au 24 août. Ce qui est là, ce qui manque, sans complaisance.
 | Romances à axes séparés | **partiel** | `romances.js` — arcs écrits, un seul axe d'affinité |
 | Mémoire narrative longue | **fait** | `chaines_secretes.js` — 10 chaînes armées sur marqueur, en arrière-plan |
 | PNJ majeurs qui agissent seuls | **manquant** | `politique.js` simule 6 puissances, pas 9 personnes |
-| Crises régionales en étapes | **manquant** | `tensions` n'est qu'un nombre qui imprime une ligne |
+| Crises régionales en étapes | **fait** | `crises.js` — 5 crises, 25 étapes nommées, poussées par l'état du monde |
 | Fin lisant l'état réel du monde | **fait** | `epilogue.js`, 116 verdicts, 8 legs |
 | Interface dark fantasy non-tableur | **fait** | un seul écran de jeu, le lieu |
 
@@ -175,7 +175,7 @@ Inventaire : 20 lieux · 4 régions · 24 routes · 75 créatures · 12 champion
 29 troupes · 12 champs de bataille · 130 événements écrits illustrés · **30
 affaires en chaînes (101 étapes, 564 scènes, 313 choix, 142 issues)** · **10
 chaînes secrètes armées sur marqueur (30 étapes, 184 scènes, 110 choix, 32
-issues)** · 60 affaires locales + 20 dénouements · 50 contrats au registre · 25 maisons nobles ·
+issues)** · **5 crises régionales en 25 étapes nommées** · 60 affaires locales + 20 dénouements · 50 contrats au registre · 25 maisons nobles ·
 8 ouvrages de Karlsberg · 116 verdicts d'épilogue.
 
 ---
@@ -192,9 +192,12 @@ Dans cet ordre. À chaque étape, le jeu reste jouable et les épreuves passent.
    (`declencheur:{flags,sansFlags,apres}`), trois au plus de front, et elles
    reviennent des mois plus tard pendant qu'on est occupé ailleurs. C'est le
    pilier « conséquences longues » rendu visible.
-3. **Les crises régionales en cinq étapes**
-   (`design/narratif/05_GRANDE_HISTOIRE/CRISES_REGIONALES`), qui remplacent les
-   tensions numériques : Elfes, Astrah, Khesh, Peaux-Vertes, Hommes-Bêtes.
+3. ~~Les crises régionales en cinq étapes.~~ **Fait** : `src/data/crises.js` et
+   `src/crises.js`. Elfes, Astrah, Peaux-Vertes, Khesh, Hommes-Bêtes, cinq
+   étapes nommées chacune, franchies dans l'ordre. Ce qui les pousse se lit
+   dans l'état réel de la partie (`pression()` rend des **raisons**, pas un
+   coefficient) ; `hero.tensions` en est désormais dérivé, ce qui laisse
+   intacts les édits, les `tensionMin` et les verdicts d'épilogue.
 4. Les neuf PNJ majeurs comme acteurs autonomes, avec objectifs et mémoire
    (`design/narratif/02_EVENEMENTS/PERSONNAGES/autonomous_npcs.json`).
 5. Les romances à axes séparés (`design/narratif/05_GRANDE_HISTOIRE/ROMANCES`).
@@ -205,7 +208,7 @@ Dans cet ordre. À chaque étape, le jeu reste jouable et les épreuves passent.
 
 ## 4. Règles de travail
 
-- **Rien ne casse.** `node tools/validate.js` puis les neuf épreuves de
+- **Rien ne casse.** `node tools/validate.js` puis les onze épreuves de
   navigateur avant tout commit (voir README, *Vérifier une modification*).
 - **Pas de bundler.** Scripts classiques en portée globale ; l'ordre de
   chargement dans `index.html` est le contrat de dépendances.
