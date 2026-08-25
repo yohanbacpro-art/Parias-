@@ -1,26 +1,26 @@
 <title>La Fille du Sel</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
 
 <style>
 /* ═══════════════════════════════════════════════════════════════════════
    PARIAS — Tranche 1. Un arc complet, du début à la fin.
 
    Le monde tourne sur des actes écrits : contrats en trois exemplaires,
-   registres de sel, bornes, bordereaux de sortie. La face utilitaire de la
-   page est donc une monospace de registre, et le récit une Garamond. Le rouge
-   ne sert qu'à une seule chose : ce qui ne se reprend pas.
+   registres de sel, bordereaux, bornes. La face utilitaire de la page est
+   donc une monospace de registre, et le récit une Garamond. Le rouge ne sert
+   qu'à une seule chose : ce qui ne se reprend pas.
 
    Parti pris assumé : une seule ambiance, sombre, peinte explicitement — la
    page tient sur n'importe quel fond d'hôte.
    ═══════════════════════════════════════════════════════════════════════ */
 
 :root{
-  --encre:#0B0A09;        /* le fond : un noir qui tire sur la suie brune */
-  --encre-2:#131110;      /* les blocs posés dessus */
-  --ligne:#2B241D;        /* filets */
-  --velin:#E4D9C2;        /* le texte */
-  --velin-bas:#9A8C73;    /* le second plan */
+  --encre:#0A0908;        /* le fond : un noir qui tire sur la suie brune */
+  --encre-2:#121010;      /* les blocs posés dessus */
+  --ligne:#2B241D;
+  --velin:#E4D9C2;
+  --velin-bas:#9A8C73;
   --sang:#A32436;         /* uniquement ce qui ne se reprend pas */
   --sang-vif:#C9394C;
   --onde:#4E9E96;         /* l'Onde. Une seule fois par écran, jamais deux */
@@ -32,15 +32,15 @@ html{-webkit-text-size-adjust:100%;}
 body{
   margin:0; background:var(--encre); color:var(--velin);
   font-family:'EB Garamond',Georgia,'Times New Roman',serif;
-  font-size:18px; line-height:1.68;
+  font-size:18.5px; line-height:1.72;
   padding:0 20px 120px;
 }
 
-/* ── Le bandeau : l'acte, la date, ce qui vient ───────────────────────── */
+/* ── Le bandeau : l'acte, la bourse, le corps ─────────────────────────── */
 .bandeau{
   position:sticky; top:0; z-index:20;
-  margin:0 -20px 0; padding:10px 20px;
-  background:linear-gradient(to bottom,var(--encre) 72%,rgba(11,10,9,0));
+  margin:0 -20px; padding:10px 20px;
+  background:linear-gradient(to bottom,var(--encre) 74%,rgba(10,9,8,0));
   display:flex; align-items:baseline; gap:16px; flex-wrap:wrap;
   font-family:'JetBrains Mono',ui-monospace,monospace;
   font-size:11px; letter-spacing:.09em; text-transform:uppercase;
@@ -49,6 +49,7 @@ body{
 .bandeau b{color:var(--velin); font-weight:600;}
 .bandeau .vers{color:var(--sang-vif);}
 .bandeau .pousse{margin-left:auto;}
+.bandeau .chair{color:var(--sang-vif);}
 .btn-journal{
   font:inherit; letter-spacing:.09em; text-transform:uppercase;
   background:none; border:1px solid var(--ligne); color:var(--velin-bas);
@@ -56,8 +57,7 @@ body{
 }
 .btn-journal:hover,.btn-journal:focus-visible{color:var(--velin); border-color:var(--velin-bas);}
 
-/* ── La colonne ────────────────────────────────────────────────────────── */
-.colonne{max-width:63ch; margin:0 auto;}
+.colonne{max-width:64ch; margin:0 auto;}
 
 .lieu{
   font-family:'JetBrains Mono',ui-monospace,monospace;
@@ -66,7 +66,7 @@ body{
 }
 h1{
   font-family:'Cormorant Garamond',Garamond,serif;
-  font-weight:600; font-size:clamp(30px,6vw,42px); line-height:1.12;
+  font-weight:600; font-size:clamp(30px,6vw,43px); line-height:1.1;
   letter-spacing:-.01em; margin:0 0 22px; text-wrap:balance;
 }
 .qui{
@@ -86,9 +86,16 @@ h1{
   letter-spacing:.08em; text-transform:uppercase; color:var(--velin-bas);
 }
 
-p.recit{margin:0 0 18px;}
+p.recit{margin:0 0 19px;}
 p.recit:last-of-type{margin-bottom:26px;}
 .recit em{color:var(--velin); font-style:italic;}
+
+/* Le souffle : une ligne isolée, quand le récit s'arrête de respirer. */
+p.souffle{
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:21px; line-height:1.5; color:var(--velin);
+  border-left:2px solid var(--ligne); padding-left:16px; margin:0 0 22px;
+}
 
 .jet{
   font-family:'JetBrains Mono',monospace; font-size:11.5px;
@@ -99,6 +106,16 @@ p.recit:last-of-type{margin-bottom:26px;}
 .jet b{color:var(--velin);}
 .jet.reussi b{color:var(--onde);}
 .jet.rate b{color:var(--sang-vif);}
+
+/* ── L'affrontement ────────────────────────────────────────────────────── */
+.melee{
+  border:1px solid #3A1D22; background:#150E0F;
+  padding:12px 14px; margin:0 0 22px;
+  font-family:'JetBrains Mono',monospace; font-size:11px;
+  letter-spacing:.07em; text-transform:uppercase; color:var(--velin-bas);
+  display:flex; gap:18px; flex-wrap:wrap; font-variant-numeric:tabular-nums;
+}
+.melee b{color:var(--sang-vif); font-weight:600;}
 
 /* ── Les choix ─────────────────────────────────────────────────────────── */
 .choix{display:flex; flex-direction:column; gap:1px; margin-top:8px;}
@@ -118,8 +135,6 @@ p.recit:last-of-type{margin-bottom:26px;}
   letter-spacing:.05em; color:var(--velin-bas); font-variant-numeric:tabular-nums;
 }
 .choix button[disabled]{opacity:.4; cursor:not-allowed;}
-
-/* Le geste central du jeu : un choix qui ne se reprend pas le dit avant. */
 .choix button.definitif{border-left-color:var(--sang);}
 .choix button.definitif:hover,.choix button.definitif:focus-visible{
   border-left-color:var(--sang-vif); background:#1C1412;
@@ -140,7 +155,6 @@ p.recit:last-of-type{margin-bottom:26px;}
 }
 .suite button:hover,.suite button:focus-visible{color:var(--velin); border-color:var(--velin-bas);}
 
-/* ── Ce qui vient de changer ───────────────────────────────────────────── */
 .effets{display:flex; flex-wrap:wrap; gap:6px; margin:0 0 22px;}
 .effets span{
   font-family:'JetBrains Mono',monospace; font-size:10.5px;
@@ -151,28 +165,26 @@ p.recit:last-of-type{margin-bottom:26px;}
 .effets span.mal{color:var(--sang-vif); border-color:#3A1D22;}
 .effets span.marque{color:var(--onde); border-color:#1E3A38;}
 
-/* ── Le journal des portes fermées ─────────────────────────────────────── */
+/* ── Le journal ────────────────────────────────────────────────────────── */
 .journal{
-  position:fixed; inset:0 0 0 auto; width:min(420px,100%); z-index:40;
+  position:fixed; inset:0 0 0 auto; width:min(440px,100%); z-index:40;
   background:var(--encre-2); border-left:1px solid var(--ligne);
   padding:22px 24px 40px; overflow-y:auto;
   transform:translateX(100%); transition:transform .22s ease;
 }
 .journal.ouvert{transform:none;}
-.journal h2{
-  font-family:'Cormorant Garamond',serif; font-weight:600; font-size:23px;
-  margin:0 0 4px;
-}
+.journal h2{font-family:'Cormorant Garamond',serif; font-weight:600; font-size:23px; margin:0 0 4px;}
 .journal .sous{
   font-family:'JetBrains Mono',monospace; font-size:10.5px;
-  letter-spacing:.08em; text-transform:uppercase; color:var(--velin-bas);
-  margin:0 0 20px;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--velin-bas); margin:0 0 20px;
 }
 .journal ul{list-style:none; margin:0 0 26px; padding:0; display:flex; flex-direction:column; gap:12px;}
-.journal li{font-size:16px; line-height:1.55; padding-left:14px; position:relative;}
+.journal li{font-size:16px; line-height:1.55; padding-left:15px; position:relative;}
 .journal li::before{content:'—'; position:absolute; left:0; color:var(--velin-bas);}
 .journal li.close{color:var(--velin-bas);}
 .journal li.close::before{content:'✕'; color:var(--sang);}
+.journal li.plaie{color:var(--velin);}
+.journal li.plaie::before{content:'†'; color:var(--sang-vif);}
 .journal .vide{color:var(--velin-bas); font-style:italic;}
 .fermer{
   position:absolute; top:18px; right:20px;
@@ -181,47 +193,39 @@ p.recit:last-of-type{margin-bottom:26px;}
 }
 .fermer:hover{color:var(--velin);}
 .voile{
-  position:fixed; inset:0; z-index:30; background:rgba(11,10,9,.72);
+  position:fixed; inset:0; z-index:30; background:rgba(10,9,8,.74);
   opacity:0; pointer-events:none; transition:opacity .22s;
 }
 .voile.ouvert{opacity:1; pointer-events:auto;}
 
-/* ── La fin de l'arc ───────────────────────────────────────────────────── */
 .issue{border-top:1px solid var(--ligne); margin-top:32px; padding-top:22px;}
 .issue .etiquette{
   font-family:'JetBrains Mono',monospace; font-size:10.5px;
-  letter-spacing:.14em; text-transform:uppercase; color:var(--sang-vif);
-  margin-bottom:8px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--sang-vif); margin-bottom:8px;
 }
-.issue h2{font-family:'Cormorant Garamond',serif; font-weight:600; font-size:27px; margin:0 0 16px;}
-.plus-tard{
-  border-left:2px solid var(--sang); background:#150F0E;
-  padding:14px 16px; margin-top:22px;
-}
+.issue h2{font-family:'Cormorant Garamond',serif; font-weight:600; font-size:28px; margin:0 0 16px;}
+.plus-tard{border-left:2px solid var(--sang); background:#150F0E; padding:14px 16px; margin-top:22px;}
 .plus-tard .etiquette{
   font-family:'JetBrains Mono',monospace; font-size:10px;
-  letter-spacing:.12em; text-transform:uppercase; color:var(--velin-bas);
-  margin-bottom:6px;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--velin-bas); margin-bottom:6px;
 }
 .plus-tard p{margin:0; font-size:16.5px;}
 
 .note{
-  max-width:63ch; margin:60px auto 0; padding-top:20px;
-  border-top:1px solid var(--ligne);
+  max-width:64ch; margin:60px auto 0; padding-top:20px; border-top:1px solid var(--ligne);
   font-family:'JetBrains Mono',monospace; font-size:11.5px; line-height:1.75;
   letter-spacing:.02em; color:var(--velin-bas);
 }
 .note b{color:var(--velin); font-weight:600;}
 
-@media (prefers-reduced-motion:reduce){
-  .journal,.voile{transition:none;}
-}
+@media (prefers-reduced-motion:reduce){ .journal,.voile{transition:none;} }
 </style>
 
 <div class="bandeau">
   <span><b>Acte II</b> — L'hiver des maisons</span>
   <span class="vers">La guerre est à trois actes</span>
   <span class="pousse"></span>
+  <span id="chair"></span>
   <span id="bourse">340 or</span>
   <button class="btn-journal" id="btnJournal">Journal</button>
 </div>
@@ -234,6 +238,9 @@ p.recit:last-of-type{margin-bottom:26px;}
   <h2>Ce que vous avez fait</h2>
   <p class="sous">Rien ici ne se reprend</p>
   <ul id="journalFaits"></ul>
+  <h2>Ce que vous portez</h2>
+  <p class="sous">Les plaies durent au-delà de la scène</p>
+  <ul id="journalPlaies"></ul>
   <h2>Ce que vous ne pouvez plus faire</h2>
   <p class="sous">Les portes fermées</p>
   <ul id="journalPortes"></ul>
@@ -241,30 +248,32 @@ p.recit:last-of-type{margin-bottom:26px;}
 
 <script>
 /* ═══════════════════════════════════════════════════════════════════════
-   LE MOTEUR — cent lignes, et rien de plus.
+   LE MOTEUR — cent trente lignes, et rien de plus.
 
    Une scène : du texte, éventuellement quelqu'un en face, et des choix.
    Un choix : un libellé, ce qu'il coûte, ce qu'il ferme, ce qu'il change,
-   et où il mène. C'est tout. Pas de simulation en arrière-plan, pas de
-   compteur qui monte tout seul : ce qui bouge à l'écran, c'est vous.
+   et où il mène. Pas de simulation en arrière-plan : ce qui bouge à
+   l'écran, c'est vous.
+
+   L'affrontement n'est pas un autre système. C'est une scène qui compte
+   les hommes debout et laisse des plaies qui durent.
    ═══════════════════════════════════════════════════════════════════════ */
 
 const ETAT = {
-  or:340, vol:11, precision:9,
+  or:340, vol:11, precision:9, vigueur:12,
   flags:new Set(),
-  faits:[],      // ce qu'on a fait, écrit en toutes lettres
-  portes:[],     // ce qu'on ne peut plus faire
+  faits:[], portes:[], plaies:[],
+  melee:null,
 };
 const a = f => ETAT.flags.has(f);
 
 const GENS = {
-  ermeline:{nom:"Dame Ermeline d'Estrées", role:"Maison d'Estrées · le sel", lettre:"E"},
-  blanche: {nom:"Blanche d'Estrées",       role:"sa nièce · vingt-six ans",  lettre:"B"},
-  ferrand: {nom:"Ferrand le Boiteux",      role:"sergent d'ordonnance, licencié", lettre:"F"},
-  charretier:{nom:"Le charretier de tête", role:"convoi de sel — onzième du nom", lettre:"C"},
+  ermeline:{nom:"Dame Ermeline d'Estrées", role:"Maison d'Estrées · dix-neuf ans de sel", lettre:"E"},
+  blanche: {nom:"Blanche d'Estrées",       role:"sa nièce · vingt-six ans",               lettre:"B"},
+  ferrand: {nom:"Ferrand le Boiteux",      role:"sergent d'ordonnance, licencié sans solde", lettre:"F"},
+  charretier:{nom:"Perrin, charretier de tête", role:"six ans de route pour Estrées",     lettre:"P"},
 };
 
-/* ── Rendu ─────────────────────────────────────────────────────────────── */
 let jetEnAttente = null;
 
 function ecrire(id){
@@ -280,9 +289,16 @@ function ecrire(id){
     h += `<div class="qui"><div class="visage">${g.lettre}</div>
       <div><div class="nom">${g.nom}</div><div class="role">${g.role}</div></div></div>`;
   }
+  if(s.melee && ETAT.melee){
+    h += `<div class="melee"><span>Debout en face · <b>${ETAT.melee.eux}</b></span>
+      <span>Souffle · <b>${ETAT.melee.souffle}</b></span>
+      <span>${ETAT.melee.note}</span></div>`;
+  }
   const tags = appliquer(s.effets);
   if(tags.length) h += `<div class="effets">${tags.join('')}</div>`;
-  h += s.texte.map(p => `<p class="recit">${p}</p>`).join('');
+  h += s.texte.map(p => p.startsWith('§')
+      ? `<p class="souffle">${p.slice(1)}</p>`
+      : `<p class="recit">${p}</p>`).join('');
 
   if(s.issue){
     h += `<div class="issue"><p class="etiquette">${s.issue}</p><h2>${s.bilan}</h2>`;
@@ -308,7 +324,6 @@ function ecrire(id){
 
   el.innerHTML = h;
   window.scrollTo({top:0, behavior:'instant'});
-
   el.querySelectorAll('.choix button:not([disabled])').forEach(b => {
     b.onclick = () => jouer(choix[+b.dataset.i]);
   });
@@ -321,11 +336,12 @@ function jouer(c){
   if(c.ferme) ETAT.portes.push(c.ferme.replace(/^Ferme : /,''));
   if(c.test){
     const de = 1 + Math.floor(Math.random() * 20);
-    const total = de + ETAT[c.test.stat];
+    const malus = ETAT.plaies.length;          // une plaie pèse sur tout le reste
+    const total = de + ETAT[c.test.stat] - malus;
     const ok = total >= c.test.dc;
-    const nom = c.test.stat === 'vol' ? 'Volonté' : 'Précision';
-    jetEnAttente = `<p class="jet ${ok ? 'reussi' : 'rate'}">${nom} — ${de} + ${ETAT[c.test.stat]} = ${total}
-      contre ${c.test.dc} · <b>${ok ? 'réussite' : 'échec'}</b></p>`;
+    const NOMS = {vol:'Volonté', precision:'Précision', vigueur:'Vigueur'};
+    jetEnAttente = `<p class="jet ${ok ? 'reussi' : 'rate'}">${NOMS[c.test.stat]} — ${de} + ${ETAT[c.test.stat]}${
+      malus ? ' − ' + malus + ' (plaies)' : ''} = ${total} contre ${c.test.dc} · <b>${ok ? 'réussite' : 'échec'}</b></p>`;
     ecrire(ok ? c.reussite : c.echec);
     return;
   }
@@ -337,6 +353,17 @@ function appliquer(e){
   const t = [];
   if(e.or){ ETAT.or += e.or; t.push(`<span class="${e.or > 0 ? 'bien' : 'mal'}">${e.or > 0 ? '+' : '−'}${Math.abs(e.or)} or</span>`); }
   (e.flags || []).forEach(f => ETAT.flags.add(f));
+  if(e.plaie && !ETAT.plaies.includes(e.plaie)){
+    ETAT.plaies.push(e.plaie);
+    t.push(`<span class="mal">${e.plaie}</span>`);
+  }
+  if(e.melee) ETAT.melee = { ...e.melee };
+  if(e.eux !== undefined && ETAT.melee){
+    ETAT.melee.eux = Math.max(0, ETAT.melee.eux + e.eux);
+    t.push(`<span class="mal">${e.eux} debout en face</span>`);
+  }
+  if(e.souffle !== undefined && ETAT.melee) ETAT.melee.souffle = e.souffle;
+  if(e.noteMelee && ETAT.melee) ETAT.melee.note = e.noteMelee;
   if(e.marque){ ETAT.faits.push(e.marque); t.push(`<span class="marque">${e.court || 'Inscrit au journal'}</span>`); }
   (e.tags || []).forEach(x => t.push(`<span>${x}</span>`));
   majBandeau();
@@ -345,14 +372,16 @@ function appliquer(e){
 
 function majBandeau(){
   document.getElementById('bourse').textContent = ETAT.or + ' or';
-  const f = document.getElementById('journalFaits');
-  const p = document.getElementById('journalPortes');
-  f.innerHTML = ETAT.faits.length
-    ? ETAT.faits.map(x => `<li>${x}</li>`).join('')
-    : '<li class="vide">Rien encore. La journée commence.</li>';
-  p.innerHTML = ETAT.portes.length
-    ? ETAT.portes.map(x => `<li class="close">${x}</li>`).join('')
-    : '<li class="vide">Toutes les routes sont encore ouvertes.</li>';
+  document.getElementById('chair').textContent = ETAT.plaies.length
+    ? ETAT.plaies.length + (ETAT.plaies.length > 1 ? ' plaies' : ' plaie') : '';
+  const mettre = (id, liste, cls, vide) => {
+    document.getElementById(id).innerHTML = liste.length
+      ? liste.map(x => `<li class="${cls}">${x}</li>`).join('')
+      : `<li class="vide">${vide}</li>`;
+  };
+  mettre('journalFaits',  ETAT.faits,  '',      "Rien encore. La journée commence.");
+  mettre('journalPlaies', ETAT.plaies, 'plaie', "Rien de cassé. Pour l'instant.");
+  mettre('journalPortes', ETAT.portes, 'close', "Toutes les routes sont encore ouvertes.");
 }
 
 const journal = document.getElementById('journal'), voile = document.getElementById('voile');
@@ -374,22 +403,25 @@ audience:{
   titre:"Onze convois",
   qui:"ermeline",
   texte:[
-    "Dame Ermeline d'Estrées a cinquante-quatre ans, la maison depuis dix-neuf, et elle reçoit dans la salle des comptes plutôt que dans la grande — ce qui est déjà une phrase entière.",
-    "« Onze convois de sel pris sur la Route Grise en quatre mois. Onze. Ma maison vit du sel, messire, et l'on m'en vole les trois quarts sur une route que je paie pour qu'elle soit sûre. »",
-    "Elle pousse un feuillet en travers de la table. Un nom, une seule ligne : <em>Ferrand le Boiteux, dit le sergent, tient le défilé des Deux Saules.</em>",
-    "« Je veux qu'il cesse. Je ne vous demande pas comment. »"
+    "Il gèle depuis dix-neuf jours. Dans la cour d'Estrées, un valet casse la glace de l'abreuvoir à coups de talon, recommence, et jure entre ses dents avec une régularité de métronome. On entend ça à travers les volets, et on l'entendra pendant toute l'audience.",
+    "Dame Ermeline d'Estrées a cinquante-quatre ans, la maison depuis dix-neuf, et elle reçoit dans la salle des comptes plutôt que dans la grande — ce qui est déjà une phrase entière. Il y a un feu, mais il est bas et il fume ; elle garde ses gants et ses mains sont enflées aux jointures. Cette femme a passé vingt hivers dans des pièces qu'elle ne chauffe pas pour économiser le bois qu'elle vend.",
+    "« Onze convois de sel pris sur la Route Grise en quatre mois. Onze. Ma maison vit du sel, messire, elle en vit depuis quatre générations, et l'on m'en vole les trois quarts sur une route que je paie pour qu'elle soit sûre. »",
+    "Elle pousse un feuillet en travers de la table. Le papier est bon, l'encre est fraîche, et il ne porte qu'une ligne : <em>Ferrand le Boiteux, dit le sergent, tient le défilé des Deux Saules.</em>",
+    "Elle ne dit pas <em>arrêtez-le</em>. Elle ne dit pas <em>faites-le juger</em>. Elle vous regarde exactement comme on regarde un outil qu'on a déjà payé et qu'on veut voir fonctionner.",
+    "« Je veux qu'il cesse. Je ne vous demande pas comment, et je ne veux pas le savoir. »",
+    "Dehors, le valet casse la glace. Trois coups, un juron, trois coups."
   ],
   choix:[
     {t:"« Combien de morts, sur les onze convois ? »",
-     cout:"Une question qu'on pose avant de dire oui",
+     cout:"Une question qu'on pose avant de dire oui, pas après",
      va:"morts"},
     {t:"Demander à voir les registres de sel",
-     cout:"Jet de Précision (12) — les pertes se comptent",
+     cout:"Jet de Précision (12) — ce qu'on vous vole se compte quelque part",
      test:{stat:'precision', dc:12}, reussite:"registres_ok", echec:"registres_ko"},
     {t:"« Pourquoi pas le prévôt ? »",
-     cout:"Une route royale, onze vols, et personne n'a saisi la justice",
+     cout:"Onze vols sur une route royale, et personne n'a saisi la justice",
      va:"prevot"},
-    {t:"Ne rien demander et parler d'argent",
+    {t:"Ne rien demander. Parler d'argent tout de suite",
      cout:"Un homme qui ne pose pas de questions coûte moins cher à recevoir",
      va:"argent",
      effets:{flags:['discret'], marque:"Vous n'avez rien demandé à Estrées avant de dire oui.", court:"Rien demandé"}},
@@ -399,33 +431,40 @@ audience:{
 morts:{
   qui:"ermeline",
   texte:[
-    "La question la prend de flanc. Elle met une seconde de trop à répondre, et c'est la seconde qui compte.",
+    "La question la prend de flanc. Elle met une seconde de trop à répondre, et c'est la seconde qui compte, pas la réponse.",
     "« Aucun. »",
-    "Elle se reprend aussitôt : « Ils prennent les charges et laissent les hommes. C'est ce qui rend la chose humiliante plutôt que tragique. »",
-    "Onze convois en quatre mois, sur une route de montagne, sans un mort. Ce n'est pas une bande de brigands. C'est un métier, ou c'est autre chose."
+    "Elle se reprend aussitôt, plus vite qu'elle n'aurait dû : « Ils prennent les charges et laissent les hommes. C'est ce qui rend la chose humiliante plutôt que tragique, et c'est bien pour ça que je ne peux pas la laisser durer. Un noble qu'on tue, on le venge. Un noble qu'on vole onze fois de suite sans jamais lever la main sur ses gens, on en rit. »",
+    "Elle a probablement raison sur ce point. Ce n'est pas ce qui vous intéresse.",
+    "Onze convois en quatre mois, sur un défilé de montagne en plein hiver, avec des charretiers armés de gourdins et des escortes payées — et pas un cadavre. Pas un bras cassé. Pas même un chien tué.",
+    "§ Des brigands ne travaillent pas comme ça. Des brigands ont peur, et la peur fait des morts.",
+    "Ce sont des gens qui tiennent des comptes. Et des gens qui tiennent des comptes, ça se retrouve."
   ],
-  effets:{flags:['sait_aucun_mort'], marque:"Onze convois pris, aucun mort. Vous l'avez remarqué.", court:"Aucun mort"},
+  effets:{flags:['sait_aucun_mort'], marque:"Onze convois pris, aucun mort. Vous l'avez fait dire.", court:"Aucun mort"},
   suite:"termes_intro", libelleSuite:"Parler des termes",
 },
 
 registres_ok:{
   qui:"ermeline",
   texte:[
-    "Les registres sont tenus à la perfection, ce qui est déjà suspect chez quelqu'un qu'on vole.",
-    "Onze convois portés perdus. Mais les sorties de saline en portent quatorze pour la même période, et quatre des onze « perdus » ont été portés au débit d'un courtier de Port-Noir <em>après</em> leur disparition.",
-    "On ne revend pas un chargement qu'on n'a plus.",
-    "Dame Ermeline vous laisse lire jusqu'au bout. Quand vous relevez les yeux, elle a le visage de quelqu'un qui vient de décider de ne rien dire."
+    "Elle vous fait apporter quatre volumes par un commis de seize ans qui a des engelures aux doigts et qui les repose sur la table sans regarder personne.",
+    "Les registres sont tenus à la perfection. C'est la première chose qui cloche : on ne tient pas ses comptes à la perfection quand on est en train de se faire ruiner. On les tient quand on veut pouvoir les montrer.",
+    "Il faut une heure. Elle vous laisse la prendre, debout derrière vous, sans un mot, en frottant lentement ses jointures gonflées.",
+    "Onze convois portés perdus. Les sorties de saline en portent quatorze pour la même période. Et quatre des onze « perdus » ont été portés au débit d'un courtier de Port-Noir — un nommé Vasseur, quai des Cordiers — <em>trois semaines après</em> leur disparition.",
+    "§ On ne revend pas un chargement qu'on n'a plus.",
+    "Quand vous relevez les yeux, elle a le visage de quelqu'un qui vient de décider, en temps réel, de ne rien dire. Elle referme le quatrième volume elle-même et le repousse vers le commis.",
+    "« Vous lisez vite pour un homme d'épée », dit-elle. Ce n'est pas un compliment. C'est une note qu'elle vient de prendre."
   ],
-  effets:{flags:['sait_registres'], marque:"Les registres d'Estrées ne tiennent pas debout, et elle le sait.", court:"Les comptes mentent"},
+  effets:{flags:['sait_registres'], marque:"Les comptes d'Estrées ne tiennent pas debout, et elle sait que vous l'avez vu.", court:"Les comptes mentent"},
   suite:"termes_intro", libelleSuite:"Parler des termes",
 },
 
 registres_ko:{
   qui:"ermeline",
   texte:[
-    "Quatre livres de saline, trois écritures, deux systèmes de mesure et une colonne de report qu'on ne vous explique pas.",
-    "Au bout d'une heure, vous savez seulement qu'il manque du sel — ce que vous saviez en entrant.",
-    "« Vous avez fini ? » Elle referme le dernier volume elle-même."
+    "Quatre livres de saline, trois écritures successives, deux systèmes de mesure — la mine et le muid, jamais convertis — et une colonne de report qu'on ne vous explique pas et qu'elle ne vous expliquera pas.",
+    "Au bout d'une heure, vous avez froid aux mains, mal aux yeux, et vous savez exactement ce que vous saviez en entrant : il manque du sel.",
+    "« Vous avez fini ? »",
+    "Elle referme le dernier volume avant que vous ayez répondu."
   ],
   suite:"termes_intro", libelleSuite:"Parler des termes",
 },
@@ -434,11 +473,15 @@ prevot:{
   qui:"ermeline",
   texte:[
     "« Le prévôt de la vallée est mon cousin. »",
-    "Elle le dit sans embarras, parce que ce n'est pas la réponse gênante. La suivante l'est.",
-    "« Et le sel de cette maison ne passe pas au visa depuis dix-neuf ans. Si je saisis la justice pour du sel volé, il faudra dire combien on m'en a volé, et il faudra donc dire combien j'en sortais. »",
-    "Elle croise les mains. « Vous comprenez maintenant pourquoi je vous paie plutôt que lui. »"
+    "Elle le dit sans le moindre embarras, parce que ce n'est pas la réponse gênante. Elle laisse venir la suivante, et celle-là, elle la pèse.",
+    "« Et le sel de cette maison ne passe pas au visa depuis dix-neuf ans. »",
+    "Le feu fume. Elle ne bouge pas.",
+    "« Si je saisis la justice pour du sel volé, il faudra dire combien on m'en a volé. Il faudra donc dire combien j'en sortais. Il faudra ouvrir les registres de saline à un homme de la Couronne, et à la troisième page cet homme comprendra que la maison d'Estrées a fraudé la gabelle depuis avant la naissance de son roi. »",
+    "Elle croise les mains, et les jointures craquent.",
+    "« Alors non, messire, je ne saisis pas le prévôt. Je paie un Paria. Vous comprenez maintenant pourquoi c'est cher, et pourquoi je ne veux surtout pas savoir comment vous vous y prendrez. »",
+    "§ Elle vient de vous avouer un crime capital pour vous prouver qu'elle ne peut pas vous trahir. C'est de la confiance, à la manière des maisons : une lame qu'on vous tend par la garde."
   ],
-  effets:{flags:['sait_fraude'], marque:"Estrées fraude le sel depuis dix-neuf ans. Elle vous l'a dit elle-même.", court:"La fraude, admise"},
+  effets:{flags:['sait_fraude'], marque:"Estrées fraude la gabelle depuis dix-neuf ans. Elle vous l'a dit elle-même.", court:"La fraude, admise"},
   suite:"termes_intro", libelleSuite:"Parler des termes",
 },
 
@@ -446,20 +489,25 @@ argent:{
   qui:"ermeline",
   texte:[
     "« Combien ? »",
-    "Elle apprécie. Cela se voit à la façon dont elle se rassoit.",
-    "« Douze cents écus. Et la coutume, bien sûr. »",
-    "Elle laisse le mot posé sur la table sans rien ajouter, comme on laisse une porte ouverte."
+    "Elle apprécie. Cela se voit à la façon dont elle se rassoit, à la façon dont ses épaules descendent d'un demi-pouce.",
+    "« Douze cents écus. »",
+    "Un temps. Le valet, dehors, casse la glace.",
+    "« Et la coutume, bien sûr. »",
+    "Elle laisse le mot posé sur la table comme on laisse une porte ouverte derrière soi, sans le commenter, sans même le regarder. Chez ces gens-là, la coutume ne se propose pas : elle se rappelle."
   ],
   suite:"termes_intro", libelleSuite:"Fixer les termes",
 },
 
-/* ── 2. Les termes, avant tout ─────────────────────────────────────────── */
+/* ── 2. Les termes ─────────────────────────────────────────────────────── */
 termes_intro:{
   lieu:"La même salle · les termes se fixent avant que rien ne commence",
   titre:"La coutume",
   texte:[
-    "On ne discute pas le prix d'un Paria après coup. C'est la seule règle que les maisons et les Parias respectent également, et depuis assez longtemps pour que personne ne se souvienne pourquoi.",
-    "Le prix se dit en deux moitiés : <em>l'or et le sang</em>. L'or se compte. Le sang, c'est une femme de la maison, adulte, consentante, et qui doit le dire elle-même.",
+    "On ne discute pas le prix d'un Paria après coup. C'est la seule règle que les maisons et les Parias respectent également, et depuis assez longtemps pour que plus personne ne se souvienne pourquoi elle existe.",
+    "Ce qu'on en sait tient en une phrase apprise à tous les enfants Parias avant qu'ils sachent lire : <em>on paie le Paria en or et en sang, et les deux se disent avant.</em>",
+    "L'or se compte, se pèse et se conteste. Le sang, c'est une femme de la maison — adulte, consentante, et qui doit le dire elle-même, à voix haute, devant témoin. Une maison qui refuse le sang paie l'or double. Une maison qui promet le sang sans le consentement de celle qu'elle promet est déshonorée dans les six provinces, et il y a trois cents ans de sentences pour le prouver.",
+    "Ça n'a rien de galant. Ça date d'un temps où les Parias mouraient sans descendance parce que personne ne voulait mêler son sang au leur, et où quelqu'un a décidé que si l'on tenait tant à les employer, on paierait aussi ce prix-là.",
+    "§ Une coutume n'est jamais aimable. Elle est seulement plus vieille que ceux qui doivent la tenir.",
     "Dame Ermeline fait entrer sa nièce sans prévenir, ce qui est une façon de répondre avant qu'on demande."
   ],
   suite:"termes", libelleSuite:"Fixer les termes",
@@ -468,31 +516,35 @@ termes_intro:{
 termes:{
   qui:"blanche",
   texte:[
-    "Blanche d'Estrées a vingt-six ans, elle est entrée seule, et elle s'assied sans qu'on le lui propose.",
-    "« Ma tante vous a dit la coutume. Je vais vous dire ma part : je n'appartiens pas à cette maison, je n'appartiens pas à la coutume, et je n'appartiens pas à vous. »",
-    "Un temps. « Ce qui ne veut pas dire non. »"
+    "Blanche d'Estrées a vingt-six ans. Elle entre seule, sans chaperon, avec un manteau d'homme jeté sur les épaules parce que la salle des comptes est glaciale et qu'elle a manifestement l'habitude d'y venir.",
+    "Elle s'assied sans qu'on le lui propose, ce que sa tante remarque et ne relève pas.",
+    "« Ma tante vous a dit la coutume. Je vais vous dire ma part, et je préfère la dire tout de suite plutôt qu'à la fin, quand tout le monde aura eu le temps de s'arranger avec. »",
+    "Elle a les yeux d'une femme qui n'a pas dormi et la voix parfaitement posée de quelqu'un qui a répété.",
+    "« Je n'appartiens pas à cette maison. Je n'appartiens pas à la coutume. Et je ne vous appartiendrai pas. »",
+    "Un temps.",
+    "« Ce qui ne veut pas dire non. »"
   ],
   choix:[
     {t:"L'or seul. Douze cents écus, et rien d'autre",
-     cout:"+1500 or · la maison paie davantage quand on ne réclame pas le reste",
-     ferme:"Ferme : le sang d'Estrées — la coutume ne se réclame pas deux fois",
+     cout:"+1500 or · une maison paie davantage quand on ne réclame pas le reste",
+     ferme:"Ferme : le sang d'Estrées — on ne rouvre pas des termes fixés",
      definitif:true, va:"or_seul",
      effets:{or:1500, flags:['or_seul'],
-             marque:"Vous n'avez pris que l'or à Estrées. Blanche l'a noté.", court:"L'or seul"}},
+             marque:"Vous n'avez pris que l'or à Estrées.", court:"L'or seul"}},
 
     {t:"Lui demander à elle, devant sa tante",
      cout:"C'est à elle de répondre, et elle a une raison qui n'est pas vous",
      va:"demande_blanche"},
 
     {t:"L'or et le sang, comme le veut la coutume",
-     cout:"+1200 or · on ne réclame la coutume que d'une seule voix",
-     ferme:"Ferme : la sympathie de Blanche — elle vous répondra, mais pas à vous",
+     cout:"+1200 or · la coutume se réclame d'une seule voix, et ce sera la vôtre",
+     ferme:"Ferme : ce que Blanche aurait pu vous dire — elle répondra, mais pas à vous",
      definitif:true, va:"les_deux",
-     effets:{or:1200, flags:['les_deux'],
-             marque:"Vous avez réclamé la coutume entière à Estrées.", court:"La coutume entière"}},
+     effets:{or:1200, flags:['les_deux','coutume_imposee'],
+             marque:"Vous avez réclamé la coutume entière sans rien demander à Blanche.", court:"La coutume, imposée"}},
 
     {t:"Refuser les termes et sortir",
-     cout:"L'affaire s'arrête ici",
+     cout:"L'affaire s'arrête ici, et quelqu'un d'autre la prendra",
      ferme:"Ferme : toute l'affaire du sel",
      definitif:true, va:"refus",
      effets:{marque:"Vous avez refusé les termes d'Estrées.", court:"Refusé"}},
@@ -503,20 +555,23 @@ demande_blanche:{
   qui:"blanche",
   texte:[
     "« Je ne le demanderai pas à votre tante. Je vous le demande à vous, et vous pouvez dire non devant elle. »",
-    "Dame Ermeline ouvre la bouche. Blanche lève une main de trois centimètres et sa tante se tait, ce qui apprend plus sur cette maison que les registres.",
+    "Dame Ermeline ouvre la bouche. Blanche lève une main de trois centimètres, et sa tante se tait — ce qui apprend sur cette maison davantage que quatre volumes de registres.",
     a('sait_fraude') || a('sait_registres')
-      ? "« Vous savez déjà, pour le sel », dit-elle enfin. « Ça se voit. Alors je vais être aussi franche que vous. »"
-      : "« Vous ne savez pas encore ce que vous acceptez », dit-elle enfin. « Moi si. Alors je vais être franche. »",
-    "« On me marie au printemps à un homme de Vaubrun qui a quarante-neuf ans et deux femmes enterrées. Une liaison connue avec un Paria rend ce mariage impossible : aucune maison n'épouse une femme dont on parle. »",
-    "« Alors oui. Pas pour vous — vous n'y êtes pour rien et vous n'y serez pour rien. Pour sortir d'ici. Si ça vous convient, dites-le maintenant. Si ça vous humilie, dites-le aussi : je préfère. »"
+      ? "« Vous savez déjà, pour le sel », dit Blanche enfin. « Ça se voit sur vous depuis une demi-heure. Alors je vais être aussi franche que vous avez été indélicat. »"
+      : "« Vous ne savez pas encore ce que vous acceptez », dit-elle enfin. « Moi si. Alors je vais être franche, et vous vous débrouillerez avec. »",
+    "Elle ramène le manteau d'homme sur ses épaules.",
+    "« On me marie au printemps. Un seigneur de Vaubrun, quarante-neuf ans, deux femmes enterrées dont la seconde à vingt-trois ans en couches, et une réputation de mari qu'on m'a soigneusement cachée jusqu'à ce que j'aille la chercher moi-même. Ma tante a besoin de ce mariage : il lui apporte un droit de passage sur la Saulx qu'elle convoite depuis six ans. »",
+    "« Une liaison connue avec un Paria rend ce mariage impossible. Aucune maison n'épouse une femme dont on parle. »",
+    "§ « Alors oui. Pas pour vous. Vous n'y êtes pour rien et vous n'y serez pour rien : vous êtes le moyen, comme ce défilé est le vôtre. »",
+    "« Si ça vous convient, dites-le maintenant. Si ça vous humilie, dites-le aussi — je préfère un homme qui se vexe à un homme qui fait semblant de ne pas comprendre. »"
   ],
   effets:{flags:['blanche_franche']},
   choix:[
     {t:"« Ça me convient. »",
      cout:"+1200 or · deux adultes, un accord, et aucun mensonge entre eux",
-     ferme:"Ferme : le mariage de Vaubrun — la maison de Vaubrun s'en souviendra",
+     ferme:"Ferme : le mariage de Vaubrun — et la maison de Vaubrun s'en souviendra",
      definitif:true, va:"accord",
-     effets:{or:1200, flags:['blanche_accord'],
+     effets:{or:1200, flags:['blanche_accord','blanche_estime'],
              marque:"Blanche d'Estrées a dit oui pour ses raisons, et vous les connaissez.", court:"L'accord de Blanche"}},
 
     {t:"« Alors je prends l'or. Sortez-vous d'ici autrement. »",
@@ -536,9 +591,10 @@ reproche:{
   qui:"blanche",
   texte:[
     "« Oui. »",
-    "Elle ne bouge pas d'un cil. « Vous vous serviez de ma maison pour douze cents écus il y a quatre minutes et personne dans cette pièce n'a trouvé ça grossier. »",
-    "« La différence, c'est que vous, on vous paie pour ça, et moi on m'a mariée pour ça depuis mes quatorze ans. »",
-    "Dame Ermeline regarde le mur. Ce silence-là dure trop longtemps pour être vide."
+    "Elle ne bouge pas d'un cil. Elle attendait celle-là.",
+    "« Vous vous serviez de ma maison pour douze cents écus il y a quatre minutes, et personne dans cette pièce n'a trouvé ça grossier. Vous alliez tuer un homme pour un sel dont vous n'avez pas demandé la provenance. »",
+    "« La différence entre nous deux, messire, c'est qu'on vous paie pour ça, et qu'on me marie pour ça depuis mes quatorze ans. Vous, vous pouvez refuser un contrat. Montrez-moi la porte par laquelle je refuse le mien. »",
+    "Dame Ermeline regarde le mur. Le silence dure trop longtemps pour être vide : il dure le temps qu'il faut à une femme de cinquante-quatre ans pour ne pas répondre à quelque chose de vrai."
   ],
   effets:{flags:['blanche_franche']},
   choix:[
@@ -557,24 +613,13 @@ reproche:{
   ],
 },
 
-accord:{
-  qui:"blanche",
-  texte:[
-    "« Alors c'est dit », fait-elle, et elle se lève la première.",
-    "Dame Ermeline fait porter douze cents écus et un contrat en deux exemplaires, qu'elle a manifestement fait rédiger avant l'audience. Blanche le lit en entier, debout, devant tout le monde, et raye deux lignes avant de signer.",
-    "« La première disait que je ne pouvais pas rompre. La seconde disait que vous ne pouviez pas. »",
-    "À la porte, elle s'arrête. « Une chose, puisqu'on se dit tout : le sergent que vous allez tuer n'a jamais tué personne en vingt ans. Demandez-vous pourquoi ma tante veut sa mort et pas son procès. »"
-  ],
-  effets:{flags:['sait_aucun_mort'], marque:"Blanche vous a mis en garde avant votre départ.", court:"L'avertissement"},
-  suite:"route", libelleSuite:"Prendre la Route Grise",
-},
-
 or_seul:{
   qui:"ermeline",
   texte:[
     "« L'or seul. »",
-    "Dame Ermeline compte quinze cents écus avec le soulagement mal caché de quelqu'un à qui l'on vient d'épargner une conversation.",
-    "Blanche ne dit rien. Elle se lève avant la fin du compte et sort sans regarder personne, et vous mettrez trois jours à comprendre que ce n'était pas du mépris."
+    "Dame Ermeline compte quinze cents écus avec le soulagement mal caché de quelqu'un à qui l'on vient d'épargner une conversation. Les pièces sonnent mal — un tiers d'entre elles sont des écus de province rognés, et elle sait que vous le voyez, et elle continue de compter.",
+    "Blanche ne dit rien. Elle se lève avant la fin du compte et sort sans regarder personne.",
+    "Vous mettrez trois jours à comprendre que ce n'était pas du mépris."
   ],
   suite:"route", libelleSuite:"Prendre la Route Grise",
 },
@@ -582,90 +627,549 @@ or_seul:{
 or_apres_franchise:{
   qui:"blanche",
   texte:[
-    "Elle encaisse mieux que vous ne l'auriez cru, et beaucoup moins bien qu'elle ne le montre.",
-    "« Bien. » Elle se lève. « Vous êtes le premier à me dire non depuis douze ans. Je ne sais pas encore si je vous en veux. »",
-    "À la porte, sans se retourner : « Le sergent que vous allez chercher n'a jamais tué personne. Vous devriez vous demander pourquoi ma tante veut sa mort plutôt que son arrestation. »"
+    "Elle encaisse mieux que vous ne l'auriez cru, et beaucoup moins bien qu'elle ne le montre. Une seule chose la trahit : elle remet le manteau d'homme sur ses épaules alors qu'elle ne l'avait pas quitté.",
+    "« Bien. »",
+    "Elle se lève. « Vous êtes le premier homme à me dire non depuis douze ans. Je ne sais pas encore si je vous en veux, et je n'ai pas l'intention d'y réfléchir devant vous. »",
+    "À la porte, sans se retourner :",
+    "§ « Le sergent que vous allez tuer n'a jamais tué personne en vingt ans. Demandez-vous pourquoi ma tante veut sa mort, et pas son procès. »"
   ],
   effets:{flags:['sait_aucun_mort'], marque:"Blanche vous a mis en garde en partant.", court:"L'avertissement"},
   suite:"route", libelleSuite:"Prendre la Route Grise",
+},
+
+accord:{
+  qui:"blanche",
+  texte:[
+    "« Alors c'est dit », fait-elle, et elle se lève la première.",
+    "Dame Ermeline fait porter douze cents écus et un contrat en deux exemplaires — qu'elle a manifestement fait rédiger avant l'audience, ce que Blanche remarque en même temps que vous.",
+    "Blanche le lit en entier, debout, devant tout le monde, en prenant son temps. Puis elle raye deux lignes avant de signer, et fait recopier la rature sur le second exemplaire.",
+    "« La première disait que je ne pouvais pas rompre. La seconde disait que vous ne pouviez pas. »",
+    "Elle rend la plume à sa tante. « Une coutume qui a besoin d'une clause pour tenir n'est plus une coutume. C'est un bail. »",
+    "À la porte, elle s'arrête et parle sans se retourner :",
+    "§ « Une chose, puisqu'on se dit tout : le sergent que vous allez tuer n'a jamais tué personne en vingt ans. Demandez-vous pourquoi ma tante veut sa mort, et pas son procès. »",
+    "« Vous partez après-demain. Je viendrai ce soir. »"
+  ],
+  effets:{flags:['sait_aucun_mort'], marque:"Blanche vous a mis en garde avant votre départ.", court:"L'avertissement"},
+  suite:"nuit_accord", libelleSuite:"Le soir",
 },
 
 les_deux:{
   qui:"blanche",
   texte:[
     "« L'or et le sang. »",
-    "Dame Ermeline hoche la tête, satisfaite : la coutume respectée est une chose qu'elle sait ranger.",
-    "Blanche vous regarde longuement. Puis elle dit, à sa tante et pas à vous : « Alors qu'on m'écrive les termes. Je les lirai avant de les tenir. »",
-    "Elle sort. Elle a dit oui. Vous ne saurez jamais ce qu'elle aurait répondu si vous le lui aviez demandé."
+    "Dame Ermeline hoche la tête, satisfaite. La coutume respectée est une chose qu'elle sait ranger, classer et oublier ; c'est même exactement pour ça que les coutumes existent.",
+    "Blanche vous regarde longuement. Assez longuement pour que ce soit inconfortable, et sans une once d'hostilité — ce qui est pire.",
+    "Puis elle dit, à sa tante et pas à vous : « Alors qu'on m'écrive les termes. Je les lirai avant de les tenir. »",
+    "Elle raye deux lignes au contrat avant de signer, fait recopier la rature sur le second exemplaire, et rend la plume.",
+    "« La première disait que je ne pouvais pas rompre. La seconde disait qu'il ne pouvait pas. »",
+    "§ Elle a dit oui. Vous ne saurez jamais ce qu'elle aurait répondu si vous le lui aviez demandé.",
+    "À la porte : « Vous partez après-demain. Je viendrai ce soir. » Elle dit ça comme on annonce une livraison."
   ],
   effets:{flags:['blanche_accord'], marque:"Blanche d'Estrées a accepté. Vous ne le lui avez pas demandé.", court:"La coutume, tenue"},
-  suite:"route", libelleSuite:"Prendre la Route Grise",
+  suite:"nuit_coutume", libelleSuite:"Le soir",
 },
 
 refus:{
   qui:"ermeline",
   texte:[
     "« Non. »",
-    "Elle ne discute pas, ne marchande pas, ne s'offusque pas. Elle referme le feuillet au nom de Ferrand et le range dans le tiroir dont il est sorti.",
-    "« Quelqu'un d'autre le fera dans le mois, messire. Vous le savez, je le sais, et ni vous ni moi n'y pouvons plus rien maintenant. »",
-    "Blanche vous regarde sortir. C'est le seul regard de la pièce qui ne soit pas froid."
+    "Elle ne discute pas, ne marchande pas, ne s'offusque pas. Elle referme le feuillet au nom de Ferrand et le range dans le tiroir dont il est sorti, et le tiroir grince.",
+    "« Quelqu'un d'autre le fera dans le mois, messire. Vous le savez, je le sais, et ni vous ni moi n'y pouvons plus rien maintenant que vous avez dit non. »",
+    "Elle a raison, et elle le dit sans triomphe, ce qui rend la chose plus laide encore.",
+    "Blanche vous regarde sortir. C'est le seul regard de la pièce qui ne soit pas froid, et vous ne saurez jamais ce qu'il voulait dire.",
+    "Dehors, le valet a fini de casser la glace. Il s'est assis contre le mur, les mains sous les aisselles, et il attend qu'elle regèle."
   ],
   issue:"L'affaire est close",
   bilan:"Vous n'avez pas pris le sel d'Estrées",
   apres:[
-    "Trois semaines plus tard, une compagnie de Chastel prend le contrat pour huit cents écus et ramène la tête de Ferrand le Boiteux dans un sac de toile.",
-    "Ils ne posent aucune question. C'est pour ça qu'ils coûtent moins cher."
+    "Trois semaines plus tard, une compagnie de Chastel prend le contrat pour huit cents écus et ramène la tête de Ferrand le Boiteux dans un sac de toile cirée, avec les oreilles de quatre de ses hommes pour faire le compte.",
+    "Ils ne posent aucune question. C'est très exactement pour ça qu'ils coûtent moins cher que vous.",
+    "Au printemps, la taxe de route d'Estrées passe de deux à trois sous par essieu. La maison explique que l'escorte coûte cher."
   ],
-  plusTard:"Vous n'avez rien perdu et rien gagné, et c'est ce qui vous restera : un hiver de plus sans avoir relevé la moindre pierre à Karlsberg.",
+  plusTard:"Vous n'avez rien perdu et rien gagné. C'est ce qui vous restera de cet hiver : pas une pierre relevée à Karlsberg, et la certitude d'avoir eu raison — ce qui ne se mange pas.",
 },
 
-/* ── 3. La route ───────────────────────────────────────────────────────── */
+/* ── 3. La nuit ────────────────────────────────────────────────────────── */
+nuit_accord:{
+  lieu:"Estrées-sur-Saulx · la chambre d'angle, tour est · onzième nuit de Nivôse",
+  titre:"Ce qui se paie en sang",
+  qui:"blanche",
+  texte:[
+    "On vous a donné la chambre d'angle de la tour est, ce qui est un choix : c'est la seule de la maison qu'on atteint sans passer devant une autre porte.",
+    "Le feu est bon, pour une fois — quelqu'un a fait monter du bois sec, et ce quelqu'un n'est pas Dame Ermeline. Il fait quand même froid à trois pas de l'âtre. Dehors, le vent prend l'angle de la tour et fait un bruit de corde tendue.",
+    "Elle frappe. Elle ne frappe pas comme on vient tenir un contrat : deux coups, brefs, et elle entre sans attendre.",
+    "Elle a laissé le manteau d'homme. Cheveux défaits, pieds nus dans des sabots qu'elle abandonne à la porte, et une bouteille de vin de Saulx dans la main gauche — le vin de la maison, celui qu'on ne sert pas aux invités parce qu'il est trop bon pour être bu par des gens de passage.",
+    "« J'ai volé ça dans la cave de ma tante », dit-elle en refermant du talon. « Si nous devons faire ce que le papier dit, autant qu'elle le paie deux fois. »",
+    "Elle pose la bouteille sur le coffre, se retourne, et vous regarde bien en face pour la première fois depuis l'audience.",
+    "« Bon. Vous êtes aussi mal à l'aise que moi. C'est déjà ça. »"
+  ],
+  choix:[
+    {t:"« Vous n'êtes obligée à rien. Je le dirai à votre tante. »",
+     cout:"Le contrat est signé · le rompre vous coûte l'or et lui coûte son printemps",
+     va:"nuit_offre_sortie"},
+    {t:"Lui demander ce qu'elle veut, elle, cette nuit",
+     cout:"Jet de Volonté (12) — la question est simple, la poser ne l'est pas",
+     test:{stat:'vol', dc:12}, reussite:"nuit_veut_ok", echec:"nuit_veut_ko"},
+    {t:"Ouvrir le vin et la laisser mener",
+     cout:"Elle est venue avec une bouteille et une décision déjà prise",
+     va:"nuit_vin"},
+  ],
+},
+
+nuit_offre_sortie:{
+  qui:"blanche",
+  texte:[
+    "Elle s'arrête net au milieu de la pièce.",
+    "« Vous savez ce que vous êtes en train de me proposer ? »",
+    "« Oui. »",
+    "« Non. » Elle secoue la tête, et il y a de la colère dedans, mais elle n'est pas dirigée contre vous. « Vous me proposez d'être un homme bien pendant douze secondes et de me laisser épouser Vaubrun. Ce n'est pas de la générosité, c'est du confort. Le vôtre. »",
+    "Elle s'assied sur le coffre, à côté de la bouteille, et remonte ses pieds nus sous elle comme une gamine.",
+    "« J'ai vingt-six ans. J'ai eu deux amants en douze ans, choisis par moi, et personne n'en a jamais rien su parce que je suis prudente et parce que ma tante ne regarde que les registres. Je ne suis pas une vierge qu'on livre. »",
+    "§ « Ce soir, c'est la première fois de ma vie qu'on a écrit quelque part que j'avais le droit. Vous voulez vraiment me reprendre ça pour vous sentir propre ? »",
+    "Elle débouche la bouteille avec les dents, ce qui doit être un geste appris quelque part et qu'on n'apprend pas dans une maison noble.",
+    "« Asseyez-vous. Vous êtes fatigant debout. »"
+  ],
+  effets:{flags:['nuit_offert_sortie','blanche_estime'],
+          marque:"Vous lui avez offert de rompre. Elle a refusé, et elle a expliqué pourquoi.", court:"Elle a refusé de sortir"},
+  suite:"nuit_ensemble",
+},
+
+nuit_veut_ok:{
+  qui:"blanche",
+  texte:[
+    "« Qu'est-ce que vous voulez, vous, cette nuit ? »",
+    "Elle ne répond pas tout de suite. Elle va jusqu'à la fenêtre, écarte le volet de deux doigts, regarde la cour noire où le valet a fini de casser la glace.",
+    "« Personne ne me l'a demandé depuis douze ans. »",
+    "Elle laisse retomber le volet.",
+    "« Je veux ne pas être polie. Une nuit. Je veux ne pas mesurer ce que je dis, ne pas surveiller mon dos, ne pas calculer ce que ça coûtera demain à la maison. Je fais ça toute la journée, tous les jours, depuis que ma mère est morte et que ma tante m'a expliqué ce que je valais sur une carte. »",
+    "Elle revient vers vous, s'arrête à un pas, et lève le menton — le même geste qu'à l'audience, exactement le même, sauf qu'ici il ne sert pas à faire taire quelqu'un.",
+    "§ « Et je veux que ce soit avec quelqu'un qui ne sera pas là dans huit jours. C'est laid à dire. C'est vrai quand même. »",
+    "« Vous avez d'autres questions, ou on peut cesser de parler ? »"
+  ],
+  effets:{flags:['nuit_demande','blanche_estime'],
+          marque:"Vous lui avez demandé ce qu'elle voulait. Personne ne l'avait fait depuis douze ans.", court:"La question posée"},
+  suite:"nuit_ensemble",
+},
+
+nuit_veut_ko:{
+  qui:"blanche",
+  texte:[
+    "La question sort mal. Trop précautionneuse, trop enveloppée, avec ce ton qu'on prend pour parler aux gens qu'on croit fragiles.",
+    "Elle l'entend immédiatement.",
+    "« Ne me ménagez pas. » Ce n'est pas dur, c'est net. « Si vous me traitez comme une chose délicate, je vais commencer à me sentir comme une chose délicate, et je vous jure que ce n'est pas ce que je suis venue chercher. »",
+    "Elle débouche la bouteille avec les dents et boit au goulot avant de vous la tendre.",
+    "« Buvez. Et parlez-moi comme à quelqu'un que vous ne plaignez pas. »"
+  ],
+  suite:"nuit_ensemble",
+},
+
+nuit_vin:{
+  qui:"blanche",
+  texte:[
+    "Vous ouvrez le vin. Il n'y a qu'un gobelet dans la chambre, en étain, cabossé, et elle décide que c'est très bien ainsi.",
+    "Elle parle. Beaucoup, et vite, comme quelqu'un qui ouvre une vanne : sa mère, morte quand elle avait onze ans, d'une fièvre que trois médecins ont appelée trois choses différentes ; le premier hiver seule dans cette maison ; la façon dont sa tante lui a expliqué, à quatorze ans, avec une carte de la province déroulée sur cette même table des comptes, ce qu'un mariage bien placé pouvait rapporter en droits de passage.",
+    "« Elle n'était pas cruelle. C'est ça le pire. Elle m'expliquait mon métier. »",
+    "Le vin est excellent. Le feu descend. À un moment elle cesse de parler au milieu d'une phrase, pose le gobelet, et le silence change de nature.",
+    "§ Ce n'est plus le silence de deux personnes qui attendent. C'est celui de deux personnes qui savent."
+  ],
+  suite:"nuit_ensemble",
+},
+
+nuit_ensemble:{
+  qui:"blanche",
+  texte:[
+    "Elle vient. Elle ne se laisse pas faire, elle ne se donne pas : elle vient, et c'est un verbe qui a un sujet.",
+    "Le premier geste est à elle — sa main à plat sur votre poitrine, pas pour repousser, pour sentir. Elle a les doigts glacés, comme tout le monde dans cette maison, et elle rit quand vous sursautez, et ce rire-là est la première chose entièrement gratuite qui se passe entre vous deux depuis l'audience.",
+    "Elle trouve la cicatrice sous la clavicule — celle d'Orsenne, trois ans, mal recousue par un barbier qui buvait. Elle s'arrête dessus. Elle ne demande pas.",
+    "Vous trouvez les siennes : quatre marques rondes, anciennes, à l'intérieur de l'avant-bras gauche, du genre qu'on ne se fait pas en tombant.",
+    "« Ma tante, non », dit-elle avant que vous ayez rien demandé. « Mon oncle. Il est mort. C'est la seule chose bien qu'il ait faite. »",
+    "Puis elle prend votre visage à deux mains, fermement, pour que vous la regardiez.",
+    "§ « Ce soir, on ne parle plus de cette maison. »",
+    "Le feu descend jusqu'aux braises. La corde du vent tient toute la nuit sur l'angle de la tour. Ils ne le remettent pas.",
+    "Il fait noir bien avant qu'ils cessent de se parler, et ce qu'ils se disent alors n'appartient plus à personne — ni à la coutume, ni à la maison, ni à ce qui sera écrit demain sur le second exemplaire du contrat."
+  ],
+  suite:"nuit_matin",
+},
+
+nuit_matin:{
+  lieu:"La chambre d'angle · avant l'aube",
+  qui:"blanche",
+  texte:[
+    "Elle est debout avant le jour, en train de se rhabiller dans le noir avec l'efficacité de quelqu'un qui l'a déjà fait, et qui a déjà eu à ne pas être vue en sortant.",
+    "Il gèle encore. Le feu est mort. Elle enfile le manteau d'homme et reste un moment près du lit, sans s'asseoir.",
+    "« Ne dites rien de gentil. Vous allez le regretter à cheval, et moi je vais y repenser pendant six mois. »",
+    a('nuit_demande') || a('nuit_offert_sortie')
+      ? "Un temps. « Mais merci d'avoir demandé. Ça, vous pouvez l'emporter. »"
+      : "Un temps. Elle ne dit rien de plus.",
+    "Elle sort le second exemplaire du contrat de sa poche, celui avec les deux ratures, et le pose sur le coffre.",
+    "« Gardez-le. Pas pour ce qu'il dit — pour la date. Si un jour quelqu'un prétend que ma tante ne vous a jamais employé, vous aurez un papier signé de sa main un jour où elle croyait tout maîtriser. »",
+    "§ « Une maison qui écrit trop finit toujours par se pendre avec son encre. C'est la seule chose utile qu'elle m'ait apprise. »",
+    "À la porte, la main sur le loquet, elle ajoute sans se retourner :",
+    "« Vasseur. Quai des Cordiers, à Port-Noir. C'est lui qui achète le sel qu'on nous vole. Je le sais parce que c'est moi qui tiens le courrier de cette maison depuis quatre ans, et que ma tante n'a jamais imaginé que je le lisais. »",
+    "Elle est déjà dans l'escalier quand vous comprenez ce qu'elle vient de vous donner."
+  ],
+  effets:{flags:['blanche_nuit','sait_vasseur','contrat_date'],
+          marque:"Blanche vous a donné le nom de Vasseur, et un contrat daté de la main de sa tante.", court:"Vasseur · le contrat"},
+  suite:"route", libelleSuite:"Prendre la Route Grise",
+},
+
+nuit_coutume:{
+  lieu:"Estrées-sur-Saulx · la chambre d'angle, tour est · onzième nuit de Nivôse",
+  titre:"Ce qui se paie en sang",
+  qui:"blanche",
+  texte:[
+    "On vous a donné la chambre d'angle de la tour est. Le feu fume ; personne n'a fait monter de bois sec.",
+    "Elle frappe à la neuvième heure. Trois coups espacés, et elle attend qu'on lui dise d'entrer.",
+    "Elle a mis une robe qu'on met pour ça, coiffée par une chambrière, et elle sent une eau de senteur qui n'est pas la sienne — quelqu'un l'a préparée, et l'idée de ce quelqu'un occupe soudain toute la pièce.",
+    "Elle referme la porte, se tient très droite au milieu de la chambre, les mains croisées devant elle.",
+    "« Le contrat dit trois nuits avant votre départ. Il n'en reste que deux, puisque vous partez après-demain. Je suppose que nous commençons ce soir. »",
+    "Sa voix est parfaitement égale. Elle ne tremble pas. Elle n'a pas bu.",
+    "§ Elle ne se dérobe pas, elle ne pleure pas, elle ne joue pas. Elle est venue tenir un engagement, comme on livre du sel.",
+    "« Dites-moi ce que vous voulez. Je préfère qu'on ne fasse pas semblant que c'est autre chose. »"
+  ],
+  choix:[
+    {t:"« Alors on ne fait rien. Sortez. Le contrat tient. »",
+     cout:"Vous gardez l'or · elle ne saura pas ce qui vous a arrêté",
+     ferme:"Ferme : la coutume, telle que la maison l'a comptée",
+     definitif:true, va:"coutume_renvoi",
+     effets:{flags:['coutume_refusee','blanche_estime'],
+             marque:"Vous avez renvoyé Blanche d'Estrées le soir même, sans explication.", court:"Renvoyée"}},
+
+    {t:"Lui demander, maintenant, ce qu'elle veut — même en retard",
+     cout:"Jet de Volonté (14) — quatre heures trop tard, et elle le sait",
+     test:{stat:'vol', dc:14}, reussite:"coutume_tard_ok", echec:"coutume_tard_ko"},
+
+    {t:"Prendre ce qui a été convenu",
+     cout:"Elle a signé, elle est majeure, elle est venue · et rien de tout ça n'arrange rien",
+     ferme:"Ferme : ce que Blanche aurait pu devenir pour vous",
+     definitif:true, va:"coutume_tenue",
+     effets:{flags:['coutume_consommee'],
+             marque:"Vous avez tenu la coutume d'Estrées à la lettre, et rien de plus.", court:"La lettre du contrat"}},
+  ],
+},
+
+coutume_tard_ok:{
+  qui:"blanche",
+  texte:[
+    "« Blanche. Qu'est-ce que vous voulez, vous ? »",
+    "C'est la première fois de la soirée que quelqu'un emploie son prénom, et ça la traverse comme un courant d'air.",
+    "Elle met beaucoup de temps. Assez pour que le feu craque deux fois.",
+    "« Vous auriez dû demander cet après-midi. »",
+    "« Je sais. »",
+    "« Non, vous ne savez pas. Cet après-midi, j'aurais répondu devant ma tante, et elle aurait vu que je pouvais dire non. Là, j'ai passé quatre heures à me faire coiffer par une fille de seize ans qui me plaignait. »",
+    "Elle défait la coiffure, méthodiquement, épingle par épingle, et les pose sur le coffre en une petite pile.",
+    "§ « Ce que je veux, c'est qu'on cesse de me préparer. »",
+    "« Alors asseyez-vous, et racontez-moi Karlsberg. Pas la version des chansons. Celle où vous avez froid. »",
+    "Ils parlent jusqu'à la quatrième heure du matin. Le contrat reste sur le coffre, à côté des épingles, et personne ne le regarde.",
+    "Quand elle s'en va, la coutume n'a pas été tenue et personne n'ira le vérifier."
+  ],
+  effets:{flags:['coutume_detournee','blanche_estime'],
+          marque:"La coutume n'a pas été tenue. Vous avez parlé jusqu'au matin.", court:"Rien, et tout"},
+  suite:"nuit_matin_froid",
+},
+
+coutume_tard_ko:{
+  qui:"blanche",
+  texte:[
+    "« Qu'est-ce que vous voulez, vous ? »",
+    "Elle a un mouvement de recul très bref, à peine visible, et la réponse tombe comme une porte.",
+    "« Il est un peu tard pour cette question, messire. »",
+    "Elle reste debout au milieu de la chambre.",
+    "« Vous l'avez posée pour vous, pas pour moi. Pour pouvoir vous dire demain, à cheval, que vous aviez demandé. »",
+    "§ « Alors n'ayez pas les deux : la coutume et la bonne conscience. Choisissez-en une. »"
+  ],
+  choix:[
+    {t:"« Vous avez raison. Sortez, et le contrat tient quand même. »",
+     cout:"Vous gardez l'or et vous perdez la face devant elle",
+     ferme:"Ferme : la coutume, telle que la maison l'a comptée",
+     definitif:true, va:"coutume_renvoi",
+     effets:{flags:['coutume_refusee','blanche_estime'],
+             marque:"Vous avez renvoyé Blanche après qu'elle vous a repris.", court:"Renvoyée"}},
+    {t:"Prendre ce qui a été convenu",
+     cout:"Elle a signé · et elle vient de vous dire exactement ce que ça vaut",
+     ferme:"Ferme : ce que Blanche aurait pu devenir pour vous",
+     definitif:true, va:"coutume_tenue",
+     effets:{flags:['coutume_consommee','blanche_froid'],
+             marque:"Vous avez tenu la coutume après qu'elle vous a repris.", court:"La lettre du contrat"}},
+  ],
+},
+
+coutume_tenue:{
+  qui:"blanche",
+  texte:[
+    "Elle tient parole. Elle la tient bien, et c'est insupportable : il n'y a pas un instant où elle se dérobe, pas un instant où elle joue la comédie, pas un instant où l'on pourrait se raconter qu'elle en avait envie.",
+    "Elle est là. Elle est présente, exacte, adulte et absente à la fois, et elle ne vous ment sur rien.",
+    "§ Deux corps qui s'acquittent d'une clause. C'est ce que la coutume prévoit, mot pour mot, et c'est ce qu'elle a toujours prévu.",
+    "Le feu fume. Le vent tient sa corde sur l'angle de la tour.",
+    "Après, elle se rhabille sans se presser et sans un mot de reproche. À la porte, elle dit une seule chose, sur le ton dont on constate le temps qu'il fait :",
+    "« Nous en avons encore une. Je viendrai. »",
+    "Et elle vient. Et c'est pire."
+  ],
+  suite:"nuit_matin_froid",
+},
+
+coutume_renvoi:{
+  qui:"blanche",
+  texte:[
+    "« Sortez. »",
+    "Elle ne bouge pas.",
+    "« Pourquoi ? »",
+    "« Parce que je ne saurais pas quoi faire de ça demain. »",
+    "C'est la vérité et ce n'est pas très glorieux, et elle le reconnaît immédiatement pour ce que c'est — ce qui est probablement la raison pour laquelle elle finit par hocher la tête.",
+    "« Ma tante comptera que la coutume a été tenue. Je ne la détromperai pas : ça me coûterait plus cher qu'à vous. »",
+    "Elle ramasse les épingles qu'elle n'a pas eu le temps de défaire.",
+    "§ « Vous ne m'avez pas rendu service, messire. Vous vous en êtes rendu un. Mais je préfère ça à la plupart des soirs de ma vie, alors je ne vais pas me plaindre. »"
+  ],
+  suite:"nuit_matin_froid",
+},
+
+nuit_matin_froid:{
+  lieu:"La chambre d'angle · avant l'aube",
+  qui:"blanche",
+  texte:[
+    a('coutume_detournee')
+      ? "Elle repasse avant l'aube, en manteau de voyage, et elle a l'air d'avoir dormi moins que vous."
+      : "Elle repasse avant l'aube. Elle n'est pas obligée, et c'est bien ce qui surprend.",
+    "Il gèle. Le feu est mort depuis longtemps. Elle reste debout à la porte, sans entrer tout à fait.",
+    "« Je vais vous donner quelque chose, et vous n'allez pas me demander pourquoi. »",
+    "Elle pose sur le coffre le second exemplaire du contrat, celui aux deux ratures.",
+    "« Pas pour ce qu'il dit. Pour la date, et pour la signature. Si un jour quelqu'un prétend que ma tante ne vous a jamais employé, vous aurez un papier de sa main d'un jour où elle croyait tout maîtriser. »",
+    a('blanche_estime')
+      ? "Puis, plus bas : « Vasseur. Quai des Cordiers, à Port-Noir. C'est lui qui achète le sel qu'on nous vole. Je tiens le courrier de cette maison depuis quatre ans et ma tante n'a jamais imaginé que je le lisais. »"
+      : "Elle n'ajoute rien d'autre. Il y avait autre chose à dire — ça se voit — et elle décide, à la porte, de ne pas le dire.",
+    "§ « Ne revenez pas me remercier. Revenez avec quelque chose qui la fasse tomber, ou ne revenez pas. »",
+    "Elle est déjà dans l'escalier quand vous comprenez qu'elle ne parlait pas de Ferrand."
+  ],
+  effets:a('blanche_estime')
+    ? {flags:['sait_vasseur','contrat_date'], marque:"Blanche vous a donné Vasseur, et un contrat daté de la main de sa tante.", court:"Vasseur · le contrat"}
+    : {flags:['contrat_date'], marque:"Blanche vous a laissé un contrat daté et signé de sa tante.", court:"Le contrat"},
+  suite:"route", libelleSuite:"Prendre la Route Grise",
+},
+
+/* ── 4. La route ───────────────────────────────────────────────────────── */
 route:{
   lieu:"Route Grise · défilé des Deux Saules · quatre jours plus tard",
   titre:"Le douzième convoi",
   qui:"charretier",
   texte:[
-    "Ils prennent le douzième convoi devant vous, à deux cents pas, et ils le font mal — trop lentement, avec trop d'hommes pour ce qu'il faut et pas assez pour ce qu'il faudrait.",
-    "Onze hommes. Quatre ont plus de cinquante ans. Personne ne dégaine.",
-    "Le charretier de tête descend de son siège, ouvre la bâche lui-même et recule de trois pas sans qu'on le lui demande. Il a fait ça déjà. Plusieurs fois.",
-    "Et il ne regarde pas les brigands. Il regarde <em>vous</em>, sur la crête, avec l'expression d'un homme qui vient de comprendre que le décor a changé."
+    "Quatre jours de route en Nivôse : de la boue gelée le matin, de la boue vraie l'après-midi, et le soir un cheval qu'il faut frictionner une heure avant de penser à soi. La Route Grise porte bien son nom en hiver — il n'y a pas d'autre couleur entre le ciel et les pierres.",
+    "Le défilé des Deux Saules est un couloir de trois cents pas entre deux versants d'éboulis, avec un ruisseau gelé au fond et deux souches mortes qui lui ont donné son nom il y a longtemps.",
+    "Ils prennent le douzième convoi devant vous, à deux cents pas, et ils le font <em>mal</em> — trop lentement, avec trop d'hommes pour ce qu'il faut et pas assez pour ce qu'il faudrait s'ils tombaient sur une vraie escorte.",
+    "Onze hommes. Vous les comptez deux fois. Quatre ont largement passé cinquante ans, l'un d'eux tient sa pique comme un bâton de marche, et personne ne dégaine.",
+    "Le charretier de tête descend de son siège, ouvre la bâche lui-même et recule de trois pas sans qu'on le lui demande. Il a fait ça déjà. Plusieurs fois. Ses gestes ont l'ordre de quelqu'un qui a une habitude.",
+    "§ Et il ne regarde pas les brigands. Il regarde <em>vous</em>, sur la crête.",
+    "Avec l'expression exacte d'un homme qui vient de comprendre que le décor a changé et qui calcule ce que ça va lui coûter."
   ],
   choix:[
     {t:"Descendre et arrêter la prise",
-     cout:"Onze hommes, une pente, et vous seul",
+     cout:"Onze hommes, une pente d'éboulis, et vous seul",
      va:"intervenir"},
     {t:"Laisser faire, et suivre le sel",
-     cout:"Un chargement volé va quelque part",
-     ferme:"Ferme : la confiance du charretier — il vous a vu ne pas bouger",
+     cout:"Un chargement volé va quelque part, et ce quelque part a un nom",
+     ferme:"Ferme : la confiance de Perrin — il vous a vu ne pas bouger",
      definitif:true, va:"suivre",
      effets:{flags:['suivi_sel'], marque:"Vous avez laissé prendre le douzième convoi pour voir où il allait.", court:"Vous avez suivi"}},
-    {t:"Parler au charretier après leur départ",
+    {t:"Attendre leur départ et parler au charretier",
      cout:"Jet de Volonté (12) — c'est lui qui a peur, pas eux",
      test:{stat:'vol', dc:12}, reussite:"charretier_ok", echec:"charretier_ko"},
   ],
 },
 
+/* ── L'affrontement ────────────────────────────────────────────────────── */
 intervenir:{
+  titre:"Onze contre un",
   texte:[
-    "Vous descendez la pente en biais, à découvert, sans dégainer, ce qui les surprend plus que l'inverse.",
-    "Ce n'est pas un combat. Un vieux lève une pique, un autre lui pose la main sur le bras, et les onze reculent en bon ordre vers les arbres sans lâcher un mot.",
-    "L'un d'eux boite. Il ne court pas. Il se retourne à la lisière, et vous voyez très bien qu'il vous compte : un homme, une épée, pas d'escorte.",
-    "Le sel reste sur la charrette. Le charretier ne vous remercie pas. Il remonte sur son siège, fouette, et part."
+    "Vous descendez la pente en biais, à découvert, sans dégainer. C'est ce qui les surprend le plus : un homme seul qui marche vers onze en montrant ses mains.",
+    "Ils se retournent tous en même temps, mal, dans un bruit de cailloux qui roulent. Un vieux lève sa pique et la tient trop haut. Deux autres reculent d'instinct vers les souches. Un quatrième — trente ans, mâchoire carrée, le seul qui ait une vraie brigandine — décide en une seconde que ce sera lui, et il vient.",
+    "§ Ils ne savent pas se battre. Ils savent tenir un défilé, ce qui n'est pas la même chose.",
+    "Il vient vite quand même. Un homme qui vient vite, ça tue, même mal."
   ],
-  effets:{flags:['ferrand_vu'], marque:"Vous avez fait reculer les onze hommes de Ferrand sans une blessure.", court:"Le convoi tenu"},
+  effets:{melee:{eux:4, souffle:"entier", note:"Sept regardent · quatre s'engagent"}},
+  melee:true,
+  choix:[
+    {t:"Le laisser venir et le désarmer",
+     cout:"Jet de Précision (13) — il charge droit, et c'est sa seule idée",
+     test:{stat:'precision', dc:13}, reussite:"melee_desarme", echec:"melee_touche"},
+    {t:"Aller au-devant, dans les éboulis",
+     cout:"Jet de Vigueur (12) — la pente est de votre côté, pas le terrain",
+     test:{stat:'vigueur', dc:12}, reussite:"melee_pente", echec:"melee_chute"},
+    {t:"Ne pas le regarder lui. Parler au vieux à la pique",
+     cout:"Jet de Volonté (14) — celui qui commande n'est pas celui qui charge",
+     test:{stat:'vol', dc:14}, reussite:"melee_vieux", echec:"melee_touche"},
+  ],
+},
+
+melee_desarme:{
+  texte:[
+    "Vous le laissez arriver. C'est contre-intuitif et c'est ce qu'il faut faire : un homme qui charge a déjà décidé où sera sa lame, et il ne peut plus changer d'avis.",
+    "Un pas de côté. Sa hache passe. Le manche vous frôle la hanche et vous refermez la main dessus — pas sur lui, sur le bois — et vous tirez dans le sens où il courait déjà.",
+    "Il part tout seul. Il fait quatre pas qu'il ne contrôle pas, s'étale dans les cailloux, et se retrouve à quatre pattes avec sa hache dans vos mains et le souffle coupé.",
+    "Personne ne bouge. Sept hommes sur la crête, trois autour de vous, et pas un qui avance.",
+    "§ Ce que vous venez de faire, ils l'ont tous compris : vous auriez pu le tuer et vous ne l'avez pas fait."
+  ],
+  effets:{eux:-1, souffle:"entier", noteMelee:"Un désarmé · trois encore debout", flags:['melee_propre'],
+          marque:"Vous avez désarmé le premier homme sans le tuer, devant les dix autres.", court:"Désarmé"},
+  suite:"melee_2",
+},
+
+melee_touche:{
+  texte:[
+    "Vous êtes une fraction de seconde trop lent, et une fraction de seconde suffit.",
+    "La hache ne porte pas là où il visait — elle vous prend l'avant-bras gauche de biais, en travers, et elle a été affûtée récemment.",
+    "Le froid rend la chose étrange : la douleur met trois secondes à arriver, et pendant ces trois secondes vous voyez très bien votre propre sang fumer sur les cailloux gelés.",
+    "Puis elle arrive.",
+    "Vous ripostez d'instinct, du plat, et l'homme part en arrière avec le nez ouvert. Il ne se relève pas tout de suite.",
+    "§ Trois hommes encore debout autour de vous, et un bras qui ne se ferme plus complètement."
+  ],
+  effets:{eux:-1, souffle:"court", noteMelee:"Vous saignez · trois encore debout",
+          plaie:"Avant-bras gauche ouvert — la main ne se ferme plus complètement",
+          marque:"Vous avez pris une hache dans l'avant-bras aux Deux Saules.", court:"Blessé"},
+  suite:"melee_2",
+},
+
+melee_pente:{
+  texte:[
+    "Vous montez à sa rencontre par la pente, en diagonale, là où les éboulis roulent — et c'est le pire endroit pour lui, parce qu'il court et que vous marchez.",
+    "Il perd pied à trois pas de vous. Pas beaucoup : un genou qui plie, une main au sol.",
+    "C'est tout ce qu'il faut. Vous êtes sur lui avant qu'il se relève, la garde de l'épée contre sa gorge, et il lâche la hache parce qu'il n'a rien d'autre à faire.",
+    "Les cailloux continuent de descendre pendant plusieurs secondes après que tout est fini. C'est le seul bruit du défilé.",
+    "§ Trois hommes vous regardent. Personne ne vient."
+  ],
+  effets:{eux:-1, souffle:"court", noteMelee:"Un à terre · trois encore debout", flags:['melee_propre'],
+          marque:"Vous avez pris la pente contre le premier homme et il n'a rien pu faire.", court:"La pente"},
+  suite:"melee_2",
+},
+
+melee_chute:{
+  texte:[
+    "Les éboulis partent sous vous au troisième pas.",
+    "Vous descendez six pieds sur le flanc dans un fracas de cailloux, et vous arrivez en bas dans une position que personne ne choisirait — à genoux, l'épée trop loin devant, la côte contre une arête de pierre.",
+    "Il ne rate pas l'occasion. Il ne frappe pas de la hache : il frappe du pied, deux fois, sur ce qui est déjà contre la pierre.",
+    "Quelque chose cède dans le flanc gauche avec un bruit qu'on entend de l'intérieur.",
+    "Vous vous relevez quand même — c'est la seule chose à faire et ça coûte tout ce que vous avez — et le fait de vous relever suffit à le faire reculer de deux pas.",
+    "§ Une côte cassée. Ça ne tue personne. Ça empêche seulement de respirer pendant six semaines."
+  ],
+  effets:{souffle:"court", noteMelee:"Vous respirez mal · quatre encore debout",
+          plaie:"Côte gauche fêlée — chaque inspiration se compte",
+          marque:"Vous êtes tombé dans les éboulis des Deux Saules et vous vous êtes brisé une côte.", court:"Côte cassée"},
+  suite:"melee_2",
+},
+
+melee_vieux:{
+  texte:[
+    "Vous ne regardez pas celui qui charge. Vous regardez le vieux à la pique, et vous parlez fort, en articulant, comme un sergent :",
+    "« RANGEZ ÇA. »",
+    "L'homme qui chargeait s'arrête net à quatre pas — pas à cause de vous, à cause du vieux, parce que sa tête s'est tournée vers lui d'elle-même, et c'est ce mouvement de tête qui vous apprend qui commande ici.",
+    "Le vieux ne baisse pas sa pique. Il ne l'a jamais vraiment levée.",
+    "« On prend la charge de queue et on s'en va », dit-il. Sa voix est calme, éraillée, avec l'accent de la vallée. « On n'a touché personne en quatre-vingt-onze prises. Vous êtes payé pour nous tuer ou pour nous regarder ? »",
+    "§ Quatre-vingt-onze. Il donne le chiffre exact, sans y penser, comme on donne une date de naissance.",
+    "Personne ne bouge. Onze hommes, un ruisseau gelé, et un homme de soixante ans qui tient un compte."
+  ],
+  effets:{eux:0, souffle:"entier", noteMelee:"Personne n'avance · le vieux parle", flags:['melee_parle','sait_compte'],
+          marque:"Un vieux du défilé vous a donné le chiffre exact : quatre-vingt-onze prises, aucun mort.", court:"Quatre-vingt-onze"},
+  suite:"melee_2",
+},
+
+melee_2:{
+  titre:"Ce qui décide",
+  texte:[
+    a('melee_parle')
+      ? "Le vieux attend une réponse. Les dix autres attendent la sienne. Le charretier, sur son siège, attend tout le monde."
+      : "Ils se regroupent. Pas pour charger — pour partir en ordre, en emportant ce qu'ils peuvent, ce qui est le réflexe de gens qui ont porté un uniforme il y a longtemps.",
+    ETAT.plaies.length
+      ? "Vous saignez, et ils le voient. C'est le moment où une bande décide soit de finir le travail, soit de s'en aller. Ça se joue en trois secondes et personne ne sait dans quel sens, pas même eux."
+      : "Vous n'avez rien. Ils le voient aussi, et un homme intact qui a désarmé leur meilleur en un geste, c'est un calcul qu'ils savent faire.",
+    "Un des vieux, à mi-pente, dit à mi-voix quelque chose qui n'est pas destiné à vous et qui vous arrive quand même :",
+    "§ « C'est le quatrième. »"
+  ],
+  melee:true,
+  choix:[
+    {t:"Les laisser partir avec la charge de queue",
+     cout:"Une charge sur onze · et un défilé qui vous doit une matinée",
+     va:"melee_fin_paix",
+     effets:{flags:['defile_paix'],
+             marque:"Vous avez laissé les hommes du défilé emporter une charge et s'en aller.", court:"Laissés partir"}},
+    {t:"Exiger qu'ils rendent la charge et se retirent",
+     cout:"Jet de Volonté (13) — ils sont onze et ils ont faim",
+     test:{stat:'vol', dc:13}, reussite:"melee_fin_ferme", echec:"melee_fin_dur"},
+    {t:"Finir ce qui est commencé",
+     cout:"Quatre vieux, sept hommes, et un contrat qui parle de leur chef",
+     ferme:"Ferme : ce que les hommes du défilé auraient pu vous dire",
+     definitif:true, va:"melee_fin_sang",
+     effets:{flags:['defile_sang'], plaie:"Coupure à la cuisse — profonde, mal recousue le soir même",
+             marque:"Vous avez tué trois hommes du défilé des Deux Saules, dont deux avaient plus de cinquante ans.", court:"Trois morts"}},
+  ],
+},
+
+melee_fin_paix:{
+  texte:[
+    "« Prenez la charge de queue et allez-vous-en. »",
+    "Le vieux vous regarde longtemps. Puis il fait un geste, et onze hommes défont une charge sur quatre avec la lenteur méthodique de gens qui ne veulent surtout pas avoir l'air de se dépêcher.",
+    "Ils remontent le versant nord par un sentier que vous n'auriez pas vu. Le dernier à disparaître est celui que vous avez mis à terre ; il se retourne à la lisière et vous regarde, longuement, sans rancune apparente.",
+    "Perrin le charretier remonte sur son siège, fouette, et démarre sans un mot de remerciement.",
+    "Au bout de vingt pas, il tire sur les rênes et se retourne à moitié.",
+    "§ « Vous avez laissé prendre la queue. Ils prennent toujours la queue. Vous devriez demander pourquoi ma maison charge toujours quatre charrettes quand le bordereau en porte trois. »",
+    "Et il repart avant que vous ayez pu répondre."
+  ],
+  effets:{flags:['charretier_ami','indice_bordereau'],
+          marque:"Perrin vous a mis sur la piste des bordereaux d'Estrées.", court:"Le quatrième chargement"},
+  suite:"ferrand", libelleSuite:"Monter aux Deux Saules",
+},
+
+melee_fin_ferme:{
+  texte:[
+    "« Vous rendez la charge, et vous montez. Tout de suite, et sans rien poser par terre. »",
+    "Ce n'est pas la voix qui décide. C'est le fait que vous n'ayez toujours pas tué personne alors que vous en avez eu trois fois l'occasion, et que onze hommes qui tiennent un défilé depuis vingt ans savent exactement compter ce genre d'occasions.",
+    "Le vieux fait remonter la charge sur la charrette lui-même, à deux mains, avec des gestes de docker.",
+    "« On reviendra », dit-il en s'essuyant les paumes. « Pas ce soir. »",
+    "Ils remontent le versant nord en file, dans l'ordre, le plus vieux en dernier — ce qui est l'ordre d'une colonne, pas d'une bande.",
+    "§ Ces gens ont été des soldats. Ça se voit à la façon dont ils partent.",
+    "Perrin remonte sur son siège. Il ne dit rien, mais il attend que vous soyez à cheval pour démarrer, et il règle son allure sur la vôtre pendant deux lieues."
+  ],
+  effets:{flags:['defile_respect','charretier_ami'],
+          marque:"Le défilé a rendu la charge. Ils savent que vous n'avez tué personne.", court:"La charge rendue"},
+  suite:"ferrand", libelleSuite:"Monter aux Deux Saules",
+},
+
+melee_fin_dur:{
+  texte:[
+    "Vous exigez. Ils écoutent. Et le vieux répond, sans hausser le ton, ce qui rend la chose définitive :",
+    "« Non. »",
+    "« On a onze bouches à Vaubien et le sel de cette charge les nourrit trois semaines. Vous voulez la reprendre, il faudra en tuer trois ou quatre, et vous le pouvez — on le sait tous ici. Alors faites-le ou laissez-nous monter. »",
+    "Il attend. Il attend vraiment, sans bravade, comme un homme qui a déjà fait ce calcul pour lui-même il y a longtemps.",
+    "§ Onze hommes, une charge de sel, et personne qui bluffe.",
+    "Ils montent avec la charge. Vous les laissez monter, et vous restez seul dans le défilé avec un charretier qui ne vous regarde pas."
+  ],
+  effets:{flags:['defile_paix'],
+          marque:"Vous avez exigé la charge et ils l'ont emportée quand même.", court:"Ils sont montés"},
+  suite:"ferrand", libelleSuite:"Monter aux Deux Saules",
+},
+
+melee_fin_sang:{
+  texte:[
+    "Ça dure moins de deux minutes et ce n'est pas un combat. C'est un travail.",
+    "Le premier tombe parce qu'il tient sa pique comme un bâton. Le deuxième parce qu'il vient au secours du premier, ce qu'un homme entraîné ne fait jamais. Le troisième — celui à la brigandine, le seul qui savait — vous ouvre la cuisse en travers avant que vous l'ayez.",
+    "Les huit autres ne restent pas. Ils lâchent la charge, lâchent leurs armes pour courir plus vite, et remontent le versant nord en désordre en s'appelant par leurs prénoms.",
+    "§ Vous saurez leurs prénoms toute votre vie. C'est la seule chose qu'on emporte de ce genre de matinées.",
+    "Trois corps sur les cailloux gelés. Le plus jeune a peut-être trente ans, les deux autres beaucoup plus. L'un d'eux porte encore, cousu à l'intérieur de son manteau, un morceau d'écusson d'ordonnance qu'il n'a pas voulu jeter en vingt ans.",
+    "Perrin le charretier reste sur son siège pendant tout ce temps. Quand c'est fini, il descend, regarde les trois hommes, et remonte sans rien dire.",
+    "Il ne vous adressera plus la parole du voyage."
+  ],
   suite:"ferrand", libelleSuite:"Monter aux Deux Saules",
 },
 
 charretier_ok:{
   qui:"charretier",
   texte:[
-    "Il attend d'être hors de vue du défilé pour parler, et il parle vite, comme on vide une chose qu'on porte depuis trop longtemps.",
-    "« Ils prennent une charge sur quatre, messire. Une sur quatre. Toujours celle de queue, jamais les autres. »",
-    "« Et les trois autres, on les décharge à Port-Noir chez un courtier, et on rentre en portant les quatre comme volées. C'est écrit comme ça sur mon bordereau avant même que je parte. »",
-    "Il crache. « J'ai six ans de route pour cette maison. Je sais compter jusqu'à quatre. »"
+    "Il attend d'être hors de vue du défilé, à un tournant, sous un dévers où le vent ne porte pas. Puis il parle vite, sans reprendre son souffle, comme on vide une chose qu'on porte depuis trop longtemps.",
+    "« Ils prennent une charge sur quatre, messire. Une sur quatre. Toujours celle de queue, jamais les autres, et ils ne touchent pas aux hommes. »",
+    "« Et les trois autres, on les décharge à Port-Noir, quai des Cordiers, chez un courtier qui s'appelle Vasseur. On rentre en portant les quatre comme volées. C'est écrit comme ça sur mon bordereau <em>avant</em> que je parte. J'ai six ans de route pour cette maison et je sais compter jusqu'à quatre. »",
+    "Il crache dans la boue gelée.",
+    "« Vous savez ce qui me tue, messire ? Le sergent là-haut, il a pris ma charge onze fois. Onze fois il m'a laissé mon cheval, mon manteau et ma vie. Mon maître à moi, il me fait signer un papier qui dit qu'on m'a tout pris, et si un jour un juge s'en mêle, c'est moi qu'on pendra pour complicité. »",
+    "§ « Alors si vous montez là-haut, montez en sachant lequel des deux est l'honnête homme. »"
   ],
-  effets:{flags:['sait_la_fraude','charretier_ami'],
-          marque:"Le charretier vous a dit ce qu'il y a vraiment sur les bordereaux d'Estrées.", court:"Le bordereau"},
+  effets:{flags:['sait_la_fraude','charretier_ami','sait_vasseur'],
+          marque:"Perrin vous a dit ce qu'il y a vraiment sur les bordereaux d'Estrées.", court:"Le bordereau"},
   suite:"ferrand", libelleSuite:"Monter aux Deux Saules",
 },
 
@@ -673,46 +1177,61 @@ charretier_ko:{
   qui:"charretier",
   texte:[
     "« Je n'ai rien vu, messire. »",
-    "Il le dit trois fois, à trois questions différentes, avec la constance d'un homme qui a répété.",
-    "En remontant sur son siège, il ajoute pourtant, sans vous regarder : « Faites attention à ce que vous rapportez. Il y a des choses qu'une maison paie pour ne pas savoir. »"
+    "Il le dit trois fois, à trois questions différentes, avec la constance patiente d'un homme qui a répété sa réponse en chemin.",
+    "Il a peur, et il n'a pas peur de vous : il regarde deux fois par-dessus votre épaule vers le sud, vers Estrées, pas vers le nord où les onze sont montés.",
+    "En remontant sur son siège, il ajoute pourtant, sans vous regarder, en s'occupant de ses rênes :",
+    "§ « Faites attention à ce que vous rapporterez. Il y a des choses qu'une maison paie très cher pour ne pas savoir. »"
   ],
   suite:"ferrand", libelleSuite:"Monter aux Deux Saules",
 },
 
 suivre:{
   texte:[
-    "Vous les suivez deux jours, à distance, et ils ne cherchent pas à vous semer parce qu'ils ne savent pas que vous êtes là.",
-    "Le sel ne monte pas dans la montagne. Il redescend — plein ouest, par le chemin des tanneries, jusqu'à un entrepôt de Port-Noir dont la porte s'ouvre avant qu'ils aient frappé.",
-    "Ce n'est pas un receleur. C'est un courtier avec des registres, un commis et une pendule.",
-    "Il paie au poids, il fait signer, et il archive. Sur le bordereau qu'on lui tend, il y a un cachet que vous avez déjà vu ce mois-ci : celui de la maison d'Estrées."
+    "Vous les suivez deux jours. Ils ne cherchent pas à vous semer parce qu'ils ne savent pas que vous êtes là, et parce que des hommes qui portent du sel dans la neige regardent leurs pieds.",
+    "Le sel ne monte pas dans la montagne.",
+    "Il redescend. Plein ouest, par le chemin des tanneries, en évitant deux hameaux et un péage, avec la sûreté de gens qui ont fait ce trajet cinquante fois.",
+    "Au bout : Port-Noir, quai des Cordiers, un entrepôt dont la porte s'ouvre avant qu'ils aient frappé.",
+    "Ce n'est pas un receleur. Un receleur travaille la nuit et compte vite. Celui-ci a un bureau, une pendule, un commis et trois registres à tranche rouge, et il fait attendre les porteurs dans le froid pendant qu'il finit sa colonne.",
+    "Il pèse. Il paie au poids et au cours du jour, moins onze pour cent. Il fait signer.",
+    "§ Et sur le bordereau qu'on lui tend, il y a un cachet que vous avez vu ce mois-ci sur une table de salle des comptes : celui de la maison d'Estrées.",
+    "Le sel « volé » d'Estrées est vendu par Estrées, avec le sceau d'Estrées, à un homme qui tient des registres."
   ],
-  effets:{flags:['sait_la_fraude','preuve_bordereau'],
+  effets:{flags:['sait_la_fraude','preuve_bordereau','sait_vasseur'],
           marque:"Le sel « volé » d'Estrées est vendu à Port-Noir avec le cachet d'Estrées.", court:"La preuve"},
   suite:"ferrand", libelleSuite:"Monter aux Deux Saules",
 },
 
-/* ── 4. Ferrand ────────────────────────────────────────────────────────── */
+/* ── 5. Ferrand ────────────────────────────────────────────────────────── */
 ferrand:{
-  lieu:"Défilé des Deux Saules · une bergerie sans toit",
+  lieu:"Défilé des Deux Saules · une bergerie sans toit, versant nord",
   titre:"Le sergent",
   qui:"ferrand",
   texte:[
-    "Ferrand le Boiteux vous reçoit assis, parce que se lever lui coûte, et sans arme, parce qu'il a compté lui aussi.",
-    "« Vous êtes le quatrième. Les trois autres sont enterrés là-haut, et je ne m'en vante pas : deux d'entre eux, ce sont mes hommes qui les ont eus dans le dos. »",
-    "Il désigne le banc en face. « Asseyez-vous ou tuez-moi, mais faites l'un des deux, j'ai froid. »"
+    "Ils vivent dans une bergerie dont le toit est tombé il y a dix ans et qu'ils ont recouverte de branches et de peaux. Il y a onze paillasses, un feu au centre, une réserve de sel dans un coin et, contre le mur du fond, quatre piques d'ordonnance rangées verticalement dans un râtelier bricolé — parce qu'on range ses armes, même quand on n'est plus personne.",
+    "Ferrand le Boiteux vous reçoit assis. Se lever lui coûte : la jambe droite est raide de la hanche au genou, et le froid la lui rend inutilisable avant midi.",
+    "Il ne porte pas d'arme. Il a fait sortir ses hommes.",
+    "« Vous êtes le quatrième. »",
+    "Il désigne le versant est d'un mouvement du menton. « Les trois autres sont là-haut sous des cailloux, et je ne m'en vante pas : deux d'entre eux, ce sont mes gars qui les ont eus dans le dos pendant qu'ils me parlaient. C'est laid. Ça m'a coûté deux nuits de sommeil chacun et je n'ai pas trente ans de sommeil devant moi. »",
+    a('defile_sang')
+      ? "§ « Vous en avez tué trois ce matin. Deux avaient plus de cinquante ans et l'un des deux avait fait Kar-Durak avec moi. »"
+      : (a('defile_respect') || a('defile_paix')
+        ? "§ « Vous n'avez tué personne en bas. Mes gars me l'ont dit avant que je vous voie. C'est la seule raison pour laquelle nous avons cette conversation assis. »"
+        : "§ « Vous êtes monté seul, sans escorte et sans arbalétrier sur la crête. Ça veut dire que vous venez parler, ou que vous êtes très sûr de vous. »"),
+    "Il désigne le banc en face du feu.",
+    "« Asseyez-vous ou tuez-moi, mais faites l'un des deux. J'ai froid et je n'ai plus l'âge de rester en suspens. »"
   ],
   choix:[
     {t:"S'asseoir",
-     cout:"Il a quelque chose à dire et il le dira une seule fois",
+     cout:"Il a quelque chose à dire, et il ne le dira qu'une fois",
      va:"ferrand_parle"},
     {t:"Le tuer maintenant, comme convenu",
-     cout:"C'est exactement ce pour quoi on vous paie",
+     cout:"C'est exactement ce pour quoi on vous a payé, mot pour mot",
      ferme:"Ferme : ce que Ferrand savait — et personne d'autre ne le sait",
      definitif:true, va:"ferrand_mort",
      effets:{flags:['ferrand_tue'], marque:"Vous avez tué Ferrand le Boiteux sans l'entendre.", court:"Ferrand est mort"}},
-    {t:"« Quatre sur onze. Et les sept autres ? »",
-     si:() => a('sait_la_fraude') || a('sait_registres') || a('sait_aucun_mort'),
-     cout:"Vous savez déjà quelque chose, et il va le voir",
+    {t:"« Quatre-vingt-onze prises. Et les onze convois d'Estrées ? »",
+     si:() => a('sait_la_fraude') || a('sait_registres') || a('sait_aucun_mort') || a('sait_compte'),
+     cout:"Vous savez déjà quelque chose, et il va le voir avant que vous ayez fini",
      va:"ferrand_confronte"},
   ],
 },
@@ -720,10 +1239,15 @@ ferrand:{
 ferrand_parle:{
   qui:"ferrand",
   texte:[
-    "« Sergent d'ordonnance, dix-neuf ans. Licencié sans solde à la chute de Karlsberg avec deux cents autres, parce qu'on ne paie pas des hommes pour garder une frontière qui n'existe plus. »",
-    "« On tient ce défilé depuis. On prend une charge sur quatre, jamais celle des gens de la vallée, et on ne tue pas. Vous pouvez demander : quatre-vingt-onze prises, zéro mort. C'est le seul chiffre dont je sois fier. »",
-    "Il vous regarde enfin.",
-    "« Onze convois pris en quatre mois, dit la dame ? Nous en avons pris quatre. Je tiens le compte. Je tiens le compte parce qu'un jour quelqu'un comme vous viendrait me le demander. »"
+    "« Sergent d'ordonnance, dix-neuf ans de service. Kar-Durak, la Cicatrice, deux campagnes de lisière. »",
+    "Il tend les mains vers le feu. Elles sont énormes, gonflées, couvertes d'engelures anciennes qui ont mal guéri.",
+    "« Licencié sans solde à la chute de Karlsberg, avec deux cents autres, parce qu'on ne paie pas des hommes pour garder une frontière qui n'existe plus. Trois mois de solde en retard qu'on ne nous a jamais versés. On nous a rendu nos armes en nous disant que c'était généreux. »",
+    "« On tient ce défilé depuis. On prend une charge sur quatre, jamais celle des gens de la vallée — jamais, vous pouvez demander à n'importe quel muletier d'ici à Chastel — et on ne tue pas. »",
+    "Il vous regarde enfin, et ses yeux sont ceux d'un homme qui n'a pas menti depuis vingt ans parce qu'il n'en a jamais eu les moyens.",
+    "« Quatre-vingt-onze prises. Zéro mort. C'est le seul chiffre de ma vie dont je sois fier, et je vais probablement mourir avec cet hiver. »",
+    "Il se penche, avec difficulté, et remue une bûche.",
+    "§ « Onze convois pris en quatre mois, vous dit la dame ? Nous en avons pris quatre. Je tiens le compte. »",
+    "« Je tiens le compte depuis le premier jour parce que je savais qu'un jour un homme comme vous monterait ici, et qu'il faudrait pouvoir lui montrer autre chose que ma parole. »"
   ],
   effets:{flags:['ferrand_parle'], marque:"Ferrand tient un compte : quatre prises sur onze convois « volés ».", court:"Quatre sur onze"},
   suite:"ferrand_choix",
@@ -732,12 +1256,15 @@ ferrand_parle:{
 ferrand_confronte:{
   qui:"ferrand",
   texte:[
-    "Il ne joue pas la surprise. Il pose ses mains à plat sur ses genoux — celles d'un homme qui a passé vingt ans à ne pas mentir parce qu'il n'en a jamais eu les moyens.",
+    "Il ne joue pas la surprise. Il pose ses mains à plat sur ses genoux et les y laisse.",
     "« Alors vous savez. »",
-    "« Quatre prises. Les sept autres, ils les vendent eux-mêmes à Port-Noir et les portent volées, et le vol leur sert à lever une taxe de route sur la vallée pour payer une escorte qu'ils n'engagent jamais. »",
-    "« Ça fait dix-neuf ans. Ils prennent aux paysans le prix d'un sel qu'ils volent à la Couronne, et le voleur, c'est moi. »"
+    "« Quatre prises. Les sept autres, ils les vendent eux-mêmes à Port-Noir, chez Vasseur, quai des Cordiers, et ils les portent volées sur les bordereaux. »",
+    "« Le vol leur sert à deux choses : il justifie la perte devant la gabelle — on ne taxe pas ce qu'on n'a pas livré — et il justifie une taxe de route sur la vallée pour payer une escorte qu'ils n'engagent jamais. »",
+    "Il crache dans le feu.",
+    "« Ça fait dix-neuf ans. Ils volent la Couronne, ils font payer les paysans, et le voleur, c'est le sergent boiteux qui prend une charge sur quatre pour nourrir onze hommes. »",
+    "§ « Je ne demande pas votre pitié, messire. Je vous demande de vérifier avant de me tuer, parce que si vous me tuez, ça continue et personne ne le saura jamais. »"
   ],
-  effets:{flags:['ferrand_parle','sait_la_fraude'],
+  effets:{flags:['ferrand_parle','sait_la_fraude','sait_vasseur'],
           marque:"Ferrand a confirmé la fraude, chiffres à l'appui.", court:"La fraude, confirmée"},
   suite:"ferrand_choix",
 },
@@ -745,36 +1272,39 @@ ferrand_confronte:{
 ferrand_choix:{
   qui:"ferrand",
   texte:[
-    "Il sort d'un coffre de campagne un rouleau de bordereaux, quatre-vingt-onze, tenus par un ruban.",
-    "« Chaque prise, la date, la charge, le nom du charretier et sa signature. Les charretiers signent parce que ça leur évite d'être accusés. »",
-    "« Avec ça, un juge de province pend une maison noble. Sans ça, il pend un sergent boiteux et deux cents licenciés. »",
-    "Il pose le rouleau entre vous deux, sur le banc, et n'y touche plus.",
-    "« Vous êtes payé pour ma mort. Je ne vous demande pas d'y renoncer. Je vous demande de savoir ce que vous vendez. »"
+    "Il se lève — ça lui prend un temps considérable et il refuse la main que vous ne lui tendez pas — et va jusqu'à un coffre de campagne réglementaire, cabossé, dont la serrure a été remplacée par une lanière de cuir.",
+    "Il en sort un rouleau de feuillets tenu par un ruban de tissu vert. Le ruban vient d'un uniforme. Il est épais comme un poignet.",
+    "« Quatre-vingt-onze prises. Chaque prise : la date, l'heure, la charge exacte, le nom du charretier, et sa signature. »",
+    "« Les charretiers signent parce que ça leur évite d'être accusés du vol. Ils signent depuis vingt ans. Certains ont signé quarante fois. »",
+    "Il pose le rouleau sur le banc, entre vous deux, et retire sa main.",
+    "« Avec ça, un juge de province pend une maison noble. Sans ça, il pend un sergent boiteux et deux cents licenciés qui n'ont jamais rien eu. »",
+    "§ « Vous êtes payé pour ma mort. Je ne vous demande pas d'y renoncer. Je vous demande de savoir ce que vous vendez, et à qui. »",
+    "Le feu craque. Dehors, onze hommes attendent dans le froid qu'on leur dise s'ils ont encore un chef."
   ],
   choix:[
     {t:"Le tuer, et prendre les bordereaux",
-     cout:"Le contrat est rempli, et vous tenez la maison qui vous paie",
+     cout:"Le contrat est rempli · et vous tenez la maison qui vous paie",
      ferme:"Ferme : Ferrand, et les deux cents hommes qui le suivaient",
      definitif:true, va:"ferrand_mort_preuve",
      effets:{flags:['ferrand_tue','preuve'],
              marque:"Vous avez tué Ferrand et emporté ses quatre-vingt-onze bordereaux.", court:"Les deux"}},
 
     {t:"Prendre les bordereaux et le laisser vivre",
-     cout:"Vous rentrez sans ce qu'on vous a payé pour",
+     cout:"Vous rentrez sans ce pour quoi on vous a payé",
      ferme:"Ferme : le paiement d'Estrées tel qu'il était convenu",
      definitif:true, va:"ferrand_vivant",
      effets:{flags:['ferrand_vit','preuve'],
              marque:"Vous avez laissé Ferrand le Boiteux vivant et pris sa preuve.", court:"Vivant"}},
 
     {t:"Le tuer, et brûler les bordereaux",
-     cout:"Personne ne saura jamais, et vous serez payé rubis sur l'ongle",
+     cout:"Personne ne saura jamais · et vous serez payé rubis sur l'ongle",
      ferme:"Ferme : la vérité sur le sel d'Estrées — définitivement",
      definitif:true, va:"ferrand_mort_brule",
      effets:{flags:['ferrand_tue','preuve_brulee'],
              marque:"Vous avez brûlé quatre-vingt-onze bordereaux dans une bergerie sans toit.", court:"Rien n'a existé"}},
 
     {t:"Partir sans rien : ni sa mort, ni sa preuve",
-     cout:"Vous rendrez l'avance et vous vous en irez",
+     cout:"−600 or · vous rendrez l'avance et vous vous en irez",
      ferme:"Ferme : l'affaire du sel, et la maison d'Estrées",
      definitif:true, va:"fin_parti",
      effets:{or:-600, flags:['abandon'],
@@ -784,27 +1314,36 @@ ferrand_choix:{
 
 ferrand_mort:{
   texte:[
-    "Il ne se défend pas et il ne ferme pas les yeux.",
-    "Ça prend moins de temps que ça n'en a mis à s'asseoir, et ses hommes n'interviennent pas — ils étaient dehors, ils ont entendu, et onze paires de bottes s'éloignent dans la neige sans un cri.",
-    "Dans le coffre de campagne, sous une couverture, il y a un rouleau de bordereaux tenu par un ruban. Quatre-vingt-onze. Vous n'en saurez jamais la valeur : vous ne saviez pas ce que vous cherchiez."
+    "Il ne se défend pas et il ne ferme pas les yeux. Il n'en a pas le temps, et de toute façon on voit bien qu'il n'en avait pas l'intention.",
+    "Ça prend moins de temps qu'il n'en a mis à s'asseoir.",
+    "Ses hommes n'entrent pas. Ils étaient dehors, ils ont entendu — on entend tout, dans une bergerie sans toit — et onze paires de bottes s'éloignent dans la neige sans un cri, sans un ordre, chacun pour soi.",
+    "Le feu continue de brûler. Le sel dans le coin, les quatre piques au râtelier, les onze paillasses.",
+    "Dans le coffre de campagne, sous une couverture pliée au carré, il y a un rouleau de feuillets tenu par un ruban de tissu vert.",
+    "§ Vous n'en saurez jamais la valeur. Vous ne saviez pas ce que vous cherchiez, et maintenant il n'y a plus personne pour vous le dire."
   ],
   suite:"retour", libelleSuite:"Redescendre à Estrées",
 },
 
 ferrand_mort_preuve:{
   texte:[
-    "Il ne se défend pas. Il dit seulement, avant : « Prenez le rouleau d'abord. Sinon vous l'oublierez, et il aura fallu que je meure pour rien. »",
+    "Il ne se défend pas.",
+    "Il dit seulement, avant, en désignant le banc du menton : « Prenez le rouleau d'abord. Sinon vous l'oublierez en sortant, et il aura fallu que je meure pour rien. »",
     "Vous prenez le rouleau d'abord.",
-    "Ses onze hommes vous laissent redescendre le défilé. Le vieux qui boîtait vous regarde passer, à trente pas, sans rien dire. Il ne portera pas la main sur vous aujourd'hui, et ce n'est pas de la peur."
+    "§ Il hoche la tête. C'est la dernière chose qu'il fait de son plein gré.",
+    "Ses onze hommes vous laissent redescendre le défilé. Ils sont sur la crête, en ligne, et ils ne bougent pas.",
+    "Le vieux à la pique — celui qui comptait — vous regarde passer à trente pas. Il ne portera pas la main sur vous aujourd'hui, et ce n'est pas de la peur : c'est qu'il a vu le rouleau sous votre bras et qu'il essaie de comprendre ce que ça veut dire."
   ],
   suite:"retour", libelleSuite:"Redescendre à Estrées",
 },
 
 ferrand_mort_brule:{
   texte:[
-    "Le rouleau met un temps considérable à brûler. Quatre-vingt-onze feuillets serrés, ça ne prend pas comme du bois.",
-    "Il regarde jusqu'au dernier. Puis il dit : « Bon. » Et il attend.",
-    "Après, vous restez seul dans une bergerie sans toit avec de la cendre et un homme mort, et vous êtes la seule personne au monde à savoir ce qui vient de disparaître."
+    "Le rouleau met un temps considérable à brûler. Quatre-vingt-onze feuillets serrés par un ruban, ça ne prend pas comme du bois : ça noircit par les bords, ça gonfle, et il faut le retourner deux fois avec une pique.",
+    "Il regarde jusqu'au dernier feuillet. Il ne dit rien pendant tout ce temps, et le silence dure sept ou huit minutes.",
+    "Quand il ne reste que de la cendre et le ruban vert à demi consumé, il dit : « Bon. »",
+    "Et il attend.",
+    "§ Après, vous restez seul dans une bergerie sans toit, avec un feu, de la cendre et un homme mort.",
+    "Vous êtes la seule personne au monde à savoir ce qui vient de disparaître, et vous le resterez."
   ],
   suite:"retour", libelleSuite:"Redescendre à Estrées",
 },
@@ -812,28 +1351,38 @@ ferrand_mort_brule:{
 ferrand_vivant:{
   qui:"ferrand",
   texte:[
-    "Vous prenez le rouleau. Il ne bouge pas.",
-    "« Vous savez ce que vous venez de faire ? Vous ne serez pas payé, et vous aurez contre vous une maison qui sait où vous dormez. »",
+    "Vous prenez le rouleau. Il ne bouge pas d'un pouce.",
+    "« Vous savez ce que vous venez de faire ? Vous ne serez pas payé, et vous aurez contre vous une maison noble qui sait où vous dormez et qui a dix-neuf ans d'habitude à cacher des choses. »",
     "« Oui. »",
-    "Il met un long moment à hocher la tête. Puis : « Alors deux cents hommes vous doivent quelque chose. Ils ne sont pas riches et ils ne sont plus jeunes, mais ils sont deux cents et ils tiennent un défilé. Souvenez-vous-en. »"
+    "Il met un long moment à hocher la tête. Il se rassied — plus lourdement qu'il ne s'était levé — et regarde le feu.",
+    "« Alors deux cents hommes vous doivent quelque chose. »",
+    "« Ils ne sont pas riches, ils ne sont plus jeunes, et la moitié ne tient plus debout une journée entière. Mais ils sont deux cents, ils ont porté un uniforme, et ils tiennent onze lieues de montagne entre Chastel et la Saulx. »",
+    "§ « Le jour où vous aurez besoin d'une route qui ne figure sur aucune carte, montez ici et dites mon nom. »"
   ],
-  effets:{flags:['ferrand_dette'], marque:"Deux cents hommes licenciés vous doivent quelque chose.", court:"Une dette"},
+  effets:{flags:['ferrand_dette'], marque:"Deux cents licenciés vous doivent quelque chose, et Ferrand tient les comptes.", court:"Une dette"},
   suite:"retour", libelleSuite:"Redescendre à Estrées",
 },
 
-/* ── 5. Le retour ──────────────────────────────────────────────────────── */
+/* ── 6. Le retour ──────────────────────────────────────────────────────── */
 retour:{
   lieu:"Estrées-sur-Saulx · la grande salle, cette fois",
   titre:"Ce qu'on rapporte",
   qui:"ermeline",
   texte:[
-    "Elle vous reçoit dans la grande salle, avec quatre témoins et le trésorier de la maison. C'est une mise en scène de paiement, et elle est prête depuis ce matin.",
+    "Elle vous reçoit dans la grande salle, avec quatre témoins, le trésorier de la maison et un feu qui, pour une fois, chauffe vraiment. C'est une mise en scène de paiement, et elle est prête depuis ce matin.",
+    "Les quatre témoins sont : le chapelain, le régisseur, et deux voisins de petite noblesse qu'on a fait venir de trois lieues. Le plus jeune des deux a vingt-deux ans et n'a manifestement jamais assisté à quoi que ce soit.",
     a('ferrand_tue')
-      ? "Vous posez ce qu'il faut poser. Le trésorier avance la cassette avant même qu'elle ait parlé."
-      : "Vous ne posez rien. Le trésorier reste immobile, la cassette sous le bras, et le silence dure jusqu'à ce que Dame Ermeline comprenne.",
+      ? "Vous posez ce qu'il faut poser. Le trésorier avance la cassette avant même qu'elle ait parlé — il a des ordres."
+      : "Vous ne posez rien. Le trésorier reste immobile, la cassette sous le bras, et le silence dure jusqu'à ce que Dame Ermeline comprenne. Elle met quatre secondes. C'est long, dans une grande salle.",
     a('preuve')
-      ? "Et il y a, dans votre manteau, un rouleau de quatre-vingt-onze feuillets que personne ici ne sait encore que vous avez."
-      : "Il n'y a rien dans votre manteau. Ce qu'il pouvait y avoir n'existe plus."
+      ? "Et il y a, dans votre manteau, contre les côtes, un rouleau de quatre-vingt-onze feuillets tenu par un ruban de tissu vert, que personne ici ne sait encore que vous avez."
+      : "Il n'y a rien dans votre manteau. Ce qu'il pouvait y avoir n'existe plus.",
+    ETAT.plaies.length
+      ? "Vous saignez encore un peu sous le linge. Le jeune noble de vingt-deux ans n'arrive pas à en détacher les yeux."
+      : "Vous n'avez pas une égratignure, et le régisseur le remarque avant tout le monde.",
+    a('blanche_accord') || a('coutume_detournee') || a('coutume_refusee')
+      ? "Blanche est là, debout, au fond, contre le pilier. Elle ne s'approche pas et elle ne détourne pas les yeux."
+      : "Blanche d'Estrées n'est pas dans la salle."
   ],
   choix:[
     {t:"Prendre l'argent et sortir",
@@ -845,30 +1394,30 @@ retour:{
 
     {t:"Poser les bordereaux sur la table, devant les quatre témoins",
      si:() => a('preuve'),
-     cout:"Quatre témoins, un trésorier, et une maison qui ne s'en relèvera pas",
-     ferme:"Ferme : Estrées, son or, et le mariage de Blanche",
+     cout:"Quatre témoins, un chapelain, et une maison qui ne s'en relèvera pas",
+     ferme:"Ferme : Estrées, son or, et le printemps de Blanche",
      definitif:true, va:"fin_verite",
      effets:{flags:['estrees_tombe'],
              marque:"Vous avez posé les quatre-vingt-onze bordereaux devant témoins.", court:"La vérité, dite"}},
 
     {t:"Lui montrer les bordereaux à elle seule, et fixer un autre prix",
      si:() => a('preuve'),
-     cout:"Ce n'est plus un contrat, c'est autre chose, et elle a de quoi payer",
+     cout:"+4000 or · ce n'est plus un contrat, et elle a de quoi payer",
      ferme:"Ferme : ce que vous étiez en entrant dans cette salle",
      definitif:true, va:"fin_chantage",
      effets:{or:4000, flags:['chantage'],
-             marque:"Vous avez fait payer le silence à la maison d'Estrées.", court:"Le silence, vendu"}},
+             marque:"Vous avez fait payer son silence à la maison d'Estrées.", court:"Le silence, vendu"}},
 
     {t:"Dire ce que vous savez, sans preuve, et partir",
      si:() => !a('preuve') && (a('sait_la_fraude') || a('sait_registres') || a('sait_fraude')),
      cout:"Elle niera, et elle aura raison de nier",
-     ferme:"Ferme : le paiement, et la parole de Yohan dans cette province",
+     ferme:"Ferme : le paiement, et votre parole dans cette province",
      definitif:true, va:"fin_sans_preuve",
      effets:{marque:"Vous avez accusé Estrées sans rien pour le prouver.", court:"Accusé, sans preuve"}},
 
     {t:"Ne rien dire du tout et sortir sans être payé",
      si:() => !a('ferrand_tue'),
-     cout:"Ni argent, ni éclat",
+     cout:"Ni argent, ni éclat, ni explication",
      ferme:"Ferme : la maison d'Estrées",
      definitif:true, va:"fin_silence",
      effets:{marque:"Vous êtes sorti d'Estrées sans un mot et sans un écu.", court:"Sorti"}},
@@ -878,110 +1427,131 @@ retour:{
 /* ── Les issues ────────────────────────────────────────────────────────── */
 fin_paye:{
   texte:[
-    "Douze cents écus, comptés devant quatre témoins, dans une salle bâtie pour ça.",
-    a('blanche_accord')
-      ? "Blanche d'Estrées est au fond de la salle. Elle ne s'approche pas."
-      : "Blanche d'Estrées n'est pas venue.",
-    "Vous sortez d'Estrées-sur-Saulx avec assez d'or pour trois saisons de chantier à Karlsberg, ce qui est très exactement ce que vous étiez venu chercher."
+    "Douze cents écus, comptés à voix haute devant quatre témoins, dans une salle bâtie pour ça il y a deux cents ans.",
+    "Le chapelain bénit la transaction. C'est l'usage. Personne n'écoute.",
+    a('blanche_accord') || a('coutume_detournee') || a('coutume_refusee')
+      ? "Blanche d'Estrées ne s'approche pas. Quand vous passez devant le pilier, elle regarde le sol, et ce n'est pas de la pudeur : c'est le calcul très rapide d'une femme qui vient de comprendre que vous n'êtes pas ce qu'elle avait espéré."
+      : "Blanche d'Estrées n'est pas venue, et personne ne fait de commentaire sur son absence.",
+    "Vous sortez d'Estrées-sur-Saulx avec assez d'or pour trois saisons de chantier à Karlsberg — l'enceinte, le puits, peut-être les granges.",
+    "§ C'est très exactement ce que vous étiez venu chercher."
   ],
   issue:"L'affaire est close",
   bilan:"Le contrat, à la lettre",
   apres:[
     a('preuve_brulee')
-      ? "Quatre-vingt-onze bordereaux ont brûlé dans une bergerie sans toit, et vous êtes la seule personne au monde à savoir ce qu'ils prouvaient."
-      : "Ferrand le Boiteux est enterré aux Deux Saules. Ses onze hommes ont tenu le défilé six semaines de plus, puis ils sont descendus vers le sud et on ne sait pas ce qu'ils sont devenus.",
-    "La taxe de route d'Estrées est passée de deux à trois sous par essieu au printemps. Les convois ne sont plus attaqués, alors la maison a expliqué que l'escorte coûtait cher."
+      ? "Quatre-vingt-onze bordereaux ont brûlé dans une bergerie sans toit, et vous êtes la seule personne au monde à savoir ce qu'ils prouvaient. Ça ne s'en va pas. Ce genre de savoir-là ne s'en va jamais."
+      : "Ferrand le Boiteux est enterré au versant est des Deux Saules, sous des cailloux, à côté de trois hommes qu'il n'aimait pas. Ses onze tiennent le défilé six semaines de plus, puis descendent vers le sud et se dispersent. On en retrouvera quatre à Port-Noir dans l'année.",
+    "Au printemps, la taxe de route d'Estrées passe de deux à trois sous par essieu. Les convois ne sont plus attaqués, alors la maison explique que l'escorte coûte cher, et onze hameaux paient.",
+    "Le sel continue de partir chez Vasseur, quai des Cordiers, à onze pour cent de commission."
   ],
-  plusTard:"À l'acte III, la maison d'Estrées vous recevra comme un des siens — ce qui veut dire qu'elle vous demandera des choses qu'on ne demande qu'aux siens.",
+  plusTard:"À l'acte III, la maison d'Estrées vous recevra comme un des siens — ce qui veut dire qu'elle vous demandera les choses qu'on ne demande qu'aux siens, et que vous aurez de plus en plus de mal à dire non.",
 },
 
 fin_verite:{
   texte:[
-    "Vous posez le rouleau sur la table et vous défaites le ruban.",
+    "Vous posez le rouleau sur la table et vous défaites le ruban vert.",
     "Le trésorier comprend le premier — c'est son métier de comprendre des chiffres — et il repose la cassette, très doucement, comme on repose un objet qui ne vous appartient plus.",
     "Dame Ermeline lit quatre feuillets. Elle n'en lit pas cinq.",
-    "« Sortez », dit-elle. Puis, aux témoins, plus fort et sans une once de tremblement : « Vous n'avez rien vu. » Et l'un des quatre, un jeune, répond : « Si, madame. »"
+    "« Sortez. »",
+    "Puis, aux témoins, plus fort, et sans une once de tremblement dans la voix : « Vous n'avez rien vu. »",
+    "§ Et le jeune noble de vingt-deux ans, celui qui n'avait jamais assisté à quoi que ce soit, répond : « Si, madame. »",
+    "Le chapelain regarde ses mains. Le régisseur regarde la porte. Et cette maison, qui a tenu dix-neuf ans, cesse de tenir dans l'espace de trois mots prononcés par un garçon qui ne savait pas encore qu'on ne les prononce pas."
   ],
   issue:"L'affaire est close",
   bilan:"Quatre-vingt-onze feuillets sur une table",
   apres:[
-    "Le procès dure onze mois. La maison d'Estrées perd la saline, la route et le droit de péage ; le prévôt de la vallée, qui était son cousin, perd sa charge et l'écrit dans une lettre où votre nom figure trois fois.",
-    a('blanche_accord')
-      ? "Blanche d'Estrées n'épouse pas l'homme de Vaubrun. Elle n'épouse personne. Elle vous écrit une fois, en tout et pour tout six lignes, dont la dernière est : <em>je ne vous remercie pas, et je ne vous en veux pas non plus.</em>"
-      : "Blanche d'Estrées épouse l'homme de Vaubrun au printemps, comme prévu, parce qu'une maison ruinée marie ses filles plus vite, pas moins.",
+    "Le procès dure onze mois. La maison d'Estrées perd la saline, la route et le droit de péage. Le prévôt de la vallée, qui était son cousin, perd sa charge et l'écrit dans une lettre où votre nom figure trois fois — jamais en bien.",
+    a('blanche_accord') || a('coutume_detournee') || a('coutume_refusee')
+      ? "Blanche d'Estrées n'épouse pas le seigneur de Vaubrun. Elle n'épouse personne : une maison en procès ne marie plus rien. Elle vous écrit une fois, en tout et pour tout six lignes, dont la dernière est : <em>je ne vous remercie pas, et je ne vous en veux pas non plus, et j'ai mis quatre mois à écrire cette phrase.</em>"
+      : "Blanche d'Estrées épouse le seigneur de Vaubrun au printemps, comme prévu. Une maison ruinée marie ses filles plus vite, pas moins.",
     a('ferrand_vit')
-      ? "Ferrand le Boiteux témoigne au troisième mois. Il descend de son défilé pour la première fois en vingt ans, dit ce qu'il a à dire, et remonte."
-      : "Ferrand le Boiteux ne témoigne pas. Il est mort quatre mois plus tôt dans une bergerie sans toit, et c'est son écriture qui parle à sa place, quatre-vingt-onze fois."
+      ? "Ferrand le Boiteux témoigne au troisième mois. Il descend de son défilé pour la première fois en vingt ans, met quatre jours à faire douze lieues, dit ce qu'il a à dire pendant deux heures — dates, heures, charges, noms — et remonte. Il ne demande rien. On ne lui rend pas ses trois mois de solde."
+      : "Ferrand le Boiteux ne témoigne pas. Il est mort quatre mois plus tôt dans une bergerie sans toit. C'est son écriture qui parle à sa place, quatre-vingt-onze fois, et le greffier met trois jours à tout lire."
   ],
-  plusTard:"Vous n'avez pas touché un écu et vous avez fait tomber une maison noble. À l'acte III, quatre autres maisons de la province savent votre nom et savent exactement ce qu'il faut ne pas vous montrer.",
+  plusTard:"Vous n'avez pas touché un écu et vous avez fait tomber une maison noble. À l'acte III, quatre autres maisons de la province savent votre nom et savent exactement ce qu'il ne faut jamais vous montrer. On vous paiera moins. On vous craindra plus.",
 },
 
 fin_chantage:{
   texte:[
-    "Vous demandez à lui parler seule. Elle fait sortir les quatre témoins, ce qui est déjà une réponse.",
-    "Vous posez le rouleau. Elle lit trois feuillets et vous regarde.",
+    "Vous demandez à lui parler seule. Elle fait sortir les quatre témoins d'un geste, ce qui est déjà une réponse — une femme qui n'a rien à cacher garde ses témoins.",
+    "Vous posez le rouleau. Elle lit trois feuillets et lève les yeux.",
     "« Combien ? »",
-    "Quatre mille écus, versés en deux fois, et le rouleau reste chez vous — parce qu'un chantage qui rend sa preuve n'est pas un chantage, c'est un cadeau, et elle serait la première à le mépriser."
+    "Pas d'indignation, pas de menace, pas une seconde perdue. Dix-neuf ans de fraude à la gabelle vous ont préparé une négociatrice.",
+    "Quatre mille écus, versés en deux fois, la seconde au printemps. Et le rouleau reste chez vous — parce qu'un chantage qui rend sa preuve n'est pas un chantage, c'est un cadeau, et elle serait la première à mépriser un homme assez sot pour le faire.",
+    "§ « Vous serez plus riche que la moitié des barons de cette vallée, messire, et vous ne serez plus jamais tranquille. Vous le savez ? »",
+    "« Oui. »",
+    "« Bien. Je détesterais avoir affaire à un imbécile. »"
   ],
   issue:"L'affaire est close",
   bilan:"Le silence a un prix, et il est élevé",
   apres:[
-    "Quatre mille écus. De quoi relever l'enceinte de Karlsberg, le puits, les granges, et payer des hommes pour tenir tout ça pendant deux ans.",
-    "La taxe de route d'Estrées passe de deux à cinq sous par essieu au printemps, parce qu'il faut bien que quelqu'un paie quatre mille écus, et ce n'est jamais celui qui les doit.",
-    "Onze hameaux de la vallée du Saulx paient votre chantier sans le savoir."
+    "Quatre mille écus. De quoi relever l'enceinte de Karlsberg, le puits, les granges, la salle basse — et payer des hommes pour tenir tout ça pendant deux ans sans rien demander à personne.",
+    "Au printemps, la taxe de route d'Estrées passe de deux à cinq sous par essieu. Il faut bien que quelqu'un paie quatre mille écus, et ce n'est jamais celui qui les doit.",
+    "§ Onze hameaux de la vallée du Saulx paient votre chantier sans le savoir. Deux familles de Vaubien partent en Ventôse parce que le sel a doublé.",
+    a('ferrand_vit')
+      ? "Ferrand le Boiteux tient toujours le défilé. Il apprend en Germinal que vous n'avez rien dit. Il ne fait pas porter de message : il fait seulement dire, par un muletier, qu'il n'a plus rien à vous demander."
+      : "Ferrand le Boiteux est mort pour un sel qui continue de partir chez Vasseur, quai des Cordiers, à onze pour cent de commission."
   ],
-  plusTard:"À l'acte III, Dame Ermeline d'Estrées ne dort pas bien. Une femme qui ne dort pas bien depuis six mois finit par décider que le problème doit disparaître, et elle a les moyens de le faire disparaître.",
+  plusTard:"À l'acte III, Dame Ermeline d'Estrées ne dort pas bien. Une femme qui ne dort pas bien depuis six mois finit toujours par décider que le problème doit disparaître — et elle a l'argent, le cousin prévôt, et dix-neuf ans d'habitude de faire disparaître des choses.",
 },
 
 fin_sans_preuve:{
   texte:[
-    "Vous dites tout. Le sel, les quatre prises sur onze, Port-Noir, la taxe de route, dix-neuf ans de saline hors visa.",
-    "Elle vous laisse aller au bout — c'est ça, le plus dur — et quand vous avez fini, elle se tourne vers ses témoins.",
-    "« Vous venez d'entendre un mercenaire qui n'a pas rempli son contrat expliquer pourquoi il ne sera pas payé. » Elle referme la cassette elle-même.",
-    "Elle a raison. C'est exactement ce qui vient de se passer, et il n'y a pas une phrase de votre récit que vous puissiez prouver."
+    "Vous dites tout. Le sel, les quatre prises sur onze, Vasseur au quai des Cordiers, la taxe de route, dix-neuf ans de saline hors visa.",
+    "Elle vous laisse aller au bout. C'est ça, le pire : elle ne vous coupe pas une seule fois, et pendant que vous parlez vous entendez votre propre voix devenir celle d'un homme qui raconte une histoire.",
+    "Quand vous avez fini, elle se tourne vers ses témoins.",
+    "« Vous venez d'entendre un mercenaire qui n'a pas rempli son contrat expliquer pourquoi il ne sera pas payé. »",
+    "Elle referme la cassette elle-même, et le bruit du fermoir est la seule chose qu'on entendra de cette audience dans toute la province.",
+    "§ Elle a raison. C'est exactement ce qui vient de se passer, et il n'y a pas une phrase de votre récit que vous puissiez prouver.",
+    a('blanche_accord') || a('coutume_detournee')
+      ? "Blanche, au fond, contre le pilier, ferme les yeux une seconde. Elle savait, elle, et elle ne peut rien dire sans se perdre."
+      : "Personne ne bouge."
   ],
   issue:"L'affaire est close",
   bilan:"La vérité sans un feuillet ne vaut rien",
   apres:[
-    "Vous sortez d'Estrées-sur-Saulx sans un écu, avec six cents écus d'avance à rendre et une réputation d'homme qui accuse ses commanditaires.",
-    "Deux maisons de la province annulent des audiences dans le mois. Aucune ne dit pourquoi."
+    "Vous sortez d'Estrées-sur-Saulx sans un écu, avec six cents écus d'avance à rendre et une réputation d'homme qui accuse ses commanditaires quand il échoue.",
+    "Deux maisons de la province annulent des audiences dans le mois. Aucune ne dit pourquoi, et les deux emploient exactement la même formule dans leur lettre — ce qui veut dire qu'elles se sont écrit."
   ],
-  plusTard:"À l'acte III, il faudra travailler pour des gens qui ont moins à perdre — et qui paient moins bien.",
+  plusTard:"À l'acte III, il faudra travailler pour des gens qui ont moins à perdre : des bourgs, des prieurés, des compagnies. Ils paient moins bien et ils vous doivent moins. Ce n'est pas la pire des vies, mais Karlsberg attendra encore un hiver.",
 },
 
 fin_silence:{
   texte:[
     "Vous ne posez rien sur la table et vous ne dites rien.",
-    "Dame Ermeline attend. Le trésorier attend. Les quatre témoins attendent.",
-    "Puis vous tournez les talons, et le seul bruit dans la grande salle est celui de vos bottes jusqu'à la porte."
+    "Dame Ermeline attend. Le trésorier attend, la cassette sous le bras. Les quatre témoins attendent, et le jeune de vingt-deux ans regarde alternativement votre manteau et le visage de sa voisine.",
+    "Puis vous tournez les talons.",
+    "§ Le seul bruit dans la grande salle est celui de vos bottes jusqu'à la porte, et cette porte est très loin."
   ],
   issue:"L'affaire est close",
   bilan:"Sorti sans un mot",
   apres:[
     a('ferrand_dette')
-      ? "Ferrand le Boiteux tient toujours le défilé des Deux Saules. Deux cents hommes licenciés savent votre nom et savent que vous n'avez pas parlé."
-      : "Ferrand le Boiteux tient toujours le défilé des Deux Saules, et il ne saura jamais pourquoi personne n'est venu.",
+      ? "Ferrand le Boiteux tient toujours le défilé des Deux Saules. Deux cents licenciés savent votre nom et savent que vous n'avez pas parlé — ce qui, chez ces gens-là, vaut un serment écrit."
+      : "Ferrand le Boiteux tient toujours le défilé des Deux Saules, et il ne saura jamais pourquoi le quatrième homme n'est pas venu.",
     a('preuve')
-      ? "Le rouleau de quatre-vingt-onze bordereaux est dans votre manteau. Il y est encore. Une preuve ne pourrit pas."
-      : "Vous n'avez rien emporté. Ce que vous savez, vous le savez seul, et ça ne vaut rien."
+      ? "Le rouleau de quatre-vingt-onze bordereaux est dans votre manteau. Il y est encore trois mois plus tard. Une preuve ne pourrit pas et n'a pas besoin d'être nourrie."
+      : "Vous n'avez rien emporté. Ce que vous savez, vous le savez seul, et un savoir sans papier ne vaut rien devant un juge de province."
   ],
   plusTard:a('preuve')
-    ? "À l'acte III, vous tenez encore une maison noble sans qu'elle le sache. C'est la seule chose de cet hiver qui prendra de la valeur avec le temps."
-    : "À l'acte III, l'hiver aura coûté six semaines, six cents écus et rien d'autre.",
+    ? "À l'acte III, vous tenez une maison noble sans qu'elle le sache. C'est la seule chose de cet hiver qui prendra de la valeur avec le temps — et la guerre, quand elle viendra, rendra ce genre de papier très cher."
+    : "À l'acte III, cet hiver aura coûté six semaines, six cents écus et rien d'autre. Karlsberg est toujours trois pans de mur et un loup de pierre fendu.",
 },
 
 fin_parti:{
   texte:[
-    "Vous rendez l'avance par un messager, avec six mots : <em>l'affaire n'était pas celle annoncée.</em>",
-    "Puis vous redescendez la Route Grise dans l'autre sens, et vous ne repassez pas par Estrées-sur-Saulx."
+    "Vous rendez l'avance par un messager, avec six mots écrits au dos du bordereau de route : <em>l'affaire n'était pas celle annoncée.</em>",
+    "Puis vous redescendez la Route Grise dans l'autre sens, et vous ne repassez pas par Estrées-sur-Saulx.",
+    "§ Il y a une forme de propreté là-dedans. Elle ne nourrit personne."
   ],
   issue:"L'affaire est close",
   bilan:"Ni sa mort, ni sa preuve",
   apres:[
     "Ferrand le Boiteux tient son défilé jusqu'à l'automne. Une compagnie de Chastel monte aux Deux Saules en Vendémiaire pour huit cents écus et ne pose aucune question.",
-    "Quatre-vingt-onze bordereaux brûlent dans une bergerie sans toit, mais ce n'est pas vous qui y mettez le feu."
+    "Quatre-vingt-onze bordereaux brûlent dans une bergerie sans toit — mais ce n'est pas vous qui y mettez le feu, et vous ne saurez jamais qu'ils ont existé.",
+    "Onze hommes descendent vers le sud. Deux cents licenciés apprennent, quelque part, qu'un Paria est monté et redescendu sans rien faire, et personne ne sait quoi en penser."
   ],
-  plusTard:"À l'acte III, personne dans la province ne vous doit rien, et personne ne vous en veut. C'est une position, et elle vaut ce qu'elle vaut quand la guerre arrive.",
+  plusTard:"À l'acte III, personne dans la province ne vous doit rien et personne ne vous en veut. C'est une position. Elle vaut ce qu'elle vaut le jour où la guerre arrive et où il faut demander quelque chose à quelqu'un.",
 },
 
 };
@@ -992,6 +1562,8 @@ ecrire('audience');
 
 <div class="note">
   <p><b>Tranche 1 — un arc complet, du début à la fin.</b> Ce n'est pas une démo de systèmes : c'est la boucle de deux minutes, répétée sept fois, qu'on juge en y jouant.</p>
-  <p>Ce qui est éprouvé ici : l'audience où l'on peut poser des questions qui changent la fin · les <b>termes du Prix fixés avant tout départ</b>, avec une femme adulte qui répond elle-même et dont la raison n'est pas vous · les <b>choix définitifs annoncés comme tels</b>, avec ce qu'ils ferment écrit avant le clic · un affrontement raconté, sans écran séparé · une <b>conséquence immédiate et visible</b> · le <b>journal des portes fermées</b> · et une clôture qui dit ce que ça coûtera à l'acte III.</p>
-  <p>Cinq issues, atteignables en quinze minutes. Rejouez-la : la deuxième partie ne se déroule pas comme la première.</p>
+  <p><b>Le Prix du Paria</b> se fixe avant tout départ, et la nuit se joue vraiment — deux scènes entièrement différentes selon qu'on a demandé à Blanche ou qu'on a invoqué la coutume par-dessus elle. La même clause, deux nuits qui n'ont rien à voir, et ce qu'elle vous donne au matin en dépend.</p>
+  <p><b>L'affrontement n'est pas un autre système.</b> C'est une scène qui compte les hommes debout, propose de vraies décisions — laisser venir, prendre la pente, parler à celui qui commande — et laisse des <b>plaies qui durent</b> : une côte fêlée retire un point à tous les jets suivants, jusqu'à la fin de l'arc.</p>
+  <p><b>Vingt-deux choix définitifs</b>, annoncés comme tels, avec ce qu'ils ferment écrit avant le clic. Sept issues. Le journal tient trois listes : ce que vous avez fait, ce que vous portez, ce que vous ne pouvez plus faire.</p>
+  <p>Rejouez-la. La deuxième partie ne se déroule pas comme la première, et la troisième vous apprendra que l'audience décidait déjà de la fin.</p>
 </div>

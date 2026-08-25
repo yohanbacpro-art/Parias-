@@ -8,7 +8,13 @@ const url = 'file://' + path.join(__dirname, '..', 'proto', 'tranche-1.html');
   const p = await b.newPage();
   const err = [];
   p.on('pageerror', e => err.push(e.message));
-  p.on('console', m => { if(m.type() === 'error') err.push('console: ' + m.text()); });
+  /* Le sandbox n'a pas de réseau : l'échec de chargement des fontes Google est
+     attendu en local et n'existe pas une fois la page publiée. */
+  p.on('console', m => {
+    if(m.type() !== 'error') return;
+    if(/ERR_CONNECTION|fonts\.(googleapis|gstatic)/.test(m.text())) return;
+    err.push('console: ' + m.text());
+  });
   await p.goto(url);
   await p.waitForTimeout(300);
 
