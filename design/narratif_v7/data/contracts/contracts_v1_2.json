@@ -1,0 +1,3592 @@
+[
+  {
+    "id": "CTR_PARIA_001",
+    "titre": "La Wyverne de Cendrepont",
+    "commanditaire": "Maison de Valombre",
+    "lieu_principal": "Route Grise",
+    "type": "chasse",
+    "danger": "modéré",
+    "pitch": "Une immense wyverne a établi son nid au-dessus d'une route commerciale.",
+    "or_propose": 250,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Valombre expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Route Grise."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type chasse : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Éléonore",
+        "maison": "Maison de Valombre",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_002",
+    "titre": "Le Chevalier sans Visage",
+    "commanditaire": "Maison Rochebrune",
+    "lieu_principal": "Côte des Dents",
+    "type": "chasse",
+    "danger": "dangereux",
+    "pitch": "Une armure sans visage massacre les voyageurs après le coucher du soleil.",
+    "or_propose": 375,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison Rochebrune expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Côte des Dents."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type chasse : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Isabeau",
+        "maison": "Maison Rochebrune",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_003",
+    "titre": "L'Héritier disparu",
+    "commanditaire": "Maison d'Arquenay",
+    "lieu_principal": "contreforts nains",
+    "type": "sauvetage",
+    "danger": "très dangereux",
+    "pitch": "Le jeune héritier de la maison n'est jamais revenu d'une expédition.",
+    "or_propose": 500,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison d'Arquenay expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers contreforts nains."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type sauvetage : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Adélaïde",
+        "maison": "Maison d'Arquenay",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_004",
+    "titre": "Les Trois Frères Rouges",
+    "commanditaire": "Maison de Vauclair",
+    "lieu_principal": "marais de Sombreval",
+    "type": "traque",
+    "danger": "extrême",
+    "pitch": "Trois mercenaires ont assassiné un noble avant de fuir avec ses archives.",
+    "or_propose": 875,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Vauclair expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers marais de Sombreval."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type traque : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Mathilde",
+        "maison": "Maison de Vauclair",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_005",
+    "titre": "Le Troll du vieux pont",
+    "commanditaire": "Maison de Sombreval",
+    "lieu_principal": "Champs de Cendre",
+    "type": "chasse",
+    "danger": "légendaire",
+    "pitch": "Un troll a coupé l'unique route permettant aux récoltes de rejoindre la ville.",
+    "or_propose": 750,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Sombreval expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Champs de Cendre."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type chasse : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Aliénor",
+        "maison": "Maison de Sombreval",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_006",
+    "titre": "La Dame captive",
+    "commanditaire": "Maison de Hauterive",
+    "lieu_principal": "forêts de Valombre",
+    "type": "sauvetage",
+    "danger": "modéré",
+    "pitch": "Une noble a été capturée par une bande installée dans une forteresse abandonnée.",
+    "or_propose": 875,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Hauterive expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers forêts de Valombre."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type sauvetage : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Constance",
+        "maison": "Maison de Hauterive",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_007",
+    "titre": "Le Livre de Sang",
+    "commanditaire": "Maison de Cendrepont",
+    "lieu_principal": "ruines impériales",
+    "type": "récupération",
+    "danger": "dangereux",
+    "pitch": "Un registre susceptible de révéler d'anciennes filiations a été volé.",
+    "or_propose": 1000,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Cendrepont expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers ruines impériales."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type récupération : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Marguerite",
+        "maison": "Maison de Cendrepont",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_008",
+    "titre": "Le Capitaine félon",
+    "commanditaire": "Maison de Bellac",
+    "lieu_principal": "Défilé des Souffrances",
+    "type": "traque",
+    "danger": "très dangereux",
+    "pitch": "Un capitaine a déserté avec la solde et plusieurs dizaines d'hommes.",
+    "or_propose": 1375,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Bellac expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Défilé des Souffrances."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type traque : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Héloïse",
+        "maison": "Maison de Bellac",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_009",
+    "titre": "La Bête sous la chapelle",
+    "commanditaire": "Maison de Corven",
+    "lieu_principal": "frontière de Mont-Draken",
+    "type": "enquête",
+    "danger": "extrême",
+    "pitch": "Des habitants disparaissent autour d'une chapelle que personne n'ose ouvrir.",
+    "or_propose": 1250,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Corven expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers frontière de Mont-Draken."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type enquête : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Blanche",
+        "maison": "Maison de Corven",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_010",
+    "titre": "Le Seigneur de guerre Peau-Verte",
+    "commanditaire": "Maison de Brézé",
+    "lieu_principal": "Dunes Khesh",
+    "type": "guerre",
+    "danger": "légendaire",
+    "pitch": "Un chef Peau-Verte rassemble plusieurs bandes près d'un passage stratégique.",
+    "or_propose": 1375,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Brézé expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Dunes Khesh."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type guerre : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Célestine",
+        "maison": "Maison de Brézé",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_011",
+    "titre": "La Wyverne de Cendrepont — de Valombre",
+    "commanditaire": "Maison de Valombre",
+    "lieu_principal": "Route Grise",
+    "type": "chasse",
+    "danger": "modéré",
+    "pitch": "Une immense wyverne a établi son nid au-dessus d'une route commerciale.",
+    "or_propose": 250,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Valombre expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Route Grise."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type chasse : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Agnès",
+        "maison": "Maison de Valombre",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_012",
+    "titre": "Le Chevalier sans Visage — Rochebrune",
+    "commanditaire": "Maison Rochebrune",
+    "lieu_principal": "Côte des Dents",
+    "type": "chasse",
+    "danger": "dangereux",
+    "pitch": "Une armure sans visage massacre les voyageurs après le coucher du soleil.",
+    "or_propose": 625,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison Rochebrune expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Côte des Dents."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type chasse : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Philippa",
+        "maison": "Maison Rochebrune",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_013",
+    "titre": "L'Héritier disparu — d'Arquenay",
+    "commanditaire": "Maison d'Arquenay",
+    "lieu_principal": "contreforts nains",
+    "type": "sauvetage",
+    "danger": "très dangereux",
+    "pitch": "Le jeune héritier de la maison n'est jamais revenu d'une expédition.",
+    "or_propose": 500,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison d'Arquenay expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers contreforts nains."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type sauvetage : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Ysabeau",
+        "maison": "Maison d'Arquenay",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_014",
+    "titre": "Les Trois Frères Rouges — de Vauclair",
+    "commanditaire": "Maison de Vauclair",
+    "lieu_principal": "marais de Sombreval",
+    "type": "traque",
+    "danger": "extrême",
+    "pitch": "Trois mercenaires ont assassiné un noble avant de fuir avec ses archives.",
+    "or_propose": 625,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Vauclair expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers marais de Sombreval."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type traque : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Aveline",
+        "maison": "Maison de Vauclair",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_015",
+    "titre": "Le Troll du vieux pont — de Sombreval",
+    "commanditaire": "Maison de Sombreval",
+    "lieu_principal": "Champs de Cendre",
+    "type": "chasse",
+    "danger": "légendaire",
+    "pitch": "Un troll a coupé l'unique route permettant aux récoltes de rejoindre la ville.",
+    "or_propose": 750,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Sombreval expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Champs de Cendre."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type chasse : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Béatrice",
+        "maison": "Maison de Sombreval",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_016",
+    "titre": "La Dame captive — de Hauterive",
+    "commanditaire": "Maison de Hauterive",
+    "lieu_principal": "forêts de Valombre",
+    "type": "sauvetage",
+    "danger": "modéré",
+    "pitch": "Une noble a été capturée par une bande installée dans une forteresse abandonnée.",
+    "or_propose": 1125,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Hauterive expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers forêts de Valombre."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type sauvetage : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Rosamonde",
+        "maison": "Maison de Hauterive",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_017",
+    "titre": "Le Livre de Sang — de Cendrepont",
+    "commanditaire": "Maison de Cendrepont",
+    "lieu_principal": "ruines impériales",
+    "type": "récupération",
+    "danger": "dangereux",
+    "pitch": "Un registre susceptible de révéler d'anciennes filiations a été volé.",
+    "or_propose": 1000,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Cendrepont expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers ruines impériales."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type récupération : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Mélisende",
+        "maison": "Maison de Cendrepont",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_018",
+    "titre": "Le Capitaine félon — de Bellac",
+    "commanditaire": "Maison de Bellac",
+    "lieu_principal": "Défilé des Souffrances",
+    "type": "traque",
+    "danger": "très dangereux",
+    "pitch": "Un capitaine a déserté avec la solde et plusieurs dizaines d'hommes.",
+    "or_propose": 1125,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Bellac expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Défilé des Souffrances."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type traque : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Clarisse",
+        "maison": "Maison de Bellac",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_019",
+    "titre": "La Bête sous la chapelle — de Corven",
+    "commanditaire": "Maison de Corven",
+    "lieu_principal": "frontière de Mont-Draken",
+    "type": "enquête",
+    "danger": "extrême",
+    "pitch": "Des habitants disparaissent autour d'une chapelle que personne n'ose ouvrir.",
+    "or_propose": 1250,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Corven expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers frontière de Mont-Draken."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type enquête : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Diane",
+        "maison": "Maison de Corven",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_020",
+    "titre": "Le Seigneur de guerre Peau-Verte — de Brézé",
+    "commanditaire": "Maison de Brézé",
+    "lieu_principal": "Dunes Khesh",
+    "type": "guerre",
+    "danger": "légendaire",
+    "pitch": "Un chef Peau-Verte rassemble plusieurs bandes près d'un passage stratégique.",
+    "or_propose": 1625,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Brézé expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Dunes Khesh."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type guerre : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Ophélie",
+        "maison": "Maison de Brézé",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_021",
+    "titre": "La Wyverne de Cendrepont — de Valombre",
+    "commanditaire": "Maison de Valombre",
+    "lieu_principal": "Route Grise",
+    "type": "chasse",
+    "danger": "modéré",
+    "pitch": "Une immense wyverne a établi son nid au-dessus d'une route commerciale.",
+    "or_propose": 250,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Valombre expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Route Grise."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type chasse : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Éléonore",
+        "maison": "Maison de Valombre",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_022",
+    "titre": "Le Chevalier sans Visage — Rochebrune",
+    "commanditaire": "Maison Rochebrune",
+    "lieu_principal": "Côte des Dents",
+    "type": "chasse",
+    "danger": "dangereux",
+    "pitch": "Une armure sans visage massacre les voyageurs après le coucher du soleil.",
+    "or_propose": 375,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison Rochebrune expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Côte des Dents."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type chasse : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Isabeau",
+        "maison": "Maison Rochebrune",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_023",
+    "titre": "L'Héritier disparu — d'Arquenay",
+    "commanditaire": "Maison d'Arquenay",
+    "lieu_principal": "contreforts nains",
+    "type": "sauvetage",
+    "danger": "très dangereux",
+    "pitch": "Le jeune héritier de la maison n'est jamais revenu d'une expédition.",
+    "or_propose": 500,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison d'Arquenay expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers contreforts nains."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type sauvetage : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Adélaïde",
+        "maison": "Maison d'Arquenay",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_024",
+    "titre": "Les Trois Frères Rouges — de Vauclair",
+    "commanditaire": "Maison de Vauclair",
+    "lieu_principal": "marais de Sombreval",
+    "type": "traque",
+    "danger": "extrême",
+    "pitch": "Trois mercenaires ont assassiné un noble avant de fuir avec ses archives.",
+    "or_propose": 875,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Vauclair expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers marais de Sombreval."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type traque : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Mathilde",
+        "maison": "Maison de Vauclair",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_025",
+    "titre": "Le Troll du vieux pont — de Sombreval",
+    "commanditaire": "Maison de Sombreval",
+    "lieu_principal": "Champs de Cendre",
+    "type": "chasse",
+    "danger": "légendaire",
+    "pitch": "Un troll a coupé l'unique route permettant aux récoltes de rejoindre la ville.",
+    "or_propose": 750,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Sombreval expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Champs de Cendre."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type chasse : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Aliénor",
+        "maison": "Maison de Sombreval",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_026",
+    "titre": "La Dame captive — de Hauterive",
+    "commanditaire": "Maison de Hauterive",
+    "lieu_principal": "forêts de Valombre",
+    "type": "sauvetage",
+    "danger": "modéré",
+    "pitch": "Une noble a été capturée par une bande installée dans une forteresse abandonnée.",
+    "or_propose": 875,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Hauterive expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers forêts de Valombre."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type sauvetage : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Constance",
+        "maison": "Maison de Hauterive",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_027",
+    "titre": "Le Livre de Sang — de Cendrepont",
+    "commanditaire": "Maison de Cendrepont",
+    "lieu_principal": "ruines impériales",
+    "type": "récupération",
+    "danger": "dangereux",
+    "pitch": "Un registre susceptible de révéler d'anciennes filiations a été volé.",
+    "or_propose": 1000,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Cendrepont expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers ruines impériales."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type récupération : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Marguerite",
+        "maison": "Maison de Cendrepont",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_028",
+    "titre": "Le Capitaine félon — de Bellac",
+    "commanditaire": "Maison de Bellac",
+    "lieu_principal": "Défilé des Souffrances",
+    "type": "traque",
+    "danger": "très dangereux",
+    "pitch": "Un capitaine a déserté avec la solde et plusieurs dizaines d'hommes.",
+    "or_propose": 1375,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Bellac expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Défilé des Souffrances."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type traque : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Héloïse",
+        "maison": "Maison de Bellac",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_029",
+    "titre": "La Bête sous la chapelle — de Corven",
+    "commanditaire": "Maison de Corven",
+    "lieu_principal": "frontière de Mont-Draken",
+    "type": "enquête",
+    "danger": "extrême",
+    "pitch": "Des habitants disparaissent autour d'une chapelle que personne n'ose ouvrir.",
+    "or_propose": 1250,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Corven expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers frontière de Mont-Draken."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type enquête : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Blanche",
+        "maison": "Maison de Corven",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_030",
+    "titre": "Le Seigneur de guerre Peau-Verte — de Brézé",
+    "commanditaire": "Maison de Brézé",
+    "lieu_principal": "Dunes Khesh",
+    "type": "guerre",
+    "danger": "légendaire",
+    "pitch": "Un chef Peau-Verte rassemble plusieurs bandes près d'un passage stratégique.",
+    "or_propose": 1375,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Brézé expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Dunes Khesh."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type guerre : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true,
+    "prix_paria": {
+      "negocie_avant_depart": true,
+      "noble_proposee": {
+        "nom": "Lady Célestine",
+        "maison": "Maison de Brézé",
+        "adulte": true,
+        "consentement_requis": true
+      },
+      "choix": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "NEGOCIER",
+        "REFUSER"
+      ],
+      "effets_relationnels": {
+        "contrat_reussi": "relation positive avec la maison",
+        "noble": "relation persistante avec le Paria si elle fait partie du prix accepté"
+      },
+      "descendance": {
+        "possible_apres_relation": true,
+        "automatique": false,
+        "verification": "lors des avancées de temps pertinentes",
+        "facteurs": [
+          "temps",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant": "PNJ persistant, fils ou fille, lié aux deux maisons",
+        "potentiel_paria": "héritage latent probabiliste"
+      }
+    }
+  },
+  {
+    "id": "CTR_GEN_031",
+    "titre": "La Wyverne de Cendrepont — de Valombre",
+    "commanditaire": "Maison de Valombre",
+    "lieu_principal": "Route Grise",
+    "type": "chasse",
+    "danger": "modéré",
+    "pitch": "Une immense wyverne a établi son nid au-dessus d'une route commerciale.",
+    "or_propose": 250,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Valombre expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Route Grise."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type chasse : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_032",
+    "titre": "Le Chevalier sans Visage — Rochebrune",
+    "commanditaire": "Maison Rochebrune",
+    "lieu_principal": "Côte des Dents",
+    "type": "chasse",
+    "danger": "dangereux",
+    "pitch": "Une armure sans visage massacre les voyageurs après le coucher du soleil.",
+    "or_propose": 625,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison Rochebrune expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Côte des Dents."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type chasse : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_033",
+    "titre": "L'Héritier disparu — d'Arquenay",
+    "commanditaire": "Maison d'Arquenay",
+    "lieu_principal": "contreforts nains",
+    "type": "sauvetage",
+    "danger": "très dangereux",
+    "pitch": "Le jeune héritier de la maison n'est jamais revenu d'une expédition.",
+    "or_propose": 500,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison d'Arquenay expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers contreforts nains."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type sauvetage : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_034",
+    "titre": "Les Trois Frères Rouges — de Vauclair",
+    "commanditaire": "Maison de Vauclair",
+    "lieu_principal": "marais de Sombreval",
+    "type": "traque",
+    "danger": "extrême",
+    "pitch": "Trois mercenaires ont assassiné un noble avant de fuir avec ses archives.",
+    "or_propose": 625,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Vauclair expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers marais de Sombreval."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type traque : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_035",
+    "titre": "Le Troll du vieux pont — de Sombreval",
+    "commanditaire": "Maison de Sombreval",
+    "lieu_principal": "Champs de Cendre",
+    "type": "chasse",
+    "danger": "légendaire",
+    "pitch": "Un troll a coupé l'unique route permettant aux récoltes de rejoindre la ville.",
+    "or_propose": 750,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Sombreval expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Champs de Cendre."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type chasse : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_036",
+    "titre": "La Dame captive — de Hauterive",
+    "commanditaire": "Maison de Hauterive",
+    "lieu_principal": "forêts de Valombre",
+    "type": "sauvetage",
+    "danger": "modéré",
+    "pitch": "Une noble a été capturée par une bande installée dans une forteresse abandonnée.",
+    "or_propose": 1125,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Hauterive expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers forêts de Valombre."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type sauvetage : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_037",
+    "titre": "Le Livre de Sang — de Cendrepont",
+    "commanditaire": "Maison de Cendrepont",
+    "lieu_principal": "ruines impériales",
+    "type": "récupération",
+    "danger": "dangereux",
+    "pitch": "Un registre susceptible de révéler d'anciennes filiations a été volé.",
+    "or_propose": 1000,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Cendrepont expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers ruines impériales."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type récupération : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_038",
+    "titre": "Le Capitaine félon — de Bellac",
+    "commanditaire": "Maison de Bellac",
+    "lieu_principal": "Défilé des Souffrances",
+    "type": "traque",
+    "danger": "très dangereux",
+    "pitch": "Un capitaine a déserté avec la solde et plusieurs dizaines d'hommes.",
+    "or_propose": 1125,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Bellac expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Défilé des Souffrances."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type traque : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_039",
+    "titre": "La Bête sous la chapelle — de Corven",
+    "commanditaire": "Maison de Corven",
+    "lieu_principal": "frontière de Mont-Draken",
+    "type": "enquête",
+    "danger": "extrême",
+    "pitch": "Des habitants disparaissent autour d'une chapelle que personne n'ose ouvrir.",
+    "or_propose": 1250,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Corven expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers frontière de Mont-Draken."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type enquête : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_040",
+    "titre": "Le Seigneur de guerre Peau-Verte — de Brézé",
+    "commanditaire": "Maison de Brézé",
+    "lieu_principal": "Dunes Khesh",
+    "type": "guerre",
+    "danger": "légendaire",
+    "pitch": "Un chef Peau-Verte rassemble plusieurs bandes près d'un passage stratégique.",
+    "or_propose": 1625,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Brézé expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Dunes Khesh."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type guerre : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_041",
+    "titre": "La Wyverne de Cendrepont — de Valombre",
+    "commanditaire": "Maison de Valombre",
+    "lieu_principal": "Route Grise",
+    "type": "chasse",
+    "danger": "modéré",
+    "pitch": "Une immense wyverne a établi son nid au-dessus d'une route commerciale.",
+    "or_propose": 250,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Valombre expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Route Grise."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type chasse : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_042",
+    "titre": "Le Chevalier sans Visage — Rochebrune",
+    "commanditaire": "Maison Rochebrune",
+    "lieu_principal": "Côte des Dents",
+    "type": "chasse",
+    "danger": "dangereux",
+    "pitch": "Une armure sans visage massacre les voyageurs après le coucher du soleil.",
+    "or_propose": 375,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison Rochebrune expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Côte des Dents."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type chasse : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_043",
+    "titre": "L'Héritier disparu — d'Arquenay",
+    "commanditaire": "Maison d'Arquenay",
+    "lieu_principal": "contreforts nains",
+    "type": "sauvetage",
+    "danger": "très dangereux",
+    "pitch": "Le jeune héritier de la maison n'est jamais revenu d'une expédition.",
+    "or_propose": 500,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison d'Arquenay expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers contreforts nains."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type sauvetage : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_044",
+    "titre": "Les Trois Frères Rouges — de Vauclair",
+    "commanditaire": "Maison de Vauclair",
+    "lieu_principal": "marais de Sombreval",
+    "type": "traque",
+    "danger": "extrême",
+    "pitch": "Trois mercenaires ont assassiné un noble avant de fuir avec ses archives.",
+    "or_propose": 875,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Vauclair expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers marais de Sombreval."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type traque : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_045",
+    "titre": "Le Troll du vieux pont — de Sombreval",
+    "commanditaire": "Maison de Sombreval",
+    "lieu_principal": "Champs de Cendre",
+    "type": "chasse",
+    "danger": "légendaire",
+    "pitch": "Un troll a coupé l'unique route permettant aux récoltes de rejoindre la ville.",
+    "or_propose": 750,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Sombreval expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Champs de Cendre."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type chasse : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_046",
+    "titre": "La Dame captive — de Hauterive",
+    "commanditaire": "Maison de Hauterive",
+    "lieu_principal": "forêts de Valombre",
+    "type": "sauvetage",
+    "danger": "modéré",
+    "pitch": "Une noble a été capturée par une bande installée dans une forteresse abandonnée.",
+    "or_propose": 875,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Hauterive expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers forêts de Valombre."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type sauvetage : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_047",
+    "titre": "Le Livre de Sang — de Cendrepont",
+    "commanditaire": "Maison de Cendrepont",
+    "lieu_principal": "ruines impériales",
+    "type": "récupération",
+    "danger": "dangereux",
+    "pitch": "Un registre susceptible de révéler d'anciennes filiations a été volé.",
+    "or_propose": 1000,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Cendrepont expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers ruines impériales."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type récupération : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_048",
+    "titre": "Le Capitaine félon — de Bellac",
+    "commanditaire": "Maison de Bellac",
+    "lieu_principal": "Défilé des Souffrances",
+    "type": "traque",
+    "danger": "très dangereux",
+    "pitch": "Un capitaine a déserté avec la solde et plusieurs dizaines d'hommes.",
+    "or_propose": 1375,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Bellac expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Défilé des Souffrances."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type traque : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_049",
+    "titre": "La Bête sous la chapelle — de Corven",
+    "commanditaire": "Maison de Corven",
+    "lieu_principal": "frontière de Mont-Draken",
+    "type": "enquête",
+    "danger": "extrême",
+    "pitch": "Des habitants disparaissent autour d'une chapelle que personne n'ose ouvrir.",
+    "or_propose": 1250,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Corven expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers frontière de Mont-Draken."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type enquête : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  },
+  {
+    "id": "CTR_GEN_050",
+    "titre": "Le Seigneur de guerre Peau-Verte — de Brézé",
+    "commanditaire": "Maison de Brézé",
+    "lieu_principal": "Dunes Khesh",
+    "type": "guerre",
+    "danger": "légendaire",
+    "pitch": "Un chef Peau-Verte rassemble plusieurs bandes près d'un passage stratégique.",
+    "or_propose": 1375,
+    "etapes": [
+      {
+        "etape": 1,
+        "nom": "Audience",
+        "contenu": "Maison de Brézé expose le problème et négocie les termes avant toute action."
+      },
+      {
+        "etape": 2,
+        "nom": "Préparation",
+        "contenu": "Le joueur peut enquêter, acheter du matériel, recruter ou partir immédiatement vers Dunes Khesh."
+      },
+      {
+        "etape": 3,
+        "nom": "Approche",
+        "contenu": "Une complication contextuelle est tirée : témoin, fausse piste, embuscade, météo, rival ou information inattendue."
+      },
+      {
+        "etape": 4,
+        "nom": "Résolution",
+        "contenu": "La mission mène à une résolution de type guerre : combat, duel, infiltration, négociation ou poursuite selon les choix."
+      },
+      {
+        "etape": 5,
+        "nom": "Retour",
+        "contenu": "Le monde enregistre le succès, l'échec ou les conséquences incomplètes ; les relations et réputations évoluent."
+      }
+    ],
+    "complications_possibles": [
+      "cible différente des rumeurs",
+      "rival engagé sur le même contrat",
+      "trahison locale",
+      "innocents présents",
+      "objectif secondaire découvert"
+    ],
+    "issues": [
+      "succès complet",
+      "succès avec complication",
+      "échec",
+      "abandon",
+      "retournement contre le commanditaire"
+    ],
+    "persistant": true
+  }
+]

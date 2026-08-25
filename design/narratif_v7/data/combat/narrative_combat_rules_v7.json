@@ -1,0 +1,21 @@
+{
+  "version": "7.0",
+  "scale": {"mortal_min": 1, "mortal_max": 10, "supernatural_max": 15},
+  "attributes": ["force", "agility", "endurance", "perception", "intellect", "willpower", "presence"],
+  "skills": ["swords", "heavy_weapons", "polearms", "daggers", "ranged", "thrown", "grappling", "shield", "riding", "anatomy", "bestiary", "alchemy", "stealth", "tactics", "command", "wave_mastery"],
+  "resources": ["vitality", "stamina", "focus", "blood", "morale"],
+  "result_bands": [
+    {"id": "dominant", "margin_min": 6},
+    {"id": "success", "margin_min": 2, "margin_max": 5},
+    {"id": "costly_success", "margin_min": -1, "margin_max": 1},
+    {"id": "failure", "margin_min": -5, "margin_max": -2},
+    {"id": "catastrophe", "margin_max": -6}
+  ],
+  "positions": ["far", "reach", "close", "grappled", "grounded", "elevated", "covered", "surrounded"],
+  "conditions": ["winded", "exhausted", "stunned", "grounded", "grappled", "disarmed", "blinded", "burning", "poisoned", "terrified", "bleeding", "fractured", "mutilated", "dying"],
+  "wound_fields": ["location", "type", "severity", "pain", "bleeding", "function_loss", "treatment", "scar"],
+  "adaptation": {"first_repeat_bonus": 2, "later_repeat_bonus": 4},
+  "gore_detail": ["restrained", "intense", "extreme"],
+  "defeat_outcomes": ["retreat", "capture", "ransom", "mutilation", "item_loss", "ally_death", "contract_failure", "territory_loss", "death"],
+  "combat_modes": ["duel", "skirmish", "monster", "battle"]
+}

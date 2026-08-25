@@ -1,0 +1,32 @@
+{
+  "rule": "Les termes sont fixés avant toute action.",
+  "payment_choices": [
+    "OR",
+    "NOBLE_ADULTE_CONSENTANTE",
+    "OR_ET_NOBLE_ADULTE_CONSENTANTE",
+    "NEGOCIER",
+    "REFUSER"
+  ],
+  "candidate_selection": {
+    "source": "PNJ réels de la maison commanditaire",
+    "requirements": [
+      "adulte",
+      "noble",
+      "vivante",
+      "consentante",
+      "disponible selon contexte"
+    ],
+    "consent_checked_before_contract_acceptance": true
+  },
+  "success": {
+    "house_relation_gain": "positif, modulé par résultat et comportement",
+    "noble_relation_gain": "positif si elle fait partie du prix accepté, modulé par personnalité et interactions"
+  },
+  "later_time": {
+    "relationship_persists": true,
+    "birth_check_possible": true,
+    "birth_not_guaranteed": true,
+    "child_added_to_genealogy": true,
+    "paria_potential": "latent et probabiliste"
+  }
+}

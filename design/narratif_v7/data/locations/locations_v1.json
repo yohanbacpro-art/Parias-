@@ -1,0 +1,122 @@
+[
+  {
+    "id": "LOC_001",
+    "nom": "Karlsberg — Les Ruines du Loup",
+    "image": "assets/locations/loc_001.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_002",
+    "nom": "Fort-aux-Princes",
+    "image": "assets/locations/loc_002.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_003",
+    "nom": "Mont-Draken",
+    "image": "assets/locations/loc_003.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_004",
+    "nom": "Capitale d'Astrah",
+    "image": "assets/locations/loc_004.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_005",
+    "nom": "Les Dunes Khesh",
+    "image": "assets/locations/loc_005.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_006",
+    "nom": "La Cour lumineuse d'Eltharion",
+    "image": "assets/locations/loc_006.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_007",
+    "nom": "La Cour d'Anarion",
+    "image": "assets/locations/loc_007.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_008",
+    "nom": "Kar-Durak",
+    "image": "assets/locations/loc_008.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_009",
+    "nom": "Les Profondeurs Vertes",
+    "image": "assets/locations/loc_009.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_010",
+    "nom": "La Forêt des Mille Cornes",
+    "image": "assets/locations/loc_010.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_011",
+    "nom": "La Route Grise",
+    "image": "assets/locations/loc_011.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_012",
+    "nom": "Le Défilé des Souffrances",
+    "image": "assets/locations/loc_012.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_013",
+    "nom": "Les Îles Interdites",
+    "image": "assets/locations/loc_013.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_014",
+    "nom": "La Cicatrice",
+    "image": "assets/locations/loc_014.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_015",
+    "nom": "Le Cimetière des Dragons de Sable",
+    "image": "assets/locations/loc_015.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_016",
+    "nom": "Port-Noir",
+    "image": "assets/locations/loc_016.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_017",
+    "nom": "L'Arène Rouge",
+    "image": "assets/locations/loc_017.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_018",
+    "nom": "Les Champs de Cendre",
+    "image": "assets/locations/loc_018.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_019",
+    "nom": "La Côte des Dents",
+    "image": "assets/locations/loc_019.png",
+    "illustration": "à générer"
+  },
+  {
+    "id": "LOC_020",
+    "nom": "Les Pierres du Premier Rugissement",
+    "image": "assets/locations/loc_020.png",
+    "illustration": "à générer"
+  }
+]

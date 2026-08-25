@@ -1,0 +1,1762 @@
+[
+  {
+    "id": "CTR_PARIA_001",
+    "titre": "Chasse — Contrat 01",
+    "type": "CHASSE",
+    "objectif": "Éliminer ou chasser une créature dangereuse",
+    "danger": "modéré",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_002",
+    "titre": "Escorte — Contrat 02",
+    "type": "ESCORTE",
+    "objectif": "Escorter une personne ou un convoi à travers une zone dangereuse",
+    "danger": "dangereux",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_003",
+    "titre": "Traque — Contrat 03",
+    "type": "TRAQUE",
+    "objectif": "Retrouver une cible disparue ou en fuite",
+    "danger": "très dangereux",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_004",
+    "titre": "Sauvetage — Contrat 04",
+    "type": "SAUVETAGE",
+    "objectif": "Extraire une personne d'une situation hostile",
+    "danger": "extrême",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_005",
+    "titre": "Protection — Contrat 05",
+    "type": "PROTECTION",
+    "objectif": "Protéger une maison, un village ou un personnage",
+    "danger": "modéré",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_006",
+    "titre": "Recuperation — Contrat 06",
+    "type": "RECUPERATION",
+    "objectif": "Récupérer un objet, des archives ou un héritage",
+    "danger": "dangereux",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_007",
+    "titre": "Guerre — Contrat 07",
+    "type": "GUERRE",
+    "objectif": "Participer à une opération militaire",
+    "danger": "très dangereux",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_008",
+    "titre": "Duel — Contrat 08",
+    "type": "DUEL",
+    "objectif": "Représenter un commanditaire lors d'un duel ou d'une épreuve",
+    "danger": "extrême",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_009",
+    "titre": "Monstre — Contrat 09",
+    "type": "MONSTRE",
+    "objectif": "Affronter une créature rare ou nommée",
+    "danger": "modéré",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_010",
+    "titre": "Secret — Contrat 10",
+    "type": "SECRET",
+    "objectif": "Résoudre discrètement une affaire compromettante",
+    "danger": "dangereux",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_011",
+    "titre": "Chasse — Contrat 11",
+    "type": "CHASSE",
+    "objectif": "Éliminer ou chasser une créature dangereuse",
+    "danger": "très dangereux",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_012",
+    "titre": "Escorte — Contrat 12",
+    "type": "ESCORTE",
+    "objectif": "Escorter une personne ou un convoi à travers une zone dangereuse",
+    "danger": "extrême",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_013",
+    "titre": "Traque — Contrat 13",
+    "type": "TRAQUE",
+    "objectif": "Retrouver une cible disparue ou en fuite",
+    "danger": "modéré",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_014",
+    "titre": "Sauvetage — Contrat 14",
+    "type": "SAUVETAGE",
+    "objectif": "Extraire une personne d'une situation hostile",
+    "danger": "dangereux",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_015",
+    "titre": "Protection — Contrat 15",
+    "type": "PROTECTION",
+    "objectif": "Protéger une maison, un village ou un personnage",
+    "danger": "très dangereux",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_016",
+    "titre": "Recuperation — Contrat 16",
+    "type": "RECUPERATION",
+    "objectif": "Récupérer un objet, des archives ou un héritage",
+    "danger": "extrême",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_017",
+    "titre": "Guerre — Contrat 17",
+    "type": "GUERRE",
+    "objectif": "Participer à une opération militaire",
+    "danger": "modéré",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_018",
+    "titre": "Duel — Contrat 18",
+    "type": "DUEL",
+    "objectif": "Représenter un commanditaire lors d'un duel ou d'une épreuve",
+    "danger": "dangereux",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_019",
+    "titre": "Monstre — Contrat 19",
+    "type": "MONSTRE",
+    "objectif": "Affronter une créature rare ou nommée",
+    "danger": "très dangereux",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_PARIA_020",
+    "titre": "Secret — Contrat 20",
+    "type": "SECRET",
+    "objectif": "Résoudre discrètement une affaire compromettante",
+    "danger": "extrême",
+    "compatible_paria": true,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ],
+    "prix_paria": {
+      "regle_canonique": "Le prix est choisi et accepté avant toute action.",
+      "options_joueur": [
+        "OR",
+        "NOBLE_CONSENTANTE",
+        "OR_ET_NOBLE_CONSENTANTE",
+        "REFUSER_OU_NEGOCIER"
+      ],
+      "consentement": "La noble est adulte, identifiée et consentante avant l'acceptation définitive.",
+      "relation_apres_succes": {
+        "maison_commanditaire": "gain positif selon honneur du contrat et choix du prix",
+        "noble": "relation persistante créée ou renforcée selon personnalité et contexte"
+      },
+      "descendance": {
+        "possible": true,
+        "garantie": false,
+        "evaluation_avec_temps": true,
+        "facteurs": [
+          "temps écoulé",
+          "relation",
+          "rencontres",
+          "contexte"
+        ],
+        "enfant_persistant": true,
+        "sexe": "déterminé à la naissance",
+        "heritage_paria": "potentiel magique hérité selon probabilité/puissance latente"
+      }
+    }
+  },
+  {
+    "id": "CTR_GEN_021",
+    "titre": "Chasse — Contrat 21",
+    "type": "CHASSE",
+    "objectif": "Éliminer ou chasser une créature dangereuse",
+    "danger": "modéré",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_022",
+    "titre": "Escorte — Contrat 22",
+    "type": "ESCORTE",
+    "objectif": "Escorter une personne ou un convoi à travers une zone dangereuse",
+    "danger": "dangereux",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_023",
+    "titre": "Traque — Contrat 23",
+    "type": "TRAQUE",
+    "objectif": "Retrouver une cible disparue ou en fuite",
+    "danger": "très dangereux",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_024",
+    "titre": "Sauvetage — Contrat 24",
+    "type": "SAUVETAGE",
+    "objectif": "Extraire une personne d'une situation hostile",
+    "danger": "extrême",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_025",
+    "titre": "Protection — Contrat 25",
+    "type": "PROTECTION",
+    "objectif": "Protéger une maison, un village ou un personnage",
+    "danger": "modéré",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_026",
+    "titre": "Recuperation — Contrat 26",
+    "type": "RECUPERATION",
+    "objectif": "Récupérer un objet, des archives ou un héritage",
+    "danger": "dangereux",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_027",
+    "titre": "Guerre — Contrat 27",
+    "type": "GUERRE",
+    "objectif": "Participer à une opération militaire",
+    "danger": "très dangereux",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_028",
+    "titre": "Duel — Contrat 28",
+    "type": "DUEL",
+    "objectif": "Représenter un commanditaire lors d'un duel ou d'une épreuve",
+    "danger": "extrême",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_029",
+    "titre": "Monstre — Contrat 29",
+    "type": "MONSTRE",
+    "objectif": "Affronter une créature rare ou nommée",
+    "danger": "modéré",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_030",
+    "titre": "Secret — Contrat 30",
+    "type": "SECRET",
+    "objectif": "Résoudre discrètement une affaire compromettante",
+    "danger": "dangereux",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_031",
+    "titre": "Chasse — Contrat 31",
+    "type": "CHASSE",
+    "objectif": "Éliminer ou chasser une créature dangereuse",
+    "danger": "très dangereux",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_032",
+    "titre": "Escorte — Contrat 32",
+    "type": "ESCORTE",
+    "objectif": "Escorter une personne ou un convoi à travers une zone dangereuse",
+    "danger": "extrême",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_033",
+    "titre": "Traque — Contrat 33",
+    "type": "TRAQUE",
+    "objectif": "Retrouver une cible disparue ou en fuite",
+    "danger": "modéré",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_034",
+    "titre": "Sauvetage — Contrat 34",
+    "type": "SAUVETAGE",
+    "objectif": "Extraire une personne d'une situation hostile",
+    "danger": "dangereux",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_035",
+    "titre": "Protection — Contrat 35",
+    "type": "PROTECTION",
+    "objectif": "Protéger une maison, un village ou un personnage",
+    "danger": "très dangereux",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_036",
+    "titre": "Recuperation — Contrat 36",
+    "type": "RECUPERATION",
+    "objectif": "Récupérer un objet, des archives ou un héritage",
+    "danger": "extrême",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_037",
+    "titre": "Guerre — Contrat 37",
+    "type": "GUERRE",
+    "objectif": "Participer à une opération militaire",
+    "danger": "modéré",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_038",
+    "titre": "Duel — Contrat 38",
+    "type": "DUEL",
+    "objectif": "Représenter un commanditaire lors d'un duel ou d'une épreuve",
+    "danger": "dangereux",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_039",
+    "titre": "Monstre — Contrat 39",
+    "type": "MONSTRE",
+    "objectif": "Affronter une créature rare ou nommée",
+    "danger": "très dangereux",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_040",
+    "titre": "Secret — Contrat 40",
+    "type": "SECRET",
+    "objectif": "Résoudre discrètement une affaire compromettante",
+    "danger": "extrême",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_041",
+    "titre": "Chasse — Contrat 41",
+    "type": "CHASSE",
+    "objectif": "Éliminer ou chasser une créature dangereuse",
+    "danger": "modéré",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_042",
+    "titre": "Escorte — Contrat 42",
+    "type": "ESCORTE",
+    "objectif": "Escorter une personne ou un convoi à travers une zone dangereuse",
+    "danger": "dangereux",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_043",
+    "titre": "Traque — Contrat 43",
+    "type": "TRAQUE",
+    "objectif": "Retrouver une cible disparue ou en fuite",
+    "danger": "très dangereux",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_044",
+    "titre": "Sauvetage — Contrat 44",
+    "type": "SAUVETAGE",
+    "objectif": "Extraire une personne d'une situation hostile",
+    "danger": "extrême",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_045",
+    "titre": "Protection — Contrat 45",
+    "type": "PROTECTION",
+    "objectif": "Protéger une maison, un village ou un personnage",
+    "danger": "modéré",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_046",
+    "titre": "Recuperation — Contrat 46",
+    "type": "RECUPERATION",
+    "objectif": "Récupérer un objet, des archives ou un héritage",
+    "danger": "dangereux",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_047",
+    "titre": "Guerre — Contrat 47",
+    "type": "GUERRE",
+    "objectif": "Participer à une opération militaire",
+    "danger": "très dangereux",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_048",
+    "titre": "Duel — Contrat 48",
+    "type": "DUEL",
+    "objectif": "Représenter un commanditaire lors d'un duel ou d'une épreuve",
+    "danger": "extrême",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_049",
+    "titre": "Monstre — Contrat 49",
+    "type": "MONSTRE",
+    "objectif": "Affronter une créature rare ou nommée",
+    "danger": "modéré",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  },
+  {
+    "id": "CTR_GEN_050",
+    "titre": "Secret — Contrat 50",
+    "type": "SECRET",
+    "objectif": "Résoudre discrètement une affaire compromettante",
+    "danger": "dangereux",
+    "compatible_paria": false,
+    "termes_negocies_avant_action": true,
+    "issues_gameplay": [
+      "succès",
+      "échec",
+      "abandon",
+      "trahison_possible",
+      "objectif_transformé"
+    ],
+    "peut_mener_a": [
+      "combat",
+      "duel",
+      "traque",
+      "enquête",
+      "voyage",
+      "relation"
+    ]
+  }
+]

@@ -1,0 +1,9 @@
+[
+  {"id":"STYLE_DUELIST","reads":["agility","perception","swords"],"strengths":["counter","precision","adaptation"],"weaknesses":["grapple","confined_space","attrition"],"retreat_morale":30},
+  {"id":"STYLE_BRUISER","reads":["force","endurance","heavy_weapons"],"strengths":["guard_break","armor_damage","fear"],"weaknesses":["mobility","range","fatigue"],"retreat_morale":15},
+  {"id":"STYLE_ASSASSIN","reads":["agility","stealth","anatomy"],"strengths":["surprise","poison","target_wounds"],"weaknesses":["prolonged_fight","open_ground","heavy_armor"],"retreat_morale":50},
+  {"id":"STYLE_SOLDIER","reads":["endurance","shield","polearms"],"strengths":["formation","discipline","reach"],"weaknesses":["isolated","flanked","unorthodox_attack"],"retreat_morale":35},
+  {"id":"STYLE_BEAST","reads":["force","agility","bestiary"],"strengths":["instinct","charge","pain_response"],"weaknesses":["fire","territorial_lure","injured_limb"],"retreat_morale":25},
+  {"id":"STYLE_WAVE_USER","reads":["willpower","focus","wave_mastery"],"strengths":["control","area","internal_damage"],"weaknesses":["disrupted_focus","exhaustion","wave_counter"],"retreat_morale":20},
+  {"id":"STYLE_COMMANDER","reads":["presence","tactics","command"],"strengths":["allies","terrain","morale"],"weaknesses":["isolation","broken_signal","personal_duel"],"retreat_morale":40}
+]

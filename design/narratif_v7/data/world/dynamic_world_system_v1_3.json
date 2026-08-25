@@ -1,0 +1,112 @@
+{
+  "version": "1.3",
+  "time_model": {
+    "turn_unit": "configurable",
+    "recommended_campaign_tick": "1 mois",
+    "yearly_tick_every": 12,
+    "processes": [
+      "vieillissement",
+      "naissances",
+      "mariages_et_unions",
+      "morts",
+      "successions",
+      "ambitions",
+      "relations",
+      "guerres_locales",
+      "migrations",
+      "nouvelles_du_monde"
+    ]
+  },
+  "npc_schema": {
+    "fields": [
+      "id",
+      "nom",
+      "sexe",
+      "age",
+      "espece",
+      "culture",
+      "maison_ou_clan",
+      "rang",
+      "parents",
+      "partenaire",
+      "enfants",
+      "traits",
+      "competences_simples",
+      "richesse",
+      "statut",
+      "relations",
+      "ambition",
+      "localisation",
+      "etat",
+      "potentiel_paria"
+    ],
+    "etat_values": [
+      "vivant",
+      "mort",
+      "disparu",
+      "captif",
+      "exilé"
+    ]
+  },
+  "relation_scale": {
+    "min": -100,
+    "max": 100,
+    "bands": {
+      "ennemi": [
+        -100,
+        -60
+      ],
+      "hostile": [
+        -59,
+        -25
+      ],
+      "neutre": [
+        -24,
+        24
+      ],
+      "favorable": [
+        25,
+        59
+      ],
+      "allié": [
+        60,
+        100
+      ]
+    }
+  },
+  "birth_system": {
+    "automatic": false,
+    "requires_adult_characters": true,
+    "evaluated_on_time_advance": true,
+    "factors": [
+      "relation",
+      "temps_passé",
+      "rencontres",
+      "contexte",
+      "stabilité"
+    ],
+    "child_persistent": true,
+    "child_sex": "probabiliste",
+    "inheritance": [
+      "maison",
+      "relations_dynastiques",
+      "traits_partiels",
+      "potentiel_paria_latent"
+    ]
+  },
+  "death_succession": {
+    "natural_death": "probabilité croissante avec l'âge",
+    "violent_death": "événements, guerre, duel, maladie générique ou accident selon contexte",
+    "succession": "héritier légal/culturel ou crise de succession"
+  },
+  "cultures": {
+    "HUMAINS": "maisons nobles, héritage, mariages, branches cadettes, rivalités",
+    "PARIAS": "mêmes lignées humaines + sang Paria et potentiel magique latent",
+    "KHESH": "tribus, chefs, héritiers, défis, soumission et confédération",
+    "ELFES": "maisons très anciennes, générations longues, faible renouvellement",
+    "ELFES_NOIRS": "maisons, alliances rapides, séductions, complots et assassinats",
+    "NAINS": "clans, serments, rancunes, héritage des charges",
+    "HOMMES_BETES": "hardes, chef dominant, succession par force, absorption des vaincus",
+    "PEAUX_VERTES": "bandes/clans, domination par puissance et fédération guerrière"
+  }
+}

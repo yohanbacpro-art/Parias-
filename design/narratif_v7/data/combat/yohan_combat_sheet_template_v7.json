@@ -1,0 +1,13 @@
+{
+  "id": "YOHAN",
+  "leveling_policy": "No automatic level scaling. Values come from the campaign save.",
+  "attributes": {"force": 0, "agility": 0, "endurance": 0, "perception": 0, "intellect": 0, "willpower": 0, "presence": 0},
+  "skills": {"swords": 0, "heavy_weapons": 0, "polearms": 0, "daggers": 0, "ranged": 0, "thrown": 0, "grappling": 0, "shield": 0, "riding": 0, "anatomy": 0, "bestiary": 0, "alchemy": 0, "stealth": 0, "tactics": 0, "command": 0, "wave_mastery": 0},
+  "resources": {"vitality": 100, "stamina": 100, "focus": 100, "blood": 100, "morale": 100},
+  "equipment_refs": [],
+  "wounds": [],
+  "conditions": [],
+  "combat_memories": [],
+  "known_weaknesses": [],
+  "public_fighting_reputation": []
+}

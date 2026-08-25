@@ -1,0 +1,262 @@
+[
+  {
+    "id": "NPC_ARCH_001",
+    "archetype": "Marchand ambulant",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_002",
+    "archetype": "Mercenaire déchu",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_003",
+    "archetype": "Noble en fuite",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_004",
+    "archetype": "Chasseuse solitaire",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_005",
+    "archetype": "Prêtre errant",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_006",
+    "archetype": "Soldat déserteur",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_007",
+    "archetype": "Artisan nain",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_008",
+    "archetype": "Émissaire elfique",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_009",
+    "archetype": "Éclaireur Khesh",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_010",
+    "archetype": "Contrebandier",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_011",
+    "archetype": "Scribe impérial",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_012",
+    "archetype": "Chasseur de monstres",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_013",
+    "archetype": "Espion",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_014",
+    "archetype": "Médecin de campagne",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_015",
+    "archetype": "Aventurier",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_016",
+    "archetype": "Bandit repenti",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_017",
+    "archetype": "Courtisane / informatrice",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_018",
+    "archetype": "Guide des montagnes",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_019",
+    "archetype": "Mineur survivant",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  },
+  {
+    "id": "NPC_ARCH_020",
+    "archetype": "Voyageur mystérieux",
+    "traits": [
+      "honnête",
+      "brutal",
+      "charismatique",
+      "prudent",
+      "mystérieux",
+      "ambitieux"
+    ],
+    "persistant_possible": true
+  }
+]

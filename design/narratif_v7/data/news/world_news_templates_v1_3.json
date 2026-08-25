@@ -1,0 +1,52 @@
+[
+  {
+    "id": "NEWS_SUCCESSION",
+    "category": "dynastie",
+    "template": "{region} — {name} succède à {predecessor} à la tête de {house}."
+  },
+  {
+    "id": "NEWS_BIRTH",
+    "category": "dynastie",
+    "template": "{region} — {house} annonce la naissance de {name}."
+  },
+  {
+    "id": "NEWS_DEATH",
+    "category": "dynastie",
+    "template": "{region} — {name} est mort. La succession de {house} commence."
+  },
+  {
+    "id": "NEWS_MARRIAGE",
+    "category": "dynastie",
+    "template": "{region} — Une union rapproche {house_a} et {house_b}."
+  },
+  {
+    "id": "NEWS_KHESH",
+    "category": "khesh",
+    "template": "Dunes Khesh — La tribu {tribe} a juré fidélité à {leader}."
+  },
+  {
+    "id": "NEWS_GREENSKIN",
+    "category": "crise",
+    "template": "Kar-Durak — Une galerie inférieure est tombée aux mains des Peaux-Vertes."
+  },
+  {
+    "id": "NEWS_BEAST",
+    "category": "crise",
+    "template": "Forêt des Mille Cornes — Plusieurs hardes se rassemblent sous un même symbole."
+  },
+  {
+    "id": "NEWS_ASTRAH",
+    "category": "politique",
+    "template": "Astrah — {name} rassemble de nouveaux partisans autour des anciennes bannières impériales."
+  },
+  {
+    "id": "NEWS_PARIA",
+    "category": "rumeur",
+    "template": "{region} — Des rumeurs parlent d'un individu ayant manifesté des pouvoirs attribués aux Parias."
+  },
+  {
+    "id": "NEWS_MONSTER",
+    "category": "danger",
+    "template": "{region} — Les attaques de {monster} ont augmenté sur les routes."
+  }
+]

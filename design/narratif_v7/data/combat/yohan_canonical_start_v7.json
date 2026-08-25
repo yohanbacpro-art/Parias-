@@ -1,0 +1,12 @@
+{
+  "id": "YOHAN_START_V7",
+  "stage": "ACT_I_UNKNOWN_PARIA",
+  "attributes": {"force": 7, "agility": 7, "endurance": 8, "perception": 6, "intellect": 5, "willpower": 8, "presence": 6},
+  "skills": {"swords": 7, "heavy_weapons": 4, "polearms": 4, "daggers": 5, "ranged": 3, "thrown": 5, "grappling": 6, "shield": 5, "riding": 5, "anatomy": 4, "bestiary": 3, "alchemy": 2, "stealth": 5, "tactics": 4, "command": 2, "wave_mastery": 4},
+  "resources": {"vitality": 100, "stamina": 100, "focus": 80, "blood": 100, "morale": 85},
+  "starting_style": "STYLE_ROAD_SURVIVOR",
+  "equipment": ["LONGSWORD_WORN_BALANCED", "DAGGER_ROBUST", "TRAVEL_ARMOR_COMPOSITE"],
+  "wave_abilities": ["WAVE_SENSE", "WAVE_BRIEF_REINFORCEMENT", "WAVE_SHORT_IMPULSE"],
+  "locked_wave_abilities": ["WAVE_GRIP", "WAVE_INTERNAL_RUPTURE", "WAVE_KARLSBERG_SILENCE", "WAVE_SURGE"],
+  "design_limits": ["not_invulnerable", "no_level_scaling_enemies", "extreme_wave_is_desperation", "wounds_persist", "power_does_not_replace_armies"]
+}

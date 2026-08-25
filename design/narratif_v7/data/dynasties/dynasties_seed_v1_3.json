@@ -1,0 +1,149 @@
+[
+  {
+    "id": "MAISON_VAUCLAIR",
+    "nom": "Maison de Vauclair",
+    "culture": "humain",
+    "chef": "NPC_0001",
+    "membres": [
+      "NPC_0001",
+      "NPC_0002",
+      "NPC_0003",
+      "NPC_0004"
+    ],
+    "richesse": 5,
+    "influence": 4,
+    "relations_maisons": {},
+    "historique": [],
+    "branches": [],
+    "etat": "active"
+  },
+  {
+    "id": "MAISON_ROCHEBRUNE",
+    "nom": "Maison Rochebrune",
+    "culture": "humain",
+    "chef": "NPC_0005",
+    "membres": [
+      "NPC_0005",
+      "NPC_0006",
+      "NPC_0007",
+      "NPC_0008"
+    ],
+    "richesse": 4,
+    "influence": 3,
+    "relations_maisons": {},
+    "historique": [],
+    "branches": [],
+    "etat": "active"
+  },
+  {
+    "id": "MAISON_ARQUENAY",
+    "nom": "Maison d'Arquenay",
+    "culture": "humain",
+    "chef": "NPC_0009",
+    "membres": [
+      "NPC_0009",
+      "NPC_0010",
+      "NPC_0011",
+      "NPC_0012"
+    ],
+    "richesse": 3,
+    "influence": 5,
+    "relations_maisons": {},
+    "historique": [],
+    "branches": [],
+    "etat": "active"
+  },
+  {
+    "id": "MAISON_SOMBREVAL",
+    "nom": "Maison de Sombreval",
+    "culture": "humain",
+    "chef": "NPC_0013",
+    "membres": [
+      "NPC_0013",
+      "NPC_0014",
+      "NPC_0015",
+      "NPC_0016"
+    ],
+    "richesse": 3,
+    "influence": 5,
+    "relations_maisons": {},
+    "historique": [],
+    "branches": [],
+    "etat": "active"
+  },
+  {
+    "id": "MAISON_BELLAC",
+    "nom": "Maison de Bellac",
+    "culture": "humain",
+    "chef": "NPC_0017",
+    "membres": [
+      "NPC_0017",
+      "NPC_0018",
+      "NPC_0019",
+      "NPC_0020"
+    ],
+    "richesse": 2,
+    "influence": 4,
+    "relations_maisons": {},
+    "historique": [],
+    "branches": [],
+    "etat": "active"
+  },
+  {
+    "id": "MAISON_CORVEN",
+    "nom": "Maison de Corven",
+    "culture": "humain",
+    "chef": "NPC_0021",
+    "membres": [
+      "NPC_0021",
+      "NPC_0022",
+      "NPC_0023",
+      "NPC_0024"
+    ],
+    "richesse": 2,
+    "influence": 5,
+    "relations_maisons": {},
+    "historique": [],
+    "branches": [],
+    "etat": "active"
+  },
+  {
+    "id": "TRIBU_KHESH_DRAGONS_SABLE",
+    "nom": "Tribu des Dragons de Sable",
+    "culture": "khesh",
+    "chef": "KEM_VAL_OR_KHAL_VAENE_RUNTIME",
+    "membres": [],
+    "richesse": 2,
+    "influence": 4,
+    "relations_maisons": {},
+    "historique": [],
+    "branches": [],
+    "etat": "active"
+  },
+  {
+    "id": "CLAN_NAIN_KARDURAK",
+    "nom": "Clan royal de Kar-Durak",
+    "culture": "nain",
+    "chef": "GENERATE_RUNTIME",
+    "membres": [],
+    "richesse": 5,
+    "influence": 5,
+    "relations_maisons": {},
+    "historique": [],
+    "branches": [],
+    "etat": "active"
+  },
+  {
+    "id": "HARDE_PREMIER_RUGISSEMENT",
+    "nom": "Harde du Premier Rugissement",
+    "culture": "homme_bete",
+    "chef": "GENERATE_RUNTIME",
+    "membres": [],
+    "richesse": 1,
+    "influence": 3,
+    "relations_maisons": {},
+    "historique": [],
+    "branches": [],
+    "etat": "active"
+  }
+]

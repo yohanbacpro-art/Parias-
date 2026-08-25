@@ -1,0 +1,402 @@
+[
+  {
+    "id": "BST_001",
+    "nom": "Loup gris",
+    "danger": 1,
+    "vitalite": "faible",
+    "degats": "faibles",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_002",
+    "nom": "Loup noir",
+    "danger": 2,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_003",
+    "nom": "Ours des montagnes",
+    "danger": 3,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_004",
+    "nom": "Sanglier cuirassé",
+    "danger": 2,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_005",
+    "nom": "Grand Cerf Blanc",
+    "danger": 1,
+    "vitalite": "faible",
+    "degats": "faibles",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_006",
+    "nom": "Griffon",
+    "danger": 4,
+    "vitalite": "élevée",
+    "degats": "élevés",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_007",
+    "nom": "Hippogriffe",
+    "danger": 3,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_008",
+    "nom": "Manticore",
+    "danger": 4,
+    "vitalite": "élevée",
+    "degats": "élevés",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_009",
+    "nom": "Wyverne",
+    "danger": 4,
+    "vitalite": "élevée",
+    "degats": "élevés",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_010",
+    "nom": "Dragon des Sables",
+    "danger": 5,
+    "vitalite": "élevée",
+    "degats": "élevés",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_011",
+    "nom": "Dragon des Montagnes",
+    "danger": 5,
+    "vitalite": "élevée",
+    "degats": "élevés",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_012",
+    "nom": "Dragon Ancien",
+    "danger": 6,
+    "vitalite": "légendaire",
+    "degats": "extrêmes",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_013",
+    "nom": "Léviathan",
+    "danger": 5,
+    "vitalite": "élevée",
+    "degats": "élevés",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_014",
+    "nom": "Araignée pâle",
+    "danger": 2,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_015",
+    "nom": "Troll des Cavernes",
+    "danger": 4,
+    "vitalite": "élevée",
+    "degats": "élevés",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_016",
+    "nom": "Ver des Profondeurs",
+    "danger": 4,
+    "vitalite": "élevée",
+    "degats": "élevés",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_017",
+    "nom": "Squig des Profondeurs",
+    "danger": 2,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_018",
+    "nom": "Loup Déformé",
+    "danger": 3,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_019",
+    "nom": "Ours Déformé",
+    "danger": 4,
+    "vitalite": "élevée",
+    "degats": "élevés",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_020",
+    "nom": "Spectre de l'Onde",
+    "danger": 4,
+    "vitalite": "élevée",
+    "degats": "élevés",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_021",
+    "nom": "Corne-Rouge",
+    "danger": 3,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_022",
+    "nom": "Ours-Corne",
+    "danger": 4,
+    "vitalite": "élevée",
+    "degats": "élevés",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_023",
+    "nom": "Revenant",
+    "danger": 3,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_024",
+    "nom": "Chevalier sans Visage",
+    "danger": 4,
+    "vitalite": "élevée",
+    "degats": "élevés",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_025",
+    "nom": "Mange-Esprit",
+    "danger": 5,
+    "vitalite": "élevée",
+    "degats": "élevés",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_026",
+    "nom": "Gharok, Roi sous la Montagne",
+    "danger": 6,
+    "vitalite": "légendaire",
+    "degats": "extrêmes",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_027",
+    "nom": "Chien des dunes",
+    "danger": 2,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_028",
+    "nom": "Scorpion cuirassé",
+    "danger": 2,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_029",
+    "nom": "Vautour rouge",
+    "danger": 1,
+    "vitalite": "faible",
+    "degats": "faibles",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_030",
+    "nom": "Lion des roches",
+    "danger": 3,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_031",
+    "nom": "Serpent des ruines",
+    "danger": 2,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_032",
+    "nom": "Chauve-souris géante",
+    "danger": 2,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_033",
+    "nom": "Crache-Fange",
+    "danger": 3,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_034",
+    "nom": "Troll de guerre",
+    "danger": 4,
+    "vitalite": "élevée",
+    "degats": "élevés",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_035",
+    "nom": "Cerf d'écorce",
+    "danger": 2,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_036",
+    "nom": "Rôdeur des brumes",
+    "danger": 3,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_037",
+    "nom": "Gargouille vivante",
+    "danger": 3,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_038",
+    "nom": "Serpent de verre",
+    "danger": 4,
+    "vitalite": "élevée",
+    "degats": "élevés",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_039",
+    "nom": "Drake des falaises",
+    "danger": 3,
+    "vitalite": "moyenne",
+    "degats": "moyens",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  },
+  {
+    "id": "BST_040",
+    "nom": "Basilic cendré",
+    "danger": 4,
+    "vitalite": "élevée",
+    "degats": "élevés",
+    "armure": "variable",
+    "mobilite": "variable",
+    "note": "À mapper sur le système de combat réel."
+  }
+]

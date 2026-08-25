@@ -1,0 +1,782 @@
+[
+  {
+    "id": "NPC_0001",
+    "nom": "Aldric de Vauclair",
+    "sexe": "H",
+    "age": 50,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_VAUCLAIR",
+    "rang": "Seigneur",
+    "parents": [],
+    "partenaire": "NPC_0002",
+    "enfants": [
+      "NPC_0003",
+      "NPC_0004"
+    ],
+    "traits": [
+      "calculateur",
+      "charismatique"
+    ],
+    "competences_simples": {
+      "combat": 5,
+      "diplomatie": 2,
+      "intrigue": 3
+    },
+    "richesse": 5,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "gagner de l'influence",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0002",
+    "nom": "Adélaïde de Vauclair",
+    "sexe": "F",
+    "age": 44,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_VAUCLAIR",
+    "rang": "Dame",
+    "parents": [],
+    "partenaire": "NPC_0001",
+    "enfants": [
+      "NPC_0003",
+      "NPC_0004"
+    ],
+    "traits": [
+      "charismatique",
+      "orgueilleux"
+    ],
+    "competences_simples": {
+      "combat": 2,
+      "diplomatie": 3,
+      "intrigue": 1
+    },
+    "richesse": 5,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "éviter une guerre",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0003",
+    "nom": "Gautier de Vauclair",
+    "sexe": "H",
+    "age": 24,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_VAUCLAIR",
+    "rang": "Héritier",
+    "parents": [
+      "NPC_0001"
+    ],
+    "partenaire": null,
+    "enfants": [],
+    "traits": [
+      "prudent",
+      "charismatique"
+    ],
+    "competences_simples": {
+      "combat": 3,
+      "diplomatie": 4,
+      "intrigue": 4
+    },
+    "richesse": 4,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "agrandir la maison",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0004",
+    "nom": "Constance de Vauclair",
+    "sexe": "F",
+    "age": 20,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_VAUCLAIR",
+    "rang": "Noble",
+    "parents": [
+      "NPC_0001"
+    ],
+    "partenaire": null,
+    "enfants": [],
+    "traits": [
+      "calculateur",
+      "charismatique"
+    ],
+    "competences_simples": {
+      "combat": 1,
+      "diplomatie": 4,
+      "intrigue": 2
+    },
+    "richesse": 3,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "gagner de l'influence",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0005",
+    "nom": "Armand de Rochebrune",
+    "sexe": "H",
+    "age": 51,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_ROCHEBRUNE",
+    "rang": "Seigneur",
+    "parents": [],
+    "partenaire": "NPC_0006",
+    "enfants": [
+      "NPC_0007",
+      "NPC_0008"
+    ],
+    "traits": [
+      "orgueilleux",
+      "charismatique"
+    ],
+    "competences_simples": {
+      "combat": 1,
+      "diplomatie": 5,
+      "intrigue": 5
+    },
+    "richesse": 2,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "agrandir la maison",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0006",
+    "nom": "Blanche de Rochebrune",
+    "sexe": "F",
+    "age": 45,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_ROCHEBRUNE",
+    "rang": "Dame",
+    "parents": [],
+    "partenaire": "NPC_0005",
+    "enfants": [
+      "NPC_0007",
+      "NPC_0008"
+    ],
+    "traits": [
+      "martial",
+      "calculateur"
+    ],
+    "competences_simples": {
+      "combat": 5,
+      "diplomatie": 1,
+      "intrigue": 1
+    },
+    "richesse": 3,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "protéger l'héritier",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0007",
+    "nom": "Thibault de Rochebrune",
+    "sexe": "H",
+    "age": 25,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_ROCHEBRUNE",
+    "rang": "Héritier",
+    "parents": [
+      "NPC_0005"
+    ],
+    "partenaire": null,
+    "enfants": [],
+    "traits": [
+      "prudent",
+      "loyal"
+    ],
+    "competences_simples": {
+      "combat": 2,
+      "diplomatie": 4,
+      "intrigue": 5
+    },
+    "richesse": 4,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "agrandir la maison",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0008",
+    "nom": "Aveline de Rochebrune",
+    "sexe": "F",
+    "age": 21,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_ROCHEBRUNE",
+    "rang": "Noble",
+    "parents": [
+      "NPC_0005"
+    ],
+    "partenaire": null,
+    "enfants": [],
+    "traits": [
+      "calculateur",
+      "orgueilleux"
+    ],
+    "competences_simples": {
+      "combat": 5,
+      "diplomatie": 2,
+      "intrigue": 5
+    },
+    "richesse": 2,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "obtenir une alliance",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0009",
+    "nom": "Amaury de d'Arquenay",
+    "sexe": "H",
+    "age": 52,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_ARQUENAY",
+    "rang": "Seigneur",
+    "parents": [],
+    "partenaire": "NPC_0010",
+    "enfants": [
+      "NPC_0011",
+      "NPC_0012"
+    ],
+    "traits": [
+      "loyal",
+      "charismatique"
+    ],
+    "competences_simples": {
+      "combat": 5,
+      "diplomatie": 5,
+      "intrigue": 2
+    },
+    "richesse": 2,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "éviter une guerre",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0010",
+    "nom": "Isabeau de d'Arquenay",
+    "sexe": "F",
+    "age": 46,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_ARQUENAY",
+    "rang": "Dame",
+    "parents": [],
+    "partenaire": "NPC_0009",
+    "enfants": [
+      "NPC_0011",
+      "NPC_0012"
+    ],
+    "traits": [
+      "érudit",
+      "ambitieux"
+    ],
+    "competences_simples": {
+      "combat": 5,
+      "diplomatie": 4,
+      "intrigue": 5
+    },
+    "richesse": 4,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "obtenir une alliance",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0011",
+    "nom": "Hugues de d'Arquenay",
+    "sexe": "H",
+    "age": 26,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_ARQUENAY",
+    "rang": "Héritier",
+    "parents": [
+      "NPC_0009"
+    ],
+    "partenaire": null,
+    "enfants": [],
+    "traits": [
+      "charismatique",
+      "loyal"
+    ],
+    "competences_simples": {
+      "combat": 1,
+      "diplomatie": 2,
+      "intrigue": 1
+    },
+    "richesse": 3,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "gagner de l'influence",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0012",
+    "nom": "Aliénor de d'Arquenay",
+    "sexe": "F",
+    "age": 22,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_ARQUENAY",
+    "rang": "Noble",
+    "parents": [
+      "NPC_0009"
+    ],
+    "partenaire": null,
+    "enfants": [],
+    "traits": [
+      "prudent",
+      "érudit"
+    ],
+    "competences_simples": {
+      "combat": 4,
+      "diplomatie": 5,
+      "intrigue": 3
+    },
+    "richesse": 2,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "obtenir une alliance",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0013",
+    "nom": "Roland de Sombreval",
+    "sexe": "H",
+    "age": 53,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_SOMBREVAL",
+    "rang": "Seigneur",
+    "parents": [],
+    "partenaire": "NPC_0014",
+    "enfants": [
+      "NPC_0015",
+      "NPC_0016"
+    ],
+    "traits": [
+      "calculateur",
+      "charismatique"
+    ],
+    "competences_simples": {
+      "combat": 1,
+      "diplomatie": 4,
+      "intrigue": 3
+    },
+    "richesse": 3,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "agrandir la maison",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0014",
+    "nom": "Béatrice de Sombreval",
+    "sexe": "F",
+    "age": 47,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_SOMBREVAL",
+    "rang": "Dame",
+    "parents": [],
+    "partenaire": "NPC_0013",
+    "enfants": [
+      "NPC_0015",
+      "NPC_0016"
+    ],
+    "traits": [
+      "érudit",
+      "loyal"
+    ],
+    "competences_simples": {
+      "combat": 4,
+      "diplomatie": 1,
+      "intrigue": 2
+    },
+    "richesse": 4,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "obtenir une alliance",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0015",
+    "nom": "Robert de Sombreval",
+    "sexe": "H",
+    "age": 27,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_SOMBREVAL",
+    "rang": "Héritier",
+    "parents": [
+      "NPC_0013"
+    ],
+    "partenaire": null,
+    "enfants": [],
+    "traits": [
+      "charismatique",
+      "calculateur"
+    ],
+    "competences_simples": {
+      "combat": 2,
+      "diplomatie": 2,
+      "intrigue": 2
+    },
+    "richesse": 5,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "éviter une guerre",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0016",
+    "nom": "Héloïse de Sombreval",
+    "sexe": "F",
+    "age": 23,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_SOMBREVAL",
+    "rang": "Noble",
+    "parents": [
+      "NPC_0013"
+    ],
+    "partenaire": null,
+    "enfants": [],
+    "traits": [
+      "martial",
+      "charismatique"
+    ],
+    "competences_simples": {
+      "combat": 3,
+      "diplomatie": 2,
+      "intrigue": 2
+    },
+    "richesse": 4,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "éviter une guerre",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0017",
+    "nom": "Aldric de Bellac",
+    "sexe": "H",
+    "age": 54,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_BELLAC",
+    "rang": "Seigneur",
+    "parents": [],
+    "partenaire": "NPC_0018",
+    "enfants": [
+      "NPC_0019",
+      "NPC_0020"
+    ],
+    "traits": [
+      "loyal",
+      "calculateur"
+    ],
+    "competences_simples": {
+      "combat": 4,
+      "diplomatie": 5,
+      "intrigue": 3
+    },
+    "richesse": 2,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "agrandir la maison",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0018",
+    "nom": "Adélaïde de Bellac",
+    "sexe": "F",
+    "age": 48,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_BELLAC",
+    "rang": "Dame",
+    "parents": [],
+    "partenaire": "NPC_0017",
+    "enfants": [
+      "NPC_0019",
+      "NPC_0020"
+    ],
+    "traits": [
+      "orgueilleux",
+      "calculateur"
+    ],
+    "competences_simples": {
+      "combat": 4,
+      "diplomatie": 3,
+      "intrigue": 5
+    },
+    "richesse": 4,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "éviter une guerre",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0019",
+    "nom": "Gautier de Bellac",
+    "sexe": "H",
+    "age": 28,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_BELLAC",
+    "rang": "Héritier",
+    "parents": [
+      "NPC_0017"
+    ],
+    "partenaire": null,
+    "enfants": [],
+    "traits": [
+      "calculateur",
+      "prudent"
+    ],
+    "competences_simples": {
+      "combat": 3,
+      "diplomatie": 4,
+      "intrigue": 5
+    },
+    "richesse": 5,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "éviter une guerre",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0020",
+    "nom": "Constance de Bellac",
+    "sexe": "F",
+    "age": 24,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_BELLAC",
+    "rang": "Noble",
+    "parents": [
+      "NPC_0017"
+    ],
+    "partenaire": null,
+    "enfants": [],
+    "traits": [
+      "loyal",
+      "charismatique"
+    ],
+    "competences_simples": {
+      "combat": 3,
+      "diplomatie": 2,
+      "intrigue": 4
+    },
+    "richesse": 2,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "éviter une guerre",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0021",
+    "nom": "Armand de Corven",
+    "sexe": "H",
+    "age": 55,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_CORVEN",
+    "rang": "Seigneur",
+    "parents": [],
+    "partenaire": "NPC_0022",
+    "enfants": [
+      "NPC_0023",
+      "NPC_0024"
+    ],
+    "traits": [
+      "prudent",
+      "martial"
+    ],
+    "competences_simples": {
+      "combat": 3,
+      "diplomatie": 4,
+      "intrigue": 5
+    },
+    "richesse": 5,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "protéger l'héritier",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0022",
+    "nom": "Blanche de Corven",
+    "sexe": "F",
+    "age": 49,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_CORVEN",
+    "rang": "Dame",
+    "parents": [],
+    "partenaire": "NPC_0021",
+    "enfants": [
+      "NPC_0023",
+      "NPC_0024"
+    ],
+    "traits": [
+      "ambitieux",
+      "martial"
+    ],
+    "competences_simples": {
+      "combat": 5,
+      "diplomatie": 5,
+      "intrigue": 4
+    },
+    "richesse": 3,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "éviter une guerre",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0023",
+    "nom": "Thibault de Corven",
+    "sexe": "H",
+    "age": 29,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_CORVEN",
+    "rang": "Héritier",
+    "parents": [
+      "NPC_0021"
+    ],
+    "partenaire": null,
+    "enfants": [],
+    "traits": [
+      "prudent",
+      "calculateur"
+    ],
+    "competences_simples": {
+      "combat": 2,
+      "diplomatie": 3,
+      "intrigue": 1
+    },
+    "richesse": 5,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "protéger l'héritier",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  },
+  {
+    "id": "NPC_0024",
+    "nom": "Aveline de Corven",
+    "sexe": "F",
+    "age": 25,
+    "adulte": true,
+    "espece": "Humain",
+    "culture": "humain",
+    "maison_ou_clan": "MAISON_CORVEN",
+    "rang": "Noble",
+    "parents": [
+      "NPC_0021"
+    ],
+    "partenaire": null,
+    "enfants": [],
+    "traits": [
+      "calculateur",
+      "charismatique"
+    ],
+    "competences_simples": {
+      "combat": 3,
+      "diplomatie": 3,
+      "intrigue": 5
+    },
+    "richesse": 2,
+    "statut": "noble",
+    "relations": {},
+    "ambition": "protéger l'héritier",
+    "localisation": "domaine familial",
+    "etat": "vivant",
+    "potentiel_paria": "inconnu"
+  }
+]
