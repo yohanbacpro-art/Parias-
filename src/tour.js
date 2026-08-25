@@ -93,6 +93,7 @@ function ouvrirPliDuTour(resume){
      ce qui vient de se produire, et laisse le joueur en tirer les conséquences. */
   (resume && resume.crises || []).forEach(c =>
     lignes.push(`<li class="pli-crise"><b>${c.crise.nom} — ${c.nom}.</b> ${c.chronique}</li>`));
+  (resume && resume.pnj || []).forEach(a => lignes.push(`<li class="pli-pnj">${a.texte}</li>`));
   if(resume && resume.solde) lignes.push(`<li class="pli-solde">${resume.solde}</li>`);
   if(resume && resume.rente) lignes.push(`<li class="pli-or">${resume.rente}</li>`);
 

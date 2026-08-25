@@ -180,10 +180,12 @@ async function nouvellePartie(browser){
     const enr = { version:8, hero:{ niveau:5, pvMax:60, trame:{chapitre:0, points:0},
       tensions:{ humains:72, elfes:36, khesh:20, nains:54, peaux_vertes:54, hommes_betes:18, parias:9, elfes_noirs:36 } } };
     const m = migrer(JSON.parse(JSON.stringify(enr)));
-    return { version:m.version, crises:m.hero.crises };
+    return { version:m.version, courante:SAVE_VERSION, crises:m.hero.crises };
   });
   console.log('    ' + Object.entries(migration.crises).map(([k,v]) => `${k} ${v.palier}/5`).join(' · '));
-  verifie('la sauvegarde passe en v9', migration.version === 9, migration.version);
+  const SAVE_ATTENDUE = migration.courante;
+  verifie('la sauvegarde traverse les migrations jusqu\'à la version courante',
+    migration.version === SAVE_ATTENDUE, migration.version);
   verifie('les anciens nombres se relisent en étapes',
     migration.crises.ASTRAH.palier === 4 && migration.crises.ELFES.palier === 2, migration.crises);
   verifie('aucune crise ne démarre au-delà de la cinquième',

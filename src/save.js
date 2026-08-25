@@ -19,7 +19,7 @@
  * reconstruits au chargement (voir CHAMPS_SET).
  */
 
-const SAVE_VERSION = 9;
+const SAVE_VERSION = 10;
 /* Le préfixe est un espace de noms de stockage, pas le numéro de version : il
  * reste figé pour que les parties commencées avant soient relues puis migrées. */
 const SAVE_PREFIX  = 'parias_save_v6_';
@@ -78,6 +78,7 @@ function reconstruireHero(brut){
   h.politique         = h.politique || {};
   h.chaines           = h.chaines || { actives:[], faites:[], issues:{} };
   h.crises            = h.crises || {};
+  h.pnj               = h.pnj || {};
   h.lignee            = h.lignee || { liaisons: [], enfants: [] };
   if(typeof h.age !== 'number') h.age = AGE_DEPART;
   h.compagnons        = (h.compagnons || []).map(c => COMPANIONS_POOL[c.id] || c);
@@ -168,6 +169,13 @@ const MIGRATIONS = {
                               pression: 0, causes: [] };
     }
     enr.version = 9;
+    return enr;
+  },
+  9: enr => {           // v9 → v10 : les neuf qui agissent sans vous
+    /* Leur fiche se reconstruit toute seule ; ce qu'ils ont retenu de la
+     * partie en cours se relit au premier tick, marqueur par marqueur. */
+    enr.hero.pnj = enr.hero.pnj || {};
+    enr.version = 10;
     return enr;
   },
 };

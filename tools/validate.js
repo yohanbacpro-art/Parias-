@@ -23,7 +23,7 @@ const fichiers = [
   'src/data/reputation.js', 'src/data/epilogue.js',
   'src/data/chantier.js', 'src/data/events_suspicion.js', 'src/data/politique.js',
   'src/data/maisons.js', 'src/data/chaines.js', 'src/data/chaines_secretes.js',
-  'src/data/crises.js',
+  'src/data/crises.js', 'src/data/pnj_autonomes.js',
 ];
 
 const ctx = vm.createContext({ console });
@@ -41,7 +41,7 @@ const {
   UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART, REGIONS, ROUTES, LOC_REGION,
   REPUTATION_DEPART, RANGS_REPUTATION, LOC_PEUPLE, REPUTATION_VOIX, SHOPS, BUTIN_PAR_PEUPLE,
   CONTRATS_LOCAUX, CONTRACT_COMPLICATIONS,
-  CHANTIER, EVENTS_SUSPICION, POUVOIRS, EDITS, MAISONS, CHAINES, CRISES,
+  CHANTIER, EVENTS_SUSPICION, POUVOIRS, EDITS, MAISONS, CHAINES, CRISES, PNJ_AUTONOMES,
   EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_LIGNEE, EPI_ONDE, EPI_LEGS,
 } = vm.runInContext(`({
   BESTIARY_FULL, PORTRAITS, LOCATIONS, EVENTS, CONTRACTS, ITEM_POOL,
@@ -51,7 +51,7 @@ const {
   UNIT_TYPES, BATTLES, TERRAINS, AFFINITES_DEPART, REGIONS, ROUTES, LOC_REGION,
   REPUTATION_DEPART, RANGS_REPUTATION, LOC_PEUPLE, REPUTATION_VOIX, SHOPS, BUTIN_PAR_PEUPLE,
   CONTRATS_LOCAUX, CONTRACT_COMPLICATIONS,
-  CHANTIER, EVENTS_SUSPICION, POUVOIRS, EDITS, MAISONS, CHAINES, CRISES,
+  CHANTIER, EVENTS_SUSPICION, POUVOIRS, EDITS, MAISONS, CHAINES, CRISES, PNJ_AUTONOMES,
   EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_LIGNEE, EPI_ONDE, EPI_LEGS
 })`, ctx);
 
@@ -686,6 +686,55 @@ for(const m of sourceCrises.matchAll(/criseEtape\('([A-Z_]+)'\)/g)){
   if(!criseIds.has(m[1])) err(`CRISES : pression lue sur la crise « ${m[1]} », qui n'existe pas`);
 }
 
+/* ---- Les neuf acteurs autonomes ----
+ * Une personne, pas une statistique : un âge, un lieu, une maison, des traits,
+ * des ambitions, ce qu'elle retiendra de Yohan et ce qu'elle est capable de
+ * faire toute seule. Un marqueur qu'elle guette et que rien ne pose est un
+ * souvenir qu'elle n'aura jamais. */
+/* Les marqueurs qu'ils posent en agissant — à collecter avant de vérifier ce
+ * qu'ils guettent, puisqu'ils se souviennent aussi des actes les uns des autres. */
+const sourcePnj = fs.readFileSync(path.join(racine, 'src/data/pnj_autonomes.js'), 'utf8');
+for(const m of sourcePnj.matchAll(/flags:\[([^\]]*)\]/g))
+  for(const f of m[1].matchAll(/'([a-z0-9_]+)'/g)) marqueursPoses.add(f[1]);
+for(const m of sourcePnj.matchAll(/\bflag:\s*'([a-z0-9_]+)'/g)) marqueursPoses.add(m[1]);
+
+const pnjIds = new Set();
+PNJ_AUTONOMES.forEach(p => {
+  const ou = `PNJ ${p.id}`;
+  if(pnjIds.has(p.id)) err(`${ou} : identifiant en double`);
+  pnjIds.add(p.id);
+  if(!p.nom || !p.maison || !p.lieu) err(`${ou} : nom, maison ou localisation manquants`);
+  if(typeof p.age !== 'number' || p.age <= 0) err(`${ou} : âge absent`);
+  if(!peuplesConnus.has(p.peuple)) err(`${ou} : peuple « ${p.peuple} » inconnu de la réputation`);
+  if(!portrIds.has(p.portrait)) err(`${ou} : aucun portrait « ${p.portrait} »`);
+  if((p.traits || []).length < 2)    err(`${ou} : moins de deux traits`);
+  if((p.ambitions || []).length < 1) err(`${ou} : aucune ambition`);
+  if(typeof p.objectif !== 'function') err(`${ou} : pas d'objectif() qui suive le monde`);
+  if(typeof p.opinion !== 'function')  err(`${ou} : pas d'opinion()`);
+  if((p.retient || []).length < 3)     err(`${ou} : moins de trois souvenirs possibles`);
+  (p.retient || []).forEach(r => {
+    if(!marqueursPoses.has(r.flag))
+      err(`${ou} : retient le marqueur « ${r.flag} », que rien ne pose — ce souvenir n'arrivera jamais`);
+    if(!r.texte || r.texte.length < 20) err(`${ou}/${r.flag} : souvenir sans texte lisible`);
+    if(typeof r.opinion !== 'number')   err(`${ou}/${r.flag} : souvenir sans effet sur l'opinion`);
+  });
+  if((p.actions || []).length < 3) err(`${ou} : moins de trois actes possibles`);
+  const actIds = new Set();
+  (p.actions || []).forEach(a => {
+    const oa = `${ou}/${a.id}`;
+    if(actIds.has(a.id)) err(`${oa} : acte en double`);
+    actIds.add(a.id);
+    if(typeof a.poids !== 'function') err(`${oa} : pas de poids() — il agirait n'importe quand`);
+    if(typeof a.fait  !== 'function') err(`${oa} : pas de fait()`);
+  });
+});
+for(const m of sourcePnj.matchAll(/criseEtape\('([A-Z_]+)'\)/g))
+  if(!criseIds.has(m[1])) err(`PNJ : décision prise sur la crise « ${m[1]} », qui n'existe pas`);
+for(const m of sourcePnj.matchAll(/crise:\s*\{\s*id:'([A-Z_]+)'/g))
+  if(!criseIds.has(m[1])) err(`PNJ : acte qui pousse la crise « ${m[1]} », qui n'existe pas`);
+for(const m of sourcePnj.matchAll(/pnjOpinion\('([a-z]+)'\)/g))
+  if(!pnjIds.has(m[1])) err(`PNJ : opinion lue sur « ${m[1]} », qui n'est pas des neuf`);
+
 /* ---- Les maisons nobles et le Prix ---- */
 let nbNobles = 0, maisonsVides = 0;
 Object.entries(MAISONS).forEach(([nom, m]) => {
@@ -828,6 +877,7 @@ POUVOIRS.forEach(p => {
     warn(`POUVOIRS ${p.id} : cette puissance ne décide jamais rien`);
 });
 console.log(`Politique   ${POUVOIRS.length} puissances · ${EDITS.length} édits`);
+console.log(`Personnages ${PNJ_AUTONOMES.length} acteurs autonomes · ${PNJ_AUTONOMES.reduce((s,p)=>s+p.actions.length,0)} actes · ${PNJ_AUTONOMES.reduce((s,p)=>s+p.retient.length,0)} souvenirs possibles`);
 console.log(`Crises      ${CRISES.length} régionales · ${CRISES.reduce((s,c)=>s+c.paliers.length,0)} étapes nommées`);
 console.log('');
 

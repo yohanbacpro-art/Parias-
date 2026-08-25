@@ -160,7 +160,7 @@ Audit au 24 août. Ce qui est là, ce qui manque, sans complaisance.
 | Suspicion qui change le monde | **fait** | `suspicion.js`, 4 paliers, 12 événements dédiés |
 | Romances à axes séparés | **partiel** | `romances.js` — arcs écrits, un seul axe d'affinité |
 | Mémoire narrative longue | **fait** | `chaines_secretes.js` — 10 chaînes armées sur marqueur, en arrière-plan |
-| PNJ majeurs qui agissent seuls | **manquant** | `politique.js` simule 6 puissances, pas 9 personnes |
+| PNJ majeurs qui agissent seuls | **fait** | `pnj.js` — 9 acteurs, objectifs, mémoire nominative, 32 actes |
 | Crises régionales en étapes | **fait** | `crises.js` — 5 crises, 25 étapes nommées, poussées par l'état du monde |
 | Fin lisant l'état réel du monde | **fait** | `epilogue.js`, 116 verdicts, 8 legs |
 | Interface dark fantasy non-tableur | **fait** | un seul écran de jeu, le lieu |
@@ -175,7 +175,8 @@ Inventaire : 20 lieux · 4 régions · 24 routes · 75 créatures · 12 champion
 29 troupes · 12 champs de bataille · 130 événements écrits illustrés · **30
 affaires en chaînes (101 étapes, 564 scènes, 313 choix, 142 issues)** · **10
 chaînes secrètes armées sur marqueur (30 étapes, 184 scènes, 110 choix, 32
-issues)** · **5 crises régionales en 25 étapes nommées** · 60 affaires locales + 20 dénouements · 50 contrats au registre · 25 maisons nobles ·
+issues)** · **5 crises régionales en 25 étapes nommées** · **9 acteurs autonomes
+(32 actes, 45 souvenirs possibles)** · 60 affaires locales + 20 dénouements · 50 contrats au registre · 25 maisons nobles ·
 8 ouvrages de Karlsberg · 116 verdicts d'épilogue.
 
 ---
@@ -198,8 +199,12 @@ Dans cet ordre. À chaque étape, le jeu reste jouable et les épreuves passent.
    dans l'état réel de la partie (`pression()` rend des **raisons**, pas un
    coefficient) ; `hero.tensions` en est désormais dérivé, ce qui laisse
    intacts les édits, les `tensionMin` et les verdicts d'épilogue.
-4. Les neuf PNJ majeurs comme acteurs autonomes, avec objectifs et mémoire
-   (`design/narratif/02_EVENEMENTS/PERSONNAGES/autonomous_npcs.json`).
+4. ~~Les neuf PNJ majeurs comme acteurs autonomes.~~ **Fait** :
+   `src/data/pnj_autonomes.js` et `src/pnj.js`. Chacun a un âge, un lieu, une
+   maison, des traits, des ambitions, un `objectif()` qui suit l'état du monde,
+   un `retient[]` — sa mémoire, nominative et datée, de ce que Yohan a fait —
+   et des actes qu'il pose de lui-même. `poids()` décide, pas un dé : chaque
+   saison, au plus deux d'entre eux agissent, et ce sont les plus décidés.
 5. Les romances à axes séparés (`design/narratif/05_GRANDE_HISTOIRE/ROMANCES`).
 6. Karlsberg payé autrement qu'en or : pierre, bras, routes, faveurs.
 7. La succession jouable — on continue avec l'héritier.
@@ -208,7 +213,7 @@ Dans cet ordre. À chaque étape, le jeu reste jouable et les épreuves passent.
 
 ## 4. Règles de travail
 
-- **Rien ne casse.** `node tools/validate.js` puis les onze épreuves de
+- **Rien ne casse.** `node tools/validate.js` puis les douze épreuves de
   navigateur avant tout commit (voir README, *Vérifier une modification*).
 - **Pas de bundler.** Scripts classiques en portée globale ; l'ordre de
   chargement dans `index.html` est le contrat de dépendances.

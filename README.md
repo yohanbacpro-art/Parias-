@@ -7,16 +7,15 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V1.9** — **les cinq crises régionales**. Le monde n'avance
-plus par huit compteurs qui montent au hasard : cinq crises franchissent cinq
-étapes nommées chacune, et ce qui les pousse se lit dans l'état réel de la
-partie — les marqueurs posés par vos affaires, l'influence des puissances, votre
-réputation, et l'état des autres crises.
+**Version actuelle : V2.0** — **les neuf qui agissent sans vous**. Charles,
+Lucius, Alycia, Caleb, Alarielle, Tyrion, Eltharion, Anarion et Khal-Vaene ont
+chacun un âge, une maison, des traits, un objectif qui change avec le monde, et
+la mémoire nominative de ce que vous avez fait. Ils décident seuls, ils
+vieillissent, ils meurent.
 
-*V1.8 : les dix chaînes secrètes — elles ne se proposent pas et ne s'acceptent
-pas, elles s'arment en silence sur ce que vous avez fait et reviennent vous
-chercher des mois plus tard. V1.7 : les trente affaires du pack narratif écrites
-en chaînes.*
+*V1.9 : les cinq crises régionales, en cinq étapes nommées chacune. V1.8 : les
+dix chaînes secrètes, armées en silence sur ce que vous avez fait. V1.7 : les
+trente affaires du pack narratif écrites en chaînes.*
 
 > **`CLAUDE.md` fait autorité.** Il porte le prompt maître du projet, l'audit du
 > code au regard de ce prompt, et la feuille de route. Ce README-ci documente ce
@@ -70,6 +69,7 @@ lien. Il se régénère avec `node tools/build-standalone.js`.
 | **Affaires en chaînes** : 30 affaires en 101 étapes, jouées sur plusieurs tours | ✅ |
 | **Chaînes secrètes** : 10 chaînes armées sur marqueur, en arrière-plan, jamais proposées | ✅ |
 | **Crises régionales** : 5 crises en 5 étapes nommées, poussées par l'état du monde | ✅ |
+| **Neuf acteurs autonomes** : objectifs qui suivent le monde, mémoire nominative, 32 actes | ✅ |
 | **Maisons nobles** : 25 maisons, 26 nobles adultes nommées, avec droit de refus | ✅ |
 | **Bestiaire** : 75 créatures, dont 24 adversaires humains par peuple | ✅ |
 | **Rencontres composées** : meneur, élite, soutien et piétaille selon l'affaire et le lieu | ✅ |
@@ -393,6 +393,48 @@ qu'on a fait quelque chose** — et personne ne vous prévient.
 
 Ce dernier n'est pas un contrat : c'est la réponse à la question que le jeu pose
 depuis la première ligne. Karlsberg n'est pas tombée sous des monstres.
+
+## Les neuf qui agissent sans vous
+
+> *« Chaque PNJ majeur a un âge, une culture, une maison, une localisation, des
+> traits, des relations, des objectifs, une opinion de Yohan et des autres, un
+> statut, un conjoint éventuel, des enfants, des ennemis, des alliés, et la
+> mémoire des événements importants. »*
+
+Neuf personnes, pas neuf statistiques.
+
+| Qui | Ce qu'il poursuit | Ce qu'il fait tout seul |
+|---|---|---|
+| **Charles de Mont-Draken** | protéger les humains, quoi qu'il en coûte | vide sa marche pour barrer la route aux hardes ; convoque les maisons ; ouvre les registres de l'année de la Purge |
+| **Lucius Furius Augustus** | refonder Astrah par les armes | paie les dettes d'une maison sans rien demander ; se marie pour trois cents lances ; rouvre les primes sur les Parias |
+| **Alycia de Callensbourg** | protéger les derniers Parias, rester libre | vide trois refuges quatre jours avant les chasseurs ; laisse un chasseur vivant avec son carnet ouvert ; s'en va sans un mot |
+| **Caleb de Fort-aux-Princes** | que sa maison survive | se désolidarise de vous par trois canaux ; ferme sa ville ; ou envoie quarante hommes sans bannière |
+| **Alarielle** | réparer la faute elfique, éviter une seconde catastrophe | passe seule d'une cour à l'autre sans mandat ; dit tout haut ce que les Elfes ont fait ; part en laissant son nom de maison sur la table |
+| **Tyrion** | qu'aucun déséquilibre ne recommence | met onze lames sur les routes ; brûle deux avant-postes avant que sa cour le sache ; envoie un carreau sans lettre |
+| **Eltharion** | que son peuple existe dans mille ans | temporise en vers ; fait graver quarante et un noms Parias sur la stèle ; finit par demander des hommes à des humains |
+| **Anarion** | vaincre Eltharion, tenir parole à la lettre | propose un contrat en trois exemplaires ; rachète vos dettes et attend ; déclare la guerre en vers |
+| **Khal-Vaene** | douze feux | achète deux bannières et en perd une ; laisse un cheval à votre barrière ; meurt de vieillesse et d'une épaule |
+
+**Ils décident, ils ne tirent pas au sort.** Chacun a des actes possibles ; le
+poids d'un acte est nul tant que ce n'est pas le moment, et sinon il vaut ce
+qu'il compte pour cette personne-là. Chaque saison, au plus deux d'entre eux
+agissent — les plus décidés. Deux parties dans le même état produisent
+exactement les mêmes décisions.
+
+**Ils se souviennent, nommément.** Chacun déclare les marqueurs qui le marquent,
+en quels termes, et ce que ça lui fait :
+
+> *Été, An 7* — « Vous lui avez coûté une saison et deux cents hommes. »
+> *Automne, An 9* — « Vous avez vendu la liste des Parias vivants. Elle sait à qui. »
+
+L'écran des Chroniques les montre pour ce qu'ils sont : un visage, un âge, un
+lieu, ce qu'ils poursuivent en ce moment, et les trois derniers souvenirs qu'ils
+gardent de vous. Leur humeur est un mot — *dévoué, acquis, méfiant, hostile,
+ennemi* — jamais un nombre.
+
+**Ce qu'ils font compte.** Une médiation d'Alarielle freine la crise elfique de
+quarante-cinq points de pression. Un édit de Lucius rouvre les primes et fait
+monter la Suspicion. Une mort ne se répare pas.
 
 ## Les crises régionales
 
@@ -859,6 +901,7 @@ tools/smoke-consolidation.js  éprouve l'écran unique, les offres, les voyages,
                               la Suspicion, le chantier et la politique
 tools/smoke-chaines.js     éprouve les affaires en chaînes, les termes et les issues
 tools/smoke-crises.js      éprouve les cinq crises, leurs étapes et leurs raisons
+tools/smoke-pnj.js         éprouve les neuf acteurs : décisions, mémoire, morts
 tools/build-artifact.js    fabrique dist/parias-artifact.html (page publiable)
 tools/smoke-tranche.js     l'épreuve d'acceptation du document fondateur :
                            partie → carte → voyage → lieu → récit → combat →
@@ -887,6 +930,7 @@ node tools/smoke-tour.js                     # tour, âge, descendance, carte, r
 node tools/smoke-consolidation.js            # écran unique, offres, voyages, Suspicion, chantier, politique
 node tools/smoke-chaines.js                  # affaires en chaînes, termes du Prix, issues durables
 node tools/smoke-crises.js                   # crises régionales : étapes, raisons, tensions dérivées
+node tools/smoke-pnj.js                      # les neuf : objectifs, mémoire, décisions, vieillesse
 node tools/smoke-tranche.js                  # la tranche verticale, de bout en bout
 
 node tools/manifest-assets.js                # régénère la liste des illustrations

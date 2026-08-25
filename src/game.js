@@ -284,6 +284,7 @@ document.getElementById('importFileInput').onchange = (e) => {
 
 function enterGame(){
   if(typeof syncTensions === 'function') syncTensions();
+  if(typeof heroPnj === 'function') heroPnj();
   document.getElementById('tabs').style.display='flex';
   const cal = document.getElementById('calendarBar');
   cal.style.display='flex';
@@ -360,12 +361,14 @@ function advanceTime(semaines){
   hero.temps.semaines += semaines;
   const after = dateFromSemaines(hero.temps.semaines);
   let nouvelle = null;
-  let crises = [];
+  let crises = [], pnj = [];
   if(after.saisonIdx !== before.saisonIdx || after.an !== before.an){
     const region = LOCATIONS[Math.floor(Math.random()*LOCATIONS.length)].nom;
     nouvelle = NEWS_POOL[Math.floor(Math.random()*NEWS_POOL.length)](region);
     hero.chroniques.push({ date: `${after.saison}, An ${after.an}`, texte: nouvelle });
     crises = (typeof criseTick === 'function') ? criseTick(after) : [];
+    // Neuf personnes regardent le monde qui vient de bouger, et agissent.
+    pnj = (typeof pnjTick === 'function') ? pnjTick(after) : [];
   }
   // Le temps ne fait pas que tourner un compteur : on vieillit, et il naît des gens.
   const lignee = passerLeTemps(semaines);
@@ -376,11 +379,12 @@ function advanceTime(semaines){
   // sixième se relève dans le dos de tout le monde.
   const politique = (typeof politiqueTick === 'function') ? politiqueTick(semaines) : [];
   renderCalendar();
-  return { nouvelle, lignee, politique, crises };
+  return { nouvelle, lignee, politique, crises, pnj };
 }
 
 function renderChroniques(){
   if(typeof renderCrises === 'function') renderCrises();
+  if(typeof renderPnj === 'function') renderPnj();
   renderReputations();
   if(typeof renderPolitique === 'function') renderPolitique();
   const list = document.getElementById('newsList');

@@ -620,6 +620,32 @@
   .pol-edits li.pol-rien{border-left-color:var(--line);color:var(--parchment-dim);font-style:italic;}
   .pli-politique{color:var(--gold);}
   .pli-crise{color:var(--blood-bright);}
+  /* Les neuf qui agissent sans vous */
+  .pnja-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;}
+  .pnja{background:#0f0c0a;border:1px solid var(--line);border-left:2px solid var(--line);border-radius:5px;padding:11px 13px;}
+  .pnja-favorable,.pnja-acquis{border-left-color:var(--onde);}
+  .pnja-devoue{border-left-color:var(--onde-bright);}
+  .pnja-mefiant{border-left-color:var(--warn);}
+  .pnja-hostile,.pnja-ennemi{border-left-color:var(--blood-bright);}
+  .pnja-mort{opacity:.45;}
+  .pnja-tete{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .pnja-face{width:40px;height:40px;border-radius:4px;border:1px solid var(--line);object-fit:cover;flex:0 0 auto;}
+  .pnja-ident{flex:1;min-width:0;}
+  .pnja-nom{display:block;font-family:'Cinzel',serif;font-size:13px;color:var(--parchment);}
+  .pnja-sous{display:block;font-family:'Inter',sans-serif;font-size:10px;color:var(--parchment-dim);}
+  .pnja-humeur{font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--parchment-dim);flex:0 0 auto;}
+  .pnja-devoue .pnja-humeur,.pnja-acquis .pnja-humeur{color:var(--onde-bright);}
+  .pnja-hostile .pnja-humeur,.pnja-ennemi .pnja-humeur{color:var(--blood-bright);}
+  .pnja-mefiant .pnja-humeur{color:var(--warn);}
+  .pnja-objectif{font-size:12px;line-height:1.5;color:var(--parchment);margin-bottom:6px;}
+  .pnja-objectif b{font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-dim);}
+  .pnja-traits{font-family:'Inter',sans-serif;font-size:10.5px;font-style:italic;color:var(--parchment-dim);margin-bottom:8px;}
+  .pnja-memoire-titre{font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-dim);border-top:1px solid var(--line);padding-top:7px;margin-bottom:4px;}
+  .pnja-memoire{list-style:none;margin:0;padding:0;}
+  .pnja-memoire li{font-size:11.5px;line-height:1.5;color:var(--parchment);margin-bottom:3px;}
+  .pnja-quand{display:block;font-family:'Inter',sans-serif;font-size:9.5px;color:var(--parchment-dim);}
+  .pnja-memoire-vide{font-size:11.5px;font-style:italic;color:var(--parchment-dim);border-top:1px solid var(--line);padding-top:7px;}
+  .pli-pnj{color:var(--parchment);}
 
   .quete-bandeau{display:flex;justify-content:space-between;align-items:center;gap:14px;
     flex-wrap:wrap;padding:7px 11px;margin-bottom:8px;cursor:pointer;
@@ -1119,6 +1145,12 @@
       <div class="rep-grid" id="reputationGrid"></div>
     </div>
     <div class="panel">
+      <h2>Neuf personnes, et ce qu'elles font sans vous</h2>
+      <p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;">Chacune poursuit son propre but, agit de sa propre initiative, et se souvient nommément de ce que vous avez fait.</p>
+      <div class="pnja-grid" id="pnjGrid"></div>
+    </div>
+
+    <div class="panel">
       <h2>La politique de Vardhen</h2>
       <p id="politiqueTete" class="pol-tete"></p>
       <div class="pouv-grid" id="politiqueGrid"></div>
@@ -1209,6 +1241,7 @@
 <script src="src/data/events_suspicion.js"></script>
 <script src="src/data/politique.js"></script>
 <script src="src/data/crises.js"></script>
+<script src="src/data/pnj_autonomes.js"></script>
 <script src="src/data/romances.js"></script>
 <script src="src/data/reputation.js"></script>
 <script src="src/data/epilogue.js"></script>
@@ -1225,6 +1258,7 @@
 <script src="src/suspicion.js"></script>
 <script src="src/politique.js"></script>
 <script src="src/crises.js"></script>
+<script src="src/pnj.js"></script>
 <script src="src/offres.js"></script>
 <script src="src/lieu.js"></script>
 <script src="src/chantier.js"></script>
