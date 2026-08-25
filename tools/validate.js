@@ -24,6 +24,7 @@ const fichiers = [
   'src/data/chantier.js', 'src/data/events_suspicion.js', 'src/data/politique.js',
   'src/data/maisons.js', 'src/data/chaines.js', 'src/data/chaines_secretes.js',
   'src/data/crises.js', 'src/data/pnj_autonomes.js', 'src/data/ressources.js',
+  'src/data/succession.js',
 ];
 
 const ctx = vm.createContext({ console });
@@ -43,6 +44,7 @@ const {
   CONTRATS_LOCAUX, CONTRACT_COMPLICATIONS,
   CHANTIER, EVENTS_SUSPICION, POUVOIRS, EDITS, MAISONS, CHAINES, CRISES, PNJ_AUTONOMES,
   RESSOURCES, SOURCES, CONDITIONS_CHANTIER, KARLSBERG_PALIERS,
+  SUCCESSION_PROFILS, SUCCESSION_ETATS, SUCCESSION_FINS,
   EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_LIGNEE, EPI_ONDE, EPI_LEGS,
 } = vm.runInContext(`({
   BESTIARY_FULL, PORTRAITS, LOCATIONS, EVENTS, CONTRACTS, ITEM_POOL,
@@ -54,6 +56,7 @@ const {
   CONTRATS_LOCAUX, CONTRACT_COMPLICATIONS,
   CHANTIER, EVENTS_SUSPICION, POUVOIRS, EDITS, MAISONS, CHAINES, CRISES, PNJ_AUTONOMES,
   RESSOURCES, SOURCES, CONDITIONS_CHANTIER, KARLSBERG_PALIERS,
+  SUCCESSION_PROFILS, SUCCESSION_ETATS, SUCCESSION_FINS,
   EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_LIGNEE, EPI_ONDE, EPI_LEGS
 })`, ctx);
 
@@ -800,6 +803,25 @@ KARLSBERG_PALIERS.forEach(p => {
   (p.exige || []).forEach(id => {
     if(!ouvragesConnus.has(id)) err(`PALIER ${p.id} : exige l'ouvrage « ${id} », qui n'existe pas`);
   });
+});
+
+/* ---- La succession ----
+ * Chaque état de Karlsberg doit avoir sa phrase d'héritage, sinon l'héritier
+ * arrive dans une maison que le jeu ne sait pas décrire. */
+Object.entries(SUCCESSION_PROFILS).forEach(([id, p]) => {
+  if(!p.nom || !p.dit) err(`SUCCESSION ${id} : sans nom ni phrase`);
+  if(p.dit && p.dit.length < 40) warn(`SUCCESSION ${id} : phrase très courte`);
+  (p.flags || []).forEach(f => marqueursPoses.add(f));
+  if(typeof p.suspicionGardee !== 'number' || p.suspicionGardee < 0 || p.suspicionGardee > 1)
+    err(`SUCCESSION ${id} : part de Suspicion conservée hors bornes`);
+});
+KARLSBERG_PALIERS.forEach(p => {
+  if(!SUCCESSION_ETATS[p.id])
+    err(`SUCCESSION : aucune phrase d'héritage pour l'état « ${p.id} »`);
+});
+SUCCESSION_FINS.forEach(f => {
+  if(!f.titre || !f.texte) err(`SUCCESSION fin ${f.id} : sans titre ni texte`);
+  if(typeof f.si !== 'function') err(`SUCCESSION fin ${f.id} : sans condition`);
 });
 
 /* ---- Les maisons nobles et le Prix ---- */

@@ -153,6 +153,7 @@ Audit au 24 août. Ce qui est là, ce qui manque, sans complaisance.
 | Bataille existante intégrée, non réécrite | **fait** | `battle.js` (3 fronts, ordres, moral) |
 | Sauvegarde unique et versionnée | **fait** | `save.js`, v8, migrations chaînées |
 | Le temps passe, on vieillit, on a des enfants | **fait** | `lignee.js` |
+| La succession jouable | **fait** | `succession.js` — on continue avec l'héritier, le monde reste |
 | Contrats en aventures, pas en boutons | **fait** | `chaines.js` — 30 affaires sur 30 |
 | Termes fixés avant toute action | **fait** | `prix.js` + `chaines.js` |
 | Noble adulte réelle et consentante | **fait** | `data/maisons.js`, 19 femmes, droit de refus |
@@ -219,13 +220,23 @@ Dans cet ordre. À chaque étape, le jeu reste jouable et les épreuves passent.
    stocks : une route sûre, une garnison, quelqu'un qui sache bâtir, assez
    d'habitants. Onze ouvrages, six états nommés : ruines → refuge → fort →
    château → domaine → puissance régionale.
-7. La succession jouable — on continue avec l'héritier.
+7. ~~La succession jouable.~~ **Fait** : `src/succession.js`. Yohan meurt de
+   vieillesse — probable à partir de soixante-six ans, certain à
+   quatre-vingt-quatre — ou transmet de son vivant. On continue avec l'héritier
+   majeur, dans le même monde : les crises en sont où elles en sont, les neuf se
+   souviennent encore de ce que le père a fait, Karlsberg est bâtie comme il l'a
+   bâtie, les carrières qu'il a rouvertes travaillent toujours. Ce qui ne se
+   transmet pas : le niveau, les pouvoirs, ceux qui l'aimaient, et la moitié de
+   ce que le monde soupçonnait. Sans héritier majeur, c'est l'épilogue.
+
+**Les sept étapes de la feuille de route sont faites.** Ce qui suit relève de
+l'écriture et de l'équilibrage, plus de l'architecture.
 
 ---
 
 ## 4. Règles de travail
 
-- **Rien ne casse.** `node tools/validate.js` puis les quatorze épreuves de
+- **Rien ne casse.** `node tools/validate.js` puis les quinze épreuves de
   navigateur avant tout commit (voir README, *Vérifier une modification*).
 - **Pas de bundler.** Scripts classiques en portée globale ; l'ordre de
   chargement dans `index.html` est le contrat de dépendances.

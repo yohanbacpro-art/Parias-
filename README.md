@@ -7,13 +7,14 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V2.2** — **Karlsberg ne se paie plus en or**. Il faut de la
-pierre, des bras, du grain et des dettes qu'on vous doit — et rien de tout cela
-ne s'achète : chaque ressource vient d'une décision prise ailleurs, des mois
-plus tôt. Onze ouvrages, six états : ruines → refuge → fort → château → domaine
-→ puissance régionale.
+**Version actuelle : V2.3** — **la succession se joue**. Yohan meurt de
+vieillesse ou transmet de son vivant ; la partie continue avec son héritier,
+dans le même monde, où neuf personnes se souviennent encore de ce que son père
+leur a fait.
 
-*V2.1 : les liens sur quatre axes séparés — relation, confiance, attirance et
+*V2.2 : Karlsberg ne se paie plus en or — il faut de la pierre, des bras, du
+grain et des dettes qu'on vous doit, et rien de tout cela ne s'achète.
+V2.1 : les liens sur quatre axes séparés — relation, confiance, attirance et
 compatibilité politique ne montent pas ensemble. V2.0 : les neuf acteurs
 autonomes, qui décident seuls, se souviennent nommément de vous, vieillissent et
 meurent. V1.9 : les cinq crises régionales en cinq étapes nommées. V1.8 : les
@@ -74,6 +75,7 @@ lien. Il se régénère avec `node tools/build-standalone.js`.
 | **Crises régionales** : 5 crises en 5 étapes nommées, poussées par l'état du monde | ✅ |
 | **Neuf acteurs autonomes** : objectifs qui suivent le monde, mémoire nominative, 32 actes | ✅ |
 | **Liens à quatre axes** : relation, confiance, attirance, politique — séparés | ✅ |
+| **Succession jouable** : on continue avec l'héritier, dans le monde que son père a fait | ✅ |
 | **Maisons nobles** : 25 maisons, 26 nobles adultes nommées, avec droit de refus | ✅ |
 | **Bestiaire** : 75 créatures, dont 24 adversaires humains par peuple | ✅ |
 | **Rencontres composées** : meneur, élite, soutien et piétaille selon l'affaire et le lieu | ✅ |
@@ -397,6 +399,37 @@ qu'on a fait quelque chose** — et personne ne vous prévient.
 
 Ce dernier n'est pas un contrat : c'est la réponse à la question que le jeu pose
 depuis la première ligne. Karlsberg n'est pas tombée sous des monstres.
+
+## La succession
+
+> *« Le temps est une mécanique réelle. Les personnages vieillissent, les
+> enfants deviennent adultes, les maisons évoluent, on meurt, on hérite. Les
+> descendants Karlsberg comptent sur une longue campagne. »*
+
+À soixante-six ans, chaque saison porte un risque. À quatre-vingt-quatre, c'est
+certain. On peut aussi transmettre de son vivant — poser l'anneau sur la table,
+signer quatre feuillets, et aller s'asseoir dehors — dès qu'un enfant est majeur
+et que Karlsberg est autre chose qu'un tas de pierres.
+
+**Ce qui passe avec le nom :** tout le monde. Les crises en sont où elles en
+sont. Les neuf se souviennent nommément de ce que le père a fait, et ils s'en
+souviendront devant son enfant. Karlsberg est bâtie comme il l'a bâtie, les
+carrières qu'il a rouvertes travaillent toujours, les dettes qu'on lui devait
+sont dues à son héritier, l'armée reste sous les bannières.
+
+**Ce qui ne passe pas :** le niveau, les pouvoirs, ce qu'il avait dans les
+mains, ceux qui l'aimaient, et la moitié de ce que le monde soupçonnait. Un
+héritier n'est pas son père : il recommence au niveau trois, dans une maison
+haute, avec un nom que trop de gens connaissent déjà.
+
+**Le sang passe devant l'aînesse.** L'enfant qui porte l'Onde hérite le premier
+— *« Le bourdonnement lui est venu à onze ans, pendant une fièvre. On ne le lui
+a jamais expliqué, et il a compris tout seul. »* Celui qui ne porte rien garde
+plus de discrétion et moins de sang : *« il porte le nom sans porter la
+chose. »*
+
+Sans héritier majeur, il n'y a pas d'écran de mort : c'est l'épilogue, avec ses
+116 verdicts qui lisent l'état réel du monde.
 
 ## Relever Karlsberg
 
@@ -996,6 +1029,7 @@ tools/smoke-crises.js      éprouve les cinq crises, leurs étapes et leurs rais
 tools/smoke-pnj.js         éprouve les neuf acteurs : décisions, mémoire, morts
 tools/smoke-liens.js       éprouve les quatre axes, les refus motivés, les promesses
 tools/smoke-karlsberg.js   éprouve le chantier : ressources, conditions, six états
+tools/smoke-succession.js  éprouve la succession : héritiers, monde conservé, mort
 tools/build-artifact.js    fabrique dist/parias-artifact.html (page publiable)
 tools/smoke-tranche.js     l'épreuve d'acceptation du document fondateur :
                            partie → carte → voyage → lieu → récit → combat →
@@ -1027,6 +1061,7 @@ node tools/smoke-crises.js                   # crises régionales : étapes, rai
 node tools/smoke-pnj.js                      # les neuf : objectifs, mémoire, décisions, vieillesse
 node tools/smoke-liens.js                    # les quatre axes, les refus motivés, les promesses
 node tools/smoke-karlsberg.js                # chantier : pierre, bras, grain, faveurs, six états
+node tools/smoke-succession.js               # héritiers, monde conservé, transmission, mort
 node tools/smoke-tranche.js                  # la tranche verticale, de bout en bout
 
 node tools/manifest-assets.js                # régénère la liste des illustrations

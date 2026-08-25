@@ -646,6 +646,21 @@
   .pnja-quand{display:block;font-family:'Inter',sans-serif;font-size:9.5px;color:var(--parchment-dim);}
   .pnja-memoire-vide{font-size:11.5px;font-style:italic;color:var(--parchment-dim);border-top:1px solid var(--line);padding-top:7px;}
   .pli-pnj{color:var(--parchment);}
+  /* La succession */
+  .succ-titre{font-family:'Cinzel',serif;font-size:26px;color:var(--gold);margin:8px 0 14px;}
+  .succ-texte{font-size:14px;line-height:1.7;color:var(--parchment);margin:0 0 12px;max-width:66ch;}
+  .succ-garde{background:#0f0c0a;border:1px solid var(--line);border-radius:5px;padding:12px 14px;margin:16px 0;}
+  .succ-garde b{display:block;font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-dim);margin:6px 0 4px;}
+  .succ-garde ul{list-style:none;margin:0 0 8px;padding:0;}
+  .succ-garde li{font-size:12.5px;line-height:1.55;color:var(--parchment-dim);padding-left:12px;position:relative;}
+  .succ-garde li::before{content:'·';position:absolute;left:2px;color:var(--gold);}
+  .succ-h{font-family:'Cinzel',serif;font-size:15px;color:var(--parchment);margin:20px 0 10px;}
+  .succ-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;}
+  .succ-carte{background:#0f0c0a;border:1px solid var(--line);border-left:2px solid var(--gold);border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;}
+  .succ-nom{font-family:'Cinzel',serif;font-size:15px;color:var(--parchment);}
+  .succ-meta{font-family:'Inter',sans-serif;font-size:10.5px;color:var(--parchment-dim);}
+  .succ-dit{font-size:12.5px;line-height:1.55;color:var(--parchment);margin:0;flex:1;}
+  .succ-btn{margin-top:6px;}
   /* Karlsberg : ce qu'on a, et d'où ça vient */
   .kb-etat{border-left:2px solid var(--gold);padding-left:12px;margin-bottom:14px;}
   .kb-palier{font-family:'Cinzel',serif;font-size:17px;color:var(--gold);letter-spacing:.04em;}
@@ -1004,6 +1019,11 @@
     <div class="panel epi-panel"><div id="epilogueCorps"></div></div>
   </div>
 
+  <!-- SUCCESSION -->
+  <div class="screen" id="screen-succession">
+    <div class="panel epi-panel"><div id="successionCorps"></div></div>
+  </div>
+
   <!-- QUÊTE PRINCIPALE -->
   <div class="screen" id="screen-quete">
     <div class="panel">
@@ -1296,6 +1316,7 @@
 <script src="src/data/crises.js"></script>
 <script src="src/data/pnj_autonomes.js"></script>
 <script src="src/data/ressources.js"></script>
+<script src="src/data/succession.js"></script>
 <script src="src/data/romances.js"></script>
 <script src="src/data/reputation.js"></script>
 <script src="src/data/epilogue.js"></script>
@@ -1315,6 +1336,7 @@
 <script src="src/pnj.js"></script>
 <script src="src/liens.js"></script>
 <script src="src/ressources.js"></script>
+<script src="src/succession.js"></script>
 <script src="src/offres.js"></script>
 <script src="src/lieu.js"></script>
 <script src="src/chantier.js"></script>

@@ -128,5 +128,15 @@ function renderLieu(){
       () => { showScreen('personnage'); renderEquipement(); }, false);
     if(l.id === 'LOC_001') bouton("Le chantier de Karlsberg", "Ce qu'on relève, et ce que ça coûte",
       () => ouvrirChantier(), false);
+    /* Transmettre de son vivant. Ce n'est pas une reddition : c'est une
+       décision, et elle ne s'offre que quand il y a quelqu'un et quelque
+       chose à donner. */
+    if(l.id === 'LOC_001' && typeof peutTransmettre === 'function'){
+      const t = peutTransmettre();
+      bouton("Transmettre le nom", t.oui
+          ? "Poser l'anneau sur la table, et continuer avec l'héritier"
+          : t.non,
+        () => ouvrirSuccession('transmission'), !t.oui);
+    }
   }
 }

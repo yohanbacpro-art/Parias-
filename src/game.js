@@ -163,7 +163,7 @@ function showScreen(id){
   document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active', b.dataset.screen===id));
   const cal = document.getElementById('calendarBar');
   if(cal.dataset.gameStarted==='1'){
-    cal.style.display = (id==='combat' || id==='bataille' || id==='epilogue') ? 'none' : 'flex';
+    cal.style.display = (id==='combat' || id==='bataille' || id==='epilogue' || id==='succession') ? 'none' : 'flex';
   }
 }
 
@@ -352,7 +352,8 @@ function dateFromSemaines(s){
 
 function renderCalendar(){
   const d = dateFromSemaines(hero.temps.semaines);
-  document.getElementById('calendarText').innerHTML = `${d.saison}, An ${d.an} après la Purge <b>· semaine ${hero.temps.semaines % 13 + 1}/13</b>`;
+  const gen = (hero.generation || 1) > 1 ? ` · ${hero.nom}, ${hero.generation}<sup>e</sup> du nom` : '';
+  document.getElementById('calendarText').innerHTML = `${d.saison}, An ${d.an} après la Purge <b>· semaine ${hero.temps.semaines % 13 + 1}/13</b>${gen}`;
   renderSuspicionBadge();
   renderApPips();
   if(typeof renderBandeauQuete === 'function') renderBandeauQuete();
@@ -375,6 +376,8 @@ function advanceTime(semaines){
     if(typeof liensTick === 'function') liensTick();
     // Ce qui travaille pour Karlsberg travaille aussi quand Yohan est ailleurs.
     if(typeof ressourcesTick === 'function') ressourcesTick();
+    // Un homme de soixante-dix ans finit par ne pas se relever un matin.
+    if(typeof successionTick === 'function') successionTick();
   }
   // Le temps ne fait pas que tourner un compteur : on vieillit, et il naît des gens.
   const lignee = passerLeTemps(semaines);

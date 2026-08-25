@@ -19,7 +19,7 @@
  * reconstruits au chargement (voir CHAMPS_SET).
  */
 
-const SAVE_VERSION = 12;
+const SAVE_VERSION = 13;
 /* Le préfixe est un espace de noms de stockage, pas le numéro de version : il
  * reste figé pour que les parties commencées avant soient relues puis migrées. */
 const SAVE_PREFIX  = 'parias_save_v6_';
@@ -81,6 +81,8 @@ function reconstruireHero(brut){
   h.pnj               = h.pnj || {};
   h.liens             = h.liens || {};
   h.ressources        = h.ressources || { pierre:0, bras:0, grain:0, faveurs:0 };
+  h.generation        = h.generation || 1;
+  h.successionEnCours = false;
   h.lignee            = h.lignee || { liaisons: [], enfants: [] };
   if(typeof h.age !== 'number') h.age = AGE_DEPART;
   h.compagnons        = (h.compagnons || []).map(c => COMPANIONS_POOL[c.id] || c);
@@ -201,6 +203,11 @@ const MIGRATIONS = {
      * tenu un refuge ne reparte pas de zéro. */
     enr.hero.ressources = enr.hero.ressources || { pierre:0, bras:0, grain:0, faveurs:0 };
     enr.version = 12;
+    return enr;
+  },
+  12: enr => {          // v12 → v13 : la succession
+    enr.hero.generation = enr.hero.generation || 1;
+    enr.version = 13;
     return enr;
   },
 };

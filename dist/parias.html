@@ -646,6 +646,21 @@
   .pnja-quand{display:block;font-family:'Inter',sans-serif;font-size:9.5px;color:var(--parchment-dim);}
   .pnja-memoire-vide{font-size:11.5px;font-style:italic;color:var(--parchment-dim);border-top:1px solid var(--line);padding-top:7px;}
   .pli-pnj{color:var(--parchment);}
+  /* La succession */
+  .succ-titre{font-family:'Cinzel',serif;font-size:26px;color:var(--gold);margin:8px 0 14px;}
+  .succ-texte{font-size:14px;line-height:1.7;color:var(--parchment);margin:0 0 12px;max-width:66ch;}
+  .succ-garde{background:#0f0c0a;border:1px solid var(--line);border-radius:5px;padding:12px 14px;margin:16px 0;}
+  .succ-garde b{display:block;font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-dim);margin:6px 0 4px;}
+  .succ-garde ul{list-style:none;margin:0 0 8px;padding:0;}
+  .succ-garde li{font-size:12.5px;line-height:1.55;color:var(--parchment-dim);padding-left:12px;position:relative;}
+  .succ-garde li::before{content:'·';position:absolute;left:2px;color:var(--gold);}
+  .succ-h{font-family:'Cinzel',serif;font-size:15px;color:var(--parchment);margin:20px 0 10px;}
+  .succ-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;}
+  .succ-carte{background:#0f0c0a;border:1px solid var(--line);border-left:2px solid var(--gold);border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;}
+  .succ-nom{font-family:'Cinzel',serif;font-size:15px;color:var(--parchment);}
+  .succ-meta{font-family:'Inter',sans-serif;font-size:10.5px;color:var(--parchment-dim);}
+  .succ-dit{font-size:12.5px;line-height:1.55;color:var(--parchment);margin:0;flex:1;}
+  .succ-btn{margin-top:6px;}
   /* Karlsberg : ce qu'on a, et d'où ça vient */
   .kb-etat{border-left:2px solid var(--gold);padding-left:12px;margin-bottom:14px;}
   .kb-palier{font-family:'Cinzel',serif;font-size:17px;color:var(--gold);letter-spacing:.04em;}
@@ -1002,6 +1017,11 @@
   <!-- ÉPILOGUE -->
   <div class="screen" id="screen-epilogue">
     <div class="panel epi-panel"><div id="epilogueCorps"></div></div>
+  </div>
+
+  <!-- SUCCESSION -->
+  <div class="screen" id="screen-succession">
+    <div class="panel epi-panel"><div id="successionCorps"></div></div>
   </div>
 
   <!-- QUÊTE PRINCIPALE -->
@@ -19982,6 +20002,71 @@ const KARLSBERG_PALIERS = [
 
 </script>
 <script>
+/* src/data/succession.js */
+/* PARIAS — Ce qui se transmet, et à qui
+ *
+ * Le document fondateur : *« Le temps est une mécanique réelle. Les personnages
+ * vieillissent, les enfants deviennent adultes, les maisons évoluent, on meurt,
+ * on hérite […] Les descendants Karlsberg comptent sur une longue campagne. »*
+ *
+ * D'où la succession. Ce n'est pas une fin qu'on regarde : c'est la partie qui
+ * continue avec quelqu'un d'autre.
+ *
+ * Ce qui reste au monde : tout. Les crises en sont où elles en sont, les neuf
+ * se souviennent de ce que le père a fait, Karlsberg est bâtie comme il l'a
+ * bâtie, les dettes qu'on lui devait sont dues à son enfant.
+ *
+ * Ce qui ne se transmet pas : le niveau, les pouvoirs, ce que Yohan avait dans
+ * les mains, et ceux qui l'aimaient. Un héritier n'est pas son père.
+ */
+
+const SUCCESSION_AGE_MAJORITE = 16;
+
+/* La mort ne tombe pas d'un coup : elle devient probable, puis certaine. */
+const SUCCESSION_AGE_DECLIN  = 66;
+const SUCCESSION_AGE_CERTAIN = 84;
+
+/* Ce qu'un héritier reçoit, selon ce qu'il est. Le sang décide de peu de
+ * choses, mais il décide de la seule qui compte pour ce nom-là. */
+const SUCCESSION_PROFILS = {
+  paria: {
+    nom:"porte l'Onde",
+    dit:"Le bourdonnement lui est venu à onze ans, pendant une fièvre. On ne le lui a jamais expliqué, et il a compris tout seul.",
+    stats:{ vol:2, precision:1 },
+    sang:40, suspicionGardee:0.55,
+    flags:['heritier_paria','succession_onde'],
+  },
+  sans_onde: {
+    nom:"ne porte rien",
+    dit:"Rien ne s'est jamais réveillé en lui, et c'est peut-être la meilleure chose qui lui soit arrivée. Il porte le nom sans porter la chose.",
+    stats:{ precision:2, agi:1 },
+    sang:10, suspicionGardee:0.30,
+    flags:['succession_sans_onde'],
+  },
+};
+
+/* Ce que l'héritier trouve en arrivant, écrit selon l'état réel de la maison. */
+const SUCCESSION_ETATS = {
+  ruines:    "Il hérite d'un nom et d'un tas de pierres. C'est très exactement ce que son père avait reçu.",
+  refuge:    "Il hérite d'un toit, d'un feu, et de gens qui dorment là parce qu'on ne leur a pas demandé d'où ils venaient.",
+  fort:      "Il hérite de murs qui ferment, d'un puits qui donne, et d'une porte à laquelle il faut frapper.",
+  chateau:   "Il hérite d'un donjon qu'on voit à trois lieues et d'une garnison qui a déjà un avis sur lui.",
+  domaine:   "Il hérite d'un bourg, d'un marché, d'une querelle de bornes en cours, et d'enfants nés ici qui n'ont jamais vu les ruines.",
+  puissance: "Il hérite d'une vallée fermée, d'une province qui compte avec elle, et de trois maisons qui ont fait demander, séparément, ce que Karlsberg comptait faire ensuite.",
+};
+
+/* Les façons dont un règne s'achève, et ce que l'héritier en porte. */
+const SUCCESSION_FINS = [
+  { id:'vieillesse', si:h => h.age >= SUCCESSION_AGE_DECLIN,
+    titre:"De vieillesse",
+    texte:"Il est mort dans la salle basse, un matin de fin d'hiver, sans que personne s'en aperçoive avant midi. Il avait {age} ans, ce qui, pour un homme qui a fait ce métier-là, relève de l'anomalie statistique." },
+  { id:'transmission', si:() => true,
+    titre:"De son vivant",
+    texte:"Il n'est pas mort. Il a fait venir un notaire, signé quatre feuillets, et posé l'anneau sur la table sans discours. Puis il est allé s'asseoir dehors, et il y est resté longtemps." },
+];
+
+</script>
+<script>
 /* src/data/romances.js */
 /* PARIAS — Attachements
  *
@@ -26005,6 +26090,226 @@ function renderRessources(){
 
 </script>
 <script>
+/* src/succession.js */
+/* PARIAS — La succession
+ *
+ * « On meurt, on hérite. » La partie ne s'arrête pas là : elle continue avec
+ * quelqu'un d'autre, dans le même monde, avec la même mémoire.
+ *
+ * CE QUI RESTE AU MONDE — tout. Les crises en sont où elles en sont. Les neuf
+ * se souviennent nommément de ce que le père a fait, et ils s'en souviendront
+ * encore devant son enfant. Karlsberg est bâtie comme il l'a bâtie, les
+ * carrières qu'il a rouvertes travaillent toujours, les dettes qu'on lui devait
+ * sont dues à son héritier.
+ *
+ * CE QUI NE SE TRANSMET PAS — le niveau, les pouvoirs, ce qu'il avait dans les
+ * mains, ceux qui l'aimaient, et la moitié de ce que le monde soupçonnait de
+ * lui. Un héritier n'est pas son père : il commence bas, dans une maison haute.
+ */
+
+/* ============================= QUI PEUT SUCCÉDER ============================= */
+
+function heritiersEligibles(){
+  const l = (typeof heroLignee === 'function') ? heroLignee() : (hero.lignee || {enfants:[]});
+  return (l.enfants || [])
+    .filter(e => (e.age || 0) >= SUCCESSION_AGE_MAJORITE && !e.mort)
+    /* Le sang d'abord — c'est ce nom-là qui se transmet — puis l'aîné. */
+    .sort((a, b) => (b.paria ? 1 : 0) - (a.paria ? 1 : 0) || (b.age || 0) - (a.age || 0));
+}
+
+function successionPossible(){ return heritiersEligibles().length > 0; }
+
+/* Transmettre de son vivant : possible dès qu'un héritier est majeur et que la
+ * maison tient debout. Ce n'est pas une reddition, c'est une décision. */
+function peutTransmettre(){
+  if(!successionPossible()) return { non:"Aucun enfant de Yohan n'est en âge de recevoir quoi que ce soit." };
+  const pal = (typeof palierKarlsberg === 'function') ? palierKarlsberg() : null;
+  if(pal && pal.id === 'ruines')
+    return { non:"On ne transmet pas un tas de pierres. Il faudrait d'abord que Karlsberg soit quelque chose." };
+  return { oui:true };
+}
+
+/* ============================= LA MORT ============================= */
+
+/* Elle devient probable, puis certaine. Appelée une fois par saison. */
+function risqueDeMourir(){
+  const a = hero.age || 0;
+  if(a < SUCCESSION_AGE_DECLIN) return 0;
+  if(a >= SUCCESSION_AGE_CERTAIN) return 1;
+  const p = (a - SUCCESSION_AGE_DECLIN) / (SUCCESSION_AGE_CERTAIN - SUCCESSION_AGE_DECLIN);
+  return 0.02 + p * p * 0.28;      // lent d'abord, puis franc
+}
+
+function successionTick(){
+  if(hero.successionEnCours) return null;
+  if((hero.flags || []).includes('chronique_terminee')) return null;
+  if(Math.random() >= risqueDeMourir()) return null;
+  return ouvrirSuccession('vieillesse');
+}
+
+/* ============================= LE PASSAGE ============================= */
+
+let successionEtat = null;
+
+function ouvrirSuccession(finId){
+  const fin = SUCCESSION_FINS.find(f => f.id === finId) || SUCCESSION_FINS[0];
+  const candidats = heritiersEligibles();
+  hero.successionEnCours = true;
+
+  /* Personne pour reprendre le nom : la chronique s'achève, et c'est
+   * l'épilogue qui a le dernier mot — pas un écran de mort. */
+  if(!candidats.length){
+    hero.successionEnCours = false;
+    if(!(hero.flags || []).includes('chronique_terminee')) hero.flags.push('chronique_terminee');
+    if(typeof ouvrirEpilogue === 'function') ouvrirEpilogue();
+    return { epilogue:true };
+  }
+
+  successionEtat = { fin, candidats };
+  renderSuccession();
+  if(typeof closeEventModal === 'function') closeEventModal();
+  showScreen('succession');
+  return { succession:true, candidats: candidats.length };
+}
+
+/* Ce que l'héritier garde du règne précédent. */
+function heritageDuRegne(){
+  return {
+    or:        Math.round((hero.or || 0) * 0.6),
+    renom:     Math.round(renomActuel() * 0.4),
+    suspicion: hero.suspicion || 0,          // pondéré par le profil, plus bas
+    armee:     (hero.armee || []).length,
+    chantier:  (hero.chantier || []).length,
+    palier:    (typeof palierKarlsberg === 'function') ? palierKarlsberg() : null,
+    faveurs:   (hero.ressources || {}).faveurs || 0,
+  };
+}
+
+/* Le passage lui-même. On garde le monde, on remplace l'homme. */
+function succeder(nomEnfant){
+  const l = heroLignee();
+  const enfant = (l.enfants || []).find(e => e.nom === nomEnfant);
+  if(!enfant) return null;
+
+  const profil = SUCCESSION_PROFILS[enfant.paria ? 'paria' : 'sans_onde'];
+  const ancien = { nom: hero.nom, age: hero.age, generation: hero.generation || 1 };
+  const garde  = heritageDuRegne();
+
+  /* — Ce qui disparaît avec lui — */
+  hero.nom          = enfant.nom;
+  hero.generation   = ancien.generation + 1;
+  hero.age          = enfant.age;
+  hero.niveau       = 3;
+  hero.xp           = 0;
+  hero.talentPoints = 3;
+  hero.unlocked     = new Set(YOHAN_STARTING_POWERS);
+  hero.inventaire   = [{ uid:'succ_potion_' + Date.now(), itemId:'potion_vigueur', qty:2 }];
+  hero.equipement   = { armure:null, accessoire:null };
+  hero.compagnons   = [];
+  hero.liens        = {};            // ceux qui aimaient le père n'aiment pas le fils
+  hero.affinites    = { ...AFFINITES_DEPART };
+  hero.agi = 12; hero.vol = 10; hero.precision = 5; hero.defenseBase = 12;
+  hero.pvMax = 42; hero.pv = 42; hero.fat = 0; hero.paMax = 3;
+  hero.renaissanceUsed = false;
+  for(const [k, v] of Object.entries(profil.stats)) hero[k] = (hero[k] || 0) + v;
+
+  /* — Ce qui reste — */
+  hero.or        = garde.or;
+  hero.renom     = garde.renom;
+  hero.suspicion = Math.round(garde.suspicion * profil.suspicionGardee);
+  hero.trame     = { points: Math.min(200, profil.sang), chapitre: hero.trame.chapitre };
+  /* La lignée repart de lui : ses frères et sœurs restent, ses parents non. */
+  l.liaisons = [];
+  l.enfants  = (l.enfants || []).filter(e => e.nom !== enfant.nom);
+
+  profil.flags.forEach(f => { if(!hasFlag(f)) hero.flags.push(f); });
+  if(!hasFlag('succession_faite')) hero.flags.push('succession_faite');
+  hero.flags.push(`generation_${hero.generation}`);
+
+  /* Les neuf ne changent pas d'avis parce que quelqu'un est mort. Ils notent. */
+  if(hero.chroniques){
+    const d = dateFromSemaines(hero.temps ? hero.temps.semaines : 0);
+    hero.chroniques.push({ date:`${d.saison}, An ${d.an}`,
+      texte:`✦ <b>${ancien.nom}</b> a cessé de tenir Karlsberg à ${ancien.age} ans. <b>${enfant.nom}</b> le tient désormais.` });
+  }
+
+  hero.successionEnCours = false;
+  successionEtat = null;
+  applyPassiveEffects();
+  if(typeof syncTensions === 'function') syncTensions();
+  saveGame(true);
+
+  return { ancien, enfant, profil, garde };
+}
+
+/* ============================= L'ÉCRAN ============================= */
+
+function renderSuccession(){
+  const box = document.getElementById('successionCorps');
+  if(!box || !successionEtat) return;
+  const { fin, candidats } = successionEtat;
+  const g = heritageDuRegne();
+  const pal = g.palier;
+
+  const cartes = candidats.map(e => {
+    const p = SUCCESSION_PROFILS[e.paria ? 'paria' : 'sans_onde'];
+    return `<div class="succ-carte" data-nom="${e.nom}">
+      <div class="succ-nom">${e.nom}</div>
+      <div class="succ-meta">${e.sexe === 'f' ? 'Fille' : 'Fils'} de ${e.mere} · ${e.age} ans · ${p.nom}</div>
+      <p class="succ-dit">${p.dit}</p>
+      <button class="primary succ-btn" data-nom="${e.nom}">Lui donner le nom</button>
+    </div>`;
+  }).join('');
+
+  box.innerHTML = `
+    <span class="event-tag">${fin.titre}</span>
+    <h2 class="succ-titre">La maison Karlsberg change de main</h2>
+    <p class="succ-texte">${fin.texte.replace('{age}', hero.age)}</p>
+    <p class="succ-texte">${pal ? (SUCCESSION_ETATS[pal.id] || '') : ''}</p>
+    <div class="succ-garde">
+      <b>Ce qui passe avec le nom</b>
+      <ul>
+        <li>Karlsberg telle qu'elle est : ${g.chantier} ouvrage${g.chantier > 1 ? 's' : ''} debout${pal ? `, ${pal.nom.toLowerCase()}` : ''}</li>
+        <li>Les sources ouvertes — carrières, refuges, routes — continuent de travailler</li>
+        <li>${g.faveurs} dette${g.faveurs > 1 ? 's' : ''} qu'on doit encore à cette maison</li>
+        <li>${g.armee} unité${g.armee > 1 ? 's' : ''} sous les bannières, et ${g.or} or sur ce qu'il restait</li>
+        <li>Le monde entier : ce que les crises sont devenues, et ce que neuf personnes se rappellent</li>
+      </ul>
+      <b>Ce qui ne passe pas</b>
+      <ul>
+        <li>Ce qu'il savait faire, ce qu'il avait dans les mains, ceux qui l'aimaient</li>
+        <li>Une partie de ce que le monde soupçonnait — un héritier n'est pas son père</li>
+      </ul>
+    </div>
+    <h3 class="succ-h">Qui reprend le nom</h3>
+    <div class="succ-grid">${cartes}</div>`;
+
+  box.querySelectorAll('.succ-btn').forEach(b => {
+    b.onclick = () => {
+      const r = succeder(b.dataset.nom);
+      if(r) montrerPassage(r);
+    };
+  });
+}
+
+function montrerPassage(r){
+  const box = document.getElementById('successionCorps');
+  box.innerHTML = `
+    <span class="event-tag">Génération ${r.enfant ? (hero.generation) : ''}</span>
+    <h2 class="succ-titre">${hero.nom}</h2>
+    <p class="succ-texte">${r.profil.dit}</p>
+    <p class="succ-texte">${r.ancien.nom} avait ${r.ancien.age} ans. Ce qu'il a fait est fait, et le monde s'en souvient — pas toujours en bien.</p>
+    <p class="succ-texte">Ce qui recommence : un niveau, trois talents, deux fioles, et un nom que trop de gens connaissent déjà.</p>
+    <div style="margin-top:20px;text-align:right;"><button class="primary" id="succContinuer">Continuer</button></div>`;
+  document.getElementById('succContinuer').onclick = () => {
+    showScreen('lieu');
+    renderPersonnage(); renderQuete(); renderChroniques();
+    if(typeof renderLieu === 'function') renderLieu();
+  };
+}
+
+</script>
+<script>
 /* src/offres.js */
 /* PARIAS — Ce qu'on vous propose ici
  *
@@ -26343,6 +26648,16 @@ function renderLieu(){
       () => { showScreen('personnage'); renderEquipement(); }, false);
     if(l.id === 'LOC_001') bouton("Le chantier de Karlsberg", "Ce qu'on relève, et ce que ça coûte",
       () => ouvrirChantier(), false);
+    /* Transmettre de son vivant. Ce n'est pas une reddition : c'est une
+       décision, et elle ne s'offre que quand il y a quelqu'un et quelque
+       chose à donner. */
+    if(l.id === 'LOC_001' && typeof peutTransmettre === 'function'){
+      const t = peutTransmettre();
+      bouton("Transmettre le nom", t.oui
+          ? "Poser l'anneau sur la table, et continuer avec l'héritier"
+          : t.non,
+        () => ouvrirSuccession('transmission'), !t.oui);
+    }
   }
 }
 
@@ -27025,7 +27340,7 @@ function nouvelleChronique(){
  * reconstruits au chargement (voir CHAMPS_SET).
  */
 
-const SAVE_VERSION = 12;
+const SAVE_VERSION = 13;
 /* Le préfixe est un espace de noms de stockage, pas le numéro de version : il
  * reste figé pour que les parties commencées avant soient relues puis migrées. */
 const SAVE_PREFIX  = 'parias_save_v6_';
@@ -27087,6 +27402,8 @@ function reconstruireHero(brut){
   h.pnj               = h.pnj || {};
   h.liens             = h.liens || {};
   h.ressources        = h.ressources || { pierre:0, bras:0, grain:0, faveurs:0 };
+  h.generation        = h.generation || 1;
+  h.successionEnCours = false;
   h.lignee            = h.lignee || { liaisons: [], enfants: [] };
   if(typeof h.age !== 'number') h.age = AGE_DEPART;
   h.compagnons        = (h.compagnons || []).map(c => COMPANIONS_POOL[c.id] || c);
@@ -27207,6 +27524,11 @@ const MIGRATIONS = {
      * tenu un refuge ne reparte pas de zéro. */
     enr.hero.ressources = enr.hero.ressources || { pierre:0, bras:0, grain:0, faveurs:0 };
     enr.version = 12;
+    return enr;
+  },
+  12: enr => {          // v12 → v13 : la succession
+    enr.hero.generation = enr.hero.generation || 1;
+    enr.version = 13;
     return enr;
   },
 };
@@ -27702,7 +28024,7 @@ function showScreen(id){
   document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active', b.dataset.screen===id));
   const cal = document.getElementById('calendarBar');
   if(cal.dataset.gameStarted==='1'){
-    cal.style.display = (id==='combat' || id==='bataille' || id==='epilogue') ? 'none' : 'flex';
+    cal.style.display = (id==='combat' || id==='bataille' || id==='epilogue' || id==='succession') ? 'none' : 'flex';
   }
 }
 
@@ -27891,7 +28213,8 @@ function dateFromSemaines(s){
 
 function renderCalendar(){
   const d = dateFromSemaines(hero.temps.semaines);
-  document.getElementById('calendarText').innerHTML = `${d.saison}, An ${d.an} après la Purge <b>· semaine ${hero.temps.semaines % 13 + 1}/13</b>`;
+  const gen = (hero.generation || 1) > 1 ? ` · ${hero.nom}, ${hero.generation}<sup>e</sup> du nom` : '';
+  document.getElementById('calendarText').innerHTML = `${d.saison}, An ${d.an} après la Purge <b>· semaine ${hero.temps.semaines % 13 + 1}/13</b>${gen}`;
   renderSuspicionBadge();
   renderApPips();
   if(typeof renderBandeauQuete === 'function') renderBandeauQuete();
@@ -27914,6 +28237,8 @@ function advanceTime(semaines){
     if(typeof liensTick === 'function') liensTick();
     // Ce qui travaille pour Karlsberg travaille aussi quand Yohan est ailleurs.
     if(typeof ressourcesTick === 'function') ressourcesTick();
+    // Un homme de soixante-dix ans finit par ne pas se relever un matin.
+    if(typeof successionTick === 'function') successionTick();
   }
   // Le temps ne fait pas que tourner un compteur : on vieillit, et il naît des gens.
   const lignee = passerLeTemps(semaines);
