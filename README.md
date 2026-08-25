@@ -7,14 +7,16 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V2.1** — **les liens sur quatre axes séparés**. Relation,
-confiance, attirance et compatibilité politique ne montent pas ensemble : on
-peut être désiré sans être cru, aimé sans être suivi, et un refus dit lequel des
-quatre manque.
+**Version actuelle : V2.2** — **Karlsberg ne se paie plus en or**. Il faut de la
+pierre, des bras, du grain et des dettes qu'on vous doit — et rien de tout cela
+ne s'achète : chaque ressource vient d'une décision prise ailleurs, des mois
+plus tôt. Onze ouvrages, six états : ruines → refuge → fort → château → domaine
+→ puissance régionale.
 
-*V2.0 : les neuf acteurs autonomes — Charles, Lucius, Alycia, Caleb, Alarielle,
-Tyrion, Eltharion, Anarion et Khal-Vaene décident seuls, se souviennent
-nommément de vous, vieillissent et meurent. V1.9 : les cinq crises régionales, en cinq étapes nommées chacune. V1.8 : les
+*V2.1 : les liens sur quatre axes séparés — relation, confiance, attirance et
+compatibilité politique ne montent pas ensemble. V2.0 : les neuf acteurs
+autonomes, qui décident seuls, se souviennent nommément de vous, vieillissent et
+meurent. V1.9 : les cinq crises régionales en cinq étapes nommées. V1.8 : les
 dix chaînes secrètes, armées en silence sur ce que vous avez fait. V1.7 : les
 trente affaires du pack narratif écrites en chaînes.*
 
@@ -64,7 +66,7 @@ lien. Il se régénère avec `node tools/build-standalone.js`.
 | **Un seul écran de jeu** : le lieu, ses trois offres du tour, ce qu'on y fait | ✅ |
 | **Voyages par contrat** : accepter une affaire lointaine, c'est prendre la route | ✅ |
 | **Suspicion vivante** : 4 paliers, 12 événements dédiés, des couvertures durables | ✅ |
-| **Le chantier de Karlsberg** : 8 ouvrages, 5 200 or et 36 semaines pour tout relever | ✅ |
+| **Le chantier de Karlsberg** : 11 ouvrages, 6 états, payés en pierre, bras, grain et faveurs | ✅ |
 | **Politique** : 6 puissances, leur influence, leur posture, et 8 édits qui tombent | ✅ |
 | **Le Prix du Paria** : toute maison noble doit l'Or et le Sang, en trois termes | ✅ |
 | **Affaires en chaînes** : 30 affaires en 101 étapes, jouées sur plusieurs tours | ✅ |
@@ -395,6 +397,50 @@ qu'on a fait quelque chose** — et personne ne vous prévient.
 
 Ce dernier n'est pas un contrat : c'est la réponse à la question que le jeu pose
 depuis la première ligne. Karlsberg n'est pas tombée sous des monstres.
+
+## Relever Karlsberg
+
+> *« Jamais "Reconstruire le château : 10 000 or". Il faut de la pierre, des
+> ouvriers, un architecte, de la nourriture, des routes sûres, une garnison, une
+> population, des revenus, des alliances. »*
+
+Avec un million d'écus et rien d'autre, on déblaie la cour. C'est tout.
+
+**Quatre ressources qui ne s'achètent pas.** Pierre, bras, grain, faveurs. Chacune
+vient d'une **source ouverte en jouant**, ailleurs, des mois plus tôt :
+
+| Source | Ce qu'elle apporte |
+|---|---|
+| La carrière de Rochebrune | *les carriers taillent pour vous plutôt que pour leur ancien maître* |
+| Les charrois de Kar-Durak | *des blocs sciés qui se ferment sans mortier* |
+| Le corps de logis | *trente lits, et une règle : on ne demande pas d'où l'on vient* |
+| Les quarante de Fort-aux-Princes | *sans bannière, sans lettre et sans conditions* |
+| La route franche | *les convois passent chez vous parce que ça ne leur coûte rien* |
+| Les Dunes | *deux cents lances en douze jours, si on les appelle* |
+
+Vingt-cinq sources en tout. Elles rapportent chaque saison, toutes seules, tant
+qu'elles tiennent. Relever Karlsberg n'est donc pas un poste de dépense : c'est
+ce que devient une partie où l'on a rendu des choses à des gens.
+
+**Quatre conditions qui ne sont pas des stocks.** Une route sûre, une garnison,
+quelqu'un qui sache bâtir, assez d'habitants. Elles passent avant les
+ressources dans le refus, parce qu'on ne dit pas à quelqu'un qu'il lui manque
+huit charrois de pierre quand le vrai problème est qu'aucune route ne monte :
+
+> *« rien de lourd ne monte tant que le défilé n'est pas tenu »*
+> *« Il manque 8 pierre » — Il faudrait ouvrir : La carrière de Rochebrune, Les charrois de Kar-Durak, Le treuil de Brécourt.*
+
+**Les bras mangent.** Une place qui abrite plus de monde qu'elle n'en nourrit en
+perd, et la chronique le dit : *« Karlsberg nourrit moins de monde qu'elle n'en
+abrite. Quatre hommes sont repartis avant l'hiver. »*
+
+**Six états, jamais un pourcentage.**
+
+`Ruines` → `Refuge` → `Fort` → `Château` → `Domaine` → `Puissance régionale`
+
+> **Domaine** — *Il y a un marché le troisième jour de chaque semaine, deux
+> tavernes, une querelle de bornes en cours, et des enfants nés ici qui n'ont
+> jamais vu les ruines.*
 
 ## Les liens, sur quatre axes séparés
 
@@ -949,6 +995,7 @@ tools/smoke-chaines.js     éprouve les affaires en chaînes, les termes et les 
 tools/smoke-crises.js      éprouve les cinq crises, leurs étapes et leurs raisons
 tools/smoke-pnj.js         éprouve les neuf acteurs : décisions, mémoire, morts
 tools/smoke-liens.js       éprouve les quatre axes, les refus motivés, les promesses
+tools/smoke-karlsberg.js   éprouve le chantier : ressources, conditions, six états
 tools/build-artifact.js    fabrique dist/parias-artifact.html (page publiable)
 tools/smoke-tranche.js     l'épreuve d'acceptation du document fondateur :
                            partie → carte → voyage → lieu → récit → combat →
@@ -979,6 +1026,7 @@ node tools/smoke-chaines.js                  # affaires en chaînes, termes du P
 node tools/smoke-crises.js                   # crises régionales : étapes, raisons, tensions dérivées
 node tools/smoke-pnj.js                      # les neuf : objectifs, mémoire, décisions, vieillesse
 node tools/smoke-liens.js                    # les quatre axes, les refus motivés, les promesses
+node tools/smoke-karlsberg.js                # chantier : pierre, bras, grain, faveurs, six états
 node tools/smoke-tranche.js                  # la tranche verticale, de bout en bout
 
 node tools/manifest-assets.js                # régénère la liste des illustrations

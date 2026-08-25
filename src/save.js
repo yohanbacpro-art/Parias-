@@ -19,7 +19,7 @@
  * reconstruits au chargement (voir CHAMPS_SET).
  */
 
-const SAVE_VERSION = 11;
+const SAVE_VERSION = 12;
 /* Le préfixe est un espace de noms de stockage, pas le numéro de version : il
  * reste figé pour que les parties commencées avant soient relues puis migrées. */
 const SAVE_PREFIX  = 'parias_save_v6_';
@@ -80,6 +80,7 @@ function reconstruireHero(brut){
   h.crises            = h.crises || {};
   h.pnj               = h.pnj || {};
   h.liens             = h.liens || {};
+  h.ressources        = h.ressources || { pierre:0, bras:0, grain:0, faveurs:0 };
   h.lignee            = h.lignee || { liaisons: [], enfants: [] };
   if(typeof h.age !== 'number') h.age = AGE_DEPART;
   h.compagnons        = (h.compagnons || []).map(c => COMPANIONS_POOL[c.id] || c);
@@ -192,6 +193,14 @@ const MIGRATIONS = {
                               griefs:[], promesses:[], etat:'inconnu' };
     }
     enr.version = 11;
+    return enr;
+  },
+  11: enr => {          // v11 → v12 : Karlsberg ne se paie plus qu'en or
+    /* Les sources déjà ouvertes dans la partie en cours comptent : on crédite
+     * une saison de rendement, pour que quelqu'un qui a rendu une carrière et
+     * tenu un refuge ne reparte pas de zéro. */
+    enr.hero.ressources = enr.hero.ressources || { pierre:0, bras:0, grain:0, faveurs:0 };
+    enr.version = 12;
     return enr;
   },
 };

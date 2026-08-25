@@ -1,7 +1,16 @@
 /* PARIAS — Moteur du chantier
  *
- * Bâtir coûte de l'or et des semaines. Les semaines sont la vraie dépense :
- * pendant qu'on bâtit, Yohan vieillit et le monde avance sans lui.
+ * Bâtir ne coûte jamais que de l'or. Il faut de la pierre, des bras, du grain,
+ * des faveurs — et des choses qui ne sont pas des stocks : une route sûre,
+ * quelqu'un qui sache bâtir, une garnison, des habitants.
+ *
+ * Rien de tout cela ne s'achète. Chaque ressource vient d'une source ouverte en
+ * jouant, ailleurs, des mois plus tôt (src/data/ressources.js). Relever
+ * Karlsberg n'est donc pas un poste de dépense : c'est ce que devient une
+ * partie où l'on a rendu des choses à des gens.
+ *
+ * Les semaines restent la dépense la plus lourde : pendant qu'on bâtit, Yohan
+ * vieillit et le monde avance sans lui.
  */
 
 function heroChantier(){
@@ -17,8 +26,33 @@ function ouvrageDisponible(o){
     return { bloque:`Demande d'abord : ${p ? p.nom : o.requis}` };
   }
   if(o.requisFlag && !hasFlag(o.requisFlag)) return { bloque:"Ce qu'il faudrait graver n'existe pas encore" };
-  if(hero.or < o.or) return { bloque:`${o.or} or requis (vous en avez ${hero.or})` };
-  return { ok:true };
+
+  /* Les conditions passent avant les stocks : on ne dit pas à quelqu'un qu'il
+   * lui manque huit charrois de pierre alors que le vrai problème est qu'aucune
+   * route ne monte. */
+  const cond = (typeof conditionsManquantes === 'function')
+    ? conditionsManquantes(o.exige) : [];
+  if(cond.length) return { bloque: cond[0].manque, condition: cond[0] };
+
+  const cout = Object.assign({ or:o.or || 0 }, o.cout || {});
+  const manque = (typeof coutManquant === 'function') ? coutManquant(cout) : [];
+  if(manque.length){
+    const m = manque[0];
+    const ou = (m.res !== 'or' && typeof ouTrouver === 'function') ? ouTrouver(m.res) : [];
+    return { bloque:`Il manque ${m.il} ${m.nom}`, manque,
+             piste: ou.length ? ou.join(', ') : null };
+  }
+  return { ok:true, cout };
+}
+
+/* Ce qu'un ouvrage coûte, en toutes lettres. */
+function coutLisible(o){
+  const p = [];
+  if(o.or) p.push(`${o.or} or`);
+  for(const [k, n] of Object.entries(o.cout || {}))
+    p.push(`${n} ${RESSOURCES[k].unite} de ${RESSOURCES[k].nom.toLowerCase()}`);
+  p.push(`${o.semaines} semaines`);
+  return p.join(' · ');
 }
 
 /* Le cumul de tout ce qui est bâti — lu par le combat, la boutique, l'armée. */
@@ -42,7 +76,9 @@ function batir(id){
   const d = ouvrageDisponible(o);
   if(!d || !d.ok) return;
 
-  hero.or -= o.or;
+  if(typeof payerRessources === 'function')
+    payerRessources(Object.assign({ or:o.or || 0 }, o.cout || {}));
+  else hero.or -= o.or;
   heroChantier().push(o.id);
   const e = o.effet || {};
   if(e.renom) ajusterRenom(e.renom);
@@ -70,7 +106,11 @@ function batir(id){
   box.innerHTML = `${artEventBanner('evt_paria', 'PARIA')}
     <span class="event-tag">Chantier · ${o.semaines} semaines</span><h3>${o.nom}</h3>
     <p class="narrative">${o.apres}</p>
-    <div class="reward-tags"><span class="reward-tag neg">−${o.or} or</span>${tags.join('')}</div>
+    <div class="reward-tags">${
+      [o.or ? `<span class="reward-tag neg">−${o.or} or</span>` : ''].concat(
+        Object.entries(o.cout || {}).map(([k, n]) =>
+          `<span class="reward-tag neg">−${n} ${RESSOURCES[k].nom.toLowerCase()}</span>`)).join('')
+    }${tags.join('')}</div>
     ${resume && resume.nouvelle ? `<p class="narrative" style="color:var(--parchment-dim);font-style:italic;">Pendant ce temps : ${resume.nouvelle}</p>` : ''}
     <div style="margin-top:16px;text-align:right;"><button class="primary" id="chBtn">Continuer</button></div>`;
   document.getElementById('eventModal').style.display = 'flex';
@@ -80,12 +120,27 @@ function batir(id){
 function ouvrirChantier(){
   const b = chantierBonus();
   const faits = heroChantier().length;
+  const pal = (typeof palierKarlsberg === 'function') ? palierKarlsberg() : null;
+  const suiv = (typeof palierSuivant === 'function') ? palierSuivant() : null;
+  const st = (typeof heroRessources === 'function') ? heroRessources() : {};
+  const rend = (typeof rendementParSaison === 'function') ? rendementParSaison() : {};
   const box = document.getElementById('eventModalBox');
-  box.innerHTML = `<span class="event-tag">Karlsberg — Les Ruines du Loup</span>
+
+  const stocks = (typeof RESSOURCES !== 'undefined')
+    ? Object.entries(RESSOURCES).map(([k, r]) =>
+        `<span class="ch-res"><b>${st[k] || 0}</b> ${r.nom.toLowerCase()}${
+          rend[k] ? `<i>+${rend[k]}</i>` : ''}</span>`).join('')
+    : '';
+
+  box.innerHTML = `<span class="event-tag">Karlsberg — ${pal ? pal.nom : 'Les Ruines du Loup'}</span>
     <h3>Le chantier</h3>
     <p class="narrative">${faits === 0
       ? "Trois pans de mur, un loup de pierre fendu, et de l'herbe rase. Tout est à faire, et personne ne le fera à votre place."
-      : `${faits} ouvrage${faits > 1 ? 's' : ''} debout. ${faits >= CHANTIER.length ? "Il n'y a plus rien à relever : Karlsberg tient." : "Le reste attend."}`}</p>
+      : (pal ? pal.dit : '')}</p>
+    ${suiv ? `<p class="narrative" style="color:var(--parchment-dim);font-style:italic;">Pour que ce soit un ${suiv.nom.toLowerCase()} : ${
+      suiv.exige.filter(id => !ouvrageFait(id))
+        .map(id => (CHANTIER.find(x => x.id === id) || {}).nom || id).join(', ')}.</p>` : ''}
+    <div class="chantier-stocks">${stocks}<span class="ch-res"><b>${hero.or}</b> or</span></div>
     <div class="chantier-etat">Défense +${b.defense} · Fatigue max +${b.fatMax}
       · Entretien ×${b.entretienMult.toFixed(2)} · Prix ×${b.prixMult.toFixed(2)}
       · Repos ×${b.reposMult}</div>
@@ -97,9 +152,13 @@ function ouvrirChantier(){
     const etat = ouvrageDisponible(o);
     const div = document.createElement('div');
     div.className = 'ouvrage' + (etat === null ? ' fait' : '') + (etat && etat.bloque ? ' bloque' : '');
+    const exige = (o.exige || []).map(id => CONDITIONS_CHANTIER[id])
+      .filter(Boolean).map(c => c.nom).join(', ');
     div.innerHTML = `<div><div class="ouv-nom">${o.nom}</div>
       <div class="ouv-desc">${etat === null ? o.apres : o.desc}</div>
-      <div class="ouv-cout">${o.or} or · ${o.semaines} semaines</div></div>`;
+      <div class="ouv-cout">${coutLisible(o)}</div>
+      ${exige && etat !== null ? `<div class="ouv-exige">Demande ${exige}.</div>` : ''}
+      ${etat && etat.piste ? `<div class="ouv-piste">Il faudrait ouvrir : ${etat.piste}.</div>` : ''}</div>`;
     const btn = document.createElement('button');
     btn.className = 'ghost';
     if(etat === null){ btn.textContent = 'Debout'; btn.disabled = true; }

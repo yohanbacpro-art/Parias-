@@ -646,6 +646,29 @@
   .pnja-quand{display:block;font-family:'Inter',sans-serif;font-size:9.5px;color:var(--parchment-dim);}
   .pnja-memoire-vide{font-size:11.5px;font-style:italic;color:var(--parchment-dim);border-top:1px solid var(--line);padding-top:7px;}
   .pli-pnj{color:var(--parchment);}
+  /* Karlsberg : ce qu'on a, et d'où ça vient */
+  .kb-etat{border-left:2px solid var(--gold);padding-left:12px;margin-bottom:14px;}
+  .kb-palier{font-family:'Cinzel',serif;font-size:17px;color:var(--gold);letter-spacing:.04em;}
+  .kb-dit{font-size:13px;line-height:1.55;color:var(--parchment);margin:4px 0 0;}
+  .kb-suite{font-size:12px;line-height:1.5;color:var(--parchment-dim);margin:6px 0 0;font-style:italic;}
+  .res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .res{background:#0f0c0a;border:1px solid var(--line);border-radius:5px;padding:10px 12px;}
+  .res-tete{display:flex;justify-content:space-between;align-items:baseline;}
+  .res-nom{font-family:'Cinzel',serif;font-size:13px;color:var(--parchment);}
+  .res-n{font-family:'Inter',sans-serif;font-weight:700;font-size:15px;color:var(--gold);}
+  .res-n i{font-style:normal;font-weight:400;font-size:9.5px;color:var(--parchment-dim);margin-left:4px;}
+  .res-note{font-family:'Inter',sans-serif;font-size:10.5px;font-style:italic;color:var(--parchment-dim);margin-bottom:7px;}
+  .res-sources{list-style:none;margin:0;padding:7px 0 0;border-top:1px solid var(--line);}
+  .res-sources li{font-size:11.5px;line-height:1.5;color:var(--parchment-dim);margin-bottom:3px;}
+  .res-sources b{color:var(--parchment);font-weight:600;}
+  .res-flux{font-family:'Inter',sans-serif;font-size:10px;color:var(--onde-bright);margin-top:4px;}
+  .res-rien{font-size:11.5px;line-height:1.5;font-style:italic;color:var(--parchment-dim);border-top:1px solid var(--line);padding-top:7px;}
+  .chantier-stocks{display:flex;flex-wrap:wrap;gap:14px;margin:10px 0;padding:8px 10px;background:#0f0c0a;border:1px solid var(--line);border-radius:4px;}
+  .ch-res{font-family:'Inter',sans-serif;font-size:11px;color:var(--parchment-dim);}
+  .ch-res b{color:var(--gold);font-size:13px;margin-right:3px;}
+  .ch-res i{font-style:normal;color:var(--onde-bright);margin-left:3px;font-size:9.5px;}
+  .ouv-exige{font-family:'Inter',sans-serif;font-size:10.5px;font-style:italic;color:var(--warn);margin-top:3px;}
+  .ouv-piste{font-family:'Inter',sans-serif;font-size:10.5px;font-style:italic;color:var(--parchment-dim);margin-top:3px;}
   /* Les liens, sur quatre axes séparés */
   .liens-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px;}
   .liens-vide{color:var(--parchment-dim);font-style:italic;font-size:13px;}
@@ -994,6 +1017,12 @@
     <div class="panel">
       <h2>Compagnons</h2>
       <div class="compagnon-list" id="compagnonList"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Karlsberg</h2>
+      <p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;">On ne relève pas une maison avec de l'or. Il faut de la pierre, des bras, du grain et des dettes qu'on vous doit — et rien de tout cela ne s'achète.</p>
+      <div id="ressourcesBloc"></div>
     </div>
 
     <div class="panel">
@@ -18110,16 +18139,26 @@ CHAINES_SECRETES_3.forEach(c => { CHAINES_SECRETES.push(c); CHAINES.push(c); });
 /* src/data/chantier.js */
 /* PARIAS — Le chantier de Karlsberg
  *
- * On parlait de relever une maison depuis le début sans jamais en poser une
- * pierre. Voici les pierres.
+ *   « Jamais "Reconstruire le château : 10 000 or". Il faut de la pierre, des
+ *     ouvriers, un architecte, de la nourriture, des routes sûres, une
+ *     garnison, une population, des revenus, des alliances. »
  *
- * Chaque ouvrage coûte de l'or et des semaines — le temps est la vraie monnaie,
- * parce qu'il fait vieillir Yohan et avancer le monde pendant qu'on bâtit. En
- * échange, chacun donne un avantage qu'on sent au jeu, pas une ligne de plus
- * sur une fiche.
+ * L'or ne suffit donc jamais, et à partir du fort il ne suffit même plus du
+ * tout. Un ouvrage se paie en :
+ *
+ *   or        ce qu'on a gagné en travaillant — jamais seul
+ *   cout      pierre / bras / grain / faveurs (voir src/data/ressources.js),
+ *             qui ne s'achètent pas : ils viennent de sources ouvertes en
+ *             jouant, des mois plus tôt, ailleurs
+ *   exige     des conditions qui ne sont pas des stocks : une route sûre, une
+ *             garnison, quelqu'un qui sache bâtir, assez d'habitants
+ *   semaines  la vraie dépense : Yohan vieillit, le monde avance sans lui
  *
  * `requis` : l'ouvrage précédent, ou un marqueur d'histoire.
  * `effet`  : lu par chantierBonus() dans src/chantier.js.
+ *
+ * Les six états de l'endroit — ruines, refuge, fort, château, domaine,
+ * puissance régionale — sont dans KARLSBERG_PALIERS.
  */
 
 const CHANTIER = [
@@ -18130,47 +18169,82 @@ const CHANTIER = [
     apres:"On peut traverser la cour sans se tordre une cheville. C'est peu. C'est la première fois depuis la Purge.",
   },
   {
-    id:"ch_enceinte", nom:"Relever l'enceinte", or:800, semaines:6, requis:"ch_cour",
+    id:"ch_enceinte", nom:"Relever l'enceinte", or:500, semaines:6, requis:"ch_cour",
+    cout:{ pierre:8, bras:6, grain:4 }, exige:['route_sure'],
     desc:"Avant les toits, les murs : c'est ce qu'on fait quand on compte rester. Trois pans à remonter, et la porte à reposer.",
     effet:{ defense:2, flags:["karlsberg_enceinte"] },
     apres:"Il y a une porte, et elle ferme. Ceux qui viennent doivent désormais frapper.",
   },
   {
-    id:"ch_puits", nom:"Le puits et les granges", or:500, semaines:4, requis:"ch_cour",
+    id:"ch_puits", nom:"Le puits et les granges", or:300, semaines:4, requis:"ch_cour",
+    cout:{ pierre:4, bras:5, grain:2 },
     desc:"On ne tient pas une place sans eau ni grain. Le vieux puits est comblé, mais il est là.",
     effet:{ entretienMult:0.7 },
     apres:"On nourrit chez soi. Une colonne qui mange à Karlsberg coûte un tiers de moins qu'une colonne qui achète en route.",
   },
   {
-    id:"ch_salle", nom:"La salle basse", or:600, semaines:4, requis:"ch_enceinte",
+    id:"ch_salle", nom:"La salle basse", or:350, semaines:4, requis:"ch_cour",
+    cout:{ pierre:6, bras:4, grain:3 },
     desc:"Une seule pièce voûtée, sèche, avec un feu. Ce n'est pas du confort : c'est un endroit où l'Onde retombe.",
     effet:{ fatMax:10, reposMult:2 },
     apres:"On y dort vraiment. Le bourdonnement s'y calme comme il ne se calme nulle part ailleurs.",
   },
   {
-    id:"ch_forge", nom:"La forge", or:900, semaines:5, requis:"ch_puits",
+    id:"ch_forge", nom:"La forge", or:500, semaines:5, requis:"ch_puits",
+    cout:{ pierre:6, bras:6, grain:4, faveurs:1 },
     desc:"Un forgeron d'un hameau voisin accepte de venir, à condition qu'on lui bâtisse de quoi travailler.",
     effet:{ prixMult:0.75, flags:["karlsberg_forge"] },
     apres:"On répare au lieu de racheter. Tout ce qu'on achète ailleurs coûte un quart de moins, parce qu'on n'achète plus que ce qu'on ne sait pas faire.",
   },
   {
-    id:"ch_refuge", nom:"Le corps de logis", or:1100, semaines:7, requis:"ch_salle",
+    id:"ch_refuge", nom:"Le corps de logis", or:600, semaines:7, requis:"ch_salle",
+    cout:{ pierre:9, bras:8, grain:10 },
     desc:"De quoi loger trente personnes qui n'ont nulle part où aller. C'est la première décision qui ne sert à rien militairement.",
     effet:{ reputation:{parias:20, humains:-4}, flags:["refuge_tenu"] },
     apres:"Trente lits, un four, et une règle : on ne demande pas d'où l'on vient. Le mot circule vite chez ceux qui en ont besoin.",
   },
   {
-    id:"ch_banniere", nom:"La bannière au-dessus de la porte", or:400, semaines:3, requis:"ch_enceinte",
+    id:"ch_banniere", nom:"La bannière au-dessus de la porte", or:250, semaines:3, requis:"ch_enceinte",
+    cout:{ bras:2 },
     desc:"Coudre le loup et le pendre en vue de la route. C'est un acte politique, et tout le monde le lira comme tel.",
     effet:{ renom:10, suspicion:15, reputation:{parias:16}, flags:["banniere_haute"] },
     apres:"On voit le loup depuis la route à une demi-lieue. Il n'y a plus moyen de prétendre que Karlsberg n'existe pas.",
   },
   {
-    id:"ch_pierre", nom:"Graver l'acte de fondation", or:700, semaines:5,
-    requis:"ch_enceinte", requisFlag:"acte_fondation",
+    id:"ch_pierre", nom:"Graver l'acte de fondation", or:400, semaines:5,
+    requis:"ch_muraille", requisFlag:"acte_fondation",
+    cout:{ pierre:6, faveurs:4 }, exige:['population'],
     desc:"Le texte tient en trois lignes : la Maison Karlsberg tient ses terres de son propre chef et non d'une couronne.",
     effet:{ renom:6, reputation:{parias:18, humains:-10}, flags:["karlsberg_independante"] },
     apres:"Ce n'est pas une bravade : c'est un document administratif recopié sur une pierre. C'est précisément pour ça que personne ne pourra jamais prétendre qu'il n'a pas existé.",
+  },
+
+  /* ── Ce qui vient après le fort. À partir d'ici, l'or ne sert presque plus :
+        il faut des gens, du grain, quelqu'un qui sache bâtir, et des dettes
+        que d'autres maisons vous doivent. ──────────────────────────────── */
+  {
+    id:"ch_donjon", nom:"Le donjon", or:400, semaines:12, requis:"ch_enceinte",
+    cout:{ pierre:22, bras:16, grain:14, faveurs:2 },
+    exige:['route_sure', 'architecte', 'garnison'],
+    desc:"Trois étages sur une base carrée, des murs de neuf pieds, un escalier qui tourne dans le mauvais sens pour l'assaillant. Ce n'est pas un symbole : c'est le seul endroit d'où l'on tient une vallée.",
+    effet:{ defense:4, renom:12, suspicion:10, flags:["karlsberg_donjon"] },
+    apres:"Le donjon se voit à trois lieues. Les cartes de la province devront être refaites, et ceux qui les font le savent déjà.",
+  },
+  {
+    id:"ch_bourg", nom:"Le bourg au pied des murs", or:300, semaines:14, requis:"ch_donjon",
+    cout:{ pierre:16, bras:24, grain:26 },
+    exige:['population', 'route_sure'],
+    desc:"On ne décide pas qu'un bourg existe : on trace des rues, on creuse un fossé, on donne des toits, et on attend de voir si les gens y restent. Quarante feux au départ.",
+    effet:{ entretienMult:0.75, renom:8, reputation:{parias:14, humains:6}, flags:["karlsberg_bourg"] },
+    apres:"Il y a un marché le troisième jour de chaque semaine, deux tavernes, une querelle de bornes en cours, et des enfants nés ici qui n'ont jamais vu les ruines.",
+  },
+  {
+    id:"ch_muraille", nom:"La muraille de la vallée", or:600, semaines:18, requis:"ch_bourg",
+    cout:{ pierre:34, bras:30, grain:24, faveurs:5 },
+    exige:['architecte', 'garnison', 'population'],
+    desc:"Fermer la vallée elle-même, pas seulement la maison : deux mille pas de courtine entre les deux versants, un corps de garde, et une porte qu'il faut deux attelages pour ouvrir.",
+    effet:{ defense:6, renom:16, suspicion:14, reputation:{parias:18, humains:-8}, flags:["karlsberg_muraille","karlsberg_a_tenu"] },
+    apres:"On n'entre plus dans la vallée du Loup : on y est admis. Trois maisons de la province ont fait demander, séparément, ce que Karlsberg comptait faire ensuite.",
   },
 ];
 
@@ -19790,6 +19864,121 @@ const PNJ_AUTONOMES = [
 ];
 
 const PNJ_PAR_ID = id => PNJ_AUTONOMES.find(p => p.id === id) || null;
+
+</script>
+<script>
+/* src/data/ressources.js */
+/* PARIAS — Ce avec quoi on relève une maison
+ *
+ * Le document fondateur, mot pour mot :
+ *
+ *   « Jamais "Reconstruire le château : 10 000 or". Il faut de la pierre, des
+ *     ouvriers, un architecte, de la nourriture, des routes sûres, une
+ *     garnison, une population, des revenus, des alliances. »
+ *
+ * D'où quatre choses qui ne s'achètent pas, et une condition qui ne s'achète
+ * pas non plus.
+ *
+ * Le point important : **on ne les gagne pas en cliquant**. Chacune vient d'une
+ * source qu'on a ouverte en jouant — une carrière rendue à ses hommes, un
+ * refuge tenu, une route rouverte, une dette naine soldée. Ouvrir une source,
+ * c'est une décision prise ailleurs, dans une affaire, des mois plus tôt. Elle
+ * rapporte ensuite chaque saison, toute seule, tant qu'elle tient.
+ *
+ * Relever Karlsberg n'est donc pas un poste de dépense : c'est ce que devient
+ * une partie où l'on a rendu des choses à des gens.
+ */
+
+const RESSOURCES = {
+  pierre:  { nom:"Pierre",     unite:"charrois", note:"taillée, charriée, montée" },
+  bras:    { nom:"Bras",       unite:"hommes",   note:"des gens qui restent et qui bâtissent" },
+  grain:   { nom:"Grain",      unite:"muids",    note:"de quoi les nourrir pendant qu'ils bâtissent" },
+  faveurs: { nom:"Faveurs",    unite:"dettes",   note:"ce qu'on vous doit, et qu'on ne refuse pas" },
+};
+
+/* Une source ouverte rapporte chaque saison. `pourquoi` est ce qu'on affiche —
+ * le joueur lit d'où vient sa pierre, pas un chiffre de production. */
+const SOURCES = [
+  /* — La pierre — */
+  { flag:'rochebrune_carriere',  res:'pierre', n:3, quoi:"La carrière de Rochebrune", pourquoi:"les carriers taillent pour vous plutôt que pour leur ancien maître" },
+  { flag:'nain_pierre_taillee',  res:'pierre', n:4, quoi:"Les charrois de Kar-Durak", pourquoi:"des blocs sciés qui se ferment sans mortier" },
+  { flag:'brecourt_treuil',      res:'pierre', n:2, quoi:"Le treuil de Brécourt", pourquoi:"on remonte enfin ce qu'on extrait" },
+  { flag:'torcy_veine_haute',    res:'pierre', n:2, quoi:"La veine haute de Torcy", pourquoi:"de la pierre à deux jours de route" },
+  { flag:'karlsberg_rasee_deux_fois', res:'pierre', n:1, quoi:"Les ruines elles-mêmes", pourquoi:"Karlsberg a été rasée deux fois : il y a de quoi rebâtir dans ses propres décombres" },
+
+  /* — Les bras —
+     Le socle : dès que la cour est praticable, des gens s'arrêtent. Peu, mais
+     il en vient toujours — c'est ce qui garantit qu'une partie qui ne fait
+     rien d'autre avance quand même, très lentement. */
+  { flag:'karlsberg_habitable', res:'bras', n:1, quoi:"Ceux qui s'arrêtent", pourquoi:"une cour praticable et un toit, ça se sait sur une route" },
+  { flag:'refuge_tenu',          res:'bras', n:4, quoi:"Le corps de logis", pourquoi:"trente lits, et une règle : on ne demande pas d'où l'on vient" },
+  { flag:'vaudreuil_sept_libres',res:'bras', n:3, quoi:"Les sept de Vaudreuil", pourquoi:"ils sont libres, et ils sont venus" },
+  { flag:'vaudreuil_quatre_libres', res:'bras', n:2, quoi:"Les quatre de Vaudreuil", pourquoi:"quatre sur sept, c'est ce qu'on a pu" },
+  { flag:'fils_a_karlsberg',     res:'bras', n:3, quoi:"Les Vaury de Vaubien", pourquoi:"cinq du nom sont montés à Karlsberg" },
+  { flag:'aubremont_familles',   res:'bras', n:2, quoi:"Les familles d'Aubremont", pourquoi:"elles n'avaient plus de tour où rentrer" },
+  { flag:'caleb_allie',          res:'bras', n:3, quoi:"Les quarante de Fort-aux-Princes", pourquoi:"sans bannière, sans lettre et sans conditions" },
+  { flag:'arquenay_sauves',      res:'bras', n:2, quoi:"Ceux d'Arquenay", pourquoi:"ils sont rentrés, et certains ne sont pas repartis" },
+
+  /* — Le grain — */
+  { flag:'karlsberg_habitable', res:'grain', n:1, quoi:"Le potager de la cour", pourquoi:"quatre planches de légumes là où il y avait des ronces" },
+  { flag:'route_franche',        res:'grain', n:3, quoi:"La route franche", pourquoi:"les convois passent chez vous parce que ça ne leur coûte rien" },
+  { flag:'route_peage',          res:'grain', n:2, quoi:"Le péage de la vallée", pourquoi:"deux sous par essieu, et un registre tenu" },
+  { flag:'vaudreuil_defrichement', res:'grain', n:3, quoi:"Le défrichement de Vaudreuil", pourquoi:"des arpents qui n'avaient rien porté depuis quarante ans" },
+  { flag:'estrees_peage_leve',   res:'grain', n:2, quoi:"Le péage d'Estrées levé", pourquoi:"le sel remonte, et il s'échange" },
+  { flag:'karlsberg_route_ouverte', res:'grain', n:3, quoi:"La voie de la vallée", pourquoi:"une route entretenue nourrit ce qu'il y a au bout" },
+  { flag:'gorge_ouverte',        res:'grain', n:2, quoi:"La Gorge rouverte", pourquoi:"le commerce du sud repasse" },
+
+  /* — Les faveurs — */
+  { flag:'charles_allie',        res:'faveurs', n:2, quoi:"Charles de Mont-Draken", pourquoi:"il tient deux vallées avec vous" },
+  { flag:'nain_maitre_oeuvre',   res:'faveurs', n:2, quoi:"Brann de Kar-Durak", pourquoi:"cent onze ans, six mots par jour, et un mur qui ne tombera plus" },
+  { flag:'nain_boucliers_venus', res:'faveurs', n:2, quoi:"La Halle de Kar-Durak", pourquoi:"deux cents boucliers sont montés au jour pour vous" },
+  { flag:'khesh_lances_offertes',res:'faveurs', n:2, quoi:"Les Dunes", pourquoi:"deux cents lances en douze jours, si on les appelle" },
+  { flag:'trois_chenes_traite',  res:'faveurs', n:1, quoi:"Le traité des Trois Chênes", pourquoi:"deux cours elfiques vous doivent une paix" },
+  { flag:'eltharion_reconnait',  res:'faveurs', n:2, quoi:"La stèle des Trois Chênes", pourquoi:"quarante et un noms Parias gravés par une cour elfique" },
+  { flag:'alliance_valombre',    res:'faveurs', n:1, quoi:"Valombre", pourquoi:"une alliance de maison, avec ce que ça implique" },
+];
+
+/* Les conditions qui ne sont pas des stocks : une route sûre est un état du
+ * monde, pas une pile de charrois. */
+const CONDITIONS_CHANTIER = {
+  route_sure: {
+    nom:"une route sûre jusqu'à la vallée",
+    flags:['cg_route_fait','karlsberg_route_ouverte','route_ferrand_engage','route_du_loup_nommee','route_escortee'],
+    manque:"rien de lourd ne monte tant que le défilé n'est pas tenu",
+  },
+  garnison: {
+    nom:"une garnison qui tienne les murs",
+    flags:['caleb_allie','nain_boucliers_venus','karlsberg_a_tenu','route_ferrand_engage'],
+    manque:"personne ne bâtit un donjon qu'il ne peut pas défendre",
+  },
+  architecte: {
+    nom:"quelqu'un qui sache bâtir",
+    flags:['nain_maitre_oeuvre','karlsberg_architecte'],
+    manque:"il n'y a personne ici qui sache monter une voûte qui tienne",
+  },
+  population: {
+    nom:"assez de monde pour que ce soit une ville",
+    flags:['refuge_tenu','fils_a_karlsberg','aubremont_familles','vaudreuil_sept_libres'],
+    manque:"un domaine sans habitants est un décor",
+  },
+};
+
+/* Les six états visibles de Karlsberg. Le joueur ne voit jamais un pourcentage :
+ * il voit le nom de ce qu'est devenu l'endroit. */
+const KARLSBERG_PALIERS = [
+  { id:'ruines',   nom:"Ruines",              exige:[], 
+    dit:"Quarante ans de ronces sur ce qui fut une maison." },
+  { id:'refuge',   nom:"Refuge",              exige:['ch_cour','ch_salle'],
+    dit:"Un endroit sec, un feu, une porte. Des gens y dorment." },
+  { id:'fort',     nom:"Fort",                exige:['ch_enceinte','ch_puits'],
+    dit:"Des murs, de l'eau, du grain. Ceux qui viennent doivent frapper." },
+  { id:'chateau',  nom:"Château",             exige:['ch_donjon','ch_forge'],
+    dit:"Un donjon, une forge, une garnison. On ne prend plus ça au passage." },
+  { id:'domaine',  nom:"Domaine",             exige:['ch_bourg','ch_refuge'],
+    dit:"Un bourg au pied des murs, un marché, des gens qui y naissent." },
+  { id:'puissance',nom:"Puissance régionale", exige:['ch_muraille','ch_pierre'],
+    dit:"Karlsberg pèse sur la province. On compte avec elle, qu'on le veuille ou non." },
+];
 
 </script>
 <script>
@@ -25673,6 +25862,149 @@ function renderLiens(){
 
 </script>
 <script>
+/* src/ressources.js */
+/* PARIAS — Ce qu'on a, et d'où ça vient
+ *
+ * Quatre stocks, et rien qui s'achète. Une source s'ouvre parce qu'on a rendu
+ * une carrière à ses hommes, tenu un refuge, rouvert une route, soldé une dette
+ * naine. Elle rapporte ensuite chaque saison, toute seule, tant qu'elle tient.
+ *
+ * Le joueur ne voit jamais un rendement : il voit la liste de ce qui travaille
+ * pour lui et pourquoi. C'est la même règle que partout ailleurs — les nombres
+ * sont dans le moteur, les raisons sont à l'écran.
+ */
+
+function heroRessources(){
+  if(!hero.ressources) hero.ressources = { pierre:0, bras:0, grain:0, faveurs:0 };
+  for(const k of Object.keys(RESSOURCES))
+    if(typeof hero.ressources[k] !== 'number') hero.ressources[k] = 0;
+  return hero.ressources;
+}
+
+function ressourceDe(k){ return heroRessources()[k] || 0; }
+
+/* Les sources ouvertes — celles dont le marqueur est posé. */
+function sourcesActives(){ return SOURCES.filter(s => hasFlag(s.flag)); }
+
+/* Ce qui rentre chaque saison, par ressource. */
+function rendementParSaison(){
+  const r = { pierre:0, bras:0, grain:0, faveurs:0 };
+  sourcesActives().forEach(s => { r[s.res] += s.n; });
+  return r;
+}
+
+/* Appelé une fois par saison. Les bras mangent : une place qui abrite plus de
+ * gens qu'elle n'en nourrit en perd, et c'est ce qui empêche d'entasser. */
+function ressourcesTick(){
+  const st = heroRessources();
+  const r = rendementParSaison();
+  for(const k of Object.keys(r)) st[k] += r[k];
+
+  const faim = Math.max(0, Math.floor(st.bras / 6) - Math.floor(st.grain / 4));
+  if(faim > 0){
+    st.bras = Math.max(0, st.bras - faim);
+    if(hero.chroniques && faim >= 2){
+      const d = dateFromSemaines(hero.temps ? hero.temps.semaines : 0);
+      hero.chroniques.push({ date:`${d.saison}, An ${d.an}`,
+        texte:`⌂ Karlsberg nourrit moins de monde qu'elle n'en abrite. ${faim} hommes sont repartis avant l'hiver.` });
+    }
+  }
+  for(const k of Object.keys(st)) st[k] = Math.min(999, st[k]);
+  return r;
+}
+
+/* ============================= PAYER ============================= */
+
+function coutManquant(cout){
+  const manque = [];
+  if(!cout) return manque;
+  if(cout.or && (hero.or || 0) < cout.or)
+    manque.push({ res:'or', il:cout.or - (hero.or||0), nom:"or" });
+  for(const k of Object.keys(RESSOURCES)){
+    if(cout[k] && ressourceDe(k) < cout[k])
+      manque.push({ res:k, il: cout[k] - ressourceDe(k), nom: RESSOURCES[k].nom.toLowerCase() });
+  }
+  return manque;
+}
+
+function payerRessources(cout){
+  if(!cout) return;
+  if(cout.or) hero.or = Math.max(0, (hero.or||0) - cout.or);
+  const st = heroRessources();
+  for(const k of Object.keys(RESSOURCES))
+    if(cout[k]) st[k] = Math.max(0, st[k] - cout[k]);
+}
+
+/* Où trouver ce qui manque : on ne dit pas « il vous faut 8 pierres », on dit
+ * quelles décisions du monde ouvrent une carrière. */
+function ouTrouver(res){
+  return SOURCES.filter(s => s.res === res && !hasFlag(s.flag)).slice(0, 3).map(s => s.quoi);
+}
+
+/* ============================= LES CONDITIONS ============================= */
+
+function conditionRemplie(id){
+  const c = CONDITIONS_CHANTIER[id];
+  return !!c && c.flags.some(f => hasFlag(f));
+}
+function conditionsManquantes(liste){
+  return (liste || []).filter(id => !conditionRemplie(id))
+    .map(id => CONDITIONS_CHANTIER[id]).filter(Boolean);
+}
+
+/* ============================= L'ÉTAT DE KARLSBERG ============================= */
+
+function palierKarlsberg(){
+  let dernier = KARLSBERG_PALIERS[0];
+  for(const p of KARLSBERG_PALIERS){
+    if(p.exige.every(id => ouvrageFait(id))) dernier = p; else break;
+  }
+  return dernier;
+}
+function palierSuivant(){
+  const i = KARLSBERG_PALIERS.findIndex(p => p.id === palierKarlsberg().id);
+  return KARLSBERG_PALIERS[i + 1] || null;
+}
+
+/* ============================= L'ÉCRAN ============================= */
+
+function renderRessources(){
+  const bloc = document.getElementById('ressourcesBloc');
+  if(!bloc) return;
+  heroRessources();
+  const rend = rendementParSaison();
+  const actives = sourcesActives();
+  const pal = palierKarlsberg();
+  const suiv = palierSuivant();
+
+  const cartes = Object.entries(RESSOURCES).map(([k, r]) => {
+    const sources = actives.filter(s => s.res === k);
+    return `<div class="res">
+      <div class="res-tete"><span class="res-nom">${r.nom}</span>
+        <span class="res-n">${ressourceDe(k)}<i>${r.unite}</i></span></div>
+      <div class="res-note">${r.note}</div>
+      ${sources.length
+        ? `<ul class="res-sources">${sources.map(s =>
+            `<li><b>${s.quoi}</b> — ${s.pourquoi}</li>`).join('')}</ul>
+           <div class="res-flux">+${rend[k]} par saison</div>`
+        : `<div class="res-rien">Rien ne vous en apporte. ${
+             ouTrouver(k).length ? 'Il faudrait : ' + ouTrouver(k).join(', ') + '.' : ''}</div>`}
+    </div>`;
+  }).join('');
+
+  bloc.innerHTML = `
+    <div class="kb-etat">
+      <span class="kb-palier">${pal.nom}</span>
+      <p class="kb-dit">${pal.dit}</p>
+      ${suiv ? `<p class="kb-suite">Pour que ce soit <b>${suiv.nom.toLowerCase()}</b>, il faudrait : ${
+        suiv.exige.filter(id => !ouvrageFait(id))
+          .map(id => (CHANTIER.find(o => o.id === id) || {}).nom || id).join(', ')}.</p>` : ''}
+    </div>
+    <div class="res-grid">${cartes}</div>`;
+}
+
+</script>
+<script>
 /* src/offres.js */
 /* PARIAS — Ce qu'on vous propose ici
  *
@@ -26019,8 +26351,17 @@ function renderLieu(){
 /* src/chantier.js */
 /* PARIAS — Moteur du chantier
  *
- * Bâtir coûte de l'or et des semaines. Les semaines sont la vraie dépense :
- * pendant qu'on bâtit, Yohan vieillit et le monde avance sans lui.
+ * Bâtir ne coûte jamais que de l'or. Il faut de la pierre, des bras, du grain,
+ * des faveurs — et des choses qui ne sont pas des stocks : une route sûre,
+ * quelqu'un qui sache bâtir, une garnison, des habitants.
+ *
+ * Rien de tout cela ne s'achète. Chaque ressource vient d'une source ouverte en
+ * jouant, ailleurs, des mois plus tôt (src/data/ressources.js). Relever
+ * Karlsberg n'est donc pas un poste de dépense : c'est ce que devient une
+ * partie où l'on a rendu des choses à des gens.
+ *
+ * Les semaines restent la dépense la plus lourde : pendant qu'on bâtit, Yohan
+ * vieillit et le monde avance sans lui.
  */
 
 function heroChantier(){
@@ -26036,8 +26377,33 @@ function ouvrageDisponible(o){
     return { bloque:`Demande d'abord : ${p ? p.nom : o.requis}` };
   }
   if(o.requisFlag && !hasFlag(o.requisFlag)) return { bloque:"Ce qu'il faudrait graver n'existe pas encore" };
-  if(hero.or < o.or) return { bloque:`${o.or} or requis (vous en avez ${hero.or})` };
-  return { ok:true };
+
+  /* Les conditions passent avant les stocks : on ne dit pas à quelqu'un qu'il
+   * lui manque huit charrois de pierre alors que le vrai problème est qu'aucune
+   * route ne monte. */
+  const cond = (typeof conditionsManquantes === 'function')
+    ? conditionsManquantes(o.exige) : [];
+  if(cond.length) return { bloque: cond[0].manque, condition: cond[0] };
+
+  const cout = Object.assign({ or:o.or || 0 }, o.cout || {});
+  const manque = (typeof coutManquant === 'function') ? coutManquant(cout) : [];
+  if(manque.length){
+    const m = manque[0];
+    const ou = (m.res !== 'or' && typeof ouTrouver === 'function') ? ouTrouver(m.res) : [];
+    return { bloque:`Il manque ${m.il} ${m.nom}`, manque,
+             piste: ou.length ? ou.join(', ') : null };
+  }
+  return { ok:true, cout };
+}
+
+/* Ce qu'un ouvrage coûte, en toutes lettres. */
+function coutLisible(o){
+  const p = [];
+  if(o.or) p.push(`${o.or} or`);
+  for(const [k, n] of Object.entries(o.cout || {}))
+    p.push(`${n} ${RESSOURCES[k].unite} de ${RESSOURCES[k].nom.toLowerCase()}`);
+  p.push(`${o.semaines} semaines`);
+  return p.join(' · ');
 }
 
 /* Le cumul de tout ce qui est bâti — lu par le combat, la boutique, l'armée. */
@@ -26061,7 +26427,9 @@ function batir(id){
   const d = ouvrageDisponible(o);
   if(!d || !d.ok) return;
 
-  hero.or -= o.or;
+  if(typeof payerRessources === 'function')
+    payerRessources(Object.assign({ or:o.or || 0 }, o.cout || {}));
+  else hero.or -= o.or;
   heroChantier().push(o.id);
   const e = o.effet || {};
   if(e.renom) ajusterRenom(e.renom);
@@ -26089,7 +26457,11 @@ function batir(id){
   box.innerHTML = `${artEventBanner('evt_paria', 'PARIA')}
     <span class="event-tag">Chantier · ${o.semaines} semaines</span><h3>${o.nom}</h3>
     <p class="narrative">${o.apres}</p>
-    <div class="reward-tags"><span class="reward-tag neg">−${o.or} or</span>${tags.join('')}</div>
+    <div class="reward-tags">${
+      [o.or ? `<span class="reward-tag neg">−${o.or} or</span>` : ''].concat(
+        Object.entries(o.cout || {}).map(([k, n]) =>
+          `<span class="reward-tag neg">−${n} ${RESSOURCES[k].nom.toLowerCase()}</span>`)).join('')
+    }${tags.join('')}</div>
     ${resume && resume.nouvelle ? `<p class="narrative" style="color:var(--parchment-dim);font-style:italic;">Pendant ce temps : ${resume.nouvelle}</p>` : ''}
     <div style="margin-top:16px;text-align:right;"><button class="primary" id="chBtn">Continuer</button></div>`;
   document.getElementById('eventModal').style.display = 'flex';
@@ -26099,12 +26471,27 @@ function batir(id){
 function ouvrirChantier(){
   const b = chantierBonus();
   const faits = heroChantier().length;
+  const pal = (typeof palierKarlsberg === 'function') ? palierKarlsberg() : null;
+  const suiv = (typeof palierSuivant === 'function') ? palierSuivant() : null;
+  const st = (typeof heroRessources === 'function') ? heroRessources() : {};
+  const rend = (typeof rendementParSaison === 'function') ? rendementParSaison() : {};
   const box = document.getElementById('eventModalBox');
-  box.innerHTML = `<span class="event-tag">Karlsberg — Les Ruines du Loup</span>
+
+  const stocks = (typeof RESSOURCES !== 'undefined')
+    ? Object.entries(RESSOURCES).map(([k, r]) =>
+        `<span class="ch-res"><b>${st[k] || 0}</b> ${r.nom.toLowerCase()}${
+          rend[k] ? `<i>+${rend[k]}</i>` : ''}</span>`).join('')
+    : '';
+
+  box.innerHTML = `<span class="event-tag">Karlsberg — ${pal ? pal.nom : 'Les Ruines du Loup'}</span>
     <h3>Le chantier</h3>
     <p class="narrative">${faits === 0
       ? "Trois pans de mur, un loup de pierre fendu, et de l'herbe rase. Tout est à faire, et personne ne le fera à votre place."
-      : `${faits} ouvrage${faits > 1 ? 's' : ''} debout. ${faits >= CHANTIER.length ? "Il n'y a plus rien à relever : Karlsberg tient." : "Le reste attend."}`}</p>
+      : (pal ? pal.dit : '')}</p>
+    ${suiv ? `<p class="narrative" style="color:var(--parchment-dim);font-style:italic;">Pour que ce soit un ${suiv.nom.toLowerCase()} : ${
+      suiv.exige.filter(id => !ouvrageFait(id))
+        .map(id => (CHANTIER.find(x => x.id === id) || {}).nom || id).join(', ')}.</p>` : ''}
+    <div class="chantier-stocks">${stocks}<span class="ch-res"><b>${hero.or}</b> or</span></div>
     <div class="chantier-etat">Défense +${b.defense} · Fatigue max +${b.fatMax}
       · Entretien ×${b.entretienMult.toFixed(2)} · Prix ×${b.prixMult.toFixed(2)}
       · Repos ×${b.reposMult}</div>
@@ -26116,9 +26503,13 @@ function ouvrirChantier(){
     const etat = ouvrageDisponible(o);
     const div = document.createElement('div');
     div.className = 'ouvrage' + (etat === null ? ' fait' : '') + (etat && etat.bloque ? ' bloque' : '');
+    const exige = (o.exige || []).map(id => CONDITIONS_CHANTIER[id])
+      .filter(Boolean).map(c => c.nom).join(', ');
     div.innerHTML = `<div><div class="ouv-nom">${o.nom}</div>
       <div class="ouv-desc">${etat === null ? o.apres : o.desc}</div>
-      <div class="ouv-cout">${o.or} or · ${o.semaines} semaines</div></div>`;
+      <div class="ouv-cout">${coutLisible(o)}</div>
+      ${exige && etat !== null ? `<div class="ouv-exige">Demande ${exige}.</div>` : ''}
+      ${etat && etat.piste ? `<div class="ouv-piste">Il faudrait ouvrir : ${etat.piste}.</div>` : ''}</div>`;
     const btn = document.createElement('button');
     btn.className = 'ghost';
     if(etat === null){ btn.textContent = 'Debout'; btn.disabled = true; }
@@ -26634,7 +27025,7 @@ function nouvelleChronique(){
  * reconstruits au chargement (voir CHAMPS_SET).
  */
 
-const SAVE_VERSION = 11;
+const SAVE_VERSION = 12;
 /* Le préfixe est un espace de noms de stockage, pas le numéro de version : il
  * reste figé pour que les parties commencées avant soient relues puis migrées. */
 const SAVE_PREFIX  = 'parias_save_v6_';
@@ -26695,6 +27086,7 @@ function reconstruireHero(brut){
   h.crises            = h.crises || {};
   h.pnj               = h.pnj || {};
   h.liens             = h.liens || {};
+  h.ressources        = h.ressources || { pierre:0, bras:0, grain:0, faveurs:0 };
   h.lignee            = h.lignee || { liaisons: [], enfants: [] };
   if(typeof h.age !== 'number') h.age = AGE_DEPART;
   h.compagnons        = (h.compagnons || []).map(c => COMPANIONS_POOL[c.id] || c);
@@ -26807,6 +27199,14 @@ const MIGRATIONS = {
                               griefs:[], promesses:[], etat:'inconnu' };
     }
     enr.version = 11;
+    return enr;
+  },
+  11: enr => {          // v11 → v12 : Karlsberg ne se paie plus qu'en or
+    /* Les sources déjà ouvertes dans la partie en cours comptent : on crédite
+     * une saison de rendement, pour que quelqu'un qui a rendu une carrière et
+     * tenu un refuge ne reparte pas de zéro. */
+    enr.hero.ressources = enr.hero.ressources || { pierre:0, bras:0, grain:0, faveurs:0 };
+    enr.version = 12;
     return enr;
   },
 };
@@ -27425,6 +27825,7 @@ function enterGame(){
   if(typeof syncTensions === 'function') syncTensions();
   if(typeof heroPnj === 'function') heroPnj();
   if(typeof liensTick === 'function') liensTick();
+  if(typeof heroRessources === 'function') heroRessources();
   document.getElementById('tabs').style.display='flex';
   const cal = document.getElementById('calendarBar');
   cal.style.display='flex';
@@ -27511,6 +27912,8 @@ function advanceTime(semaines){
     pnj = (typeof pnjTick === 'function') ? pnjTick(after) : [];
     // Les liens relisent ce que le monde vient de faire à ce qu'elles défendent.
     if(typeof liensTick === 'function') liensTick();
+    // Ce qui travaille pour Karlsberg travaille aussi quand Yohan est ailleurs.
+    if(typeof ressourcesTick === 'function') ressourcesTick();
   }
   // Le temps ne fait pas que tourner un compteur : on vieillit, et il naît des gens.
   const lignee = passerLeTemps(semaines);
@@ -27553,6 +27956,7 @@ function applyPassiveEffects(){
 function renderPersonnage(){
   applyPassiveEffects();
   if(typeof renderLiens === 'function') renderLiens();
+  if(typeof renderRessources === 'function') renderRessources();
   const face = document.getElementById('charFace');
   if(face && !face.dataset.pose){ face.innerHTML = artPortraitImg('yohan'); face.dataset.pose = '1'; }
   document.getElementById('charLvl').textContent = hero.niveau;

@@ -353,20 +353,36 @@ const verifie = (n, ok, d) => { if(ok) console.log('  ✔', n);
   console.log("\nKarlsberg se relève, et cela se sent");
   const chantier = await page.evaluate(() => {
     hero.chantier = []; hero.or = 12000; hero.position = 'LOC_001';
+    hero.flags = []; hero.ressources = { pierre:0, bras:0, grain:0, faveurs:0 };
     currentLieu = LOCATIONS.find(l => l.id === 'LOC_001');
     const avant = { def: chantierBonus().defense, entretien: chantierBonus().entretienMult,
                     sem: hero.temps.semaines, or: hero.or };
+
+    /* L'or seul ne va pas plus loin que la cour : c'est la règle du document
+       fondateur, et c'est ce qu'on vérifie d'abord. */
     batir('ch_cour'); closeEventModal();
+    batir('ch_enceinte'); closeEventModal();
+    const orSeul = hero.chantier.slice();
+
+    /* Puis une partie qui a rouvert une route, rendu une carrière et fait venir
+       des gens : là, les murs montent. */
+    hero.flags.push('cg_route_fait','rochebrune_carriere','nain_pierre_taillee',
+                    'vaudreuil_sept_libres','caleb_allie','route_franche',
+                    'vaudreuil_defrichement');
+    for(let t = 0; t < 8; t++) ressourcesTick();
     batir('ch_enceinte'); closeEventModal();
     batir('ch_puits'); closeEventModal();
     const b = chantierBonus();
-    return { avant, ouvrages: hero.chantier.length,
+    return { avant, orSeul, ouvrages: hero.chantier.length,
              apres:{ def:b.defense, entretien:+b.entretienMult.toFixed(2), sem: hero.temps.semaines, or: hero.or },
              bloque: (ouvrageDisponible(CHANTIER.find(x => x.id === 'ch_pierre')) || {}).bloque };
   });
   verifie('bâtir consomme de l\'or et des semaines',
     chantier.apres.or < chantier.avant.or && chantier.apres.sem > chantier.avant.sem, chantier);
-  verifie('trois ouvrages sont debout', chantier.ouvrages === 3, chantier);
+  verifie('douze mille écus ne relèvent que la cour',
+    chantier.orSeul.length === 1 && chantier.orSeul[0] === 'ch_cour', chantier.orSeul);
+  verifie('avec la pierre, les bras et une route, trois ouvrages sont debout',
+    chantier.ouvrages === 3, chantier);
   verifie('les murs donnent de la Défense', chantier.apres.def > chantier.avant.def, chantier);
   verifie('le puits fait baisser l\'entretien', chantier.apres.entretien < 1, chantier);
   verifie('un ouvrage sans prérequis reste barré', !!chantier.bloque, chantier.bloque);

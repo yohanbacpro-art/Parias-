@@ -641,6 +641,47 @@
   .pnja-quand{display:block;font-family:'Inter',sans-serif;font-size:9.5px;color:var(--parchment-dim);}
   .pnja-memoire-vide{font-size:11.5px;font-style:italic;color:var(--parchment-dim);border-top:1px solid var(--line);padding-top:7px;}
   .pli-pnj{color:var(--parchment);}
+  /* Karlsberg : ce qu'on a, et d'où ça vient */
+  .kb-etat{border-left:2px solid var(--gold);padding-left:12px;margin-bottom:14px;}
+  .kb-palier{font-family:'Cinzel',serif;font-size:17px;color:var(--gold);letter-spacing:.04em;}
+  .kb-dit{font-size:13px;line-height:1.55;color:var(--parchment);margin:4px 0 0;}
+  .kb-suite{font-size:12px;line-height:1.5;color:var(--parchment-dim);margin:6px 0 0;font-style:italic;}
+  .res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .res{background:#0f0c0a;border:1px solid var(--line);border-radius:5px;padding:10px 12px;}
+  .res-tete{display:flex;justify-content:space-between;align-items:baseline;}
+  .res-nom{font-family:'Cinzel',serif;font-size:13px;color:var(--parchment);}
+  .res-n{font-family:'Inter',sans-serif;font-weight:700;font-size:15px;color:var(--gold);}
+  .res-n i{font-style:normal;font-weight:400;font-size:9.5px;color:var(--parchment-dim);margin-left:4px;}
+  .res-note{font-family:'Inter',sans-serif;font-size:10.5px;font-style:italic;color:var(--parchment-dim);margin-bottom:7px;}
+  .res-sources{list-style:none;margin:0;padding:7px 0 0;border-top:1px solid var(--line);}
+  .res-sources li{font-size:11.5px;line-height:1.5;color:var(--parchment-dim);margin-bottom:3px;}
+  .res-sources b{color:var(--parchment);font-weight:600;}
+  .res-flux{font-family:'Inter',sans-serif;font-size:10px;color:var(--onde-bright);margin-top:4px;}
+  .res-rien{font-size:11.5px;line-height:1.5;font-style:italic;color:var(--parchment-dim);border-top:1px solid var(--line);padding-top:7px;}
+  .chantier-stocks{display:flex;flex-wrap:wrap;gap:14px;margin:10px 0;padding:8px 10px;background:#0f0c0a;border:1px solid var(--line);border-radius:4px;}
+  .ch-res{font-family:'Inter',sans-serif;font-size:11px;color:var(--parchment-dim);}
+  .ch-res b{color:var(--gold);font-size:13px;margin-right:3px;}
+  .ch-res i{font-style:normal;color:var(--onde-bright);margin-left:3px;font-size:9.5px;}
+  .ouv-exige{font-family:'Inter',sans-serif;font-size:10.5px;font-style:italic;color:var(--warn);margin-top:3px;}
+  .ouv-piste{font-family:'Inter',sans-serif;font-size:10.5px;font-style:italic;color:var(--parchment-dim);margin-top:3px;}
+  /* Les liens, sur quatre axes séparés */
+  .liens-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px;}
+  .liens-vide{color:var(--parchment-dim);font-style:italic;font-size:13px;}
+  .lien{background:#0f0c0a;border:1px solid var(--line);border-radius:5px;padding:11px 13px;}
+  .lien-tete{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+  .lien-face{width:44px;height:44px;border-radius:4px;border:1px solid var(--line);object-fit:cover;flex:0 0 auto;}
+  .lien-nom{display:block;font-family:'Cinzel',serif;font-size:13.5px;color:var(--parchment);}
+  .lien-etat{display:block;font-family:'Inter',sans-serif;font-size:10.5px;letter-spacing:.04em;color:var(--gold);}
+  .lien-juge{font-family:'Inter',sans-serif;font-size:10.5px;font-style:italic;color:var(--parchment-dim);margin-bottom:8px;}
+  .lien-axes{list-style:none;margin:0 0 8px;padding:0;}
+  .lien-axes li{font-size:12px;line-height:1.55;color:var(--parchment);display:flex;gap:8px;}
+  .lien-axe{flex:0 0 74px;font-family:'Inter',sans-serif;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-dim);padding-top:3px;}
+  .lien-bloque{font-size:11.5px;line-height:1.5;color:var(--warn);border-top:1px solid var(--line);padding-top:7px;}
+  .lien-bloque b{font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--gold-dim);}
+  .lien-griefs{border-top:1px solid var(--line);padding-top:7px;margin-top:7px;}
+  .lien-griefs b{display:block;font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--blood-bright);margin-bottom:3px;}
+  .lien-griefs ul{list-style:none;margin:0;padding:0;}
+  .lien-griefs li{font-size:11.5px;line-height:1.5;color:var(--parchment-dim);}
 
   .quete-bandeau{display:flex;justify-content:space-between;align-items:center;gap:14px;
     flex-wrap:wrap;padding:7px 11px;margin-bottom:8px;cursor:pointer;
@@ -971,6 +1012,18 @@
     <div class="panel">
       <h2>Compagnons</h2>
       <div class="compagnon-list" id="compagnonList"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Karlsberg</h2>
+      <p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;">On ne relève pas une maison avec de l'or. Il faut de la pierre, des bras, du grain et des dettes qu'on vous doit — et rien de tout cela ne s'achète.</p>
+      <div id="ressourcesBloc"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Liens</h2>
+      <p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;">Quatre choses différentes, qui ne montent pas ensemble. On peut être désiré sans être cru, et aimé sans être suivi.</p>
+      <div class="liens-grid" id="liensGrid"></div>
     </div>
 
     <div class="panel" id="panelCampagnes">
@@ -18081,16 +18134,26 @@ CHAINES_SECRETES_3.forEach(c => { CHAINES_SECRETES.push(c); CHAINES.push(c); });
 /* src/data/chantier.js */
 /* PARIAS — Le chantier de Karlsberg
  *
- * On parlait de relever une maison depuis le début sans jamais en poser une
- * pierre. Voici les pierres.
+ *   « Jamais "Reconstruire le château : 10 000 or". Il faut de la pierre, des
+ *     ouvriers, un architecte, de la nourriture, des routes sûres, une
+ *     garnison, une population, des revenus, des alliances. »
  *
- * Chaque ouvrage coûte de l'or et des semaines — le temps est la vraie monnaie,
- * parce qu'il fait vieillir Yohan et avancer le monde pendant qu'on bâtit. En
- * échange, chacun donne un avantage qu'on sent au jeu, pas une ligne de plus
- * sur une fiche.
+ * L'or ne suffit donc jamais, et à partir du fort il ne suffit même plus du
+ * tout. Un ouvrage se paie en :
+ *
+ *   or        ce qu'on a gagné en travaillant — jamais seul
+ *   cout      pierre / bras / grain / faveurs (voir src/data/ressources.js),
+ *             qui ne s'achètent pas : ils viennent de sources ouvertes en
+ *             jouant, des mois plus tôt, ailleurs
+ *   exige     des conditions qui ne sont pas des stocks : une route sûre, une
+ *             garnison, quelqu'un qui sache bâtir, assez d'habitants
+ *   semaines  la vraie dépense : Yohan vieillit, le monde avance sans lui
  *
  * `requis` : l'ouvrage précédent, ou un marqueur d'histoire.
  * `effet`  : lu par chantierBonus() dans src/chantier.js.
+ *
+ * Les six états de l'endroit — ruines, refuge, fort, château, domaine,
+ * puissance régionale — sont dans KARLSBERG_PALIERS.
  */
 
 const CHANTIER = [
@@ -18101,47 +18164,82 @@ const CHANTIER = [
     apres:"On peut traverser la cour sans se tordre une cheville. C'est peu. C'est la première fois depuis la Purge.",
   },
   {
-    id:"ch_enceinte", nom:"Relever l'enceinte", or:800, semaines:6, requis:"ch_cour",
+    id:"ch_enceinte", nom:"Relever l'enceinte", or:500, semaines:6, requis:"ch_cour",
+    cout:{ pierre:8, bras:6, grain:4 }, exige:['route_sure'],
     desc:"Avant les toits, les murs : c'est ce qu'on fait quand on compte rester. Trois pans à remonter, et la porte à reposer.",
     effet:{ defense:2, flags:["karlsberg_enceinte"] },
     apres:"Il y a une porte, et elle ferme. Ceux qui viennent doivent désormais frapper.",
   },
   {
-    id:"ch_puits", nom:"Le puits et les granges", or:500, semaines:4, requis:"ch_cour",
+    id:"ch_puits", nom:"Le puits et les granges", or:300, semaines:4, requis:"ch_cour",
+    cout:{ pierre:4, bras:5, grain:2 },
     desc:"On ne tient pas une place sans eau ni grain. Le vieux puits est comblé, mais il est là.",
     effet:{ entretienMult:0.7 },
     apres:"On nourrit chez soi. Une colonne qui mange à Karlsberg coûte un tiers de moins qu'une colonne qui achète en route.",
   },
   {
-    id:"ch_salle", nom:"La salle basse", or:600, semaines:4, requis:"ch_enceinte",
+    id:"ch_salle", nom:"La salle basse", or:350, semaines:4, requis:"ch_cour",
+    cout:{ pierre:6, bras:4, grain:3 },
     desc:"Une seule pièce voûtée, sèche, avec un feu. Ce n'est pas du confort : c'est un endroit où l'Onde retombe.",
     effet:{ fatMax:10, reposMult:2 },
     apres:"On y dort vraiment. Le bourdonnement s'y calme comme il ne se calme nulle part ailleurs.",
   },
   {
-    id:"ch_forge", nom:"La forge", or:900, semaines:5, requis:"ch_puits",
+    id:"ch_forge", nom:"La forge", or:500, semaines:5, requis:"ch_puits",
+    cout:{ pierre:6, bras:6, grain:4, faveurs:1 },
     desc:"Un forgeron d'un hameau voisin accepte de venir, à condition qu'on lui bâtisse de quoi travailler.",
     effet:{ prixMult:0.75, flags:["karlsberg_forge"] },
     apres:"On répare au lieu de racheter. Tout ce qu'on achète ailleurs coûte un quart de moins, parce qu'on n'achète plus que ce qu'on ne sait pas faire.",
   },
   {
-    id:"ch_refuge", nom:"Le corps de logis", or:1100, semaines:7, requis:"ch_salle",
+    id:"ch_refuge", nom:"Le corps de logis", or:600, semaines:7, requis:"ch_salle",
+    cout:{ pierre:9, bras:8, grain:10 },
     desc:"De quoi loger trente personnes qui n'ont nulle part où aller. C'est la première décision qui ne sert à rien militairement.",
     effet:{ reputation:{parias:20, humains:-4}, flags:["refuge_tenu"] },
     apres:"Trente lits, un four, et une règle : on ne demande pas d'où l'on vient. Le mot circule vite chez ceux qui en ont besoin.",
   },
   {
-    id:"ch_banniere", nom:"La bannière au-dessus de la porte", or:400, semaines:3, requis:"ch_enceinte",
+    id:"ch_banniere", nom:"La bannière au-dessus de la porte", or:250, semaines:3, requis:"ch_enceinte",
+    cout:{ bras:2 },
     desc:"Coudre le loup et le pendre en vue de la route. C'est un acte politique, et tout le monde le lira comme tel.",
     effet:{ renom:10, suspicion:15, reputation:{parias:16}, flags:["banniere_haute"] },
     apres:"On voit le loup depuis la route à une demi-lieue. Il n'y a plus moyen de prétendre que Karlsberg n'existe pas.",
   },
   {
-    id:"ch_pierre", nom:"Graver l'acte de fondation", or:700, semaines:5,
-    requis:"ch_enceinte", requisFlag:"acte_fondation",
+    id:"ch_pierre", nom:"Graver l'acte de fondation", or:400, semaines:5,
+    requis:"ch_muraille", requisFlag:"acte_fondation",
+    cout:{ pierre:6, faveurs:4 }, exige:['population'],
     desc:"Le texte tient en trois lignes : la Maison Karlsberg tient ses terres de son propre chef et non d'une couronne.",
     effet:{ renom:6, reputation:{parias:18, humains:-10}, flags:["karlsberg_independante"] },
     apres:"Ce n'est pas une bravade : c'est un document administratif recopié sur une pierre. C'est précisément pour ça que personne ne pourra jamais prétendre qu'il n'a pas existé.",
+  },
+
+  /* ── Ce qui vient après le fort. À partir d'ici, l'or ne sert presque plus :
+        il faut des gens, du grain, quelqu'un qui sache bâtir, et des dettes
+        que d'autres maisons vous doivent. ──────────────────────────────── */
+  {
+    id:"ch_donjon", nom:"Le donjon", or:400, semaines:12, requis:"ch_enceinte",
+    cout:{ pierre:22, bras:16, grain:14, faveurs:2 },
+    exige:['route_sure', 'architecte', 'garnison'],
+    desc:"Trois étages sur une base carrée, des murs de neuf pieds, un escalier qui tourne dans le mauvais sens pour l'assaillant. Ce n'est pas un symbole : c'est le seul endroit d'où l'on tient une vallée.",
+    effet:{ defense:4, renom:12, suspicion:10, flags:["karlsberg_donjon"] },
+    apres:"Le donjon se voit à trois lieues. Les cartes de la province devront être refaites, et ceux qui les font le savent déjà.",
+  },
+  {
+    id:"ch_bourg", nom:"Le bourg au pied des murs", or:300, semaines:14, requis:"ch_donjon",
+    cout:{ pierre:16, bras:24, grain:26 },
+    exige:['population', 'route_sure'],
+    desc:"On ne décide pas qu'un bourg existe : on trace des rues, on creuse un fossé, on donne des toits, et on attend de voir si les gens y restent. Quarante feux au départ.",
+    effet:{ entretienMult:0.75, renom:8, reputation:{parias:14, humains:6}, flags:["karlsberg_bourg"] },
+    apres:"Il y a un marché le troisième jour de chaque semaine, deux tavernes, une querelle de bornes en cours, et des enfants nés ici qui n'ont jamais vu les ruines.",
+  },
+  {
+    id:"ch_muraille", nom:"La muraille de la vallée", or:600, semaines:18, requis:"ch_bourg",
+    cout:{ pierre:34, bras:30, grain:24, faveurs:5 },
+    exige:['architecte', 'garnison', 'population'],
+    desc:"Fermer la vallée elle-même, pas seulement la maison : deux mille pas de courtine entre les deux versants, un corps de garde, et une porte qu'il faut deux attelages pour ouvrir.",
+    effet:{ defense:6, renom:16, suspicion:14, reputation:{parias:18, humains:-8}, flags:["karlsberg_muraille","karlsberg_a_tenu"] },
+    apres:"On n'entre plus dans la vallée du Loup : on y est admis. Trois maisons de la province ont fait demander, séparément, ce que Karlsberg comptait faire ensuite.",
   },
 ];
 
@@ -19764,6 +19862,121 @@ const PNJ_PAR_ID = id => PNJ_AUTONOMES.find(p => p.id === id) || null;
 
 </script>
 <script>
+/* src/data/ressources.js */
+/* PARIAS — Ce avec quoi on relève une maison
+ *
+ * Le document fondateur, mot pour mot :
+ *
+ *   « Jamais "Reconstruire le château : 10 000 or". Il faut de la pierre, des
+ *     ouvriers, un architecte, de la nourriture, des routes sûres, une
+ *     garnison, une population, des revenus, des alliances. »
+ *
+ * D'où quatre choses qui ne s'achètent pas, et une condition qui ne s'achète
+ * pas non plus.
+ *
+ * Le point important : **on ne les gagne pas en cliquant**. Chacune vient d'une
+ * source qu'on a ouverte en jouant — une carrière rendue à ses hommes, un
+ * refuge tenu, une route rouverte, une dette naine soldée. Ouvrir une source,
+ * c'est une décision prise ailleurs, dans une affaire, des mois plus tôt. Elle
+ * rapporte ensuite chaque saison, toute seule, tant qu'elle tient.
+ *
+ * Relever Karlsberg n'est donc pas un poste de dépense : c'est ce que devient
+ * une partie où l'on a rendu des choses à des gens.
+ */
+
+const RESSOURCES = {
+  pierre:  { nom:"Pierre",     unite:"charrois", note:"taillée, charriée, montée" },
+  bras:    { nom:"Bras",       unite:"hommes",   note:"des gens qui restent et qui bâtissent" },
+  grain:   { nom:"Grain",      unite:"muids",    note:"de quoi les nourrir pendant qu'ils bâtissent" },
+  faveurs: { nom:"Faveurs",    unite:"dettes",   note:"ce qu'on vous doit, et qu'on ne refuse pas" },
+};
+
+/* Une source ouverte rapporte chaque saison. `pourquoi` est ce qu'on affiche —
+ * le joueur lit d'où vient sa pierre, pas un chiffre de production. */
+const SOURCES = [
+  /* — La pierre — */
+  { flag:'rochebrune_carriere',  res:'pierre', n:3, quoi:"La carrière de Rochebrune", pourquoi:"les carriers taillent pour vous plutôt que pour leur ancien maître" },
+  { flag:'nain_pierre_taillee',  res:'pierre', n:4, quoi:"Les charrois de Kar-Durak", pourquoi:"des blocs sciés qui se ferment sans mortier" },
+  { flag:'brecourt_treuil',      res:'pierre', n:2, quoi:"Le treuil de Brécourt", pourquoi:"on remonte enfin ce qu'on extrait" },
+  { flag:'torcy_veine_haute',    res:'pierre', n:2, quoi:"La veine haute de Torcy", pourquoi:"de la pierre à deux jours de route" },
+  { flag:'karlsberg_rasee_deux_fois', res:'pierre', n:1, quoi:"Les ruines elles-mêmes", pourquoi:"Karlsberg a été rasée deux fois : il y a de quoi rebâtir dans ses propres décombres" },
+
+  /* — Les bras —
+     Le socle : dès que la cour est praticable, des gens s'arrêtent. Peu, mais
+     il en vient toujours — c'est ce qui garantit qu'une partie qui ne fait
+     rien d'autre avance quand même, très lentement. */
+  { flag:'karlsberg_habitable', res:'bras', n:1, quoi:"Ceux qui s'arrêtent", pourquoi:"une cour praticable et un toit, ça se sait sur une route" },
+  { flag:'refuge_tenu',          res:'bras', n:4, quoi:"Le corps de logis", pourquoi:"trente lits, et une règle : on ne demande pas d'où l'on vient" },
+  { flag:'vaudreuil_sept_libres',res:'bras', n:3, quoi:"Les sept de Vaudreuil", pourquoi:"ils sont libres, et ils sont venus" },
+  { flag:'vaudreuil_quatre_libres', res:'bras', n:2, quoi:"Les quatre de Vaudreuil", pourquoi:"quatre sur sept, c'est ce qu'on a pu" },
+  { flag:'fils_a_karlsberg',     res:'bras', n:3, quoi:"Les Vaury de Vaubien", pourquoi:"cinq du nom sont montés à Karlsberg" },
+  { flag:'aubremont_familles',   res:'bras', n:2, quoi:"Les familles d'Aubremont", pourquoi:"elles n'avaient plus de tour où rentrer" },
+  { flag:'caleb_allie',          res:'bras', n:3, quoi:"Les quarante de Fort-aux-Princes", pourquoi:"sans bannière, sans lettre et sans conditions" },
+  { flag:'arquenay_sauves',      res:'bras', n:2, quoi:"Ceux d'Arquenay", pourquoi:"ils sont rentrés, et certains ne sont pas repartis" },
+
+  /* — Le grain — */
+  { flag:'karlsberg_habitable', res:'grain', n:1, quoi:"Le potager de la cour", pourquoi:"quatre planches de légumes là où il y avait des ronces" },
+  { flag:'route_franche',        res:'grain', n:3, quoi:"La route franche", pourquoi:"les convois passent chez vous parce que ça ne leur coûte rien" },
+  { flag:'route_peage',          res:'grain', n:2, quoi:"Le péage de la vallée", pourquoi:"deux sous par essieu, et un registre tenu" },
+  { flag:'vaudreuil_defrichement', res:'grain', n:3, quoi:"Le défrichement de Vaudreuil", pourquoi:"des arpents qui n'avaient rien porté depuis quarante ans" },
+  { flag:'estrees_peage_leve',   res:'grain', n:2, quoi:"Le péage d'Estrées levé", pourquoi:"le sel remonte, et il s'échange" },
+  { flag:'karlsberg_route_ouverte', res:'grain', n:3, quoi:"La voie de la vallée", pourquoi:"une route entretenue nourrit ce qu'il y a au bout" },
+  { flag:'gorge_ouverte',        res:'grain', n:2, quoi:"La Gorge rouverte", pourquoi:"le commerce du sud repasse" },
+
+  /* — Les faveurs — */
+  { flag:'charles_allie',        res:'faveurs', n:2, quoi:"Charles de Mont-Draken", pourquoi:"il tient deux vallées avec vous" },
+  { flag:'nain_maitre_oeuvre',   res:'faveurs', n:2, quoi:"Brann de Kar-Durak", pourquoi:"cent onze ans, six mots par jour, et un mur qui ne tombera plus" },
+  { flag:'nain_boucliers_venus', res:'faveurs', n:2, quoi:"La Halle de Kar-Durak", pourquoi:"deux cents boucliers sont montés au jour pour vous" },
+  { flag:'khesh_lances_offertes',res:'faveurs', n:2, quoi:"Les Dunes", pourquoi:"deux cents lances en douze jours, si on les appelle" },
+  { flag:'trois_chenes_traite',  res:'faveurs', n:1, quoi:"Le traité des Trois Chênes", pourquoi:"deux cours elfiques vous doivent une paix" },
+  { flag:'eltharion_reconnait',  res:'faveurs', n:2, quoi:"La stèle des Trois Chênes", pourquoi:"quarante et un noms Parias gravés par une cour elfique" },
+  { flag:'alliance_valombre',    res:'faveurs', n:1, quoi:"Valombre", pourquoi:"une alliance de maison, avec ce que ça implique" },
+];
+
+/* Les conditions qui ne sont pas des stocks : une route sûre est un état du
+ * monde, pas une pile de charrois. */
+const CONDITIONS_CHANTIER = {
+  route_sure: {
+    nom:"une route sûre jusqu'à la vallée",
+    flags:['cg_route_fait','karlsberg_route_ouverte','route_ferrand_engage','route_du_loup_nommee','route_escortee'],
+    manque:"rien de lourd ne monte tant que le défilé n'est pas tenu",
+  },
+  garnison: {
+    nom:"une garnison qui tienne les murs",
+    flags:['caleb_allie','nain_boucliers_venus','karlsberg_a_tenu','route_ferrand_engage'],
+    manque:"personne ne bâtit un donjon qu'il ne peut pas défendre",
+  },
+  architecte: {
+    nom:"quelqu'un qui sache bâtir",
+    flags:['nain_maitre_oeuvre','karlsberg_architecte'],
+    manque:"il n'y a personne ici qui sache monter une voûte qui tienne",
+  },
+  population: {
+    nom:"assez de monde pour que ce soit une ville",
+    flags:['refuge_tenu','fils_a_karlsberg','aubremont_familles','vaudreuil_sept_libres'],
+    manque:"un domaine sans habitants est un décor",
+  },
+};
+
+/* Les six états visibles de Karlsberg. Le joueur ne voit jamais un pourcentage :
+ * il voit le nom de ce qu'est devenu l'endroit. */
+const KARLSBERG_PALIERS = [
+  { id:'ruines',   nom:"Ruines",              exige:[], 
+    dit:"Quarante ans de ronces sur ce qui fut une maison." },
+  { id:'refuge',   nom:"Refuge",              exige:['ch_cour','ch_salle'],
+    dit:"Un endroit sec, un feu, une porte. Des gens y dorment." },
+  { id:'fort',     nom:"Fort",                exige:['ch_enceinte','ch_puits'],
+    dit:"Des murs, de l'eau, du grain. Ceux qui viennent doivent frapper." },
+  { id:'chateau',  nom:"Château",             exige:['ch_donjon','ch_forge'],
+    dit:"Un donjon, une forge, une garnison. On ne prend plus ça au passage." },
+  { id:'domaine',  nom:"Domaine",             exige:['ch_bourg','ch_refuge'],
+    dit:"Un bourg au pied des murs, un marché, des gens qui y naissent." },
+  { id:'puissance',nom:"Puissance régionale", exige:['ch_muraille','ch_pierre'],
+    dit:"Karlsberg pèse sur la province. On compte avec elle, qu'on le veuille ou non." },
+];
+
+</script>
+<script>
 /* src/data/romances.js */
 /* PARIAS — Attachements
  *
@@ -20436,6 +20649,244 @@ const EVENTS_ROMANCE = [
 },
 
 ];
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LES QUATRE AXES, EN SCÈNES
+   ══════════════════════════════════════════════════════════════════════════
+
+   Ce qui précède fait monter un lien. Ce qui suit le rend séparable : des
+   moments où être franc coûte ce qu'on ressent, où ce qu'on ressent ne suffit
+   pas, où deux promesses ne peuvent pas tenir ensemble.
+
+   Ces scènes lisent l'état réel des axes (`elleAccepterait`) : le refus n'est
+   pas un jet raté, c'est un désaccord, et il dit lequel.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const EVENTS_LIENS = [
+
+/* ── ALYCIA — la franchise coûte, et elle paie ─────────────────────────── */
+{
+  id:"LI_ALYCIA_FRANCHISE", titre:"Ce qu'elle demande, et ce qu'elle vérifie",
+  famille:"PARIA", rarete:"rare", image:"ro_alycia_1",
+  requis:{ compagnon:"alycia", chapitreMin:1, sansFlags:["li_alycia_franchise_fait"] },
+  scenes:{
+    start:{ pnj:"alycia", texte:[
+      "Elle attend qu'ils soient seuls, ce qui chez elle prend rarement plus de dix minutes.",
+      "« Je vais te poser une question et tu vas mentir », dit-elle. « C'est normal, tout le monde ment. Ce que je veux savoir, c'est comment tu mens. »",
+      "Un temps. « Combien de Parias vivants est-ce que tu peux nommer ? »",
+      "Ce n'est pas une question anodine. C'est exactement la question que pose quelqu'un qui cherche une liste."],
+      choix:[
+        {label:"Dire la vérité, y compris ce qu'elle a de laid", detail:"Elle vérifiera · ce qu'on gagne en crédit se perd en mystère",
+         suite:"vrai", effets:{lien:{qui:"alycia", confiance:4, attirance:-1, relation:1},
+                               xp:24, flags:["li_alycia_franchise_fait","alycia_franc"]}},
+        {label:"Répondre à côté, élégamment", detail:"Elle appréciera le geste et notera le refus",
+         suite:"cote", effets:{lien:{qui:"alycia", attirance:2, confiance:-1},
+                               xp:18, flag:"li_alycia_franchise_fait"}},
+        {label:"Mentir en donnant un chiffre plausible", detail:"Jet de Volonté (15) · elle a passé trente ans à repérer ça",
+         test:{stat:"vol", dc:15}, reussite:"ment_ok", echec:"ment_ko"},
+        {label:"Lui retourner la question", detail:"Combien elle peut en nommer, elle",
+         suite:"retourne", effets:{lien:{qui:"alycia", relation:2, attirance:1},
+                                   xp:20, flag:"li_alycia_franchise_fait"}},
+      ]},
+    vrai:{ fin:true, pnj:"alycia", texte:[
+      "Il donne le compte exact, y compris ceux qu'il n'a pas aidés, y compris celui qu'il a laissé prendre à Orsenne parce que s'arrêter aurait coûté trois vies.",
+      "Elle écoute jusqu'au bout sans une expression. Puis : « Bien. Tu viens de te rendre beaucoup moins intéressant et beaucoup plus utile. »",
+      "Elle vérifiera. Elle vérifie tout. Trois semaines plus tard, elle reviendra sans commentaire, et ce silence-là vaudra plus que ce qu'elle aurait pu dire."]},
+    cote:{ fin:true, pnj:"alycia", texte:[
+      "Il répond joliment et ne répond pas. Elle sourit, parce que c'est bien fait.",
+      "« Tu as raison », dit-elle. « Moi non plus je ne te répondrais pas. »",
+      "Ce qui vient de se passer n'est pas rien : deux personnes se sont reconnues. Ce n'est simplement pas de la confiance."]},
+    ment_ok:{ fin:true, pnj:"alycia", texte:[
+      "Il donne un chiffre. Il le donne avec la fatigue exacte de quelqu'un qui compte des morts depuis longtemps, ce qui est la seule façon de mentir là-dessus.",
+      "Elle le croit. Elle le croit vraiment, et c'est le problème : ce qu'elle fera de ce chiffre ne sera pas rattrapable."],
+      effets:{lien:{qui:"alycia", confiance:3, attirance:2}, xp:26,
+              flags:["li_alycia_franchise_fait","alycia_chiffre_faux"]}},
+    ment_ko:{ fin:true, pnj:"alycia", texte:[
+      "Il donne un chiffre. Elle le laisse finir, attend trois secondes de trop, puis répète le chiffre lentement, comme on repose un objet mal rangé.",
+      "« Non », dit-elle. Rien d'autre. Pas de colère, pas de reproche, pas de scène.",
+      "Elle ne repose pas la question. Elle ne la reposera plus jamais, et c'est exactement ce que ça coûte."],
+      effets:{lien:{qui:"alycia", confiance:-5, attirance:1,
+                    grief:"vous lui avez menti sur le nombre de Parias vivants"},
+              xp:14, flags:["li_alycia_franchise_fait","alycia_ment_su"]}},
+    retourne:{ fin:true, pnj:"alycia", texte:[
+      "« Et toi ? »",
+      "Elle ne s'y attendait pas. Elle met un moment, puis donne un nombre — deux cent onze — et l'endroit où sont onze d'entre eux, ce qu'elle n'a jamais dit à personne.",
+      "« Voilà », fait-elle en se levant. « Maintenant tu peux me vendre. C'est plus simple quand c'est réciproque. »",
+      "Ce n'est pas de la confiance. C'est un otage échangé, ce qui, chez elle, arrive plus tôt."]},
+  }
+},
+
+/* ── ALARIELLE — ce que l'engagement coûte à ce qu'elle défend ─────────── */
+{
+  id:"LI_ALARIELLE_PRIX", titre:"Ce que ça coûterait, et à qui",
+  famille:"ELFE", rarete:"rare", image:"ro_alarielle_1",
+  requis:{ compagnon:"alarielle", chapitreMin:1, sansFlags:["li_alarielle_prix_fait"] },
+  scenes:{
+    start:{ pnj:"alarielle", texte:[
+      "Elle a une lettre à la main depuis le matin et ne l'a pas ouverte, ce qui, chez quelqu'un d'aussi méthodique, veut dire qu'elle sait ce qu'il y a dedans.",
+      "« Si je reste », dit-elle enfin, « ma cour perdra la seule personne capable de parler aux deux camps. Ce n'est pas de la vanité : il n'y a personne d'autre. »",
+      "Elle repose la lettre. « Alors ne me demande pas de rester par affection. Demande-le-moi en sachant ce que ça coûte à des gens qui n'ont rien fait. »"],
+      choix:[
+        {label:"Lui dire de partir", detail:"Ce qu'elle défend passe avant · ça se paiera entre eux",
+         suite:"partir", effets:{lien:{qui:"alarielle", confiance:5, relation:1, attirance:-2},
+                                 xp:26, flags:["li_alarielle_prix_fait","alarielle_devoir"]}},
+        {label:"Lui demander de rester, en le disant comme c'est", detail:"Égoïste, assumé, et honnête",
+         suite:"rester", effets:{lien:{qui:"alarielle", attirance:4, relation:2, confiance:-2},
+                                 xp:24, flags:["li_alarielle_prix_fait","alarielle_retenue"]}},
+        {label:"Lui promettre de porter la médiation à sa place", detail:"Jet de Volonté (15) · une promesse qu'il faudra tenir",
+         test:{stat:"vol", dc:15}, reussite:"promet_ok", echec:"promet_ko"},
+        {label:"Ne pas décider pour elle", detail:"C'est sa cour, sa faute historique et sa vie",
+         suite:"elle_decide", effets:{lien:{qui:"alarielle", confiance:3, relation:1},
+                                      xp:22, flag:"li_alarielle_prix_fait"}},
+      ]},
+    partir:{ fin:true, pnj:"alarielle", texte:[
+      "« Pars. »",
+      "Elle le regarde longuement. Ce n'est pas de la gratitude : c'est le soulagement très laid de quelqu'un à qui on vient de retirer un choix impossible.",
+      "« Tu viens de me rendre la chose plus facile et beaucoup plus triste », dit-elle. « Les deux comptent. »",
+      "Elle part le lendemain. Elle écrira, et ses lettres seront précises, longues, et sans un mot de tendresse — parce que c'est ce qu'elle peut se permettre."]},
+    rester:{ fin:true, pnj:"alarielle", texte:[
+      "« Reste. Je n'ai pas d'argument. Je préfère que tu sois là. »",
+      "Elle ferme les yeux une seconde. « Merci de ne pas avoir habillé ça. »",
+      "Elle reste. Trois mois plus tard, une négociation qu'elle aurait pu mener échoue à quarante lieues d'ici, et ils apprennent tous les deux le nombre de morts par la même chronique.",
+      "Ils n'en parleront jamais. Ce sera là quand même."]},
+    promet_ok:{ fin:true, pnj:"alarielle", texte:[
+      "« Je la porterai. Pas à ta place — à ta demande, avec ton nom, et je te rendrai compte. »",
+      "Elle réfléchit longtemps, ce qui est bon signe : elle ne prend jamais au sérieux ce qu'elle accepte vite.",
+      "« Un humain qui va parler aux deux cours elfiques », dit-elle enfin. « C'est absurde. Et personne ne peut te reprocher d'être du mauvais camp, puisque tu n'en as aucun. »",
+      "Elle reste. La promesse, elle, est écrite quelque part maintenant."],
+      effets:{lien:{qui:"alarielle", confiance:4, relation:3, attirance:2,
+                    promesse:"porter la médiation elfique"},
+              xp:32, flags:["li_alarielle_prix_fait","yohan_mediateur_elfique"]}},
+    promet_ko:{ fin:true, pnj:"alarielle", texte:[
+      "Il promet trop vite et trop large, avec cette chaleur qui rend une promesse agréable à entendre et impossible à tenir.",
+      "Elle l'écoute jusqu'au bout. Puis : « Tu ne sais pas ce que tu viens de proposer. Ce n'est pas grave. Mais ne le redis pas. »",
+      "Elle part quand même."],
+      effets:{lien:{qui:"alarielle", confiance:-3, attirance:1}, xp:16,
+              flags:["li_alarielle_prix_fait","alarielle_devoir"]}},
+    elle_decide:{ fin:true, pnj:"alarielle", texte:[
+      "« Ce n'est pas à moi de te le dire. »",
+      "Elle a un rire bref, sans joie. « Non. Ce n'est pas à toi. » Elle ouvre enfin la lettre, la lit, et met un temps considérable à la reposer.",
+      "« Je pars. » Puis, à la porte : « Je voulais que quelqu'un me retienne. Tu as eu raison de ne pas le faire, et je vais t'en vouloir un peu. Les deux tiennent ensemble. »"]},
+  }
+},
+
+/* ── LE PAS DE PLUS — et le refus, qui dit pourquoi ────────────────────── */
+{
+  id:"LI_PAS_DE_PLUS", titre:"Un pas de plus",
+  famille:"PARIA", rarete:"rare", image:"ro_alycia_2",
+  requis:{ compagnon:"alycia", chapitreMin:2, sansFlags:["li_pas_de_plus_fait"] },
+  scenes:{
+    start:{ pnj:"alycia", texte:[
+      "Il y a un moment, dans une pièce, où continuer à parler devient une façon de ne pas décider.",
+      "Ils y sont."],
+      choix:[
+        {label:"Le lui demander", detail:"Elle répondra franchement · elle répond toujours franchement",
+         suite:"demande"},
+        {label:"Laisser passer", detail:"Ce qui n'est pas dit reste possible",
+         suite:"laisse", effets:{lien:{qui:"alycia", relation:1}, xp:12,
+                                 flag:"li_pas_de_plus_fait"}},
+      ]},
+    demande:{ pnj:"alycia",
+      /* La scène lit l'état réel des axes. Un refus n'est pas un jet raté :
+         c'est un désaccord, et il porte sa raison. */
+      texteDyn(){
+        const r = elleAccepterait('alycia', 'amants');
+        if(r.oui) return [
+          "« Oui », dit-elle, sans détour et sans mise en scène, ce qui est le plus déroutant.",
+          "« J'ai trente et un ans, je n'appartiens à personne et je fais ce que je veux. Toi aussi. C'est la seule condition, et elle vaut dans les deux sens. »"];
+        return [
+          "Elle ne détourne pas les yeux, et elle ne fait pas durer.",
+          "« Non. »",
+          `« Ce n'est pas un caprice et ce n'est pas définitif. C'est que ${r.parce}. »`,
+          "Elle se lève. « Ne recommence pas ce soir. Recommence plus tard, si c'est encore vrai. »"];
+      },
+      choixDyn(){
+        const r = elleAccepterait('alycia', 'amants');
+        return r.oui
+          ? [{label:"Rester", detail:"La scène s'arrête à la porte",
+              suite:"oui", effets:{lien:{qui:"alycia", relation:2, attirance:2, confiance:1},
+                                   xp:40, flags:["li_pas_de_plus_fait","alycia_amants"]}},
+             {label:"Lui promettre qu'il n'y aura personne d'autre", detail:"Une promesse se retient",
+              suite:"oui", effets:{lien:{qui:"alycia", relation:2, attirance:2, confiance:2,
+                                         promesse:"exclusivite"},
+                                   xp:44, flags:["li_pas_de_plus_fait","alycia_amants","alycia_promesse"]}}]
+          : [{label:"Accepter le non", detail:"Sans insister, sans le reprocher",
+              suite:"non_ok", effets:{lien:{qui:"alycia", confiance:2}, xp:22,
+                                      flag:"li_pas_de_plus_fait"}},
+             {label:"Insister", detail:"Ce qu'elle vient de dire était pourtant clair",
+              suite:"insiste", effets:{lien:{qui:"alycia", confiance:-4, attirance:-2,
+                                             grief:"vous avez insisté après un non"},
+                                       xp:8, flag:"li_pas_de_plus_fait"}}];
+      }},
+    laisse:{ fin:true, pnj:"alycia", texte:[
+      "Il ne dit rien. Elle non plus. Le moment passe, comme passent les moments qu'on laisse passer.",
+      "Plus tard dans la soirée, elle dit, sans lever les yeux de ce qu'elle fait : « C'était bien. » Il n'y a aucune ironie dedans, ce qui est rare chez elle.",
+      "Rien n'est arrivé. Rien n'est fermé non plus."]},
+    oui:{ fin:true, pnj:"alycia", texte:[
+      "La porte se referme, et ce qu'il y a derrière ne regarde personne.",
+      "Au matin, elle est déjà debout, habillée, en train de vérifier les sorties de la pièce — le même geste qu'au premier jour. Elle ne s'excuse pas de le faire.",
+      "« Ça ne change pas ce que je suis », dit-elle. « Ni ce que tu es. C'est pour ça que ça peut tenir. »"]},
+    non_ok:{ fin:true, pnj:"alycia", texte:[
+      "« D'accord. »",
+      "Elle s'arrête à la porte, un peu surprise, et se retourne. « Tu ne vas pas discuter ? »",
+      "« Non. »",
+      "Elle hoche la tête lentement. Ce qui vient de se passer compte plus, pour elle, que ce qu'elle a refusé."]},
+    insiste:{ fin:true, pnj:"alycia", texte:[
+      "Il insiste. Il insiste bien, avec des arguments, ce qui rend la chose pire.",
+      "Elle ne s'énerve pas. Elle attend qu'il ait fini, entièrement, jusqu'au dernier mot, dans un silence qui devient très long.",
+      "« Voilà », dit-elle enfin. « Maintenant je sais comment tu es quand on te dit non. »",
+      "Elle sort. Elle sera là demain, et quelque chose ne sera plus là."]},
+  }
+},
+
+/* ── DEUX EN MÊME TEMPS — ce qui a été promis se retient ───────────────── */
+{
+  id:"LI_CLARIFICATION", titre:"Ce qui a été promis",
+  famille:"PARIA", rarete:"rare", image:"ro_alycia_3",
+  requis:{ flags:["lien_clarification_due"], sansFlags:["li_clarification_fait"] },
+  scenes:{
+    start:{ pnj:"alycia", texte:[
+      "Ce n'est pas une scène. Personne ne crie, personne ne pleure, et c'est bien pire.",
+      "« Je ne te reproche pas d'avoir quelqu'un », dit Alycia. « Je m'en fiche, sincèrement, et tu le sais. »",
+      "Elle pose une main à plat sur la table. « Je te reproche d'avoir promis. Tu n'étais pas obligé. Tu l'as fait pour t'acheter quelque chose sur le moment, et maintenant il y a une promesse en trop dans le monde. »",
+      "Un temps. « Alors on va la ranger. Il y a trois façons. »"],
+      choix:[
+        {label:"Retirer la promesse, et le dire", detail:"Elle préfère ça à ce qu'il y a maintenant",
+         suite:"retire", effets:{lien:{qui:"alycia", confiance:3, attirance:-2, relation:-1},
+                                 xp:34, flags:["li_clarification_fait","lien_promesse_retiree"]}},
+        {label:"La tenir, et rompre l'autre", detail:"Une promesse tenue vaut ce qu'elle coûte",
+         suite:"tient", effets:{lien:{qui:"alycia", confiance:5, relation:2},
+                                xp:38, flags:["li_clarification_fait","lien_promesse_tenue"]}},
+        {label:"Soutenir qu'il n'y a rien à ranger", detail:"Jet de Volonté (16) · elle sait déjà",
+         test:{stat:"vol", dc:16}, reussite:"nie_ok", echec:"nie_ko"},
+      ]},
+    retire:{ fin:true, pnj:"alycia", texte:[
+      "« Je retire ce que j'ai promis. Ce n'était pas vrai quand je l'ai dit. »",
+      "Elle encaisse ça mieux que ce qu'il craignait, et beaucoup moins bien qu'elle ne le montre.",
+      "« Bon. » Elle range la promesse comme on range un couteau. « Ça, au moins, je peux le compter. »"]},
+    tient:{ fin:true, pnj:"alycia", texte:[
+      "Il tient parole. Ça coûte exactement ce qu'une parole tenue coûte, c'est-à-dire tout ce qu'il y avait de l'autre côté.",
+      "Alycia ne triomphe pas. Elle a l'air, un instant, presque désolée.",
+      "« Tu as choisi la promesse plutôt que la personne », dit-elle. « C'est ce qu'il fallait faire. Ce n'est pas la même chose que d'avoir choisi la bonne. »"]},
+    nie_ok:{ fin:true, pnj:"alycia", texte:[
+      "Il ne nie pas les faits — il refuse le cadre. Il n'y a pas de promesse en trop : il y a deux vies d'adultes qui ne se doivent aucun compte, et il le dit sans une once de mauvaise foi parce qu'il le pense.",
+      "Elle l'écoute. Puis, très lentement : « D'accord. » Et ce n'est pas une reddition : c'est quelqu'un qui vient d'entendre un raisonnement qui tient.",
+      "« Mais alors ne promets plus rien à personne. Jamais. Sinon c'est juste de la lâcheté avec un bon vocabulaire. »"],
+      effets:{lien:{qui:"alycia", confiance:1, attirance:1}, xp:30,
+              flags:["li_clarification_fait","lien_sans_promesse"]}},
+    nie_ko:{ fin:true, pnj:"alycia", texte:[
+      "Il nie. Mal. Avec cette précision fébrile qui, chez un menteur ordinaire, passerait pour de la sincérité, et qui, devant elle, ne passe pas du tout.",
+      "Elle ne dit rien pendant très longtemps. Puis elle se lève et remet son manteau.",
+      "« Le problème n'a jamais été l'autre », dit-elle à la porte. « Le problème, c'est que je viens de perdre la seule chose que j'avais avec toi et que personne d'autre ne m'a jamais donnée. »"],
+      effets:{lien:{qui:"alycia", confiance:-7, relation:-2,
+                    grief:"vous avez nié une promesse qu'elle avait entendue"},
+              xp:16, flags:["li_clarification_fait","lien_menti_deux_fois"]}},
+  }
+},
+
+];
+
+EVENTS_LIENS.forEach(e => EVENTS_ROMANCE.push(e));
 
 </script>
 <script>
@@ -23011,6 +23462,22 @@ function applyEffets(e){
     ajusterAffinite(e.affinite.qui, e.affinite.n);
     tags.push(`<span class="reward-tag">Lien resserré</span>`);
   }
+  /* Les axes séparés : une scène peut resserrer ce qu'on ressent tout en
+     abîmant ce qu'on croit. C'est ce qui distingue un lien d'une jauge. */
+  if(e.lien && typeof ajusterLien === 'function'){
+    const d = e.lien;
+    ajusterLien(d.qui, d);
+    const mots = [];
+    if(d.relation  > 0) mots.push('vous vous rapprochez');
+    if(d.relation  < 0) mots.push('vous vous éloignez');
+    if(d.confiance > 0) mots.push('elle vous croit un peu plus');
+    if(d.confiance < 0) mots.push('elle vous croit moins');
+    if(d.attirance > 0) mots.push('quelque chose passe');
+    if(d.attirance < 0) mots.push('quelque chose se referme');
+    if(d.grief)         mots.push("elle ne l'oubliera pas");
+    if(d.promesse)      mots.push('vous avez promis');
+    if(mots.length) tags.push(`<span class="reward-tag">${mots.join(' · ')}</span>`);
+  }
   // Un compagnon ne s'impose plus : une scène le propose, le joueur décide.
   if(e.compagnon){
     const c = COMPANIONS_POOL[e.compagnon];
@@ -23073,12 +23540,19 @@ function renderScene(sceneId){
   const tags = applyEffets(sc.effets);
   const box = document.getElementById('eventModalBox');
 
+  /* Une scène peut se composer au moment où elle s'ouvre. C'est ce qui permet
+     à un refus de dire *pourquoi* : le texte et les choix se lisent alors dans
+     l'état réel du lien, pas dans un jet de dé. Le joueur, lui, ne voit qu'une
+     scène ordinaire — il n'existe toujours qu'une scène à l'écran. */
+  const texte = sc.texteDyn ? sc.texteDyn() : sc.texte;
+  const choix = sc.choixDyn ? sc.choixDyn() : sc.choix;
+
   let html = artEventBanner(ev.image, ev.famille);
   html += `<span class="event-tag">${ev.famille} · ${ev.rarete}${lieu?' · '+lieu.nom:''}</span>`;
   if(sceneId === 'start') html += `<h3>${ev.titre}</h3>`;
   if(sc.pnj) html += artPortraitCard(sc.pnj);
   if(ecritState.dernierJet){ html += ecritState.dernierJet; ecritState.dernierJet = null; }
-  html += sc.texte.map(p=>`<p class="narrative">${p}</p>`).join('');
+  html += texte.map(p=>`<p class="narrative">${p}</p>`).join('');
   if(tags.length) html += `<div class="reward-tags">${tags.join('')}</div>`;
 
   // --- Scène de bataille rangée ---
@@ -23137,7 +23611,7 @@ function renderScene(sceneId){
   // Une scène peut porter `suite` sans offrir de choix : c'est un battement de
   // récit (on descend, on marche, on arrive) qui mène à la scène suivante sans
   // refermer l'événement.
-  if((!sc.choix || !sc.choix.length) && sc.suite){
+  if((!choix || !choix.length) && sc.suite){
     html += `<div style="margin-top:18px;text-align:right;"><button class="primary" id="scSuiteBtn">Continuer</button></div>`;
     box.innerHTML = html;
     document.getElementById('eventModal').style.display='flex';
@@ -23146,7 +23620,7 @@ function renderScene(sceneId){
   }
 
   // --- Scène terminale ---
-  if(!sc.choix || !sc.choix.length){
+  if(!choix || !choix.length){
     html += `<div style="margin-top:18px;text-align:right;"><button class="primary" id="scFinBtn">Continuer</button></div>`;
     box.innerHTML = html;
     document.getElementById('eventModal').style.display='flex';
@@ -23167,7 +23641,7 @@ function renderScene(sceneId){
   document.getElementById('eventModal').style.display='flex';
 
   const cl = document.getElementById('scChoix');
-  sc.choix.forEach(choix=>{
+  choix.forEach(choix=>{
     const verrou = choixVerrou(choix);
     const b = document.createElement('button');
     if(verrou) b.className = 'locked';
@@ -23315,7 +23789,14 @@ function heroAffinites(){
   return hero.affinites;
 }
 function affiniteAvec(qui){ const a = heroAffinites(); return a[qui] || 0; }
+/* Un effet ancien `affinite:{qui,n}` ne connaît qu'un nombre. On le traduit sur
+ * les axes — le temps passé et ce qu'on ressent montent ensemble, la confiance
+ * ne se donne pas d'un geste — et `hero.affinites` reste la lecture courte. */
 function ajusterAffinite(qui, n){
+  if(typeof ajusterLien === 'function' && typeof LIENS_PROFILS !== 'undefined' && LIENS_PROFILS[qui]){
+    ajusterLien(qui, { relation: n, attirance: n });
+    return;
+  }
   const a = heroAffinites();
   a[qui] = Math.max(0, (a[qui]||0) + n);
 }
@@ -25072,6 +25553,453 @@ function renderPnj(){
 
 </script>
 <script>
+/* src/liens.js */
+/* PARIAS — Les liens, sur quatre axes séparés
+ *
+ * Le document fondateur : *« Jamais une barre à remplir. Séparer au minimum
+ * relation / confiance / attirance / compatibilité politique. Alycia et
+ * Alarielle sont majeures et facultatives. Elles peuvent aimer Yohan et être en
+ * désaccord avec lui, refuser, rompre, ou préférer leurs propres intérêts. »*
+ *
+ * D'où quatre axes, qui ne bougent pas ensemble :
+ *
+ *   relation    le temps passé, ce qu'on a traversé côte à côte
+ *   confiance   ce qu'elle croit de ce que vous dites. Un mensonge la casse
+ *               d'un coup et elle remonte lentement.
+ *   attirance   ce qui n'a rien à voir avec les trois autres
+ *   politique   **dérivée du monde**, pas d'un compteur : ce que vos actes
+ *               coûtent à ce qu'elle défend. Alycia lit votre loyauté envers les
+ *               Parias ; Alarielle lit vos engagements et leurs conséquences.
+ *
+ * Une jauge élevée ne suffit jamais. Chaque palier exige *plusieurs* axes à la
+ * fois, et le refus n'est pas un échec de dé : c'est un désaccord, il porte une
+ * raison, et cette raison s'affiche.
+ *
+ * COMPATIBILITÉ. `hero.affinites` reste écrit et lu : c'est la lecture courte
+ * des axes. Tout ce qui l'utilisait — `requis.affinite` des événements écrits,
+ * `si.affinite` des verdicts d'épilogue, les jalons de romance — continue de
+ * fonctionner tel quel.
+ */
+
+const LIENS_AXES = ['relation', 'confiance', 'attirance'];
+
+/* Ce que chacune regarde en priorité, et ce qu'elle ne pardonne pas. */
+const LIENS_PROFILS = {
+  alycia: {
+    nom:"Alycia de Callensbourg",
+    juge:"la loyauté envers les Parias, et la franchise",
+    /* Sa compatibilité politique se lit dans ce que Yohan fait des siens. */
+    politique(){
+      let n = Math.round(reputationDe('parias') / 12);
+      if(hasFlag('genealogies_vendues'))   n -= 10;
+      if(hasFlag('genealogies_brulees'))   n += 4;
+      if(hasFlag('cause_parias'))          n += 3;
+      if(hasFlag('caleb_desolidarise'))    n += 1;
+      if(hasFlag('lucius_offre') && hasFlag('banniere_haute')) n -= 2;
+      return Math.max(-12, Math.min(12, n));
+    },
+    /* Ce qui casse la confiance chez elle : lui mentir, ou vendre les siens. */
+    trahisons:[
+      { flag:'genealogies_vendues', n:-9, quoi:"vous avez vendu la liste des Parias vivants" },
+      { flag:'alycia_partie',       n:-4, quoi:"elle est partie, et vous l'avez laissée partir" },
+    ],
+  },
+  alarielle: {
+    nom:"Alarielle",
+    juge:"les engagements tenus, et ce qu'ils coûtent au monde",
+    politique(){
+      let n = Math.round(reputationDe('elfes') / 12);
+      if(criseEtape('ELFES') >= 4)         n -= 6;   // sa cour en guerre la reprend
+      if(hasFlag('trois_chenes_traite'))   n += 5;
+      if(hasFlag('alarielle_rappelee'))    n -= 4;
+      if(hasFlag('alarielle_a_choisi'))    n += 8;
+      if(hasFlag('valombre_dragon_mort'))  n -= 2;
+      return Math.max(-12, Math.min(12, n));
+    },
+    trahisons:[
+      { flag:'tyrion_rapport_faux', n:-5, quoi:"un rapport faux, signé de votre main" },
+      { flag:'convoi_plomb_rompu',  n:-4, quoi:"un plomb rompu sur un convoi sous parole" },
+    ],
+  },
+  eleonore: {
+    nom:"Éléonore",
+    juge:"ce qu'on fait de sa maison",
+    politique(){ return Math.round(reputationDe('humains') / 14); },
+    trahisons:[],
+  },
+};
+
+/* ============================= L'ÉTAT ============================= */
+
+function heroLiens(){
+  if(!hero.liens) hero.liens = {};
+  for(const qui of Object.keys(LIENS_PROFILS)){
+    if(!hero.liens[qui]) hero.liens[qui] = {
+      relation:0, confiance:0, attirance:0,
+      griefs:[], promesses:[], etat:'inconnu',
+    };
+  }
+  return hero.liens;
+}
+
+function lienDe(qui){ return heroLiens()[qui] || null; }
+
+function axeDe(qui, axe){
+  if(axe === 'politique'){
+    const p = LIENS_PROFILS[qui];
+    if(!p) return 0;
+    try { return p.politique(); } catch(e){ return 0; }
+  }
+  const l = lienDe(qui);
+  return l ? (l[axe] || 0) : 0;
+}
+
+/* Ce qu'une scène écrite peut faire : bouger un ou plusieurs axes d'un coup,
+ * et jamais tous dans le même sens. */
+function ajusterLien(qui, delta){
+  const l = lienDe(qui);
+  if(!l) return;
+  for(const axe of LIENS_AXES){
+    if(typeof delta[axe] === 'number')
+      l[axe] = Math.max(-12, Math.min(12, l[axe] + delta[axe]));
+  }
+  if(delta.grief) l.griefs.push({ quoi: delta.grief, semaine: semaineCourante() });
+  if(delta.promesse) l.promesses.push({ quoi: delta.promesse, semaine: semaineCourante() });
+  syncAffinites();
+}
+
+/* Ce que le monde a fait à sa confiance, sans qu'aucune scène l'écrive. */
+function relireTrahisons(){
+  for(const [qui, p] of Object.entries(LIENS_PROFILS)){
+    const l = lienDe(qui);
+    for(const t of (p.trahisons || [])){
+      if(!hasFlag(t.flag)) continue;
+      if(l.griefs.some(g => g.flag === t.flag)) continue;
+      l.griefs.push({ flag: t.flag, quoi: t.quoi, semaine: semaineCourante() });
+      l.confiance = Math.max(-12, l.confiance + t.n);
+    }
+  }
+  syncAffinites();
+}
+
+/* La lecture courte, pour tout ce qui lisait `affinites` avant les axes. */
+function syncAffinites(){
+  if(!hero.affinites) hero.affinites = { ...AFFINITES_DEPART };
+  for(const qui of Object.keys(LIENS_PROFILS)){
+    const l = lienDe(qui);
+    hero.affinites[qui] = Math.max(0, Math.round((l.relation + l.confiance + l.attirance) / 3));
+  }
+}
+
+/* ============================= LES PALIERS =============================
+ * Un palier n'est jamais un seuil unique. Il faut plusieurs axes à la fois —
+ * c'est ce qui fait qu'on peut être désiré et pas cru, ou aimé et refusé. */
+
+const LIENS_PALIERS = [
+  { id:'inconnu',      nom:"Vous ne vous connaissez pas",
+    exige:{} },
+  { id:'connaissance', nom:"Vous vous connaissez",
+    exige:{ relation:2 } },
+  { id:'confiance',    nom:"Elle vous croit",
+    exige:{ relation:4, confiance:4 } },
+  { id:'attachement',  nom:"Il y a quelque chose",
+    exige:{ relation:5, confiance:4, attirance:5 } },
+  { id:'amants',       nom:"Vous êtes ensemble",
+    exige:{ relation:6, confiance:6, attirance:7 } },
+  { id:'engagement',   nom:"Elle a choisi de rester",
+    exige:{ relation:8, confiance:8, attirance:8, politique:0 } },
+  { id:'mariage',      nom:"Elle vous a épousé",
+    exige:{ relation:10, confiance:9, attirance:8, politique:3 } },
+];
+
+function palierAtteint(qui){
+  let dernier = LIENS_PALIERS[0];
+  for(const p of LIENS_PALIERS){
+    const ok = Object.entries(p.exige).every(([axe, n]) => axeDe(qui, axe) >= n);
+    if(ok) dernier = p; else break;
+  }
+  return dernier;
+}
+
+/* Ce qui bloque le palier suivant — et c'est ça qu'on montre au joueur, jamais
+ * un nombre. Un refus a toujours une raison, et elle est dite. */
+const LIENS_MANQUES = {
+  relation:  qui => "vous ne vous êtes pas assez vus pour ça",
+  confiance: qui => "elle ne croit pas encore ce que vous dites",
+  attirance: qui => "ce n'est pas ce qu'elle ressent",
+  politique: qui => qui === 'alycia'
+    ? "ce que vous faites des Parias se met en travers"
+    : "ce que vous êtes en train de faire coûte trop à ce qu'elle défend",
+};
+
+function cequiBloque(qui){
+  const actuel = palierAtteint(qui);
+  const i = LIENS_PALIERS.findIndex(p => p.id === actuel.id);
+  const suivant = LIENS_PALIERS[i + 1];
+  if(!suivant) return null;
+  const manques = Object.entries(suivant.exige)
+    .filter(([axe, n]) => axeDe(qui, axe) < n)
+    .map(([axe]) => LIENS_MANQUES[axe](qui));
+  return { palier: suivant, manques };
+}
+
+/* La question que pose une scène avant de proposer un pas de plus : est-ce
+ * qu'elle dirait oui ? Et si non, pourquoi. */
+function elleAccepterait(qui, palierId){
+  const p = LIENS_PALIERS.find(x => x.id === palierId);
+  if(!p) return { oui:false, parce:"ce palier n'existe pas" };
+  const manques = Object.entries(p.exige)
+    .filter(([axe, n]) => axeDe(qui, axe) < n)
+    .map(([axe]) => LIENS_MANQUES[axe](qui));
+  return manques.length
+    ? { oui:false, parce: manques[0], tous: manques }
+    : { oui:true, parce:null, tous:[] };
+}
+
+/* ============================= DEUX EN MÊME TEMPS =============================
+ * Le pack l'autorise et refuse la rivalité caricaturale automatique. Ce qui est
+ * mémorisé, ce sont les mensonges et les promesses incompatibles. */
+
+function promesseExclusive(qui){
+  const l = lienDe(qui);
+  return !!l && l.promesses.some(p => p.quoi === 'exclusivite');
+}
+
+function liensSimultanes(){
+  return Object.keys(LIENS_PROFILS)
+    .filter(qui => ['amants','engagement','mariage'].includes(palierAtteint(qui).id));
+}
+
+/* Vrai quand une promesse faite à l'une est démentie par ce qui se passe avec
+ * l'autre. C'est ce qui arme la scène de clarification. */
+function promesseRompue(){
+  const doubles = liensSimultanes();
+  if(doubles.length < 2) return null;
+  const menteur = doubles.find(promesseExclusive);
+  if(!menteur) return null;
+  return { promise: menteur, autre: doubles.find(q => q !== menteur) };
+}
+
+/* Appelé en fin de tour : relit le monde, note ce qui a changé d'état, et arme
+ * la clarification quand il y a de quoi. */
+function liensTick(){
+  heroLiens();
+  relireTrahisons();
+  const bascules = [];
+  for(const qui of Object.keys(LIENS_PROFILS)){
+    const l = lienDe(qui);
+    const p = palierAtteint(qui);
+    if(p.id !== l.etat){
+      const monte = LIENS_PALIERS.findIndex(x => x.id === p.id)
+                  > LIENS_PALIERS.findIndex(x => x.id === l.etat);
+      l.etat = p.id;
+      bascules.push({ qui, palier:p, monte });
+    }
+  }
+  const rompue = promesseRompue();
+  if(rompue && !hasFlag('lien_clarification_due')) hero.flags.push('lien_clarification_due');
+  return bascules;
+}
+
+/* ============================= L'ÉCRAN =============================
+ * Quatre axes, quatre phrases. Aucun nombre : le joueur lit une personne. */
+
+const LIENS_MOTS = {
+  relation:  [[8,"vous avez traversé des choses ensemble"], [4,"vous vous connaissez"], [1,"vous vous êtes croisés"], [-99,"vous ne vous connaissez pas"]],
+  confiance: [[8,"elle vous croit sur parole"], [4,"elle vous croit"], [1,"elle vérifie encore"], [-3,"elle ne vous croit pas"], [-99,"elle sait que vous lui avez menti"]],
+  attirance: [[8,"elle vous veut"], [5,"il y a quelque chose et elle le sait"], [2,"elle vous trouve quelque chose"], [-99,"ce n'est pas là"]],
+  politique: [[6,"vous voulez la même chose"], [2,"ce que vous faites lui convient"], [-1,"elle a des réserves"], [-5,"vous êtes en désaccord"], [-99,"ce que vous faites détruit ce qu'elle défend"]],
+};
+function motDAxe(axe, n){
+  const t = LIENS_MOTS[axe].find(([seuil]) => n >= seuil);
+  return t ? t[1] : '';
+}
+
+function renderLiens(){
+  const bloc = document.getElementById('liensGrid');
+  if(!bloc) return;
+  heroLiens();
+
+  const actifs = Object.keys(LIENS_PROFILS).filter(qui =>
+    LIENS_AXES.some(a => axeDe(qui, a) !== 0) || palierAtteint(qui).id !== 'inconnu');
+
+  if(!actifs.length){
+    bloc.innerHTML = `<p class="liens-vide">Yohan n'a de lien avec personne, pour l'instant. C'est une manière de vivre.</p>`;
+    return;
+  }
+
+  bloc.innerHTML = actifs.map(qui => {
+    const p = LIENS_PROFILS[qui];
+    const l = lienDe(qui);
+    const pal = palierAtteint(qui);
+    const bloque = cequiBloque(qui);
+    const face = (typeof artPortraitImg === 'function') ? artPortraitImg(qui, 'lien-face') : '';
+    const axes = ['relation','confiance','attirance','politique']
+      .map(a => `<li><span class="lien-axe">${a}</span>${motDAxe(a, axeDe(qui, a))}</li>`).join('');
+    const griefs = l.griefs.length
+      ? `<div class="lien-griefs"><b>Ce qu'elle n'oublie pas</b><ul>${
+          l.griefs.slice(-2).map(g => `<li>${g.quoi}</li>`).join('')}</ul></div>` : '';
+
+    return `<div class="lien">
+      <div class="lien-tete">${face}
+        <div><span class="lien-nom">${p.nom}</span>
+             <span class="lien-etat">${pal.nom}</span></div>
+      </div>
+      <div class="lien-juge">Elle juge ${p.juge}.</div>
+      <ul class="lien-axes">${axes}</ul>
+      ${bloque && bloque.manques.length
+        ? `<div class="lien-bloque"><b>Ce qui n'est pas encore là :</b> ${bloque.manques.join(' ; ')}.</div>`
+        : ''}
+      ${griefs}
+    </div>`;
+  }).join('');
+}
+
+</script>
+<script>
+/* src/ressources.js */
+/* PARIAS — Ce qu'on a, et d'où ça vient
+ *
+ * Quatre stocks, et rien qui s'achète. Une source s'ouvre parce qu'on a rendu
+ * une carrière à ses hommes, tenu un refuge, rouvert une route, soldé une dette
+ * naine. Elle rapporte ensuite chaque saison, toute seule, tant qu'elle tient.
+ *
+ * Le joueur ne voit jamais un rendement : il voit la liste de ce qui travaille
+ * pour lui et pourquoi. C'est la même règle que partout ailleurs — les nombres
+ * sont dans le moteur, les raisons sont à l'écran.
+ */
+
+function heroRessources(){
+  if(!hero.ressources) hero.ressources = { pierre:0, bras:0, grain:0, faveurs:0 };
+  for(const k of Object.keys(RESSOURCES))
+    if(typeof hero.ressources[k] !== 'number') hero.ressources[k] = 0;
+  return hero.ressources;
+}
+
+function ressourceDe(k){ return heroRessources()[k] || 0; }
+
+/* Les sources ouvertes — celles dont le marqueur est posé. */
+function sourcesActives(){ return SOURCES.filter(s => hasFlag(s.flag)); }
+
+/* Ce qui rentre chaque saison, par ressource. */
+function rendementParSaison(){
+  const r = { pierre:0, bras:0, grain:0, faveurs:0 };
+  sourcesActives().forEach(s => { r[s.res] += s.n; });
+  return r;
+}
+
+/* Appelé une fois par saison. Les bras mangent : une place qui abrite plus de
+ * gens qu'elle n'en nourrit en perd, et c'est ce qui empêche d'entasser. */
+function ressourcesTick(){
+  const st = heroRessources();
+  const r = rendementParSaison();
+  for(const k of Object.keys(r)) st[k] += r[k];
+
+  const faim = Math.max(0, Math.floor(st.bras / 6) - Math.floor(st.grain / 4));
+  if(faim > 0){
+    st.bras = Math.max(0, st.bras - faim);
+    if(hero.chroniques && faim >= 2){
+      const d = dateFromSemaines(hero.temps ? hero.temps.semaines : 0);
+      hero.chroniques.push({ date:`${d.saison}, An ${d.an}`,
+        texte:`⌂ Karlsberg nourrit moins de monde qu'elle n'en abrite. ${faim} hommes sont repartis avant l'hiver.` });
+    }
+  }
+  for(const k of Object.keys(st)) st[k] = Math.min(999, st[k]);
+  return r;
+}
+
+/* ============================= PAYER ============================= */
+
+function coutManquant(cout){
+  const manque = [];
+  if(!cout) return manque;
+  if(cout.or && (hero.or || 0) < cout.or)
+    manque.push({ res:'or', il:cout.or - (hero.or||0), nom:"or" });
+  for(const k of Object.keys(RESSOURCES)){
+    if(cout[k] && ressourceDe(k) < cout[k])
+      manque.push({ res:k, il: cout[k] - ressourceDe(k), nom: RESSOURCES[k].nom.toLowerCase() });
+  }
+  return manque;
+}
+
+function payerRessources(cout){
+  if(!cout) return;
+  if(cout.or) hero.or = Math.max(0, (hero.or||0) - cout.or);
+  const st = heroRessources();
+  for(const k of Object.keys(RESSOURCES))
+    if(cout[k]) st[k] = Math.max(0, st[k] - cout[k]);
+}
+
+/* Où trouver ce qui manque : on ne dit pas « il vous faut 8 pierres », on dit
+ * quelles décisions du monde ouvrent une carrière. */
+function ouTrouver(res){
+  return SOURCES.filter(s => s.res === res && !hasFlag(s.flag)).slice(0, 3).map(s => s.quoi);
+}
+
+/* ============================= LES CONDITIONS ============================= */
+
+function conditionRemplie(id){
+  const c = CONDITIONS_CHANTIER[id];
+  return !!c && c.flags.some(f => hasFlag(f));
+}
+function conditionsManquantes(liste){
+  return (liste || []).filter(id => !conditionRemplie(id))
+    .map(id => CONDITIONS_CHANTIER[id]).filter(Boolean);
+}
+
+/* ============================= L'ÉTAT DE KARLSBERG ============================= */
+
+function palierKarlsberg(){
+  let dernier = KARLSBERG_PALIERS[0];
+  for(const p of KARLSBERG_PALIERS){
+    if(p.exige.every(id => ouvrageFait(id))) dernier = p; else break;
+  }
+  return dernier;
+}
+function palierSuivant(){
+  const i = KARLSBERG_PALIERS.findIndex(p => p.id === palierKarlsberg().id);
+  return KARLSBERG_PALIERS[i + 1] || null;
+}
+
+/* ============================= L'ÉCRAN ============================= */
+
+function renderRessources(){
+  const bloc = document.getElementById('ressourcesBloc');
+  if(!bloc) return;
+  heroRessources();
+  const rend = rendementParSaison();
+  const actives = sourcesActives();
+  const pal = palierKarlsberg();
+  const suiv = palierSuivant();
+
+  const cartes = Object.entries(RESSOURCES).map(([k, r]) => {
+    const sources = actives.filter(s => s.res === k);
+    return `<div class="res">
+      <div class="res-tete"><span class="res-nom">${r.nom}</span>
+        <span class="res-n">${ressourceDe(k)}<i>${r.unite}</i></span></div>
+      <div class="res-note">${r.note}</div>
+      ${sources.length
+        ? `<ul class="res-sources">${sources.map(s =>
+            `<li><b>${s.quoi}</b> — ${s.pourquoi}</li>`).join('')}</ul>
+           <div class="res-flux">+${rend[k]} par saison</div>`
+        : `<div class="res-rien">Rien ne vous en apporte. ${
+             ouTrouver(k).length ? 'Il faudrait : ' + ouTrouver(k).join(', ') + '.' : ''}</div>`}
+    </div>`;
+  }).join('');
+
+  bloc.innerHTML = `
+    <div class="kb-etat">
+      <span class="kb-palier">${pal.nom}</span>
+      <p class="kb-dit">${pal.dit}</p>
+      ${suiv ? `<p class="kb-suite">Pour que ce soit <b>${suiv.nom.toLowerCase()}</b>, il faudrait : ${
+        suiv.exige.filter(id => !ouvrageFait(id))
+          .map(id => (CHANTIER.find(o => o.id === id) || {}).nom || id).join(', ')}.</p>` : ''}
+    </div>
+    <div class="res-grid">${cartes}</div>`;
+}
+
+</script>
+<script>
 /* src/offres.js */
 /* PARIAS — Ce qu'on vous propose ici
  *
@@ -25418,8 +26346,17 @@ function renderLieu(){
 /* src/chantier.js */
 /* PARIAS — Moteur du chantier
  *
- * Bâtir coûte de l'or et des semaines. Les semaines sont la vraie dépense :
- * pendant qu'on bâtit, Yohan vieillit et le monde avance sans lui.
+ * Bâtir ne coûte jamais que de l'or. Il faut de la pierre, des bras, du grain,
+ * des faveurs — et des choses qui ne sont pas des stocks : une route sûre,
+ * quelqu'un qui sache bâtir, une garnison, des habitants.
+ *
+ * Rien de tout cela ne s'achète. Chaque ressource vient d'une source ouverte en
+ * jouant, ailleurs, des mois plus tôt (src/data/ressources.js). Relever
+ * Karlsberg n'est donc pas un poste de dépense : c'est ce que devient une
+ * partie où l'on a rendu des choses à des gens.
+ *
+ * Les semaines restent la dépense la plus lourde : pendant qu'on bâtit, Yohan
+ * vieillit et le monde avance sans lui.
  */
 
 function heroChantier(){
@@ -25435,8 +26372,33 @@ function ouvrageDisponible(o){
     return { bloque:`Demande d'abord : ${p ? p.nom : o.requis}` };
   }
   if(o.requisFlag && !hasFlag(o.requisFlag)) return { bloque:"Ce qu'il faudrait graver n'existe pas encore" };
-  if(hero.or < o.or) return { bloque:`${o.or} or requis (vous en avez ${hero.or})` };
-  return { ok:true };
+
+  /* Les conditions passent avant les stocks : on ne dit pas à quelqu'un qu'il
+   * lui manque huit charrois de pierre alors que le vrai problème est qu'aucune
+   * route ne monte. */
+  const cond = (typeof conditionsManquantes === 'function')
+    ? conditionsManquantes(o.exige) : [];
+  if(cond.length) return { bloque: cond[0].manque, condition: cond[0] };
+
+  const cout = Object.assign({ or:o.or || 0 }, o.cout || {});
+  const manque = (typeof coutManquant === 'function') ? coutManquant(cout) : [];
+  if(manque.length){
+    const m = manque[0];
+    const ou = (m.res !== 'or' && typeof ouTrouver === 'function') ? ouTrouver(m.res) : [];
+    return { bloque:`Il manque ${m.il} ${m.nom}`, manque,
+             piste: ou.length ? ou.join(', ') : null };
+  }
+  return { ok:true, cout };
+}
+
+/* Ce qu'un ouvrage coûte, en toutes lettres. */
+function coutLisible(o){
+  const p = [];
+  if(o.or) p.push(`${o.or} or`);
+  for(const [k, n] of Object.entries(o.cout || {}))
+    p.push(`${n} ${RESSOURCES[k].unite} de ${RESSOURCES[k].nom.toLowerCase()}`);
+  p.push(`${o.semaines} semaines`);
+  return p.join(' · ');
 }
 
 /* Le cumul de tout ce qui est bâti — lu par le combat, la boutique, l'armée. */
@@ -25460,7 +26422,9 @@ function batir(id){
   const d = ouvrageDisponible(o);
   if(!d || !d.ok) return;
 
-  hero.or -= o.or;
+  if(typeof payerRessources === 'function')
+    payerRessources(Object.assign({ or:o.or || 0 }, o.cout || {}));
+  else hero.or -= o.or;
   heroChantier().push(o.id);
   const e = o.effet || {};
   if(e.renom) ajusterRenom(e.renom);
@@ -25488,7 +26452,11 @@ function batir(id){
   box.innerHTML = `${artEventBanner('evt_paria', 'PARIA')}
     <span class="event-tag">Chantier · ${o.semaines} semaines</span><h3>${o.nom}</h3>
     <p class="narrative">${o.apres}</p>
-    <div class="reward-tags"><span class="reward-tag neg">−${o.or} or</span>${tags.join('')}</div>
+    <div class="reward-tags">${
+      [o.or ? `<span class="reward-tag neg">−${o.or} or</span>` : ''].concat(
+        Object.entries(o.cout || {}).map(([k, n]) =>
+          `<span class="reward-tag neg">−${n} ${RESSOURCES[k].nom.toLowerCase()}</span>`)).join('')
+    }${tags.join('')}</div>
     ${resume && resume.nouvelle ? `<p class="narrative" style="color:var(--parchment-dim);font-style:italic;">Pendant ce temps : ${resume.nouvelle}</p>` : ''}
     <div style="margin-top:16px;text-align:right;"><button class="primary" id="chBtn">Continuer</button></div>`;
   document.getElementById('eventModal').style.display = 'flex';
@@ -25498,12 +26466,27 @@ function batir(id){
 function ouvrirChantier(){
   const b = chantierBonus();
   const faits = heroChantier().length;
+  const pal = (typeof palierKarlsberg === 'function') ? palierKarlsberg() : null;
+  const suiv = (typeof palierSuivant === 'function') ? palierSuivant() : null;
+  const st = (typeof heroRessources === 'function') ? heroRessources() : {};
+  const rend = (typeof rendementParSaison === 'function') ? rendementParSaison() : {};
   const box = document.getElementById('eventModalBox');
-  box.innerHTML = `<span class="event-tag">Karlsberg — Les Ruines du Loup</span>
+
+  const stocks = (typeof RESSOURCES !== 'undefined')
+    ? Object.entries(RESSOURCES).map(([k, r]) =>
+        `<span class="ch-res"><b>${st[k] || 0}</b> ${r.nom.toLowerCase()}${
+          rend[k] ? `<i>+${rend[k]}</i>` : ''}</span>`).join('')
+    : '';
+
+  box.innerHTML = `<span class="event-tag">Karlsberg — ${pal ? pal.nom : 'Les Ruines du Loup'}</span>
     <h3>Le chantier</h3>
     <p class="narrative">${faits === 0
       ? "Trois pans de mur, un loup de pierre fendu, et de l'herbe rase. Tout est à faire, et personne ne le fera à votre place."
-      : `${faits} ouvrage${faits > 1 ? 's' : ''} debout. ${faits >= CHANTIER.length ? "Il n'y a plus rien à relever : Karlsberg tient." : "Le reste attend."}`}</p>
+      : (pal ? pal.dit : '')}</p>
+    ${suiv ? `<p class="narrative" style="color:var(--parchment-dim);font-style:italic;">Pour que ce soit un ${suiv.nom.toLowerCase()} : ${
+      suiv.exige.filter(id => !ouvrageFait(id))
+        .map(id => (CHANTIER.find(x => x.id === id) || {}).nom || id).join(', ')}.</p>` : ''}
+    <div class="chantier-stocks">${stocks}<span class="ch-res"><b>${hero.or}</b> or</span></div>
     <div class="chantier-etat">Défense +${b.defense} · Fatigue max +${b.fatMax}
       · Entretien ×${b.entretienMult.toFixed(2)} · Prix ×${b.prixMult.toFixed(2)}
       · Repos ×${b.reposMult}</div>
@@ -25515,9 +26498,13 @@ function ouvrirChantier(){
     const etat = ouvrageDisponible(o);
     const div = document.createElement('div');
     div.className = 'ouvrage' + (etat === null ? ' fait' : '') + (etat && etat.bloque ? ' bloque' : '');
+    const exige = (o.exige || []).map(id => CONDITIONS_CHANTIER[id])
+      .filter(Boolean).map(c => c.nom).join(', ');
     div.innerHTML = `<div><div class="ouv-nom">${o.nom}</div>
       <div class="ouv-desc">${etat === null ? o.apres : o.desc}</div>
-      <div class="ouv-cout">${o.or} or · ${o.semaines} semaines</div></div>`;
+      <div class="ouv-cout">${coutLisible(o)}</div>
+      ${exige && etat !== null ? `<div class="ouv-exige">Demande ${exige}.</div>` : ''}
+      ${etat && etat.piste ? `<div class="ouv-piste">Il faudrait ouvrir : ${etat.piste}.</div>` : ''}</div>`;
     const btn = document.createElement('button');
     btn.className = 'ghost';
     if(etat === null){ btn.textContent = 'Debout'; btn.disabled = true; }
@@ -26033,7 +27020,7 @@ function nouvelleChronique(){
  * reconstruits au chargement (voir CHAMPS_SET).
  */
 
-const SAVE_VERSION = 10;
+const SAVE_VERSION = 12;
 /* Le préfixe est un espace de noms de stockage, pas le numéro de version : il
  * reste figé pour que les parties commencées avant soient relues puis migrées. */
 const SAVE_PREFIX  = 'parias_save_v6_';
@@ -26093,6 +27080,8 @@ function reconstruireHero(brut){
   h.chaines           = h.chaines || { actives:[], faites:[], issues:{} };
   h.crises            = h.crises || {};
   h.pnj               = h.pnj || {};
+  h.liens             = h.liens || {};
+  h.ressources        = h.ressources || { pierre:0, bras:0, grain:0, faveurs:0 };
   h.lignee            = h.lignee || { liaisons: [], enfants: [] };
   if(typeof h.age !== 'number') h.age = AGE_DEPART;
   h.compagnons        = (h.compagnons || []).map(c => COMPANIONS_POOL[c.id] || c);
@@ -26190,6 +27179,29 @@ const MIGRATIONS = {
      * partie en cours se relit au premier tick, marqueur par marqueur. */
     enr.hero.pnj = enr.hero.pnj || {};
     enr.version = 10;
+    return enr;
+  },
+  10: enr => {          // v10 → v11 : le lien unique devient quatre axes séparés
+    /* Une partie en cours n'avait qu'un nombre par personne. On le relit comme
+     * ce qu'il était vraiment : du temps passé et de l'attirance. La confiance,
+     * elle, n'avait jamais été mesurée — elle repart de zéro, ce qui est plus
+     * honnête que de l'inventer. */
+    const a = enr.hero.affinites || {};
+    enr.hero.liens = enr.hero.liens || {};
+    for(const [qui, n] of Object.entries(a)){
+      if(enr.hero.liens[qui]) continue;
+      enr.hero.liens[qui] = { relation:n||0, confiance:0, attirance:n||0,
+                              griefs:[], promesses:[], etat:'inconnu' };
+    }
+    enr.version = 11;
+    return enr;
+  },
+  11: enr => {          // v11 → v12 : Karlsberg ne se paie plus qu'en or
+    /* Les sources déjà ouvertes dans la partie en cours comptent : on crédite
+     * une saison de rendement, pour que quelqu'un qui a rendu une carrière et
+     * tenu un refuge ne reparte pas de zéro. */
+    enr.hero.ressources = enr.hero.ressources || { pierre:0, bras:0, grain:0, faveurs:0 };
+    enr.version = 12;
     return enr;
   },
 };
@@ -26807,6 +27819,8 @@ document.getElementById('importFileInput').onchange = (e) => {
 function enterGame(){
   if(typeof syncTensions === 'function') syncTensions();
   if(typeof heroPnj === 'function') heroPnj();
+  if(typeof liensTick === 'function') liensTick();
+  if(typeof heroRessources === 'function') heroRessources();
   document.getElementById('tabs').style.display='flex';
   const cal = document.getElementById('calendarBar');
   cal.style.display='flex';
@@ -26891,6 +27905,10 @@ function advanceTime(semaines){
     crises = (typeof criseTick === 'function') ? criseTick(after) : [];
     // Neuf personnes regardent le monde qui vient de bouger, et agissent.
     pnj = (typeof pnjTick === 'function') ? pnjTick(after) : [];
+    // Les liens relisent ce que le monde vient de faire à ce qu'elles défendent.
+    if(typeof liensTick === 'function') liensTick();
+    // Ce qui travaille pour Karlsberg travaille aussi quand Yohan est ailleurs.
+    if(typeof ressourcesTick === 'function') ressourcesTick();
   }
   // Le temps ne fait pas que tourner un compteur : on vieillit, et il naît des gens.
   const lignee = passerLeTemps(semaines);
@@ -26932,6 +27950,8 @@ function applyPassiveEffects(){
 
 function renderPersonnage(){
   applyPassiveEffects();
+  if(typeof renderLiens === 'function') renderLiens();
+  if(typeof renderRessources === 'function') renderRessources();
   const face = document.getElementById('charFace');
   if(face && !face.dataset.pose){ face.innerHTML = artPortraitImg('yohan'); face.dataset.pose = '1'; }
   document.getElementById('charLvl').textContent = hero.niveau;

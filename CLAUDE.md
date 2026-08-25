@@ -156,7 +156,7 @@ Audit au 24 août. Ce qui est là, ce qui manque, sans complaisance.
 | Contrats en aventures, pas en boutons | **fait** | `chaines.js` — 30 affaires sur 30 |
 | Termes fixés avant toute action | **fait** | `prix.js` + `chaines.js` |
 | Noble adulte réelle et consentante | **fait** | `data/maisons.js`, 19 femmes, droit de refus |
-| Karlsberg progressif, jamais « payer X » | **partiel** | `chantier.js` — 8 ouvrages, mais l'or reste la seule monnaie |
+| Karlsberg progressif, jamais « payer X » | **fait** | `ressources.js` — pierre, bras, grain, faveurs · 11 ouvrages · 6 états |
 | Suspicion qui change le monde | **fait** | `suspicion.js`, 4 paliers, 12 événements dédiés |
 | Romances à axes séparés | **fait** | `liens.js` — relation / confiance / attirance / politique |
 | Mémoire narrative longue | **fait** | `chaines_secretes.js` — 10 chaînes armées sur marqueur, en arrière-plan |
@@ -177,7 +177,8 @@ affaires en chaînes (101 étapes, 564 scènes, 313 choix, 142 issues)** · **10
 chaînes secrètes armées sur marqueur (30 étapes, 184 scènes, 110 choix, 32
 issues)** · **5 crises régionales en 25 étapes nommées** · **9 acteurs autonomes
 (32 actes, 45 souvenirs possibles)** · 60 affaires locales + 20 dénouements · 50 contrats au registre · 25 maisons nobles ·
-8 ouvrages de Karlsberg · 116 verdicts d'épilogue.
+**11 ouvrages de Karlsberg en 6 états, 25 sources de ressources** ·
+116 verdicts d'épilogue.
 
 ---
 
@@ -210,14 +211,21 @@ Dans cet ordre. À chaque étape, le jeu reste jouable et les épreuves passent.
    est **dérivée du monde**. Un palier en exige plusieurs à la fois, un refus
    porte sa raison écrite, une trahison casse la confiance toute seule, et deux
    liens simultanés ne gênent que si une promesse a été faite.
-6. Karlsberg payé autrement qu'en or : pierre, bras, routes, faveurs.
+6. ~~Karlsberg payé autrement qu'en or.~~ **Fait** : `src/data/ressources.js`
+   et `src/ressources.js`. Pierre, bras, grain, faveurs — aucun ne s'achète :
+   ils viennent de 25 sources ouvertes en jouant ailleurs (une carrière rendue à
+   ses hommes, un refuge tenu, une route rouverte, une dette naine soldée), et
+   rapportent chaque saison. S'y ajoutent quatre conditions qui ne sont pas des
+   stocks : une route sûre, une garnison, quelqu'un qui sache bâtir, assez
+   d'habitants. Onze ouvrages, six états nommés : ruines → refuge → fort →
+   château → domaine → puissance régionale.
 7. La succession jouable — on continue avec l'héritier.
 
 ---
 
 ## 4. Règles de travail
 
-- **Rien ne casse.** `node tools/validate.js` puis les treize épreuves de
+- **Rien ne casse.** `node tools/validate.js` puis les quatorze épreuves de
   navigateur avant tout commit (voir README, *Vérifier une modification*).
 - **Pas de bundler.** Scripts classiques en portée globale ; l'ordre de
   chargement dans `index.html` est le contrat de dépendances.

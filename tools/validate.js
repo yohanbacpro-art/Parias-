@@ -23,7 +23,7 @@ const fichiers = [
   'src/data/reputation.js', 'src/data/epilogue.js',
   'src/data/chantier.js', 'src/data/events_suspicion.js', 'src/data/politique.js',
   'src/data/maisons.js', 'src/data/chaines.js', 'src/data/chaines_secretes.js',
-  'src/data/crises.js', 'src/data/pnj_autonomes.js',
+  'src/data/crises.js', 'src/data/pnj_autonomes.js', 'src/data/ressources.js',
 ];
 
 const ctx = vm.createContext({ console });
@@ -42,6 +42,7 @@ const {
   REPUTATION_DEPART, RANGS_REPUTATION, LOC_PEUPLE, REPUTATION_VOIX, SHOPS, BUTIN_PAR_PEUPLE,
   CONTRATS_LOCAUX, CONTRACT_COMPLICATIONS,
   CHANTIER, EVENTS_SUSPICION, POUVOIRS, EDITS, MAISONS, CHAINES, CRISES, PNJ_AUTONOMES,
+  RESSOURCES, SOURCES, CONDITIONS_CHANTIER, KARLSBERG_PALIERS,
   EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_LIGNEE, EPI_ONDE, EPI_LEGS,
 } = vm.runInContext(`({
   BESTIARY_FULL, PORTRAITS, LOCATIONS, EVENTS, CONTRACTS, ITEM_POOL,
@@ -52,6 +53,7 @@ const {
   REPUTATION_DEPART, RANGS_REPUTATION, LOC_PEUPLE, REPUTATION_VOIX, SHOPS, BUTIN_PAR_PEUPLE,
   CONTRATS_LOCAUX, CONTRACT_COMPLICATIONS,
   CHANTIER, EVENTS_SUSPICION, POUVOIRS, EDITS, MAISONS, CHAINES, CRISES, PNJ_AUTONOMES,
+  RESSOURCES, SOURCES, CONDITIONS_CHANTIER, KARLSBERG_PALIERS,
   EPI_OUVERTURE, EPI_NOM, EPI_PEUPLES, EPI_GENS, EPI_NEMESIS, EPI_EMPIRE, EPI_LIGNEE, EPI_ONDE, EPI_LEGS
 })`, ctx);
 
@@ -749,6 +751,57 @@ for(const m of sourcePnj.matchAll(/crise:\s*\{\s*id:'([A-Z_]+)'/g))
 for(const m of sourcePnj.matchAll(/pnjOpinion\('([a-z]+)'\)/g))
   if(!pnjIds.has(m[1])) err(`PNJ : opinion lue sur « ${m[1]} », qui n'est pas des neuf`);
 
+/* ---- Ce avec quoi on relève Karlsberg ----
+ * La règle du document fondateur : jamais « payer X or ». Un ouvrage au-delà du
+ * premier doit donc coûter autre chose que de l'or, et cet autre chose doit
+ * pouvoir venir de quelque part — une source accrochée à un marqueur fantôme
+ * est un mur définitif. */
+/* Les ouvrages posent des marqueurs, et certaines sources les guettent : on les
+ * collecte avant de vérifier les sources. */
+CHANTIER.forEach(o => noterMarqueurs(o.effet));
+
+const resIds = new Set(Object.keys(RESSOURCES));
+const sourcesParRes = {};
+SOURCES.forEach(s => {
+  const ou = `SOURCE ${s.flag}`;
+  if(!resIds.has(s.res)) err(`${ou} : ressource « ${s.res} » inconnue`);
+  if(!marqueursPoses.has(s.flag))
+    err(`${ou} : accrochée à un marqueur que rien ne pose — cette source n'ouvrirait jamais`);
+  if(!s.quoi || !s.pourquoi) err(`${ou} : sans nom ni raison affichable`);
+  if(typeof s.n !== 'number' || s.n <= 0) err(`${ou} : rendement absent`);
+  sourcesParRes[s.res] = (sourcesParRes[s.res] || 0) + 1;
+});
+resIds.forEach(r => {
+  if(!sourcesParRes[r]) err(`RESSOURCE ${r} : aucune source ne l'apporte`);
+  else if(sourcesParRes[r] < 3) warn(`RESSOURCE ${r} : seulement ${sourcesParRes[r]} source(s)`);
+});
+Object.entries(CONDITIONS_CHANTIER).forEach(([id, c]) => {
+  if(!c.nom || !c.manque) err(`CONDITION ${id} : sans nom ni phrase de refus`);
+  (c.flags || []).forEach(f => {
+    if(!marqueursPoses.has(f)) err(`CONDITION ${id} : marqueur « ${f} » jamais posé`);
+  });
+  if(!(c.flags || []).length) err(`CONDITION ${id} : aucune façon de la remplir`);
+});
+const ouvragesConnus = new Set(CHANTIER.map(o => o.id));
+CHANTIER.forEach(o => {
+  const ou = `CHANTIER ${o.id}`;
+  for(const k of Object.keys(o.cout || {}))
+    if(!resIds.has(k)) err(`${ou} : coût en « ${k} », qui n'est pas une ressource`);
+  (o.exige || []).forEach(c => {
+    if(!CONDITIONS_CHANTIER[c]) err(`${ou} : condition « ${c} » inconnue`);
+  });
+  /* La règle, appliquée : seul le tout premier ouvrage peut ne rien demander
+   * d'autre que de l'or et des bras. */
+  if(o.id !== 'ch_cour' && !Object.keys(o.cout || {}).length)
+    err(`${ou} : payé uniquement en or — c'est exactement ce que le document fondateur interdit`);
+});
+KARLSBERG_PALIERS.forEach(p => {
+  if(!p.nom || !p.dit) err(`PALIER ${p.id} : sans nom ni phrase`);
+  (p.exige || []).forEach(id => {
+    if(!ouvragesConnus.has(id)) err(`PALIER ${p.id} : exige l'ouvrage « ${id} », qui n'existe pas`);
+  });
+});
+
 /* ---- Les maisons nobles et le Prix ---- */
 let nbNobles = 0, maisonsVides = 0;
 Object.entries(MAISONS).forEach(([nom, m]) => {
@@ -891,6 +944,7 @@ POUVOIRS.forEach(p => {
     warn(`POUVOIRS ${p.id} : cette puissance ne décide jamais rien`);
 });
 console.log(`Politique   ${POUVOIRS.length} puissances · ${EDITS.length} édits`);
+console.log(`Karlsberg   ${CHANTIER.length} ouvrages · ${KARLSBERG_PALIERS.length} états · ${SOURCES.length} sources de ressources`);
 console.log(`Personnages ${PNJ_AUTONOMES.length} acteurs autonomes · ${PNJ_AUTONOMES.reduce((s,p)=>s+p.actions.length,0)} actes · ${PNJ_AUTONOMES.reduce((s,p)=>s+p.retient.length,0)} souvenirs possibles`);
 console.log(`Crises      ${CRISES.length} régionales · ${CRISES.reduce((s,c)=>s+c.paliers.length,0)} étapes nommées`);
 console.log('');

@@ -646,6 +646,29 @@
   .pnja-quand{display:block;font-family:'Inter',sans-serif;font-size:9.5px;color:var(--parchment-dim);}
   .pnja-memoire-vide{font-size:11.5px;font-style:italic;color:var(--parchment-dim);border-top:1px solid var(--line);padding-top:7px;}
   .pli-pnj{color:var(--parchment);}
+  /* Karlsberg : ce qu'on a, et d'où ça vient */
+  .kb-etat{border-left:2px solid var(--gold);padding-left:12px;margin-bottom:14px;}
+  .kb-palier{font-family:'Cinzel',serif;font-size:17px;color:var(--gold);letter-spacing:.04em;}
+  .kb-dit{font-size:13px;line-height:1.55;color:var(--parchment);margin:4px 0 0;}
+  .kb-suite{font-size:12px;line-height:1.5;color:var(--parchment-dim);margin:6px 0 0;font-style:italic;}
+  .res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .res{background:#0f0c0a;border:1px solid var(--line);border-radius:5px;padding:10px 12px;}
+  .res-tete{display:flex;justify-content:space-between;align-items:baseline;}
+  .res-nom{font-family:'Cinzel',serif;font-size:13px;color:var(--parchment);}
+  .res-n{font-family:'Inter',sans-serif;font-weight:700;font-size:15px;color:var(--gold);}
+  .res-n i{font-style:normal;font-weight:400;font-size:9.5px;color:var(--parchment-dim);margin-left:4px;}
+  .res-note{font-family:'Inter',sans-serif;font-size:10.5px;font-style:italic;color:var(--parchment-dim);margin-bottom:7px;}
+  .res-sources{list-style:none;margin:0;padding:7px 0 0;border-top:1px solid var(--line);}
+  .res-sources li{font-size:11.5px;line-height:1.5;color:var(--parchment-dim);margin-bottom:3px;}
+  .res-sources b{color:var(--parchment);font-weight:600;}
+  .res-flux{font-family:'Inter',sans-serif;font-size:10px;color:var(--onde-bright);margin-top:4px;}
+  .res-rien{font-size:11.5px;line-height:1.5;font-style:italic;color:var(--parchment-dim);border-top:1px solid var(--line);padding-top:7px;}
+  .chantier-stocks{display:flex;flex-wrap:wrap;gap:14px;margin:10px 0;padding:8px 10px;background:#0f0c0a;border:1px solid var(--line);border-radius:4px;}
+  .ch-res{font-family:'Inter',sans-serif;font-size:11px;color:var(--parchment-dim);}
+  .ch-res b{color:var(--gold);font-size:13px;margin-right:3px;}
+  .ch-res i{font-style:normal;color:var(--onde-bright);margin-left:3px;font-size:9.5px;}
+  .ouv-exige{font-family:'Inter',sans-serif;font-size:10.5px;font-style:italic;color:var(--warn);margin-top:3px;}
+  .ouv-piste{font-family:'Inter',sans-serif;font-size:10.5px;font-style:italic;color:var(--parchment-dim);margin-top:3px;}
   /* Les liens, sur quatre axes séparés */
   .liens-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px;}
   .liens-vide{color:var(--parchment-dim);font-style:italic;font-size:13px;}
@@ -997,6 +1020,12 @@
     </div>
 
     <div class="panel">
+      <h2>Karlsberg</h2>
+      <p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;">On ne relève pas une maison avec de l'or. Il faut de la pierre, des bras, du grain et des dettes qu'on vous doit — et rien de tout cela ne s'achète.</p>
+      <div id="ressourcesBloc"></div>
+    </div>
+
+    <div class="panel">
       <h2>Liens</h2>
       <p style="color:var(--parchment-dim);font-style:italic;font-size:13.5px;">Quatre choses différentes, qui ne montent pas ensemble. On peut être désiré sans être cru, et aimé sans être suivi.</p>
       <div class="liens-grid" id="liensGrid"></div>
@@ -1266,6 +1295,7 @@
 <script src="src/data/politique.js"></script>
 <script src="src/data/crises.js"></script>
 <script src="src/data/pnj_autonomes.js"></script>
+<script src="src/data/ressources.js"></script>
 <script src="src/data/romances.js"></script>
 <script src="src/data/reputation.js"></script>
 <script src="src/data/epilogue.js"></script>
@@ -1284,6 +1314,7 @@
 <script src="src/crises.js"></script>
 <script src="src/pnj.js"></script>
 <script src="src/liens.js"></script>
+<script src="src/ressources.js"></script>
 <script src="src/offres.js"></script>
 <script src="src/lieu.js"></script>
 <script src="src/chantier.js"></script>
