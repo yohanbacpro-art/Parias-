@@ -26103,20 +26103,31 @@ function renderCodex(){
 
 document.getElementById('btnSaveNow').onclick = () => { saveGame(false); renderSauvegardes(); };
 
-document.getElementById('btnExportSave').onclick = () => {
-  const texte = serialiserHero({ version: SAVE_VERSION, meta: construireMeta(hero), hero });
-
-  // Le téléchargement direct ne marche pas partout (page intégrée, sandbox,
-  // file://). On propose donc toujours le texte de la sauvegarde à côté : c'est
-  // le seul moyen qui fonctionne dans tous les cas.
+/* Remettre un fichier au joueur, par le moyen qui marche là où il joue.
+ * Une page hébergée n'a pas le droit de déclencher un téléchargement toute
+ * seule : elle doit passer par son hôte, qui demande confirmation. Sur un
+ * fichier local, c'est l'inverse. On essaie l'un, puis l'autre — et de toute
+ * façon le texte de la sauvegarde reste affiché en dessous, ce qui est le seul
+ * moyen qui fonctionne partout. */
+async function proposerFichier(nom, texte){
+  try{
+    const hote = (typeof claude !== 'undefined' && typeof claude.use === 'function')
+      ? await claude.use('downloads') : null;
+    if(hote){ await hote.save({ filename: nom, data: texte }); return; }
+  } catch(e){ return; }   // le joueur a refusé : ne pas insister par un second moyen
   try{
     const blob = new Blob([texte], {type:'application/json'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = 'parias_vardhen_save.json';
+    a.href = url; a.download = nom;
     a.click();
     setTimeout(()=>URL.revokeObjectURL(url), 1000);
   } catch(e){ /* sans importance : le texte ci-dessous reste disponible */ }
+}
+
+document.getElementById('btnExportSave').onclick = () => {
+  const texte = serialiserHero({ version: SAVE_VERSION, meta: construireMeta(hero), hero });
+  proposerFichier('parias_vardhen_save.json', texte);
 
   const zone = document.getElementById('saveTextZone');
   zone.style.display = 'block';
