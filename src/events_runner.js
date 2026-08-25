@@ -156,6 +156,22 @@ function applyEffets(e){
     ajusterAffinite(e.affinite.qui, e.affinite.n);
     tags.push(`<span class="reward-tag">Lien resserré</span>`);
   }
+  /* Les axes séparés : une scène peut resserrer ce qu'on ressent tout en
+     abîmant ce qu'on croit. C'est ce qui distingue un lien d'une jauge. */
+  if(e.lien && typeof ajusterLien === 'function'){
+    const d = e.lien;
+    ajusterLien(d.qui, d);
+    const mots = [];
+    if(d.relation  > 0) mots.push('vous vous rapprochez');
+    if(d.relation  < 0) mots.push('vous vous éloignez');
+    if(d.confiance > 0) mots.push('elle vous croit un peu plus');
+    if(d.confiance < 0) mots.push('elle vous croit moins');
+    if(d.attirance > 0) mots.push('quelque chose passe');
+    if(d.attirance < 0) mots.push('quelque chose se referme');
+    if(d.grief)         mots.push("elle ne l'oubliera pas");
+    if(d.promesse)      mots.push('vous avez promis');
+    if(mots.length) tags.push(`<span class="reward-tag">${mots.join(' · ')}</span>`);
+  }
   // Un compagnon ne s'impose plus : une scène le propose, le joueur décide.
   if(e.compagnon){
     const c = COMPANIONS_POOL[e.compagnon];
@@ -218,12 +234,19 @@ function renderScene(sceneId){
   const tags = applyEffets(sc.effets);
   const box = document.getElementById('eventModalBox');
 
+  /* Une scène peut se composer au moment où elle s'ouvre. C'est ce qui permet
+     à un refus de dire *pourquoi* : le texte et les choix se lisent alors dans
+     l'état réel du lien, pas dans un jet de dé. Le joueur, lui, ne voit qu'une
+     scène ordinaire — il n'existe toujours qu'une scène à l'écran. */
+  const texte = sc.texteDyn ? sc.texteDyn() : sc.texte;
+  const choix = sc.choixDyn ? sc.choixDyn() : sc.choix;
+
   let html = artEventBanner(ev.image, ev.famille);
   html += `<span class="event-tag">${ev.famille} · ${ev.rarete}${lieu?' · '+lieu.nom:''}</span>`;
   if(sceneId === 'start') html += `<h3>${ev.titre}</h3>`;
   if(sc.pnj) html += artPortraitCard(sc.pnj);
   if(ecritState.dernierJet){ html += ecritState.dernierJet; ecritState.dernierJet = null; }
-  html += sc.texte.map(p=>`<p class="narrative">${p}</p>`).join('');
+  html += texte.map(p=>`<p class="narrative">${p}</p>`).join('');
   if(tags.length) html += `<div class="reward-tags">${tags.join('')}</div>`;
 
   // --- Scène de bataille rangée ---
@@ -282,7 +305,7 @@ function renderScene(sceneId){
   // Une scène peut porter `suite` sans offrir de choix : c'est un battement de
   // récit (on descend, on marche, on arrive) qui mène à la scène suivante sans
   // refermer l'événement.
-  if((!sc.choix || !sc.choix.length) && sc.suite){
+  if((!choix || !choix.length) && sc.suite){
     html += `<div style="margin-top:18px;text-align:right;"><button class="primary" id="scSuiteBtn">Continuer</button></div>`;
     box.innerHTML = html;
     document.getElementById('eventModal').style.display='flex';
@@ -291,7 +314,7 @@ function renderScene(sceneId){
   }
 
   // --- Scène terminale ---
-  if(!sc.choix || !sc.choix.length){
+  if(!choix || !choix.length){
     html += `<div style="margin-top:18px;text-align:right;"><button class="primary" id="scFinBtn">Continuer</button></div>`;
     box.innerHTML = html;
     document.getElementById('eventModal').style.display='flex';
@@ -312,7 +335,7 @@ function renderScene(sceneId){
   document.getElementById('eventModal').style.display='flex';
 
   const cl = document.getElementById('scChoix');
-  sc.choix.forEach(choix=>{
+  choix.forEach(choix=>{
     const verrou = choixVerrou(choix);
     const b = document.createElement('button');
     if(verrou) b.className = 'locked';
@@ -460,7 +483,14 @@ function heroAffinites(){
   return hero.affinites;
 }
 function affiniteAvec(qui){ const a = heroAffinites(); return a[qui] || 0; }
+/* Un effet ancien `affinite:{qui,n}` ne connaît qu'un nombre. On le traduit sur
+ * les axes — le temps passé et ce qu'on ressent montent ensemble, la confiance
+ * ne se donne pas d'un geste — et `hero.affinites` reste la lecture courte. */
 function ajusterAffinite(qui, n){
+  if(typeof ajusterLien === 'function' && typeof LIENS_PROFILS !== 'undefined' && LIENS_PROFILS[qui]){
+    ajusterLien(qui, { relation: n, attirance: n });
+    return;
+  }
   const a = heroAffinites();
   a[qui] = Math.max(0, (a[qui]||0) + n);
 }

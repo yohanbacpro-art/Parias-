@@ -19,7 +19,7 @@
  * reconstruits au chargement (voir CHAMPS_SET).
  */
 
-const SAVE_VERSION = 10;
+const SAVE_VERSION = 11;
 /* Le préfixe est un espace de noms de stockage, pas le numéro de version : il
  * reste figé pour que les parties commencées avant soient relues puis migrées. */
 const SAVE_PREFIX  = 'parias_save_v6_';
@@ -79,6 +79,7 @@ function reconstruireHero(brut){
   h.chaines           = h.chaines || { actives:[], faites:[], issues:{} };
   h.crises            = h.crises || {};
   h.pnj               = h.pnj || {};
+  h.liens             = h.liens || {};
   h.lignee            = h.lignee || { liaisons: [], enfants: [] };
   if(typeof h.age !== 'number') h.age = AGE_DEPART;
   h.compagnons        = (h.compagnons || []).map(c => COMPANIONS_POOL[c.id] || c);
@@ -176,6 +177,21 @@ const MIGRATIONS = {
      * partie en cours se relit au premier tick, marqueur par marqueur. */
     enr.hero.pnj = enr.hero.pnj || {};
     enr.version = 10;
+    return enr;
+  },
+  10: enr => {          // v10 → v11 : le lien unique devient quatre axes séparés
+    /* Une partie en cours n'avait qu'un nombre par personne. On le relit comme
+     * ce qu'il était vraiment : du temps passé et de l'attirance. La confiance,
+     * elle, n'avait jamais été mesurée — elle repart de zéro, ce qui est plus
+     * honnête que de l'inventer. */
+    const a = enr.hero.affinites || {};
+    enr.hero.liens = enr.hero.liens || {};
+    for(const [qui, n] of Object.entries(a)){
+      if(enr.hero.liens[qui]) continue;
+      enr.hero.liens[qui] = { relation:n||0, confiance:0, attirance:n||0,
+                              griefs:[], promesses:[], etat:'inconnu' };
+    }
+    enr.version = 11;
     return enr;
   },
 };

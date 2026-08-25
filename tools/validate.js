@@ -96,6 +96,7 @@ const MARQUEURS_MOTEUR = [
   'descendance',          // src/lignee.js — première naissance
   'heritier_paria',       // src/lignee.js — un enfant porte l'Onde
   'chronique_terminee',   // src/epilogue.js — la chronique est allée à son terme
+  'lien_clarification_due', // src/liens.js — deux promesses qui ne tiennent pas ensemble
 ];
 const marqueursPoses = new Set(MARQUEURS_MOTEUR);   // tout flag qu'un effet peut poser
 const marqueursLus = new Map();     // flag → où il est exigé
@@ -140,7 +141,13 @@ for(const { ev, cat } of tousLesEvenements){
     nbScenes++;
 
     if(sc.pnj && !portrIds.has(sc.pnj)) err(`${nom}/${id} : portrait inconnu ${sc.pnj}`);
-    if(!sc.texte || !sc.texte.length) err(`${nom}/${id} : scène sans texte`);
+    /* Une scène peut se composer à l'ouverture (texteDyn/choixDyn) : c'est
+     * ainsi qu'un refus dit sa raison au lieu de tomber sur un dé. On ne peut
+     * pas l'exécuter ici, mais on peut lire les scènes qu'elle vise. */
+    const dynamique = !!(sc.texteDyn || sc.choixDyn);
+    if(!dynamique && (!sc.texte || !sc.texte.length)) err(`${nom}/${id} : scène sans texte`);
+    if(sc.texteDyn && typeof sc.texteDyn !== 'function') err(`${nom}/${id} : texteDyn n'est pas une fonction`);
+    if(sc.choixDyn && typeof sc.choixDyn !== 'function') err(`${nom}/${id} : choixDyn n'est pas une fonction`);
     if(sc.effets && sc.effets.item && !itemIds.has(sc.effets.item)) err(`${nom}/${id} : objet inconnu ${sc.effets.item}`);
     noterMarqueurs(sc.effets);
 
@@ -197,6 +204,13 @@ for(const { ev, cat } of tousLesEvenements){
           err(`${ref} : affinité inconnue ${c.effets.affinite.qui}`);
         noterMarqueurs(c.effets);
       });
+    } else if(sc.choixDyn){
+      /* On relit la source de la fabrique de choix pour savoir où elle mène :
+       * une scène visée qui n'existe pas casserait le récit à l'exécution. */
+      const src = sc.choixDyn.toString();
+      for(const m of src.matchAll(/(?:suite|reussite|echec):\s*"([a-z0-9_]+)"/g)) suivantes.push(m[1]);
+      for(const m of src.matchAll(/label:\s*"[^"]+"/g)) nbChoix++;
+      if(!suivantes.length) err(`${nom}/${id} : choixDyn ne mène nulle part`);
     } else if(sc.suite){
       // Scène de liaison : un battement de récit qui mène ailleurs sans choix.
       suivantes.push(sc.suite);

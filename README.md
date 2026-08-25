@@ -7,13 +7,14 @@ connu d'une maison Paria rasée pendant la Grande Purge : deux pistolets à sile
 une épée bâtarde, et dans les veines une magie de l'Onde qui fatigue autant
 qu'elle détruit.
 
-**Version actuelle : V2.0** — **les neuf qui agissent sans vous**. Charles,
-Lucius, Alycia, Caleb, Alarielle, Tyrion, Eltharion, Anarion et Khal-Vaene ont
-chacun un âge, une maison, des traits, un objectif qui change avec le monde, et
-la mémoire nominative de ce que vous avez fait. Ils décident seuls, ils
-vieillissent, ils meurent.
+**Version actuelle : V2.1** — **les liens sur quatre axes séparés**. Relation,
+confiance, attirance et compatibilité politique ne montent pas ensemble : on
+peut être désiré sans être cru, aimé sans être suivi, et un refus dit lequel des
+quatre manque.
 
-*V1.9 : les cinq crises régionales, en cinq étapes nommées chacune. V1.8 : les
+*V2.0 : les neuf acteurs autonomes — Charles, Lucius, Alycia, Caleb, Alarielle,
+Tyrion, Eltharion, Anarion et Khal-Vaene décident seuls, se souviennent
+nommément de vous, vieillissent et meurent. V1.9 : les cinq crises régionales, en cinq étapes nommées chacune. V1.8 : les
 dix chaînes secrètes, armées en silence sur ce que vous avez fait. V1.7 : les
 trente affaires du pack narratif écrites en chaînes.*
 
@@ -70,6 +71,7 @@ lien. Il se régénère avec `node tools/build-standalone.js`.
 | **Chaînes secrètes** : 10 chaînes armées sur marqueur, en arrière-plan, jamais proposées | ✅ |
 | **Crises régionales** : 5 crises en 5 étapes nommées, poussées par l'état du monde | ✅ |
 | **Neuf acteurs autonomes** : objectifs qui suivent le monde, mémoire nominative, 32 actes | ✅ |
+| **Liens à quatre axes** : relation, confiance, attirance, politique — séparés | ✅ |
 | **Maisons nobles** : 25 maisons, 26 nobles adultes nommées, avec droit de refus | ✅ |
 | **Bestiaire** : 75 créatures, dont 24 adversaires humains par peuple | ✅ |
 | **Rencontres composées** : meneur, élite, soutien et piétaille selon l'affaire et le lieu | ✅ |
@@ -393,6 +395,50 @@ qu'on a fait quelque chose** — et personne ne vous prévient.
 
 Ce dernier n'est pas un contrat : c'est la réponse à la question que le jeu pose
 depuis la première ligne. Karlsberg n'est pas tombée sous des monstres.
+
+## Les liens, sur quatre axes séparés
+
+> *« Jamais une barre à remplir. Séparer au minimum relation / confiance /
+> attirance / compatibilité politique. Alycia et Alarielle sont majeures et
+> facultatives. Elles peuvent aimer Yohan et être en désaccord avec lui,
+> refuser, rompre, ou préférer leurs propres intérêts. »*
+
+Quatre axes, et ils ne montent pas ensemble.
+
+| Axe | Ce qui le fait bouger |
+|---|---|
+| **relation** | le temps passé, ce qu'on a traversé côte à côte |
+| **confiance** | ce qu'elle croit de ce que vous dites — un mensonge la casse d'un coup, elle remonte lentement |
+| **attirance** | ce qui n'a rien à voir avec les trois autres |
+| **compatibilité politique** | **dérivée du monde**, jamais d'un compteur : Alycia lit votre loyauté envers les Parias, Alarielle lit vos engagements et ce qu'ils coûtent |
+
+**Un palier en exige plusieurs à la fois.** Devenir amants demande de la
+relation, de la confiance *et* de l'attirance. Un mariage y ajoute la
+compatibilité politique. Toute l'attirance du monde ne suffit à rien.
+
+**Un refus n'est pas un jet raté.** La scène lit l'état réel des axes et dit
+laquelle des quatre choses manque :
+
+> « Non. Ce n'est pas un caprice et ce n'est pas définitif. C'est que *elle ne
+> croit pas encore ce que vous dites*. » Elle se lève. « Ne recommence pas ce
+> soir. Recommence plus tard, si c'est encore vrai. »
+
+**Elle peut vous aimer et refuser de vous suivre.** Vendez la liste des Parias
+vivants et Alycia restera votre amante en refusant de vous épouser — et elle
+dira pourquoi.
+
+**Ce qu'on lui a fait se retient sans qu'une scène l'écrive.** Certains
+marqueurs cassent la confiance d'eux-mêmes et laissent un grief daté, affiché
+sur l'écran Personnage sous *ce qu'elle n'oublie pas*.
+
+**Deux liens à la fois sont possibles** et ne déclenchent aucune rivalité
+automatique — le pack l'interdit explicitement. Ce qui gêne, c'est une promesse
+d'exclusivité démentie : elle arme une scène de clarification où l'on peut
+retirer la promesse, la tenir en rompant l'autre, ou soutenir qu'il n'y avait
+rien à ranger.
+
+L'écran ne montre aucun nombre. Quatre phrases : *« elle vous croit sur
+parole »*, *« elle vous veut »*, *« vous êtes en désaccord »*.
 
 ## Les neuf qui agissent sans vous
 
@@ -902,6 +948,7 @@ tools/smoke-consolidation.js  éprouve l'écran unique, les offres, les voyages,
 tools/smoke-chaines.js     éprouve les affaires en chaînes, les termes et les issues
 tools/smoke-crises.js      éprouve les cinq crises, leurs étapes et leurs raisons
 tools/smoke-pnj.js         éprouve les neuf acteurs : décisions, mémoire, morts
+tools/smoke-liens.js       éprouve les quatre axes, les refus motivés, les promesses
 tools/build-artifact.js    fabrique dist/parias-artifact.html (page publiable)
 tools/smoke-tranche.js     l'épreuve d'acceptation du document fondateur :
                            partie → carte → voyage → lieu → récit → combat →
@@ -931,6 +978,7 @@ node tools/smoke-consolidation.js            # écran unique, offres, voyages, S
 node tools/smoke-chaines.js                  # affaires en chaînes, termes du Prix, issues durables
 node tools/smoke-crises.js                   # crises régionales : étapes, raisons, tensions dérivées
 node tools/smoke-pnj.js                      # les neuf : objectifs, mémoire, décisions, vieillesse
+node tools/smoke-liens.js                    # les quatre axes, les refus motivés, les promesses
 node tools/smoke-tranche.js                  # la tranche verticale, de bout en bout
 
 node tools/manifest-assets.js                # régénère la liste des illustrations

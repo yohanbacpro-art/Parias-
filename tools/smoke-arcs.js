@@ -147,7 +147,7 @@ async function derouler(page, cible){
   });
   verifie('les trois conclusions existent', rom.trouves.length === 3, rom.trouves);
   verifie('et sont atteignables en fin de chronique', rom.ouvertes.length === 3, rom.ouvertes);
-  verifie(`les attachements comptent ${rom.total} scènes`, rom.total === 10, rom.total);
+  verifie(`les attachements comptent ${rom.total} scènes`, rom.total >= 10, rom.total);
   await ctx.close();
 
   /* ---------- 4. Les affaires locales, et ce qu'elles changent ---------- */

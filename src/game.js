@@ -285,6 +285,7 @@ document.getElementById('importFileInput').onchange = (e) => {
 function enterGame(){
   if(typeof syncTensions === 'function') syncTensions();
   if(typeof heroPnj === 'function') heroPnj();
+  if(typeof liensTick === 'function') liensTick();
   document.getElementById('tabs').style.display='flex';
   const cal = document.getElementById('calendarBar');
   cal.style.display='flex';
@@ -369,6 +370,8 @@ function advanceTime(semaines){
     crises = (typeof criseTick === 'function') ? criseTick(after) : [];
     // Neuf personnes regardent le monde qui vient de bouger, et agissent.
     pnj = (typeof pnjTick === 'function') ? pnjTick(after) : [];
+    // Les liens relisent ce que le monde vient de faire à ce qu'elles défendent.
+    if(typeof liensTick === 'function') liensTick();
   }
   // Le temps ne fait pas que tourner un compteur : on vieillit, et il naît des gens.
   const lignee = passerLeTemps(semaines);
@@ -410,6 +413,7 @@ function applyPassiveEffects(){
 
 function renderPersonnage(){
   applyPassiveEffects();
+  if(typeof renderLiens === 'function') renderLiens();
   const face = document.getElementById('charFace');
   if(face && !face.dataset.pose){ face.innerHTML = artPortraitImg('yohan'); face.dataset.pose = '1'; }
   document.getElementById('charLvl').textContent = hero.niveau;

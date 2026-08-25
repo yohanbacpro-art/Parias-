@@ -669,3 +669,241 @@ const EVENTS_ROMANCE = [
 },
 
 ];
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LES QUATRE AXES, EN SCÈNES
+   ══════════════════════════════════════════════════════════════════════════
+
+   Ce qui précède fait monter un lien. Ce qui suit le rend séparable : des
+   moments où être franc coûte ce qu'on ressent, où ce qu'on ressent ne suffit
+   pas, où deux promesses ne peuvent pas tenir ensemble.
+
+   Ces scènes lisent l'état réel des axes (`elleAccepterait`) : le refus n'est
+   pas un jet raté, c'est un désaccord, et il dit lequel.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const EVENTS_LIENS = [
+
+/* ── ALYCIA — la franchise coûte, et elle paie ─────────────────────────── */
+{
+  id:"LI_ALYCIA_FRANCHISE", titre:"Ce qu'elle demande, et ce qu'elle vérifie",
+  famille:"PARIA", rarete:"rare", image:"ro_alycia_1",
+  requis:{ compagnon:"alycia", chapitreMin:1, sansFlags:["li_alycia_franchise_fait"] },
+  scenes:{
+    start:{ pnj:"alycia", texte:[
+      "Elle attend qu'ils soient seuls, ce qui chez elle prend rarement plus de dix minutes.",
+      "« Je vais te poser une question et tu vas mentir », dit-elle. « C'est normal, tout le monde ment. Ce que je veux savoir, c'est comment tu mens. »",
+      "Un temps. « Combien de Parias vivants est-ce que tu peux nommer ? »",
+      "Ce n'est pas une question anodine. C'est exactement la question que pose quelqu'un qui cherche une liste."],
+      choix:[
+        {label:"Dire la vérité, y compris ce qu'elle a de laid", detail:"Elle vérifiera · ce qu'on gagne en crédit se perd en mystère",
+         suite:"vrai", effets:{lien:{qui:"alycia", confiance:4, attirance:-1, relation:1},
+                               xp:24, flags:["li_alycia_franchise_fait","alycia_franc"]}},
+        {label:"Répondre à côté, élégamment", detail:"Elle appréciera le geste et notera le refus",
+         suite:"cote", effets:{lien:{qui:"alycia", attirance:2, confiance:-1},
+                               xp:18, flag:"li_alycia_franchise_fait"}},
+        {label:"Mentir en donnant un chiffre plausible", detail:"Jet de Volonté (15) · elle a passé trente ans à repérer ça",
+         test:{stat:"vol", dc:15}, reussite:"ment_ok", echec:"ment_ko"},
+        {label:"Lui retourner la question", detail:"Combien elle peut en nommer, elle",
+         suite:"retourne", effets:{lien:{qui:"alycia", relation:2, attirance:1},
+                                   xp:20, flag:"li_alycia_franchise_fait"}},
+      ]},
+    vrai:{ fin:true, pnj:"alycia", texte:[
+      "Il donne le compte exact, y compris ceux qu'il n'a pas aidés, y compris celui qu'il a laissé prendre à Orsenne parce que s'arrêter aurait coûté trois vies.",
+      "Elle écoute jusqu'au bout sans une expression. Puis : « Bien. Tu viens de te rendre beaucoup moins intéressant et beaucoup plus utile. »",
+      "Elle vérifiera. Elle vérifie tout. Trois semaines plus tard, elle reviendra sans commentaire, et ce silence-là vaudra plus que ce qu'elle aurait pu dire."]},
+    cote:{ fin:true, pnj:"alycia", texte:[
+      "Il répond joliment et ne répond pas. Elle sourit, parce que c'est bien fait.",
+      "« Tu as raison », dit-elle. « Moi non plus je ne te répondrais pas. »",
+      "Ce qui vient de se passer n'est pas rien : deux personnes se sont reconnues. Ce n'est simplement pas de la confiance."]},
+    ment_ok:{ fin:true, pnj:"alycia", texte:[
+      "Il donne un chiffre. Il le donne avec la fatigue exacte de quelqu'un qui compte des morts depuis longtemps, ce qui est la seule façon de mentir là-dessus.",
+      "Elle le croit. Elle le croit vraiment, et c'est le problème : ce qu'elle fera de ce chiffre ne sera pas rattrapable."],
+      effets:{lien:{qui:"alycia", confiance:3, attirance:2}, xp:26,
+              flags:["li_alycia_franchise_fait","alycia_chiffre_faux"]}},
+    ment_ko:{ fin:true, pnj:"alycia", texte:[
+      "Il donne un chiffre. Elle le laisse finir, attend trois secondes de trop, puis répète le chiffre lentement, comme on repose un objet mal rangé.",
+      "« Non », dit-elle. Rien d'autre. Pas de colère, pas de reproche, pas de scène.",
+      "Elle ne repose pas la question. Elle ne la reposera plus jamais, et c'est exactement ce que ça coûte."],
+      effets:{lien:{qui:"alycia", confiance:-5, attirance:1,
+                    grief:"vous lui avez menti sur le nombre de Parias vivants"},
+              xp:14, flags:["li_alycia_franchise_fait","alycia_ment_su"]}},
+    retourne:{ fin:true, pnj:"alycia", texte:[
+      "« Et toi ? »",
+      "Elle ne s'y attendait pas. Elle met un moment, puis donne un nombre — deux cent onze — et l'endroit où sont onze d'entre eux, ce qu'elle n'a jamais dit à personne.",
+      "« Voilà », fait-elle en se levant. « Maintenant tu peux me vendre. C'est plus simple quand c'est réciproque. »",
+      "Ce n'est pas de la confiance. C'est un otage échangé, ce qui, chez elle, arrive plus tôt."]},
+  }
+},
+
+/* ── ALARIELLE — ce que l'engagement coûte à ce qu'elle défend ─────────── */
+{
+  id:"LI_ALARIELLE_PRIX", titre:"Ce que ça coûterait, et à qui",
+  famille:"ELFE", rarete:"rare", image:"ro_alarielle_1",
+  requis:{ compagnon:"alarielle", chapitreMin:1, sansFlags:["li_alarielle_prix_fait"] },
+  scenes:{
+    start:{ pnj:"alarielle", texte:[
+      "Elle a une lettre à la main depuis le matin et ne l'a pas ouverte, ce qui, chez quelqu'un d'aussi méthodique, veut dire qu'elle sait ce qu'il y a dedans.",
+      "« Si je reste », dit-elle enfin, « ma cour perdra la seule personne capable de parler aux deux camps. Ce n'est pas de la vanité : il n'y a personne d'autre. »",
+      "Elle repose la lettre. « Alors ne me demande pas de rester par affection. Demande-le-moi en sachant ce que ça coûte à des gens qui n'ont rien fait. »"],
+      choix:[
+        {label:"Lui dire de partir", detail:"Ce qu'elle défend passe avant · ça se paiera entre eux",
+         suite:"partir", effets:{lien:{qui:"alarielle", confiance:5, relation:1, attirance:-2},
+                                 xp:26, flags:["li_alarielle_prix_fait","alarielle_devoir"]}},
+        {label:"Lui demander de rester, en le disant comme c'est", detail:"Égoïste, assumé, et honnête",
+         suite:"rester", effets:{lien:{qui:"alarielle", attirance:4, relation:2, confiance:-2},
+                                 xp:24, flags:["li_alarielle_prix_fait","alarielle_retenue"]}},
+        {label:"Lui promettre de porter la médiation à sa place", detail:"Jet de Volonté (15) · une promesse qu'il faudra tenir",
+         test:{stat:"vol", dc:15}, reussite:"promet_ok", echec:"promet_ko"},
+        {label:"Ne pas décider pour elle", detail:"C'est sa cour, sa faute historique et sa vie",
+         suite:"elle_decide", effets:{lien:{qui:"alarielle", confiance:3, relation:1},
+                                      xp:22, flag:"li_alarielle_prix_fait"}},
+      ]},
+    partir:{ fin:true, pnj:"alarielle", texte:[
+      "« Pars. »",
+      "Elle le regarde longuement. Ce n'est pas de la gratitude : c'est le soulagement très laid de quelqu'un à qui on vient de retirer un choix impossible.",
+      "« Tu viens de me rendre la chose plus facile et beaucoup plus triste », dit-elle. « Les deux comptent. »",
+      "Elle part le lendemain. Elle écrira, et ses lettres seront précises, longues, et sans un mot de tendresse — parce que c'est ce qu'elle peut se permettre."]},
+    rester:{ fin:true, pnj:"alarielle", texte:[
+      "« Reste. Je n'ai pas d'argument. Je préfère que tu sois là. »",
+      "Elle ferme les yeux une seconde. « Merci de ne pas avoir habillé ça. »",
+      "Elle reste. Trois mois plus tard, une négociation qu'elle aurait pu mener échoue à quarante lieues d'ici, et ils apprennent tous les deux le nombre de morts par la même chronique.",
+      "Ils n'en parleront jamais. Ce sera là quand même."]},
+    promet_ok:{ fin:true, pnj:"alarielle", texte:[
+      "« Je la porterai. Pas à ta place — à ta demande, avec ton nom, et je te rendrai compte. »",
+      "Elle réfléchit longtemps, ce qui est bon signe : elle ne prend jamais au sérieux ce qu'elle accepte vite.",
+      "« Un humain qui va parler aux deux cours elfiques », dit-elle enfin. « C'est absurde. Et personne ne peut te reprocher d'être du mauvais camp, puisque tu n'en as aucun. »",
+      "Elle reste. La promesse, elle, est écrite quelque part maintenant."],
+      effets:{lien:{qui:"alarielle", confiance:4, relation:3, attirance:2,
+                    promesse:"porter la médiation elfique"},
+              xp:32, flags:["li_alarielle_prix_fait","yohan_mediateur_elfique"]}},
+    promet_ko:{ fin:true, pnj:"alarielle", texte:[
+      "Il promet trop vite et trop large, avec cette chaleur qui rend une promesse agréable à entendre et impossible à tenir.",
+      "Elle l'écoute jusqu'au bout. Puis : « Tu ne sais pas ce que tu viens de proposer. Ce n'est pas grave. Mais ne le redis pas. »",
+      "Elle part quand même."],
+      effets:{lien:{qui:"alarielle", confiance:-3, attirance:1}, xp:16,
+              flags:["li_alarielle_prix_fait","alarielle_devoir"]}},
+    elle_decide:{ fin:true, pnj:"alarielle", texte:[
+      "« Ce n'est pas à moi de te le dire. »",
+      "Elle a un rire bref, sans joie. « Non. Ce n'est pas à toi. » Elle ouvre enfin la lettre, la lit, et met un temps considérable à la reposer.",
+      "« Je pars. » Puis, à la porte : « Je voulais que quelqu'un me retienne. Tu as eu raison de ne pas le faire, et je vais t'en vouloir un peu. Les deux tiennent ensemble. »"]},
+  }
+},
+
+/* ── LE PAS DE PLUS — et le refus, qui dit pourquoi ────────────────────── */
+{
+  id:"LI_PAS_DE_PLUS", titre:"Un pas de plus",
+  famille:"PARIA", rarete:"rare", image:"ro_alycia_2",
+  requis:{ compagnon:"alycia", chapitreMin:2, sansFlags:["li_pas_de_plus_fait"] },
+  scenes:{
+    start:{ pnj:"alycia", texte:[
+      "Il y a un moment, dans une pièce, où continuer à parler devient une façon de ne pas décider.",
+      "Ils y sont."],
+      choix:[
+        {label:"Le lui demander", detail:"Elle répondra franchement · elle répond toujours franchement",
+         suite:"demande"},
+        {label:"Laisser passer", detail:"Ce qui n'est pas dit reste possible",
+         suite:"laisse", effets:{lien:{qui:"alycia", relation:1}, xp:12,
+                                 flag:"li_pas_de_plus_fait"}},
+      ]},
+    demande:{ pnj:"alycia",
+      /* La scène lit l'état réel des axes. Un refus n'est pas un jet raté :
+         c'est un désaccord, et il porte sa raison. */
+      texteDyn(){
+        const r = elleAccepterait('alycia', 'amants');
+        if(r.oui) return [
+          "« Oui », dit-elle, sans détour et sans mise en scène, ce qui est le plus déroutant.",
+          "« J'ai trente et un ans, je n'appartiens à personne et je fais ce que je veux. Toi aussi. C'est la seule condition, et elle vaut dans les deux sens. »"];
+        return [
+          "Elle ne détourne pas les yeux, et elle ne fait pas durer.",
+          "« Non. »",
+          `« Ce n'est pas un caprice et ce n'est pas définitif. C'est que ${r.parce}. »`,
+          "Elle se lève. « Ne recommence pas ce soir. Recommence plus tard, si c'est encore vrai. »"];
+      },
+      choixDyn(){
+        const r = elleAccepterait('alycia', 'amants');
+        return r.oui
+          ? [{label:"Rester", detail:"La scène s'arrête à la porte",
+              suite:"oui", effets:{lien:{qui:"alycia", relation:2, attirance:2, confiance:1},
+                                   xp:40, flags:["li_pas_de_plus_fait","alycia_amants"]}},
+             {label:"Lui promettre qu'il n'y aura personne d'autre", detail:"Une promesse se retient",
+              suite:"oui", effets:{lien:{qui:"alycia", relation:2, attirance:2, confiance:2,
+                                         promesse:"exclusivite"},
+                                   xp:44, flags:["li_pas_de_plus_fait","alycia_amants","alycia_promesse"]}}]
+          : [{label:"Accepter le non", detail:"Sans insister, sans le reprocher",
+              suite:"non_ok", effets:{lien:{qui:"alycia", confiance:2}, xp:22,
+                                      flag:"li_pas_de_plus_fait"}},
+             {label:"Insister", detail:"Ce qu'elle vient de dire était pourtant clair",
+              suite:"insiste", effets:{lien:{qui:"alycia", confiance:-4, attirance:-2,
+                                             grief:"vous avez insisté après un non"},
+                                       xp:8, flag:"li_pas_de_plus_fait"}}];
+      }},
+    laisse:{ fin:true, pnj:"alycia", texte:[
+      "Il ne dit rien. Elle non plus. Le moment passe, comme passent les moments qu'on laisse passer.",
+      "Plus tard dans la soirée, elle dit, sans lever les yeux de ce qu'elle fait : « C'était bien. » Il n'y a aucune ironie dedans, ce qui est rare chez elle.",
+      "Rien n'est arrivé. Rien n'est fermé non plus."]},
+    oui:{ fin:true, pnj:"alycia", texte:[
+      "La porte se referme, et ce qu'il y a derrière ne regarde personne.",
+      "Au matin, elle est déjà debout, habillée, en train de vérifier les sorties de la pièce — le même geste qu'au premier jour. Elle ne s'excuse pas de le faire.",
+      "« Ça ne change pas ce que je suis », dit-elle. « Ni ce que tu es. C'est pour ça que ça peut tenir. »"]},
+    non_ok:{ fin:true, pnj:"alycia", texte:[
+      "« D'accord. »",
+      "Elle s'arrête à la porte, un peu surprise, et se retourne. « Tu ne vas pas discuter ? »",
+      "« Non. »",
+      "Elle hoche la tête lentement. Ce qui vient de se passer compte plus, pour elle, que ce qu'elle a refusé."]},
+    insiste:{ fin:true, pnj:"alycia", texte:[
+      "Il insiste. Il insiste bien, avec des arguments, ce qui rend la chose pire.",
+      "Elle ne s'énerve pas. Elle attend qu'il ait fini, entièrement, jusqu'au dernier mot, dans un silence qui devient très long.",
+      "« Voilà », dit-elle enfin. « Maintenant je sais comment tu es quand on te dit non. »",
+      "Elle sort. Elle sera là demain, et quelque chose ne sera plus là."]},
+  }
+},
+
+/* ── DEUX EN MÊME TEMPS — ce qui a été promis se retient ───────────────── */
+{
+  id:"LI_CLARIFICATION", titre:"Ce qui a été promis",
+  famille:"PARIA", rarete:"rare", image:"ro_alycia_3",
+  requis:{ flags:["lien_clarification_due"], sansFlags:["li_clarification_fait"] },
+  scenes:{
+    start:{ pnj:"alycia", texte:[
+      "Ce n'est pas une scène. Personne ne crie, personne ne pleure, et c'est bien pire.",
+      "« Je ne te reproche pas d'avoir quelqu'un », dit Alycia. « Je m'en fiche, sincèrement, et tu le sais. »",
+      "Elle pose une main à plat sur la table. « Je te reproche d'avoir promis. Tu n'étais pas obligé. Tu l'as fait pour t'acheter quelque chose sur le moment, et maintenant il y a une promesse en trop dans le monde. »",
+      "Un temps. « Alors on va la ranger. Il y a trois façons. »"],
+      choix:[
+        {label:"Retirer la promesse, et le dire", detail:"Elle préfère ça à ce qu'il y a maintenant",
+         suite:"retire", effets:{lien:{qui:"alycia", confiance:3, attirance:-2, relation:-1},
+                                 xp:34, flags:["li_clarification_fait","lien_promesse_retiree"]}},
+        {label:"La tenir, et rompre l'autre", detail:"Une promesse tenue vaut ce qu'elle coûte",
+         suite:"tient", effets:{lien:{qui:"alycia", confiance:5, relation:2},
+                                xp:38, flags:["li_clarification_fait","lien_promesse_tenue"]}},
+        {label:"Soutenir qu'il n'y a rien à ranger", detail:"Jet de Volonté (16) · elle sait déjà",
+         test:{stat:"vol", dc:16}, reussite:"nie_ok", echec:"nie_ko"},
+      ]},
+    retire:{ fin:true, pnj:"alycia", texte:[
+      "« Je retire ce que j'ai promis. Ce n'était pas vrai quand je l'ai dit. »",
+      "Elle encaisse ça mieux que ce qu'il craignait, et beaucoup moins bien qu'elle ne le montre.",
+      "« Bon. » Elle range la promesse comme on range un couteau. « Ça, au moins, je peux le compter. »"]},
+    tient:{ fin:true, pnj:"alycia", texte:[
+      "Il tient parole. Ça coûte exactement ce qu'une parole tenue coûte, c'est-à-dire tout ce qu'il y avait de l'autre côté.",
+      "Alycia ne triomphe pas. Elle a l'air, un instant, presque désolée.",
+      "« Tu as choisi la promesse plutôt que la personne », dit-elle. « C'est ce qu'il fallait faire. Ce n'est pas la même chose que d'avoir choisi la bonne. »"]},
+    nie_ok:{ fin:true, pnj:"alycia", texte:[
+      "Il ne nie pas les faits — il refuse le cadre. Il n'y a pas de promesse en trop : il y a deux vies d'adultes qui ne se doivent aucun compte, et il le dit sans une once de mauvaise foi parce qu'il le pense.",
+      "Elle l'écoute. Puis, très lentement : « D'accord. » Et ce n'est pas une reddition : c'est quelqu'un qui vient d'entendre un raisonnement qui tient.",
+      "« Mais alors ne promets plus rien à personne. Jamais. Sinon c'est juste de la lâcheté avec un bon vocabulaire. »"],
+      effets:{lien:{qui:"alycia", confiance:1, attirance:1}, xp:30,
+              flags:["li_clarification_fait","lien_sans_promesse"]}},
+    nie_ko:{ fin:true, pnj:"alycia", texte:[
+      "Il nie. Mal. Avec cette précision fébrile qui, chez un menteur ordinaire, passerait pour de la sincérité, et qui, devant elle, ne passe pas du tout.",
+      "Elle ne dit rien pendant très longtemps. Puis elle se lève et remet son manteau.",
+      "« Le problème n'a jamais été l'autre », dit-elle à la porte. « Le problème, c'est que je viens de perdre la seule chose que j'avais avec toi et que personne d'autre ne m'a jamais donnée. »"],
+      effets:{lien:{qui:"alycia", confiance:-7, relation:-2,
+                    grief:"vous avez nié une promesse qu'elle avait entendue"},
+              xp:16, flags:["li_clarification_fait","lien_menti_deux_fois"]}},
+  }
+},
+
+];
+
+EVENTS_LIENS.forEach(e => EVENTS_ROMANCE.push(e));

@@ -158,7 +158,7 @@ Audit au 24 août. Ce qui est là, ce qui manque, sans complaisance.
 | Noble adulte réelle et consentante | **fait** | `data/maisons.js`, 19 femmes, droit de refus |
 | Karlsberg progressif, jamais « payer X » | **partiel** | `chantier.js` — 8 ouvrages, mais l'or reste la seule monnaie |
 | Suspicion qui change le monde | **fait** | `suspicion.js`, 4 paliers, 12 événements dédiés |
-| Romances à axes séparés | **partiel** | `romances.js` — arcs écrits, un seul axe d'affinité |
+| Romances à axes séparés | **fait** | `liens.js` — relation / confiance / attirance / politique |
 | Mémoire narrative longue | **fait** | `chaines_secretes.js` — 10 chaînes armées sur marqueur, en arrière-plan |
 | PNJ majeurs qui agissent seuls | **fait** | `pnj.js` — 9 acteurs, objectifs, mémoire nominative, 32 actes |
 | Crises régionales en étapes | **fait** | `crises.js` — 5 crises, 25 étapes nommées, poussées par l'état du monde |
@@ -205,7 +205,11 @@ Dans cet ordre. À chaque étape, le jeu reste jouable et les épreuves passent.
    un `retient[]` — sa mémoire, nominative et datée, de ce que Yohan a fait —
    et des actes qu'il pose de lui-même. `poids()` décide, pas un dé : chaque
    saison, au plus deux d'entre eux agissent, et ce sont les plus décidés.
-5. Les romances à axes séparés (`design/narratif/05_GRANDE_HISTOIRE/ROMANCES`).
+5. ~~Les romances à axes séparés.~~ **Fait** : `src/liens.js`. Relation,
+   confiance, attirance sont posées par les choix ; la compatibilité politique
+   est **dérivée du monde**. Un palier en exige plusieurs à la fois, un refus
+   porte sa raison écrite, une trahison casse la confiance toute seule, et deux
+   liens simultanés ne gênent que si une promesse a été faite.
 6. Karlsberg payé autrement qu'en or : pierre, bras, routes, faveurs.
 7. La succession jouable — on continue avec l'héritier.
 
@@ -213,7 +217,7 @@ Dans cet ordre. À chaque étape, le jeu reste jouable et les épreuves passent.
 
 ## 4. Règles de travail
 
-- **Rien ne casse.** `node tools/validate.js` puis les douze épreuves de
+- **Rien ne casse.** `node tools/validate.js` puis les treize épreuves de
   navigateur avant tout commit (voir README, *Vérifier une modification*).
 - **Pas de bundler.** Scripts classiques en portée globale ; l'ordre de
   chargement dans `index.html` est le contrat de dépendances.
