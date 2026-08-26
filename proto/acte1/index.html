@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Gué de Cendrepont</title>
+<meta name="description" content="Acte I de PARIAS — Yohan de Karlsberg, un contrat, une wyverne, et des choix qui ne se reprennent pas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --encre:#0A0908;          /* le fond, presque noir, un peu chaud */
+  --schiste:#15161A;        /* les surfaces */
+  --schiste-clair:#1E2026;
+  --trait:#2C2E35;
+  --parchemin:#E4DCCC;      /* le texte */
+  --parchemin-bas:#9A9284;  /* le texte secondaire */
+  --cendre:#6A665E;         /* le texte éteint */
+  --sang:#A32436;
+  --sang-clair:#C7455A;
+  --onde:#4E9E96;
+  --or:#B9942F;
+  --serif:"Cormorant Garamond", "EB Garamond", Georgia, "Times New Roman", serif;
+  --mono:"JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  background:var(--encre);
+  color:var(--parchemin);
+  font-family:var(--serif);
+  font-size:20px;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── Le bandeau ─────────────────────────────────────────────────────────── */
+header{
+  position:sticky; top:0; z-index:20;
+  display:flex; align-items:center; gap:1rem;
+  padding:.7rem clamp(1rem, 4vw, 2.5rem);
+  background:rgba(10,9,8,.94);
+  border-bottom:1px solid var(--trait);
+  backdrop-filter:blur(6px);
+}
+#bRang{
+  font-family:var(--serif); font-style:italic; font-size:1.02rem;
+  color:var(--parchemin-bas); letter-spacing:.01em;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.bandeau-droite{ margin-left:auto; display:flex; align-items:center; gap:.9rem; flex-shrink:0; }
+#bOr, #bChair{
+  font-family:var(--mono); font-size:.68rem; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--cendre);
+}
+#bOr{ color:var(--or); }
+#bChair{ color:var(--sang-clair); }
+#bChair:empty{ display:none; }
+
+header button, #jFermer{
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--parchemin-bas); background:transparent;
+  border:1px solid var(--trait); border-radius:2px;
+  padding:.4rem .7rem; cursor:pointer;
+  transition:border-color .15s, color .15s;
+}
+header button:hover, #jFermer:hover{ color:var(--parchemin); border-color:var(--cendre); }
+header button:focus-visible, #jFermer:focus-visible,
+.choix button:focus-visible, .suite button:focus-visible,
+#gore button:focus-visible{ outline:2px solid var(--onde); outline-offset:2px; }
+
+/* ── La scène ───────────────────────────────────────────────────────────── */
+main{
+  max-width:38rem;
+  margin:0 auto;
+  padding:clamp(2rem, 6vw, 4.5rem) clamp(1.1rem, 5vw, 2rem) 6rem;
+}
+
+.lieu{
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--cendre);
+  margin:0 0 1.6rem; padding-bottom:.9rem;
+  border-bottom:1px solid var(--trait);
+}
+
+h1{
+  font-size:clamp(2rem, 6vw, 2.7rem); font-weight:400; line-height:1.14;
+  margin:0 0 1.8rem; text-wrap:balance; letter-spacing:-.01em;
+}
+
+.recit{ margin:0 0 1.15rem; }
+.recit b{ font-weight:600; color:#F3ECDD; }
+.recit i{ font-style:italic; color:var(--parchemin-bas); }
+
+.souffle{
+  margin:2rem 0; padding-left:1.2rem;
+  border-left:2px solid var(--sang);
+  font-style:italic; font-size:1.1rem; color:#F0E8D8;
+}
+.souffle b{ font-style:normal; font-weight:600; }
+
+/* Un visage : une lettre dans un cadre, pas un portrait qu'on n'a pas. */
+.qui{ display:flex; align-items:center; gap:.85rem; margin:0 0 1.7rem; }
+.visage{
+  width:2.6rem; height:2.6rem; flex-shrink:0;
+  display:grid; place-items:center;
+  border:1px solid var(--trait); background:var(--schiste);
+  font-size:1.25rem; color:var(--parchemin-bas);
+}
+.qui .nom{ font-size:1.05rem; }
+.qui .role{
+  font-family:var(--mono); font-size:.62rem; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--cendre);
+}
+
+/* ── Le jet ─────────────────────────────────────────────────────────────── */
+.jet{
+  font-family:var(--mono); font-size:.7rem; line-height:1.75; letter-spacing:.02em;
+  color:var(--cendre);
+  margin:0 0 1.8rem; padding:.85rem 1rem;
+  background:var(--schiste); border-left:2px solid var(--trait);
+}
+.jet b{ display:block; margin-top:.35rem; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; }
+.jet.dominante{ border-left-color:var(--onde); } .jet.dominante b{ color:var(--onde); }
+.jet.nette{ border-left-color:#7E8C6A; } .jet.nette b{ color:#9AAC80; }
+.jet.couteuse{ border-left-color:var(--or); } .jet.couteuse b{ color:var(--or); }
+.jet.echec{ border-left-color:#8A5A3C; } .jet.echec b{ color:#B57A52; }
+.jet.catastrophe{ border-left-color:var(--sang); } .jet.catastrophe b{ color:var(--sang-clair); }
+
+/* ── La mêlée ───────────────────────────────────────────────────────────── */
+.melee{
+  display:flex; flex-wrap:wrap; gap:.4rem 1.4rem;
+  margin:0 0 1.7rem; padding:.7rem 1rem;
+  border:1px solid var(--trait); background:var(--schiste);
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--cendre);
+}
+.melee b{ color:var(--parchemin); font-weight:600; }
+
+/* ── Les effets ─────────────────────────────────────────────────────────── */
+.effets{ display:flex; flex-wrap:wrap; gap:.45rem; margin:0 0 1.6rem; }
+.effets span{
+  font-family:var(--mono); font-size:.64rem; letter-spacing:.05em;
+  padding:.28rem .6rem; border:1px solid var(--trait); color:var(--parchemin-bas);
+}
+.effets .bien{ color:#9AAC80; border-color:#3D4634; }
+.effets .mal{ color:var(--sang-clair); border-color:#4A2028; }
+.effets .renom{ color:var(--or); border-color:#4A3D14; }
+.effets .rang{ color:var(--onde); border-color:#1F4340; text-transform:none; letter-spacing:0; font-family:var(--serif); font-size:.85rem; font-style:italic; }
+.effets .marque{ color:var(--parchemin-bas); }
+.effets .rien{ color:var(--cendre); }
+
+/* ── Les choix ──────────────────────────────────────────────────────────── */
+.choix{ display:flex; flex-direction:column; gap:.6rem; margin-top:2.6rem; }
+.choix button{
+  position:relative; text-align:left; width:100%; cursor:pointer;
+  font-family:var(--serif); font-size:1.02rem; color:var(--parchemin);
+  background:var(--schiste); border:1px solid var(--trait); border-left-width:2px;
+  padding:.95rem 1.1rem;
+  display:flex; flex-direction:column; gap:.28rem;
+  transition:background .14s, border-color .14s, transform .14s;
+}
+.choix button:hover:not([disabled]){
+  background:var(--schiste-clair); border-color:var(--cendre); transform:translateX(2px);
+}
+.choix button[disabled]{ opacity:.42; cursor:not-allowed; }
+.ch-t{ line-height:1.35; }
+.ch-risque{
+  position:absolute; top:.95rem; right:1.1rem;
+  font-family:var(--mono); font-size:.58rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--cendre);
+}
+.ch-detail{ font-size:.86rem; color:var(--parchemin-bas); line-height:1.45; padding-right:5rem; }
+.ch-ferme{
+  font-family:var(--mono); font-size:.62rem; letter-spacing:.04em;
+  color:var(--sang-clair); opacity:.85; line-height:1.5;
+}
+.choix button.definitif{ border-left-color:var(--sang); }
+.choix button[data-risque="prudent"]{ border-left-color:#3D4634; }
+.choix button[data-risque="favorable"]{ border-left-color:#3D4634; }
+.choix button[data-risque="calculé"]{ border-left-color:#2F5B57; }
+.choix button[data-risque="aléatoire"]{ border-left-color:#4A3D14; }
+.choix button[data-risque="dangereux"]{ border-left-color:#7A4A2C; }
+.choix button[data-risque="très dangereux"]{ border-left-color:#8E2B24; }
+.choix button[data-risque="définitif"]{ border-left-color:var(--sang); }
+.choix button[data-risque="très dangereux"] .ch-risque{ color:#B96A5E; }
+.choix button[data-risque="définitif"] .ch-risque{ color:var(--sang-clair); }
+
+.suite{ margin-top:2.6rem; }
+.suite button{
+  font-family:var(--mono); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--parchemin); background:transparent; cursor:pointer;
+  border:1px solid var(--cendre); padding:.75rem 1.6rem;
+  transition:background .14s, color .14s;
+}
+.suite button:hover{ background:var(--parchemin); color:var(--encre); }
+
+/* ── L'issue ────────────────────────────────────────────────────────────── */
+.issue{ margin:3rem 0 0; padding:2rem 0 0; border-top:1px solid var(--trait); }
+.etiquette{
+  font-family:var(--mono); font-size:.62rem; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--sang-clair); margin:0 0 .8rem;
+}
+.issue h2{
+  font-size:1.6rem; font-weight:400; line-height:1.25; margin:0 0 1.6rem;
+  text-wrap:balance; color:#F3ECDD;
+}
+.plus-tard{
+  margin-top:2rem; padding:1.2rem 1.3rem;
+  background:var(--schiste); border-left:2px solid var(--or);
+}
+.plus-tard p:last-child{ margin:0; font-style:italic; color:var(--parchemin-bas); font-size:.98rem; }
+.plus-tard .etiquette{ color:var(--or); }
+
+/* ── Le journal ─────────────────────────────────────────────────────────── */
+#journal{
+  position:fixed; top:0; right:0; bottom:0; z-index:30;
+  width:min(25rem, 92vw); overflow-y:auto;
+  background:var(--schiste); border-left:1px solid var(--trait);
+  transform:translateX(101%); transition:transform .22s ease;
+  padding:1.2rem clamp(1rem, 4vw, 1.6rem) 3rem;
+}
+#journal.ouvert{ transform:translateX(0); }
+#journal header{ position:static; padding:0 0 1.2rem; background:none; border:none; backdrop-filter:none; }
+#journal h2{
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--parchemin-bas); font-weight:600; margin:1.9rem 0 .2rem;
+}
+#journal .sous{
+  font-size:.84rem; font-style:italic; color:var(--cendre); margin:0 0 .8rem;
+}
+#journal ul{ list-style:none; margin:0; padding:0; }
+#journal li{
+  font-size:.92rem; line-height:1.5; padding:.5rem 0;
+  border-bottom:1px solid var(--trait); color:var(--parchemin-bas);
+}
+#journal li b{ color:var(--parchemin); font-weight:600; }
+#journal li i{ font-size:.82rem; color:var(--cendre); }
+#journal li u{ text-decoration:none; color:var(--sang-clair); }
+#journal li.plaie{ border-left:2px solid var(--sang); padding-left:.7rem; }
+#journal li.close{ border-left:2px solid var(--trait); padding-left:.7rem; text-decoration:line-through; color:var(--cendre); }
+#journal li.vide{ font-style:italic; color:var(--cendre); border:none; }
+
+.fiche{ display:flex; flex-wrap:wrap; gap:.35rem; margin:0 0 .7rem; }
+.fiche span{
+  display:flex; align-items:baseline; gap:.35rem;
+  border:1px solid var(--trait); padding:.28rem .5rem;
+  font-family:var(--mono); font-size:.62rem;
+}
+.fiche i{ font-style:normal; letter-spacing:.05em; text-transform:uppercase; color:var(--cendre); }
+.fiche b{ color:var(--parchemin); font-size:.76rem; font-variant-numeric:tabular-nums; }
+.fiche-comp b{ color:var(--onde); }
+
+.jauges{ display:flex; flex-direction:column; gap:.3rem; margin:.9rem 0 0; }
+.jauge{
+  position:relative; height:1.35rem; background:var(--encre); border:1px solid var(--trait);
+  display:flex; align-items:center;
+}
+.jauge span{
+  position:absolute; left:0; top:0; bottom:0;
+  background:linear-gradient(90deg, #33232A, #5C2A33);
+}
+.jauge i, .jauge b{
+  position:relative; font-family:var(--mono); font-size:.6rem; letter-spacing:.08em;
+  text-transform:uppercase; font-style:normal;
+}
+.jauge i{ padding-left:.5rem; color:var(--parchemin-bas); }
+.jauge b{ margin-left:auto; padding-right:.5rem; color:var(--parchemin); font-variant-numeric:tabular-nums; }
+
+/* ── Le réglage du détail ───────────────────────────────────────────────── */
+#gore{ display:flex; gap:.3rem; margin:.6rem 0 0; }
+#gore button{
+  flex:1; font-family:var(--mono); font-size:.6rem; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--cendre); background:transparent; border:1px solid var(--trait);
+  padding:.4rem .3rem; cursor:pointer;
+}
+#gore button[aria-pressed="true"]{ color:var(--parchemin); border-color:var(--sang); background:#1A1214; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ transition:none !important; animation:none !important; }
+}
+@media (max-width:520px){
+  body{ font-size:18px; }
+  .ch-detail{ padding-right:0; }
+  .ch-risque{ position:static; order:-1; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <span id="bRang">« Nous cherchons un Paria »</span>
+  <span class="bandeau-droite">
+    <span id="bChair"></span>
+    <span id="bOr">40 or</span>
+    <button id="bJournal" aria-expanded="false" aria-controls="journal">Journal</button>
+  </span>
+</header>
+
+<main id="scene"></main>
+
+<aside id="journal" aria-label="Journal de Yohan">
+  <header>
+    <button id="jFermer">Fermer</button>
+  </header>
+  <h2>Le détail</h2>
+  <p class="sous">Ce qui change, c'est ce qu'on écrit. Jamais ce qui arrive.</p>
+  <div id="gore">
+    <button data-g="sobre" aria-pressed="false">Sobre</button>
+    <button data-g="intense" aria-pressed="true">Intense</button>
+    <button data-g="extreme" aria-pressed="false">Extrême</button>
+  </div>
+  <div id="journalCorps"></div>
+  <h2>La partie</h2>
+  <p class="sous">Une seule sauvegarde. Elle se fait toute seule.</p>
+  <button id="bNeuf" style="font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sang-clair);background:transparent;border:1px solid #4A2028;padding:.5rem .8rem;cursor:pointer;">Tout recommencer</button>
+</aside>
+
+<script src="moteur.js"></script>
+<script src="monde.js"></script>
+<script src="arc_wyverne.js"></script>
+<script src="jeu.js"></script>
+</body>
+</html>
