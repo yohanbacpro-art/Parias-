@@ -57,7 +57,9 @@ const dit = (ok, quoi, note) => {
     const def = Object.keys(SCENES);
     const ref = {};
     for(const [id, s] of Object.entries(SCENES)) ref[id] = cibles(s);
-    return { def, ref, dyn:Object.keys(DYN), echos:Object.keys(ECHOS) };
+    /* Les scènes que les aiguillages composent : le banc et le couloir. */
+    const parBanc = ACCUSES.map(x => ['as_banc_' + x.id, 'as_parler_' + x.id]).flat();
+    return { def, ref, dyn:Object.keys(DYN), echos:Object.keys(ECHOS), parBanc };
   });
 
   const SCENES_DYN = graphe.dyn;
@@ -80,9 +82,13 @@ const dit = (ok, quoi, note) => {
                            'wy_nuit', 'wy_route', 'wy_mort', 'wy_traine',
                            'wy_fin_route', 'wy_fin_vivante', 'wy_fin_perdu',
                            'convalescence', 'palier_nomme', 'palier_karlsberg',
+                           'as_arrivee', 'as_rond_2', 'as_rond_3', 'as_forfait', 'as_temps_1', 'as_temps_2',
+                           'as_fin_nom', 'as_fin_yohan', 'as_fin_anonyme', 'as_fin_silence',
+                           'as_fin_onde', 'as_fin_perdu',
                            'karls_lettre', 'karls_pierre', 'karls_gamin', 'karls_rien']
                           .concat(graphe.dyn)
-                          .concat(Object.keys(ECHOS_IDS).map(id => 'echo_' + id)));
+                          .concat(Object.keys(ECHOS_IDS).map(id => 'echo_' + id))
+                          .concat(graphe.parBanc));
   const orphelines = graphe.def.filter(id => !referencees.has(id) && !entrees.has(id));
   dit(orphelines.length === 0, "aucune scène écrite n'est inatteignable", orphelines.join(' · '));
 

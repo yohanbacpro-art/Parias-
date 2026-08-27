@@ -25,6 +25,14 @@ const GENS = {
   gassien:    { nom:"Gassien le Lièvre",    role:"contrebandier · rabat les caravanes",  lettre:"G" },
   alienor:    { nom:"Aliénor de Valombre",  role:"nièce d'Héloïse · vingt-quatre ans",   lettre:"Æ" },
   sergent:    { nom:"Le sergent d'étape",   role:"Route Grise · douze ans de poste",     lettre:"S" },
+
+  /* L'assise d'hiver — Chastel descend enfin de ses archives. */
+  vasque:     { nom:"Ancelin Vasque",       role:"commissaire aux titres de Chastel",    lettre:"V" },
+  sorgue:     { nom:"Renaud Sorgue",        role:"champion judiciaire · quarante et un", lettre:"R" },
+  greffier:   { nom:"Le greffier",          role:"tient le rôle depuis dix-neuf ans",    lettre:"G" },
+  loys:       { nom:"Loys",                 role:"quinze ans · il est monté à la borne", lettre:"L" },
+  clerc:      { nom:"Le clerc de Chastel",  role:"vingt-six ans · il a lu les relevés",  lettre:"C" },
+  tailleur:   { nom:"Le tailleur de pierre",role:"un hangar, pas assez de commandes",    lettre:"T" },
 };
 
 /* ── Yohan, valeurs canoniques V7 ───────────────────────────────────────── */
@@ -251,7 +259,7 @@ function rendreBascule(){
           ? "On vous demande par votre nom, maintenant. Les lettres arrivent adressées, les sommes montent, et deux personnes dans cette province ont commencé à se demander d'où sort un homme d'armes que personne ne se rappelle avoir vu grandir."
           : "Quelqu'un, quelque part, a fait le rapprochement entre ce que vous savez faire et une maison rayée il y a dix-neuf ans. Ce n'est pas une rumeur de taverne : c'est écrit, quelque part, dans un dossier, avec une date. Ce qui vous cherche maintenant n'a plus rien d'un commanditaire."),
     ]),
-    suite:'acte1_fin', libelleSuite:"Ce qui vient",
+    suite:'as_arrivee', libelleSuite:"Ce qui monte la vallée",
   };
   aller('bascule');
 }
@@ -268,20 +276,7 @@ SCENES_MONDE.pas_ecrit = {
 
 SCENES_MONDE.hub_retour = { dyn:true };
 
-SCENES_MONDE.acte1_fin = {
-  titre:"Fin de l'Acte I",
-  texte:[
-    "Ici s'ouvre le contrat exceptionnel — celui où Yohan fait l'impossible devant trop de témoins, où l'Onde se voit, et où le nom Karlsberg se réveille dans la bouche de quelqu'un qui compte.",
-    "§ Il n'est pas encore écrit. La machine, elle, l'est : le prologue, le tableau, les trois saisons, le renom qui ne monte que devant témoins, et le basculement qui lit ce que vous avez fait et ce que vous avez laissé faire.",
-    "C'est la charpente de l'Acte I. Le reste sont des arcs qu'on y accroche, un par un, à cinq mille mots pièce.",
-  ],
-  issue:"Acte I",
-  bilan:"La charpente tient",
-  apres:[
-    `Vous finissez cet acte avec ${ETAT.or} couronnes, ${ETAT.blessures.length} blessure${ETAT.blessures.length > 1 ? 's' : ''} et ${ETAT.faits.length} choses inscrites au journal qui ne se reprendront pas.`,
-  ],
-  plusTard:"L'Acte II — Le Dernier Karlsberg — commence le jour où quelqu'un vous appelle par un nom que vous n'avez donné à personne.",
-};
+
 
 /* ── Enregistrement et aiguillages ─────────────────────────────────────── */
 enregistrerScenes(SCENES_MONDE);
