@@ -188,7 +188,9 @@ function appliquer(e){
   const tags = [];
   const T = (cls, txt) => tags.push(`<span class="${cls}">${txt}</span>`);
 
-  if(e.or){ ETAT.or += e.or; T(e.or > 0 ? 'bien' : 'mal', `${e.or > 0 ? '+' : '−'}${Math.abs(e.or)} or`); }
+  if(e.faire) e.faire();
+  const or = val(e.or);
+  if(or){ ETAT.or += or; T(or > 0 ? 'bien' : 'mal', `${or > 0 ? '+' : '−'}${Math.abs(or)} or`); }
   (e.flags || []).forEach(f => ETAT.flags.add(f));
   if(e.flag) ETAT.flags.add(e.flag);
   if(e.cout) depenser(e.cout);

@@ -16,7 +16,7 @@ const { chromium } = require('playwright-core');
 
 const RACINE = path.resolve(__dirname, '..');
 const PAGE   = 'file://' + path.join(RACINE, 'proto/acte1/index.html');
-const PARTIES = Number(process.env.PARTIES || 200);
+const PARTIES = Number(process.env.PARTIES || 600);
 
 let echecs = 0;
 const dit = (ok, quoi, note) => {
@@ -57,10 +57,11 @@ const dit = (ok, quoi, note) => {
     const def = Object.keys(SCENES);
     const ref = {};
     for(const [id, s] of Object.entries(SCENES)) ref[id] = cibles(s);
-    return { def, ref, dyn:Object.keys(DYN) };
+    return { def, ref, dyn:Object.keys(DYN), echos:Object.keys(ECHOS) };
   });
 
   const SCENES_DYN = graphe.dyn;
+  const ECHOS_IDS = Object.fromEntries(graphe.echos.map(id => [id, 1]));
   const definies = new Set(graphe.def);
   const referencees = new Set();
   const absentes = [];
@@ -77,7 +78,11 @@ const dit = (ok, quoi, note) => {
    * du jeu et les cibles d'aiguillage dynamique n'en sont pas. */
   const entrees = new Set(['prologue', 'hub', 'bascule', 'hub_retour', 'acte1_fin',
                            'wy_nuit', 'wy_route', 'wy_mort', 'wy_traine',
-                           'wy_fin_route', 'wy_fin_vivante', 'wy_fin_perdu'].concat(graphe.dyn));
+                           'wy_fin_route', 'wy_fin_vivante', 'wy_fin_perdu',
+                           'convalescence', 'palier_nomme', 'palier_karlsberg',
+                           'karls_lettre', 'karls_pierre', 'karls_gamin', 'karls_rien']
+                          .concat(graphe.dyn)
+                          .concat(Object.keys(ECHOS_IDS).map(id => 'echo_' + id)));
   const orphelines = graphe.def.filter(id => !referencees.has(id) && !entrees.has(id));
   dit(orphelines.length === 0, "aucune scène écrite n'est inatteignable", orphelines.join(' · '));
 
@@ -101,7 +106,11 @@ const dit = (ok, quoi, note) => {
         vues.add(ETAT.scene);
         const s = SCENES[ETAT.scene];
         if(s.dyn) { bloquees++; break; }   // un aiguillage non branché
-        if(s.issue){ issues[s.issue] = (issues[s.issue] || 0) + 1; break; }
+        if(s.issue){
+          issues[s.issue] = (issues[s.issue] || 0) + 1;
+          if(!s.suite) break;                 // une fin de partie s'arrête là
+          aller(s.suite); continue;           // une fin d'affaire rend la main
+        }
 
         const choix = (s.choix || []).filter(c => !c.si || c.si())
                                      .filter(c => !(c.requisOr && ETAT.or < c.requisOr));
@@ -124,15 +133,23 @@ const dit = (ok, quoi, note) => {
       bilan.tropLong ? `${bilan.tropLong} > 400 pas` : '');
 
   const somme = Object.values(bilan.issues).reduce((a, b) => a + b, 0);
-  dit(somme === PARTIES, `${somme}/${PARTIES} parties arrivent à une issue écrite`);
+  dit(somme >= PARTIES, `${somme} issues atteintes sur ${PARTIES} parties`);
   dit(Object.keys(bilan.issues).length >= 4,
       `${Object.keys(bilan.issues).length} issues distinctes atteintes`);
 
-  /* Un aiguillage dynamique ne s'affiche jamais : il compte comme vu. */
+  /* Un aiguillage dynamique ne s'affiche jamais : il compte comme vu. Les
+   * branches « Domination » demandent une marge de +6 et ne sortent presque
+   * jamais au hasard : elles sont vérifiées par le rendu, pas par la marche. */
   const vues = new Set(bilan.vues.concat(graphe.dyn));
-  const couverture = Math.round(100 * vues.size / definies.size);
-  dit(couverture >= 80, `couverture ${couverture} % (${vues.size}/${definies.size})`,
-      couverture < 90 ? graphe.def.filter(id => !vues.has(id)).slice(0, 10).join(' · ') : '');
+  const marchables = graphe.def.filter(id => !/_dom$/.test(id));
+  const manquantes = marchables.filter(id => !vues.has(id));
+  const couverture = Math.round(100 * (marchables.length - manquantes.length) / marchables.length);
+  /* La marche est uniforme ; un joueur ne l'est pas. Une branche profonde qui
+   * sort rarement n'est pas un défaut — une famille entière de branches qui ne
+   * sort jamais en est un. On échoue bas, et on imprime toujours la liste. */
+  dit(couverture >= 92,
+      `couverture ${couverture} % des scènes atteignables au hasard (${marchables.length - manquantes.length}/${marchables.length})`,
+      manquantes.length ? manquantes.join(' · ') : '');
 
   /* Les branches « Domination » demandent une marge de +6 : le hasard les
    * sert rarement. On les rend donc toutes, une par une, pour vérifier au

@@ -756,6 +756,10 @@ wy_route:{
 
 wy_bracq:{
   qui:'bracq',
+  /* Il est là, il a deux engins tendus et onze jours de froid dans les os : il
+   * travaille avec vous d'office. Les jets qui suivent ne décident pas de son
+   * concours — ils décident de ce qu'il accepte de dire. */
+  effets:{ flags:['wy_bracq_allie'] },
   texte:[
     "« Bracq. Maître des engins pour la maison de Valombre, ce qui veut dire que je suis le seul homme de la vallée qui sache tendre une baliste sans se faire arracher la main. »",
     "Il lève sa main gauche, trois doigts.",
@@ -820,7 +824,7 @@ wy_bracq_ok:{
     "« Militaire. Poinçonné. Je ne vous dirai pas de quel arsenal parce que je tiens à ma place et à mes trois doigts. »",
     "§ « Mais posez-vous la question suivante, messire, et posez-la à quelqu'un d'autre que moi : qui, dans une vallée de bergers, a de quoi tirer un carreau de baliste sur une bête à cent pieds ? »",
   ],
-  effets:{ flags:['wy_sait_fleches'],
+  effets:{ flags:['wy_sait_fleches','wy_sait_baliste'],
            marque:"Le carreau retiré de l'aile est militaire et poinçonné.", court:"Un carreau militaire" },
   suite:'wy_bracq', libelleSuite:"Revenir aux balistes",
 },
@@ -2587,6 +2591,9 @@ Object.assign(ARC_WYVERNE, ARC_WYVERNE_8);
  * vallée, plus cher que deux cent cinquante couronnes.
  * ══════════════════════════════════════════════════════════════════════════ */
 
+/* Ce que Valombre doit : le tarif du tableau, prime de rang comprise. */
+const dueDuContrat = () => (ETAT.acte.contrat && ETAT.acte.contrat.or) || 250;
+
 const ARC_WYVERNE_9 = {
 
 wy_retour:{
@@ -2729,12 +2736,14 @@ wy_ret_borne:{
 wy_paiement:{
   lieu:"Valombre · la cour · une heure plus tard",
   titre:"Ce qu'on emporte",
+  effets:{ or:() => a('wy_morte') ? dueDuContrat()
+                  : (a('wy_epargnee') || a('wy_rompu') ? 0 : Math.round(dueDuContrat() / 3)) },
   texte:[
     () => a('wy_morte')
-      ? "Le régisseur compte deux cent cinquante couronnes sur le rebord d'une auge à chevaux parce qu'il n'y a pas d'autre surface plate dans cette cour. Il compte deux fois. C'est un homme consciencieux et il a l'air très fatigué."
+      ? `Le régisseur compte ${dueDuContrat()} couronnes sur le rebord d'une auge à chevaux parce qu'il n'y a pas d'autre surface plate dans cette cour. Il compte deux fois. C'est un homme consciencieux et il a l'air très fatigué.`
       : (a('wy_epargnee') || a('wy_rompu')
         ? "Le régisseur ne compte rien du tout, parce qu'il n'y a rien à compter. Le contrat disait : la bête. La bête est vivante, la route est fermée, et il n'existe aucune clause qui prévoie autre chose."
-        : "Le régisseur compte quatre-vingts couronnes — le tiers, l'usage des maisons du nord quand un homme a manifestement tout donné et que la chose n'est pas faite. Il vous les tend en s'excusant à voix basse, ce qu'aucun règlement ne lui demande."),
+        : `Le régisseur compte ${Math.round(dueDuContrat() / 3)} couronnes — le tiers, l'usage des maisons du nord quand un homme a manifestement tout donné et que la chose n'est pas faite. Il vous les tend en s'excusant à voix basse, ce qu'aucun règlement ne lui demande.`),
     () => a('wy_coutume')
       ? "§ Et il y a l'autre moitié du Prix, qui ne se compte pas dans une cour."
       : "",
@@ -2957,7 +2966,7 @@ DYN.wy_issue = () =>
 
 /* Le retour des issues vers le tableau des mercenaires. */
 for(const id of ['wy_fin_route', 'wy_fin_vivante', 'wy_fin_perdu']){
-  ARC_WYVERNE[id].suite = 'hub_retour';
+  ARC_WYVERNE[id].suite = 'entre_saisons';
   ARC_WYVERNE[id].libelleSuite = "Reprendre la route";
 }
 

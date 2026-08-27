@@ -37,7 +37,7 @@ function neuf(){
   ETAT.or = 40; ETAT.renom = 6; ETAT.suspicion = 4;
   ETAT.flags = new Set(); ETAT.blessures = []; ETAT.faits = []; ETAT.portes = [];
   ETAT.adaptation = {};
-  ETAT.acte = { saison:0, engagements:3, arcsFaits:[], arcsIgnores:[] };
+  ETAT.acte = { saison:0, engagements:3, arcsFaits:[], arcsIgnores:[], arcsPerdus:[] };
 }
 
 /* ── Les six affaires de l'Acte I ──────────────────────────────────────────
@@ -191,7 +191,8 @@ function rendreHub(){
   const reste = A.engagements - A.arcsFaits.length;
   const rang = rangActuel();
 
-  const dispo = AFFAIRES.filter(x => !A.arcsFaits.includes(x.id));
+  const perdus = A.arcsPerdus || [];
+  const dispo = AFFAIRES.filter(x => !A.arcsFaits.includes(x.id) && !perdus.includes(x.id));
   const saisons = ["Fin d'hiver", "Printemps", "Été", "Automne"];
 
   SCENES.hub = {
@@ -204,13 +205,20 @@ function rendreHub(){
       `§ Vous n'avez pas de troupe, pas de château, pas de nom qu'on puisse écrire. Vous avez un cheval, une épée, et **${reste} saison${reste > 1 ? 's' : ''}** avant que l'hiver revienne et que la vallée se referme.`,
       "On ne prend pas six affaires. On en prend trois. Les autres seront prises par d'autres, ou par personne, et ça se saura.",
       `Pour l'instant, dans cette vallée, on dit : « ${rang.cri} ». ${rang.note}`,
-    ],
+      rang.id === 'inconnu' ? "" :
+        (rang.id === 'nomme'
+          ? "Les sommes ont monté de moitié depuis qu'on vous demande par votre nom, et deux lettres du mur sont adressées au lieu d'être affichées. C'est ce que rapporte le renom. Le reste de ce qu'il rapporte n'arrive pas par le mur."
+          : "Les papiers du mur ne vous concernent plus tout à fait. On vous écrit, maintenant, et pas seulement des maisons ; l'aubergiste garde deux plis sous le comptoir qu'il n'a pas voulu clouer au mur, et il ne veut pas dire pourquoi."),
+      perdus.length
+        ? `§ ${perdus.map(id => AFFAIRES.find(x => x.id === id).titre).join(' · ')} — décroché${perdus.length > 1 ? 's' : ''} du mur pendant que vous vous remettiez. Quelqu'un d'autre les a.`
+        : "",
+    ].filter(Boolean),
     choix: (reste > 0 ? dispo : []).map(x => ({
       t: `${x.titre} — ${x.maison}`,
-      detail: `${x.lieu} · ${x.danger} · ${x.or} couronnes${x.prix ? " · la coutume est due" : ""}`,
+      detail: `${x.lieu} · ${x.danger} · ${prime(x.or)} couronnes${x.prix ? " · la coutume est due" : ""}`,
       va: x.entree || 'pas_ecrit',
       effets:{ flags:['pris_' + x.id] },
-      avant: () => { A.arcsFaits.push(x.id); A.saison++; },
+      avant: () => { A.arcsFaits.push(x.id); A.saison++; A.contrat = { id:x.id, or:prime(x.or) }; },
     })).concat(reste <= 0 ? [{
       t:"Ne rien prendre de plus. L'hiver revient.",
       detail:"Trois saisons brûlées · le tableau se referme",
@@ -255,7 +263,7 @@ SCENES_MONDE.pas_ecrit = {
     "§ C'est ici que se branche le contenu à venir : la machine de l'acte est finie, les arcs se posent dedans.",
     "Reprenez le tableau et prenez la Wyverne — c'est celle qui est écrite.",
   ],
-  suite:'hub_retour', libelleSuite:"Revenir au tableau",
+  suite:'entre_saisons', libelleSuite:"Revenir au tableau",
 };
 
 SCENES_MONDE.hub_retour = { dyn:true };
