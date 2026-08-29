@@ -232,15 +232,26 @@ const DYN = {};
 function aller(id){
   const s = SCENES[id];
   if(!s){ console.error('Scène absente :', id); return; }
-  if(s.dyn && DYN[id]){ DYN[id](); return; }
+  /* Un aiguillage qui se compose lui-même — la carte, l'épilogue — réécrit
+   * SCENES[id] puis se rappelle. Sans ce garde-fou il boucle ; avec, il
+   * garde son `dyn` et se recompose à chaque visite au lieu de servir une
+   * fois la version périmée de la saison précédente. */
+  if(s.dyn && DYN[id] && aller.encours !== id){
+    aller.encours = id;
+    try { DYN[id](); } finally { aller.encours = null; }
+    return;
+  }
   ETAT.scene = id;
 
   const perte = saigner();
   const el = document.getElementById('scene');
   let h = '';
 
-  if(s.lieu)  h += `<p class="lieu">${s.lieu}</p>`;
-  if(s.titre) h += `<h1>${s.titre}</h1>`;
+  /* `lieu` et `titre` acceptent une fonction, comme le reste : une scène qui
+   * se rejoue à des saisons différentes doit pouvoir dire où et quand. */
+  const lieu = val2(s.lieu), titre = val2(s.titre);
+  if(lieu)  h += `<p class="lieu">${lieu}</p>`;
+  if(titre) h += `<h1>${titre}</h1>`;
   if(dernierJet){ h += dernierJet; dernierJet = null; }
   if(s.qui) h += vignette(s.qui);
   if(s.melee && ETAT.melee) h += barreMelee();

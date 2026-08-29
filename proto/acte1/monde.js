@@ -77,6 +77,11 @@ function neuf(){
   ETAT.flags = new Set(); ETAT.blessures = []; ETAT.faits = []; ETAT.portes = [];
   ETAT.adaptation = {};
   ETAT.acte = { saison:0, engagements:3, arcsFaits:[], arcsIgnores:[], arcsPerdus:[] };
+  /* L'Acte II tient son propre état — l'année, les saisons, les cinq crises,
+   * les quatre axes de chaque lien. Il se recompose tout seul à la première
+   * lecture : il suffit de le vider ici, sinon une nouvelle partie hérite du
+   * calendrier et des relations de la précédente. */
+  ETAT.acte2 = null; ETAT.liens = null; ETAT.melee = null;
 }
 
 /* ── Les six affaires de l'Acte I ──────────────────────────────────────────

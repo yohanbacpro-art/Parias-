@@ -1964,3 +1964,15 @@ as_fin_perdu:{
 };
 Object.assign(ASSISE, ASSISE_9);
 enregistrerScenes(ASSISE);
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+ * L'ACTE II
+ * Toutes les fins de l'Acte I sont des fins d'acte, pas des fins de partie :
+ * l'hiver se termine et quelqu'un vient.
+ * ══════════════════════════════════════════════════════════════════════════ */
+for(const id of ['as_fin_nom','as_fin_yohan','as_fin_anonyme','as_fin_silence',
+                 'as_fin_onde','as_fin_perdu','as_partir']){
+  ASSISE[id].suite = 'a2_ouverture';
+  ASSISE[id].libelleSuite = "La fonte";
+}

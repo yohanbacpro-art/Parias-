@@ -14,6 +14,10 @@ function sauver(){
       flags:[...ETAT.flags], blessures:ETAT.blessures,
       faits:ETAT.faits, portes:ETAT.portes, adaptation:ETAT.adaptation,
       gore:ETAT.gore, scene:ETAT.scene, melee:ETAT.melee, acte:ETAT.acte,
+      /* L'Acte II a son propre calendrier, ses cinq crises, ses trois pistes
+       * et les quatre axes de chaque lien. Sans ces deux lignes, recharger au
+       * milieu de l'acte rend un monde neuf à un homme qui ne l'est pas. */
+      acte2:ETAT.acte2, liens:ETAT.liens,
     }));
   }catch(e){ /* navigation privée, quota, tout ça : on joue quand même */ }
 }

@@ -59,7 +59,15 @@ const dit = (ok, quoi, note) => {
     for(const [id, s] of Object.entries(SCENES)) ref[id] = cibles(s);
     /* Les scènes que les aiguillages composent : le banc et le couloir. */
     const parBanc = ACCUSES.map(x => ['as_banc_' + x.id, 'as_parler_' + x.id]).flat();
-    return { def, ref, dyn:Object.keys(DYN), echos:Object.keys(ECHOS), parBanc };
+    /* L'Acte II ne se navigue pas par `va:` mais par la carte : chaque arc
+     * s'inscrit au registre des offres et c'est là qu'est son entrée. */
+    const parOffre = OFFRES.map(o => o.va);
+    const parNeuf = Object.keys(NEUF).map(id => 'acte_' + id);
+    /* Les étapes d'Alycia ne se référencent nulle part : c'est elle qui
+     * vient, et l'aiguillage choisit laquelle. */
+    const parBeat = BEATS_ALYCIA.map(b => [b.id, b.rate]).flat().filter(Boolean);
+    return { def, ref, dyn:Object.keys(DYN), echos:Object.keys(ECHOS),
+             parBanc, parOffre, parNeuf, parBeat };
   });
 
   const SCENES_DYN = graphe.dyn;
@@ -86,8 +94,12 @@ const dit = (ok, quoi, note) => {
                            'as_fin_nom', 'as_fin_yohan', 'as_fin_anonyme', 'as_fin_silence',
                            'as_fin_onde', 'as_fin_perdu',
                            'karls_lettre', 'karls_pierre', 'karls_gamin', 'karls_rien',
-                           'ar_compte_scene', 'ar_effondrement']
+                           'ar_compte_scene', 'ar_effondrement',
+                           'a2_rien', 'a2_crise', 'a2_acte', 'a2_bascule_fin', 'a2_epilogue']
                           .concat(graphe.dyn)
+                          .concat(graphe.parOffre)
+                          .concat(graphe.parNeuf)
+                          .concat(graphe.parBeat)
                           .concat(Object.keys(ECHOS_IDS).map(id => 'echo_' + id))
                           .concat(graphe.parBanc));
   const orphelines = graphe.def.filter(id => !referencees.has(id) && !entrees.has(id));
@@ -107,12 +119,16 @@ const dit = (ok, quoi, note) => {
       neuf();
       ETAT.gore = ['sobre','intense','extreme'][p % 3];
       if(p % 3 === 0){ aller('prologue'); }
-      else { ETAT.acte.arcsFaits.push('C01'); aller('wy_audience'); }
+      else if(p % 3 === 1){ ETAT.acte.arcsFaits.push('C01'); aller('wy_audience'); }
+      else { ETAT.acte.arcsFaits.push('C01','C02','C03'); aller('a2_ouverture'); }
 
-      for(let pas = 0; pas < 400; pas++){
+      for(let pas = 0; pas < 900; pas++){
         vues.add(ETAT.scene);
         const s = SCENES[ETAT.scene];
-        if(s.dyn) { bloquees++; break; }   // un aiguillage non branché
+        /* Un aiguillage qui se compose lui-même garde son `dyn` : il est
+         * branché, il a des choix, ce n'est pas une impasse. Une scène
+         * `dyn` sans aiguillage, si. */
+        if(s.dyn && !DYN[ETAT.scene]) { bloquees++; break; }
         if(s.issue){
           issues[s.issue] = (issues[s.issue] || 0) + 1;
           if(!s.suite) break;                 // une fin de partie s'arrête là
@@ -128,7 +144,7 @@ const dit = (ok, quoi, note) => {
         }else{
           bloquees++; break;
         }
-        if(pas === 399) tropLong++;
+        if(pas === 899) tropLong++;
       }
     }
     return { vues:[...vues], issues, bloquees, tropLong, total:n };
