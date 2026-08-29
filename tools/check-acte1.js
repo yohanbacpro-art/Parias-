@@ -85,7 +85,8 @@ const dit = (ok, quoi, note) => {
                            'as_arrivee', 'as_rond_2', 'as_rond_3', 'as_forfait', 'as_temps_1', 'as_temps_2',
                            'as_fin_nom', 'as_fin_yohan', 'as_fin_anonyme', 'as_fin_silence',
                            'as_fin_onde', 'as_fin_perdu',
-                           'karls_lettre', 'karls_pierre', 'karls_gamin', 'karls_rien']
+                           'karls_lettre', 'karls_pierre', 'karls_gamin', 'karls_rien',
+                           'ar_compte_scene', 'ar_effondrement']
                           .concat(graphe.dyn)
                           .concat(Object.keys(ECHOS_IDS).map(id => 'echo_' + id))
                           .concat(graphe.parBanc));

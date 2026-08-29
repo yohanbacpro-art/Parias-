@@ -40,6 +40,19 @@ const GENS = {
   ermengarde: { nom:"Ermengarde de Rochebrune", role:"sa fille · veuve · vingt-six ans",   lettre:"E" },
   gervais:    { nom:"Gervais",                role:"dix-neuf ans · il a été relâché",      lettre:"G" },
   baudoin:    { nom:"Ser Baudoin d'Escaut",   role:"beau-frère du seigneur · très aimé",   lettre:"B" },
+
+  /* C03 — L'Héritier disparu */
+  maelys:     { nom:"Maëlys d'Arquenay",      role:"vingt ans · mariée en Floréal",        lettre:"M" },
+  gaspard:    { nom:"Gaspard d'Arquenay",     role:"son frère · vingt-deux ans",           lettre:"G" },
+  corbeil:    { nom:"Maître Corbeil",         role:"régisseur des mines d'Arquenay",       lettre:"C" },
+  bergrun:    { nom:"Bergrun",                role:"chef de taille · quarante ans de fond", lettre:"B" },
+
+  /* C04 — Les Trois Frères Rouges */
+  aymar:      { nom:"Aymar de Vauclair",      role:"sire · concessions de tourbe",         lettre:"A" },
+  iselle:     { nom:"Iselle de Vauclair",     role:"sa belle-sœur · veuve · vingt-neuf ans", lettre:"I" },
+  esteve:     { nom:"Estève",                 role:"l'aîné · trente-quatre ans · il parle", lettre:"E" },
+  bertran:    { nom:"Bertran",                role:"le cadet · dix-neuf ans · il écrit",    lettre:"B" },
+  nonne:      { nom:"la Nonne",               role:"elle tient le marais depuis trente ans", lettre:"N" },
 };
 
 /* ── Yohan, valeurs canoniques V7 ───────────────────────────────────────── */
@@ -77,12 +90,14 @@ const AFFAIRES = [
     id:'C03', titre:"L'Héritier disparu", maison:"Maison d'Arquenay",
     lieu:"Contreforts nains", danger:"dangereux", or:300, prix:true,
     pitch:"Gaspard d'Arquenay, vingt-deux ans, n'est pas rentré des contreforts. Sa sœur Maëlys croit qu'il a fui un mariage politique. Sa maison paie pour qu'on le ramène.",
+    entree:'ar_audience',
     sans:"Gaspard d'Arquenay est mort dans une galerie clandestine sous les contreforts, avec dix-neuf mineurs et quatorze prisonniers que sa propre maison y avait vendus. L'effondrement a été déclaré accidentel. Maëlys d'Arquenay a été mariée en Floréal à un homme qu'elle n'a vu que le jour du contrat.",
   },
   {
     id:'C04', titre:"Les Trois Frères Rouges", maison:"Maison de Vauclair",
     lieu:"Marais de Sombreval", danger:"modéré", or:200, prix:true,
     pitch:"Vauclair veut trois brigands vivants, et paie le triple si aucun ne meurt. Un contrat de mercenaire ne précise jamais pourquoi on tient tant à ce qu'un homme puisse parler — ou se taire.",
+    entree:'va_audience',
     sans:"Les trois frères ont été pris au filet dans les marais et exécutés dans la cour de Vauclair avant tout procès, pour vol et rébellion. Aucun des trois n'a été entendu. La communauté de serfs fugitifs qu'ils protégeaient a été dispersée dans le mois ; on en a retrouvé onze noyés dans les tourbières.",
   },
   {
