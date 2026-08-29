@@ -33,6 +33,13 @@ const GENS = {
   loys:       { nom:"Loys",                 role:"quinze ans · il est monté à la borne", lettre:"L" },
   clerc:      { nom:"Le clerc de Chastel",  role:"vingt-six ans · il a lu les relevés",  lettre:"C" },
   tailleur:   { nom:"Le tailleur de pierre",role:"un hangar, pas assez de commandes",    lettre:"T" },
+
+  /* C02 — Le Chevalier sans visage */
+  guichard:   { nom:"Guichard de Rochebrune", role:"seigneur · onze patrouilles perdues",  lettre:"G" },
+  aldren:     { nom:"Ser Aldren",             role:"le chevalier sans visage",             lettre:"A" },
+  ermengarde: { nom:"Ermengarde de Rochebrune", role:"sa fille · veuve · vingt-six ans",   lettre:"E" },
+  gervais:    { nom:"Gervais",                role:"dix-neuf ans · il a été relâché",      lettre:"G" },
+  baudoin:    { nom:"Ser Baudoin d'Escaut",   role:"beau-frère du seigneur · très aimé",   lettre:"B" },
 };
 
 /* ── Yohan, valeurs canoniques V7 ───────────────────────────────────────── */
@@ -63,6 +70,7 @@ const AFFAIRES = [
     id:'C02', titre:"Le Chevalier sans visage", maison:"Maison Rochebrune",
     lieu:"Côte des Dents", danger:"très dangereux", or:400, prix:true,
     pitch:"Un cavalier noir mutile les patrouilles de Rochebrune. On retrouve les corps sans visage, prélevé proprement, et son cheval revient seul chaque aube.",
+    entree:'ro_audience',
     sans:"Ser Aldren a été pris vivant sur la Côte des Dents et pendu à Rochebrune après trois jours de question. Il a répété le même nom jusqu'à la fin — celui du chevalier qui l'avait défiguré et trahi. Ce nom est celui du beau-frère du seigneur de Rochebrune. Personne n'a pris de notes.",
   },
   {
