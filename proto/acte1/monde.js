@@ -53,6 +53,17 @@ const GENS = {
   esteve:     { nom:"Estève",                 role:"l'aîné · trente-quatre ans · il parle", lettre:"E" },
   bertran:    { nom:"Bertran",                role:"le cadet · dix-neuf ans · il écrit",    lettre:"B" },
   nonne:      { nom:"la Nonne",               role:"elle tient le marais depuis trente ans", lettre:"N" },
+
+  /* C05 — Le Troll du vieux pont */
+  ode:        { nom:"Ode de Sombreval",       role:"soixante-quatre ans · elle l'a connu enfant", lettre:"O" },
+  adelie:     { nom:"Adélie de Sombreval",    role:"sa fille · trente et un ans · les granges", lettre:"A" },
+  harn:       { nom:"Harn",                   role:"le vieux du pont · deux cent onze ans", lettre:"H" },
+  meunier:    { nom:"Le meunier de l'amont",  role:"il passe le pont depuis quarante ans", lettre:"M" },
+
+  /* C06 — La Dame captive */
+  hauterive:  { nom:"Sire de Hauterive",      role:"l'époux · il exige la discrétion",     lettre:"H" },
+  isabeau:    { nom:"Isabeau de Hauterive",   role:"trente et un ans · elle emporte quelque chose", lettre:"I" },
+  jaufre:     { nom:"Jaufré",                 role:"capitaine des preneurs · payé d'avance", lettre:"J" },
 };
 
 /* ── Yohan, valeurs canoniques V7 ───────────────────────────────────────── */
@@ -104,12 +115,14 @@ const AFFAIRES = [
     id:'C05', titre:"Le Troll du vieux pont", maison:"Maison de Sombreval",
     lieu:"Le vieux pont", danger:"dangereux", or:220, prix:true,
     pitch:"Le troll du vieux pont n'exige plus de péage. Il exige une histoire vraie. Le grain de Sombreval pourrit dans les granges depuis deux mois.",
+    entree:'tr_audience',
     sans:"Le vieux pont a été repris à la poudre. Le troll a mis quatre jours à mourir sous les décombres et on l'entendait depuis le bourg. Le grain est passé. On a rebâti un pont neuf à trois cents pas en amont, et personne n'y raconte plus rien à personne.",
   },
   {
     id:'C06', titre:"La Dame captive", maison:"Maison de Hauterive",
     lieu:"Un moulin, quelque part", danger:"modéré", or:280, prix:true,
     pitch:"Isabeau de Hauterive, trente et un ans, a été enlevée par des mercenaires. Son époux paie bien et exige la discrétion — il l'exige même avant de dire combien.",
+    entree:'ha_audience',
     sans:"Isabeau de Hauterive a été ramenée à son époux par une compagnie qui n'a posé aucune question et a été payée pour ça. Elle est morte en Prairial. La maison a fait dire une fièvre. Les preuves qu'elle emportait n'ont jamais été retrouvées, et son époux siège désormais au conseil de la province.",
   },
 ];
@@ -247,7 +260,7 @@ function rendreHub(){
     choix: (reste > 0 ? dispo : []).map(x => ({
       t: `${x.titre} — ${x.maison}`,
       detail: `${x.lieu} · ${x.danger} · ${prime(x.or)} couronnes${x.prix ? " · la coutume est due" : ""}`,
-      va: x.entree || 'pas_ecrit',
+      va: x.entree,
       effets:{ flags:['pris_' + x.id] },
       avant: () => { A.arcsFaits.push(x.id); A.saison++; A.contrat = { id:x.id, or:prime(x.or) }; },
     })).concat(reste <= 0 ? [{
@@ -287,15 +300,7 @@ function rendreBascule(){
   aller('bascule');
 }
 
-SCENES_MONDE.pas_ecrit = {
-  titre:"Pas encore écrit",
-  texte:[
-    "Cette affaire existe dans le pack narratif, en six lignes, et elle attend d'être développée à cinq mille mots comme l'a été la Wyverne de Cendrepont.",
-    "§ C'est ici que se branche le contenu à venir : la machine de l'acte est finie, les arcs se posent dedans.",
-    "Reprenez le tableau et prenez la Wyverne — c'est celle qui est écrite.",
-  ],
-  suite:'entre_saisons', libelleSuite:"Revenir au tableau",
-};
+
 
 SCENES_MONDE.hub_retour = { dyn:true };
 

@@ -31,7 +31,7 @@ const style  = head.match(/<style>[\s\S]*?<\/style>/)[0];
 
 /* Les quatre scripts, dans l'ordre de chargement — qui est le contrat de
  * dépendances : le moteur, puis le monde, puis l'arc, puis la partie. */
-const SCRIPTS = ['moteur.js', 'monde.js', 'machine.js', 'arc_wyverne.js', 'arc_c02.js', 'arc_c03.js', 'arc_c04.js', 'climax_assise.js', 'jeu.js'];
+const SCRIPTS = ['moteur.js', 'monde.js', 'machine.js', 'arc_wyverne.js', 'arc_c02.js', 'arc_c03.js', 'arc_c04.js', 'arc_c05.js', 'arc_c06.js', 'climax_assise.js', 'jeu.js'];
 const scripts = SCRIPTS.map(f => `<script>\n/* ── ${f} ── */\n${lire(f)}\n</script>`).join('\n');
 
 const corps = body.replace(/<script src="[^"]*"><\/script>\s*/g, '').trimEnd();
