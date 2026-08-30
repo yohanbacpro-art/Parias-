@@ -10909,6 +10909,7 @@ Object.assign(GENS, {
   berold:    { nom:"Bérold",                 role:"chef de meute · onze ans à Mont-Draken",                   lettre:"B" },
   gerbaud:   { nom:"Gerbaud",                role:"maître d'armes de Karlsberg · soixante-dix ans",           lettre:"G" },
   ysabel:    { nom:"Ysabel de Karlsberg",    role:"sœur cadette de votre père · soixante-quatre ans",         lettre:"Y" },
+  epouse:    { nom:"Votre épouse",           role:"elle a signé les mêmes onze pages que vous",               lettre:"É" },
 });
 
 enregistrerScenes({});
@@ -10930,7 +10931,19 @@ enregistrerScenes({});
 const OFFRES = [];
 const offrir = o => OFFRES.push(o);
 
-const offresDe = ou => OFFRES.filter(o => o.lieu === ou && (!o.si || o.si()) && !a('fait_' + o.id));
+/* Certaines scènes ne sont la cible d'aucun `va:` : c'est un aiguillage qui
+ * les choisit — une étape d'ouvrage, un palier, celle des deux femmes à qui
+ * l'on parle. Elles s'inscrivent ici pour que l'épreuve d'acceptation sache
+ * qu'elles ne sont pas orphelines. */
+const ENTREES2 = [];
+const entree2 = (...ids) => ENTREES2.push(...ids);
+
+/* Une affaire commencée s'inscrit et ne se repropose pas. Un chantier, si :
+ * ce n'est pas une affaire, c'est un endroit où l'on revient tant qu'il
+ * reste quelque chose à monter. */
+const offresDe = ou => OFFRES.filter(o => o.lieu === ou && (!o.si || o.si())
+                                       && (o.permanent || !a('fait_' + o.id)));
+const marquerOffre = o => { if(!o.permanent) ETAT.flags.add('fait_' + o.id); };
 
 /* ── Les crises, poussées par l'état du monde ────────────────────────────── */
 const CRISES = {
@@ -11078,7 +11091,7 @@ DYN.a2_ici = () => {
   const A = A2();
   const off = offresDe(A.lieu);
   if(!off.length) return aller('a2_rien');
-  if(off.length === 1){ ETAT.flags.add('fait_' + off[0].id); return aller(off[0].va); }
+  if(off.length === 1){ marquerOffre(off[0]); return aller(off[0].va); }
 
   const ici = LIEUX[A.lieu];
   SCENES.a2_ici = {
@@ -11093,7 +11106,7 @@ DYN.a2_ici = () => {
       t:o.titre,
       detail:"cette saison · l'autre attendra",
       va:o.va,
-      avant:() => ETAT.flags.add('fait_' + o.id),
+      avant:() => marquerOffre(o),
     })),
   };
   aller('a2_ici');
@@ -11102,6 +11115,9 @@ DYN.a2_ici = () => {
 function finirSaison(){
   const A = A2();
   A.saison += 1;
+  /* Le chantier de Karlsberg tourne sans vous : ce qu'on vous doit arrive
+   * pendant que vous êtes à quatre cents lieues. C'est même tout l'intérêt. */
+  if(typeof rendreSaisonChantier === 'function') rendreSaisonChantier();
   if(A.saison > 3){ A.saison = 0; A.annee += 1; }
   A.aPousser = (A.aPousser || []).concat(pousserCrises());
   A.aAgir = quiAgit();
@@ -13072,7 +13088,7 @@ el_archives:{
     "§ Vous étiez trois. Vous, une sœur plus petite, et un frère mort en bas âge dont vous n'aviez jamais entendu parler.",
     "Et il y avait une génération avant vous, et dans cette génération il y avait votre père, et il y avait sa sœur.",
   ],
-  effets:{ flags:['el_archives','a2_ne_transmet_pas_droit'],
+  effets:{ flags:['el_archives','a2_ne_transmet_pas_droit','a2_onde_rendue'],
            faire:() => { A2().pistes.onde = 4; bouger('alarielle', { confiance:2 }); },
            exploit:{ eclat:4, temoins:'aucun', quoi:"vous savez pourquoi il y avait, dans chaque maison de Paria, des gens qui n'avaient rien" },
            marque:"« Cela ne se transmet pas droit. » Un enfant sur trois ne l'a pas. Dans onze maisons, pendant quatre cents ans.",
@@ -13878,8 +13894,11 @@ kd_dette:{
     "§ Il regarde le registre un long moment.",
     "« Vous savez ce que nous faisons, nous, d'une maison rayée qui a payé ? » dit-il. « Nous ne rayons rien. Nous n'avons jamais rayé personne en huit cents ans. C'est ce qui nous distingue de vos provinces et c'est aussi pour ça que nous perdons. »",
     "Il fait porter au relevé : *acquitté, la cent-quarante-cinquième année, par Karlsberg*.",
+    "§ Trois saisons plus tard, un Nain de cent onze ans se présente à Karlsberg sans avoir été demandé.",
+    "Il s'appelle Brann, il dit six mots par jour, et il a le titre de maître d'œuvre de la Halle basse — ce qui, dans cette montagne, se transmet une fois par siècle.",
+    "« On m'envoie », dit-il. C'est tout ce qu'on obtiendra sur le sujet, cette année-là comme les suivantes.",
   ],
-  effets:{ or:-400, flags:['kd_dette','a2_dette_naine','a2_kardurak_aide'],
+  effets:{ or:-400, flags:['kd_dette','a2_dette_naine','a2_kardurak_aide','a2_maitre_oeuvre'],
            faire:() => retenir('charles', "il a payé la dette d'une maison morte à des Nains"),
            exploit:{ eclat:6, temoins:'quelques', quoi:"une dette de quatre-vingts ans acquittée par une maison rayée" },
            marque:"« Acquitté, la cent-quarante-cinquième année, par Karlsberg. » Les Nains ne rayent personne.",
@@ -14071,6 +14090,2322 @@ offrir({ id:'acte_charles', lieu:'montdraken', va:'acte_charles',
          titre:"Charles de Mont-Draken",
          si:() => (a('kar_berold') || ETAT.suspicion >= 30)
                && !['ch_avoue','ch_nie','ch_esquive','ch_trois_cent_onze'].some(a) });
+
+</script>
+<script>
+/* ── ../acte2/chantier.js ── */
+/* PARIAS — Acte II · LE CHANTIER DE KARLSBERG
+ * ═══════════════════════════════════════════════════════════════════════
+ * Le document fondateur, mot pour mot :
+ *
+ *   « Jamais "Reconstruire le château : 10 000 or". Il faut de la pierre,
+ *     des ouvriers, un architecte, de la nourriture, des routes sûres, une
+ *     garnison, une population, des revenus, des alliances. »
+ *
+ * D'où quatre choses qui ne s'achètent pas — pierre, bras, grain, faveurs —
+ * et quatre conditions qui ne sont pas des stocks du tout.
+ *
+ * Le point important : ON NE LES GAGNE PAS EN CLIQUANT. Chacune vient d'une
+ * source ouverte ailleurs, des saisons plus tôt, dans une affaire qui n'avait
+ * rien à voir : une dette naine soldée, un réseau qu'on a rendu, une eau
+ * trouvée à quatre-vingt-dix pieds. Ouvrir une source est une décision. Elle
+ * rapporte ensuite chaque saison, toute seule, tant qu'elle tient.
+ *
+ * Relever Karlsberg n'est donc pas un poste de dépense : c'est ce que devient
+ * une partie où l'on a rendu des choses à des gens.
+ *
+ * Et l'écran n'est jamais un tableur : on lit ce qui est monté cette saison et
+ * d'où ça vient, jamais un chiffre de production.
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+const CHANTIER = () => (A2().chantier = A2().chantier || {
+  pierre:0, bras:0, grain:0, faveurs:0, faits:[], palier:'ruines', vues:[],
+});
+
+const RES = {
+  pierre:  { nom:"Pierre",  unite:"charrois", note:"taillée, charriée, montée" },
+  bras:    { nom:"Bras",    unite:"hommes",   note:"des gens qui restent et qui bâtissent" },
+  grain:   { nom:"Grain",   unite:"muids",    note:"de quoi les nourrir pendant qu'ils bâtissent" },
+  faveurs: { nom:"Faveurs", unite:"dettes",   note:"ce qu'on vous doit, et qu'on ne refuse pas" },
+};
+
+/* Une source ouverte rapporte chaque saison. `pourquoi` est ce qu'on affiche :
+ * le joueur lit d'où vient sa pierre, pas un rendement. */
+const SOURCES2 = [
+  /* — L'amorce —
+     Sans elle, dégager la cour exigerait les bras que seule la cour dégagée
+     fait venir. Ce sont ceux qui sont déjà là : peu, mais ils y sont. */
+  { flag:'kar_refuge',        res:'bras',  n:1, quoi:"Les six sous les ruines",
+    pourquoi:"ils dorment dans la crypte et ils n'ont nulle part où aller" },
+  { flag:'kar_refuge',        res:'grain', n:1, quoi:"Ce qu'on rapporte",
+    pourquoi:"deux chasseurs, un collet, et la vallée qui n'a pas été braconnée depuis vingt ans" },
+  { flag:'a2_bannieres',      res:'bras',  n:2, quoi:"Ceux que la bannière appelle",
+    pourquoi:"un nom relevé au registre se lit à voix haute dans les auberges" },
+  { flag:'a2_bannieres',      res:'grain', n:2, quoi:"La dîme de la vallée",
+    pourquoi:"une maison enregistrée a le droit de lever, et les trois hameaux paient" },
+
+  /* — La pierre — */
+  { flag:'kar_refuge',        res:'pierre', n:1, quoi:"Les ruines elles-mêmes",
+    pourquoi:"Karlsberg a été rasée une fois : il y a de quoi rebâtir dans ses propres décombres" },
+  { flag:'a2_dette_naine',    res:'pierre', n:3, quoi:"Les charrois de Kar-Durak",
+    pourquoi:"des blocs sciés qui se ferment sans mortier — une maison qui paie ses morts est une maison qu'on sert" },
+  { flag:'a2_nains_dehors',   res:'pierre', n:4, quoi:"Les tailleurs sans montagne",
+    pourquoi:"trois mille Nains en plaine, et pas un ouvrage à quoi mettre les mains" },
+  { flag:'ca_marche',         res:'pierre', n:2, quoi:"La carrière d'Estrées",
+    pourquoi:"Caleb ne donne pas de pierre : il vend une carrière, et une carrière vendue reste vendue" },
+  { flag:'lu_accepte',        res:'pierre', n:3, quoi:"Les chantiers d'Astrah",
+    pourquoi:"on relève les tombes royales, et ce qui relève des tombes sait relever des murs" },
+
+  /* — Les bras —
+     Le socle : dès que la cour est praticable, des gens s'arrêtent. Peu, mais
+     il en vient toujours. C'est ce qui garantit qu'une partie qui ne fait rien
+     d'autre avance quand même — très lentement. */
+  { flag:'ch_cour',           res:'bras', n:1, quoi:"Ceux qui s'arrêtent",
+    pourquoi:"une cour praticable et un toit, ça se sait sur une route" },
+  { flag:'ch_refuge',         res:'bras', n:4, quoi:"Le corps de logis",
+    pourquoi:"trente lits, et une règle : on ne demande pas d'où l'on vient" },
+  { flag:'a2_karlsberg_peuple', res:'bras', n:3, quoi:"Les onze d'Alycia",
+    pourquoi:"les plus vieux du réseau, ceux qui ne tenaient plus un déplacement de plus" },
+  { flag:'a2_caleb_quarante', res:'bras', n:3, quoi:"Les quarante de Fort-aux-Princes",
+    pourquoi:"sans bannière, sans lettre et sans conditions — ce qui devrait vous inquiéter" },
+  { flag:'an_porte',          res:'bras', n:2, quoi:"Ceux qui ne vont pas à Vaeth",
+    pourquoi:"il y a des rayés qui préfèrent une maison humaine à une marche noire, et ils sont peu" },
+  { flag:'a2_hordes_refugies',res:'bras', n:2, quoi:"Les hameaux de la marche",
+    pourquoi:"ils n'avaient plus de mur où rentrer, et le vôtre montait" },
+
+  /* — Le grain — */
+  { flag:'ch_cour',           res:'grain', n:1, quoi:"Le potager de la cour",
+    pourquoi:"quatre planches de légumes là où il y avait des ronces" },
+  { flag:'a2_route_franche',  res:'grain', n:3, quoi:"La route franche",
+    pourquoi:"les convois passent chez vous parce que ça ne leur coûte rien" },
+  { flag:'a2_peage',          res:'grain', n:2, quoi:"Le péage de la vallée",
+    pourquoi:"deux sous par essieu, et un registre tenu" },
+  { flag:'a2_eau',            res:'grain', n:2, quoi:"Ce que les Khesh envoient",
+    pourquoi:"on n'oublie pas l'homme qui a trouvé de l'eau, et le désert paie en orge" },
+  { flag:'ch_bourg',          res:'grain', n:3, quoi:"Le bourg",
+    pourquoi:"des gens qui sèment pour eux-mêmes au pied de vos murs" },
+
+  /* — Les faveurs — */
+  { flag:'a2_charles_allie',  res:'faveurs', n:2, quoi:"Charles de Mont-Draken",
+    pourquoi:"il tient deux vallées avec vous, ce qui lui coûte plus qu'à vous" },
+  { flag:'a2_maitre_oeuvre',  res:'faveurs', n:2, quoi:"Brann de Kar-Durak",
+    pourquoi:"cent onze ans, six mots par jour, et un mur qui ne tombera plus" },
+  { flag:'a2_onde_rendue',    res:'faveurs', n:2, quoi:"La stèle des Trois Chênes",
+    pourquoi:"une cour elfique a gravé quarante et un noms Parias dans sa propre pierre" },
+  { flag:'a2_maison_alliee',  res:'faveurs', n:2, quoi:"Votre alliance de maison",
+    pourquoi:"un contrat de mariage est une créance à onze pages, et elle joue dans les deux sens" },
+  { flag:'a2_lucius_couronne',res:'faveurs', n:3, quoi:"Astrah",
+    pourquoi:"un roi qu'on a fait doit quelque chose, et il le sait mieux que personne" },
+];
+
+/* Ce qui n'est pas un stock. Une route sûre est un état du monde. */
+const CONDITIONS2 = {
+  route_sure: { nom:"une route sûre jusqu'à la vallée",
+    flags:['a2_route_franche','a2_peage','a2_charles_allie','ch_enceinte'],
+    manque:"rien de lourd ne monte tant que le défilé n'est pas tenu" },
+  garnison: { nom:"une garnison qui tienne les murs",
+    flags:['a2_caleb_quarante','a2_bannieres','a2_charles_allie','a2_garnison'],
+    manque:"personne ne bâtit un donjon qu'il ne peut pas défendre" },
+  architecte: { nom:"quelqu'un qui sache bâtir",
+    /* Deux peuples savent monter une voûte dans ce monde, et une capitale
+     * qui relève ses tombes royales depuis deux ans a les deux sous la main. */
+    flags:['a2_maitre_oeuvre','a2_nains_dehors','lu_accepte','ls_couronne','ls_symbole'],
+    manque:"il n'y a personne ici qui sache monter une voûte qui tienne" },
+  population: { nom:"assez de monde pour que ce soit une ville",
+    flags:['ch_refuge','a2_karlsberg_peuple','a2_hordes_refugies'],
+    manque:"un domaine sans habitants est un décor" },
+};
+
+const conditionTenue = id => CONDITIONS2[id].flags.some(a);
+
+/* Les onze ouvrages. Chacun coûte des choses qui ne s'achètent pas, et
+ * certains exigent en plus un état du monde. */
+const OUVRAGES = [
+  { id:'ch_cour',     nom:"Dégager la cour",
+    dit:"Quarante ans de ronces, deux charrettes brûlées et ce qui reste d'un puits comblé.",
+    cout:{ bras:3 }, avant:[] },
+
+  { id:'ch_salle',    nom:"Remettre un toit sur la salle basse",
+    dit:"Il y a des murs et il n'y a pas de couverture. Dessous, on peut dormir au sec, ce qui change tout.",
+    cout:{ pierre:3, bras:4, grain:2 }, avant:['ch_cour'] },
+
+  { id:'ch_puits',    nom:"Recreuser le puits",
+    dit:"Ils l'ont comblé la nuit-là, avec ce qu'ils avaient sous la main. On sait quoi.",
+    cout:{ bras:4, grain:3 }, avant:['ch_cour'] },
+
+  /* Sept pieds de moellon ne sont pas une voûte : n'importe quel maçon sait
+   * les monter. L'architecte est exigé par le donjon et par la muraille, pas
+   * par un mur bas — et c'est ce qui rend « fort » atteignable tout seul. */
+  { id:'ch_enceinte', nom:"Relever l'enceinte basse",
+    dit:"Sept pieds, pas douze. Ça n'arrête pas une armée : ça arrête ceux qui passent.",
+    cout:{ pierre:8, bras:6, grain:4 }, avant:['ch_salle'] },
+
+  { id:'ch_forge',    nom:"Rallumer la forge",
+    dit:"La forge de Karlsberg a été éteinte un mardi. Personne ne rallume une forge pour rien.",
+    cout:{ pierre:6, bras:6, grain:4, faveurs:1 }, avant:['ch_enceinte'] },
+
+  { id:'ch_refuge',   nom:"Bâtir le corps de logis",
+    dit:"Trente lits, un réfectoire, et une règle affichée à l'entrée : on ne demande pas d'où l'on vient.",
+    cout:{ pierre:8, bras:10, grain:8 }, avant:['ch_salle'] },
+
+  { id:'ch_donjon',   nom:"Monter le donjon",
+    dit:"Quatre étages sur une base carrée, comme il était. On a la base : elle a tenu la Purge.",
+    cout:{ pierre:22, bras:16, grain:12, faveurs:2 }, avant:['ch_enceinte','ch_forge'],
+    exige:['architecte','garnison','route_sure'] },
+
+  { id:'ch_chapelle', nom:"Relever la chapelle",
+    dit:"Il y a trente-quatre statues sans visage dans la crypte. Il n'y a plus rien au-dessus d'elles.",
+    cout:{ pierre:9, bras:6, faveurs:2 }, avant:['ch_salle'] },
+
+  { id:'ch_bourg',    nom:"Laisser un bourg se faire au pied des murs",
+    dit:"On ne bâtit pas un bourg : on cesse de l'empêcher, on trace deux rues et on tient un registre.",
+    cout:{ pierre:12, bras:14, grain:16 }, avant:['ch_refuge','ch_puits'],
+    exige:['population','route_sure'] },
+
+  { id:'ch_muraille', nom:"La muraille de douze pieds",
+    dit:"Celle qui change la nature de l'endroit. On ne prend plus Karlsberg au passage : on l'assiège.",
+    cout:{ pierre:34, bras:24, grain:20, faveurs:3 }, avant:['ch_donjon','ch_bourg'],
+    exige:['architecte','garnison'] },
+
+  { id:'ch_pierre',   nom:"Poser la pierre de fondation",
+    dit:"Une pierre gravée, scellée dans l'angle sud-est, avec une date et un nom. Elle ne défend rien.",
+    cout:{ pierre:4, faveurs:4 }, avant:['ch_muraille'] },
+];
+
+const OUV = id => OUVRAGES.find(o => o.id === id);
+const faitCh = id => CHANTIER().faits.includes(id);
+
+const PALIERS2 = [
+  { id:'ruines',    nom:"Ruines",              exige:[],
+    dit:"Vingt ans de ronces sur ce qui fut une maison." },
+  { id:'refuge',    nom:"Refuge",              exige:['ch_cour','ch_salle'],
+    dit:"Un endroit sec, un feu, une porte. Des gens y dorment." },
+  { id:'fort',      nom:"Fort",                exige:['ch_enceinte','ch_puits'],
+    dit:"Des murs, de l'eau, du grain. Ceux qui viennent doivent frapper." },
+  { id:'chateau',   nom:"Château",             exige:['ch_donjon','ch_forge'],
+    dit:"Un donjon, une forge, une garnison. On ne prend plus ça au passage." },
+  { id:'domaine',   nom:"Domaine",             exige:['ch_bourg','ch_refuge'],
+    dit:"Un bourg au pied des murs, un marché, des gens qui y naissent." },
+  { id:'puissance', nom:"Puissance régionale", exige:['ch_muraille','ch_pierre'],
+    dit:"Karlsberg pèse sur la province. On compte avec elle, qu'on le veuille ou non." },
+];
+
+function palierDeKarlsberg(){
+  let p = PALIERS2[0];
+  for(const x of PALIERS2) if(x.exige.every(faitCh)) p = x;
+  return p;
+}
+
+/* ── Ce qui monte chaque saison ────────────────────────────────────────────
+ * Appelé par la fin de saison. Rien n'arrive si aucune source n'est ouverte,
+ * et c'est le point : une partie qui n'a rien rendu à personne ne bâtit pas. */
+function rendreSaisonChantier(){
+  const C = CHANTIER(), arrivees = [];
+  /* Une crise qui mûrit vide des hameaux, et des hameaux vidés vont vers le
+   * seul mur de la marche qui monte au lieu de tomber. */
+  if(C.faits.includes('ch_refuge') && crise('hordes') >= 2) ETAT.flags.add('a2_hordes_refugies');
+  for(const s of SOURCES2){
+    if(!a(s.flag) && !faitCh(s.flag)) continue;
+    C[s.res] += s.n;
+    arrivees.push(s);
+  }
+  return arrivees;
+}
+
+/* ── L'écran du chantier ───────────────────────────────────────────────────
+ * Jamais un tableur. On lit l'état de l'endroit, ce qui est monté cette
+ * saison et par qui, puis ce qu'on peut entreprendre — et pour le reste, ce
+ * qui manque, écrit en toutes lettres. */
+DYN.ka_chantier = () => {
+  const C = CHANTIER(), p = palierDeKarlsberg();
+  C.palier = p.id;
+
+  const dispo = OUVRAGES.filter(o => !faitCh(o.id)
+    && (o.avant || []).every(faitCh)
+    && Object.entries(o.cout).every(([k, n]) => C[k] >= n)
+    && (o.exige || []).every(conditionTenue));
+
+  const bientot = OUVRAGES.filter(o => !faitCh(o.id) && !dispo.includes(o)
+    && (o.avant || []).every(faitCh));
+
+  SCENES.ka_chantier = {
+    dyn:true,
+    lieu:`Karlsberg · ${dateA2()}`,
+    titre:p.nom === "Ruines" ? "Ce qu'il reste" : p.nom,
+    texte:[
+      p.dit,
+      () => {
+        const dit = Object.entries(RES)
+          .filter(([k]) => C[k] > 0)
+          .map(([k, r]) => `**${C[k]}** ${r.unite} de ${r.nom.toLowerCase()}`);
+        return dit.length
+          ? `Sur le tas, à pied d'œuvre : ${dit.join(' · ')}.`
+          : "Il n'y a rien sur le tas. Pas un charroi, pas un homme, pas un muid — et il n'y en aura pas tant que quelqu'un, quelque part, ne vous devra pas quelque chose.";
+      },
+      () => {
+        const sources = SOURCES2.filter(s => a(s.flag) || faitCh(s.flag));
+        if(!sources.length) return "§ Rien ne monte à Karlsberg. Ce n'est pas une question d'or : personne ne vous doit rien, et une maison ne se relève pas avec de l'argent.";
+        const trois = sources.slice(0, 4).map(s => `**${s.quoi}** — ${s.pourquoi}`);
+        return "§ Ce qui monte, et pourquoi :\n\n" + trois.join('\n\n');
+      },
+      () => bientot.length
+        ? "Ce qu'on ne peut pas entreprendre, et ce qui manque : "
+          + bientot.map(o => {
+              const cond = (o.exige || []).find(x => !conditionTenue(x));
+              if(cond) return `*${o.nom}* — ${CONDITIONS2[cond].manque}`;
+              const [k] = Object.entries(o.cout).find(([kk, n]) => C[kk] < n);
+              return `*${o.nom}* — il manque ${o.cout[k] - C[k]} ${RES[k].unite}`;
+            }).join(' · ') + "."
+        : "",
+    ],
+    choix: dispo.map(o => ({
+      t: o.nom,
+      detail: o.dit + " · il y faut "
+        + Object.entries(o.cout).map(([k, n]) => `${n} ${RES[k].unite}`).join(', '),
+      risque: 'calculé',
+      va: 'ka_monte',
+      avant: () => { A2().ouvrage = o.id; },
+    })).concat([
+      { t:"Redescendre",
+        detail:"le chantier avance sans vous · c'est même sa qualité principale",
+        risque:'prudent', va:'a2_carte' },
+    ]),
+  };
+  aller('ka_chantier');
+};
+
+/* Un ouvrage monté : on paie, on écrit une scène, et on regarde si l'endroit
+ * a changé de nom. */
+DYN.ka_monte = () => {
+  const C = CHANTIER(), o = OUV(A2().ouvrage);
+  const avant = palierDeKarlsberg().id;
+  for(const [k, n] of Object.entries(o.cout)) C[k] -= n;
+  C.faits.push(o.id);
+  ETAT.flags.add(o.id);
+  const apres = palierDeKarlsberg();
+  A2().palierNeuf = (apres.id !== avant) ? apres.id : null;
+  aller('ka_' + o.id);
+};
+
+const CH_SCENES = {
+
+ka_chantier:{ dyn:true, texte:[], suite:'a2_carte' },
+ka_monte:{ dyn:true, texte:[], suite:'ka_suite' },
+
+/* Après chaque ouvrage : soit l'endroit a changé de nom, soit on retourne au
+ * tas. C'est le seul endroit du jeu où un palier s'annonce. */
+ka_suite:{ dyn:true, texte:[], suite:'ka_chantier' },
+
+ka_ch_cour:{
+  lieu:"Karlsberg · la cour",
+  titre:"Quatre hommes et une serpe",
+  texte:[
+    { sobre:"On dégage la cour en dix-neuf jours.",
+      intense:"Dégager une cour de vingt ans de ronces prend dix-neuf jours à quatre hommes, et le neuvième on comprend pourquoi personne ne l'avait fait : sous les ronces il y a ce que les ronces cachaient.",
+      extreme:"Dégager une cour de vingt ans de ronces prend dix-neuf jours à quatre hommes armés de serpes, et personne n'en parle jamais dans les chansons parce qu'il n'y a rien à en dire. Le neuvième jour on comprend pourquoi personne ne l'avait fait avant : sous les ronces il y a exactement ce que les ronces étaient là pour cacher, et il faut le sortir à la main." },
+    "Deux charrettes brûlées, réduites aux ferrures. Un mur d'écurie effondré vers l'intérieur. Le puits comblé jusqu'à trois pieds du bord.",
+    "§ Et onze squelettes, qu'on ne peut identifier ni compter correctement parce qu'ils ont été jetés ensemble.",
+    "On les met dans la crypte, avec les statues sans visage, et le plus vieux des quatre hommes dit quatre mots dessus parce qu'il connaît les mots.",
+    "Le vingtième jour, la cour est praticable. Une charrette peut entrer, tourner et ressortir.",
+    { sobre:"C'est très peu et c'est tout ce qui compte.",
+      intense:"C'est très peu. C'est aussi la seule chose qui rende possible tout le reste : on ne monte rien là où une charrette ne peut pas tourner.",
+      extreme:"C'est très peu, et c'est très exactement ce qui rend tout le reste possible. On ne bâtit rien là où une charrette ne peut pas entrer, tourner et ressortir chargée. Toutes les grandes maisons de ces provinces ont commencé par une cour où une charrette pouvait tourner, et aucune ne s'en souvient." },
+    "§ Trois semaines plus tard, deux hommes s'arrêtent en passant et demandent s'il y a du travail.",
+  ],
+  effets:{ marque:"La cour de Karlsberg est dégagée. Onze squelettes remis à la crypte. Deux hommes se sont arrêtés.",
+           court:"La cour" },
+  suite:'ka_suite', libelleSuite:"Le chantier" },
+
+ka_ch_salle:{
+  lieu:"Karlsberg · la salle basse",
+  titre:"Un toit",
+  texte:[
+    "La salle basse a quarante pieds de long, des murs de six pieds d'épaisseur, et depuis vingt ans, le ciel.",
+    { sobre:"On remet une couverture. Ça prend une saison.",
+      intense:"Remettre une couverture demande de la charpente, et la charpente demande des arbres, et les arbres de la vallée ont été coupés par ceux qui ont brûlé la maison — pour la brûler. On va chercher le bois à quatre lieues.",
+      extreme:"Remettre une couverture demande de la charpente, la charpente demande des arbres, et les arbres de cette vallée ont été coupés il y a vingt ans par les hommes qui ont brûlé la maison, précisément pour la brûler. Il n'y a plus une futaie à moins de quatre lieues. On va donc chercher le bois à quatre lieues, à la charrette, un voyage tous les deux jours, pendant onze semaines." },
+    "Le jour où la dernière panne est posée, il pleut. C'est involontaire et personne n'oublie.",
+    "§ Onze personnes dorment au sec cette nuit-là, sous un toit de Karlsberg, pour la première fois depuis la Purge.",
+    "Personne ne dit rien de solennel. Quelqu'un fait cuire quelque chose. On se couche tôt parce qu'on travaille tôt.",
+  ],
+  effets:{ flags:['a2_karlsberg_habitable'],
+           exploit:{ eclat:4, temoins:'quelques', quoi:"on dort au sec à Karlsberg" },
+           marque:"Un toit sur la salle basse. Onze personnes y ont dormi au sec, et il pleuvait.",
+           court:"Le toit" },
+  suite:'ka_suite', libelleSuite:"Le chantier" },
+
+ka_ch_puits:{
+  lieu:"Karlsberg · le puits",
+  titre:"Ce qu'ils ont mis dedans",
+  texte:[
+    "Un puits comblé se recreuse. C'est un travail lent, dangereux, et qu'on ne peut pas faire faire par n'importe qui : il faut quelqu'un qui accepte de descendre.",
+    { sobre:"Il faut sortir ce qu'ils y ont jeté.",
+      intense:"Il faut sortir, seau par seau, ce qu'ils y ont jeté la nuit-là pour que la maison ne puisse pas se réinstaller. Trois pieds de terre, puis autre chose, puis encore de la terre.",
+      extreme:"Il faut sortir, seau par seau, à la remonte, ce qu'ils y ont jeté cette nuit-là — non par cruauté, mais par méthode : on comble le puits d'une maison rasée pour qu'aucune famille ne puisse s'y réinstaller. Trois pieds de terre battue. Puis autre chose, sur quatre pieds. Puis encore de la terre par-dessus, tassée." },
+    "L'homme qui descend s'appelle Rémi et il a fait ça toute sa vie, dans des puits ordinaires, pour des raisons ordinaires.",
+    "Il remonte au bout de deux jours et il dit : « Il vous faudra un prêtre, ou quelqu'un qui fasse l'affaire. »",
+    "§ Onze pieds plus bas, l'eau revient en une nuit. Elle est bonne. Elle l'a toujours été : c'est pour ça qu'on avait bâti là.",
+    { sobre:"Karlsberg a de l'eau.",
+      intense:"Karlsberg a de l'eau à elle. C'est la différence exacte entre un endroit qu'on tient trois jours et un endroit qu'on tient un hiver.",
+      extreme:"Karlsberg a de l'eau à elle, dans ses murs, qui ne dépend de personne. C'est très précisément la différence entre un endroit qu'on tient trois jours et un endroit qu'on tient un hiver — et tous ceux qui ont fait la guerre le savent, ce qui veut dire que Mont-Draken et Fort-aux-Princes le sauront avant la fin de la saison." },
+  ],
+  effets:{ flags:['a2_karlsberg_eau'], suspicion:6,
+           marque:"Le puits est rouvert. L'eau est revenue en une nuit ; elle a toujours été bonne.",
+           court:"L'eau" },
+  suite:'ka_suite', libelleSuite:"Le chantier" },
+
+ka_ch_enceinte:{
+  lieu:"Karlsberg · l'enceinte basse",
+  titre:"Sept pieds",
+  texte:[
+    "Sept pieds, pas douze. Il faut le dire tout de suite, parce que la différence est toute la question.",
+    { sobre:"Sept pieds arrêtent les gens. Douze arrêtent une armée.",
+      intense:"Sept pieds arrêtent ceux qui passent : les bandes de six, les rôdeurs, ceux qui testent. Douze pieds arrêtent une compagnie. Ce n'est pas une question de degré, c'est une question de nature — et de déclaration.",
+      extreme:"Sept pieds arrêtent ceux qui passent : les bandes de six hommes, les rôdeurs d'hiver, ceux qui viennent voir si l'endroit est gardé. Douze pieds arrêtent une compagnie et obligent à un siège. Ce n'est pas une différence de degré, c'est une différence de nature — et surtout de déclaration. Sept pieds disent *nous sommes des gens qui se gardent*. Douze disent *nous sommes une place*, et une place, ça se prend." },
+    "L'enceinte basse fait quatre cent dix pieds de développement, avec une porte charretière et une poterne.",
+    "§ On la monte en une saison, à dix-huit, et le mur est droit parce que quelqu'un ici sait monter un mur droit.",
+    "Le jour où la porte est posée, elle ferme. Simplement : elle ferme. Elle a un vantail, des gonds et une barre, et on peut la barrer de l'intérieur.",
+    "Le soir, quelqu'un la barre pour voir. Puis la débarre. Puis, vers minuit, la rebarre et laisse comme ça.",
+  ],
+  effets:{ flags:['a2_karlsberg_close'], suspicion:8,
+           exploit:{ eclat:7, temoins:'quelques', quoi:"Karlsberg a une porte qui ferme" },
+           marque:"Quatre cent dix pieds d'enceinte basse, une porte charretière, une poterne. Quelqu'un l'a barrée à minuit et l'a laissée barrée.",
+           court:"Sept pieds" },
+  suite:'ka_suite', libelleSuite:"Le chantier" },
+
+ka_ch_forge:{
+  lieu:"Karlsberg · la forge",
+  titre:"On ne rallume pas une forge pour rien",
+  texte:[
+    "La forge de Karlsberg a été éteinte un mardi de Germinal, il y a vingt ans, parce que le forgeron est sorti dans la cour voir ce qui se passait.",
+    { sobre:"Le foyer est intact. Ils n'ont pas pensé à le casser.",
+      intense:"Le foyer est intact : ils ont brûlé, tué, comblé le puits, mais personne n'a pensé à casser un foyer de forge — c'est une masse de pierre réfractaire, ça ne brûle pas, ça n'a l'air de rien.",
+      extreme:"Le foyer est intact. Ils ont brûlé la charpente, tué quatorze personnes, comblé le puits avec méthode et jeté les corps ensemble, mais personne n'a pensé à casser le foyer de la forge. C'est une masse de pierre réfractaire de quatre pieds sur trois : ça ne brûle pas, ça ne se pille pas, ça n'a l'air de rien du tout. Il a fallu vingt ans et un balai." },
+    "Il faut un soufflet, une enclume, du charbon et un homme.",
+    "L'homme arrive de lui-même : un maréchal de la Route Grise, quarante ans, qui a entendu dire qu'il y avait une forge froide dans les Marches et un endroit où on ne demande pas d'où l'on vient.",
+    "§ Une maison qui a une forge répare ses outils, ferre ses bêtes, et ne dépend plus d'un bourg à sept lieues pour un essieu cassé.",
+    "Ce n'est pas romanesque. C'est le jour où Karlsberg cesse d'être un chantier pour devenir un endroit qui fonctionne.",
+  ],
+  effets:{ flags:['a2_karlsberg_forge'],
+           marque:"La forge est rallumée. Un maréchal de la Route Grise est venu de lui-même.",
+           court:"La forge" },
+  suite:'ka_suite', libelleSuite:"Le chantier" },
+
+ka_ch_refuge:{
+  lieu:"Karlsberg · le corps de logis",
+  titre:"Trente lits",
+  texte:[
+    "Trente lits, un réfectoire, deux âtres, et une règle écrite au charbon sur une planche à l'entrée parce que personne n'a de peinture.",
+    "§ **On ne demande pas d'où l'on vient.**",
+    { sobre:"C'est une phrase dangereuse et tout le monde le sait.",
+      intense:"C'est une phrase dangereuse. C'est aussi, mot pour mot, la proclamation d'Anarion, et vous n'y aviez pas pensé en l'écrivant — quelqu'un vous le fait remarquer au bout de trois semaines.",
+      extreme:"C'est une phrase dangereuse et tout le monde ici le sait. C'est aussi, à trois mots près, la proclamation qu'Anarion a fait afficher sur le mur du poste de Vaeth. Vous n'y aviez pas pensé en l'écrivant. Quelqu'un vous le fait remarquer au bout de trois semaines, sans méchanceté, et vous laissez la planche parce que la retirer serait pire que de l'avoir mise." },
+    "Les trente lits sont pleins en quatre mois. Pas de Parias — enfin, pas seulement : des veuves de la marche, deux familles de hameaux vidés, un ancien clerc, trois vieux, un déserteur qui ne dit pas de quelle compagnie.",
+    "§ Vous n'avez pas fondé une garnison. Vous avez fondé un endroit où l'on arrive.",
+    "Et un endroit où l'on arrive, dans ces provinces-là, ça se signale au bailliage.",
+  ],
+  effets:{ flags:['a2_refuge_ouvert'], suspicion:10,
+           exploit:{ eclat:8, temoins:'province', quoi:"trente lits et une règle affichée à Karlsberg" },
+           marque:"Trente lits, pleins en quatre mois. « On ne demande pas d'où l'on vient » — à trois mots de la proclamation d'Anarion.",
+           court:"Trente lits" },
+  suite:'ka_suite', libelleSuite:"Le chantier" },
+
+ka_ch_chapelle:{
+  lieu:"Karlsberg · la chapelle",
+  titre:"Trente-quatre visages",
+  texte:[
+    "Il y a trente-quatre statues sans visage dans la crypte de Karlsberg, et depuis vingt ans il n'y a plus rien au-dessus d'elles qu'un plancher effondré et du ciel.",
+    { sobre:"On relève la chapelle. Neuf semaines.",
+      intense:"On relève la chapelle en neuf semaines. C'est le seul ouvrage du chantier qui ne défende rien, ne nourrisse personne et ne rapporte pas un sou, et c'est celui pour lequel les gens viennent travailler le dimanche.",
+      extreme:"On relève la chapelle en neuf semaines. C'est le seul ouvrage de tout le chantier qui ne défend rien, ne nourrit personne, ne produit rien et ne rapportera jamais un sou. C'est aussi, sans exception, celui pour lequel les gens viennent travailler le dimanche sans qu'on le leur demande, et il n'y a aucune explication rationnelle à ça — ni vous ni eux n'essaient d'en donner une." },
+    "Un tailleur de pierre propose de rendre leur visage aux trente-quatre.",
+    "« On ne sait pas à quoi ils ressemblaient. »",
+    "« Non », dit-il. « Mais on sait qu'ils en avaient un. »",
+    "§ Il en fait quatre. Puis il s'arrête, et il dit que ce n'est pas bien, et il a raison — les quatre visages sont des visages, mais ce ne sont pas leurs visages.",
+    "On laisse les quatre. Les trente autres restent lisses. C'est plus honnête et c'est infiniment plus dur à regarder.",
+  ],
+  effets:{ flags:['a2_chapelle'],
+           exploit:{ eclat:5, temoins:'quelques', quoi:"la chapelle de Karlsberg est relevée" },
+           marque:"La chapelle est relevée. Quatre statues sur trente-quatre ont un visage, et ce ne sont pas les leurs.",
+           court:"Quatre visages" },
+  suite:'ka_suite', libelleSuite:"Le chantier" },
+
+ka_ch_donjon:{
+  lieu:"Karlsberg · le donjon",
+  titre:"Quatre étages sur une base qui a tenu",
+  texte:[
+    "La base du donjon a tenu la Purge. Ils ont brûlé ce qu'il y avait dedans, fait tomber les planchers et l'ont laissée : on ne démolit pas quarante pieds de maçonnerie en une nuit avec quarante hommes.",
+    { sobre:"On remonte quatre étages dessus.",
+      intense:"On remonte quatre étages dessus, en dix-huit mois, et ce sont les dix-huit mois pendant lesquels la province apprend que Karlsberg existe.",
+      extreme:"On remonte quatre étages dessus. Dix-huit mois de chantier, une trentaine d'hommes, un maître d'œuvre qui compte ses assises à voix basse, et surtout : dix-huit mois pendant lesquels on voit monter quelque chose de très loin. Un donjon, c'est fait pour être vu. C'est même sa fonction principale — on y dort mal, on y a froid, et il sert avant tout à dire à onze lieues à la ronde qu'il y a quelqu'un ici." },
+    "§ Le jour où le faîte est posé, on compte onze cavaliers sur la crête ouest, immobiles, à trop grande distance pour qu'on lise leurs couleurs.",
+    "Ils regardent pendant une heure. Puis ils repartent vers le sud, sans être descendus, sans avoir parlé à personne.",
+    "Le maître d'œuvre les regarde partir et dit : « Voilà. Maintenant c'est fait. »",
+    "« Quoi ? »",
+    { sobre:"« Vous existez. »",
+      intense:"« Vous existez », dit-il. « Avant, vous étiez une rumeur avec des murs. Maintenant vous êtes une adresse sur une carte d'état-major, et ces onze-là vont la reporter. »",
+      extreme:"« Vous existez », dit-il, sans lever les yeux de son fil à plomb. « Avant aujourd'hui, vous étiez une rumeur avec des murs bas — désagréable, pas grave. Maintenant vous êtes un point sur une carte d'état-major, avec une hauteur estimée, un développement d'enceinte et un effectif supposé. Ces onze-là sont venus prendre les mesures, et ils les ont prises. Tout ce qui vous arrivera à partir de maintenant vous arrivera parce que ce donjon est là. »" },
+  ],
+  effets:{ flags:['a2_donjon','a2_garnison'], suspicion:22,
+           exploit:{ eclat:18, temoins:'province', quoi:"le donjon de Karlsberg est remonté" },
+           faire:() => { retenir('caleb', "il a monté un donjon, ce qui fait de lui une place et non plus un homme");
+                         retenir('charles', "Karlsberg a un donjon et une garnison"); },
+           marque:"Le donjon est remonté. Onze cavaliers sont venus prendre les mesures et sont repartis sans descendre.",
+           court:"Le donjon" },
+  plusTard:"Onze cavaliers ont reporté vos mesures sur une carte d'état-major. Ce qui vous arrivera désormais vous arrivera à cause de ça.",
+  suite:'ka_suite', libelleSuite:"Le chantier" },
+
+ka_ch_bourg:{
+  lieu:"Karlsberg · au pied des murs",
+  titre:"On ne bâtit pas un bourg",
+  texte:[
+    "On ne bâtit pas un bourg. On cesse de l'empêcher.",
+    { sobre:"Deux rues, un registre, et on laisse faire.",
+      intense:"On trace deux rues à la corde pour que ça ne pousse pas n'importe comment, on tient un registre des feux, on fixe le jour du marché — et pour le reste on laisse faire, parce qu'un bourg qu'on organise n'est pas un bourg, c'est un camp.",
+      extreme:"On trace deux rues à la corde, parce qu'un bourg qui pousse n'importe comment brûle en entier au premier feu de cheminée. On tient un registre des feux, on fixe le jour du marché au mardi, on désigne quelqu'un pour les litiges. Et pour tout le reste, on laisse faire — parce qu'un bourg qu'on organise n'est pas un bourg, c'est un camp, et les gens le sentent en trois semaines et s'en vont." },
+    "La première année : quatorze feux. La deuxième : trente et un. Un four à pain, deux ateliers, une femme qui vend de la bière et n'a pas demandé la permission.",
+    "§ Le mardi, il y a marché. On y vient de trois vallées, y compris de vallées qui ne relèvent pas de vous, ce qui est la définition administrative d'un problème.",
+    "Un enfant naît au bourg de Karlsberg en Fructidor. C'est le premier depuis la Purge, et il n'est même pas de votre sang.",
+    "Le père vient vous le dire quand même. Il ne sait pas trop pourquoi ; vous ne savez pas trop quoi répondre ; c'est très gênant pour tout le monde et ça compte plus que le donjon.",
+  ],
+  effets:{ flags:['a2_bourg','a2_peage'], suspicion:12,
+           exploit:{ eclat:12, temoins:'province', quoi:"il y a un marché le mardi au pied de Karlsberg" },
+           marque:"Trente et un feux au pied des murs. Un enfant y est né en Fructidor — le premier depuis la Purge.",
+           court:"Le bourg" },
+  suite:'ka_suite', libelleSuite:"Le chantier" },
+
+ka_ch_muraille:{
+  lieu:"Karlsberg · la muraille",
+  titre:"Douze pieds",
+  texte:[
+    "Douze pieds d'élévation, huit d'épaisseur à la base, deux tours de flanquement et un chemin de ronde continu.",
+    { sobre:"Ce n'est plus une maison qui se garde. C'est une place.",
+      intense:"À partir d'ici, Karlsberg ne se garde plus : elle se prend, ou elle ne se prend pas. Il n'y a plus de version où quelqu'un passe et regarde.",
+      extreme:"À partir d'ici, Karlsberg ne se garde plus. Elle se prend ou elle ne se prend pas, et la prendre demande une armée, un train de siège, du temps et une raison qu'on puisse écrire dans une lettre. Il n'y a plus de version de l'histoire où quelqu'un passe, regarde, et décide. Vous venez de retirer à toute la province la possibilité de vous ignorer." },
+    "Le chantier dure deux ans et il emploie, au plus fort, cent quarante personnes.",
+    "§ Pendant ces deux ans, trois choses arrivent, et aucune n'est une bataille.",
+    "**Une.** Le bailliage de Chastel envoie un commissaire vérifier votre droit d'élever une fortification. Il repart avec une copie de l'acte de relèvement et une lettre polie. C'est la dernière fois qu'on vous traite par le papier.",
+    "**Deux.** Deux maisons de la Route Grise cessent de vous écrire. Pas de rupture, pas de mot : elles cessent, simplement, comme on retire sa main d'un feu.",
+    "**Trois.** Quelqu'un vous propose de l'argent pour ne pas finir le mur. La somme est très élevée et l'émissaire ne dit pas de qui il vient.",
+    "Le jour où la dernière assise est posée, on monte au chemin de ronde et on voit la vallée entière, la crête ouest, la route de poste, et à onze lieues, par temps clair, la fumée de Chastel.",
+    "Ce qui veut dire que de Chastel, par temps clair, on voit Karlsberg.",
+  ],
+  effets:{ flags:['a2_muraille'], suspicion:30,
+           exploit:{ eclat:26, temoins:'province', quoi:"douze pieds de muraille aux Marches Grises" },
+           faire:() => { retenir('caleb', "il a une muraille de douze pieds, et je n'en ai pas");
+                         retenir('lucius', "il y a une place forte neuve dans les Marches et elle n'est à personne");
+                         retenir('charles', "une maison de Parias a une muraille"); },
+           marque:"Douze pieds, deux tours, un chemin de ronde. De Chastel, par temps clair, on voit Karlsberg.",
+           court:"Douze pieds" },
+  plusTard:"On vous a offert de l'argent pour ne pas finir le mur, et l'émissaire n'a pas dit de qui il venait.",
+  suite:'ka_suite', libelleSuite:"Le chantier" },
+
+ka_ch_pierre:{
+  lieu:"Karlsberg · l'angle sud-est",
+  titre:"La pierre",
+  texte:[
+    "Une pierre de fondation ne défend rien, ne nourrit personne, ne porte aucune charge. C'est un bloc scellé dans un angle, avec une date et un nom dessus.",
+    { sobre:"C'est le dernier ouvrage et c'est le seul qui soit une déclaration.",
+      intense:"C'est le dernier ouvrage du chantier et c'est le seul qui ne soit rien d'autre qu'une déclaration. Tout le reste avait une fonction. Celle-ci dit une chose et une seule : *nous étions là, nous y sommes revenus*.",
+      extreme:"C'est le dernier ouvrage du chantier et le seul qui ne serve strictement à rien. Tout le reste avait une fonction défendable devant n'importe quel intendant : un toit abrite, un puits abreuve, un mur arrête. Celle-ci dit une chose et une seule, à qui passera dans deux cents ans : *nous étions là, on nous a rayés, nous y sommes revenus, et voici la date des deux*." },
+    "Le tailleur demande ce qu'il faut graver.",
+    "§ Il y a la place pour trois lignes.",
+  ],
+  choix:[
+    { t:"*Karlsberg. Rasée la 143ᵉ année. Relevée la 148ᵉ.*",
+      detail:"les deux dates · rien d'autre · que celui qui lira compte lui-même",
+      risque:"définitif", definitif:true, va:'ka_pierre_dates' },
+    { t:"Les quatorze noms",
+      detail:"ceux de la nuit · on en connaît onze, il en manque trois",
+      risque:"définitif", definitif:true, va:'ka_pierre_noms' },
+    { t:"*On ne demande pas d'où l'on vient.*",
+      detail:"la planche du corps de logis, gravée dans la pierre · et ce qu'elle déclare",
+      risque:"définitif", definitif:true, va:'ka_pierre_regle' },
+  ],
+},
+
+ka_pierre_dates:{
+  titre:"Deux dates",
+  texte:[
+    "*Karlsberg. Rasée la cent-quarante-troisième année. Relevée la cent-quarante-huitième.*",
+    { sobre:"Cinq ans entre les deux lignes.",
+      intense:"Cinq ans entre les deux lignes, et vingt entre la première et le moment où quelqu'un a décidé qu'il y en aurait une deuxième.",
+      extreme:"Cinq ans entre les deux lignes. Vingt entre la première et le moment où quelqu'un a décidé qu'il y en aurait une deuxième. Celui qui lira ça dans deux cents ans ne saura rien de ces vingt ans, ne saura pas qu'un enfant de neuf ans est mort dans cette cour avec une épée de bois, et fera exactement le calcul que vous venez de faire : cinq ans. C'est bien. C'est ce qu'une pierre doit faire." },
+    "§ Rien sur qui l'a rasée. Rien sur pourquoi. Deux dates et un nom.",
+    "C'est le contraire d'un acte d'accusation, et c'est pour ça que c'est insupportable à ceux qui l'ont fait.",
+  ],
+  effets:{ flags:['a2_pierre','a2_pierre_dates'],
+           exploit:{ eclat:14, temoins:'province', quoi:"deux dates dans l'angle sud-est de Karlsberg" },
+           marque:"« Karlsberg. Rasée la 143ᵉ année. Relevée la 148ᵉ. » Rien d'autre.",
+           court:"Deux dates" },
+  suite:'ka_suite', libelleSuite:"Le chantier" },
+
+ka_pierre_noms:{
+  titre:"Onze sur quatorze",
+  texte:[
+    "On connaît onze noms sur quatorze.",
+    { sobre:"Les trois autres, personne ne les a jamais su.",
+      intense:"Les trois derniers, personne ne les a jamais sus : des gens de passage, un valet loué à la semaine, quelqu'un qui dormait à l'écurie. Une maison rasée emporte aussi ceux qui n'y étaient que pour la nuit.",
+      extreme:"Les trois derniers, personne ne les a jamais sus et personne ne les saura. Une maison rasée emporte avec elle ceux qui n'y étaient que pour une nuit : un valet loué à la semaine, un colporteur qu'on avait laissé coucher à l'écurie, quelqu'un dont on ne se souvient que parce qu'on a compté quatorze corps et onze noms. Ils n'ont pas de descendants pour les réclamer. Ils n'ont que cette pierre." },
+    "Le tailleur grave les onze, puis trois lignes vides de la même longueur.",
+    "« Vous êtes sûr ? » demande-t-il devant les vides.",
+    "« Oui. »",
+    "§ Les trois lignes vides sont ce que les gens regardent. Toujours. Pas les onze noms : les trois vides.",
+    "Loys de Karlsberg, neuf ans, est le quatrième de la liste, à sa place, sans mention particulière — parce que les autres n'en ont pas non plus.",
+  ],
+  effets:{ flags:['a2_pierre','a2_pierre_noms'],
+           exploit:{ eclat:16, temoins:'province', quoi:"onze noms et trois lignes vides" },
+           marque:"Onze noms gravés, trois lignes laissées vides. Ce sont les vides que les gens regardent.",
+           court:"Trois lignes vides" },
+  suite:'ka_suite', libelleSuite:"Le chantier" },
+
+ka_pierre_regle:{
+  titre:"La règle dans la pierre",
+  texte:[
+    "*On ne demande pas d'où l'on vient.*",
+    { sobre:"Ce n'est plus une planche au charbon. C'est un acte.",
+      intense:"Écrite au charbon sur une planche, c'était une commodité de refuge. Gravée dans la pierre de fondation d'une place forte, c'est une politique — et toute la province va la lire comme telle.",
+      extreme:"Écrite au charbon sur une planche à l'entrée d'un corps de logis, c'était une commodité : on n'a pas le temps d'interroger trente personnes par hiver. Gravée dans la pierre de fondation d'une place forte à douze pieds de muraille, à onze lieues d'un bailliage, c'est une politique déclarée. Et il n'y a pas une maison, pas un commissaire aux titres, pas un chasseur de Parias dans quatre provinces qui la lira autrement." },
+    "§ Vous venez d'écrire dans la pierre ce qu'Anarion a fait afficher sur un mur de bois à Vaeth.",
+    "La différence — et elle est énorme, et elle vous coûtera — c'est que lui l'a fait à quatre cents lieues, derrière une armée, et vous à onze lieues de Chastel.",
+    "Le tailleur pose son ciseau.",
+    "« Vous savez ce que ça dit, messire ? »",
+    "« Je sais. »",
+    "« Non », dit-il. « Ça dit : *venez*. »",
+  ],
+  effets:{ flags:['a2_pierre','a2_pierre_regle','a2_asile_declare'], suspicion:20,
+           exploit:{ eclat:20, temoins:'province', quoi:"un asile déclaré dans la pierre, à onze lieues de Chastel" },
+           faire:() => { retenir('charles', "il a gravé dans la pierre qu'il ne demande pas d'où l'on vient");
+                         retenir('anarion', "il a écrit ma phrase dans sa propre fondation"); },
+           marque:"« On ne demande pas d'où l'on vient », gravé dans la fondation. « Ça dit : venez. »",
+           court:"Venez" },
+  plusTard:"Vous avez déclaré un asile à onze lieues d'un bailliage. Ils viendront, et d'autres aussi.",
+  suite:'ka_suite', libelleSuite:"Le chantier" },
+
+};
+
+enregistrerScenes(CH_SCENES);
+
+/* ── Le franchissement d'un palier ─────────────────────────────────────────
+ * Le seul endroit du jeu qui annonce quelque chose. Encore ne dit-il qu'un
+ * nom et une phrase : l'endroit a changé de nature, pas de score. */
+DYN.ka_suite = () => {
+  const n = A2().palierNeuf;
+  if(!n) return aller('ka_chantier');
+  A2().palierNeuf = null;
+  const p = PALIERS2.find(x => x.id === n);
+  /* Recomposée à chaque franchissement par `ka_suite` : pas de `dyn` ici,
+   * sinon l'aiguillage se chercherait lui-même et la scène serait muette. */
+  SCENES.ka_palier = {
+    lieu:`Karlsberg · ${dateA2()}`,
+    titre:p.nom,
+    texte:[
+      "Personne ne l'annonce. Il n'y a pas de jour où l'on décide qu'un endroit a changé de nom : il y a un jour où quelqu'un de passage l'appelle autrement, et où personne ne le corrige.",
+      `§ On dit désormais **${p.nom.toLowerCase()}**.`,
+      p.dit,
+      PALIER_DIT[p.id] || "",
+    ],
+    effets:{ flags:['a2_palier_' + p.id],
+             marque:`Karlsberg est ${p.nom.toLowerCase()}. ${p.dit}`,
+             court:p.nom },
+    suite:'ka_chantier', libelleSuite:"Le chantier",
+  };
+  aller('ka_palier');
+};
+
+const PALIER_DIT = {
+  refuge:"Ce n'est pas une maison relevée. C'est un endroit sec dans une région qui n'en a plus beaucoup, et c'est déjà une nouvelle qui voyage.",
+  fort:"Un fort n'appartient à personne dans le droit de la province : c'est un fait, pas un titre. On peut donc vous le contester sans vous attaquer, ce qui est exactement ce qui va se produire.",
+  chateau:"Un château a une valeur, et tout ce qui a une valeur figure dans un état des lieux quelque part. Vous venez d'entrer dans les colonnes de trois maisons.",
+  domaine:"Un domaine se compte en feux, pas en pierres. Vous êtes désormais responsable de gens qui n'ont rien demandé et qui mourront si ça tourne mal.",
+  puissance:"Une puissance régionale ne se laisse pas ignorer, ne se laisse pas prendre en passant, et n'a plus le droit de rester neutre. Vous ne le savez pas encore, mais vous venez de perdre la neutralité.",
+};
+
+entree2('ka_palier', ...OUVRAGES.map(o => 'ka_' + o.id));
+
+/* Le chantier s'ouvre dès qu'il y a quelque chose à Karlsberg, et pas avant. */
+offrir({ id:'ka_chantier', lieu:'karlsberg', va:'ka_chantier',
+         titre:"Le chantier", permanent:true,
+         si:() => a('kar_refuge') || a('a2_bannieres') || CHANTIER().faits.length > 0 });
+
+</script>
+<script>
+/* ── ../acte2/politique.js ── */
+/* PARIAS — Acte II · LES TROIS HOMMES, EN ENTIER
+ * ═══════════════════════════════════════════════════════════════════════
+ * Caleb, Lucius et Charles avaient chacun une rencontre. Ils ont maintenant
+ * un arc, et les trois arcs mordent au même endroit : le chantier.
+ *
+ * C'est le cœur politique de l'acte. Relever une maison n'est pas un
+ * problème de pierre — c'est un problème de gens qui n'ont pas envie qu'une
+ * maison de Parias se relève, et qui disposent d'instruments beaucoup plus
+ * fins qu'une armée.
+ *
+ *   CALEB    achète. Il ne vous attaque jamais : il achète ce dont vous avez
+ *            besoin, avant vous, et vous le revend au prix qu'il décide.
+ *   LUCIUS   légitime. Il peut vous donner un titre qu'aucun bailliage ne
+ *            peut vous retirer — au prix d'être le premier à le reconnaître,
+ *            lui, comme roi.
+ *   CHARLES  vérifie. Il ne hait pas les Parias : il protège les hommes de
+ *            ce qui n'en est pas, et il n'est pas certain que vous en soyez.
+ *
+ * Aucun des trois n'est un méchant. Deux d'entre eux ont raison sur
+ * l'essentiel, et c'est ce qui rend l'acte politique au lieu de martial.
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+const POLITIQUE = {
+
+/* ══ CALEB — CELUI QUI ACHÈTE ═════════════════════════════════════════════ */
+
+cb_creances:{
+  qui:'caleb',
+  lieu:() => `Fort-aux-Princes · le cabinet · ${dateA2()}`,
+  titre:"Ce qu'il a acheté ce trimestre",
+  texte:[
+    "Le cabinet des créances de Fort-aux-Princes occupe deux pièces, emploie quatre clercs, et n'a pas d'armes au mur.",
+    { sobre:"Caleb vous reçoit avec un état.",
+      intense:"Caleb de Fort-aux-Princes vous reçoit avec un état de quatre pages, qu'il a fait établir avant votre arrivée parce qu'il savait que vous viendriez.",
+      extreme:"Caleb de Fort-aux-Princes vous reçoit debout, avec un état de quatre pages qu'il a fait établir la semaine précédente. Il n'a pas su que vous veniez : il a su que vous viendriez, ce qui n'est pas la même compétence et se paie beaucoup plus cher. Il tourne l'état vers vous, à l'endroit, comme on présente un contrat." },
+    "« Vous montez quelque chose aux Marches Grises. »",
+    "« Oui. »",
+    "« Avec de la pierre, des bras et du grain, et sans un sou d'or, ce qui est remarquable et ce dont je vous fais compliment sincèrement. » Il pose un doigt sur la page. « Malheureusement, ce n'est pas comme ça que ça marche. »",
+    "§ Sur l'état : les onze fournisseurs qui montent quelque chose chez vous.",
+    "Le charretier de Bourg-l'Aigre. Le maréchal. Les deux carriers d'Estrées. Le charpentier de la vallée basse. Le meunier qui vous vend le grain que vous ne produisez pas encore.",
+    "En face de chaque nom, un chiffre. En face de sept d'entre eux, une date : celle où Caleb a racheté leur dette.",
+    { sobre:"« Sept sur onze », dit-il.",
+      intense:"« Sept sur onze », dit-il, sans triomphe, du ton dont on annonce un relevé de pluie. « Ce trimestre. Le trimestre prochain, neuf. »",
+      extreme:"« Sept sur onze », dit-il, sans le moindre triomphe, exactement du ton dont on annonce un relevé de pluviométrie. « Ce trimestre-ci. Le trimestre prochain, neuf — le charpentier a une fille à marier et le meunier a une meule fendue, donc les deux emprunteront avant Frimaire, et je serai là. Je ne les menace pas, je ne leur demande rien, je ne leur parle même pas de vous. J'achète leur dette au pair, ce qui est un bon prix pour eux, et j'attends. »" },
+    "« Et ensuite ? »",
+    "« Ensuite rien. C'est tout l'intérêt. » Il referme l'état. « Je n'ai pas besoin d'appeler ma créance, messire. Il me suffit qu'ils sachent que je l'ai. Un homme qui doit trois cents couronnes à Fort-aux-Princes ne refuse pas de vous livrer : il livre plus tard, il livre moins bien, il augmente un peu, et il ne sait pas lui-même pourquoi il le fait. »",
+    "§ C'est une guerre. Elle ne comporte aucune violence, aucune illégalité, et il n'y a rien à en dire à un tribunal.",
+    "« Pourquoi ? »",
+    "« Parce qu'une maison neuve dans les Marches Grises fait baisser la valeur de tout ce que je possède au nord, de onze à quatorze pour cent selon les années. » Il hausse une épaule. « Ce n'est pas contre vous. Je ne vous connais pas. Si vous étiez mort demain je n'en éprouverais rien du tout, et si vous devenez utile je vous financerai moi-même. »",
+  ],
+  effets:{ flags:['cb_creances','a2_caleb_vu','a2_caleb_pression'],
+           faire:() => { const C = CHANTIER(); C.pierre = Math.max(0, C.pierre - 3); C.grain = Math.max(0, C.grain - 3);
+                         retenir('caleb', "il est venu voir l'état de ses fournisseurs, ce qui prouve qu'il compte"); },
+           marque:"Caleb a racheté la dette de sept de vos onze fournisseurs. Il n'appellera pas ses créances : il lui suffit qu'elles existent.",
+           court:"Sept sur onze" },
+  choix:[
+    { t:"« Combien pour les onze ? »",
+      detail:"racheter les créances · c'est ce qu'il attend et il l'a chiffré",
+      requisOr:900, risque:"calculé", va:'cb_racheter' },
+
+    { t:"« Qu'est-ce que vous voulez ? »",
+      detail:"la question directe · un marchand y répond toujours",
+      risque:"calculé", va:'cb_veut' },
+
+    { t:"« Alors je bâtirai avec des gens qui ne vous doivent rien. »",
+      detail:"les Nains, les Khesh, les Parias · personne qui ait un compte à Fort-aux-Princes",
+      risque:"définitif", ferme:"Ferme : les onze fournisseurs de la province",
+      va:'cb_ailleurs' },
+
+    { t:"Le menacer",
+      detail:"il n'y a pas d'armes au mur, et il y a quatre clercs qui écrivent",
+      risque:"dangereux", va:'cb_menace' },
+  ],
+},
+
+cb_racheter:{
+  qui:'caleb',
+  titre:"Neuf cents couronnes",
+  texte:[
+    "« Combien pour les onze ? »",
+    "Il donne le chiffre sans consulter l'état, ce qui veut dire qu'il l'avait préparé.",
+    "« Neuf cents. »",
+    "« C'est trois fois le pair. »",
+    "« C'est deux fois et demie, et vous les paierez, parce que la seule chose qui vaille moins qu'une créance qu'on ne peut pas appeler, c'est un chantier qu'on ne peut pas approvisionner. »",
+    "§ Il a raison sur le chiffre et il a raison sur le reste.",
+    "Vous payez. Les quatre clercs mettent une heure à établir les actes de cession, et Caleb les signe tous les onze de la même main régulière, sans en relire un seul.",
+    { sobre:"« Vous n'êtes pas fâché », constatez-vous.",
+      intense:"« Vous n'avez pas l'air fâché », constatez-vous en signant le dernier.\n\n« Pourquoi le serais-je ? J'ai acheté onze créances au pair et je les ai revendues à deux et demie. C'est ma meilleure opération du trimestre. »",
+      extreme:"« Vous n'avez pas l'air fâché », constatez-vous en signant le dernier acte.\n\n« Pourquoi diable le serais-je ? » Il a l'air sincèrement surpris qu'on le lui demande. « J'ai acheté onze créances au pair il y a quatre mois, je les revends à deux et demie aujourd'hui, en une heure, sans risque et sans un mot plus haut que l'autre. C'est ma meilleure opération du trimestre et de loin. Vous croyiez quoi — que je voulais votre ruine ? Je veux un rendement, messire. Votre ruine ne rapporte rien du tout. »" },
+    "« Et si je n'avais pas payé ? »",
+    "« Alors j'aurais gardé les créances et vous auriez mis six ans au lieu de trois. » Il range sa plume. « Les deux me convenaient. C'est ça, une bonne position. »",
+  ],
+  effets:{ or:-900, flags:['cb_rachete','a2_caleb_paye'],
+           faire:() => retenir('caleb', "il a payé neuf cents couronnes sans marchander, ce qui me dit ce qu'il a"),
+           exploit:{ eclat:4, temoins:'quelques', quoi:"onze créances rachetées en une heure" },
+           marque:"Neuf cents couronnes pour onze créances. Sa meilleure opération du trimestre, et il l'a dit.",
+           court:"Neuf cents" },
+  plusTard:"Il sait maintenant que vous pouviez payer neuf cents couronnes. C'est une information qu'il n'avait pas ce matin.",
+  suite:'cb_quarante', libelleSuite:"Il n'a pas fini" },
+
+cb_veut:{
+  qui:'caleb',
+  titre:"Ce qu'il veut",
+  texte:[
+    "« Qu'est-ce que vous voulez ? »",
+    { sobre:"« Bonne question. Enfin. »",
+      intense:"« Bonne question », dit-il. « Enfin. Vous n'imaginez pas le nombre de gens qui viennent ici me menacer avant de la poser. »",
+      extreme:"« Bonne question », dit-il, et pour la première fois il s'assoit. « Enfin. Vous n'imaginez pas le nombre de seigneurs de cette province qui viennent dans cette pièce, découvrent que je tiens leurs fournisseurs, et passent une demi-heure à me menacer avant de poser la seule question qui pouvait leur servir à quelque chose. Trois sur quatre. Et ce sont des gens qui ont hérité de terres. »" },
+    "Il retourne l'état et écrit trois lignes au dos.",
+    "**Une.** Que Karlsberg ne lève jamais de péage sur la voie de la vallée. « Vous êtes en travers de ma route du nord. C'est tout mon problème et c'est mon seul problème. »",
+    "**Deux.** Qu'il ait un droit de préemption sur ce que produit votre forge, au prix du marché. « Pas un privilège. Un droit de premier refus. »",
+    "**Trois.** Que si Karlsberg tombe, ce qui en reste lui revienne avant tout autre créancier.",
+    "§ Les trois sont raisonnables. La troisième est un couteau.",
+    "« Vous pariez sur ma chute. »",
+    "« Je me couvre contre elle, ce qui est le contraire. » Il pousse la feuille. « Un homme qui parie sur votre chute la provoque. Un homme qui s'en couvre s'en désintéresse — et je vous garantis que vous préférez la deuxième sorte devant chez vous. »",
+  ],
+  effets:{ flags:['cb_termes','a2_caleb_vu'],
+           marque:"Trois clauses : pas de péage, préemption sur la forge, et ce qui reste de Karlsberg si elle tombe.",
+           court:"Trois lignes au dos" },
+  choix:[
+    { t:"Signer les trois",
+      detail:"la route reste franche · et il cesse d'acheter vos fournisseurs",
+      risque:"définitif", ferme:"Ferme : le péage de la vallée, et ce qui reste si vous tombez",
+      definitif:true, va:'cb_signe' },
+    { t:"Signer les deux premières",
+      detail:"refuser la troisième · et voir s'il tient à sa couverture",
+      risque:"calculé", va:'cb_deux' },
+    { t:"Ne rien signer",
+      detail:"garder le péage · il vaudra un jour bien plus que trois cents couronnes l'an",
+      risque:"définitif", ferme:"Ferme : la paix marchande avec Fort-aux-Princes",
+      va:'cb_ailleurs' },
+  ],
+},
+
+cb_signe:{
+  qui:'caleb',
+  titre:"Trois clauses",
+  texte:[
+    "Vous signez les trois. Les quatre clercs font trois expéditions, dont une pour le bailliage.",
+    { sobre:"Le lendemain, la route est franche.",
+      intense:"Le lendemain, ses convois passent chez vous sans payer, et les vôtres descendent à Fort-aux-Princes sans être fouillés. En quatre jours, le grain arrive.",
+      extreme:"Le lendemain matin, ses convois passent par la voie de la vallée sans payer un sou, et les vôtres descendent à Fort-aux-Princes sans être fouillés à l'entrée — ce qui, découvrez-vous, était le vrai coût de la situation précédente : deux heures par charroi, à chaque fois, depuis huit mois. En quatre jours le grain arrive. En trois semaines, deux carriers d'Estrées demandent à travailler pour vous à l'année." },
+    "§ Une route franche vaut, en pratique, plus qu'un péage. Il le savait et il vous l'a laissé découvrir seul, ce qui est sa façon de faire une faveur.",
+    "La troisième clause dort dans un tiroir de bailliage.",
+    "Elle y dormira dix ans. Puis un jour, quelqu'un l'en sortira, et ce jour-là vous serez peut-être mort.",
+  ],
+  effets:{ flags:['cb_signe','a2_route_franche','a2_caleb_pacte'],
+           faire:() => { retenir('caleb', "il a signé les trois, dont la troisième, ce que peu font"); },
+           exploit:{ eclat:5, temoins:'quelques', quoi:"la voie de la vallée est franche" },
+           marque:"Trois clauses signées. La route est franche. La troisième dort au bailliage.",
+           court:"La route franche" },
+  plusTard:"Si Karlsberg tombe, ce qui en reste va d'abord à Fort-aux-Princes. C'est écrit et c'est déposé.",
+  suite:'cb_quarante', libelleSuite:"Il n'a pas fini" },
+
+cb_deux:{
+  qui:'caleb',
+  titre:"Deux sur trois",
+  texte:[
+    "« Les deux premières. Pas la troisième. »",
+    { sobre:"Il ne discute pas.",
+      intense:"Il ne discute pas une seconde, ce qui vous inquiète immédiatement — un marchand qui ne discute pas une clause qu'il a écrite lui-même vient d'apprendre quelque chose.",
+      extreme:"Il ne discute pas une seule seconde. Il raye la troisième ligne, paraphe la rature, fait recopier. Et c'est précisément ce qui devrait vous inquiéter : un marchand qui ne défend pas une clause qu'il a écrite de sa main vient soit d'obtenir ce qu'il voulait ailleurs, soit d'apprendre quelque chose qui vaut plus que la clause." },
+    "« Vous refusez de vous couvrir contre ma chute », dit-il en signant.",
+    "« Je refuse de la mettre par écrit. »",
+    "« C'est la même chose et ce n'est pas grave. » Il rend la plume. « Vous venez de me dire que vous croyez tenir. Les hommes qui croient tenir empruntent moins, se défendent mieux, et durent plus longtemps. Je révise votre notation à la hausse, messire, et ça vous coûtera moins cher que la clause. »",
+    "§ Vous venez de gagner une négociation contre un homme qui compte, et vous n'arrivez pas à vous en réjouir.",
+    "La route est franche à partir de Frimaire.",
+  ],
+  effets:{ flags:['cb_deux','a2_route_franche','a2_caleb_pacte'],
+           faire:() => retenir('caleb', "il a refusé la troisième clause, donc il croit tenir, donc il tiendra"),
+           exploit:{ eclat:6, temoins:'quelques', quoi:"deux clauses sur trois, et la route franche quand même" },
+           marque:"Deux clauses sur trois. Il n'a pas discuté la rature et il a révisé votre notation à la hausse.",
+           court:"Deux sur trois" },
+  suite:'cb_quarante', libelleSuite:"Il n'a pas fini" },
+
+cb_ailleurs:{
+  qui:'caleb',
+  titre:"Sans lui",
+  texte:[
+    "« Alors je bâtirai avec des gens qui ne vous doivent rien. »",
+    { sobre:"Il réfléchit sérieusement.",
+      intense:"Il réfléchit sérieusement, et il fait le calcul devant vous, à voix haute, parce que c'est un homme qui pense mieux en parlant.",
+      extreme:"Il réfléchit sérieusement, et il fait le calcul devant vous à voix haute, parce que c'est un homme qui pense mieux en parlant et qui n'a jamais eu besoin de cacher son raisonnement à qui que ce soit." },
+    "« Des Nains sans montagne, des Khesh qui vous doivent de l'eau, quarante et un Parias que personne ne peut identifier, et une elfe qui ne détourne pas les yeux. » Il hoche la tête. « Oui. Ça peut marcher. Ce sont exactement les quatre populations sur lesquelles je n'ai aucune prise, et vous êtes le seul homme des quatre provinces à les avoir toutes les quatre. »",
+    "« Alors ? »",
+    "« Alors vous bâtirez plus lentement, plus cher, et sans jamais pouvoir acheter un essieu à trois lieues de chez vous. » Il se rassoit. « Et vous aurez une maison qui ne doit rien à personne d'ici, ce qui est très exactement ce que la province ne pardonne pas. Je vous souhaite bonne chance sincèrement. Ce sera intéressant à regarder. »",
+    "§ Il ne vous fait pas la guerre. Il vous retire simplement de son marché, et il n'y a rien à en dire.",
+    "Onze fournisseurs cessent progressivement de livrer. Aucun ne rompt : ils livrent plus tard, moins bien, et un peu plus cher, exactement comme il l'avait décrit.",
+  ],
+  effets:{ flags:['cb_sans','a2_caleb_froid'],
+           faire:() => { const C = CHANTIER(); C.pierre = Math.max(0, C.pierre - 4); C.grain = Math.max(0, C.grain - 4);
+                         retenir('caleb', "il a refusé mon marché en face, poliment, et il avait les moyens de le faire"); },
+           marque:"Vous bâtirez sans la province. Onze fournisseurs livrent plus tard, moins bien, un peu plus cher.",
+           court:"Sans la province" },
+  plusTard:"Vous ne pouvez plus acheter un essieu à trois lieues de chez vous. Tout doit venir de plus loin.",
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+cb_menace:{
+  qui:'caleb',
+  titre:"Quatre clercs qui écrivent",
+  texte:[
+    { sobre:"Vous vous avancez. Les quatre clercs ne lèvent pas la tête.",
+      intense:"Vous vous avancez d'un pas. Les quatre clercs ne lèvent pas la tête — ils continuent d'écrire, tous les quatre, sans un temps d'arrêt, et c'est ça qui vous arrête.",
+      extreme:"Vous vous avancez d'un pas et vous laissez la phrase se former. Les quatre clercs ne lèvent pas la tête. Ils continuent d'écrire, tous les quatre, sans un temps d'arrêt, sans un regard, et c'est très exactement ça qui vous arrête net : ils ont déjà vu ça. Souvent. Ça fait partie de la journée de travail, comme la pluie." },
+    "Caleb ne bouge pas non plus.",
+    "« Vous pouvez me tuer », dit-il. « Ça se fait, c'est même arrivé à mon père. Je vais vous décrire le lendemain, parce que personne ne le fait jamais et que c'est instructif. »",
+    "« Ce ne sera pas nécessaire. »",
+    "« Si. » Il compte sur ses doigts. « Un : mes créances ne meurent pas avec moi, elles passent à ma nièce, qui a vingt-six ans et beaucoup moins de patience que moi. Deux : les quatre hommes qui écrivent derrière vous témoigneront, et un cabinet des créances est le seul endroit de cette province où le témoignage de quatre clercs vaut celui d'un noble. Trois : Fort-aux-Princes appelle ses créances toutes en même temps, ce que je ne fais jamais, et onze fournisseurs vous ferment leur porte le même jeudi. »",
+    "§ Il n'a pas haussé la voix une seule fois.",
+    "« Vous êtes un homme d'armes, messire, et un bon, à ce qu'on m'écrit. Ici, ça ne sert à rien du tout. C'est très désagréable et vous vous y ferez. »",
+  ],
+  effets:{ flags:['cb_menace','a2_caleb_hostile'], suspicion:6,
+           faire:() => { bouger('alycia', { confiance:-1 });
+                         retenir('caleb', "il m'a menacé dans mon cabinet, devant quatre clercs, ce qui était stupide"); },
+           marque:"Vous l'avez menacé. Les quatre clercs n'ont pas levé la tête et il vous a décrit le lendemain.",
+           court:"Quatre clercs" },
+  suite:'cb_veut', libelleSuite:"« Qu'est-ce que vous voulez ? »" },
+
+cb_quarante:{
+  qui:'caleb',
+  lieu:() => `Karlsberg · ${dateA2()}`,
+  titre:"Quarante hommes",
+  texte:[
+    "Ils arrivent une saison plus tard, sans prévenir, un matin : quarante hommes en ordre, avec un sergent, des outils, et pas une bannière.",
+    { sobre:"Il n'y a pas de lettre.",
+      intense:"Le sergent n'a pas de lettre. Il a un ordre verbal de trois phrases, qu'il récite exactement comme on le lui a donné, et il n'en sait pas plus que vous.",
+      extreme:"Le sergent n'a pas de lettre — c'est la première chose que vous vérifiez et c'est la première chose qui cloche. Il a un ordre verbal en trois phrases, qu'il récite mot pour mot, du ton d'un homme qui l'a répété quatre fois sur la route pour ne pas se tromper, et qui n'en sait strictement pas plus que vous sur ce que ça veut dire." },
+    "« Messire de Fort-aux-Princes met quarante hommes à la disposition de Karlsberg. »",
+    "« Pour quelle durée ? »",
+    "« Il n'a pas dit. »",
+    "« À quelles conditions ? »",
+    "« Il a dit : sans conditions. »",
+    "§ Quarante hommes sans bannière, sans lettre et sans conditions.",
+    { sobre:"C'est le plus beau cadeau de l'acte et c'est un piège parfait.",
+      intense:"C'est le plus beau cadeau qu'on vous ait fait, et c'est un piège parfait — parfait au sens technique : il n'y a aucun crochet, aucun fil, rien à refuser précisément.",
+      extreme:"C'est le plus beau cadeau qu'on vous ait fait de toute votre vie, et c'est un piège parfait au sens technique du terme : il n'y a aucun crochet, aucun fil, aucune clause, rien de précis à refuser. Quarante hommes payés par un autre, qui bâtissent vos murs et qui, si un jour on leur demande à qui ils obéissent, répondront la vérité — et la vérité n'est pas *à Karlsberg*." },
+    "Ils travaillent bien. Ils travaillent même très bien : ce sont des gens de Fort-aux-Princes, habitués aux chantiers, encadrés, réguliers.",
+    "En deux saisons, ils montent plus de mur que les vôtres en un an.",
+  ],
+  choix:[
+    { t:"Les garder",
+      detail:"quarante bras · et une garnison qui n'est pas à vous dans vos propres murs",
+      risque:"définitif", ferme:"Ferme : la certitude de savoir à qui obéissent vos murs",
+      definitif:true, va:'cb_garder' },
+
+    { t:"Les garder, et les payer",
+      detail:"les prendre à votre solde · ce qui coûte, et ce qui tranche la question",
+      requisOr:500, risque:"calculé", definitif:true, va:'cb_payer' },
+
+    { t:"Les renvoyer",
+      detail:"quarante hommes qui repartent · et un homme qui note",
+      risque:"définitif", ferme:"Ferme : deux saisons de mur", definitif:true, va:'cb_renvoyer' },
+  ],
+},
+
+cb_garder:{
+  qui:'caleb',
+  titre:"Ce que vous ne saurez jamais",
+  texte:[
+    "Vous les gardez.",
+    { sobre:"Ils restent trois ans.",
+      intense:"Ils restent trois ans. Ils montent l'enceinte, une partie du donjon, la moitié du bourg. Douze d'entre eux se marient dans la vallée.",
+      extreme:"Ils restent trois ans. Ils montent l'enceinte basse en entier, la moitié du donjon, une bonne part du bourg. Douze d'entre eux se marient dans la vallée, quatre y font des enfants, et le sergent — qui s'appelle Ambroise, qui a quarante-trois ans et une hanche qui le fait boiter par temps humide — finit par appeler Karlsberg *chez nous* sans y penser, un soir de Nivôse, devant témoins." },
+    "Vous ne saurez jamais s'ils sont à vous.",
+    "§ C'est la seule chose que Caleb ait vraiment achetée : pas les hommes, le doute.",
+    "Il ne les rappellera pas. Il n'écrira pas. Il ne fera absolument rien, pendant des années, et vous regarderez quarante hommes monter vos murs en vous demandant chaque matin ce qui se passerait s'il écrivait.",
+    "« Ils sont à nous », dit Ambroise, la seule fois où vous le lui demandez.",
+    "« Vous en êtes sûr ? »",
+    "« Non », dit-il, et il retourne à son mur, parce que c'est un honnête homme et qu'il ne va pas mentir sur une chose pareille.",
+  ],
+  effets:{ flags:['cb_garde','a2_caleb_quarante','a2_garnison','a2_caleb_dedans'],
+           faire:() => { const C = CHANTIER(); C.bras += 6; C.pierre += 4;
+                         retenir('caleb', "il a gardé mes quarante hommes, ce qui vaut mieux qu'un contrat"); },
+           exploit:{ eclat:6, temoins:'quelques', quoi:"quarante hommes de Fort-aux-Princes montent vos murs" },
+           marque:"Quarante hommes gardés. Vous ne saurez jamais s'ils sont à vous, et c'est ça qu'il a acheté.",
+           court:"Quarante hommes" },
+  plusTard:"Il n'écrira pas. C'est le fait qu'il pourrait écrire qui est l'instrument.",
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+cb_payer:{
+  qui:'caleb',
+  titre:"Cinq cents couronnes pour trancher",
+  texte:[
+    "Vous les prenez à votre solde. Cinq cents couronnes l'année, versées devant le sergent, avec un rôle nominatif signé des quarante.",
+    { sobre:"Trente-quatre signent. Six repartent.",
+      intense:"Trente-quatre signent. Six repartent vers Fort-aux-Princes, sans drame, et l'un d'eux vous salue en partant — ce qui est correct, et ce qui vous apprend qu'ils étaient six.",
+      extreme:"Trente-quatre signent le rôle. Six repartent vers Fort-aux-Princes le lendemain matin, sans drame, sans un mot de trop, et l'un des six vous salue correctement en montant à cheval. Vous venez d'apprendre le chiffre exact : il y en avait six. Six sur quarante. C'est peu, c'est beaucoup, et surtout c'est un chiffre que vous n'auriez jamais connu si vous ne les aviez pas payés." },
+    "§ Trente-quatre hommes qui sont à vous, sans ambiguïté, parce qu'on peut lire leur nom sur un rôle.",
+    "Caleb ne commente pas. Sa réponse arrive quatre mois plus tard, en une ligne, dans une lettre qui traite d'autre chose :",
+    "*Vous avez payé pour savoir. C'est cher et c'est bien vu.*",
+  ],
+  effets:{ or:-500, flags:['cb_paye','a2_caleb_quarante','a2_garnison'],
+           faire:() => { const C = CHANTIER(); C.bras += 5;
+                         retenir('caleb', "il a payé cinq cents couronnes pour lever un doute, ce que je n'avais pas prévu"); },
+           exploit:{ eclat:8, temoins:'quelques', quoi:"trente-quatre hommes sur un rôle nominatif" },
+           marque:"Trente-quatre signent, six repartent. « Vous avez payé pour savoir. C'est cher et c'est bien vu. »",
+           court:"Six sur quarante" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+cb_renvoyer:{
+  qui:'caleb',
+  titre:"Quarante hommes qui repartent",
+  texte:[
+    "Vous les renvoyez le jour même, avec des vivres pour la route et une lettre de remerciement que le sergent transmettra.",
+    { sobre:"Ambroise ne comprend pas.",
+      intense:"Ambroise ne comprend pas et ne cherche pas à comprendre : c'est un sergent, on lui a dit d'aller, on lui dit de revenir. Ce sont ses hommes qui prennent mal la chose.",
+      extreme:"Ambroise ne comprend pas et ne cherche pas à comprendre — c'est un sergent, on lui a dit d'aller, on lui dit de revenir, il notera la date. Ce sont ses hommes qui prennent mal la chose, et il faut voir pourquoi : ils sont arrivés à un chantier où il y avait manifestement du travail pour eux, ils ont regardé le mur pendant une matinée en attendant, et on les renvoie sans qu'ils aient posé une pierre. Un homme de chantier n'a pas de mot pour ça." },
+    "§ Vous venez de refuser deux saisons de mur pour une raison que vous ne pouvez expliquer à personne.",
+    "La réponse de Caleb met trois mois et tient en une ligne :",
+    "*Vous avez refusé quarante hommes gratuits. Je note.*",
+    "C'est tout. Il ne dit pas s'il approuve. Il n'approuve ni ne désapprouve : il note, et ce qu'il a noté est que vous préférez perdre du temps à devoir quelque chose.",
+    "Vous êtes désormais, dans son état des maisons, dans la colonne de ceux qui ne s'achètent pas.",
+    { sobre:"Ce n'est pas forcément une bonne colonne.",
+      intense:"Ce n'est pas forcément une bonne colonne. Les gens qui ne s'achètent pas se règlent autrement, et il connaît les autres façons.",
+      extreme:"Ce n'est pas forcément une bonne colonne où figurer. Les gens qui s'achètent se gèrent avec de l'argent, ce qui est le moyen le moins coûteux, le moins bruyant et le moins définitif dont dispose un homme comme lui. Ceux qui ne s'achètent pas se règlent autrement. Il connaît les autres façons ; il ne les aime pas ; il les emploie." },
+  ],
+  effets:{ flags:['cb_renvoye','a2_caleb_note','a2_incorruptible'],
+           faire:() => retenir('caleb', "il a renvoyé quarante hommes gratuits — il est dans l'autre colonne"),
+           exploit:{ eclat:5, temoins:'quelques', quoi:"quarante hommes renvoyés avec des vivres et une lettre" },
+           marque:"« Vous avez refusé quarante hommes gratuits. Je note. » Vous êtes dans la colonne de ceux qui ne s'achètent pas.",
+           court:"Je note" },
+  plusTard:"Ceux qui ne s'achètent pas se règlent autrement. Il connaît les autres façons.",
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+/* ══ LUCIUS — CELUI QUI LÉGITIME ══════════════════════════════════════════ */
+
+ls_legitimation:{
+  qui:'lucius',
+  lieu:() => `Astrah · la salle des rôles · ${dateA2()}`,
+  titre:"Ce qu'un trône vide peut donner",
+  texte:[
+    "La salle des rôles d'Astrah contient quatre mille registres et deux personnes.",
+    { sobre:"Lucius vous y reçoit seul.",
+      intense:"Lucius Furius Augustus vous y reçoit seul, sans secrétaire, ce qu'il ne fait avec personne — et c'est le premier terme de la négociation, offert avant qu'elle commence.",
+      extreme:"Lucius Furius Augustus vous reçoit seul dans la salle des rôles, sans secrétaire, sans témoin, ce qu'il ne fait avec personne et dont trois provinces parleraient si elles le savaient. C'est le premier terme de la négociation et il vous l'offre avant qu'elle commence : *je vous parle sans témoins, donc je vous parle vraiment, donc vous me devez d'écouter*. C'est très bien joué et il ne s'en cache pas une seconde." },
+    "« Votre relèvement de titre est enregistré au bailliage de Chastel », dit-il. « Volume cent-quarante-trois. »",
+    "« Vous l'avez lu. »",
+    "« J'en ai une copie. » Il pose la main sur un registre beaucoup plus vieux. « Savez-vous ce qu'est un relèvement de bailliage, messire ? C'est une inscription de province. Elle vaut ce que vaut la province, et une province, ça se remplace. »",
+    "§ Il ouvre le vieux registre. C'est un rôle royal d'Astrah, tenu jusqu'à quarante ans en arrière, puis rien.",
+    "« Ceci vaut autre chose. Une maison inscrite ici n'est pas relevée par une province : elle est **reconnue par une couronne**. Aucun bailliage au monde ne peut rayer une ligne d'un rôle royal. Ils n'en ont pas le pouvoir — c'est une question de hiérarchie des actes, ça se plaide en une demi-heure, et ça a été plaidé onze fois. »",
+    "« Il n'y a pas de roi à Astrah. »",
+    { sobre:"« Pas encore. »",
+      intense:"« Pas encore », dit-il, et c'est la première fois qu'il le dit tout haut à quelqu'un qui n'est pas de sa maison.",
+      extreme:"« Pas encore », dit-il — et il le dit très simplement, sans emphase, en refermant le registre. C'est la première fois qu'il prononce ces deux mots devant quelqu'un qui n'est pas de sa maison, et il vient de mettre sa vie entre vos mains, ce dont vous prenez conscience avec un temps de retard désagréable." },
+    "« Vous me proposez d'inscrire Karlsberg à un rôle royal qui n'a pas de roi. »",
+    "« Je vous propose d'être inscrit le jour où il en aura un. Première page, première ligne, à la reprise du rôle. » Il vous regarde. « La première maison reconnue par la couronne restaurée d'Astrah. Ce n'est pas une faveur, messire. C'est une place dans l'histoire, et elle est libre. »",
+    "« Et ce que vous voulez ? »",
+    "« Que vous soyez là. »",
+  ],
+  choix:[
+    { t:"« Là comment ? »",
+      detail:"faire préciser · un homme comme lui a déjà tout précisé",
+      risque:"prudent", va:'ls_prix' },
+    { t:"« Non. Une couronne qu'on se donne n'est pas une couronne. »",
+      detail:"le dire dans la salle des rôles, sans témoins · à un homme qui vient de s'exposer",
+      risque:"définitif", ferme:"Ferme : le rôle royal, et la protection qu'il vaut",
+      va:'ls_refus' },
+    { t:"« Pourquoi moi ? »",
+      detail:"il y a onze maisons rayées et vingt-cinq maisons vivantes · pourquoi la plus faible",
+      risque:"calculé", va:'ls_pourquoi' },
+  ],
+},
+
+ls_pourquoi:{
+  qui:'lucius',
+  titre:"Pourquoi vous",
+  texte:[
+    "« Pourquoi moi ? Il y a vingt-cinq maisons dans cette province et vingt-quatre sont plus fortes que la mienne. »",
+    { sobre:"« C'est exactement pour ça. »",
+      intense:"« C'est exactement pour ça, et je vais vous le dire crûment parce que vous n'êtes pas idiot et que la flatterie vous ferait perdre du temps. »",
+      extreme:"« C'est exactement pour ça, et je vais vous le dire crûment, parce que vous n'êtes pas idiot, que la flatterie vous ferait perdre trois quarts d'heure, et que j'ai constaté qu'avec les hommes de votre sorte la brutalité est en réalité la forme de respect la moins coûteuse. »" },
+    "Il compte, comme Caleb, mais sur les registres au lieu des doigts.",
+    "**Une.** « Une maison forte qui me reconnaît roi me fait un rival. Une maison faible me fait un précédent. J'ai besoin d'un précédent, pas d'un pair. »",
+    "**Deux.** « Une maison rayée qui se relève est le meilleur argument possible pour une couronne qui se relève. Vous êtes ma démonstration. Vingt ans de ronces, et un donjon. »",
+    "**Trois.** « Et vous êtes un Paria. »",
+    "§ Il le dit sans changer de ton, et il n'y a pas de question dans sa voix.",
+    "« Je n'ai pas dit ça. »",
+    "« Non. Moi si. » Il écarte les mains. « Je m'en moque absolument, ce qui est ma quatrième raison. Les vingt-quatre autres maisons ne s'en moquent pas. Le jour où ça se saura — et ça se saura, messire, un donjon de quatre étages ne reste pas anonyme — vous n'aurez plus qu'un seul allié possible dans quatre provinces, et ce sera celui à qui ça ne fait rien. »",
+    "« Ça ne vous fait rien. »",
+    { sobre:"« Non. Astrah a eu trois rois de l'Onde. »",
+      intense:"« Non. Astrah a eu trois rois de l'Onde en quatre cents ans, et le dernier est celui dont j'ai fait relever la tombe l'an dernier, à mes frais, avec beaucoup de monde et beaucoup de discours. » Il sourit très légèrement. « Personne n'a fait le rapprochement. »",
+      extreme:"« Non. Astrah a eu trois rois de l'Onde en quatre cents ans. Le dernier s'appelait Ceoris et c'est sa tombe que j'ai fait relever l'année dernière, à mes frais, avec beaucoup de monde, beaucoup de discours et un chapelain de province qui a lu un texte que j'avais écrit. » Il sourit, très légèrement, pour la première fois de l'entretien. « Personne n'a fait le rapprochement. Trois cents personnes présentes, quatre chroniqueurs, et pas un seul. J'ai trouvé ça extrêmement instructif sur ce que les gens regardent. »" },
+  ],
+  effets:{ flags:['ls_pourquoi','a2_lucius_sait','a2_lucius_vu'], suspicion:10,
+           faire:() => retenir('lucius', "il sait que je sais, et il ne s'est pas levé pour partir"),
+           marque:"Lucius sait ce que vous êtes et s'en moque. Astrah a eu trois rois de l'Onde ; il a fait relever la tombe du dernier.",
+           court:"Ceoris" },
+  suite:'ls_prix', libelleSuite:"« Là comment ? »" },
+
+ls_prix:{
+  qui:'lucius',
+  titre:"Le prix",
+  texte:[
+    "« Là comment ? »",
+    "« Debout, à ma droite, le jour du couronnement, avec vos couleurs. »",
+    "« C'est tout ? »",
+    { sobre:"« C'est tout, et c'est énorme. »",
+      intense:"« C'est tout, et vous ne mesurez pas ce que c'est. Une couronne ne se prend pas : elle se reconnaît. Il faut quelqu'un qui soit là et qui ne parte pas. »",
+      extreme:"« C'est tout, et vous ne mesurez visiblement pas ce que c'est, ce qui est normal — personne ne le mesure avant d'avoir vu une salle vide. Une couronne ne se prend pas, messire. Elle ne se conquiert pas non plus, on raconte n'importe quoi là-dessus depuis quatre siècles. Elle se **reconnaît**. Il faut qu'il y ait des gens dans la salle, debout, avec leurs couleurs, qui ne sortent pas. C'est tout ce qui distingue un roi d'un homme avec un cercle de métal sur la tête, et c'est extraordinairement difficile à obtenir. »" },
+    "« Combien en avez-vous ? »",
+    "« Trois maisons du sud, qui ont signé pour des raisons de grenier et qui repartiront si ça tourne. » Il ne se ment pas à lui-même, ce qui est sa qualité et son danger. « Il m'en faut sept. »",
+    "§ Il y a une deuxième partie et il l'annonce sans transition, ce qui est sa manière de dire qu'elle n'est pas négociable.",
+    "« Et cent hommes pendant deux saisons, l'année du couronnement. Pas pour se battre : pour tenir les portes d'Astrah pendant que ça se fait. Si la cérémonie est interrompue, elle n'a pas lieu, et si elle n'a pas lieu une fois, elle n'a lieu jamais. »",
+    "« Cent hommes pendant deux saisons, c'est mon chantier arrêté un an. »",
+    "« Oui », dit-il. « Et une ligne à la première page d'un rôle royal, que ni Chastel, ni Mont-Draken, ni Fort-aux-Princes ne pourront jamais rayer. Vous mettez un an de pierre en face d'un titre inattaquable. C'est un très bon prix et vous le savez. »",
+  ],
+  choix:[
+    { t:"Accepter. Être là, avec cent hommes.",
+      detail:"un an de chantier arrêté · et la première ligne d'un rôle royal",
+      risque:"définitif", ferme:"Ferme : la neutralité de Karlsberg dans la question d'Astrah",
+      definitif:true, va:'ls_couronnement' },
+
+    { t:"Être là, sans les cent hommes",
+      detail:"la reconnaissance sans la garde · voir si le symbole lui suffit",
+      risque:"calculé", va:'ls_symbole' },
+
+    { t:"« Faites-vous couronner. Je viendrai après. »",
+      detail:"reconnaître un roi qui l'est déjà ne coûte rien · et ne vaut rien",
+      risque:"calculé", va:'ls_apres' },
+
+    { t:"Refuser",
+      detail:"une couronne qu'on se donne n'est pas une couronne",
+      risque:"définitif", ferme:"Ferme : le rôle royal, et la protection qu'il vaut",
+      definitif:true, va:'ls_refus' },
+  ],
+},
+
+ls_couronnement:{
+  qui:'lucius',
+  lieu:"Astrah · la salle du trône · deux ans plus tard",
+  titre:"Debout, à sa droite",
+  texte:[
+    "Cent hommes pendant deux saisons. Le chantier de Karlsberg s'arrête onze mois ; l'enceinte reste ouverte sur quarante pieds tout un hiver.",
+    { sobre:"Le couronnement a lieu un mardi.",
+      intense:"Le couronnement a lieu un mardi de Ventôse, dans une salle qui n'avait pas servi depuis quarante ans et qu'il a fallu chauffer trois jours d'avance pour que la pierre ne suinte pas.",
+      extreme:"Le couronnement a lieu un mardi de Ventôse, dans une salle qui n'avait pas servi depuis quarante ans. Il a fallu la chauffer trois jours d'avance pour que la pierre cesse de suinter, faire recoudre des tentures qui tombaient en poussière, et trouver quelqu'un qui sache encore l'ordre des choses — ce fut un vieil homme de quatre-vingt-un ans, ancien huissier du dernier roi, qu'on est allé chercher dans un hospice et qui a pleuré du début à la fin sans que personne ose le lui reprocher." },
+    "Il y a sept maisons. Six ont signé ; la septième est la vôtre et c'est la seule qui n'ait rien à y gagner de matériel.",
+    "§ Vos cent hommes tiennent les quatre portes d'Astrah pendant onze semaines. Il ne se passe rien du tout, ce qui est exactement le résultat recherché.",
+    "Vous êtes debout à sa droite. Vous y restez trois heures. Personne ne sort.",
+    { sobre:"Puis on rouvre le rôle.",
+      intense:"Puis on rouvre le rôle royal d'Astrah, fermé depuis quarante ans, et le vieil huissier de quatre-vingt-un ans écrit la première ligne d'une main qui tremble beaucoup.",
+      extreme:"Puis on rouvre le rôle royal d'Astrah — quatre mille pages, fermé sur une ligne inachevée depuis quarante ans — et c'est le vieil huissier de quatre-vingt-un ans qui écrit, parce qu'il est le seul vivant à avoir tenu cette plume-là. Sa main tremble énormément. Ça prend quatre minutes pendant lesquelles trois cents personnes ne font aucun bruit, et l'écriture est mauvaise, et personne n'a jamais rien vu de plus solennel." },
+    "**Maison de Karlsberg. Marches Grises. Reconnue.**",
+    "§ Un seul mot dans la troisième colonne, et aucun bailliage de ces provinces n'a le pouvoir de le rayer.",
+    "Le soir, Lucius vous trouve seul.",
+    "« Vous n'aviez rien à y gagner », dit-il.",
+    "« Une ligne. »",
+    "« Une ligne que je vous aurais donnée de toute façon si vous n'étiez pas venu, parce que j'avais besoin d'un précédent et que vous restiez le meilleur. » Il regarde la salle qui se vide. « Vous êtes venu quand même, avec cent hommes, en arrêtant votre mur. Je ne l'oublierai pas, et je suis un homme qui n'oublie rien : c'est ma seule qualité et c'est celle qui fera de moi un mauvais roi. »",
+  ],
+  effets:{ flags:['ls_couronne','a2_lucius_couronne','a2_lucius_aide','a2_role_royal','a2_titre_inattaquable'],
+           suspicion:14,
+           faire:() => { const C = CHANTIER(); C.bras = Math.max(0, C.bras - 8); C.grain = Math.max(0, C.grain - 6);
+                         A2().crises.astrah = 4;
+                         retenir('lucius', "il est venu avec cent hommes en arrêtant son propre chantier");
+                         retenir('caleb', "Karlsberg est au rôle royal d'Astrah, ce que je ne peux pas acheter");
+                         retenir('charles', "il a couronné un homme, ce qui le met dans une autre catégorie"); },
+           exploit:{ eclat:30, temoins:'province', quoi:"la première maison reconnue par la couronne restaurée d'Astrah" },
+           marque:"« Maison de Karlsberg. Marches Grises. Reconnue. » Première ligne du rôle royal rouvert.",
+           court:"Reconnue" },
+  plusTard:"Astrah a un roi et trois provinces vont passer dix ans à discuter de la nuance, les armes à la main. Vous étiez debout à sa droite.",
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+ls_symbole:{
+  qui:'lucius',
+  titre:"Sans les cent hommes",
+  texte:[
+    "« Je serai là. Je ne vous donnerai pas cent hommes. »",
+    { sobre:"Il réfléchit longtemps.",
+      intense:"Il réfléchit longtemps, et vous le voyez peser la chose exactement comme un homme pèse une chose : ce qu'il perd, ce qu'il garde, ce que ça dit.",
+      extreme:"Il réfléchit longtemps, debout devant quatre mille registres, et vous le voyez peser la chose comme un homme pèse réellement une chose — pas la mise en scène de la réflexion, la réflexion : ce qu'il perd en sécurité, ce qu'il garde en symbole, et surtout ce que ça dira de lui qu'une maison ait accepté d'être là sans accepter de le garder." },
+    "« Vous savez ce que ça signifie, si on l'apprend ? »",
+    "« Que je vous reconnais sans vous défendre. »",
+    "« Que vous me reconnaissez **et que vous doutez**. » Il hoche la tête. « C'est ce qu'on lira. Et honnêtement, à votre place, je ferais pareil : un an de chantier pour un homme qui n'est pas encore roi, c'est une mise dangereuse. »",
+    "« Alors ? »",
+    "« Alors j'accepte, parce que six maisons qui signent et une qui vient sans rien devoir, ça se raconte mieux que sept maisons achetées. » Il tend la main. « Vous me coûtez cent hommes et vous me rapportez une phrase. Je prends. »",
+    "§ Il vous inscrit au rôle. Pas à la première ligne : à la quatrième.",
+    "Il ne le dit pas et il ne s'en excuse pas. C'est exact, c'est mérité, et ça vaut encore infiniment plus qu'un volume de bailliage.",
+  ],
+  effets:{ flags:['ls_symbole','a2_lucius_couronne','a2_role_royal'], suspicion:8,
+           faire:() => { A2().crises.astrah = Math.min(4, (A2().crises.astrah || 0) + 1);
+                         retenir('lucius', "il est venu sans ses hommes, ce qui était honnête et un peu vexant"); },
+           exploit:{ eclat:16, temoins:'province', quoi:"quatrième ligne du rôle royal d'Astrah" },
+           marque:"Quatrième ligne du rôle royal. Il ne l'a pas commenté et c'était mérité.",
+           court:"La quatrième ligne" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+ls_apres:{
+  qui:'lucius',
+  titre:"Après",
+  texte:[
+    "« Faites-vous couronner. Je viendrai après. »",
+    { sobre:"C'est la seule réponse qui l'atteint.",
+      intense:"C'est, de toutes les réponses possibles, la seule qui l'atteigne — et vous le voyez, parce qu'il met une seconde de trop à répondre et qu'il n'en met jamais.",
+      extreme:"C'est, de toutes les réponses possibles, la seule qui l'atteigne réellement. Vous le voyez à une chose et une seule : il met une seconde de trop à répondre, et cet homme n'en met jamais. Le refus l'aurait laissé froid — il en a eu dix-huit. L'acceptation lui aurait coûté une dette. Ceci ne lui coûte rien, ne lui donne rien, et le renvoie exactement à ce qu'il craint le plus." },
+    "« Vous venez de dire que vous me reconnaîtrez quand je n'aurai plus besoin d'être reconnu. »",
+    "« Oui. »",
+    "« C'est-à-dire jamais, puisque tout le problème est là. »",
+    "« Oui. »",
+    "Silence dans la salle des rôles.",
+    "« Bien », dit-il enfin. « Vous ne me devez rien, je ne vous dois rien, et vous m'avez fait perdre une matinée en me disant la seule chose vraie que j'entendrai cette année. »",
+    "§ Il ne vous en veut pas. Il vous range — dans quelle colonne, on ne le saura que plus tard.",
+    "« Revenez quand j'aurai la couronne, messire. Je vous inscrirai quand même, à une ligne moins bonne, et vous saurez pourquoi. »",
+  ],
+  effets:{ flags:['ls_apres','a2_lucius_vu','a2_lucius_froid'],
+           faire:() => retenir('lucius', "il m'a dit la seule chose vraie que j'entendrai cette année et il ne me doit rien"),
+           exploit:{ eclat:4, temoins:'aucun', quoi:"vous avez dit à un futur roi ce que personne ne lui dit" },
+           marque:"« Vous me reconnaîtrez quand je n'aurai plus besoin de l'être. » Il a mis une seconde de trop à répondre.",
+           court:"Une seconde de trop" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+ls_refus:{
+  qui:'lucius',
+  titre:"Sans témoins",
+  texte:[
+    "« Non. Une couronne qu'on se donne n'est pas une couronne. »",
+    { sobre:"Il encaisse sans broncher.",
+      intense:"Il encaisse sans broncher. Il vient de vous dire, sans témoins, qu'il compte se faire roi ; vous venez de lui répondre non, sans témoins ; et il n'y a strictement rien qu'il puisse faire de ça.",
+      extreme:"Il encaisse sans broncher, et c'est le moment le plus dangereux de tout l'entretien. Il vient de vous dire, seul à seul et sans témoin, qu'il compte ceindre une couronne à laquelle il n'a pas droit. Vous venez de lui répondre non. Il n'y a strictement rien qu'il puisse faire de cette situation, sauf une chose, et vous êtes tous les deux en train de penser à cette chose en même temps, dans une salle de quatre mille registres où personne ne vous a vus entrer." },
+    "Il fait deux pas et ouvre la porte lui-même, en grand.",
+    "« Sortez par la cour d'honneur », dit-il assez fort pour que le couloir l'entende. « Et transmettez mes respects à votre maison. »",
+    "§ Il vient de vous faire voir sortant de chez lui par onze personnes.",
+    "Ce n'est pas une menace : c'est le contraire. Il vient de se rendre impossible de vous faire disparaître, publiquement, en trois secondes, et sans rien demander en échange.",
+    "Sur le seuil : « Vous avez raison, d'ailleurs. Une couronne qu'on se donne n'en est pas une. » Il hausse les épaules. « C'est pour ça qu'il me faut sept maisons. Je regrette que la vôtre n'en soit pas. »",
+  ],
+  effets:{ flags:['ls_refuse','a2_lucius_refuse','a2_lucius_vu'],
+           faire:() => retenir('lucius', "il a refusé en face, sans témoins, et je l'ai fait sortir par la cour d'honneur"),
+           exploit:{ eclat:6, temoins:'quelques', quoi:"sorti par la cour d'honneur d'Astrah" },
+           marque:"Vous avez refusé. Il vous a fait sortir par la cour d'honneur devant onze témoins, pour rien.",
+           court:"La cour d'honneur" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+/* ══ CHARLES — CELUI QUI VÉRIFIE ══════════════════════════════════════════ */
+
+cd_commission:{
+  qui:'charles',
+  lieu:() => `Mont-Draken · la cour d'exercice · ${dateA2()}`,
+  titre:"La commission",
+  texte:[
+    "Mont-Draken n'est pas un château : c'est une école. Quatre bâtiments bas autour d'une cour de terre battue, deux cents élèves, et un mur d'ossements catalogués.",
+    { sobre:"Charles de Mont-Draken a obtenu sa commission.",
+      intense:"Charles de Mont-Draken a obtenu du conseil de province une commission sur les manifestations de l'Onde. Elle lui a été accordée à onze voix contre quatre.",
+      extreme:"Charles de Mont-Draken a obtenu du conseil de province une commission d'enquête sur les manifestations de l'Onde en territoire humain. Onze voix contre quatre. Il l'avait demandée trois fois en huit ans ; ce qui a changé, c'est qu'il y a désormais une maison neuve dans les Marches Grises dont on ne sait pas d'où elle sort, et que onze conseillers ont trouvé la coïncidence intéressante." },
+    "Il vous reçoit dans la cour, debout, pendant que deux cents élèves travaillent à quarante pas.",
+    "« Vous savez ce qu'est cette commission ? »",
+    "« Un dossier sur moi. »",
+    { sobre:"« Non. »",
+      intense:"« Non. » Il a l'air agacé. « C'est un registre. Trente ans que je réclame un registre. »",
+      extreme:"« Non », dit-il, et il a l'air sincèrement agacé, ce qui vous surprend. « Ce n'est pas un dossier sur vous, messire, et si c'était ça je vous l'aurais dit — je ne mens pas, c'est bien connu, c'est même la seule chose qu'on trouve à me reprocher. C'est un **registre**. Trente ans que je le réclame à quatre conseils successifs. »" },
+    "« Un registre de quoi ? »",
+    "« De ce qui arrive. » Il désigne le mur d'ossements. « Trois cent onze pièces, messire. Chacune étiquetée : ce que c'était, où, quand, combien de morts, combien de mes élèves. Trois cent onze. Vous savez combien de manifestations de l'Onde sont étiquetées quelque part dans ces provinces ? »",
+    "« Aucune. »",
+    "« Aucune. Il y en a eu quatre-vingts en trente ans, j'en ai la trace, et pas une n'est écrite nulle part parce que chaque fois quelqu'un a préféré étouffer. » Il se tourne vers vous. « Résultat : quand un enfant de onze ans fait tomber un mur sans le vouloir dans un village de la marche, personne ne sait quoi faire, et le village décide seul. Vous savez ce que décide un village ? »",
+    "§ Vous savez ce que décide un village.",
+  ],
+  choix:[
+    { t:"« Et si le registre existait ? »",
+      detail:"lui demander ce qu'il en ferait · c'est la seule question qui compte",
+      risque:"calculé", va:'cd_registre' },
+    { t:"« Vous voulez me faire inscrire. »",
+      detail:"aller droit au point · il est venu pour ça",
+      risque:"calculé", va:'cd_inscrire' },
+    { t:"« Quatre-vingts en trente ans. Combien en ont réchappé ? »",
+      detail:"la question qu'un homme qui a été cet enfant-là poserait",
+      risque:"dangereux", va:'cd_rechappe' },
+  ],
+},
+
+cd_registre:{
+  qui:'charles',
+  titre:"Ce qu'il en ferait",
+  texte:[
+    "« Et si le registre existait ? Qu'est-ce que vous en feriez ? »",
+    { sobre:"« Trois choses. »",
+      intense:"« Trois choses, et je les ai écrites il y a onze ans dans un mémoire que personne n'a lu. »",
+      extreme:"« Trois choses. Je les ai écrites il y a onze ans dans un mémoire de quarante-deux pages que j'ai fait porter à quatre conseils et que personne n'a jamais lu — j'ai vérifié : les exemplaires sont revenus non coupés. »" },
+    "**Une.** « Une déclaration obligatoire, sans peine attachée. On déclare, il ne se passe rien. C'est tout le mémoire : *il ne se passe rien*. Un registre où l'inscription coûte quelque chose est un registre vide. »",
+    "**Deux.** « Une école. Pas ici — ailleurs, tenue par des gens qui en ont. On ne forme pas un enfant à ne pas faire tomber les murs en lui expliquant que les murs ne doivent pas tomber. »",
+    "**Trois.** « Et l'interdiction, sous peine capitale, de régler un cas par le village. »",
+    "§ Vous mettez un moment à comprendre ce que vous venez d'entendre.",
+    "« Vous voulez protéger les enfants de l'Onde. »",
+    { sobre:"« Je veux protéger les hommes. »",
+      intense:"« Je veux protéger les hommes de ce qui n'en est pas, et je n'ai jamais dit autre chose. » Il vous regarde. « Simplement, un enfant de onze ans qui fait tomber un mur en est un. C'est même toute la difficulté de ma vie. »",
+      extreme:"« Je veux protéger les hommes de ce qui n'en est pas. Je n'ai jamais dit autre chose, je ne le dirai jamais autrement, et trois cent onze pièces sur ce mur disent que j'ai raison de le vouloir. » Il vous regarde longuement. « Simplement : un enfant de onze ans qui fait tomber un mur sans le vouloir en est un. Un homme de trente ans qui pousse quatre adversaires à distance dans une crypte en est un aussi, probablement. C'est toute la difficulté de ma vie, messire, et je la traîne depuis trente ans sans que personne ne m'ait jamais aidé à la porter, parce que les deux camps trouvent plus confortable que je sois un boucher. »" },
+    "« Combien d'enfants avez-vous fait pendre ? »",
+    "« Deux. » Il ne cille pas. « Il y a dix-neuf et vingt-deux ans. Les deux étaient au-delà de ce que je pouvais faire et je le pense encore. Je me trompe peut-être sur le second. »",
+  ],
+  effets:{ flags:['cd_registre','a2_charles_respect','a2_charles_vu'],
+           faire:() => retenir('charles', "il m'a demandé ce que je ferais du registre, ce que personne n'a demandé en trente ans"),
+           marque:"Déclaration sans peine, une école, et l'interdiction de régler un cas par le village. Il a fait pendre deux enfants et doute du second.",
+           court:"Le mémoire" },
+  suite:'cd_epreuve', libelleSuite:"Il propose autre chose" },
+
+cd_inscrire:{
+  qui:'charles',
+  titre:"Le premier nom",
+  texte:[
+    "« Vous voulez me faire inscrire. »",
+    "« Oui. »",
+    "Pas d'hésitation, pas d'enrobage.",
+    { sobre:"« Vous ne le nierez pas ? »",
+      intense:"« Vous ne prenez même pas la peine de le nier ? »\n\n« Nier quoi ? Je vous demande de vous inscrire à un registre. Si vous n'avez rien à inscrire, la démarche est ridicule et vous rirez. »",
+      extreme:"« Vous ne prenez même pas la peine de nier ce que ça suppose ? »\n\n« Nier quoi ? » Il paraît sincèrement dérouté. « Je vous demande de vous inscrire à un registre de déclaration. Si vous n'avez rien à y déclarer, la démarche est ridicule, vous en rirez avec moi et nous parlerons d'autre chose — j'ai deux vallées à tenir et vous êtes en travers de l'une des deux, ce qui nous fera un sujet. Je ne suis pas en train de vous tendre un piège, messire. Je n'en ai jamais tendu un seul de ma vie et c'est la raison pour laquelle je n'ai obtenu ma commission qu'au bout de huit ans. »" },
+    "« Le premier nom d'un registre est une cible. »",
+    "« Le premier nom d'un registre est celui dont on se sert pour convaincre le deuxième. » Il croise les bras. « Oui, c'est dangereux. Oui, je vous le demande quand même, parce que j'ai quatre-vingts cas en trente ans, aucune inscription, et que quelqu'un doit être le premier ou il n'y en aura jamais. »",
+    "§ Il ajoute, et c'est ce qui rend l'homme difficile à détester :",
+    "« Si vous refusez, il ne se passera rien. Je n'ai pas le pouvoir de vous contraindre et je ne le demanderai pas : un registre obtenu par contrainte est un registre de dénonciations, et j'en ai vu un, une fois, dans le sud. Je préfère mourir sans mon registre. »",
+  ],
+  effets:{ flags:['cd_demande','a2_charles_vu'],
+           marque:"Il vous demande d'être le premier nom de son registre. Si vous refusez, il ne se passera rien.",
+           court:"Le premier nom" },
+  choix:[
+    { t:"S'inscrire",
+      detail:"le premier nom d'un registre de province · en toutes lettres, volontairement",
+      risque:"définitif", ferme:"Ferme : le fait qu'on ne sache pas",
+      definitif:true, va:'cd_inscrit' },
+    { t:"Refuser",
+      detail:"il a dit qu'il ne se passerait rien · et il ne ment pas",
+      risque:"calculé", va:'cd_refus' },
+    { t:"« Inscrivez-en un autre d'abord. »",
+      detail:"proposer quelqu'un · il y a quarante et une personnes que vous ne trahirez pas",
+      risque:"dangereux", va:'cd_autre' },
+  ],
+},
+
+cd_rechappe:{
+  qui:'charles',
+  titre:"Quatre-vingts",
+  texte:[
+    "« Quatre-vingts cas en trente ans. Combien en ont réchappé ? »",
+    { sobre:"Il ne répond pas tout de suite.",
+      intense:"Il ne répond pas tout de suite, et c'est la première fois. Il regarde les deux cents élèves à quarante pas.",
+      extreme:"Il ne répond pas tout de suite. C'est la première fois de l'entretien, et probablement la première fois qu'on lui pose cette question dans cet ordre-là — pas *combien en avez-vous tué*, qu'on lui a demandée cent fois et à laquelle il a une réponse toute faite : *combien en ont réchappé*. Il regarde ses deux cents élèves travailler à quarante pas." },
+    "« Onze. »",
+    "« Sur quatre-vingts. »",
+    "« Sur quatre-vingts. » Il ne détourne pas les yeux. « Neuf ont été tués par leur propre village avant que quiconque arrive. Quarante et un se sont enfuis et je ne sais pas ce qu'ils sont devenus — statistiquement, la plupart sont morts, mais je n'en ai pas la trace et je ne les compte pas parmi les morts. Dix-neuf ont été exécutés régulièrement, dont deux par moi. »",
+    "« Et les onze ? »",
+    { sobre:"« Ils vivent. »",
+      intense:"« Ils vivent. Sous d'autres noms, dans d'autres provinces, et huit d'entre eux ne savent pas que c'est moi qui les ai fait sortir. »",
+      extreme:"« Ils vivent. Sous d'autres noms, dans d'autres provinces, avec des métiers ordinaires. Huit d'entre eux ne savent pas que c'est moi qui les ai fait sortir : on ne le leur a jamais dit et je n'ai pas l'intention qu'on le leur dise. Les trois autres le savent, et sur les trois, deux me haïssent — ce que je comprends parfaitement, puisque dans les deux cas j'étais venu pour les tuer et que j'ai changé d'avis sur place. On ne pardonne pas ça. »" },
+    "§ Onze sur quatre-vingts, et c'est le meilleur chiffre que ces provinces aient jamais produit.",
+    "« Vous n'avez jamais écrit ces onze-là nulle part. »",
+    "« Bien sûr que non. » Il vous regarde enfin. « C'est très exactement pour ça qu'il me faut un registre où l'inscription ne coûte rien : pour n'avoir plus jamais à faire sortir quelqu'un en cachette de mes propres élèves. »",
+  ],
+  effets:{ flags:['cd_onze','a2_charles_respect','a2_charles_vu','a2_charles_onze'],
+           faire:() => { bouger('alycia', { relation:1 });
+                         retenir('charles', "il m'a demandé combien en avaient réchappé, et personne ne demande jamais ça"); },
+           exploit:{ eclat:3, temoins:'un', quoi:"vous avez posé à Mont-Draken la question qu'on ne lui pose pas" },
+           marque:"Onze sur quatre-vingts ont réchappé. Huit ne savent pas que c'est lui qui les a fait sortir.",
+           court:"Onze sur quatre-vingts" },
+  suite:'cd_inscrire', libelleSuite:"Il en vient à ce qu'il veut" },
+
+cd_inscrit:{
+  qui:'charles',
+  titre:"Le registre de la commission, folio un",
+  texte:[
+    "Le registre est un volume neuf, relié de basane, sans une écriture dedans.",
+    { sobre:"Vous écrivez la première ligne vous-même.",
+      intense:"Il ne l'écrit pas pour vous. Il vous tend la plume, ce qui est le seul geste de toute cette affaire dont vous vous souviendrez avec précision quinze ans plus tard.",
+      extreme:"Il ne l'écrit pas pour vous, ce qu'un commissaire de province ferait normalement — c'est lui qui tient le registre, c'est son écriture qui fait foi. Il vous tend la plume à l'envers, par le calame, et il attend. C'est le seul geste de toute cette affaire dont vous vous souviendrez avec précision quinze ans plus tard, et vous ne saurez jamais s'il l'a fait exprès." },
+    "*Yohan de Karlsberg. Marches Grises. Déclaré volontairement, sans contrainte, sans peine encourue.*",
+    "§ Vous signez. Il contresigne. Deux témoins contresignent : un maître d'armes de l'école et un clerc du conseil.",
+    "Et il ne se passe rien.",
+    { sobre:"Absolument rien. C'était tout l'objet.",
+      intense:"Absolument rien. Vous ressortez par la cour, vous reprenez votre cheval, personne ne vous suit. C'était tout l'objet du mémoire de quarante-deux pages que personne n'avait lu.",
+      extreme:"Absolument rien. Vous ressortez par la cour d'exercice, vous reprenez votre cheval à l'écurie, et deux cents élèves continuent de travailler à quarante pas sans lever la tête. Personne ne vous suit, personne ne vous escorte, personne ne consigne votre départ. C'était très précisément l'objet du mémoire de quarante-deux pages que quatre conseils avaient renvoyé non coupé : *on déclare, il ne se passe rien*." },
+    "Charles vous rattrape à la porte de l'école.",
+    "« Vous mesurez ce que vous venez de faire ? »",
+    "« Je crois. »",
+    "« Non. » Il pose la main sur le chambranle. « Il y a quarante et un de vos semblables dans ces provinces qui vivent cachés, et à partir de ce soir il en existe un qui vit inscrit. C'est la première fois en trois cents ans. Je ne sais pas si ça finira bien. Je sais que ça n'avait jamais été essayé. »",
+  ],
+  effets:{ flags:['cd_inscrit','a2_declare','a2_charles_allie','a2_registre_onde'], suspicion:35,
+           faire:() => { bouger('alycia', { confiance:-4, peur:2 });
+                         retenir('charles', "il s'est inscrit de sa main, le premier, et il n'y était pas obligé");
+                         retenir('caleb', "il a déclaré ce qu'il est à un registre de province, ce qui change son prix");
+                         retenir('alycia', "il s'est fait inscrire à un registre — je n'ai pas été consultée"); },
+           exploit:{ eclat:24, temoins:'province', quoi:"le premier nom du registre de l'Onde, écrit de sa main" },
+           marque:"Premier nom du registre de la commission, écrit de votre main. Il ne s'est rien passé. C'était l'objet.",
+           court:"Folio un" },
+  plusTard:"Quarante et un vivent cachés. Il en existe désormais un qui vit inscrit, et personne ne sait comment ça finit.",
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+cd_refus:{
+  qui:'charles',
+  titre:"Rien",
+  texte:[
+    "« Non. »",
+    "« Bien », dit Charles de Mont-Draken.",
+    { sobre:"Et il ne se passe rien non plus.",
+      intense:"Et il ne se passe rien non plus, ce qui est le point : il avait dit qu'il ne se passerait rien, et il ne se passe rien.",
+      extreme:"Et il ne se passe rien non plus. C'est très exactement le point, et il faut un moment pour le voir : il avait dit qu'il ne se passerait rien si vous refusiez, et il ne se passe rien. Pas de menace voilée, pas de « réfléchissez », pas d'homme sur la route trois jours plus tard. Cet homme fait ce qu'il dit, dans les deux sens, et c'est ce qui le rend beaucoup plus dangereux que s'il mentait." },
+    "Il vous raccompagne aux écuries et parle de la vallée haute, des loups qui redescendent, d'un pont à refaire.",
+    "Sur le seuil : « Je vous le redemanderai. »",
+    "« Je sais. »",
+    "« Pas cette année. Peut-être pas dans dix ans. » Il hausse une épaule. « J'ai soixante et un ans, messire, et le registre est vide. Il le sera probablement à ma mort. C'est comme ça. Trois cent onze pièces sur ce mur, et la seule chose que je n'aurai pas obtenue, c'est un cahier. »",
+    "§ Vous partez sans être inscrit, sans être menacé, et avec le désagrément durable d'avoir refusé quelque chose de raisonnable à quelqu'un de raisonnable.",
+  ],
+  effets:{ flags:['cd_refus','a2_charles_vu','a2_charles_attend'],
+           faire:() => { bouger('alycia', { confiance:2 });
+                         retenir('charles', "il a refusé le registre et je le lui redemanderai"); },
+           marque:"Vous avez refusé. Il ne s'est rien passé, exactement comme il l'avait dit. Il le redemandera.",
+           court:"Le cahier vide" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+cd_autre:{
+  qui:'charles',
+  titre:"Quelqu'un d'autre",
+  texte:[
+    "« Inscrivez-en un autre d'abord. »",
+    { sobre:"Il se raidit.",
+      intense:"Il se raidit — la première réaction physique de tout l'entretien — et sa voix change.",
+      extreme:"Il se raidit, et c'est la première réaction physique de tout l'entretien : les épaules, la mâchoire, une seconde entière. Sa voix change de registre quand elle revient, et elle descend au lieu de monter, ce qui chez un homme de cette sorte est nettement plus inquiétant." },
+    "« Vous venez de me proposer de dénoncer quelqu'un. »",
+    "« J'ai dit *inscrivez*. »",
+    "« Vous avez dit : *prenez-en un autre à ma place*. » Il vous coupe d'un geste. « Non, messire. Ne recommencez pas. Vous savez exactement ce que vous avez dit et moi aussi. »",
+    "§ Il n'est pas offensé pour lui. Il est offensé pour le registre.",
+    "« Le premier nom d'un registre de déclaration volontaire doit être volontaire, sinon ce n'est pas un registre de déclaration : c'est une liste, et il y en a déjà onze qui circulent dans cette province avec sept noms barrés dessus. » Il reprend le volume. « Vous en connaissez au moins une. »",
+    "« Oui. »",
+    "« Alors vous savez ce que je refuse de fabriquer. »",
+    "Il range le registre neuf dans une armoire, et vous entendez la clef.",
+  ],
+  effets:{ flags:['cd_denonce','a2_charles_froid','a2_charles_vu'],
+           faire:() => { bouger('alycia', { confiance:-3 });
+                         retenir('charles', "il m'a proposé quelqu'un d'autre à sa place, ce que je n'oublierai pas"); },
+           marque:"Vous avez proposé quelqu'un d'autre. Il a rangé le registre neuf et vous avez entendu la clef.",
+           court:"La clef" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+cd_epreuve:{
+  qui:'charles',
+  lieu:"Mont-Draken · la vallée haute",
+  titre:"Ce qu'il y a dans la vallée haute",
+  texte:[
+    "« Avant que je vous demande quoi que ce soit », dit Charles, « il y a une chose dans la vallée haute et j'y vais demain. Venez. »",
+    "« C'est une épreuve. »",
+    { sobre:"« Oui. Évidemment. »",
+      intense:"« Oui, évidemment. » Il n'a pas l'air de comprendre pourquoi on le souligne. « Je ne vais pas décider de ce que vous êtes d'après une conversation dans une cour. »",
+      extreme:"« Oui, évidemment. » Il n'a pas l'air de comprendre pourquoi on prend la peine de le souligner. « Je ne vais pas décider de ce que vous êtes d'après une conversation dans une cour d'exercice — vous êtes manifestement intelligent, ce qui est précisément la raison de ne pas vous croire sur parole. Je vais vous regarder faire quelque chose de difficile à côté de gens à moi. C'est la seule méthode que je connaisse et elle ne m'a jamais trompé. »" },
+    "§ Dans la vallée haute, il y a une chose qui a vidé deux granges et un hameau de neuf feux, et qui n'a laissé aucun corps.",
+    "Ce n'est pas un loup, ce n'est pas un ours, et ce n'est pas humain : Charles a une empreinte moulée dans du plâtre et il ne sait pas ce que c'est, ce qui n'était pas arrivé depuis onze ans.",
+    "« Trois cent onze pièces au mur », dit-il en la posant sur la table. « Aucune ne correspond. »",
+    "Vous montez à quatre : lui, vous, et deux de ses élèves de dernière année — un garçon de dix-neuf ans, une fille de vingt-deux.",
+  ],
+  melee:{ eux:1, position:"vallée haute · trois pieds de neige", pression:"aucune trace, aucun corps" },
+  choix:[
+    { t:"Chasser à sa méthode",
+      detail:"relevés, battue, cinq jours · c'est ce qu'il est venu regarder",
+      risque:"calculé", va:'cd_methode' },
+    { t:"Employer l'Onde devant lui",
+      detail:"devant Charles de Mont-Draken et deux de ses élèves · définitif",
+      risque:"définitif", ferme:"Ferme : le doute qu'il entretenait poliment",
+      definitif:true, va:'cd_onde' },
+    { t:"Envoyer les élèves devant",
+      detail:"c'est leur dernière année · et c'est ce qu'un capitaine ferait",
+      risque:"dangereux", va:'cd_eleves' },
+  ],
+},
+
+cd_methode:{
+  qui:'charles',
+  titre:"Cinq jours",
+  texte:[
+    "Cinq jours de relevés dans trois pieds de neige.",
+    { sobre:"Sa méthode est lente et elle marche.",
+      intense:"Sa méthode est d'une lenteur exaspérante et elle marche : on ne cherche pas la bête, on cartographie ce qu'elle évite. Une chose qui évite l'eau vive et les crêtes exposées se trouve toute seule au bout de cinq jours.",
+      extreme:"Sa méthode est d'une lenteur exaspérante et elle fonctionne parfaitement. On ne cherche jamais la bête : on cartographie ce qu'elle évite. Cinq jours de relevés — l'eau vive, les crêtes exposées au vent, les fermes où il y a des chiens, les deux versants qu'elle n'a jamais franchis. Au soir du cinquième, il reste sur la carte une poche de deux cents arpents où la chose peut être, et elle y est, parce qu'elle n'a nulle part ailleurs où aller." },
+    "Ce qui est dedans mesure sept pieds, se déplace à quatre pattes et se dresse pour frapper, et n'a de nom dans aucune langue de ces provinces.",
+    "§ Ça tombe en onze minutes, à quatre, sans qu'aucun des quatre soit blessé sérieusement, parce qu'on savait où c'était et qu'on est arrivés dans le bon sens.",
+    "La fille de vingt-deux ans porte le coup qui la tue. Le garçon de dix-neuf tient la lanterne, ce qui est le poste dangereux, et il ne la lâche pas.",
+    "Charles ne dit rien pendant la descente.",
+    "Le soir, à l'école, devant le mur d'ossements, il désigne un emplacement vide.",
+    "« Trois cent douzième pièce. » Il écrit l'étiquette lui-même. « Vallée haute. Onze morts. Quatre chasseurs, aucun perdu. »",
+    "Il ajoute votre nom sur l'étiquette, entre celui de ses deux élèves, sans commentaire et sans vous regarder.",
+  ],
+  effets:{ flags:['cd_methode','a2_charles_allie','a2_charles_respect'],
+           cout:{ endurance:18 },
+           exploit:{ eclat:11, temoins:'quelques', quoi:"la trois cent douzième pièce du mur de Mont-Draken" },
+           faire:() => { retenir('charles', "il a chassé cinq jours à ma méthode sans se plaindre et il a laissé la fille frapper"); },
+           marque:"Trois cent douzième pièce au mur de Mont-Draken. Votre nom sur l'étiquette, entre ses deux élèves.",
+           court:"La 312ᵉ" },
+  suite:'cd_inscrire', libelleSuite:"Il en vient à ce qu'il veut" },
+
+cd_onde:{
+  qui:'charles',
+  titre:"Devant lui",
+  texte:[
+    "La chose sort du couvert à onze pas de la fille de vingt-deux ans, qui est à contre-pente et qui ne la voit pas.",
+    { sobre:"Vous n'avez pas le temps de décider.",
+      intense:"Il n'y a pas de décision. Il y a onze pas, une élève de vingt-deux ans à contre-pente, et un corps qui fait ce qu'il sait faire avant que la tête ait un avis.",
+      extreme:"Il n'y a pas de décision, et c'est important de le dire exactement : il y a onze pas, une jeune femme de vingt-deux ans à contre-pente qui regarde ailleurs, une chose de sept pieds qui se dresse, et un corps qui fait ce qu'il sait faire quatre bonnes secondes avant que la tête ait le moindre avis sur la question. On peut appeler ça du courage. Ce n'en est pas. C'est de la mécanique, et vous vous êtes construit cette mécanique-là exprès, il y a onze ans, parce que le contraire vous aurait tué." },
+    "§ La chose part en arrière de quatre pieds, à plat, comme frappée par un chariot qui n'existe pas.",
+    "Elle se relève. Elle est reprise, de côté cette fois, contre un rocher. Le bruit n'est pas un bruit d'os : c'est un bruit de charge, sourd, très bas, qu'on sent dans le sternum à quinze pas.",
+    "La fille se retourne enfin. Le garçon a lâché la lanterne.",
+    "Charles de Mont-Draken n'a pas bougé du tout.",
+    { sobre:"Il regarde. C'est son métier.",
+      intense:"Il regarde, très attentivement, jusqu'au bout, et il ne dégaine pas — ce qui, pour un homme qui a passé trente ans à faire exactement le contraire, est un effort qu'on ne mesure pas.",
+      extreme:"Il regarde. Très attentivement, jusqu'au bout, sans dégainer, sans un mouvement vers ses deux élèves, sans un mot. Pour un homme qui a consacré trente ans de sa vie à mettre des choses non humaines à terre dès qu'elles se manifestent, et qui a fait pendre deux enfants, l'effort que représente cette immobilité-là ne se mesure pas. Il vous regardera plus tard, mais pas tout de suite : d'abord il regarde ce que vous faites, en professionnel, jusqu'à la fin." },
+    "Quand c'est fini, il s'approche du corps, pas de vous, et il l'examine pendant une demi-heure.",
+    "Puis, sans se relever : « Les côtes sont enfoncées sur toute la ligne, régulièrement. Ce n'est pas un coup. C'est une pression. »",
+    "« Oui. »",
+    "« Vous pouvez faire ça à un homme. »",
+    "« Oui. »",
+    "§ Il se relève. Ses deux élèves sont à dix pas et ils ne savent pas où se mettre.",
+    "« Bien », dit Charles. « Maintenant je sais, et vous savez que je sais, et il va falloir décider tous les deux ce qu'on en fait. Je propose qu'on descende d'abord, parce que la nuit tombe et que ma fille a froid. »",
+    "Vous mettez trois secondes à comprendre que la fille de vingt-deux ans est sa fille.",
+  ],
+  effets:{ flags:['cd_onde','a2_montdraken_certain','a2_onde_publique','a2_charles_sait'], suspicion:30,
+           cout:{ concentration:24 },
+           exploit:{ eclat:14, temoins:'quelques', quoi:"l'Onde employée devant Mont-Draken et ses deux élèves" },
+           faire:() => { retenir('charles', "il a sauvé ma fille avec ça, sous mes yeux, et je l'ai regardé faire");
+                         bouger('alycia', { peur:3 }); },
+           marque:"Vous avez employé l'Onde devant Charles de Mont-Draken pour sauver sa fille. Il a regardé jusqu'au bout sans dégainer.",
+           court:"Sa fille" },
+  plusTard:"Il sait. Ses deux élèves aussi. L'un des trois parlera, et ce ne sera pas lui.",
+  suite:'cd_inscrire', libelleSuite:"Il en vient à ce qu'il veut" },
+
+cd_eleves:{
+  qui:'charles',
+  titre:"Dernière année",
+  texte:[
+    "« Envoyez-les devant. C'est leur dernière année. »",
+    { sobre:"Charles accepte.",
+      intense:"Charles accepte sans discuter, ce qui vous surprend, et vous comprenez pourquoi trois heures plus tard.",
+      extreme:"Charles accepte sans discuter une seconde, ce qui vous surprend assez pour que vous le regardiez deux fois. Vous comprendrez pourquoi trois heures plus tard, et ce sera désagréable." },
+    "Ils entrent dans le couvert les premiers. Ils font tout correctement — l'écart, l'angle, la lanterne basse — parce qu'ils ont été formés par le meilleur des quatre provinces.",
+    "§ Ça ne suffit pas. Ça ne suffit jamais la première fois.",
+    "Le garçon de dix-neuf ans prend le coup au flanc gauche et il est à terre en une seconde et demie.",
+    "Il faut trois hommes pour finir ce qu'il avait commencé, et ça se passe bien parce qu'il l'avait effectivement commencé : la chose est déjà touchée quand vous arrivez, à la jointure, exactement où on lui a appris.",
+    "Il vit. Il vivra. Il ne se servira plus de son bras gauche.",
+    "Charles le panse lui-même dans la neige, sans se presser, en parlant d'autre chose.",
+    "Puis, plus tard, devant le feu, sans reproche dans la voix :",
+    { sobre:"« Vous avez fait ce qu'un capitaine fait. »",
+      intense:"« Vous avez fait exactement ce qu'un capitaine fait, et c'était le bon ordre. » Il regarde le garçon dormir. « Je l'ai accepté parce que c'était le bon ordre. »",
+      extreme:"« Vous avez fait exactement ce qu'un capitaine fait, et c'était le bon ordre, et je l'ai accepté pour cette raison. » Il regarde le garçon dormir de l'autre côté du feu. « Un homme de trente ans qui vaut quatre hommes ne passe pas devant : il passe en second, il voit ce qui se passe et il décide. C'est de la tactique élémentaire et je l'enseigne moi-même le mardi. »" },
+    "« Mais ? »",
+    "« Mais je le fais depuis trente ans et je passe toujours devant. » Il tisonne. « C'est mauvais, ça coûte des hommes, et j'ai tort. Voilà. Vous avez raison et j'ai tort, et son bras gauche ne remarchera pas. »",
+    "§ Il ne vous accuse de rien. C'est infiniment pire.",
+  ],
+  effets:{ flags:['cd_eleve_blesse','a2_charles_froid','a2_charles_vu'],
+           exploit:{ eclat:6, temoins:'quelques', quoi:"la chose de la vallée haute est morte" },
+           faire:() => retenir('charles', "il a envoyé mes élèves devant, ce qui était le bon ordre, et le garçon a perdu son bras"),
+           marque:"Le garçon de dix-neuf ans ne se servira plus de son bras gauche. C'était le bon ordre et Charles l'a dit.",
+           court:"Le bras gauche" },
+  plusTard:"« Vous avez raison et j'ai tort, et son bras gauche ne remarchera pas. »",
+  suite:'cd_inscrire', libelleSuite:"Il en vient à ce qu'il veut" },
+
+};
+
+enregistrerScenes(POLITIQUE);
+
+/* ── Où ces trois hommes se trouvent ──────────────────────────────────────
+ * Chacun s'ouvre sur ce que le chantier a fait de vous : Caleb quand vous
+ * commencez à consommer de la province, Lucius quand vous avez un titre à
+ * faire valoir, Charles quand ce que vous êtes devient une question. */
+offrir({ id:'cb_creances', lieu:'fortauxprinces', va:'cb_creances',
+         titre:"L'état de vos fournisseurs",
+         si:() => a('ca_vu') && CHANTIER().faits.length >= 2 });
+
+offrir({ id:'ls_legitimation', lieu:'astrah', va:'ls_legitimation',
+         titre:"La salle des rôles",
+         si:() => a('a2_lucius_vu') && (a('a2_bannieres') || CHANTIER().faits.length >= 3) });
+
+offrir({ id:'cd_commission', lieu:'montdraken', va:'cd_commission',
+         titre:"La commission sur l'Onde",
+         si:() => (a('a2_charles_vu') || a('ch_avoue') || a('ch_nie') || a('ch_esquive') || a('ch_trois_cent_onze'))
+               && !a('cd_registre') && !a('cd_demande') });
+
+</script>
+<script>
+/* ── ../acte2/mariage.js ── */
+/* PARIAS — Acte II · L'ÉPOUSE, ET CE QU'ON FAIT DE L'AUTRE
+ * ═══════════════════════════════════════════════════════════════════════
+ * Un mariage de maison n'est pas une fin de romance : c'est un contrat entre
+ * deux maisons, signé par deux adultes qui savent tous les deux ce qu'ils
+ * signent. L'épouse de Yohan n'est ni une victime ni une récompense — c'est
+ * une femme de vingt-six ou vingt-neuf ans qui a fait son propre calcul, qui
+ * l'écrit noir sur blanc, et qui a ses propres objectifs.
+ *
+ * Ensuite vient la question que ces provinces règlent depuis quatre cents
+ * ans avec une hypocrisie parfaitement organisée : on peut garder quelqu'un.
+ * C'est admis, c'est courant, ça a un nom, des usages et des limites — et
+ * ça se paie, autrement qu'en scandale.
+ *
+ * TROIS FEMMES ADULTES, TROIS VOLONTÉS QUI NE SE PLIENT PAS :
+ *
+ *   L'ÉPOUSE     n'est pas dupe et ne le sera jamais. Elle peut accepter,
+ *                négocier ses propres termes, ou refuser — et son refus n'est
+ *                pas une crise de jalousie : c'est une clause de contrat.
+ *   ALYCIA       est une Paria. Être la maîtresse d'un homme marié, c'est
+ *                dépendre — sa peur monte, pas son attirance. Elle peut dire
+ *                non pour cette seule raison, et elle a raison.
+ *   ALARIELLE    a un peuple. Ce que la province appelle une maîtresse, sa
+ *                cour appelle autrement, et son frère y verra une arme.
+ *
+ * Aucune ne se gagne. Chacune peut refuser sans que rien ne baisse, et il y
+ * a toujours une porte pour ne rien demander du tout.
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+/* Qui est l'épouse, selon la maison qui a écrit. */
+const EPOUSE = () => a('a2_couronne_caleb')
+  ? { id:'ysore', nom:"Ysoré de Fort-aux-Princes", age:"vingt-six ans",
+      quoi:"nièce de Caleb · veuve d'un premier mariage sans enfant",
+      maison:"Fort-aux-Princes", oncle:"Caleb" }
+  : { id:'livia', nom:"Livia Furia", age:"vingt-neuf ans",
+      quoi:"cousine de la maison Furia · un nom qui remonte plus haut que la Purge",
+      maison:"Astrah", oncle:"Lucius" };
+
+const MARIAGE = {
+
+/* ══ ELLE ARRIVE ══════════════════════════════════════════════════════════ */
+ma_arrivee:{
+  qui:'epouse',
+  lieu:() => `Karlsberg · ${dateA2()}`,
+  titre:"Celle qui a signé l'autre moitié",
+  texte:[
+    () => { const e = EPOUSE();
+      return `${e.nom}, ${e.age}, arrive aux Marches Grises avec quatre chariots, deux servantes, un intendant et une malle de papiers.`; },
+    { sobre:"Elle regarde les murs avant de regarder l'homme.",
+      intense:"Elle descend de voiture, regarde les murs sur toute leur longueur, compte quelque chose, et ne se tourne vers vous qu'après.",
+      extreme:"Elle descend de voiture, fait trois pas, et regarde les murs sur toute leur longueur en comptant visiblement quelque chose — les toises, ou les hommes sur le chantier, ou les deux. Elle ne se tourne vers vous qu'après, et pas par froideur : parce qu'un mur ne bouge pas et qu'un homme, si. Elle a hiérarchisé ses observations." },
+    "« Il y a moins que ce qu'on m'avait dit », dit-elle. « Et plus que ce que je craignais. »",
+    "« On vous avait dit quoi ? »",
+    "« Un château. » Elle remonte son manteau. « Il y a un chantier. Ce n'est pas la même chose et ce n'est pas plus mal : dans un château, tout est décidé depuis deux cents ans. »",
+    "§ La malle de papiers est ce qui compte.",
+    "Elle contient : le contrat en onze pages, deux états de dot, un plan d'assolement qu'elle a fait établir elle-même, la correspondance de sa maison sur trois ans — et une note de sa main, quatre pages, intitulée *Ce que je compte faire*.",
+    "Elle vous la tend le premier soir, avant tout le reste.",
+    "« Lisez-la maintenant. Je préfère les désaccords tôt. »",
+  ],
+  effets:{ flags:['ma_arrivee'],
+           faire:() => { const C = CHANTIER(); C.grain += 6; C.faveurs += 2;
+                         const e = EPOUSE(); GENS.epouse.nom = e.nom; GENS.epouse.role = e.quoi; },
+           marque:"L'épouse est arrivée avec quatre chariots et une note de quatre pages intitulée « Ce que je compte faire ».",
+           court:"La malle" },
+  choix:[
+    { t:"Lire les quatre pages devant elle",
+      detail:"c'est ce qu'elle demande · et ce qu'elle observe",
+      risque:"prudent", va:'ma_note' },
+    { t:"« Dites-le-moi plutôt. »",
+      detail:"la faire parler · une note écrite se relit, une parole s'engage",
+      risque:"calculé", va:'ma_dire' },
+  ],
+},
+
+ma_note:{
+  qui:'epouse',
+  titre:"Ce qu'elle compte faire",
+  texte:[
+    "Quatre pages, d'une écriture serrée, sans une rature.",
+    "**Une.** Elle prend l'intendance. Pas la gestion du chantier — l'intendance : les comptes, les baux, les greniers, le registre des feux du bourg. « Vous bâtissez. Quelqu'un doit tenir. Vous ne pouvez pas faire les deux et vous êtes mauvais pour le second. »",
+    "**Deux.** Elle veut deux enfants, pas plus, et elle dit pourquoi en trois lignes cliniques qui n'appellent aucun commentaire.",
+    "**Trois.** Elle veut que le bourg ait un four banal et une école. « Un domaine où l'on ne sait pas lire est un domaine qu'on peut voler par écrit. Ma maison l'a fait onze fois. »",
+    "§ **Quatre.** Et la quatrième page traite de vous, en deux paragraphes.",
+    { sobre:"« Je sais ce que vous êtes », est-il écrit.",
+      intense:"*Je sais ce que vous êtes. Mon oncle me l'a dit avant que je signe, parce qu'il est honnête en affaires, et j'ai signé après.*",
+      extreme:"*Je sais ce que vous êtes. Mon oncle me l'a dit avant que je signe — il est parfaitement honnête en affaires, c'est même sa seule vertu et elle est réelle — et j'ai signé après, en connaissance de cause, ce qui devrait vous éviter de vous demander pendant deux ans si vous devez me le dire.*" },
+    "*Je n'en pense rien. Ce n'est pas de l'indifférence : je n'ai pas d'opinion, faute d'éléments, et je n'en aurai que quand j'aurai vu ce que ça fait dans une maison.*",
+    "*Le second paragraphe est plus désagréable et je le mets par écrit pour ne pas avoir à le dire.*",
+    "*Si vous devez garder quelqu'un, dites-le-moi, et dites-le-moi avant que je l'apprenne. Ce n'est pas une permission : c'est un délai de préavis, et il est la seule chose que je vous demande personnellement dans tout ce contrat.*",
+    "§ Elle vous regarde lire les deux paragraphes. Elle sait à quelle ligne vous en êtes.",
+    "« Vous êtes très direct », dites-vous.",
+    "« Je suis lisible », corrige-t-elle. « C'est un choix, il m'a coûté un premier mariage, et je ne reviendrai pas dessus. »",
+  ],
+  effets:{ flags:['ma_note','ma_preavis'],
+           faire:() => { ETAT.faits.push("« Si vous devez garder quelqu'un, dites-le-moi avant que je l'apprenne. »"); },
+           marque:"Elle sait ce que vous êtes ; son oncle le lui a dit avant la signature. Elle demande un préavis, pas une permission.",
+           court:"Quatre pages" },
+  suite:'ma_apres', libelleSuite:"Les premiers mois" },
+
+ma_dire:{
+  qui:'epouse',
+  titre:"De vive voix",
+  texte:[
+    "« Dites-le-moi plutôt. »",
+    { sobre:"Elle range la note. Ça ne la gêne pas.",
+      intense:"Elle range la note dans la malle sans la relire, ce qui veut dire qu'elle la connaît par cœur, ce qui veut dire qu'elle l'a écrite plus d'une fois.",
+      extreme:"Elle range la note dans la malle sans un regard, ce qui veut dire qu'elle la sait par cœur, ce qui veut dire qu'elle l'a écrite plus d'une fois — trois ou quatre versions, probablement, pendant les onze semaines de voyage et les deux ans de correspondance. Elle n'a pas l'air contrariée. Elle a l'air d'ajuster une méthode." },
+    "« Bien. Alors debout, et sans les phrases polies, parce qu'elles m'ennuient et que nous allons vivre longtemps ensemble. »",
+    "Elle dit tout en quatre minutes : l'intendance, deux enfants, le four banal, l'école.",
+    "Puis elle s'arrête.",
+    "« Il y a une cinquième chose et je préférais l'écrire. »",
+    "« Dites-la. »",
+    { sobre:"« Si vous devez garder quelqu'un, dites-le-moi avant que je l'apprenne. »",
+      intense:"« Si vous devez garder quelqu'un, dites-le-moi. Avant que je l'apprenne, pas après. » Elle soutient votre regard sans effort. « Ce n'est pas une permission, ne vous méprenez pas. C'est un préavis. »",
+      extreme:"« Si vous devez garder quelqu'un, dites-le-moi. Avant que je l'apprenne — pas après, pas quand une servante me l'aura dit, pas quand la province en rira. » Elle soutient votre regard sans le moindre effort apparent, et vous comprenez que c'est la phrase pour laquelle elle a fait onze semaines de route. « Ce n'est pas une permission, ne vous y trompez pas une seconde. Je ne vous en donne aucune et je n'en ai pas à donner. C'est un préavis, et c'est la seule chose que je demande pour moi dans onze pages de contrat. »" },
+    "« Pourquoi ? »",
+    "« Parce que mon premier mari ne me l'a pas donné, que je l'ai appris par sa sœur, et que ce n'est pas la chose elle-même qui m'a fait quelque chose. »",
+    "§ Elle n'en dit pas plus, ni ce soir-là ni jamais.",
+  ],
+  effets:{ flags:['ma_dit','ma_preavis'],
+           faire:() => { ETAT.faits.push("« Ce n'est pas la chose elle-même qui m'a fait quelque chose. »"); },
+           exploit:{ eclat:2, temoins:'aucun', quoi:"vous l'avez fait parler au lieu de la lire" },
+           marque:"Elle a demandé un préavis, debout, sans phrases polies. Son premier mari ne le lui avait pas donné.",
+           court:"Le préavis" },
+  suite:'ma_apres', libelleSuite:"Les premiers mois" },
+
+ma_apres:{
+  qui:'epouse',
+  lieu:() => `Karlsberg · ${dateA2()}`,
+  titre:"Ce que ça fait dans une maison",
+  texte:[
+    "Onze mois.",
+    { sobre:"Elle tient. C'est le mot exact.",
+      intense:"Elle tient, au sens où un intendant tient : les comptes sont justes, les baux sont écrits, le registre des feux est à jour, et le grain ne disparaît plus entre le champ et le grenier.",
+      extreme:"Elle tient, au sens strict et technique où un intendant tient une maison. Les comptes sont justes au sou. Les baux sont écrits, datés et déposés. Le registre des feux du bourg est à jour au mois. Le grain a cessé de disparaître entre le champ et le grenier — il en disparaissait un cinquième et personne ne s'en était aperçu, y compris vous, y compris pendant deux ans." },
+    "§ Le four banal est bâti en Thermidor. L'école ouvre en Brumaire, avec onze élèves et un ancien clerc de Chastel qui n'avait plus de place nulle part.",
+    "Vous ne vous aimez pas. Vous ne vous détestez pas non plus, et ce n'est ni triste ni cynique : vous vous respectez et vous travaillez bien ensemble, ce qui est plus rare qu'un mariage d'amour et dure notablement plus longtemps.",
+    "Elle rit trois fois en onze mois, toujours de choses administratives.",
+    () => { const l = lien('alycia'), e = lien('alarielle');
+      if(l.relation >= 8 || e.relation >= 8)
+        return "§ Et il y a quelqu'un d'autre, qui n'est pas partie, qui ne partira pas, et à qui vous n'avez rien dit non plus.";
+      return "§ Il n'y a personne d'autre. C'est une position, elle est tenable, et elle n'a rien de facile."; },
+  ],
+  effets:{ flags:['ma_installee','a2_maison_alliee','a2_intendance'],
+           faire:() => { const C = CHANTIER(); C.grain += 4; C.faveurs += 1; },
+           exploit:{ eclat:6, temoins:'quelques', quoi:"un four banal, une école, et des comptes justes" },
+           marque:"Onze mois. Un four banal, une école à onze élèves, et un cinquième du grain qui ne disparaît plus.",
+           court:"L'intendance" },
+  choix:[
+    { t:"Lui parler d'Alycia",
+      detail:"le préavis · avant qu'elle l'apprenne, comme elle l'a demandé",
+      si:() => lien('alycia').relation >= 8,
+      risque:"définitif", va:'ma_preavis_alycia' },
+
+    { t:"Lui parler d'Alarielle",
+      detail:"le préavis · et il faudra expliquer ce qu'est une elfe de cette maison",
+      si:() => lien('alarielle').relation >= 8,
+      risque:"définitif", va:'ma_preavis_alarielle' },
+
+    { t:"Ne rien dire",
+      detail:"il n'y a peut-être rien à dire · et elle a été très précise sur ce point",
+      risque:"dangereux", va:'ma_rien' },
+
+    { t:"Il n'y a personne d'autre",
+      detail:"et c'est vrai · ce qui est plus rare que le contraire",
+      si:() => lien('alycia').relation < 8 && lien('alarielle').relation < 8,
+      risque:"prudent", va:'ma_seul' },
+  ],
+},
+
+/* ══ LE PRÉAVIS ═══════════════════════════════════════════════════════════
+ * On le donne à l'épouse. Ce n'est pas une permission ; c'est ce qui décide
+ * si la maison tient. Elle répond en femme adulte qui a un contrat. */
+ma_preavis_alycia:{
+  qui:'epouse',
+  titre:"Le préavis",
+  texte:[
+    "Vous le dites un soir de Frimaire, dans la salle basse, sans préparer.",
+    "« Il y a quelqu'un. »",
+    { sobre:"Elle pose sa plume.",
+      intense:"Elle pose sa plume dans l'encrier, referme le registre des feux sur son doigt, et attend. Elle ne demande pas qui.",
+      extreme:"Elle pose sa plume dans l'encrier, referme le registre des feux du bourg sur son doigt pour ne pas perdre sa page, et attend. Elle ne demande pas qui. C'est la première chose que vous remarquez et c'est la plus étrange : la question évidente ne vient pas, et il faut un moment pour comprendre qu'elle ne vient pas parce qu'elle est déjà répondue depuis longtemps." },
+    "« Alycia de Callensbourg », dit-elle. « Oui. »",
+    "« Vous saviez. »",
+    "« Depuis Prairial. Une maison de trente feux ne cache rien à son intendante, et je suis l'intendante. » Elle repousse le registre. « Je vous ai laissé onze mois pour me le dire. C'est plus que le délai d'usage et beaucoup moins que ce que la plupart des hommes prennent. »",
+    "§ Elle ne pleure pas, ne crie pas, et ne fait aucune des choses que la province attend d'une épouse.",
+    "Elle prend une feuille et écrit trois lignes.",
+    "**Une.** « Jamais sous ce toit. Le bourg, une maison de la vallée, ailleurs — pas ici. Ce n'est pas de la pudeur : trente feux nous regardent et une maison qu'on ne respecte pas ne se fait pas payer ses baux. »",
+    "**Deux.** « Elle n'a aucun rang, aucune préséance, aucune voix aux comptes. Si un jour elle décide de quoi que ce soit qui touche à l'intendance, je pars le lendemain avec ma dot et vous perdez le grain de trois vallées. »",
+    "**Trois.** « Nos deux enfants d'abord. Après quoi vous ferez ce que vous voulez et je ferai ce que je veux. »",
+    "« La troisième est nouvelle. »",
+    { sobre:"« Oui. »",
+      intense:"« Oui. » Elle ne développe pas. « Vous avez signé onze pages, messire, et j'ai signé les mêmes. Elles n'étaient pas plus favorables de mon côté que du vôtre. »",
+      extreme:"« Oui. » Elle ne développe pas d'un mot, et son visage n'exprime absolument rien. « Vous avez signé onze pages. J'ai signé les mêmes onze pages. Elles n'étaient pas plus favorables de mon côté que du vôtre — vous avez peut-être cru le contraire, les hommes le croient toujours. Alors non, je ne vais pas développer, et vous ne me le demanderez pas deux fois. »" },
+    "Elle pousse la feuille. Trois lignes, et une place pour deux signatures.",
+  ],
+  effets:{ flags:['ma_preavis_donne'],
+           faire:() => ETAT.faits.push("Trois lignes de l'épouse : jamais sous ce toit, aucun rang, et les deux enfants d'abord."),
+           marque:"Elle savait depuis Prairial. Elle a écrit trois lignes et laissé la place pour deux signatures.",
+           court:"Trois lignes" },
+  choix:[
+    { t:"Signer les trois",
+      detail:"c'est un contrat · comme les onze pages, comme le reste",
+      risque:"définitif", ferme:"Ferme : l'idée que cette maison marche autrement qu'au contrat",
+      definitif:true, va:'ma_termes' },
+    { t:"« Alors il n'y aura personne. »",
+      detail:"choisir l'épouse · et le lui dire à elle avant de le dire à l'autre",
+      risque:"définitif", ferme:"Ferme : ce qui restait possible avec Alycia",
+      definitif:true, va:'ma_choisit_epouse' },
+    { t:"Refuser la deuxième ligne",
+      detail:"Alycia ne prendra jamais un rang · mais elle décidera de choses",
+      risque:"calculé", va:'ma_ligne_deux' },
+  ],
+},
+
+ma_preavis_alarielle:{
+  qui:'epouse',
+  titre:"Le préavis, et une difficulté de vocabulaire",
+  texte:[
+    "« Il y a quelqu'un. »",
+    "Elle pose sa plume. Elle ne demande pas qui — et cette fois elle se trompe.",
+    "« Alycia de Callensbourg. »",
+    "« Non. »",
+    { sobre:"Ça, ça l'arrête.",
+      intense:"Ça, ça l'arrête net. C'est la première fois en onze mois que vous la voyez ne pas savoir quelque chose.",
+      extreme:"Ça l'arrête net, et c'est un spectacle : c'est la première fois en onze mois que vous voyez cette femme ne pas savoir quelque chose sur sa propre maison. Elle repasse visiblement en revue tout ce qu'elle croyait tenir, et elle ne trouve pas, et elle déteste ça." },
+    "« Alarielle. »",
+    "Silence long.",
+    "« L'elfe. »",
+    "« Oui. »",
+    "« Celle d'Aelthiriel. Celle dont le frère est Tyrion. » Elle se lève et fait deux pas. « Messire, avez-vous la moindre idée de ce que ça veut dire, ou est-ce que vous avez fait ça sans y penser ? »",
+    "§ « Les deux », dites-vous, et c'est la vérité.",
+    "Elle rit — une seule fois, sans gaieté, et c'est la quatrième fois en onze mois.",
+    { sobre:"« Il n'y a pas de mot pour ça », dit-elle.",
+      intense:"« Le problème est qu'il n'y a pas de mot pour ça », dit-elle. « Une maîtresse, la province sait ce que c'est : il y a des usages, une place à table, un rang qu'on ne dépasse pas. Une elfe de la cour d'Eltharion, la province ne sait pas. »",
+      extreme:"« Le problème n'est pas moral, il est administratif, et c'est bien pire. » Elle compte sur ses doigts, comme son oncle. « Une maîtresse, la province sait ce que c'est. Il y a un mot, des usages vieux de trois cents ans, une place à table, un rang qu'on ne dépasse pas, une façon de la nommer dans les actes. Tout le monde sait quoi faire. Une elfe de la maison d'Eltharion, sœur du prince Tyrion, dans une maison humaine relevée depuis cinq ans — il n'y a **pas de mot**. Et quand il n'y a pas de mot, messire, chacun met le sien, et je vous garantis que celui de Mont-Draken ne sera pas le mien. »" },
+    "Elle se rassoit et prend une feuille.",
+    "« Bien. Puisque personne n'a de mot, nous allons en écrire un. C'est très exactement mon métier. »",
+    "**Une.** « Elle est reçue à Karlsberg comme envoyée d'Aelthiriel, avec les honneurs dus à une cour étrangère. Pas comme autre chose. Jamais nommée autrement dans un acte. »",
+    "**Deux.** « Ce qu'elle est par ailleurs ne se dit pas, ne s'écrit pas, et ne se nie pas non plus. La province supposera ; qu'elle suppose. On ne se défend pas d'une chose qu'on n'a pas déclarée. »",
+    "**Trois.** « Et si sa cour s'en sert contre nous — et son frère s'en servira — c'est vous qui irez le dire à Aelthiriel, pas moi. »",
+  ],
+  effets:{ flags:['ma_preavis_donne','ma_elfe'],
+           faire:() => { bouger('alarielle', { devoir:-2 });
+                         ETAT.faits.push("« Quand il n'y a pas de mot, chacun met le sien. »"); },
+           marque:"Reçue comme envoyée d'Aelthiriel, jamais nommée autrement. « On ne se défend pas d'une chose qu'on n'a pas déclarée. »",
+           court:"Pas de mot" },
+  choix:[
+    { t:"Signer les trois",
+      detail:"une fiction diplomatique tenue par écrit · c'est ce qui tient les maisons",
+      risque:"définitif", ferme:"Ferme : la simplicité de vos rapports avec Aelthiriel",
+      definitif:true, va:'ma_termes' },
+    { t:"« Alors il n'y aura personne. »",
+      detail:"choisir l'épouse · et aller le dire à Aelthiriel soi-même",
+      risque:"définitif", ferme:"Ferme : ce qui restait possible avec Alarielle",
+      definitif:true, va:'ma_choisit_epouse' },
+    { t:"« Je ne mentirai pas sur elle. »",
+      detail:"refuser la fiction · et prendre le scandale en face",
+      risque:"dangereux", ferme:"Ferme : la paix de votre épouse dans sa propre maison",
+      va:'ma_franc' },
+  ],
+},
+
+ma_rien:{
+  qui:'epouse',
+  titre:"Onze mois de plus",
+  texte:[
+    "Vous ne dites rien.",
+    { sobre:"Elle l'apprend en Ventôse, par une servante.",
+      intense:"Elle l'apprend en Ventôse, par une servante, qui le tenait d'un charretier, qui l'avait vu à une étape. Exactement comme la première fois.",
+      extreme:"Elle l'apprend en Ventôse par une servante de dix-sept ans, qui le tenait d'un charretier de la vallée, qui avait vu quelque chose à une étape et l'avait raconté à l'auberge parce que c'est ce qu'on fait à l'auberge. Exactement, dans le détail, comme la première fois — sa sœur, à l'époque, avait entendu ça d'une couturière." },
+    "Elle ne vous en parle pas.",
+    "§ Elle ne vous en parlera jamais, et c'est ça, la sanction : il n'y a pas de scène, pas de reproche, pas une seule conversation.",
+    "Ce qui change tient en trois choses, et il faut six mois pour les voir toutes.",
+    "**Une.** Les comptes restent parfaits et cessent d'être commentés. Elle les dépose sur la table, à l'heure, et sort.",
+    "**Deux.** Elle écrit à sa maison deux fois plus souvent qu'avant, et vous ne lisez plus ses lettres parce qu'elle les scelle désormais.",
+    "**Trois.** Le contrat prévoit deux enfants. Il y en aura deux, et pas un jour de plus que le contrat.",
+    { sobre:"Elle tient sa parole à la lettre. Rien qu'à la lettre.",
+      intense:"Elle tient sa parole à la lettre, et rien qu'à la lettre, ce qui dans une maison est une forme de guerre parfaitement légale et absolument imparable.",
+      extreme:"Elle tient sa parole à la lettre et rien qu'à la lettre. C'est une forme de guerre parfaitement légale, absolument imparable, et dont il n'existe aucun remède : personne ne peut lui reprocher quoi que ce soit, jamais, devant qui que ce soit. Elle a onze pages de contrat et elle les exécute. Ce qu'elle avait donné en plus — et il y en avait beaucoup, vous vous en apercevez seulement maintenant — a été retiré en une saison, sans un mot." },
+    "Vous avez perdu quelque chose que vous n'aviez pas remarqué que vous aviez.",
+  ],
+  effets:{ flags:['ma_tu','a2_epouse_froide'],
+           faire:() => { const C = CHANTIER(); C.faveurs = Math.max(0, C.faveurs - 2);
+                         retenir('caleb', "sa femme m'écrit deux fois plus souvent qu'avant, et elle scelle"); },
+           marque:"Elle l'a appris par une servante, comme la première fois. Elle n'en a jamais parlé. Elle tient sa parole à la lettre.",
+           court:"À la lettre" },
+  plusTard:"Elle écrit à sa maison deux fois par mois et elle scelle. Quelqu'un lit ces lettres à l'autre bout.",
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+ma_seul:{
+  qui:'epouse',
+  titre:"Personne",
+  texte:[
+    "« Il n'y a personne d'autre. »",
+    { sobre:"Elle vous regarde un moment.",
+      intense:"Elle vous regarde un moment, comme on vérifie un compte, et vous laissez faire.",
+      extreme:"Elle vous regarde un moment sans rien dire, exactement comme elle regarde une colonne de chiffres qui tombe juste du premier coup — avec méfiance, parce que dans son expérience les colonnes qui tombent juste du premier coup cachent en général une erreur de report." },
+    "« Bien », dit-elle enfin.",
+    "« Vous ne me croyez pas ? »",
+    "« Si. C'est ça qui me gêne. » Elle referme le registre. « Je m'étais préparée à l'autre conversation. J'ai onze mois de phrases prêtes et je vais devoir les jeter. »",
+    "§ Elle a un geste vague vers la salle, le chantier, les murs.",
+    "« Alors ce sera plus simple », dit-elle, « et plus lent. »",
+    "« Plus lent ? »",
+    "« Deux personnes qui n'ont personne d'autre finissent par se parler. Ça prend des années et ça ne ressemble à rien de ce qu'on raconte. » Elle se lève, prend sa chandelle. « Bonne nuit, messire. Les baux de la vallée basse sont sur la table, il en manque deux signatures. »",
+    "Il faudra quatre ans. Ce n'est pas une romance : c'est deux personnes intelligentes enfermées dans le même travail, qui finissent par préférer la compagnie l'une de l'autre à toute autre, sans jamais l'avoir décidé ni dit.",
+  ],
+  effets:{ flags:['ma_seul','a2_epouse_proche'],
+           faire:() => { const C = CHANTIER(); C.faveurs += 2; C.grain += 3; },
+           exploit:{ eclat:3, temoins:'aucun', quoi:"il n'y a personne d'autre, et c'est vrai" },
+           marque:"« Deux personnes qui n'ont personne d'autre finissent par se parler. Ça prend des années. »",
+           court:"Plus lent" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+ma_ligne_deux:{
+  qui:'epouse',
+  titre:"La deuxième ligne",
+  texte:[
+    "« La deuxième, non. Elle décidera de choses. »",
+    { sobre:"Elle plisse les yeux.",
+      intense:"« Lesquelles ? » Ce n'est pas une objection : c'est une intendante qui demande un périmètre.",
+      extreme:"« Lesquelles ? » Ce n'est pas une objection et ce n'est pas de la jalousie : c'est une intendante qui demande un périmètre, parce qu'une clause sans périmètre est une clause qui finira devant un tribunal." },
+    "« Qui entre à Karlsberg. Qui y reste. Qui en sort et par où. »",
+    "Elle réfléchit longtemps.",
+    "« Ce n'est pas de l'intendance », dit-elle enfin. « C'est de la sûreté. »",
+    "« Oui. »",
+    "« Alors ce n'est pas ma ligne. » Elle raye la deuxième et récrit trois mots au-dessus. « *Sauf la sûreté.* Voilà. Elle ne touche pas à un bail, à un grenier, à un feu du bourg ; elle décide de qui franchit la porte. »",
+    "§ Elle repose la plume et ajoute, sans changer de ton :",
+    "« Et vous venez de me dire que cette femme est meilleure que moi à quelque chose, ce que vous n'aviez pas besoin de me dire ce soir. »",
+    "« Ce n'est pas ce que j'ai dit. »",
+    "« C'est ce que vous avez signé, et dans une maison ce sont les signatures qui comptent. » Elle pousse la feuille. « Signez. Ce n'est pas une mauvaise clause, elle est même bonne, et j'aurais préféré l'écrire moi-même. »",
+  ],
+  effets:{ flags:['ma_surete','a2_alycia_surete'],
+           faire:() => { bouger('alycia', { relation:3, confiance:4, peur:-2 }); },
+           marque:"« Sauf la sûreté. » Alycia décide de qui franchit la porte de Karlsberg. L'épouse aurait préféré l'écrire elle-même.",
+           court:"Sauf la sûreté" },
+  suite:'ma_termes', libelleSuite:"Signer" },
+
+ma_franc:{
+  qui:'epouse',
+  titre:"Sans fiction",
+  texte:[
+    "« Je ne mentirai pas sur elle. »",
+    { sobre:"« Ce n'est pas un mensonge. C'est un silence tenu par écrit. »",
+      intense:"« Ce n'est pas un mensonge, messire, c'est un silence — et un silence tenu par écrit est ce qui empêche les gens de s'entretuer depuis trois cents ans dans cette province. »",
+      extreme:"« Ce n'est pas un mensonge, messire, ne vous drapez pas. C'est un silence, et un silence organisé par écrit est très précisément ce qui empêche les maisons de cette province de s'entretuer depuis trois cents ans. Tout le monde sait. Personne ne dit. Chacun peut continuer à traiter avec l'autre. Vous voulez remplacer ça par quoi — par la vérité ? Ils n'en veulent pas. Ils n'en ont jamais voulu. Ils veulent pouvoir venir dîner. »" },
+    "« Elle n'est pas une chose qu'on tait. »",
+    "Long silence.",
+    "« Non », concède-t-elle. « Elle ne l'est pas, et c'est le seul argument que vous ayez qui vaille quelque chose. »",
+    "§ Elle repousse la feuille sans la déchirer.",
+    "« Alors voici ce qui va se passer, et je vous le dis maintenant pour que vous ne veniez pas me le reprocher dans trois ans. »",
+    "**Un.** « La province va décider elle-même du mot, et ce sera le pire. Pas *maîtresse* : *sorcière elfe*, ou pire. »",
+    "**Deux.** « Mont-Draken va lier trois choses qui n'ont rien à voir — vous, elle, et ce que vous êtes — et il aura l'air d'avoir raison. »",
+    "**Trois.** « Et moi, je serai *la femme qu'on a humiliée*, ce qui est le seul rôle de cette histoire que je ne peux pas jouer, parce qu'on ne fait pas payer un bail à une femme qu'on plaint. »",
+    "Elle se lève.",
+    "« Je ne pars pas. Je vous ai dit que j'étais lisible : je reste, je tiens vos comptes, et je vous préviens que vous venez de me coûter ma seule arme. Faites-en ce que vous voulez, mais ne dites jamais que je ne vous ai pas prévenu. »",
+  ],
+  effets:{ flags:['ma_franc','a2_scandale','a2_epouse_expose'], suspicion:18,
+           faire:() => { bouger('alarielle', { relation:4, confiance:5, devoir:-3 });
+                         retenir('charles', "il n'a pas nié pour l'elfe, ce qui simplifie beaucoup mon dossier");
+                         retenir('caleb', "ma nièce est exposée publiquement, ce qui a un prix"); },
+           exploit:{ eclat:7, temoins:'province', quoi:"vous n'avez rien nié" },
+           marque:"Vous avez refusé la fiction. « Vous venez de me coûter ma seule arme. Ne dites jamais que je ne vous ai pas prévenu. »",
+           court:"Sans fiction" },
+  plusTard:"La province choisira le mot elle-même, et Mont-Draken liera trois choses qui n'ont rien à voir.",
+  suite:'ma_lautre', libelleSuite:"Il reste à le lui dire, à elle" },
+
+ma_termes:{
+  qui:'epouse',
+  titre:"Deux signatures",
+  texte:[
+    "Vous signez. Elle contresigne. Elle range la feuille dans la malle, avec les onze pages, les états de dot et le plan d'assolement.",
+    { sobre:"Ce n'est pas cynique. C'est une maison.",
+      intense:"On peut trouver ça froid. C'est une maison : les maisons ne fonctionnent pas au sentiment, elles fonctionnent à ce qui est écrit, et c'est précisément ce qui permet aux gens d'y vivre sans s'entre-déchirer.",
+      extreme:"On peut trouver ça froid, et vous le trouvez froid pendant environ deux ans. Puis vous comprenez ce que vous regardez : une maison ne fonctionne pas au sentiment. Elle fonctionne à ce qui est écrit, et c'est exactement ce qui permet à trente feux, deux servantes, un intendant, une épouse, un mari et une femme qui n'est pas l'épouse de vivre dans la même vallée pendant vingt ans sans que personne ne meure d'un coup de couteau un soir de Nivôse. Ce n'est pas de la froideur. C'est de l'ingénierie." },
+    "§ Elle a une dernière chose à dire et elle la dit sur le seuil, sans se retourner.",
+    "« Une remarque, et ensuite nous n'en parlerons plus. »",
+    "« Dites. »",
+    "« Vous ne m'avez pas demandé si moi, j'avais quelqu'un. »",
+    { sobre:"Elle sort.",
+      intense:"Elle sort avant que vous ayez trouvé quoi répondre, ce qui était manifestement le but, et vous restez seul dans la salle basse avec la chandelle.",
+      extreme:"Elle sort avant que vous ayez trouvé la moindre chose à répondre, ce qui était manifestement l'intention et ce qui est extrêmement bien joué. Vous restez seul dans la salle basse avec une chandelle, un registre des feux et la conscience très nette d'avoir passé onze mois à considérer une femme de vingt-six ans comme une clause de contrat, alors qu'elle en avait passé onze à ne pas vous considérer comme tel." },
+    "Vous ne le lui demanderez jamais. Ni cette année, ni les suivantes.",
+  ],
+  effets:{ flags:['ma_termes','a2_termes_signes'],
+           faire:() => ETAT.faits.push("« Vous ne m'avez pas demandé si moi, j'avais quelqu'un. »"),
+           marque:"Deux signatures. « Vous ne m'avez pas demandé si moi, j'avais quelqu'un. »",
+           court:"Deux signatures" },
+  suite:'ma_lautre', libelleSuite:"Il reste à le lui dire, à elle" },
+
+ma_choisit_epouse:{
+  qui:'epouse',
+  titre:"Personne d'autre",
+  texte:[
+    "« Alors il n'y aura personne. »",
+    { sobre:"Elle ne dit pas merci.",
+      intense:"Elle ne dit pas merci, ce qui est correct : on ne remercie pas quelqu'un d'exécuter un contrat.",
+      extreme:"Elle ne dit pas merci, et c'est parfaitement correct : on ne remercie pas quelqu'un d'exécuter les termes qu'il a signés, ce serait admettre qu'on ne s'y attendait pas. Elle hoche la tête une fois, reprend sa plume, et rouvre le registre des feux à la page où son doigt était." },
+    "« Bien. »",
+    "Puis, au bout d'un long moment, sans lever les yeux :",
+    "« Vous allez lui dire vous-même. »",
+    "« Oui. »",
+    "« En face. Pas par lettre. » Elle trace une ligne. « Une lettre, c'est ce qu'on fait aux gens dont on a honte. »",
+    "§ Il reste le plus difficile, et ce n'est pas cette conversation-ci.",
+  ],
+  effets:{ flags:['ma_fidele','a2_epouse_choisie'],
+           faire:() => { const C = CHANTIER(); C.faveurs += 2; },
+           marque:"« Il n'y aura personne. » — « En face. Pas par lettre. Une lettre, c'est ce qu'on fait aux gens dont on a honte. »",
+           court:"En face" },
+  suite:'ma_rupture', libelleSuite:"Aller le lui dire" },
+
+/* ══ ET L'AUTRE ═══════════════════════════════════════════════════════════
+ * Elles sont adultes, elles ont leurs propres raisons, et aucune des deux
+ * n'accepte parce qu'on a signé quelque chose ailleurs. Chacune peut dire
+ * non — et le non ne fait rien baisser. */
+ma_lautre:{
+  dyn:true, texte:[], suite:'a2_carte' },
+
+};
+
+enregistrerScenes(MARIAGE);
+
+DYN.ma_lautre = () => aller(a('ma_elfe') || a('ma_franc') ? 'ml_alarielle' : 'ml_alycia');
+
+const MAITRESSE = {
+
+ml_alycia:{
+  qui:'alycia',
+  lieu:() => `${LIEUX[A2().lieu].nom} · ${dateA2()}`,
+  titre:"Ce qu'on lui propose exactement",
+  texte:[
+    "Vous le lui dites en entier : le contrat, les onze pages, les trois lignes, ce qui a été signé et par qui.",
+    { sobre:"Elle écoute jusqu'au bout sans interrompre.",
+      intense:"Elle écoute jusqu'au bout sans interrompre une seule fois, ce qu'elle ne fait jamais, et à la fin elle répète une phrase.",
+      extreme:"Elle écoute jusqu'au bout sans interrompre une seule fois — elle qui coupe tout le monde, tout le temps, et qui a passé quinze ans à ne pas laisser les gens finir leurs phrases. À la fin, elle répète une seule chose, exactement comme on relit une clause à voix haute pour vérifier qu'on l'a bien comprise." },
+    "« *Aucun rang, aucune préséance, aucune voix aux comptes.* »",
+    "« Oui. »",
+    "« Elle est bonne », dit Alycia. « Vraiment. C'est la clause que j'aurais écrite. »",
+    "§ Puis elle pose la vraie question, et ce n'est aucune de celles auxquelles vous vous étiez préparé.",
+    "« Où est-ce que je dors ? »",
+    "« Pardon ? »",
+    { sobre:"« Où. Est-ce que. Je dors. »",
+      intense:"« Où est-ce que je dors, physiquement, les trois cents nuits de l'année où je ne suis pas avec vous ? » Elle a la voix très calme. « Parce que dans votre récit, il y a une maison, une épouse, trente feux, un bourg, une école — et il y a moi, quelque part, qui suis *ailleurs*. »",
+      extreme:"« Où est-ce que je dors. Physiquement. Les trois cent quarante nuits de l'année où je ne suis pas avec vous. » Sa voix est parfaitement calme, ce qui est le plus inquiétant. « Parce que dans tout ce que vous venez de me raconter il y a une maison, une épouse, un intendant, trente feux, un bourg, une école, un four banal et un registre. Et il y a moi. Moi, je suis *ailleurs*. C'est le seul mot qui me concerne dans onze pages : ailleurs. »" },
+    "« Vous avez toujours été ailleurs. C'est vous qui l'avez voulu. »",
+    "« Oui ! » — et c'est la première fois qu'elle hausse la voix depuis Cendrepont. « Oui, et c'était *ma* décision, prise par moi, pour mes raisons, et je pouvais la défaire n'importe quel matin. Là, c'est écrit. Signé. Par deux personnes dont je ne suis aucune. »",
+    "§ Voilà le point. Il n'a jamais été ailleurs.",
+    "« Vous ne me demandez pas de vous aimer moins », dit-elle plus bas. « Vous me demandez de dépendre d'un papier que je n'ai pas signé. C'est très exactement la chose contre laquelle j'ai construit ma vie entière. »",
+  ],
+  choix:[
+    { t:"« Alors signez-le. »",
+      detail:"la troisième signature · ce que personne n'a jamais proposé dans cette province",
+      risque:"définitif", va:'ml_signe' },
+
+    { t:"« Écrivez vos propres termes. »",
+      detail:"une feuille, une plume · et ce qu'elle exigera sera plus dur que l'autre",
+      risque:"calculé", va:'ml_ses_termes' },
+
+    { t:"« Alors ne dépendez de rien. Partez. »",
+      detail:"lui rendre la seule chose qu'elle ait jamais voulue · en la perdant",
+      risque:"définitif", ferme:"Ferme : ce qu'il y avait", definitif:true, va:'ml_partir' },
+
+    { t:"Ne rien lui demander du tout",
+      detail:"il n'y a pas d'obligation d'avoir cette conversation ce soir · ni jamais",
+      risque:"prudent", va:'ml_rien' },
+  ],
+},
+
+ml_signe:{
+  qui:'alycia',
+  titre:"La troisième signature",
+  texte:[
+    "« Alors signez-le. »",
+    { sobre:"Elle ne comprend pas tout de suite.",
+      intense:"Elle ne comprend pas tout de suite, et il faut le répéter, et c'est la première fois qu'il faut répéter quelque chose à cette femme.",
+      extreme:"Elle ne comprend pas tout de suite. Il faut le répéter, et c'est la première fois depuis Cendrepont qu'il faut répéter quoi que ce soit à cette femme — elle qui devine les phrases à la moitié et qui finit celles des autres depuis quinze ans." },
+    "« Le papier. Les trois lignes. Il y a deux signatures dessus. Mettez la troisième. »",
+    "« Ce n'est pas comme ça que ça se fait. »",
+    "« Non. »",
+    "« Il n'y a aucun exemple de ça dans trois cents ans de cette province. »",
+    "« Non. »",
+    "§ Elle reste très longtemps immobile.",
+    "« Elle refusera », dit-elle enfin.",
+    "« Peut-être. »",
+    "Elle refuse. Elle refuse deux fois, à quatre mois d'intervalle, et sa raison est bonne : *une clause signée par celle qu'elle vise cesse d'être une clause et devient un traité, et je ne traite pas avec une personne qui n'a pas de maison.*",
+    { sobre:"À la troisième fois, elle accepte.",
+      intense:"À la troisième fois, un an plus tard, elle accepte — non pour vous, et pas du tout pour Alycia : parce qu'entre-temps Alycia a fait sortir onze personnes d'un dépôt de Chastel, dont deux du bourg de Karlsberg, et qu'une intendante sait reconnaître ce qu'elle doit.",
+      extreme:"À la troisième fois, un an plus tard, elle accepte. Ni pour vous ni pour Alycia : parce qu'entre-temps Alycia a fait sortir onze personnes d'un dépôt de Chastel, dont deux du bourg de Karlsberg — une veuve et son fils de quatorze ans qui figuraient au registre des feux, colonne trois, tenu de sa main. Une intendante sait exactement ce qu'elle doit et à qui. Elle signe en bas, à droite, de la même écriture serrée que le reste, et elle ne commente pas." },
+    "Trois signatures sur une feuille de trois lignes, dans une malle, à Karlsberg.",
+    "§ Ce n'est pas une romance. C'est trois adultes qui ont écrit ce qu'ils acceptaient, et c'est infiniment plus solide.",
+    "Alycia garde une copie. C'est le seul papier qu'elle ait accepté de porter sur elle en quinze ans.",
+  ],
+  effets:{ flags:['ml_signe','a2_trois_signatures','a2_alycia_reste'],
+           faire:() => { bouger('alycia', { relation:8, confiance:10, attirance:6, peur:-8 });
+                         const C = CHANTIER(); C.faveurs += 2;
+                         retenir('alycia', "on m'a fait signer, moi, une clause qui me visait — personne n'avait jamais fait ça"); },
+           exploit:{ eclat:6, temoins:'quelques', quoi:"trois signatures sur une feuille de trois lignes" },
+           marque:"Trois signatures. Alycia porte une copie sur elle — le seul papier en quinze ans.",
+           court:"Trois signatures" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+ml_ses_termes:{
+  qui:'alycia',
+  titre:"Ce qu'elle exige",
+  texte:[
+    "« Écrivez vos propres termes. »",
+    "Elle prend la plume comme on prend une arme qu'on n'a pas l'habitude de porter.",
+    { sobre:"Elle écrit quatre lignes. Elles sont plus dures que les trois autres.",
+      intense:"Elle écrit quatre lignes en une demi-heure, en s'y reprenant, et elles sont considérablement plus dures que les trois de l'épouse.",
+      extreme:"Elle écrit quatre lignes en une demi-heure, en s'y reprenant trois fois, en raturant, en recommençant la page — elle écrit mal et lentement, ce que vous ne saviez pas, et ce qui explique quinze ans de listes tenues dans une tête plutôt que sur du papier. Les quatre lignes sont considérablement plus dures que les trois de l'épouse, et elles ne portent sur rien de ce que vous attendiez." },
+    "**Une.** « Je ne vis pas à Karlsberg et je n'y ai pas de chambre. Si j'en avais une, j'y serais dans deux ans, et dans cinq je ne saurais plus faire autre chose. »",
+    "**Deux.** « Je ne prends rien. Pas d'argent, pas de terre, pas de rente, pas de cadeau. Si vous me donnez quelque chose je le vends et je donne l'argent, et ce sera très humiliant pour nous deux. »",
+    "**Trois.** « Vos enfants ne sauront pas qui je suis avant leurs quinze ans. Ensuite ils sauront tout, d'un coup, de votre bouche, et vous ne mentirez pas une seule fois. »",
+    "**Quatre.** « Et le jour où je vous dirai que c'est fini, ce sera fini le jour même, sans conversation. »",
+    "« La quatrième est cruelle. »",
+    { sobre:"« La quatrième est la seule qui me protège. »",
+      intense:"« La quatrième est la seule des quatre qui me protège », dit-elle. « Les trois autres protègent votre maison. Regardez-les mieux. »",
+      extreme:"« La quatrième est la seule des quatre qui me protège, et les trois autres protègent votre maison — regardez-les mieux, messire, vous êtes en train de vous attendrir sur des clauses qui sont toutes à votre avantage sauf une. » Elle repousse la feuille. « Je ne vous quitte pas. Je me réserve de pouvoir le faire en un jour, sans avoir à en discuter avec un homme qui parle mieux que moi. C'est tout. C'est même très peu. »" },
+    "§ Vous signez. Elle signe. Deux feuilles dans la même malle, avec des clauses qui ne se recouvrent pas et ne se contredisent pas.",
+    "L'épouse lit les quatre lignes le lendemain, en intendante.",
+    "« Elle est bien meilleure que moi », dit-elle simplement. « La quatrième surtout. J'aurais dû y penser il y a onze ans. »",
+  ],
+  effets:{ flags:['ml_termes','a2_alycia_reste','a2_alycia_libre'],
+           faire:() => { bouger('alycia', { relation:6, confiance:8, attirance:5, peur:-6 });
+                         retenir('alycia', "j'ai écrit mes propres termes et il les a signés sans en discuter un seul"); },
+           exploit:{ eclat:4, temoins:'aucun', quoi:"elle a écrit ses conditions et vous n'en avez discuté aucune" },
+           marque:"Quatre lignes de sa main. La quatrième : « le jour où je dirai que c'est fini, ce sera fini le jour même. »",
+           court:"Quatre lignes" },
+  plusTard:"Elle peut mettre fin à tout ça en un jour, sans conversation. C'est écrit et vous l'avez signé.",
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+ml_partir:{
+  qui:'alycia',
+  titre:"Ne dépendre de rien",
+  texte:[
+    "« Alors ne dépendez de rien. Partez. »",
+    { sobre:"Elle encaisse mal. C'est la première fois.",
+      intense:"Elle encaisse mal, et c'est la première fois que vous la voyez encaisser mal quoi que ce soit — parce que c'est son propre argument, retourné, et qu'il n'y a rien à répondre à son propre argument.",
+      extreme:"Elle encaisse mal, et c'est la première fois en trois ans que vous voyez cette femme encaisser mal quoi que ce soit. C'est son propre argument, retourné, servi entier : elle a passé quinze ans à expliquer que dépendre est une chaîne, on lui propose de n'en porter aucune, et il n'existe pas de réponse à ça — sauf une, qu'elle ne dira pas, et vous savez tous les deux laquelle." },
+    "« Vous me mettez dehors avec ma propre phrase. »",
+    "« Je vous rends votre liberté avec votre propre phrase. »",
+    "« C'est la même opération, messire, et vous le savez, et c'est très bien joué. »",
+    "§ Elle part le lendemain matin, sans dispute, en donnant à ses affaires le temps normal qu'il faut pour les charger sur un cheval.",
+    "Elle ne disparaît pas. C'est la nuance et elle compte : trois relais, un maréchal, une sage-femme et un clerc d'étape. Un mot passe en neuf jours.",
+    "Elle fait passer un mot deux fois par an pendant onze ans. Toujours sur le réseau, jamais sur autre chose. Toujours utile. Jamais personnel.",
+    { sobre:"Elle n'a jamais dit qu'elle vous en voulait.",
+      intense:"Elle n'a jamais dit qu'elle vous en voulait, et elle a probablement raison de ne pas vous en vouloir, ce qui n'aide personne.",
+      extreme:"Elle n'a jamais dit une seule fois qu'elle vous en voulait, ni dans un mot, ni par un tiers, ni à travers quiconque. Elle a probablement raison de ne pas vous en vouloir : vous lui avez rendu exactement ce qu'elle réclamait depuis quinze ans, entier, sans conditions. Ça n'aide personne, ça ne console rien, et ça reste vrai." },
+  ],
+  effets:{ flags:['ml_partie','a2_alycia_libre','a2_reseau_su'],
+           faire:() => { bouger('alycia', { relation:-4, attirance:-6, confiance:4, peur:-10 });
+                         retenir('alycia', "il m'a rendu ma liberté avec ma propre phrase, ce qui était juste et abominable"); },
+           marque:"Elle est partie avec sa propre phrase. Un mot deux fois par an pendant onze ans, toujours utile, jamais personnel.",
+           court:"Neuf jours" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+ml_rien:{
+  qui:'alycia',
+  titre:"On n'est pas obligé",
+  texte:[
+    "Vous ne demandez rien.",
+    { sobre:"Il n'y a pas d'obligation d'avoir cette conversation.",
+      intense:"Il n'y a aucune obligation d'avoir cette conversation, ce soir ou jamais, et c'est une chose que personne ne dit assez : on peut laisser une situation être ce qu'elle est.",
+      extreme:"Il n'y a aucune obligation d'avoir cette conversation, ni ce soir, ni jamais, et c'est une chose que personne ne dit assez souvent. On peut laisser une situation être exactement ce qu'elle est, sans la nommer, sans la contracter, sans la trancher. Ça ne règle rien. Ça n'abîme rien non plus, ce qui n'est pas si fréquent." },
+    "Elle vous regarde ne pas le demander, et elle comprend, et elle ne dit rien non plus.",
+    "§ Ce qu'il y a entre vous continue exactement comme avant, sans nom, sans papier et sans place à table.",
+    "Ce sera comme ça pendant des années. Il y aura des mois entiers sans se voir et des semaines où elle sera là. L'épouse tiendra les comptes. Personne ne dira rien.",
+    "C'est la solution la plus fragile, la moins honnête et la plus vivable des quatre, et c'est celle que choisissent, en pratique, à peu près tous les gens de ces provinces.",
+  ],
+  effets:{ flags:['ml_tacite','a2_alycia_reste'],
+           faire:() => bouger('alycia', { relation:2, peur:1 }),
+           marque:"Rien n'a été demandé, rien n'a été dit, et ça continue. La solution la plus fragile et la plus vivable.",
+           court:"Sans nom" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+/* ── Alarielle ────────────────────────────────────────────────────────────
+ * Elle a un peuple. Ce n'est pas une excuse, c'est une hiérarchie, et une
+ * maison humaine est en dessous. */
+ml_alarielle:{
+  qui:'alarielle',
+  lieu:"Aelthiriel · le jardin fermé",
+  titre:"Ce que sa cour appellerait ça",
+  texte:[
+    "Vous le lui dites en entier, à Aelthiriel, dans le jardin fermé, parce qu'elle a demandé que ce soit là.",
+    { sobre:"Elle écoute sans rien montrer.",
+      intense:"Elle écoute sans rien montrer, et à la fin elle demande une précision de vocabulaire, ce qui est la chose la plus elfique qu'elle ait jamais faite devant vous.",
+      extreme:"Elle écoute sans rien montrer du tout, immobile, et à la fin elle ne réagit à rien de ce que vous attendiez : elle demande une précision de vocabulaire. C'est la chose la plus elfique qu'elle ait jamais faite devant vous en trois ans, et vous comprenez que c'est aussi une façon de gagner du temps." },
+    "« Le mot que votre épouse a refusé d'écrire. Dites-le-moi. »",
+    "« Maîtresse. »",
+    "« Traduisez-le. Pas le mot : ce qu'il fait. »",
+    "« Une femme reçue dans une maison, sans rang, dont on sait tous ce qu'elle est et dont personne ne parle. »",
+    "§ Elle réfléchit un long moment.",
+    { sobre:"« Nous n'avons pas ça. »",
+      intense:"« Nous n'avons pas ça », dit-elle. « Ce n'est pas de la vertu : nous avons pire, et c'est plus ancien. »",
+      extreme:"« Nous n'avons pas ce mot », dit-elle. « Ce n'est pas de la vertu, ne vous méprenez pas — nous avons quelque chose de bien pire et de bien plus ancien, et il n'y a pas de traduction non plus. »" },
+    "« Dites. »",
+    "« Chez nous, ce qui n'est pas contracté n'existe pas. Une elfe qui vit trois cents ans ne peut pas se permettre des situations qui durent sans être nommées : elles durent trop longtemps. » Elle regarde le jardin. « Alors on écrit tout, ou on n'a rien. Il n'y a pas de troisième état. »",
+    "« Et là ? »",
+    "« Là, ce que vous me proposez n'existe pas dans ma langue, ce qui veut dire que ma cour le nommera avec le mot le plus proche. » Elle se tourne enfin. « Et le mot le plus proche, chez nous, s'applique à ce qu'on donne en otage. »",
+    "§ Il y a la question du peuple, et elle est plus lourde que tout le reste.",
+    "« Mon frère fera de vous une preuve », dit-elle. « Il dit depuis vingt ans que les humains prennent aux Elfes ce qu'ils ne peuvent pas obtenir autrement. Je serais la démonstration vivante, dans une maison humaine, sans contrat, sans rang, à onze lieues de Chastel. »",
+    "« Vous avez dit que vous ne détourniez pas les yeux. »",
+    "« Je ne les détourne pas. Je vous dis exactement le prix, ce qui est le contraire. »",
+  ],
+  choix:[
+    { t:"« Alors contractons. Devant votre cour. »",
+      detail:"un acte elfique, écrit, déposé · c'est ce qu'elle a dit qu'il fallait",
+      risque:"définitif", ferme:"Ferme : toute discrétion sur ce point, dans deux mondes",
+      va:'ml_el_contrat' },
+
+    { t:"« Ce n'est pas à vous de payer ça. »",
+      detail:"reculer avant qu'elle décide · pour la raison qu'elle a donnée",
+      risque:"définitif", ferme:"Ferme : ce qui restait possible", definitif:true, va:'ml_el_non' },
+
+    { t:"« Que voulez-vous, vous ? »",
+      detail:"la question qu'on ne pose pas à quelqu'un qui a un peuple",
+      risque:"calculé", va:'ml_el_elle' },
+  ],
+},
+
+ml_el_elle:{
+  qui:'alarielle',
+  titre:"Ce qu'elle veut",
+  texte:[
+    "« Que voulez-vous, vous ? »",
+    { sobre:"« Personne ne me l'a demandé depuis quatre-vingt-onze ans. »",
+      intense:"Elle met du temps.\n\n« On ne me l'a pas demandé depuis quatre-vingt-onze ans », dit-elle. « Je sais le chiffre exact, ce qui devrait vous dire quelque chose sur ces quatre-vingt-onze ans. »",
+      extreme:"Elle met du temps. Beaucoup plus qu'une humaine, et pas pour les mêmes raisons.\n\n« On ne me l'a pas demandé depuis quatre-vingt-onze ans », dit-elle enfin. « Je connais le chiffre exact, à l'année près, et je crois que ça devrait vous dire à peu près tout ce qu'il y a à savoir sur ces quatre-vingt-onze ans et sur la maison dans laquelle je les ai passés. »" },
+    "« Alors répondez. »",
+    "« Je veux que la faute soit réparée. » Elle dit ça très vite, comme une chose apprise. Puis elle s'arrête. « Non. Ça, c'est ce que je dois vouloir. »",
+    "§ Elle recommence, et c'est visiblement difficile.",
+    "« Je veux **du temps qui ne compte pas**. »",
+    "« Pardon ? »",
+    { sobre:"« Vous ne pouvez pas comprendre, et ce n'est pas une insulte. »",
+      intense:"« Tout mon temps compte », dit-elle. « Chaque année de ma vie est une année de la dette de ma maison, et j'en ai deux cent onze. Ce que je veux, c'est du temps qui ne compte pas. Des saisons dont personne ne fera le bilan. »",
+      extreme:"« Tout mon temps compte, et vous ne pouvez pas comprendre ça, et ce n'est pas une insulte — c'est arithmétique. Chaque année de ma vie est une année de la dette de ma maison. J'en ai deux cent onze. J'en aurai probablement quatre cents. Il n'y a pas eu, dans ces deux cent onze années, une seule saison dont on n'ait pas fait le bilan quelque part. » Elle regarde ses mains. « Ce que je veux, c'est du temps qui ne compte pas. Des mois dont personne ne fera jamais le compte. C'est tout, c'est ridicule, et c'est absolument impossible à obtenir chez moi. »" },
+    "« Une maison humaine ne fait le bilan de rien », dites-vous.",
+    "« Une maison humaine dure quatre-vingts ans », dit-elle. « C'est très exactement ce que je viens de vous décrire. »",
+    "§ Elle vient de dire oui, et il a fallu deux cent onze ans et une question que personne ne posait.",
+  ],
+  effets:{ flags:['ml_el_veut'],
+           faire:() => bouger('alarielle', { relation:7, confiance:8, attirance:6 }),
+           exploit:{ eclat:4, temoins:'aucun', quoi:"vous avez posé à une elfe la question qu'on ne lui pose pas" },
+           marque:"« Je veux du temps qui ne compte pas. » Quatre-vingt-onze ans qu'on ne le lui avait pas demandé.",
+           court:"Du temps qui ne compte pas" },
+  choix:[
+    { t:"« Alors contractons. Devant votre cour. »",
+      detail:"la protéger avec du papier · ce qui est la seule protection qu'elle reconnaisse",
+      risque:"définitif", ferme:"Ferme : toute discrétion, dans deux mondes", va:'ml_el_contrat' },
+    { t:"« Alors ne contractons rien. »",
+      detail:"lui donner exactement ce qu'elle a demandé · du temps que personne ne compte",
+      risque:"définitif", ferme:"Ferme : la protection qu'un acte lui donnerait", va:'ml_el_sans' },
+  ],
+},
+
+ml_el_contrat:{
+  qui:'alarielle',
+  titre:"Un acte devant la cour",
+  texte:[
+    "Un acte elfique, écrit, lu devant la cour d'Aelthiriel, déposé aux archives de la marche.",
+    { sobre:"Il faut onze mois pour l'obtenir.",
+      intense:"Il faut onze mois, quatre lectures et l'avis d'un collège de trois — parce qu'aucun acte de cette nature n'a été déposé depuis quatre cents ans et qu'il faut d'abord établir sous quel titre on le classe.",
+      extreme:"Il faut onze mois, quatre lectures publiques et l'avis d'un collège de trois archivistes, parce qu'aucun acte de cette nature n'a été déposé à Aelthiriel depuis quatre cent onze ans. La difficulté n'est pas l'autorisation : c'est la classification. Sous quel titre range-t-on une elfe de la maison d'Eltharion liée par acte à un chef de maison humain de quarante ans d'espérance de vie ? Le collège siège quatre fois. Il finit par créer une rubrique." },
+    "§ Tyrion parle contre, à la troisième lecture, pendant deux heures.",
+    "Il n'est pas grossier. Il est même très bon, et son argument est celui qu'on ne peut pas réfuter : *ma sœur est en train de faire, volontairement, la chose exacte dont nous accusons les humains depuis deux siècles.*",
+    "Alarielle répond en quatre phrases.",
+    "« Volontairement. C'est le mot. Il est dans ton propre discours et tu ne l'as pas entendu. »",
+    "L'acte est déposé à onze voix contre neuf.",
+    { sobre:"Il ne la protège de rien et il change tout.",
+      intense:"L'acte ne la protège de rien de concret — aucune cour ne peut la défendre à onze lieues de Chastel. Il fait autre chose : il rend impossible de dire qu'on la lui a prise.",
+      extreme:"L'acte ne la protège de rien de concret, et tout le monde le sait : aucune cour elfique ne peut défendre quiconque à onze lieues de Chastel. Il fait exactement une chose, et c'est celle qui compte : il rend définitivement impossible de dire qu'on la lui a prise. C'est écrit, lu quatre fois, voté, déposé. Deux siècles d'un argument très efficace viennent de perdre leur meilleur exemple à venir, et c'est elle qui l'a fait, contre son propre frère, devant sa propre cour." },
+    "Elle est reçue à Karlsberg comme envoyée d'Aelthiriel. Elle y passe quatre mois par an.",
+    "Personne, dans aucun des deux mondes, ne sait comment appeler ça. C'est très exactement ce qui était visé.",
+  ],
+  effets:{ flags:['ml_el_contrat','a2_alarielle_liee','a2_acte_elfique','a2_tyrion_humilie'],
+           suspicion:16,
+           faire:() => { bouger('alarielle', { relation:9, confiance:9, attirance:7, devoir:3 });
+                         const C = CHANTIER(); C.faveurs += 3;
+                         retenir('tyrion', "ma sœur a fait déposer un acte contre moi, devant la cour, et elle a gagné");
+                         retenir('alarielle', "il a proposé le papier avant que je le demande"); },
+           exploit:{ eclat:20, temoins:'province', quoi:"un acte elfique déposé pour une maison humaine, à onze voix contre neuf" },
+           marque:"Acte déposé aux archives de la marche, onze voix contre neuf. Tyrion a parlé deux heures contre.",
+           court:"Onze contre neuf" },
+  plusTard:"Tyrion a perdu devant sa cour, publiquement, contre sa sœur. Il ne l'oubliera pas et il a trois cents ans devant lui.",
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+ml_el_sans:{
+  qui:'alarielle',
+  titre:"Du temps que personne ne compte",
+  texte:[
+    "Pas d'acte. Pas de lecture, pas de collège, pas de rubrique.",
+    { sobre:"Elle vient quand elle vient.",
+      intense:"Elle vient quand elle vient et repart quand elle repart. Personne à Aelthiriel ne tient le compte de ses absences, pour la première fois en deux cent onze ans.",
+      extreme:"Elle vient quand elle vient, elle repart quand elle repart, et personne à Aelthiriel n'en tient le compte — pour la première fois en deux cent onze ans. Ce n'est pas de la clandestinité : sa cour sait parfaitement où elle est. C'est que rien n'est déposé, donc rien n'est comptable, donc aucun bilan ne sera jamais fait de ces mois-là, ni par le collège des archives ni par personne. C'est très exactement ce qu'elle avait demandé et vous ne l'aviez pas cru sérieusement." },
+    "§ Ça marche quatre ans.",
+    "Puis Tyrion trouve le moyen de le compter quand même — un archiviste, des dates de laissez-passer, un relevé de la marche — et il le fait lire devant la cour un matin de Ventôse.",
+    "Ce n'est pas un scandale. C'est pire : c'est un **relevé**. Quatre ans, mois par mois, avec les dates.",
+    "Alarielle l'écoute jusqu'au bout, debout, et ne conteste pas un chiffre.",
+    { sobre:"« Ils sont exacts », dit-elle.",
+      intense:"« Ils sont exacts », dit-elle quand il a fini. « Tu as bien travaillé. Et maintenant que tu les as comptés, ils sont comptés pour toujours, et tu viens de me prendre la seule chose que j'aie eue en deux cent onze ans. »",
+      extreme:"« Ils sont exacts », dit-elle quand il a fini de lire, et sa voix ne tremble pas. « Tu as bien travaillé, mon frère, et je ne conteste aucun chiffre. Comprends seulement ce que tu viens de faire : ils sont comptés maintenant. Ils le resteront. Ils seront dans les archives dans quatre cents ans, mois par mois, avec les dates, et personne ne pourra plus jamais les décompter. » Elle regarde la salle. « C'était la seule chose que j'aie possédée en deux cent onze ans et tu ne me l'as pas prise pour la détruire : tu me l'as prise pour la classer. »" },
+    "Elle quitte la cour ce jour-là et n'y reparaît pas pendant sept ans.",
+  ],
+  effets:{ flags:['ml_el_sans','a2_alarielle_liee','a2_alarielle_scandale','a2_tyrion_dur'],
+           faire:() => { bouger('alarielle', { relation:6, confiance:7, attirance:8, devoir:-6 });
+                         retenir('tyrion', "j'ai fait compter les mois de ma sœur et elle a quitté la cour");
+                         retenir('alarielle', "il m'a donné quatre ans que personne ne comptait, et mon frère les a comptés"); },
+           exploit:{ eclat:8, temoins:'quelques', quoi:"quatre ans que personne n'a comptés" },
+           marque:"Quatre ans sans acte. Tyrion les a fait compter devant la cour, mois par mois. Elle n'y est pas revenue en sept ans.",
+           court:"Le relevé" },
+  plusTard:"Elle a quitté sa cour pour sept ans. Une elfe qui perd son peuple n'a plus que ce qu'elle a choisi à la place.",
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+ml_el_non:{
+  qui:'alarielle',
+  titre:"Ce n'est pas à elle de payer",
+  texte:[
+    "« Ce n'est pas à vous de payer ça. »",
+    { sobre:"Elle ne répond pas immédiatement.",
+      intense:"Elle ne répond pas immédiatement, et quand elle répond, c'est pour vous reprendre.",
+      extreme:"Elle ne répond pas immédiatement. Quand elle le fait, c'est pour vous reprendre, très calmement, et vous découvrez que vous venez de commettre exactement l'erreur que fait tout le monde avec elle depuis deux cent onze ans." },
+    "« Vous venez de décider à ma place. »",
+    "« J'ai voulu — »",
+    "« Je sais ce que vous avez voulu. » Elle lève une main. « C'est même généreux et c'est même juste. Vous avez pesé ce que ça me coûterait, vous avez trouvé que c'était trop, et vous avez tranché. Sans moi. »",
+    "§ « C'est ce que fait ma maison depuis que j'ai onze ans », dit-elle. « Elle pèse ce que ça me coûterait, elle trouve que c'est trop, et elle tranche. »",
+    "Silence dans le jardin fermé.",
+    "« Je ne vous le reproche pas », dit-elle enfin. « Vous n'avez pas eu le temps d'apprendre : vous durez quatre-vingts ans, vous décidez vite, c'est votre condition. Mais vous venez de faire, en une phrase, ce que je vous demandais de ne pas faire. »",
+    "« Voulez-vous que je revienne dessus ? »",
+    { sobre:"« Non. C'est fait. »",
+      intense:"« Non. » Elle sourit à peine. « C'est fait. Une chose reprise n'est pas une chose non dite — nous ne fonctionnons pas comme vous là-dessus. »",
+      extreme:"« Non. » Elle sourit à peine, et c'est le plus triste de la conversation. « C'est fait. Chez nous, une chose reprise n'est pas une chose non dite : nous vivons trop longtemps pour ce genre de commodité. Vous l'avez dit, ça restera dit, et dans cent ans je m'en souviendrai avec la même précision qu'aujourd'hui. » Elle regarde le jardin fermé. « Ce n'est pas une punition, messire. C'est simplement ce que c'est que de parler à quelqu'un qui n'oublie pas. »" },
+    "Elle vous reçoit toujours. Elle continue de vous ouvrir les archives. Rien n'est cassé, et rien ne se rouvrira.",
+  ],
+  effets:{ flags:['ml_el_recule','a2_alarielle_amie'],
+           faire:() => { bouger('alarielle', { relation:2, confiance:3, attirance:-5, devoir:2 });
+                         retenir('alarielle', "il a décidé à ma place en croyant me protéger, comme tout le monde"); },
+           marque:"« Vous venez de décider à ma place. C'est ce que fait ma maison depuis que j'ai onze ans. »",
+           court:"Décider à sa place" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+ma_rupture:{
+  dyn:true, texte:[], suite:'a2_carte' },
+
+/* La rupture choisie : on va le dire en face, comme l'épouse l'a exigé. */
+ml_fin_alycia:{
+  qui:'alycia',
+  titre:"En face",
+  texte:[
+    "Vous le lui dites en face, comme il a été demandé, et c'est très court.",
+    { sobre:"Elle ne discute pas.",
+      intense:"Elle ne discute pas une seconde. Elle hoche la tête, elle regarde ailleurs, et elle pose une seule question.",
+      extreme:"Elle ne discute pas une seconde, ne demande pas de raison, ne cherche pas à négocier. Elle hoche la tête une fois, regarde le mur derrière vous pendant environ trois secondes, et pose une seule question — qui n'est aucune de celles qu'un homme attend dans cette situation." },
+    "« Est-ce que le réseau continue ? »",
+    "§ C'est la seule chose qu'elle demande.",
+    "« Oui. Bien sûr. »",
+    "« Bien. » Elle se lève. « Alors ça va. »",
+    "« Alycia — »",
+    "« Non. » Elle prend son manteau. « Vous alliez dire quelque chose pour vous sentir mieux et ça me coûterait. Ne le dites pas. »",
+    "Elle est sur le seuil.",
+    "« Vous avez fait ce qu'il fallait pour votre maison », dit-elle sans se retourner. « C'est ce que je vous aurais conseillé si vous m'aviez demandé, et vous ne m'avez pas demandé, et c'est parfaitement normal. »",
+    "Elle continue de travailler avec vous pendant onze ans.",
+    "Elle ne remet jamais les pieds à Karlsberg.",
+  ],
+  effets:{ flags:['ml_fin','a2_alycia_travail'],
+           faire:() => { bouger('alycia', { attirance:-10, relation:-2, confiance:3 });
+                         retenir('alycia', "il a choisi sa maison et il me l'a dit en face, ce qui est déjà rare"); },
+           marque:"« Est-ce que le réseau continue ? » — la seule question. Elle n'est jamais revenue à Karlsberg.",
+           court:"En face" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+ml_fin_alarielle:{
+  qui:'alarielle',
+  titre:"Sept mots",
+  texte:[
+    "Vous faites la route jusqu'à Aelthiriel pour le dire en face. Onze semaines aller-retour pour une conversation de sept mots.",
+    "« J'ai choisi ma maison. Je suis venu le dire. »",
+    { sobre:"Elle met un temps très long.",
+      intense:"Elle met un temps très long — un temps elfique, celui qu'on ne supporte pas quand on vit quatre-vingts ans.",
+      extreme:"Elle met un temps très long à répondre. Un temps elfique : celui qu'on ne supporte pas quand on vit quatre-vingts ans et qu'on compte les siennes. Vous restez debout dans le jardin fermé pendant ce qui doit faire deux minutes entières, et vous comprenez à la fin que ce n'était pas de l'hésitation." },
+    "« Vous avez fait onze semaines de route pour sept mots. »",
+    "« Oui. »",
+    "« Personne n'a jamais fait onze semaines de route pour me dire quelque chose de désagréable. » Elle incline la tête. « On m'écrit. C'est l'usage et c'est plus commode. »",
+    "§ « Merci d'être venu », dit-elle, et elle le pense.",
+    "Elle vous ouvre les archives ce jour-là et les années suivantes. Elle parle devant sa cour contre les mesures qui visent les Parias, et elle perd, et elle parle quand même.",
+    "Vous ne saurez jamais si c'était une amitié. Il n'y a pas de mot pour ça non plus, et pour une fois ça n'a aucune importance.",
+  ],
+  effets:{ flags:['ml_fin','a2_alarielle_amie'],
+           faire:() => { bouger('alarielle', { relation:4, confiance:6, attirance:-6, devoir:4 });
+                         retenir('alarielle', "il a fait onze semaines de route pour me dire sept mots désagréables"); },
+           exploit:{ eclat:3, temoins:'aucun', quoi:"onze semaines de route pour sept mots" },
+           marque:"Onze semaines de route pour sept mots. « Personne n'a jamais fait ça pour me dire quelque chose de désagréable. »",
+           court:"Sept mots" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+};
+
+enregistrerScenes(MAITRESSE);
+
+DYN.ma_rupture = () => aller(a('ma_elfe') ? 'ml_fin_alarielle' : 'ml_fin_alycia');
+
+entree2('ml_alycia', 'ml_alarielle', 'ml_fin_alycia', 'ml_fin_alarielle');
+
+/* L'épouse arrive une saison après la signature du contrat, à Karlsberg,
+ * et pas ailleurs : c'est une maison qu'elle vient tenir. */
+offrir({ id:'ma_arrivee', lieu:'karlsberg', va:'ma_arrivee',
+         titre:"Elle arrive",
+         si:() => a('aly_marie') });
 
 </script>
 <script>

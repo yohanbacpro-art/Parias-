@@ -167,6 +167,7 @@ Object.assign(GENS, {
   berold:    { nom:"Bérold",                 role:"chef de meute · onze ans à Mont-Draken",                   lettre:"B" },
   gerbaud:   { nom:"Gerbaud",                role:"maître d'armes de Karlsberg · soixante-dix ans",           lettre:"G" },
   ysabel:    { nom:"Ysabel de Karlsberg",    role:"sœur cadette de votre père · soixante-quatre ans",         lettre:"Y" },
+  epouse:    { nom:"Votre épouse",           role:"elle a signé les mêmes onze pages que vous",               lettre:"É" },
 });
 
 enregistrerScenes({});

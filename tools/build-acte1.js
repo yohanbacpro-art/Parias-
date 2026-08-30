@@ -34,7 +34,8 @@ const style  = head.match(/<style>[\s\S]*?<\/style>/)[0];
 const SCRIPTS = ['moteur.js', 'monde.js', 'machine.js', 'arc_wyverne.js', 'arc_c02.js', 'arc_c03.js', 'arc_c04.js', 'arc_c05.js', 'arc_c06.js', 'climax_assise.js',
   '../acte2/monde2.js', '../acte2/boucle2.js', '../acte2/alycia.js', '../acte2/karlsberg.js',
   '../acte2/piste_papier.js', '../acte2/piste_sang.js', '../acte2/alarielle.js', '../acte2/gens.js',
-  '../acte2/lointains.js', '../acte2/alycia_2.js', '../acte2/fin2.js',
+  '../acte2/lointains.js', '../acte2/chantier.js', '../acte2/politique.js',
+  '../acte2/mariage.js', '../acte2/alycia_2.js', '../acte2/fin2.js',
   'jeu.js'];
 const scripts = SCRIPTS.map(f => `<script>\n/* ── ${f} ── */\n${lire(f)}\n</script>`).join('\n');
 

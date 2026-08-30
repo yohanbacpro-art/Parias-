@@ -65,7 +65,8 @@ const dit = (ok, quoi, note) => {
     const parNeuf = Object.keys(NEUF).map(id => 'acte_' + id);
     /* Les étapes d'Alycia ne se référencent nulle part : c'est elle qui
      * vient, et l'aiguillage choisit laquelle. */
-    const parBeat = BEATS_ALYCIA.map(b => [b.id, b.rate]).flat().filter(Boolean);
+    const parBeat = BEATS_ALYCIA.map(b => [b.id, b.rate]).flat().filter(Boolean)
+      .concat(ENTREES2);
     return { def, ref, dyn:Object.keys(DYN), echos:Object.keys(ECHOS),
              parBanc, parOffre, parNeuf, parBeat };
   });

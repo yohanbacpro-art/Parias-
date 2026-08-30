@@ -230,7 +230,7 @@ el_archives:{
     "§ Vous étiez trois. Vous, une sœur plus petite, et un frère mort en bas âge dont vous n'aviez jamais entendu parler.",
     "Et il y avait une génération avant vous, et dans cette génération il y avait votre père, et il y avait sa sœur.",
   ],
-  effets:{ flags:['el_archives','a2_ne_transmet_pas_droit'],
+  effets:{ flags:['el_archives','a2_ne_transmet_pas_droit','a2_onde_rendue'],
            faire:() => { A2().pistes.onde = 4; bouger('alarielle', { confiance:2 }); },
            exploit:{ eclat:4, temoins:'aucun', quoi:"vous savez pourquoi il y avait, dans chaque maison de Paria, des gens qui n'avaient rien" },
            marque:"« Cela ne se transmet pas droit. » Un enfant sur trois ne l'a pas. Dans onze maisons, pendant quatre cents ans.",

@@ -12,7 +12,19 @@
 const OFFRES = [];
 const offrir = o => OFFRES.push(o);
 
-const offresDe = ou => OFFRES.filter(o => o.lieu === ou && (!o.si || o.si()) && !a('fait_' + o.id));
+/* Certaines scènes ne sont la cible d'aucun `va:` : c'est un aiguillage qui
+ * les choisit — une étape d'ouvrage, un palier, celle des deux femmes à qui
+ * l'on parle. Elles s'inscrivent ici pour que l'épreuve d'acceptation sache
+ * qu'elles ne sont pas orphelines. */
+const ENTREES2 = [];
+const entree2 = (...ids) => ENTREES2.push(...ids);
+
+/* Une affaire commencée s'inscrit et ne se repropose pas. Un chantier, si :
+ * ce n'est pas une affaire, c'est un endroit où l'on revient tant qu'il
+ * reste quelque chose à monter. */
+const offresDe = ou => OFFRES.filter(o => o.lieu === ou && (!o.si || o.si())
+                                       && (o.permanent || !a('fait_' + o.id)));
+const marquerOffre = o => { if(!o.permanent) ETAT.flags.add('fait_' + o.id); };
 
 /* ── Les crises, poussées par l'état du monde ────────────────────────────── */
 const CRISES = {
@@ -160,7 +172,7 @@ DYN.a2_ici = () => {
   const A = A2();
   const off = offresDe(A.lieu);
   if(!off.length) return aller('a2_rien');
-  if(off.length === 1){ ETAT.flags.add('fait_' + off[0].id); return aller(off[0].va); }
+  if(off.length === 1){ marquerOffre(off[0]); return aller(off[0].va); }
 
   const ici = LIEUX[A.lieu];
   SCENES.a2_ici = {
@@ -175,7 +187,7 @@ DYN.a2_ici = () => {
       t:o.titre,
       detail:"cette saison · l'autre attendra",
       va:o.va,
-      avant:() => ETAT.flags.add('fait_' + o.id),
+      avant:() => marquerOffre(o),
     })),
   };
   aller('a2_ici');
@@ -184,6 +196,9 @@ DYN.a2_ici = () => {
 function finirSaison(){
   const A = A2();
   A.saison += 1;
+  /* Le chantier de Karlsberg tourne sans vous : ce qu'on vous doit arrive
+   * pendant que vous êtes à quatre cents lieues. C'est même tout l'intérêt. */
+  if(typeof rendreSaisonChantier === 'function') rendreSaisonChantier();
   if(A.saison > 3){ A.saison = 0; A.annee += 1; }
   A.aPousser = (A.aPousser || []).concat(pousserCrises());
   A.aAgir = quiAgit();
