@@ -126,7 +126,8 @@ an_donner:{
     "Il fait pousser vers vous une bourse que vous n'aviez pas vue arriver.",
     "§ Deux saisons plus tard, une colonne de la Marche noire franchit le fleuve à l'endroit exact où les maisons du sud avaient été rappelées.",
   ],
-  effets:{ or:180, flags:['an_donne','a2_anarion_soutenu','a2_anarion_vu'],
+  effets:{ or:180, flags:['an_donne','a2_anarion_soutenu','a2_anarion_vu',
+                          'a2_atrocite_couverte'],
            faire:() => { bouger('alarielle', { confiance:-8, devoir:-4 });
                          retenir('anarion', "il m'a donné une cour sans rien demander");
                          retenir('alarielle', "il a parlé d'Aelthiriel à Anarion"); },
@@ -148,7 +149,7 @@ an_refus:{
     "« D'ici là je ferai la guerre à Eltharion et vous chercherez le nom de celui qui a écrit à Chastel. » Il reprend sa liasse. « Nous avons chacun un travail. Le mien est plus grand ; le vôtre est plus difficile. »",
     "§ Il ne demande pas comment il sait pour Chastel, et vous ne le demandez pas non plus, parce qu'il y a des questions qu'on ne pose pas dans une salle où quatre secrétaires écrivent.",
   ],
-  effets:{ flags:['an_refus','a2_anarion_vu'],
+  effets:{ flags:['an_refus','a2_anarion_vu','a2_eltharion_soutenu'],
            faire:() => retenir('anarion', "il a dit non en face, ce que personne ne fait ici"),
            exploit:{ eclat:4, temoins:'quelques', quoi:"vous avez refusé Anarion dans sa propre salle" },
            marque:"« Revenez à cinquante ans. Nous aurons une conversation plus courte. »",
@@ -425,7 +426,7 @@ kh_dire:{
     "§ Un seul homme vous croit et vous prend au sérieux, et c'est le pire de tous : Lucius Furius Augustus, qui vous fait dire qu'il trouve l'information *très intéressante pour qui saura s'en servir*.",
     "Vous n'avez rien empêché. Vous avez donné à quelqu'un une saison d'avance.",
   ],
-  effets:{ flags:['kh_dit','a2_khesh_su','a2_lucius_vu'],
+  effets:{ flags:['kh_dit','a2_khesh_su','a2_lucius_vu','a2_khesh_serment'],
            faire:() => retenir('lucius', "il m'a apporté sans le vouloir la seule chose que personne d'autre n'avait"),
            exploit:{ eclat:4, temoins:'quelques', quoi:"vous avez porté au nord ce que le nord ne voulait pas entendre" },
            marque:"Quatre provinces lèvent des hommes contre une nappe phréatique. Lucius, lui, a trouvé ça très intéressant.",

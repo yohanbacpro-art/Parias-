@@ -193,7 +193,7 @@ el_rester:{
     "Elle vous tend quand même un petit objet plat, en bois, gravé de quatre entailles.",
     "« Les archives de la marche. Elles ne relèvent pas de la cour, et c'est la seule raison pour laquelle je peux encore vous donner ça. »",
   ],
-  effets:{ flags:['el_jeton','el_reste','a2_alarielle_scandale'],
+  effets:{ flags:['el_jeton','el_reste','a2_alarielle_scandale','a2_eltharion_vu'],
            faire:() => { bouger('alarielle', { relation:2, devoir:-3 }); retenir('tyrion', "vous êtes resté neuf jours après qu'il vous eut dit de partir");
                          A2().pistes.onde = Math.max(A2().pistes.onde, 3); },
            marque:"Vous êtes resté neuf jours à Aelthiriel. Ça a coûté trois voix à Alarielle.",

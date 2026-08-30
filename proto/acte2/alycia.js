@@ -445,7 +445,7 @@ al_route:{
   ],
   choix:[
     { t:"Lui apprendre à couper",
-      si:() => a('al_arret_cout') || a('al_onde_ensemble') || a('al_quatre_ko'),
+      si:() => a('al_arret') || a('al_onde_ensemble') || a('al_sauve_par_elle'),
       detail:"Personne ne lui a appris à s'arrêter · vous, on ne vous a rien appris non plus, mais vous vous êtes arrêté",
       va:'al_route_couper' },
     { t:"Lui demander Callensbourg",

@@ -619,6 +619,80 @@ function verdictsA2(){
   else
     v.push("**On ne sait toujours pas.** Après trois ans, quatre provinces et onze étapes, il n'y a rien de plus au dossier qu'un homme d'armes de haute taille, cheval bai, épée à une main et demie.");
 
+  /* — Karlsberg, ce qu'elle est devenue — */
+  if(typeof palierDeKarlsberg === 'function' && CHANTIER().faits.length){
+    const pal = palierDeKarlsberg();
+    v.push(`**Karlsberg est ${pal.nom.toLowerCase()}.** ${pal.dit} `
+      + (a('a2_pierre_regle') ? "Dans la fondation, en toutes lettres : *on ne demande pas d'où l'on vient*. Le tailleur a dit que ça voulait dire : venez."
+       : a('a2_pierre_noms')  ? "Onze noms gravés dans l'angle sud-est, et trois lignes laissées vides. Ce sont les vides que les gens regardent."
+       : a('a2_pierre_dates') ? "Deux dates dans l'angle sud-est, et rien sur qui l'a rasée."
+       : a('a2_muraille')     ? "De Chastel, par temps clair, on voit Karlsberg."
+       : a('a2_donjon')       ? "Onze cavaliers sont venus prendre les mesures du donjon et sont repartis sans descendre."
+       : a('a2_refuge_ouvert')? "Trente lits, pleins en quatre mois, sous une règle affichée au charbon."
+       : "Il y a un toit, de l'eau, et des gens dedans."));
+  }
+
+  /* — le dragon — */
+  if(a('dr_mortelle'))
+    v.push("**La Grande est morte sur le glacis de Karlsberg**, "
+      + (a('dr_nains_rendu') ? "et elle est retournée sous la montagne par une porte rouverte un jour et refermée le soir. Il n'y a pas de trophée : il y a une route de montagne refaite qui passe par votre vallée."
+       : a('dr_montdraken')  ? "et sa tête est la trois cent treizième pièce du mur de Mont-Draken, avec trois noms sur l'étiquette dont un nain."
+       : "et personne n'a su quoi faire du matin."));
+  else if(a('dr_vivante'))
+    v.push("**La Grande est vivante.** Elle est partie vers le nord "
+      + (a('dr_partie') && a('dr_defile') ? "après qu'on eut abattu douze pieds de sa propre courtine pour la laisser sortir."
+         : "quand elle a eu fini, et pas une seconde avant.")
+      + " Trois hameaux du nord l'apprendront avant l'hiver.");
+  else if(a('a2_dragon'))
+    v.push("**Il y a quelque chose dans les Marches Grises** qui ne correspond à aucune des trois cent douze pièces de Mont-Draken, et l'affaire n'est pas réglée.");
+
+  /* — l'épouse, l'autre, l'enfant — */
+  if(a('a2_alycia_epouse'))
+    v.push("**Alycia de Callensbourg est votre femme.** "
+      + (a('a2_callensbourg_releve')
+         ? "Deux maisons rayées de la Route Grise sont alliées par acte, inscrites au bailliage, et parfaitement localisables."
+         : "Devant quatre-vingts témoins, dans une chapelle, sans greffe : aucun tribunal ne le reconnaît et toute la province a compris ce qu'est Karlsberg."));
+  else if(a('a2_alarielle_epouse'))
+    v.push("**Alarielle est votre femme**, sous une rubrique créée pour l'occasion par un collège qui a siégé onze fois : *ce qu'on choisit en connaissant la durée*. Elle a deux cent onze ans. Vous en avez trente.");
+  else if(a('a2_marie'))
+    v.push(`**${GENS.epouse.nom} tient cette maison.** `
+      + (a('a2_trois_signatures') ? "Il y a trois signatures sur une feuille de trois lignes, ce dont il n'existe aucun exemple en trois cents ans."
+       : a('a2_epouse_froide')    ? "Elle l'a appris par une servante, comme la première fois. Elle tient sa parole à la lettre, et rien qu'à la lettre."
+       : a('a2_epouse_proche')    ? "Il n'y avait personne d'autre. Deux personnes qui n'ont personne d'autre finissent par se parler ; ça prend des années."
+       : a('a2_scandale')         ? "Vous avez refusé la fiction, et la province a choisi le mot elle-même."
+       : "Les comptes sont justes, le four banal est bâti, l'école a onze élèves."));
+
+  if(a('a2_enfant'))
+    v.push("**Loyse est née à Karlsberg**, de deux Parias, dans la salle basse parce que c'est la pièce la mieux chauffée. Sa mère l'a mise sur sa liste avant qu'elle naisse et n'arrive pas à l'en sortir. Il faudra choisir, à ses onze ans, entre la cacher et la déclarer.");
+  else if(a('a2_sans_enfant'))
+    v.push("**Il n'y a pas d'enfant.** Les quatre points étaient mauvais, tous les quatre, et deux personnes qui savent compter ont dit non le même soir.");
+
+  /* — les trois hommes — */
+  const hommes = [];
+  if(a('a2_caleb_pacte'))   hommes.push("**Caleb** a la route franche et un droit de premier refus sur votre forge" + (a('cb_signe') ? ", et une troisième clause qui dort au bailliage" : ""));
+  else if(a('a2_caleb_note'))   hommes.push("**Caleb** vous a rangé dans la colonne de ceux qui ne s'achètent pas, qui n'est pas la bonne");
+  else if(a('a2_caleb_froid'))  hommes.push("**Caleb** vous a retiré de son marché : vous ne pouvez plus acheter un essieu à trois lieues de chez vous");
+  else if(a('a2_caleb_hostile'))hommes.push("**Caleb** vous a décrit le lendemain de sa propre mort, devant quatre clercs qui n'ont pas levé la tête");
+
+  if(a('a2_titre_inattaquable')) hommes.push("**Astrah a un roi** et *Maison de Karlsberg, Marches Grises, reconnue* est la première ligne d'un rôle royal qu'aucun bailliage ne peut rayer");
+  else if(a('a2_role_royal'))    hommes.push("**Astrah a un roi**, et vous êtes à la quatrième ligne de son rôle — ce qui était mérité");
+  else if(a('a2_lucius_refuse')) hommes.push("**Lucius** vous a fait sortir par la cour d'honneur devant onze témoins, pour rien, après un refus sans témoins");
+  else if(a('a2_lucius_froid'))  hommes.push("**Lucius** a mis une seconde de trop à répondre, et il n'en met jamais");
+
+  if(a('a2_declare'))            hommes.push("**Le registre de Mont-Draken n'est plus vide** : il y a un nom au folio un, écrit de votre main, et il ne s'est rien passé");
+  else if(a('a2_charles_attend'))hommes.push("**Charles** a soixante et un ans, un cahier vide dans une armoire, et il vous le redemandera");
+  else if(a('a2_charles_froid')) hommes.push("**Charles** a rangé son registre neuf le jour où vous lui avez proposé quelqu'un d'autre, et vous avez entendu la clef");
+  if(hommes.length) v.push(hommes.join(" · ") + ".");
+
+  /* — ce qu'on a ouvert ailleurs — */
+  const ailleurs = [];
+  if(a('a2_eau'))          ailleurs.push("le premier forage khesh a donné à quatre-vingt-dix pieds, et le désert ne monte pas vers le nord cette décennie");
+  if(a('a2_nains_dehors')) ailleurs.push("deux mille sept cent soixante Nains sont descendus en plaine, et deux cent quarante sont morts sur la route");
+  if(a('a2_dette_naine'))  ailleurs.push("une dette de quatre-vingts ans est portée acquittée au relevé de Kar-Durak, par Karlsberg");
+  if(a('a2_vaeth_ouvert')) ailleurs.push("le poste de Vaeth ne se fermera pas non plus pour trente ou quarante personnes arrivant ensemble");
+  if(a('a2_onze_hospices'))ailleurs.push("onze hospices de route tiennent toujours entre Fort-aux-Princes et les Marches Grises");
+  if(ailleurs.length) v.push("Ce qui reste ouvert ailleurs : " + ailleurs.join(' · ') + ".");
+
   /* — ce qui est fermé — */
   if(ETAT.portes && ETAT.portes.length)
     v.push("**Ce qui est fermé pour de bon :** " + ETAT.portes.slice(-6).join(' · ') + ".");

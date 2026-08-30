@@ -668,7 +668,8 @@ cd_inscrit:{
     "« Je crois. »",
     "« Non. » Il pose la main sur le chambranle. « Il y a quarante et un de vos semblables dans ces provinces qui vivent cachés, et à partir de ce soir il en existe un qui vit inscrit. C'est la première fois en trois cents ans. Je ne sais pas si ça finira bien. Je sais que ça n'avait jamais été essayé. »",
   ],
-  effets:{ flags:['cd_inscrit','a2_declare','a2_charles_allie','a2_registre_onde'], suspicion:35,
+  effets:{ flags:['cd_inscrit','a2_declare','a2_charles_allie','a2_registre_onde',
+                  'a2_montdraken_allie'], suspicion:35,
            faire:() => { bouger('alycia', { confiance:-4, peur:2 });
                          retenir('charles', "il s'est inscrit de sa main, le premier, et il n'y était pas obligé");
                          retenir('caleb', "il a déclaré ce qu'il est à un registre de province, ce qui change son prix");
@@ -718,7 +719,7 @@ cd_autre:{
     "« Alors vous savez ce que je refuse de fabriquer. »",
     "Il range le registre neuf dans une armoire, et vous entendez la clef.",
   ],
-  effets:{ flags:['cd_denonce','a2_charles_froid','a2_charles_vu'],
+  effets:{ flags:['cd_denonce','a2_charles_froid','a2_charles_vu','a2_paria_livre'],
            faire:() => { bouger('alycia', { confiance:-3 });
                          retenir('charles', "il m'a proposé quelqu'un d'autre à sa place, ce que je n'oublierai pas"); },
            marque:"Vous avez proposé quelqu'un d'autre. Il a rangé le registre neuf et vous avez entendu la clef.",
@@ -771,7 +772,8 @@ cd_methode:{
     "« Trois cent douzième pièce. » Il écrit l'étiquette lui-même. « Vallée haute. Onze morts. Quatre chasseurs, aucun perdu. »",
     "Il ajoute votre nom sur l'étiquette, entre celui de ses deux élèves, sans commentaire et sans vous regarder.",
   ],
-  effets:{ flags:['cd_methode','a2_charles_allie','a2_charles_respect'],
+  effets:{ flags:['cd_methode','a2_charles_allie','a2_charles_respect',
+                  'a2_montdraken_allie','a2_montdraken_occupe'],
            cout:{ endurance:18 },
            exploit:{ eclat:11, temoins:'quelques', quoi:"la trois cent douzième pièce du mur de Mont-Draken" },
            faire:() => { retenir('charles', "il a chassé cinq jours à ma méthode sans se plaindre et il a laissé la fille frapper"); },
@@ -803,7 +805,8 @@ cd_onde:{
     "« Bien », dit Charles. « Maintenant je sais, et vous savez que je sais, et il va falloir décider tous les deux ce qu'on en fait. Je propose qu'on descende d'abord, parce que la nuit tombe et que ma fille a froid. »",
     "Vous mettez trois secondes à comprendre que la fille de vingt-deux ans est sa fille.",
   ],
-  effets:{ flags:['cd_onde','a2_montdraken_certain','a2_onde_publique','a2_charles_sait'], suspicion:30,
+  effets:{ flags:['cd_onde','a2_montdraken_certain','a2_onde_publique','a2_charles_sait',
+                  'a2_montdraken_occupe'], suspicion:30,
            cout:{ concentration:24 },
            exploit:{ eclat:14, temoins:'quelques', quoi:"l'Onde employée devant Mont-Draken et ses deux élèves" },
            faire:() => { retenir('charles', "il a sauvé ma fille avec ça, sous mes yeux, et je l'ai regardé faire");
