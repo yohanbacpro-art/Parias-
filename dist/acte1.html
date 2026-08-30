@@ -281,6 +281,32 @@ h1{
   .ch-detail{ padding-right:0; }
   .ch-risque{ position:static; order:-1; }
 }
+
+/* ── Le seuil ──────────────────────────────────────────────────────────── */
+.seuil{ max-width:44rem; margin:0 auto; padding:2rem 0 4rem; }
+.seuil h1{
+  font-size:clamp(3rem, 12vw, 5.5rem); line-height:.9; letter-spacing:.06em;
+  margin:.2rem 0 1.6rem; font-weight:400; color:var(--parchemin);
+}
+.seuil-sous{ color:var(--parchemin-bas); font-style:italic; max-width:34rem; }
+.seuil-reprise{
+  margin:2.4rem 0; padding:1.2rem 1.4rem;
+  border-left:2px solid var(--sang); background:var(--schiste);
+}
+.seuil-vide{ border-left-color:var(--trait); }
+.seuil-etat{ font-size:.92rem; color:var(--parchemin-bas); margin:.35rem 0; }
+.seuil-dernier{
+  margin-top:.9rem; padding-top:.9rem; border-top:1px solid var(--trait);
+  font-style:italic; color:var(--cendre); font-size:.92rem;
+}
+.seuil-gore{ margin-top:3rem; padding-top:1.4rem; border-top:1px solid var(--trait); }
+#seuilGore{ display:flex; gap:.5rem; margin-top:.7rem; flex-wrap:wrap; }
+#seuilGore button{
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.08em; text-transform:uppercase;
+  background:transparent; color:var(--cendre); border:1px solid var(--trait);
+  padding:.45rem .9rem; cursor:pointer;
+}
+#seuilGore button[aria-pressed="true"]{ color:var(--parchemin); border-color:var(--sang); }
 </style>
 
 
@@ -310,7 +336,7 @@ h1{
   <div id="journalCorps"></div>
   <h2>La partie</h2>
   <p class="sous">Une seule sauvegarde. Elle se fait toute seule.</p>
-  <button id="bNeuf" style="font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sang-clair);background:transparent;border:1px solid #4A2028;padding:.5rem .8rem;cursor:pointer;">Tout recommencer</button>
+  <button id="bNeuf" style="font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sang-clair);background:transparent;border:1px solid #4A2028;padding:.5rem .8rem;cursor:pointer;">Menu</button>
 </aside>
 
 <script>
@@ -588,11 +614,14 @@ function aller(id){
     h += '<div class="choix">' + choix.map((c, i) => {
       const bloque = c.requisOr && ETAT.or < c.requisOr;
       const ferme = val2(c.ferme);
+      /* `t` et `detail` acceptent une fonction : un choix qui compte des
+       * charges ou lit l'état doit pouvoir le dire au moment du rendu. */
+      const t = val2(c.t), detail = val2(c.detail);
       return `<button data-i="${i}" class="${c.definitif ? 'definitif' : ''}"${
         c.risque ? ` data-risque="${c.risque}"` : ''}${bloque ? ' disabled' : ''}>
-        <span class="ch-t">${c.t}</span>
+        <span class="ch-t">${t}</span>
         ${c.risque ? `<span class="ch-risque">${c.risque}</span>` : ''}
-        ${c.detail ? `<span class="ch-detail">${bloque ? `Il vous manque ${c.requisOr - ETAT.or} or — ` : ''}${c.detail}</span>` : ''}
+        ${detail ? `<span class="ch-detail">${bloque ? `Il vous manque ${c.requisOr - ETAT.or} or — ` : ''}${detail}</span>` : ''}
         ${ferme ? `<span class="ch-ferme">${ferme}</span>` : ''}
       </button>`;
     }).join('') + '</div>';
@@ -807,6 +836,7 @@ function neuf(){
    * lecture : il suffit de le vider ici, sinon une nouvelle partie hérite du
    * calendrier et des relations de la précédente. */
   ETAT.acte2 = null; ETAT.liens = null; ETAT.melee = null;
+  ETAT.pistolets = 2;
 }
 
 /* ── Les six affaires de l'Acte I ──────────────────────────────────────────
@@ -1041,6 +1071,109 @@ enregistrerScenes(SCENES_MONDE);
 DYN.hub        = () => rendreHub();
 DYN.hub_retour = () => rendreHub();
 DYN.bascule    = () => rendreBascule();
+
+</script>
+<script>
+/* ── arsenal.js ── */
+/* PARIAS — CE QUE YOHAN PORTE, ET CE QU'IL A DANS LE SANG
+ * ═══════════════════════════════════════════════════════════════════════
+ * Le dossier du personnage tient en une ligne et le prototype en avait
+ * oublié les deux tiers :
+ *
+ *   « deux pistolets à silex, une épée bâtarde, et dans les veines une
+ *     magie de l'Onde qui fatigue autant qu'elle détruit. »
+ *
+ * L'épée était là. Les pistolets et le Drain n'existaient nulle part.
+ *
+ * ── LES DEUX PISTOLETS ────────────────────────────────────────────────
+ * Ce ne sont pas des armes de combat : ce sont deux décisions. Un pistolet
+ * à silex se charge en quarante secondes dans un atelier bien éclairé, et
+ * en une minute et demie quand on a les mains qui tremblent. Dans un
+ * échange, ça n'existe pas. On a donc deux coups, deux, dans toute une
+ * affaire — après quoi on porte deux masses inutiles à la ceinture.
+ *
+ * En échange, à moins de dix pas, une balle de plomb de trois quarts d'once
+ * traverse tout ce que ce monde sait fabriquer, et fait un bruit qu'on
+ * entend à une lieue. C'est l'arme qui règle un duel avant qu'il commence,
+ * et qui apprend à toute une vallée qu'il s'est passé quelque chose.
+ *
+ * ── LE DRAIN ──────────────────────────────────────────────────────────
+ * L'autre branche de l'Onde. Là où pousser déplace, le Drain PREND — la
+ * chaleur, le souffle, ce qui fait qu'une chose est encore chaude — et le
+ * rend à celui qui prend. C'est le seul pouvoir du jeu qui soigne, et
+ * c'est la chose la plus incriminante qu'un homme puisse faire devant
+ * témoins : on ne peut pas expliquer autrement quelqu'un qui se referme
+ * pendant qu'un autre se vide.
+ *
+ * Sur une bête, c'est laid. Sur un homme, ça ne s'oublie pas, et celui qui
+ * regarde change d'avis sur vous pour le reste de sa vie.
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Les pistolets ────────────────────────────────────────────────────── */
+const PISTOLETS = () => (ETAT.pistolets = ETAT.pistolets === undefined ? 2 : ETAT.pistolets);
+const charges   = () => PISTOLETS();
+const tirer     = () => { ETAT.pistolets = Math.max(0, PISTOLETS() - 1); };
+const recharger = () => { ETAT.pistolets = 2; };
+
+/* Un choix de combat prêt à poser dans n'importe quelle scène. `dc` est la
+ * difficulté de l'adversaire ; `pres` dit si l'on est à portée utile. */
+function choixPistolet(o){
+  const pres = o.pres !== false;
+  return {
+    t: charges() === 2 ? "Un pistolet" : "Le second pistolet",
+    si: () => charges() > 0,
+    detail: () => `${charges()} coup${charges() > 1 ? 's' : ''} · on ne recharge pas dans un échange`
+      + (pres ? " · à bout portant, rien de ce monde n'arrête ça" : " · trop loin, le plomb tombe")
+      + ` · Perception + tir contre ${o.dc}`,
+    risque: "calculé",
+    avant: tirer,
+    test: { carac:'perception', comp:'tir', dc:o.dc, adversaire:o.adversaire, manoeuvre:'pistolet',
+            equipement: pres ? 4 : 0, situation:o.situation },
+    degres: o.degres,
+  };
+}
+
+/* ── Le Drain ─────────────────────────────────────────────────────────── */
+/* Il rend ce qu'il prend : c'est le seul soin du jeu, et il se paie en
+ * concentration, en témoins, et en ce que les gens décident de vous. */
+function drainer(part){
+  const r = Math.round(part);
+  ETAT.ressources.vitalite = Math.min(100, (ETAT.ressources.vitalite || 0) + r);
+  ETAT.ressources.sang     = Math.min(100, (ETAT.ressources.sang || 0) + Math.round(r * 0.6));
+  depenser({ concentration:Math.round(r * 1.2) });
+  /* Une blessure qui saigne cesse de saigner : le Drain referme avant tout. */
+  for(const b of ETAT.blessures) if(b.saignement) b.saignement = Math.max(0, b.saignement - 1);
+  return r;
+}
+
+function choixDrain(o){
+  return {
+    t: o.humain ? "Le Drain — sur lui" : "Le Drain",
+    detail: () => (o.humain
+        ? "prendre ce qui le tient encore chaud, et le garder"
+        : "prendre à la bête ce qu'il lui reste, et se refermer")
+      + (o.temoins && o.temoins !== 'aucun' ? " · devant témoins, et ça ne s'oublie pas" : " · personne ne regarde")
+      + ` · Volonté + Onde contre ${o.dc}`,
+    risque: "définitif", definitif:true,
+    ferme: o.temoins && o.temoins !== 'aucun'
+      ? "Ferme : la version où vous êtes un homme d'armes qui a de la chance" : undefined,
+    test: { carac:'volonte', comp:'onde', dc:o.dc, adversaire:o.adversaire, manoeuvre:'drain',
+            cout:{ concentration:o.cout || 20 }, situation:o.situation },
+    degres: o.degres,
+  };
+}
+
+/* Le prix social. Un Drain vu par quelqu'un ne se range dans aucune case
+ * connue : ce n'est pas de la sorcellerie de conte, c'est un homme qui se
+ * referme pendant qu'un autre refroidit. */
+const DRAIN_SUSPICION = { aucun:0, un:14, quelques:26, foule:38, province:52 };
+
+function drainVu(temoins){
+  const n = DRAIN_SUSPICION[temoins] || 0;
+  if(n) ETAT.suspicion = Math.min(100, ETAT.suspicion + n);
+  if(temoins && temoins !== 'aucun') ETAT.flags.add('a2_drain_vu');
+  return n;
+}
 
 </script>
 <script>
@@ -16895,6 +17028,148 @@ offrir({ id:'enf_question', lieu:'karlsberg', va:'enf_question',
 
 entree2('aly_epouser', 'el_epouser', 'enf_question');
 
+/* ═══════════════════════════════════════════════════════════════════════
+ * ALARIELLE — DEUX CENT ONZE ANS, ET PERSONNE
+ * ═══════════════════════════════════════════════════════════════════════
+ * Ce n'est pas de la pudeur et ce n'est pas une vertu au sens où sa cour
+ * l'entendrait : chez eux, ce qui n'est pas contracté n'existe pas, et
+ * personne ne contracte avec une fille de la maison d'Eltharion sans y
+ * mettre trois cents ans de conséquences. Elle a donc deux cent onze ans
+ * et il ne s'est jamais rien passé — pas par refus, par arithmétique.
+ *
+ * Elle le dit elle-même, sans gêne et sans solennité, parce qu'elle a eu
+ * deux siècles pour cesser d'en faire une affaire. Ce qui la met mal à
+ * l'aise n'est pas l'acte : c'est de n'avoir rien à comparer.
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+const ALARIELLE_NUIT = {
+
+el_nuit:{
+  qui:'alarielle',
+  lieu:"Aelthiriel · le jardin fermé · la nuit",
+  titre:"Deux cent onze ans",
+  texte:[
+    "Elle vous fait venir au jardin fermé un soir où il n'y a rien à discuter, ce qui n'est jamais arrivé.",
+    { sobre:"« Je vais dire quelque chose et vous n'allez pas le prendre correctement. »",
+      intense:"« Je vais dire quelque chose, et je vous demande à l'avance de ne pas le prendre comme les humains le prennent. » Elle reste debout. « Vous allez vouloir en faire une chose grave. Ce n'en est pas une. »",
+      extreme:"« Je vais dire quelque chose, et je vous demande à l'avance de ne pas le prendre comme les humains le prennent toujours. » Elle reste debout, ce qui chez elle veut dire qu'elle a préparé la phrase et qu'elle veut pouvoir partir. « Vous allez vouloir en faire une chose grave, avec du respect dedans, et de la précaution. Ce n'en est pas une, et la précaution est exactement ce qui la rendrait insupportable. »" },
+    "« Dites. »",
+    "« Il ne s'est jamais rien passé. »",
+    "§ Elle laisse ça, et elle voit très bien que vous ne comprenez pas de quoi elle parle.",
+    { sobre:"« Jamais. Avec personne. Deux cent onze ans. »",
+      intense:"« Jamais. Avec personne, en deux cent onze ans. » Elle a un geste d'impatience. « Et ce n'est pas de la vertu, ne me regardez pas comme ça — c'est de la comptabilité. »",
+      extreme:"« Jamais. Avec personne. En deux cent onze ans. » Elle a un geste d'impatience, contre vous cette fois. « Et cessez immédiatement de me regarder comme ça, ce n'est pas de la vertu et ce n'est pas un sacrifice : c'est de la comptabilité. Chez nous, ce qui n'est pas contracté n'existe pas — je vous l'ai déjà expliqué et vous n'aviez pas fait le calcul jusqu'au bout. Personne ne contracte avec une fille de la maison d'Eltharion sans y mettre trois siècles de conséquences politiques. Alors on ne contracte pas. Et comme rien n'existe hors du contrat : rien. »" },
+    "« Vous n'avez jamais voulu ? »",
+    "« Bien sûr que si. » Elle le dit sèchement. « Onze fois. J'ai le compte, j'ai les dates, et j'ai les noms de quatre d'entre eux. Ça ne change rien à ce que je viens de vous dire. »",
+    "§ Elle s'assoit enfin, et elle regarde le mur au lieu de vous.",
+    { sobre:"« Ce qui me gêne, ce n'est pas ça. »",
+      intense:"« Ce qui me gêne n'est pas ce que vous croyez. Ce n'est pas l'acte : à deux cent onze ans, on a lu, on a écouté, on n'est ignorante de rien. » Un temps. « C'est que je n'aurai rien à comparer. Jamais. Ce sera ça, et ce sera tout ce que j'aurai jamais su, pendant deux cents ans encore. »",
+      extreme:"« Ce qui me gêne n'est pas du tout ce que vous imaginez, et c'est bien pour ça que je préférais le dire moi-même. Ce n'est pas l'acte : à deux cent onze ans, on a lu, on a écouté, on a vécu à trois pas de gens qui vivaient — je ne suis ignorante de rien et je ne serai pas effrayée. » Elle continue de regarder le mur. « C'est que je n'aurai rien à comparer. Jamais. Vous serez ça, et ce sera tout ce que j'en aurai su, et il me restera deux siècles pour y penser. Un humain a le temps de se tromper et de recommencer. Moi, ce que je décide ce soir a la même durée qu'une guerre. »" },
+    "« Alors ne le décidez pas ce soir. »",
+    "« J'y pense depuis quatre ans. »",
+    "§ Elle se tourne enfin.",
+    "« Ce n'est pas une faveur que je vous fais et je ne veux pas être remerciée. Ne dites rien. Vous allez dire quelque chose de correct et ça va tout abîmer. »",
+  ],
+  choix:[
+    { t:"Ne rien dire",
+      detail:"elle vient de le demander deux fois · c'est la seule chose à faire et c'est difficile",
+      risque:"définitif", definitif:true, va:'el_nuit_oui' },
+
+    { t:"« Alors dites-moi ce que vous voulez, précisément. »",
+      detail:"deux cent onze ans à écouter et à lire · elle sait exactement ce qu'elle veut",
+      risque:"calculé", va:'el_nuit_precis' },
+
+    { t:"« Pas ce soir. »",
+      detail:"quatre ans, ça peut faire cinq · et elle en a deux cents devant elle",
+      risque:"prudent", va:'el_nuit_non' },
+  ],
+},
+
+el_nuit_precis:{
+  qui:'alarielle',
+  titre:"Précisément",
+  texte:[
+    "« Alors dites-moi ce que vous voulez. Précisément. »",
+    { sobre:"Elle ne rougit pas. Les elfes ne rougissent pas.",
+      intense:"Elle ne rougit pas — les elfes ne rougissent pas, c'est une des premières choses qu'on remarque et une des plus déstabilisantes — et elle répond avec une netteté qui vous laisse sur place.",
+      extreme:"Elle ne rougit pas. Les elfes ne rougissent pas, c'est physiologique, et c'est l'une des premières choses qu'on remarque chez eux et l'une des plus déroutantes : il n'y a aucun signal, jamais, et il faut apprendre à s'en passer. Elle répond donc avec une netteté qui vous laisse complètement sur place — parce qu'elle y a pensé, longtemps, et qu'elle a eu deux cent onze ans pour cesser de trouver la question indécente." },
+    "Elle le dit. Sans détour, sans euphémisme, en trois ou quatre phrases très précises.",
+    "§ Elle finit par : « Et je veux qu'il y ait de la lumière. Je ne veux pas de la nuit et du noir et du silence, comme si on faisait quelque chose de honteux. Ce sera la seule fois qu'il y aura une première fois. Je veux voir. »",
+    { sobre:"Ça, ça ne se refuse pas.",
+      intense:"Il n'y a rien à répondre à ça et elle le sait — c'est même pour ça qu'elle l'a gardé pour la fin.",
+      extreme:"Il n'y a rigoureusement rien à répondre à ça, et elle le sait parfaitement : c'est pour cette raison qu'elle l'a gardé pour la fin, comme une clause qu'on place quand l'autre a déjà accepté le reste. Deux cent onze ans de cour elfique apprennent à négocier, même quand on jure qu'on ne négocie pas." },
+  ],
+  effets:{ flags:['el_nuit_precis'],
+           faire:() => bouger('alarielle', { relation:4, confiance:5, attirance:6 }),
+           marque:"« Ce sera la seule fois qu'il y aura une première fois. Je veux voir. »",
+           court:"De la lumière" },
+  suite:'el_nuit_oui', libelleSuite:"Il y a de la lumière" },
+
+el_nuit_oui:{
+  qui:'alarielle',
+  lieu:"Aelthiriel · sa chambre",
+  titre:"La seule fois qu'il y aura une première fois",
+  texte:[
+    () => a('el_nuit_precis')
+      ? "Il y a de la lumière, comme elle l'a demandé : quatre lampes, et elle en allume une cinquième."
+      : "Elle allume les lampes une par une, quatre, puis une cinquième, sans expliquer pourquoi et sans qu'on ait besoin de le lui demander.",
+    { sobre:"Elle est plus calme que vous.",
+      intense:"Elle est considérablement plus calme que vous, ce qui est humiliant et parfaitement logique : elle a eu quatre ans pour y penser et vous avez eu une heure.",
+      extreme:"Elle est considérablement plus calme que vous, ce qui est humiliant sur le moment et parfaitement logique après coup : elle y pense depuis quatre ans, elle a répété la conversation, elle a décidé de la lumière, elle a même décidé du nombre de lampes. Vous avez eu une heure. C'est elle qui mène, du début à la fin, et pas une seconde par jeu." },
+    "§ Elle est curieuse plus que timide, et elle pose des questions au milieu, ce qui est déroutant et finit par être drôle.",
+    { sobre:"Il y a une seconde où elle a mal et où elle ne le cache pas.",
+      intense:"Il y a un moment où elle a mal et où elle ne le cache pas, ne le minimise pas et ne le dramatise pas : elle le dit, elle attend, et elle reprend. C'est très elle.",
+      extreme:"Il y a un moment où elle a mal. Elle ne le cache pas, ne le minimise pas, n'en fait aucune histoire : elle le dit à voix haute, du ton dont on signale un fait, elle attend ce qu'il faut attendre, et elle reprend là où on en était. C'est exactement la façon dont elle fait tout le reste — les archives, sa cour, son frère — et c'est la première fois que vous voyez ce trait s'appliquer à autre chose qu'à de la politique." },
+    "Elle a la peau plus froide qu'une humaine, ce qui n'était écrit nulle part, et elle se réchauffe très lentement.",
+    "Et à un moment, elle ferme les yeux et cesse complètement de piloter, et ça dure un long moment, et c'est la seule fois de quatre ans où vous la voyez ne rien contrôler du tout.",
+    "§ Après, elle ne dort pas. Les elfes dorment peu et elle dort moins que les autres.",
+    { sobre:"« Ce n'était pas ce que je croyais. »",
+      intense:"« Ce n'était pas ce que je croyais », dit-elle dans le noir — elle a soufflé les lampes une par une, plus tard, en prenant son temps.\n\n« C'est-à-dire ? »\n\n« Je ne vous le dirai pas. » Un temps. « Pas par pudeur. Parce que je veux le garder entier, et que le raconter l'abîmerait, et que j'ai deux cents ans pour m'en souvenir. »",
+      extreme:"« Ce n'était pas ce que je croyais », dit-elle dans le noir — elle a soufflé les cinq lampes une par une, beaucoup plus tard, en prenant son temps à chacune.\n\n« C'est-à-dire ? »\n\n« Je ne vous le dirai pas. » Elle n'a pas bougé. « Et pas par pudeur, vous savez très bien que ce n'est pas mon problème. Parce que je veux le garder entier. Tout ce qu'on raconte s'abîme un peu — on le dit une fois, puis deux, et à la quatrième c'est une anecdote et ce n'est plus la chose. J'ai deux cents ans devant moi pour m'en souvenir. Je ne vais pas commencer par le réduire à une phrase la nuit même. »" },
+    "« Vous regrettez ? »",
+    "« Non », dit-elle immédiatement. « Et je vous préviens : c'est aussi ce que ma tante a répondu. »",
+  ],
+  effets:{ flags:['el_nuit','el_amants','a2_alarielle_liee'],
+           faire:() => { bouger('alarielle', { relation:9, confiance:8, attirance:10, devoir:-2 });
+                         retenir('alarielle', "il n'a rien dit de correct, ce que je lui avais demandé deux fois"); },
+           exploit:{ eclat:2, temoins:'aucun', quoi:"vous n'avez rien dit de correct" },
+           marque:"Cinq lampes. « Je veux le garder entier. J'ai deux cents ans pour m'en souvenir. »",
+           court:"Cinq lampes" },
+  plusTard:"« Non, je ne regrette pas. Et je vous préviens : c'est aussi ce que ma tante a répondu. »",
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+el_nuit_non:{
+  qui:'alarielle',
+  titre:"Pas ce soir",
+  texte:[
+    "« Pas ce soir. »",
+    { sobre:"Elle encaisse mieux que vous.",
+      intense:"Elle encaisse nettement mieux que vous, et elle a la bonté de ne pas le montrer plus d'une seconde.",
+      extreme:"Elle encaisse nettement mieux que vous, ce qui est logique — elle a eu quatre ans pour envisager cette réponse aussi — et elle a la correction de ne laisser voir quelque chose qu'une seconde entière, ce qui chez elle est un aveu immense." },
+    "« Pourquoi ? »",
+    "« Parce que vous avez dit que ça durait comme une guerre. »",
+    "§ Elle réfléchit, honnêtement, ce qu'elle fait toujours.",
+    "« C'est un bon argument », dit-elle enfin. « Je vous le retournerai plus tard et vous n'aurez rien à répondre — mais ce soir, c'est un bon argument. »",
+    "Elle se lève et souffle les lampes qu'elle n'avait pas encore allumées.",
+    { sobre:"« Ne me le proposez pas, la prochaine fois. »",
+      intense:"« Une chose, tout de même. » Elle s'arrête à la porte. « La prochaine fois, ne me proposez rien et ne décidez rien. Attendez que je revienne, et je reviendrai, parce que je ne fais jamais une chose à moitié. »",
+      extreme:"« Une chose, tout de même, et retenez-la. » Elle s'arrête à la porte du jardin fermé. « La prochaine fois, ne me proposez rien, ne décidez rien, et surtout ne me protégez pas — c'est la deuxième fois que vous décidez à ma place en croyant bien faire, et je vous ai dit ce que ça me rappelle. Attendez simplement que je revienne. Je reviendrai. Je ne fais jamais une chose à moitié, c'est mon seul vrai défaut, et il m'a coûté beaucoup plus cher que le vôtre. »" },
+  ],
+  effets:{ flags:['el_nuit_reporte'],
+           faire:() => bouger('alarielle', { confiance:4, attirance:-2, devoir:2 }),
+           marque:"« Attendez que je revienne. Je ne fais jamais une chose à moitié. »",
+           court:"Pas ce soir" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+};
+
+enregistrerScenes(ALARIELLE_NUIT);
+
+offrir({ id:'el_nuit', lieu:'aelthiriel', va:'el_nuit',
+         titre:"Elle vous fait venir au jardin fermé",
+         si:() => !a('el_nuit') && !a('el_amants')
+               && palierPossible('alarielle', { relation:10, confiance:10, attirance:5 }).ok });
+
 </script>
 <script>
 /* ── ../acte2/dragon.js ── */
@@ -17744,6 +18019,1169 @@ offrir({ id:'dr_signes', lieu:'karlsberg', va:'dr_signes',
                && (crise('kardurak') >= 2 || A2().annee >= 2) });
 
 entree2('dr_preparer');
+
+</script>
+<script>
+/* ── ../acte2/duel.js ── */
+/* PARIAS — Acte II · LE DUEL DE ROBERT D'ESCLAVELLE
+ * ═══════════════════════════════════════════════════════════════════════
+ * Un duel de province n'est pas un sport. C'est une procédure d'extinction :
+ * deux hommes entrent dans un carré de terre battue et l'un des deux cesse
+ * d'avoir des droits.
+ *
+ * Celui-ci arrive parce qu'une maison humiliée n'a pas d'autre instrument.
+ * Robert d'Esclavelle a quarante-quatre ans, onze duels, et rien à perdre
+ * que le peu qui lui reste — c'est-à-dire tout, dans ce monde-là.
+ *
+ * Ce que ce duel met sur la table, et que rien d'autre ne mettait :
+ *   — LES DEUX PISTOLETS. Deux coups dans toute une vie de combat. Ici on
+ *     peut en brûler un avant le premier fer, ce qui est légal, tenu pour
+ *     ignoble, et parfaitement décisif.
+ *   — LE DRAIN. Devant cent personnes et un héraut d'armes. Après ça, il
+ *     n'y a plus de version où l'on ne sait pas.
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+const situDuel = () => (a('du_epaule_lue') ? 3 : 0)
+                     + (a('du_boue') ? 2 : 0)
+                     - (ETAT.melee && ETAT.melee.tour > 1 ? 1 : 0);
+
+const DUEL = {
+
+du_provoque:{
+  qui:'esclavelle',
+  lieu:() => `${LIEUX[A2().lieu].nom} · ${dateA2()}`,
+  titre:"Le gant, et ce qu'il y a dedans",
+  texte:[
+    "Il ne jette pas de gant. Personne ne jette de gant : c'est une invention de tapisserie.",
+    { sobre:"Il vous gifle, en public, avec la main ouverte.",
+      intense:"Il traverse la salle basse de l'auberge, s'arrête à un pas, et vous frappe au visage avec la main ouverte, assez fort pour que la moitié de la salle l'entende. C'est la procédure. Elle est laide et elle est efficace.",
+      extreme:"Il traverse la salle basse de l'auberge du Héron, s'arrête à un pas, attend que vous leviez la tête — il attend, c'est important, il faut que vous regardiez — et il vous frappe au visage avec la main ouverte, assez fort pour que le bruit couvre la salle et pour que votre lèvre s'ouvre contre les dents. C'est la procédure exacte, celle du droit de province, et elle est laide et parfaitement efficace : un coup porté à main ouverte devant témoins ne se refuse pas. On y répond ou l'on cesse d'exister socialement le lendemain matin." },
+    "**Robert d'Esclavelle.** Quarante-quatre ans, onze duels, un nez qu'on lui a refait trois fois et une maison qui tient sur deux fermes et un moulin.",
+    () => a('a2_bannieres') || a('a2_donjon')
+      ? "Sa maison est en travers de la voie de la vallée. Depuis que Karlsberg monte, la route passe chez vous et ne passe plus chez lui. Ça ne se plaide devant aucun tribunal."
+      : "Vous ne lui avez rien fait. Il vous a choisi parce que vous êtes un Paria, que personne ne relèvera votre nom, et qu'un homme qui tue un Paria en duel régulier n'a rien à expliquer à personne.",
+    "§ Il parle pour la salle, pas pour vous. C'est aussi la procédure.",
+    { sobre:"« Un Paria n'a pas de sang à laver. Je vais quand même le répandre. »",
+      intense:"« Messieurs, cet homme n'a pas de maison, donc pas de sang à laver, donc rien à défendre. » Il essuie sa main sur sa cuisse. « Je vais quand même le répandre, et personne n'écrira une ligne. »",
+      extreme:"« Messieurs. » Il ne quitte pas votre visage des yeux et il parle à la salle, ce qui demande un entraînement. « Cet homme n'a pas de maison. Il n'a donc pas de sang à laver, pas de nom à défendre, et aucun parent pour porter plainte. » Il essuie sa main ouverte sur sa cuisse, lentement, comme après avoir touché quelque chose. « Je vais quand même le répandre sur la terre battue de la place, devant vous tous, et il n'y aura pas une ligne écrite nulle part. C'est ça, un Paria. C'est un homme qu'on peut tuer proprement. »" },
+    "§ La salle ne dit rien. Une femme sort. Le tavernier commence à rentrer les brocs de terre.",
+    "Il y a exactement trois façons de sortir de là, et deux d'entre elles vous coûtent plus que le duel.",
+  ],
+  effets:{ flags:['du_provoque'] },
+  choix:[
+    { t:"Accepter, et fixer les armes",
+      detail:"c'est l'offensé qui répond, mais c'est le provoqué qui choisit le fer · demain, à la place, à sept heures",
+      risque:"dangereux", va:'du_accepte' },
+
+    { t:"Le tuer maintenant, dans la salle",
+      detail:"ce ne serait pas un duel · ce serait un meurtre devant trente témoins, et ils le diraient",
+      risque:"définitif", ferme:"Ferme : la possibilité d'être quelqu'un de régulier dans cette province",
+      definitif:true, va:'du_meurtre' },
+
+    { t:"Ne pas répondre",
+      detail:"partir · et devenir, en une nuit, l'homme qui ne répond pas",
+      risque:"définitif", ferme:"Ferme : ce que votre nom valait sur la Route Grise",
+      definitif:true, va:'du_refuse' },
+  ],
+},
+
+du_accepte:{
+  qui:'esclavelle',
+  lieu:"Cendrepont · la place · sept heures",
+  titre:"Ce qu'on regarde avant",
+  texte:[
+    "On se bat sur la place, dans un carré de vingt pas marqué à la chaux, avec un héraut d'armes du bailliage qui compte les gens et note les noms.",
+    { sobre:"Il y a cent personnes.",
+      intense:"Il y a cent personnes à sept heures du matin un jour de semaine. Personne ne travaille. Deux enfants sont montés sur le mur du cimetière.",
+      extreme:"Il y a cent personnes sur la place à sept heures du matin, un jour de semaine, dans une bourgade de trois cents âmes. Personne ne travaille. Le boulanger a ouvert et refermé. Deux enfants sont montés sur le mur bas du cimetière et personne ne les fait descendre, parce que tout le monde a compris qu'il n'y a rien à cacher à des enfants qui ont déjà vu tuer un cochon." },
+    "§ Ce qu'on a le droit de faire, dans le droit de province : tout ce qu'on porte sur soi en entrant dans le carré.",
+    "Ce n'est pas un oubli du texte. C'est le texte : un duel n'est pas un sport, c'est une extinction, et la loi ne s'intéresse qu'à la régularité de la provocation.",
+    "Vous avez donc, sur vous : une épée bâtarde, deux pistolets à silex chargés, et ce que vous avez sous les côtes.",
+    { sobre:"Lui a une épée de main et demie et une dague de parade.",
+      intense:"Lui a une épée de main et demie, une dague de parade au côté gauche, et onze duels derrière lui, ce qui vaut mieux que n'importe quel équipement.",
+      extreme:"Lui a une épée de main et demie qui a été rehaussée deux fois, une dague de parade au côté gauche, un gambison neuf sous une chemise propre — le gambison est légal, tout le monde en porte, et tout le monde fait semblant que non — et onze duels derrière lui. Onze. C'est un chiffre qui vaut mieux que n'importe quel équipement de ce monde, et il vous regarde le calculer." },
+    "§ Il vous reste un quart d'heure et il y a trois choses à faire d'un quart d'heure.",
+  ],
+  choix:[
+    { t:"Le regarder marcher",
+      detail:"onze duels laissent des traces · un homme de quarante-quatre ans a mal quelque part et ne le sait plus",
+      risque:"prudent", va:'du_lire' },
+    { t:"Regarder la terre",
+      detail:"il a plu quatre jours · la moitié du carré est de la boue et l'autre a séché",
+      risque:"prudent", va:'du_terre' },
+    { t:"Ne rien faire de ce quart d'heure",
+      detail:"il y a des hommes que la préparation dessert · il vaut mieux entrer froid que serré",
+      risque:"calculé", va:'du_combat_1' },
+  ],
+},
+
+du_lire:{
+  titre:"Onze duels",
+  texte:[
+    "Il fait les cent pas dans le carré, sur la longueur, sept fois.",
+    { sobre:"Il tourne toujours du même côté.",
+      intense:"Il tourne sept fois sur sept par la droite. Un homme qui marche tourne indifféremment. Un homme qui a mal à un genou tourne du côté de l'autre.",
+      extreme:"Il fait sept allers-retours et il tourne sept fois par la droite. Un homme qui marche sans y penser tourne indifféremment d'un côté ou de l'autre — c'est mesurable, c'est constant, et n'importe qui peut le vérifier sur une place de marché en dix minutes. Un homme qui tourne toujours du même côté protège quelque chose : un genou, une hanche, une vieille adhérence. Chez lui, c'est le genou gauche, et il ne le sait probablement plus lui-même depuis six ou sept ans." },
+    "§ Sur un pas de côté vers sa gauche, il devra reculer au lieu de pivoter.",
+    "Une demi-seconde. C'est tout ce qu'on obtient d'un quart d'heure, et c'est énorme.",
+  ],
+  effets:{ flags:['du_epaule_lue'],
+           exploit:{ eclat:1, temoins:'aucun', quoi:"vous avez compté ses pas" },
+           marque:"Robert d'Esclavelle protège son genou gauche depuis six ou sept ans et ne le sait plus.",
+           court:"Le genou gauche" },
+  suite:'du_combat_1', libelleSuite:"Sept heures" },
+
+du_terre:{
+  titre:"Quatre jours de pluie",
+  texte:[
+    "Il a plu quatre jours et il a cessé avant-hier.",
+    { sobre:"Le carré n'a pas séché uniformément.",
+      intense:"Le carré est orienté nord-sud. Le côté est a pris le soleil pendant deux jours et a durci ; le côté ouest, à l'ombre du mur de l'église, est encore gras sur deux pouces.",
+      extreme:"Le carré de chaux est orienté nord-sud, et le mur de l'église le borde à l'ouest sur toute sa longueur. Le côté est a pris le soleil pendant deux jours pleins : il a durci, il est bon, on y prend appui. Le côté ouest est resté à l'ombre : il est encore gras sur deux pouces, et deux pouces de terre grasse sous un homme qui charge, c'est un pied qui part au troisième pas." },
+    "§ On ne choisit pas son côté : le héraut place les deux hommes.",
+    "Mais on choisit où l'on recule, et un homme qu'on fait reculer vers l'ouest recule vers de la boue sans savoir qu'il y va.",
+  ],
+  effets:{ flags:['du_boue'],
+           marque:"Le côté ouest du carré est encore gras sur deux pouces. Un homme qu'on y fait reculer ne le sait pas.",
+           court:"Deux pouces" },
+  suite:'du_combat_1', libelleSuite:"Sept heures" },
+
+/* ══ LE DUEL ══════════════════════════════════════════════════════════════ */
+du_combat_1:{
+  melee:true,
+  lieu:"Cendrepont · le carré",
+  titre:"Robert d'Esclavelle",
+  effets:{ melee:{ eux:1, position:"vingt pas de chaux", note:"entier", tour:0 } },
+  texte:[
+    "Le héraut dit trois phrases réglementaires que personne n'écoute, puis il sort du carré.",
+    { sobre:"Il vient droit.",
+      intense:"Il ne fait aucune des choses des duellistes de récit. Il ne salue pas, ne parle pas, ne cherche pas la distance. Il vient droit, vite, l'épée basse, et il vous donne trois secondes pour comprendre que les onze duels ne sont pas une réputation.",
+      extreme:"Il ne fait aucune des choses que font les duellistes dans les récits. Il ne salue pas. Il ne parle pas. Il ne cherche pas la distance, ne tourne pas, n'étudie rien — il a étudié pendant que vous comptiez ses pas. Il vient droit, vite, l'épée basse et la dague déjà sortie, et vous avez environ trois secondes pour comprendre que onze duels n'est pas une réputation : c'est une méthode, elle consiste à ne jamais laisser le premier échange devenir un deuxième, et elle a marché onze fois." },
+    () => a('du_epaule_lue')
+      ? "§ Il charge en ligne. Sur un pas vers sa gauche, il devra reculer au lieu de pivoter : une demi-seconde, et vous savez exactement où elle est."
+      : "§ Il charge en ligne et vous ne savez rien de lui que ce qu'il vous montre, ce qui est très peu.",
+    () => a('du_boue')
+      ? "Le côté ouest est gras. Il est en train d'y aller et il ne le sait pas."
+      : "",
+    "Cent personnes. Un héraut d'armes du bailliage qui tient un rôle.",
+  ],
+  choix:[
+    choixPistolet({ dc:9, adversaire:'esclavelle', situation:situDuel,
+      degres:{ dominante:'du_pistolet_dom', couteuse:'du_pistolet_cout', echec:'du_pistolet_ko' } }),
+
+    { t:"Le pas vers sa gauche",
+      si:() => a('du_epaule_lue'),
+      detail:"là où il doit reculer au lieu de pivoter · une demi-seconde · Agilité + épées contre 8",
+      risque:"calculé",
+      test:{ carac:'agilite', comp:'epees', dc:8, adversaire:'esclavelle', manoeuvre:'gauche',
+             equipement:2, situation:situDuel },
+      degres:{ dominante:'du_gauche_dom', couteuse:'du_cout', echec:'du_ko' } },
+
+    { t:"Encaisser le premier échange",
+      detail:"onze duels finissent tous au premier échange · le douzième n'a qu'à durer · Endurance + épées contre 10",
+      risque:"dangereux",
+      test:{ carac:'endurance', comp:'epees', dc:10, adversaire:'esclavelle', manoeuvre:'encaisser',
+             equipement:1, situation:situDuel },
+      degres:{ dominante:'du_tenir_dom', couteuse:'du_cout', echec:'du_ko' } },
+
+    { t:"La dague, à la main gauche, avant qu'il l'ouvre",
+      detail:"il sort la dague en même temps que l'épée · c'est son unique défaut de méthode · Agilité + dagues contre 11",
+      risque:"très dangereux",
+      test:{ carac:'agilite', comp:'dagues', dc:11, adversaire:'esclavelle', manoeuvre:'dague',
+             equipement:1, situation:situDuel },
+      degres:{ dominante:'du_dague_dom', couteuse:'du_cout', echec:'du_ko' } },
+  ],
+},
+
+du_pistolet_dom:{
+  melee:true,
+  titre:"À sept pas",
+  effets:{ meleeMaj:{ position:"il est à terre", note:"la hanche ouverte", tour:1 },
+           flags:['du_pistolet','a2_pistolet_public'],
+           exploit:{ eclat:9, temoins:'foule', quoi:"un pistolet à silex dans un duel de province" },
+           marque:"Vous avez tiré à sept pas, dans un duel régulier. C'est légal. Cent personnes l'ont vu.",
+           court:"Sept pas" },
+  texte:[
+    "On ne tire pas un pistolet à silex comme on tire une arbalète : il y a un délai entre la pierre et la poudre, et ce délai fait rater tous ceux qui l'ignorent.",
+    { sobre:"Vous tirez à sept pas.",
+      intense:"Vous laissez venir jusqu'à sept pas — quatre de moins que le confort, deux de plus que la panique — et vous tirez pendant qu'il accélère, en tenant la ligne un demi-souffle après le déclenchement.",
+      extreme:"Vous laissez venir jusqu'à sept pas. Quatre de moins que le confort, deux de plus que la panique, et c'est la seule distance qui vaille : assez près pour que le délai de la platine ne compte plus, assez loin pour qu'il ne soit pas déjà sur vous quand la balle part. Vous tenez la ligne un demi-souffle après le déclenchement, ce qui est la seule chose qu'il faut apprendre et que personne n'apprend." },
+    "§ Le bruit arrive à toute la place en même temps que la fumée.",
+    { sobre:"Trois quarts d'once de plomb dans la hanche droite.",
+      intense:"Trois quarts d'once de plomb, à sept pas, dans la hanche droite. Un gambison n'arrête pas ça. Rien de ce que ce monde sait fabriquer n'arrête ça.",
+      extreme:"Trois quarts d'once de plomb, à sept pas, entrent dans la hanche droite et n'en ressortent pas. Un gambison n'arrête pas ça. Une brigandine n'arrête pas ça. Il n'existe rien dans ce monde, à sept pas, qui arrête ça — c'est très exactement pour cette raison que deux cents ans de tapisseries et de chansons n'ont pas encore décidé si c'est une arme d'homme." },
+    "Il tombe en trois temps : le genou, la main, puis le côté. Il ne lâche pas l'épée.",
+    "§ Personne n'applaudit. Personne ne siffle non plus.",
+    "Le héraut d'armes note quelque chose sur son rôle, et vous saurez seulement des mois plus tard qu'il a écrit : *régulier*.",
+    { sobre:"Mais cent personnes ont vu un homme régler un duel sans croiser le fer.",
+      intense:"Ce qui est écrit au rôle et ce qui se raconte à l'étape ne sont jamais la même chose. Le rôle dit *régulier*. L'étape dira que le Paria n'a pas croisé le fer.",
+      extreme:"Ce qui est porté au rôle et ce qui se raconte à l'étape ne sont jamais la même chose, et c'est la deuxième leçon de la matinée. Le rôle dit *régulier*, ce qui est exact et vous protège devant n'importe quel tribunal de province. L'étape dira que le Paria de Karlsberg n'a pas croisé le fer avec Robert d'Esclavelle, et l'étape n'a pas tort non plus. Vous porterez les deux versions pendant des années." },
+  ],
+  suite:'du_fin', libelleSuite:"Il est à terre" },
+
+du_gauche_dom:{
+  melee:true,
+  titre:"La demi-seconde",
+  effets:{ meleeMaj:{ position:"il a reculé, il est de travers", note:"le flanc ouvert", tour:1 },
+           flags:['du_gauche'],
+           exploit:{ eclat:11, temoins:'foule', quoi:"onze duels battus par un quart d'heure d'observation" },
+           marque:"Un pas vers sa gauche. Il a reculé au lieu de pivoter, comme depuis six ans.",
+           court:"La demi-seconde" },
+  texte:[
+    "Un pas. Vers sa gauche, dans son mouvement, à contretemps de sa charge.",
+    { sobre:"Il recule au lieu de pivoter.",
+      intense:"Un homme entier pivote sur le genou gauche et vous rattrape. Lui recule d'un demi-pas, parce que son genou ne pivote plus depuis six ans et que son corps a cessé de le lui demander.",
+      extreme:"Un homme entier pivote sur le genou gauche, ouvre la hanche et vous rattrape sans y penser — c'est le geste le plus élémentaire de l'escrime et on l'apprend en trois semaines. Lui recule d'un demi-pas. Son genou ne pivote plus depuis six ou sept ans, son corps a cessé de le lui demander, et il a construit onze victoires sur une méthode qui rend ce défaut invisible : ne jamais laisser un adversaire arriver au deuxième échange." },
+    "§ C'est le deuxième échange.",
+    () => a('du_boue')
+      ? "Et il recule vers l'ouest, où la terre est grasse sur deux pouces, ce qu'il ne sait pas."
+      : "Et il découvre, à quarante-quatre ans, devant cent personnes, qu'il a un défaut.",
+    "Le flanc s'ouvre sur toute sa longueur. Vous ne le prenez pas : vous prenez le bras d'épée, au-dessus du coude, parce qu'un flanc tue et qu'un bras finit un duel.",
+    { sobre:"Il lâche l'épée.",
+      intense:"Il lâche l'épée. Il la regarde par terre pendant environ une seconde et demie, ce qui est la chose la plus longue de la matinée.",
+      extreme:"Il lâche l'épée. Elle tombe à plat, sans bruit particulier, sur de la terre battue. Il la regarde par terre pendant environ une seconde et demie — une seconde et demie, avec cent personnes autour et un bras qui ne se referme plus — et c'est de très loin la chose la plus longue de toute cette matinée, pour lui comme pour vous." },
+  ],
+  suite:'du_fin', libelleSuite:"Il est désarmé" },
+
+du_tenir_dom:{
+  melee:true,
+  titre:"Le douzième",
+  effets:{ meleeMaj:{ position:"deuxième échange", note:"il souffle", tour:1 },
+           flags:['du_tenu'], cout:{ endurance:18 },
+           blessure:{ id:'du_flanc', zone:"flanc gauche", type:"estoc peu profond", gravite:1, douleur:2,
+                      saignement:1, fonction:[], traitement:null, cicatrice:"trois pouces, sous les côtes" },
+           exploit:{ eclat:8, temoins:'foule', quoi:"le premier échange encaissé, ce que personne n'avait fait" },
+           marque:"Onze duels finis au premier échange. Le douzième est allé au deuxième.",
+           court:"Le douzième" },
+  texte:[
+    "Onze duels. Onze premiers échanges.",
+    { sobre:"Il faut simplement que le douzième dure.",
+      intense:"Il n'y a rien à trouver : il faut que le douzième dure. C'est tout le plan, il est humiliant à formuler, et c'est le bon.",
+      extreme:"Il n'y a rien de brillant à trouver et c'est ce qui rend la chose supportable : il faut simplement que le douzième dure. C'est tout le plan. Il est humiliant à formuler à voix haute, il ne fera jamais une chanson, et c'est le seul qui tienne debout — parce qu'un homme dont la méthode entière consiste à finir en quatre secondes n'a, par construction, jamais eu à apprendre la cinquième." },
+    "Le premier échange coûte trois pouces sous les côtes, à gauche, et un pas en arrière.",
+    "§ Le deuxième n'a pas lieu tout de suite, et c'est là que tout se joue.",
+    { sobre:"Il souffle.",
+      intense:"Il souffle. À quarante-quatre ans, après quatre secondes à cette vitesse, un homme souffle — et il vient de découvrir, devant cent personnes, qu'il souffle.",
+      extreme:"Il souffle. C'est tout. Quarante-quatre ans, un gambison neuf, quatre secondes à une vitesse que personne ne tient plus longtemps que ça, et il souffle. Il vient de le découvrir devant cent personnes en même temps que vous, et il faut voir son visage à cette seconde-là : ce n'est pas de la peur, c'est de l'arithmétique. Il fait le compte de ce qui lui reste et il n'aime pas le résultat." },
+  ],
+  suite:'du_combat_2', libelleSuite:"Le deuxième échange" },
+
+du_dague_dom:{
+  melee:true,
+  titre:"La main gauche",
+  effets:{ meleeMaj:{ position:"il n'a plus de parade", note:"la main gauche ouverte", tour:1 },
+           flags:['du_dague'],
+           exploit:{ eclat:10, temoins:'foule', quoi:"la dague de parade prise avant qu'elle s'ouvre" },
+           marque:"Sa dague de parade est par terre avec deux doigts dessus.",
+           court:"La main gauche" },
+  texte:[
+    "Il sort l'épée et la dague dans le même mouvement, en même temps, toujours. C'est rapide, c'est efficace, et c'est son unique défaut de méthode : deux mains qui partent ensemble ne se couvrent pas l'une l'autre.",
+    { sobre:"Vous prenez la main gauche.",
+      intense:"Vous ne prenez ni l'épée ni l'homme : vous prenez la main gauche, à l'ouverture, du tranchant, dans le premier huitième de seconde où elle est seule.",
+      extreme:"Vous ne prenez ni l'épée, ni l'homme, ni rien qui ressemble à une cible d'escrime. Vous prenez la main gauche, à l'ouverture, du tranchant et de très près, dans le premier huitième de seconde où elle sort et où elle n'est couverte par rien. C'est un geste de rue et pas un geste de salle, on ne l'enseigne dans aucune école de la province, et il faut avoir passé onze ans à se battre pour de l'argent contre des gens qui ne suivent aucune règle." },
+    "§ La dague tombe. Deux doigts tombent avec elle.",
+    { sobre:"Il ne crie pas. Il regarde sa main.",
+      intense:"Il ne crie pas — les mains ne font pas crier tout de suite, c'est plus tard — il regarde sa main gauche et il compte, ce que font tous les hommes qui perdent des doigts.",
+      extreme:"Il ne crie pas. Les mains ne font pas crier tout de suite : ça prend quatre ou cinq secondes, le temps que ça remonte, et pendant ces quatre ou cinq secondes l'homme regarde sa main et il compte. Ils comptent tous. Robert d'Esclavelle, quarante-quatre ans, onze duels, compte les doigts de sa main gauche devant cent personnes et il en trouve trois." },
+    "Il n'a plus de parade. Un homme sans parade, dans un carré de vingt pas, a environ trente secondes.",
+  ],
+  suite:'du_fin', libelleSuite:"Trente secondes" },
+
+du_cout:{
+  melee:true,
+  titre:"Ça passe, et vous le payez",
+  effets:{ meleeMaj:{ position:"corps à corps", note:"les deux touchés", tour:1 },
+           flags:['du_cout'], cout:{ endurance:20 },
+           blessure:{ id:'du_epaule_g', zone:"épaule gauche", type:"estoc profond", gravite:2, douleur:3,
+                      saignement:2, fonction:['bouclier','lutte'], traitement:null,
+                      cicatrice:"une entrée nette et une sortie qui l'est moins" },
+           marque:"Ça a marché. Sa dague est passée par l'épaule gauche, de part en part.",
+           court:"De part en part" },
+  texte:[
+    "Ça marche. Il fallait juste être à la portée de sa dague pour que ça marche.",
+    { sobre:"Elle entre dans l'épaule gauche.",
+      intense:"Elle entre dans l'épaule gauche, de bas en haut, et elle ressort. Une dague de parade fait dix pouces : dans une épaule, dix pouces, ça traverse.",
+      extreme:"Elle entre dans l'épaule gauche, de bas en haut, dans le creux entre le deltoïde et la clavicule, et elle ressort par-derrière. Une dague de parade de province fait dix pouces de lame ; dans une épaule d'homme, dix pouces, ça traverse et il en reste. Le froid arrive avant la douleur, ce qui est toujours la partie la plus déroutante, et pendant environ deux secondes le bras fonctionne encore parfaitement." },
+    "§ Vous êtes tous les deux touchés et il n'y en a qu'un des deux qui ait encore ses deux bras.",
+    "Ce n'est pas vous.",
+  ],
+  suite:'du_combat_2', libelleSuite:"Le deuxième échange" },
+
+du_ko:{
+  melee:true,
+  titre:"Quatre secondes",
+  effets:{ meleeMaj:{ position:"à terre, dans la chaux", note:"il est debout au-dessus", tour:1 },
+           flags:['du_ko'], cout:{ endurance:26, moral:12 },
+           blessure:{ id:'du_cuisse', zone:"cuisse droite", type:"taille profonde", gravite:3, douleur:4,
+                      saignement:3, fonction:['agilite','equitation'], traitement:null,
+                      cicatrice:"neuf pouces en travers du quadriceps" },
+           marque:"Onze duels finissent au premier échange. Vous avez failli être le douzième.",
+           court:"Quatre secondes" },
+  texte:[
+    "Voilà pourquoi il en a gagné onze.",
+    { sobre:"Quatre secondes.",
+      intense:"Quatre secondes. Il n'y a rien à raconter d'autre : quatre secondes, une taille dans la cuisse droite, et vous êtes assis dans la chaux avec une jambe qui ne répond plus.",
+      extreme:"Quatre secondes. Il n'y a strictement rien d'autre à en dire et c'est bien le problème : quatre secondes, une taille en travers de la cuisse droite sur neuf pouces, et vous êtes assis dans la chaux avec une jambe qui ne répond pas du tout et du sang qui part au rythme du cœur, ce qui veut dire l'artère fémorale de très près. Cent personnes viennent de voir tout ce qu'il y avait à voir." },
+    "§ Il est debout au-dessus de vous et il ne se presse pas. Un homme qui a gagné onze duels sait exactement combien de temps il a.",
+    "Le héraut d'armes n'arrête rien : un duel ne s'arrête que par la mort, le forfait ou l'incapacité, et vous êtes conscient.",
+  ],
+  suite:'du_combat_2', libelleSuite:"Il ne se presse pas" },
+
+du_pistolet_cout:{
+  melee:true,
+  titre:"Le délai",
+  effets:{ meleeMaj:{ position:"corps à corps", note:"il est touché au bras", tour:1 },
+           flags:['du_pistolet','a2_pistolet_public'], cout:{ endurance:14 },
+           blessure:{ id:'du_visage', zone:"pommette gauche", type:"coupure profonde", gravite:1, douleur:3,
+                      saignement:2, fonction:['perception'], traitement:null,
+                      cicatrice:"de l'os de la joue à la mâchoire, et elle se verra toujours" },
+           exploit:{ eclat:5, temoins:'foule', quoi:"un coup de pistolet dans un duel, et il est arrivé quand même" },
+           marque:"Le délai de la platine. Il est arrivé sur vous pendant que la poudre prenait.",
+           court:"Le délai" },
+  texte:[
+    "Il y a un délai entre la pierre et la poudre. Il est court. Il n'est pas nul, et un homme qui charge parcourt trois pas dedans.",
+    { sobre:"Le coup part et il est déjà là.",
+      intense:"Le coup part, la balle prend le bras au lieu du corps, et il est déjà sur vous — parce qu'il a vu le pistolet se lever et qu'il a fait la seule chose qui vaille : accélérer.",
+      extreme:"Le coup part. La balle prend le bras gauche au lieu du corps, ce qui est une blessure et pas une décision, et il est déjà sur vous. C'est exactement ce qu'il fallait faire de son côté et il l'a fait sans réfléchir : quand un homme lève un pistolet à onze pas, on n'esquive pas, on accélère, parce que la seule chose qui sauve est de réduire le délai à zéro. Onze duels lui ont appris ça, et pas dans un livre." },
+    "§ La garde de sa dague vous ouvre la joue de l'os à la mâchoire.",
+    "Vous porterez ça toute votre vie et on vous le demandera environ deux cents fois.",
+    "Le pistolet est vide, chaud, et parfaitement inutile pour le reste de la matinée.",
+  ],
+  suite:'du_combat_2', libelleSuite:"Le deuxième échange" },
+
+du_pistolet_ko:{
+  melee:true,
+  titre:"Un long feu",
+  effets:{ meleeMaj:{ position:"à terre", note:"il n'a rien", tour:1 },
+           flags:['du_longfeu','a2_pistolet_public'], cout:{ endurance:24, moral:14 },
+           blessure:{ id:'du_ventre', zone:"ventre, au-dessus de la hanche", type:"estoc", gravite:3, douleur:4,
+                      saignement:3, fonction:['endurance','lutte'], traitement:null,
+                      cicatrice:"quatre pouces, et une digestion qui n'est jamais redevenue normale" },
+           marque:"Un long feu. La platine a claqué, la poudre a mis un temps, et lui non.",
+           court:"Un long feu" },
+  texte:[
+    "Un long feu.",
+    { sobre:"La platine claque, et rien ne part.",
+      intense:"La platine claque, l'amorce prend, et la charge met un temps — un temps ridicule, une fraction — pendant lequel il n'y a rien au bout du canon qu'un homme qui arrive.",
+      extreme:"La platine claque parfaitement. L'amorce prend. Et la charge met un temps : un temps ridicule, une petite fraction de seconde, qui arrive quand la poudre a pris l'humidité de quatre jours de pluie et qu'on n'a pas rechargé le matin même. Ce temps-là ne se voit pas. Il s'entend, après coup, quand on se repasse la scène pendant des mois : *clac* — et puis le coup, une fraction trop tard, dans le ciel." },
+    "§ Le coup part en l'air pendant qu'il vous met sa lame au-dessus de la hanche.",
+    "Un pistolet vide dans la main droite et quatre pouces d'acier dans le ventre : c'est la position la plus stupide dans laquelle un homme puisse se trouver, et cent personnes la regardent.",
+    "Il ne dit rien. Il n'a pas besoin.",
+  ],
+  suite:'du_combat_2', libelleSuite:"Il retire la lame" },
+
+/* ── DEUXIÈME ÉCHANGE ─────────────────────────────────────────────────── */
+du_combat_2:{
+  melee:true,
+  lieu:"Cendrepont · le carré",
+  titre:"Ce qu'on fait quand on n'a plus de bonne solution",
+  effets:{ meleeMaj:{ tour:2 } },
+  texte:[
+    () => a('du_ko') || a('du_longfeu')
+      ? "Vous êtes par terre. Il est debout. Cent personnes regardent et le héraut n'arrêtera rien."
+      : "Il souffle, il saigne, et il est toujours entre vous et la sortie du carré.",
+    { sobre:"Un duel ne s'arrête que par la mort, le forfait ou l'incapacité.",
+      intense:"Le droit de province est court là-dessus : un duel s'arrête par la mort, par le forfait déclaré à voix haute, ou par l'incapacité constatée. Aucun des trois n'est arrivé.",
+      extreme:"Le droit de province tient en une phrase et le héraut l'a lue tout à l'heure sans que personne écoute : un duel s'arrête par la mort de l'un des deux, par le forfait déclaré à voix haute devant le héraut, ou par l'incapacité constatée par le héraut lui-même. Aucun des trois n'est arrivé. Ce qui veut dire, très concrètement, que rien ni personne sur cette place n'a le pouvoir d'interrompre ce qui se passe, et que tout le monde ici le sait." },
+    () => charges() > 0
+      ? "§ Il vous reste un coup à la ceinture."
+      : "§ Les deux pistolets sont vides. On ne recharge pas un silex dans un duel : quarante secondes avec les mains sèches, et vous n'avez ni l'un ni l'autre.",
+    "Il y a cent témoins, un héraut d'armes, deux enfants sur le mur du cimetière.",
+  ],
+  choix:[
+    choixPistolet({ dc:8, adversaire:'esclavelle', situation:situDuel,
+      degres:{ dominante:'du_pistolet_dom', couteuse:'du_2_cout', echec:'du_2_ko' } }),
+
+    { t:"Finir à l'épée, proprement",
+      detail:"ce que tout le monde est venu voir · Force + épées contre 10",
+      risque:"dangereux",
+      test:{ carac:'force', comp:'epees', dc:10, adversaire:'esclavelle', manoeuvre:'finir',
+             equipement:2, situation:situDuel },
+      degres:{ dominante:'du_epee_dom', couteuse:'du_2_cout', echec:'du_2_ko' } },
+
+    choixDrain({ dc:11, adversaire:'esclavelle', humain:true, temoins:'foule', cout:26,
+      situation:situDuel,
+      degres:{ dominante:'du_drain_dom', couteuse:'du_2_cout', echec:'du_2_ko' } }),
+
+    { t:"Lui laisser le forfait",
+      detail:"un homme qui a perdu peut le dire à voix haute · encore faut-il lui en laisser le temps",
+      risque:"calculé",
+      test:{ carac:'presence', comp:'tactique', dc:9, adversaire:'esclavelle', manoeuvre:'forfait',
+             situation:situDuel },
+      degres:{ dominante:'du_forfait_dom', couteuse:'du_2_cout', echec:'du_2_ko' } },
+  ],
+},
+
+du_epee_dom:{
+  melee:true,
+  titre:"Ce que tout le monde est venu voir",
+  effets:{ meleeMaj:{ position:"il est à terre", note:"fini", tour:3 },
+           flags:['du_epee','du_gagne'],
+           exploit:{ eclat:14, temoins:'foule', quoi:"Robert d'Esclavelle, au fer, devant cent personnes" },
+           marque:"Fini au fer, devant cent personnes. C'est ce qu'ils étaient venus voir et ils ne l'ont pas aimé.",
+           court:"Au fer" },
+  texte:[
+    "Cent personnes sont venues voir deux hommes se battre à l'épée. Elles vont l'avoir.",
+    { sobre:"Ce n'est pas beau.",
+      intense:"Ce n'est pas beau. Ça ne l'est jamais et c'est la seule chose que les récits ne rendent pas : deux hommes fatigués, très près, qui se donnent des coups courts et laids en respirant fort.",
+      extreme:"Ce n'est pas beau. Ça ne l'est jamais et c'est très exactement ce qu'aucune tapisserie ne rend : deux hommes fatigués, à moins d'un pas l'un de l'autre, qui se donnent des coups courts, brefs et laids en respirant très fort par la bouche. Il n'y a pas de passes. Il n'y a pas de dégagements. Il y a deux hommes qui s'appuient l'un sur l'autre et qui essaient de placer neuf pouces d'acier quelque part de mou." },
+    "§ Vous le placez le premier. Sous l'aisselle droite, vers le bas, dans l'axe.",
+    { sobre:"Ça ne le tue pas tout de suite.",
+      intense:"Ça ne tue pas tout de suite. Ça ne tue jamais tout de suite : ça enlève d'abord la station debout, puis l'usage du bras, puis la parole, et la mort arrive bien après, quand tout le monde a eu le temps de la voir venir.",
+      extreme:"Ça ne le tue pas tout de suite et c'est la partie que personne ne raconte. Un homme touché sous l'aisselle, dans l'axe, perd d'abord la station debout — il s'assoit, littéralement, il s'assoit dans la chaux comme quelqu'un qui vient de se rappeler quelque chose. Puis l'usage du bras. Puis la parole. La mort arrive largement après, sur une place où cent personnes ont eu tout le temps de la regarder venir et où plus personne ne parle depuis un moment." },
+    "Il met onze minutes. Le héraut d'armes reste dans le carré avec lui, ce qui est son travail, et personne d'autre n'entre.",
+  ],
+  suite:'du_fin', libelleSuite:"Onze minutes" },
+
+du_drain_dom:{
+  melee:true,
+  titre:"Devant cent personnes et un héraut d'armes",
+  effets:{ meleeMaj:{ position:"il est à genoux", note:"il refroidit", tour:3 },
+           flags:['du_drain','du_gagne','a2_onde_publique','a2_drain_public'],
+           faire:() => { drainer(34); drainVu('foule');
+                         retenir('charles', "il a vidé un homme devant cent personnes et un héraut d'armes");
+                         if(typeof bouger === 'function') bouger('alycia', { peur:5 }); },
+           exploit:{ eclat:20, temoins:'foule', quoi:"un homme vidé sur une place publique" },
+           marque:"Vous l'avez vidé devant cent personnes. Vos plaies se sont refermées pendant qu'il refroidissait.",
+           court:"Il refroidit" },
+  texte:[
+    "Pousser déplace. Prendre est l'autre branche, et personne dans ces provinces n'a jamais vu la deuxième.",
+    { sobre:"Vous le prenez.",
+      intense:"Vous ne le frappez pas. Vous posez la main à plat sur son sternum, à travers la chemise, et vous prenez ce qui le tient encore chaud.",
+      extreme:"Vous ne le frappez pas. Vous posez la main à plat sur son sternum, à travers une chemise propre et un gambison neuf, et vous prenez. Il n'y a pas de lumière. Il n'y a pas de bruit. Il y a un homme de quarante-quatre ans qui cesse progressivement d'être chaud, à genoux dans la chaux, en vous regardant — parce qu'il vous regarde, tout le temps, et qu'il ne comprend pas ce qui lui arrive et qu'il n'a aucun mot pour le demander." },
+    "§ Et vous, vous vous refermez.",
+    { sobre:"Ce qui saignait cesse de saigner.",
+      intense:"Ce qui saignait cesse de saigner. La chaleur revient dans les mains, la vue se recentre, la fatigue s'en va — et tout ça se voit de l'extérieur, très bien, par cent personnes.",
+      extreme:"Ce qui saignait cesse de saigner. La chaleur revient dans les mains, d'abord, puis dans le visage. La vue se recentre. La fatigue de quatre jours s'en va comme on retire un manteau mouillé. Et tout cela se voit de l'extérieur — parfaitement, complètement, par cent personnes qui regardent un homme se redresser pendant qu'un autre s'affaisse, au même rythme, dans le même carré de chaux, sans qu'aucun des deux ne bouge." },
+    "Personne ne crie. C'est ça, le pire.",
+    "§ Il n'y a pas de mot dans cette province pour ce que cent personnes viennent de voir, et il y en aura un avant l'hiver.",
+    "Le héraut d'armes n'écrit rien du tout sur son rôle. Il regarde sa page pendant très longtemps, et il ne l'écrit pas, et cette page-là existe encore quelque part, vide.",
+  ],
+  plusTard:"Cent témoins, deux enfants sur un mur, et un héraut d'armes qui n'a rien écrit. On trouvera un mot avant l'hiver.",
+  suite:'du_fin', libelleSuite:"Il refroidit" },
+
+du_forfait_dom:{
+  melee:true,
+  titre:"À voix haute",
+  effets:{ meleeMaj:{ position:"il a parlé", note:"vivant", tour:3 },
+           flags:['du_forfait','du_gagne','du_vivant'],
+           exploit:{ eclat:7, temoins:'foule', quoi:"un duel réglé sans mort, ce qui ne s'était pas vu depuis onze ans" },
+           faire:() => retenir('caleb', "il a laissé Esclavelle déclarer forfait, ce qui coûte plus cher qu'un mort"),
+           marque:"Il a déclaré forfait à voix haute devant le héraut. Il vivra, et c'est bien pire pour lui.",
+           court:"Le forfait" },
+  texte:[
+    "Un homme qui a perdu peut le déclarer. Encore faut-il qu'on lui en laisse le temps, et personne ne le laisse jamais.",
+    { sobre:"Vous reculez d'un pas.",
+      intense:"Vous reculez d'un pas et vous baissez la pointe. C'est tout. C'est la chose la plus difficile de la matinée et elle ne ressemble à rien.",
+      extreme:"Vous reculez d'un pas et vous baissez la pointe. C'est tout. Ça ne ressemble absolument à rien, aucun récit n'en fera quoi que ce soit, et c'est de très loin la chose la plus difficile de la matinée — parce qu'un homme qui recule d'un pas dans un carré de vingt pas avec un adversaire encore armé vient de remettre sa vie entre les mains de quelqu'un qui a onze morts derrière lui." },
+    "Il met huit secondes.",
+    "§ « Forfait. »",
+    { sobre:"Il le dit assez fort pour le héraut, pas plus.",
+      intense:"Il le dit une fois, assez fort pour le héraut et pas plus, sans lever les yeux. Cent personnes l'entendent quand même : une place se tait très bien quand il faut.",
+      extreme:"Il le dit une seule fois, assez fort pour que le héraut d'armes l'entende et pas un décibel de plus, sans lever les yeux de la terre battue. Cent personnes l'entendent parfaitement : une place de marché se tait extraordinairement bien quand il le faut, et elle s'est tue depuis un moment." },
+    "Le héraut le porte au rôle et c'est fini, légalement, à la seconde.",
+    "§ Vous venez de lui laisser la vie. Dans cette province, un homme qui a déclaré forfait à voix haute vivra trente ans avec ça, et sa maison aussi.",
+    "Vous ne lui avez pas fait de cadeau. Vous lui avez fait quelque chose de bien pire et vous le savez tous les deux en sortant du carré.",
+  ],
+  plusTard:"Il est vivant. Sa maison porte un forfait déclaré, ce qui se transmet aux enfants dans ces provinces.",
+  suite:'du_fin', libelleSuite:"Il sort du carré" },
+
+du_2_cout:{
+  melee:true,
+  titre:"Vous l'avez, et vous êtes par terre",
+  effets:{ meleeMaj:{ position:"tous les deux à terre", note:"fini", tour:3 },
+           flags:['du_gagne','du_cher'], cout:{ endurance:24 },
+           blessure:{ id:'du_main', zone:"main gauche", type:"section", gravite:2, douleur:3,
+                      fonction:['lutte','bouclier'], traitement:null,
+                      cicatrice:"l'auriculaire et la moitié de l'annulaire" },
+           marque:"Vous l'avez eu et vous avez laissé deux doigts dans le carré.",
+           court:"Deux doigts" },
+  texte:[
+    "Vous l'avez.",
+    { sobre:"Et vous laissez deux doigts dans la chaux.",
+      intense:"Et vous laissez deux doigts de la main gauche dans la chaux du carré. Personne ne les ramasse. On balaie la place à midi.",
+      extreme:"Et vous laissez deux doigts de la main gauche dans la chaux du carré — l'auriculaire entier, l'annulaire à moitié. Personne ne les ramasse et personne n'y pense : on balaie la place à midi comme tous les jours, avec le reste, parce qu'une place de marché sert à autre chose et qu'il y a marché le lendemain." },
+    "§ Vous êtes assis tous les deux, à trois pas l'un de l'autre, et aucun des deux n'arrive à se relever tout de suite.",
+    "C'est une position très bête et elle dure une minute entière.",
+  ],
+  suite:'du_fin', libelleSuite:"Se relever" },
+
+du_2_ko:{
+  melee:true,
+  titre:"Le douzième",
+  issue:"Vous êtes mort dans un carré de chaux",
+  bilan:"Robert d'Esclavelle en a gagné douze.",
+  effets:{ flags:['du_perdu'], cout:{ vitalite:60, sang:40 },
+           marque:"Robert d'Esclavelle en a gagné douze. Deux enfants regardaient depuis le mur du cimetière." },
+  texte:[
+    "Non.",
+    { sobre:"Il en a gagné douze.",
+      intense:"Il en a gagné douze. C'était la chose la plus probable depuis le début et tout le monde sur cette place le savait, y compris vous.",
+      extreme:"Il en a gagné douze. C'était, depuis le début, l'issue de très loin la plus probable : quarante-quatre ans, onze duels, une méthode qui marche, contre un homme qui n'avait pour lui qu'un quart d'heure d'observation et deux coups de plomb. Tout le monde sur cette place le savait. Vous aussi. C'est même pour ça qu'ils sont venus." },
+    "§ Le héraut d'armes constate, note, et referme son rôle.",
+    "Deux enfants regardent depuis le mur du cimetière et personne ne les fait descendre.",
+    "On vous relève une heure plus tard, quand la place est vide.",
+  ],
+  apres:[
+    "Karlsberg reste ce qu'elle est, avec ce qu'il y a dedans, et sans personne pour la relever plus haut.",
+    "Un homme qui meurt dans un carré de chaux ne laisse pas d'épilogue. Il laisse un rôle de héraut, correctement tenu.",
+  ],
+  suite:'a2_epilogue' },
+
+du_fin:{
+  lieu:"Cendrepont · la place · huit heures",
+  titre:"Ce qu'on emporte d'une place de marché",
+  texte:[
+    "Il est huit heures. Le boulanger rouvre.",
+    () => a('du_forfait')
+      ? "Robert d'Esclavelle sort du carré sur ses jambes, avec sa maison et sans son honneur, ce qui dans cette province est la plus longue des peines."
+      : (a('du_drain')
+        ? "Robert d'Esclavelle est à genoux dans la chaux et il ne se relèvera pas. Il n'a aucune plaie."
+        : "Robert d'Esclavelle est mort ou en train de l'être, et il y a du monde autour de lui."),
+    { sobre:"Personne ne vous parle.",
+      intense:"Personne ne vous adresse la parole en sortant du carré. Ce n'est pas de l'hostilité : c'est qu'il n'existe rien à dire à un homme qui sort d'un carré de chaux.",
+      extreme:"Personne ne vous adresse la parole en sortant du carré, et il faut du temps pour comprendre que ce n'est pas de l'hostilité. C'est qu'il n'existe absolument rien à dire à un homme qui sort d'un carré de chaux. On ne félicite pas. On ne console pas. On s'écarte proprement, on regarde ailleurs avec application, et on retourne à ce qu'on faisait — et à midi la place est balayée." },
+    () => a('a2_drain_public')
+      ? "§ Sauf qu'aujourd'hui, ce n'est pas ça. Aujourd'hui, cent personnes s'écartent en vous regardant, et deux enfants sont encore sur le mur."
+      : "§ Le rôle du héraut porte le mot *régulier*, et c'est la seule chose qui vous protège de tout le reste.",
+    () => charges() === 0
+      ? "Les deux pistolets sont vides. Il faudra une heure, une table, de la lumière et des mains sèches, et ce ne sera pas ce matin."
+      : (charges() === 1
+        ? "Il reste un coup à la ceinture. On recharge l'autre le soir, à la lumière, et ça prend quarante minutes."
+        : ""),
+  ],
+  effets:{ faire:() => { if(charges() === 0) ETAT.flags.add('du_vides'); },
+           marque:"Le rôle du héraut porte le mot « régulier ».",
+           court:"Régulier" },
+  suite:'du_apres', libelleSuite:"Le soir" },
+
+du_apres:{
+  qui:'alycia',
+  lieu:"Cendrepont · le soir",
+  titre:"Recharger",
+  texte:[
+    "Recharger un pistolet à silex demande une table, de la lumière, une baguette, et de ne pas être pressé.",
+    { sobre:"Elle vous regarde faire.",
+      intense:"Alycia vous regarde faire, assise en face, sans rien dire, pendant les quarante minutes que ça prend.",
+      extreme:"Alycia vous regarde faire, assise en face de vous, sans un mot, pendant les quarante minutes entières que ça prend — la poudre, la bourre, la balle, la baguette, la poudre d'amorce, le silex qu'on vérifie et qu'on resserre. Elle ne bouge pas. Elle ne commente pas. Et vous savez très bien qu'elle est en train de préparer quelque chose de désagréable, parce qu'elle ne regarde jamais personne travailler." },
+    () => a('a2_drain_public')
+      ? "« Cent personnes », dit-elle enfin."
+      : "« Vous avez tiré », dit-elle enfin.",
+    () => a('a2_drain_public')
+      ? "« Je sais. »\n\n« Non, vous ne savez pas. Vous croyez que le problème est qu'ils ont vu. » Elle se penche. « Le problème est que **vous vous êtes refermé**. Ils ont vu un homme se guérir. Ce n'est pas une arme, ça, messire : c'est une promesse. Il y a des gens dans cette province qui vendraient leurs enfants pour ça et qui viennent de découvrir où vous habitez. »"
+      : "« Oui. »\n\n« Bien. » Elle repousse la lampe vers vous. « Ne vous excusez jamais de ça devant qui que ce soit. Un homme qui s'excuse d'avoir tiré est un homme qui promet de ne pas recommencer, et vous allez recommencer. »",
+    "§ Elle a raison sur les deux points et elle le sait, ce qui est sa manière habituelle d'avoir raison.",
+    "« Il vous en reste combien ? »",
+    () => charges() === 0 ? "« Aucun. Je recharge les deux. »" : "« Un. »",
+    { sobre:"« Deux coups. Dans une vie entière. »",
+      intense:"« Deux coups », dit-elle. « Vous avez deux coups dans une vie entière, à cause d'un délai de quarante secondes que personne n'a jamais réussi à raccourcir en deux cents ans. » Elle se lève. « Réfléchissez très bien à qui vous les donnez. »",
+      extreme:"« Deux coups. » Elle se lève et remet son manteau. « Vous avez deux coups à disposition dans une vie entière, parce qu'aucun armurier de ce monde n'a réussi en deux cents ans à raccourcir un rechargement en dessous de quarante secondes, et que quarante secondes n'existent pas quand quelqu'un veut vous tuer. » Elle s'arrête à la porte. « Alors réfléchissez très bien à qui vous les donnez, messire. Un jour il y aura quelqu'un en face de vous qui vaudra vraiment un de ces deux coups, et j'aimerais assez que vous l'ayez encore. »" },
+  ],
+  effets:{ faire:() => { recharger(); bouger('alycia', { relation:2, confiance:3 }); },
+           flags:['du_recharge'],
+           marque:"« Vous avez deux coups dans une vie entière. Réfléchissez très bien à qui vous les donnez. »",
+           court:"Deux coups" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+du_meurtre:{
+  qui:'esclavelle',
+  titre:"Trente témoins",
+  texte:[
+    "Vous ne le laissez pas finir sa phrase.",
+    { sobre:"C'est très rapide.",
+      intense:"C'est très rapide et c'est très laid : on ne tire pas l'épée dans une salle basse, on prend la dague, et une dague dans une salle basse à un pas, c'est trois secondes.",
+      extreme:"C'est très rapide et c'est extraordinairement laid. On ne tire pas une épée bâtarde dans une salle basse d'auberge — il n'y a pas la place, c'est même la raison pour laquelle on se bat sur les places. On prend la dague. Une dague, à un pas, entre des tables, sur un homme qui parlait encore à la salle et qui n'avait pas la main sur son fer : trois secondes, et deux d'entre elles sont lui qui essaie de comprendre." },
+    "§ Trente témoins, dont le tavernier, qui tient un registre parce que la loi de province l'y oblige.",
+    "Ce n'est pas un duel. Il n'y a pas eu de héraut, pas de carré, pas de délai réglementaire — il y a eu une provocation régulière et un homme mort avant d'avoir eu le temps de la voir aboutir.",
+    { sobre:"C'est un meurtre, et ça le restera.",
+      intense:"C'est un meurtre au sens exact du droit de province, ça le restera, et trente personnes le diront dans le même sens parce qu'elles ont toutes vu la même chose.",
+      extreme:"C'est un meurtre au sens strict et technique du droit de province : la provocation était régulière, la réponse ne l'était pas. Ça le restera. Et trente personnes le raconteront toutes dans le même sens, sans se concerter, sans malveillance particulière, parce qu'elles ont toutes vu exactement la même chose et qu'il n'y a pas deux façons de la voir." },
+    "§ Vous ne serez pas poursuivi. On ne poursuit pas pour un Paria, et Esclavelle n'avait plus de parents pour le faire.",
+    "Mais dans cette province, à partir de ce soir, vous êtes l'homme qui a tué Robert d'Esclavelle dans une auberge. C'est tout ce que vous serez pendant très longtemps, et ça se transmet.",
+  ],
+  effets:{ flags:['du_meurtre','a2_meurtrier'], suspicion:22,
+           faire:() => { bouger('alycia', { confiance:-4 });
+                         retenir('caleb', "il a tué un homme dans une auberge devant trente témoins, ce qui abîme un nom");
+                         retenir('charles', "il a tué hors du carré : je note la méthode"); },
+           exploit:{ eclat:6, temoins:'foule', quoi:"Robert d'Esclavelle, dans une salle basse, à la dague" },
+           marque:"Robert d'Esclavelle est mort dans une auberge, à la dague, devant trente témoins et un registre.",
+           court:"Trente témoins" },
+  plusTard:"Vous êtes l'homme qui a tué Esclavelle dans une auberge. Dans cette province, ça se transmet.",
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+du_refuse:{
+  titre:"L'homme qui ne répond pas",
+  texte:[
+    "Vous prenez votre manteau et vous sortez.",
+    { sobre:"Personne ne vous arrête.",
+      intense:"Personne ne vous arrête et personne ne dit rien. C'est ce qui rend la chose très claire : il n'y a rien à ajouter à un homme qui sort.",
+      extreme:"Personne ne vous arrête, personne ne vous insulte, personne ne dit quoi que ce soit. C'est précisément ce qui rend la chose parfaitement claire, et c'est bien pire que des cris : il n'y a rien à ajouter à un homme qui sort d'une salle où on vient de le frapper à main ouverte. La salle s'est déjà prononcée en se taisant." },
+    "§ Il n'y a pas de sanction. Il n'y a pas de loi. Il y a une étape sur la Route Grise, et à l'étape on raconte.",
+    "En trois semaines, c'est dans quatre bourgs. En trois mois, le mot arrive avant vous.",
+    { sobre:"On vous propose moins de contrats, et moins cher.",
+      intense:"Ce qui change est concret : moins de contrats, moins cher, et des maisons qui négocient autrement parce qu'un homme qui a refusé une fois refusera peut-être encore.",
+      extreme:"Ce qui change est entièrement concret et n'a rien de moral. Moins de contrats. Moins cher. Des intendants qui prennent trois jours de plus pour répondre. Et surtout : des maisons qui négocient autrement, parce qu'un homme d'armes qui a laissé passer une gifle publique est un homme d'armes dont on peut espérer qu'il laissera passer autre chose." },
+    "§ Robert d'Esclavelle, lui, ne recommencera pas. Il a obtenu ce qu'il voulait sans risquer un os.",
+    "C'est peut-être la décision la plus intelligente de l'année. Elle coûte exactement ce qu'elle a l'air de coûter.",
+  ],
+  effets:{ flags:['du_refuse','a2_gifle_publique'],
+           faire:() => { ETAT.renom = Math.max(0, ETAT.renom - 14);
+                         bouger('alycia', { relation:-2 });
+                         retenir('caleb', "il a encaissé une gifle publique sans répondre : son prix baisse"); },
+           marque:"Vous avez encaissé la gifle et vous êtes sorti. Le mot arrive avant vous depuis.",
+           court:"Sans répondre" },
+  plusTard:"Un homme d'armes qui a laissé passer une gifle publique est un homme dont on espère qu'il laissera passer autre chose.",
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+};
+
+enregistrerScenes(DUEL);
+
+Object.assign(GENS, {
+  esclavelle: { nom:"Robert d'Esclavelle", role:"quarante-quatre ans · onze duels · deux fermes et un moulin", lettre:"R" },
+});
+
+/* Il vient quand Karlsberg commence à peser, ou quand le nom se répète. */
+offrir({ id:'du_provoque', lieu:'cendrepont', va:'du_provoque',
+         titre:"Un homme vous attend dans la salle basse",
+         si:() => !a('du_provoque')
+               && (a('a2_bannieres') || a('a2_donjon') || ETAT.renom >= 55) });
+
+entree2('du_combat_1');
+
+</script>
+<script>
+/* ── ../acte2/prix.js ── */
+/* PARIAS — LE PRIX DU PARIA
+ * ═══════════════════════════════════════════════════════════════════════
+ * La coutume n'a jamais été abrogée parce que personne n'a jamais voulu
+ * l'écrire noir sur blanc : une maison noble qui emploie un Paria lui doit
+ * l'Or et le Sang. Des pièces comptant, et une femme de son rang.
+ *
+ * C'est une humiliation, et c'est fait pour : on n'appelle pas un Paria de
+ * gaieté de cœur, et la coutume existe pour que ça se sache.
+ *
+ * COMMENT ÇA MARCHE, ET CE QUE ÇA N'EST PAS :
+ *
+ *   — LES TERMES SE FIXENT AVANT TOUTE ACTION, entre Yohan et le chef de
+ *     maison. Or seul · le Sang seul · les deux · refuser. C'est un contrat
+ *     entre deux hommes qui parlent d'une troisième personne comme d'une
+ *     ligne, et le jeu ne fait rien pour rendre ça élégant.
+ *   — ELLE N'EST PAS À LA TABLE. On ne marchande pas avec elle : ce n'est
+ *     pas son rôle dans ce monde-là et prétendre le contraire serait une
+ *     politesse moderne. Elle vient après, on lui a dit, et elle décide.
+ *   — ELLE DÉCIDE. Pour le pouvoir — un enfant qui porte l'Onde est le seul
+ *     actif qu'une maison qui s'éteint puisse encore produire — ou par
+ *     désir, ce qui se dit sans décoration. Ou elle refuse, et alors
+ *     l'option n'existe simplement pas, avec la raison écrite en clair.
+ *
+ * Rien n'est automatique ensuite. Pas de grossesse de scénario, pas
+ * d'amour, pas de dette. Ce qui suit suit le monde vivant.
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+const PRIX = () => (A2().prix = A2().prix || { termes:null, dame:null, liaisons:[] });
+
+/* Les maisons qui doivent, et qui a quelque chose à y perdre. */
+const DAMES = {
+  sibylle: {
+    id:'sibylle', nom:"Dame Sibylle de Verneuil", age:29,
+    maison:"Verneuil", quoi:"veuve · elle tient les comptes depuis quatre ans",
+    mobile:'pouvoir',
+    si:() => true,
+  },
+  alix: {
+    id:'alix', nom:"Dame Alix de Bragelonne", age:24,
+    maison:"Bragelonne", quoi:"cadette · elle n'a rien à administrer et elle le sait",
+    mobile:'desir',
+    si:() => ETAT.renom >= 45,
+  },
+  hersende: {
+    id:'hersende', nom:"Dame Hersende de Chastel-Bas", age:34,
+    maison:"Chastel-Bas", quoi:"elle a un fils de neuf ans et une position",
+    mobile:'refus',
+    si:() => true,
+  },
+};
+
+const dameDuJour = () => {
+  const A2p = PRIX();
+  if(A2p.dame) return DAMES[A2p.dame];
+  /* Qui la maison propose dépend de la maison, pas d'un dé : une maison qui
+   * s'éteint envoie celle qui a un calcul, une maison qui va bien envoie
+   * celle qui a envie, et certaines n'envoient personne. */
+  const id = a('a2_bannieres') || ETAT.renom >= 60 ? 'alix'
+           : (a('px_refuse_une') ? 'hersende' : 'sibylle');
+  A2p.dame = id;
+  return DAMES[id];
+};
+
+const PRIX_SCENES = {
+
+/* ══ LES TERMES ═══════════════════════════════════════════════════════════ */
+px_termes:{
+  qui:'verneuil',
+  lieu:() => `${LIEUX[A2().lieu].nom} · le cabinet · ${dateA2()}`,
+  titre:"L'Or et le Sang",
+  texte:[
+    "Sire Gaucher de Verneuil a soixante et un ans, une maison de quatre fermes, et un problème qu'il ne peut pas régler avec ses propres hommes.",
+    { sobre:"Il en vient au Prix sans qu'on ait besoin de le nommer.",
+      intense:"Il en vient au Prix lui-même, tout de suite, avant même de dire ce qu'il veut — parce qu'un chef de maison qui laisse un Paria aborder le sujet le premier a déjà perdu la conversation.",
+      extreme:"Il en vient au Prix lui-même, immédiatement, avant même d'avoir dit ce qu'il attend de vous. C'est la manœuvre habituelle et elle est bonne : un chef de maison qui laisse un Paria aborder le sujet le premier a déjà perdu la conversation, et il l'a apprise à ses dépens il y a trente ans. Il pose donc la chose sur la table comme on pose une pièce comptable, avec une exactitude qui est sa seule façon de rester digne." },
+    "« La coutume est ce qu'elle est. Ma maison vous doit l'Or et le Sang. »",
+    "§ Il ne s'excuse pas. Il ne s'indigne pas non plus. Il constate une dette.",
+    { sobre:"« Vous choisissez, et vous choisissez maintenant. »",
+      intense:"« Vous choisissez maintenant, avant de savoir ce que je vais vous demander de faire, et une fois choisi ça ne se rediscute pas. C'est la coutume et elle est ainsi faite pour que personne ne puisse marchander en cours de route. »",
+      extreme:"« Vous choisissez maintenant. Avant de savoir ce que je vais vous demander, avant de connaître la difficulté, avant de voir les lieux — et une fois choisi, ça ne se rediscute plus. C'est la coutume et elle est faite exactement comme ça pour une raison : afin que personne, ni vous ni moi, ne puisse marchander en cours de route en fonction de ce que ça devient. On paie ce qu'on a dit qu'on paierait. »" },
+    "« Et le Sang, concrètement. »",
+    "« Une femme de mon rang, majeure, qui accepte. »",
+    "« Qui accepte de quoi ? »",
+    { sobre:"« Vous savez très bien de quoi. »",
+      intense:"« Vous savez très bien de quoi, messire, et je ne vais pas le dire à voix haute dans mon propre cabinet. » Il pose les mains à plat. « Elle acceptera ou elle n'acceptera pas. Ça, je ne le décide pas — et si vous croyez que je le décide, vous n'avez jamais mis les pieds dans une maison noble. »",
+      extreme:"« Vous savez très bien de quoi, messire, et je ne vais pas le formuler à voix haute dans mon propre cabinet, à mon âge. » Il pose les deux mains à plat sur la table. « Ce que je peux faire, c'est le lui dire. Ce que je ne peux pas faire, c'est répondre à sa place. Et si vous croyez qu'un chef de maison décide de ça pour une femme adulte de sa parenté, vous n'avez jamais vécu dans une maison noble et vous vous faites une idée très romanesque de mon autorité. Je réponds de mes terres et de mes hommes. Pas de ça. »" },
+    "§ Il attend. Quatre termes, et rien à négocier : c'est la coutume qui fixe, pas les hommes.",
+  ],
+  effets:{ flags:['px_termes'] },
+  choix:[
+    { t:"L'Or seul",
+      detail:"la maison paie et respire · on vous prend pour un mercenaire, ce qui est un déguisement commode",
+      risque:"prudent", definitif:true, va:'px_or' },
+
+    { t:"Le Sang seul",
+      detail:"renoncer à l'or · c'est le terme que les maisons craignent le plus, parce qu'il ne s'oublie pas",
+      risque:"définitif", ferme:"Ferme : quatre cents couronnes, et la version commode",
+      definitif:true, va:'px_sang' },
+
+    { t:"Le Prix entier",
+      detail:"l'Or et le Sang · la coutume dans sa forme complète, celle qu'on n'écrit nulle part",
+      risque:"définitif", ferme:"Ferme : ce que les maisons humaines pensaient encore de vous",
+      definitif:true, va:'px_entier' },
+
+    { t:"Refuser le Prix",
+      detail:"ne prendre que le contrat · aucun Paria n'a fait ça de mémoire d'homme",
+      risque:"calculé", definitif:true, va:'px_refus' },
+  ],
+},
+
+px_or:{
+  qui:'verneuil',
+  titre:"Quatre cents couronnes",
+  texte:[
+    "« L'or. »",
+    { sobre:"Il ne montre rien. Il est soulagé.",
+      intense:"Il ne montre rien du tout, et il est soulagé — ça se voit aux épaules, une demi-seconde, avant qu'il les remonte.",
+      extreme:"Il ne montre absolument rien, et il est soulagé : ça se voit aux épaules, une demi-seconde, avant qu'il ne les remonte. Un vieil homme qui vient d'éviter d'avoir à porter une conversation à une femme de sa parenté, et qui préfère largement quatre cents couronnes à cette conversation-là." },
+    "« Quatre cents. Cinq cents, si vous le faites avant la Saint-Aubin. »",
+    "§ Il paie plus cher que le tarif et vous savez tous les deux pourquoi.",
+    "En sortant, l'intendant vous glisse — pas par méchanceté, par métier : « Vous avez bien fait. On dira que vous êtes cher, ce qui est infiniment mieux que le reste. »",
+    { sobre:"C'est un déguisement, et il est commode.",
+      intense:"Un Paria qui prend l'or est un mercenaire cher. Un Paria qui prend le Sang est un Paria. C'est toute la différence et elle vaut des années de tranquillité.",
+      extreme:"Un Paria qui prend l'or est, aux yeux de quatre provinces, un mercenaire cher — désagréable, utile, oubliable. Un Paria qui prend le Sang est un Paria, au sens plein, celui de la coutume et de la Purge, et ça ne s'oublie dans aucune maison pendant deux générations. C'est toute la différence entre les deux termes, elle n'a rien à voir avec l'argent, et elle vaut des années de tranquillité." },
+  ],
+  effets:{ or:400, flags:['px_or','a2_prix_or'],
+           faire:() => { PRIX().termes = 'or'; ETAT.suspicion = Math.max(0, ETAT.suspicion - 4); },
+           exploit:{ eclat:3, temoins:'quelques', quoi:"quatre cents couronnes, et rien d'autre" },
+           marque:"Vous avez pris l'or seul. « On dira que vous êtes cher, ce qui est infiniment mieux que le reste. »",
+           court:"Quatre cents" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+px_sang:{
+  qui:'verneuil',
+  titre:"Sans l'or",
+  texte:[
+    "« Le Sang. Pas l'or. »",
+    { sobre:"Il met un temps.",
+      intense:"Il met un temps très long, et quand il répond sa voix a changé de registre.",
+      extreme:"Il met un temps très long — assez pour qu'on entende le feu, la pendule et quelqu'un qui marche à l'étage — et quand il répond sa voix a changé de registre. Pas en colère. Plus bas, plus lent, comme un homme qui vient de comprendre qu'il ne traite pas avec ce qu'il croyait." },
+    "« Vous renoncez à quatre cents couronnes. »",
+    "« Oui. »",
+    "« Personne ne fait ça. Les Parias prennent l'or. Ils prennent tous l'or, depuis trois cents ans, parce que l'or se dépense et que le reste s'écrit. »",
+    "« Je sais. »",
+    { sobre:"« Alors vous voulez qu'on le sache. »",
+      intense:"« Alors vous ne voulez pas de l'argent : vous voulez qu'on sache. » Il se lève et va à la fenêtre. « C'est très intelligent et je vous déteste sincèrement pour ça. »",
+      extreme:"« Alors vous ne voulez pas d'argent. Vous voulez qu'on sache. » Il se lève, va à la fenêtre, et reste dos à vous un moment. « Quatre cents couronnes s'oublient en un trimestre. Une maison qui a payé le Sang figure dans les conversations de trois provinces pendant vingt ans, et ses enfants l'entendent. C'est très intelligent, messire. Je vous déteste sincèrement pour ça, et je le dis sans hausser le ton parce que ça ne changerait rien. »" },
+    "§ Il tire le cordon.",
+    "« Je vais lui dire. Je vais lui dire exactement, sans arranger, parce que je ne suis pas un maquignon et que je réponds de cette maison. »",
+    "« Et si elle refuse ? »",
+    "« Alors vous n'aurez rien du tout, ni l'or ni le reste, et ce sera très bien fait pour vous. »",
+  ],
+  effets:{ flags:['px_sang','a2_prix_sang'],
+           faire:() => { PRIX().termes = 'sang'; },
+           marque:"Vous avez renoncé aux quatre cents couronnes. « Vous voulez qu'on sache. »",
+           court:"Sans l'or" },
+  suite:'px_elle', libelleSuite:"Il tire le cordon" },
+
+px_entier:{
+  qui:'verneuil',
+  titre:"La coutume dans sa forme complète",
+  texte:[
+    "« Les deux. »",
+    { sobre:"Il encaisse sans un mot.",
+      intense:"Il encaisse sans un mot. Il note quelque chose. Ce qu'il note, c'est le montant, parce qu'un homme qui tient une maison note toujours le montant en premier — c'est la seule partie qu'il sait traiter.",
+      extreme:"Il encaisse sans un mot, prend sa plume et note quelque chose. Ce qu'il note, c'est le montant : trois cent vingt couronnes, le tarif exact du Prix entier, moins le rabais coutumier. Un homme qui tient une maison depuis trente ans note toujours le montant en premier, parce que c'est la seule moitié de cette affaire qu'il sait traiter, et qu'il gagne quatre secondes avant d'avoir à penser à l'autre." },
+    "« Trois cent vingt, et le reste. »",
+    "« Le tarif est de quatre cents. »",
+    "« Le tarif est de quatre cents pour l'or seul. » Il repose la plume. « Le Prix entier se compte autrement et il se compte à la baisse, messire, ce qui devrait vous renseigner sur ce que la coutume pense de vous et de moi. »",
+    "§ C'est vrai, c'est humiliant pour tout le monde dans la pièce, et c'est écrit nulle part.",
+    "Il tire le cordon.",
+    { sobre:"« Je vais lui dire. »",
+      intense:"« Je vais lui dire. » Un temps. « Vous savez ce que je déteste le plus dans cette coutume ? Ce n'est pas ce qu'elle me coûte. C'est que je vais devoir traverser un couloir. »",
+      extreme:"« Je vais lui dire. » Il reste debout, la main sur le cordon, sans le lâcher. « Vous savez ce que je déteste le plus là-dedans, messire ? Ce n'est pas l'argent, l'argent n'est rien. Ce n'est même pas ce qu'on dira de ma maison, on dit toujours quelque chose. C'est que je vais devoir traverser un couloir, entrer dans une pièce, et dire une phrase à une femme de ma parenté que je connais depuis qu'elle a quatre ans. Trente pas. C'est ça, le Prix du Paria. Les trente pas. »" },
+  ],
+  effets:{ or:320, flags:['px_entier','a2_prix_entier'],
+           faire:() => { PRIX().termes = 'entier'; },
+           marque:"Le Prix entier. « C'est que je vais devoir traverser un couloir. Trente pas. »",
+           court:"Trente pas" },
+  suite:'px_elle', libelleSuite:"Trente pas" },
+
+px_refus:{
+  qui:'verneuil',
+  titre:"Personne ne refuse le Prix",
+  texte:[
+    "« Rien. Ni l'un ni l'autre. Le contrat, et le tarif d'un homme d'armes ordinaire. »",
+    { sobre:"Il ne comprend pas.",
+      intense:"Il ne comprend pas, et il le dit — ce qui, chez un homme de soixante et un ans qui tient une maison, est rare au point d'être un aveu.",
+      extreme:"Il ne comprend pas, et il le dit à voix haute, ce qui chez un homme de soixante et un ans qui tient une maison depuis trente ans est assez rare pour valoir un aveu. Il repose sa plume. Il vous regarde comme on regarde une pièce comptable qui ne tombe pas juste et dont on sait qu'elle finira par tomber juste, parce qu'elles tombent toujours juste." },
+    "« Pourquoi ? »",
+    "« Parce que la coutume existe pour humilier votre maison, et que je n'ai pas besoin de votre maison humiliée. »",
+    "« Vous en avez besoin plus que vous ne croyez. La coutume est la seule chose de ce droit qui reconnaisse qu'un Paria existe. »",
+    "§ Il a raison et c'est désagréable.",
+    { sobre:"« Vous vous appauvrissez d'un droit. »",
+      intense:"« Vous renoncez à un droit, messire, pas à un cadeau. Le jour où plus personne ne réclamera le Prix, plus personne ne devra rien à un Paria, et ce jour-là vous ne serez plus rien du tout dans ce droit-ci. »",
+      extreme:"« Vous renoncez à un droit et pas à un cadeau, et c'est là que vous vous trompez. Le Prix du Paria est la seule ligne de tout le droit de ces quatre provinces qui reconnaisse qu'un Paria est quelqu'un — quelqu'un à qui une maison peut devoir quelque chose. Le jour où plus personne ne le réclamera, plus personne ne devra rien, et vous ne serez plus, juridiquement, qu'un homme sans nom qu'on emploie et qu'on paie. » Il se rassoit. « Vous croyez faire un geste. Vous êtes en train de laisser mourir votre seul article. »" },
+    "Il paie deux cent cinquante, le tarif d'un homme d'armes ordinaire.",
+    "Il vous fait raccompagner par la grande porte, ce qui n'était pas obligatoire, et il le fait exprès.",
+  ],
+  effets:{ or:250, flags:['px_refuse','a2_prix_refuse'],
+           faire:() => { PRIX().termes = 'aucun'; ETAT.suspicion = Math.max(0, ETAT.suspicion - 6); },
+           exploit:{ eclat:5, temoins:'quelques', quoi:"un Paria qui n'a pas réclamé son Prix" },
+           marque:"Vous avez refusé le Prix. « Vous êtes en train de laisser mourir votre seul article. »",
+           court:"Le seul article" },
+  plusTard:"Le Prix est la seule ligne du droit qui reconnaisse qu'un Paria est quelqu'un. Vous venez d'en laisser tomber une.",
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+/* ══ ELLE ═════════════════════════════════════════════════════════════════
+ * Elle n'était pas à la table. On lui a dit. Elle vient, et elle décide —
+ * pour ce que ça vaut, ou parce qu'elle en a envie. */
+px_elle:{ dyn:true, texte:[], suite:'a2_carte' },
+
+/* — Le calcul. Une maison qui s'éteint, et le seul actif qu'elle puisse
+     encore produire. C'est froid, c'est explicite, et c'est elle qui le dit. */
+px_sibylle:{
+  qui:'sibylle',
+  lieu:"Verneuil · la petite salle",
+  titre:"Ce qu'un enfant vaut",
+  texte:[
+    "Dame Sibylle de Verneuil a vingt-neuf ans, un mari mort depuis quatre ans, et les comptes de la maison entre les mains depuis presque autant.",
+    { sobre:"Elle entre seule et elle ferme la porte.",
+      intense:"Elle entre seule, ferme la porte derrière elle, et s'assoit avant qu'on lui propose. Ce sont trois gestes et ils disent tout.",
+      extreme:"Elle entre seule, ferme la porte derrière elle et s'assoit avant qu'on ne le lui propose. Ce sont trois gestes, ils prennent quatre secondes, et ils disent l'essentiel : personne ne l'accompagne, personne n'écoute, et elle n'est pas venue en quémandeuse. Son oncle a traversé son couloir de trente pas il y a une heure et demie. Elle a manifestement passé cette heure et demie à réfléchir." },
+    "« Il me l'a dit. Il l'a très mal dit, le pauvre homme, mais il l'a dit entièrement. »",
+    "« Vous n'êtes pas obligée. »",
+    { sobre:"« Ne commencez pas par là. »",
+      intense:"« Ne commencez pas par là. » Elle a un geste sec. « C'est la phrase que les hommes disent pour se mettre à l'aise, et elle met tout le monde mal. Je sais parfaitement ce que je ne suis pas obligée de faire. »",
+      extreme:"« Ne commencez pas par là, s'il vous plaît. » Elle a un geste sec, presque agacé. « C'est la phrase que les hommes disent d'abord pour se mettre eux-mêmes à l'aise, et elle a l'effet exactement inverse : elle me met en position de vous rassurer. Je sais parfaitement ce que je ne suis pas obligée de faire. J'ai vingt-neuf ans, je tiens les comptes de cette maison depuis quatre ans, et je n'ai été obligée à rien depuis la mort de mon mari. C'est même à peu près la seule chose que sa mort m'ait apportée. »" },
+    "§ Elle pose sur la table un feuillet plié qu'elle a apporté, et ce n'est pas une lettre : c'est un état.",
+    "« Verneuil : quatre fermes, un moulin en indivision, cent quatre-vingts arpents dont quarante en friche. Trois adultes de mon sang, dont un vieillard. Aucun héritier mâle. »",
+    "« Je ne vois pas ce que — »",
+    "« Vous allez voir. »",
+    { sobre:"« Une maison qui n'a rien produit un actif en trente ans. »",
+      intense:"« En trente ans, cette maison n'a produit aucun actif. Pas un mariage utile, pas une charge, pas un droit. Elle décline exactement au rythme du siècle, ni plus vite ni moins vite, et dans deux générations il n'en restera qu'un nom sur un bail. »",
+      extreme:"« En trente ans, cette maison n'a produit strictement aucun actif. Pas un mariage utile — j'ai été le dernier, et il est mort. Pas une charge, pas un droit de péage, pas une concession, pas une alliance. Elle décline exactement au rythme du siècle, ni plus vite ni moins vite que ses voisines, et dans deux générations il en restera un nom sur un bail de fermage que personne ne saura plus prononcer. Ce n'est pas un drame, messire. C'est une courbe, et je la tiens à jour tous les trimestres. »" },
+    "Elle repousse le feuillet vers vous.",
+    "« Et puis il y a vous. »",
+    "§ Elle le dit sans une once de coquetterie, et c'est ça qui glace.",
+    { sobre:"« Un enfant de vous porterait ce que vous portez. »",
+      intense:"« Un enfant de vous porterait, selon toute probabilité, ce que vous portez. » Elle soutient votre regard. « Ne niez pas, ça nous ferait perdre une heure et je n'ai pas d'heure à perdre. Toute la province le suppose, et moi je fais des comptes, pas des suppositions. »",
+      extreme:"« Un enfant de vous porterait, selon toute probabilité, ce que vous portez. » Elle soutient votre regard sans la moindre difficulté. « Ne le niez pas : ça nous ferait perdre une heure, et je n'ai pas d'heure à perdre. Toute la province le suppose depuis deux ans. La différence entre la province et moi, c'est que la province suppose et que moi je tiens des livres. J'ai relevé onze faits vérifiables sur vous en trois ans, dont quatre que vous croyez sans témoin. J'en ai tiré une conclusion, et je n'ai aucune envie de vous la lire à voix haute. »" },
+    "« Vous voulez un enfant qui ait ça. »",
+    { sobre:"« Je veux un actif. »",
+      intense:"« Je veux un **actif**, messire, et c'est le mot que j'emploie dans ma tête depuis une heure et demie. » Elle ne baisse pas les yeux. « C'est laid. Dites-le si vous voulez, ça ne changera rien : c'est le seul que cette maison puisse encore produire, et il se trouve qu'il se produit comme ça. »",
+      extreme:"« Je veux un actif. » Elle ne baisse pas les yeux une seconde. « C'est le mot que j'emploie dans ma tête depuis une heure et demie, et je vous l'offre tel quel plutôt que de vous servir autre chose de plus présentable. C'est laid. Vous pouvez le dire, ça ne changera rien du tout. Cette maison a quatre fermes et pas d'avenir ; un enfant qui porte ce que vous portez est la seule chose de valeur qu'elle soit encore en état de produire, et il se trouve — c'est ainsi, je n'ai pas dessiné le monde — qu'il se produit de cette façon-là et pas en signant un acte. »" },
+    "§ « Et vous, dans tout ça ? » demandez-vous.",
+    "Elle met du temps pour la première fois.",
+    { sobre:"« Moi, ça fait quatre ans que personne ne me touche. »",
+      intense:"« Moi ? » Elle a un demi-sourire qui n'est pas aimable. « Moi, j'ai vingt-neuf ans, je suis veuve depuis quatre ans, et pendant ces quatre ans il ne s'est absolument rien passé — parce qu'une veuve qui tient des comptes n'a droit à rien qui puisse se raconter. Alors non, ce n'est pas seulement un calcul, et j'aurais préféré que ça le soit. »",
+      extreme:"« Moi ? » Elle a un demi-sourire qui n'a rien d'aimable, dirigé contre elle-même. « Moi, j'ai vingt-neuf ans. Je suis veuve depuis quatre ans d'un homme correct que je n'ai pas aimé et pour qui je n'ai jamais rien senti d'autre que de la patience. Pendant ces quatre années il ne s'est rigoureusement rien passé, parce qu'une veuve qui tient les comptes d'une maison n'a droit à rien qui puisse se raconter à trois lieues à la ronde. » Elle repose ses mains à plat sur la table. « Alors non, ce n'est pas uniquement un calcul, et j'aurais très sincèrement préféré que ça le soit — un calcul, je sais le défendre. Le reste, je vous le dis une fois et je ne le redirai jamais. »" },
+    "« Vous m'avez vu quatre fois. »",
+    "« Cinq. Et vous ne m'avez pas vue une seule, ce qui est la partie que je trouve la plus désagréable de toute cette histoire. »",
+  ],
+  choix:[
+    { t:"Rester",
+      detail:"elle a dit ce qu'elle voulait, dans ses termes · il n'y a rien à ajouter",
+      risque:"définitif", definitif:true, va:'px_nuit' },
+
+    { t:"« Et si l'enfant naît sans rien ? »",
+      detail:"un sur trois · c'est le chiffre, et elle tient des livres",
+      risque:"calculé", va:'px_un_sur_trois' },
+
+    { t:"Partir",
+      detail:"prendre l'or, ou rien du tout · et refermer la porte derrière soi",
+      risque:"prudent", va:'px_partir' },
+  ],
+},
+
+px_un_sur_trois:{
+  qui:'sibylle',
+  titre:"Un sur trois",
+  texte:[
+    "« Un enfant sur trois naît sans rien. C'est le chiffre. Vous tenez des livres : tenez celui-là aussi. »",
+    { sobre:"Elle ne bronche pas.",
+      intense:"Elle ne bronche pas une seconde, ce qui veut dire qu'elle avait le chiffre avant vous.",
+      extreme:"Elle ne bronche pas une seule seconde, et vous comprenez avec un temps de retard désagréable qu'elle avait ce chiffre avant vous — qu'elle l'a peut-être depuis plus longtemps que vous, et qu'elle a passé son heure et demie à faire exactement le calcul que vous venez de lui proposer de faire." },
+    "« Deux sur trois, alors », dit-elle. « C'est comme ça qu'on lit un chiffre quand on veut savoir s'il faut y aller. »",
+    "« Et si c'est le troisième ? »",
+    "« Alors j'aurai un enfant. » Elle hausse à peine les épaules. « Ce ne sera pas une catastrophe, messire, ce sera un enfant. Je le tiendrai comme je tiens le reste. »",
+    "§ Elle ajoute, et c'est la seule chose de la soirée qui la fasse hésiter :",
+    { sobre:"« Il ne portera pas votre nom. »",
+      intense:"« Il portera Verneuil. Pas Karlsberg. » Elle vous regarde. « Vous n'aurez aucun droit dessus, aucun, et je vous préviens maintenant parce que les hommes découvrent ça trop tard et le prennent très mal. »",
+      extreme:"« Il portera Verneuil. Pas Karlsberg. » Elle le dit fermement, et c'est manifestement la partie qu'elle a préparée. « Vous n'aurez aucun droit sur cet enfant. Aucun. Ni de le voir, ni de le nommer, ni de le reconnaître, ni de vous en occuper si l'idée vous prenait dans huit ans. C'est ainsi dans la coutume, c'est ainsi dans le droit, et je vous le dis maintenant plutôt que dans huit ans — parce que les hommes découvrent ça trop tard et le prennent très mal, et j'ai vu ce que ça fait à deux maisons de la vallée. »" },
+    "« Et si je le voulais quand même ? »",
+    "« Vous ne l'aurez pas. » Elle se lève. « Vous saurez qu'il existe. C'est plus que ce que beaucoup obtiennent et c'est déjà beaucoup trop pour ce que la coutume prévoit. »",
+  ],
+  effets:{ flags:['px_su_le_chiffre'],
+           marque:"« Il portera Verneuil. Vous n'aurez aucun droit dessus. » Elle le dit avant, pas dans huit ans.",
+           court:"Verneuil" },
+  choix:[
+    { t:"Rester",
+      detail:"en sachant les deux chiffres et le nom qu'il portera",
+      risque:"définitif", definitif:true, va:'px_nuit' },
+    { t:"Partir",
+      detail:"il y a des comptes qu'on ne veut pas tenir",
+      risque:"prudent", va:'px_partir' },
+  ],
+},
+
+px_nuit:{
+  qui:'sibylle',
+  lieu:"Verneuil · l'étage",
+  titre:"La petite salle, puis l'étage",
+  texte:[
+    { sobre:"Elle souffle la chandelle du couloir en passant, par habitude.",
+      intense:"Elle souffle la chandelle du couloir en passant — par habitude, pas par pudeur : c'est une femme qui compte les chandelles d'une maison depuis quatre ans et qui ne s'arrête pas de le faire pour si peu.",
+      extreme:"Elle souffle la chandelle du couloir en passant, sans y penser, par habitude d'une femme qui compte les chandelles de cette maison depuis quatre ans et qui ne va pas cesser de les compter pour si peu. Ce geste-là, plus que tout ce qui a été dit en bas, vous apprend à qui vous avez affaire." },
+    "Il n'y a rien de solennel et elle ne laisse rien le devenir.",
+    { sobre:"Elle ne tremble pas et elle ne joue pas.",
+      intense:"Elle ne tremble pas, ne joue rien, ne fait aucune des choses qu'on attend. Elle est directe, exigeante, un peu brusque, et elle sait ce qu'elle veut d'une façon qui n'a rien à voir avec quatre ans de veuvage.",
+      extreme:"Elle ne tremble pas. Elle ne joue rien du tout, ne baisse pas les yeux, ne fait aucune des choses que quatre siècles de convenances ont prévues pour ce moment-là. Elle est directe, exigeante et un peu brusque ; elle dit ce qu'elle veut et corrige ce qui ne lui va pas, à voix basse, avec la même absence complète de détour qu'en bas devant son état de fermage. Ce n'est pas de l'audace. C'est une femme de vingt-neuf ans qui a décidé quelque chose il y a deux heures et qui ne compte pas passer la nuit à en avoir l'air surprise." },
+    "§ Elle est chaude, précise, très présente, et elle rit une fois — bas, contre votre épaule, d'une chose qu'elle ne dira pas.",
+    { sobre:"Ce n'est pas tendre et ce n'est pas froid non plus.",
+      intense:"Ce n'est pas tendre et ce n'est pas froid : c'est deux adultes qui ont dit exactement ce qu'ils voulaient et qui n'ont plus rien à négocier, et il se trouve que c'est une combinaison rare et très efficace.",
+      extreme:"Ce n'est pas tendre et ce n'est surtout pas froid, contrairement à ce que la conversation d'en bas laissait attendre. C'est deux adultes qui ont posé leurs termes en toutes lettres, qui n'ont plus rien à se cacher ni à se marchander, et qui découvrent que c'est une combinaison beaucoup plus rare et beaucoup plus efficace que tout ce que les chansons racontent. Il y a de la faim là-dedans, des deux côtés, et personne ne fait semblant qu'il n'y en a pas." },
+    "Au milieu de la nuit, dans le noir, elle dit une seule chose qui n'a rien à voir avec des comptes :",
+    "« Quatre ans. »",
+    "Puis plus rien, et elle ne le redira jamais — elle avait prévenu.",
+    "§ Au matin elle est déjà debout, habillée, et son état de fermage est reparti avec elle.",
+    { sobre:"« Vous partez quand ? »",
+      intense:"« Vous partez quand ? » demande-t-elle en ouvrant le volet, du ton dont on demande l'heure.\n\n« Ce matin. »\n\n« Bien. » Un temps. « Faites ce qu'il vous a demandé de faire, et faites-le correctement. Je ne veux pas devoir expliquer à cette maison que j'ai payé pour rien. »",
+      extreme:"« Vous partez quand ? » demande-t-elle en ouvrant le volet, exactement du ton dont on demande l'heure à quelqu'un qu'on connaît peu.\n\n« Ce matin. »\n\n« Bien. » Elle rattache ses cheveux, dos à vous. « Alors faites ce que mon oncle vous a demandé, et faites-le correctement, sans économiser votre peine. Je ne tiens pas à devoir expliquer aux trois adultes de cette maison que j'ai payé le Prix pour un homme qui a bâclé. »\n\nElle sort. Elle ne se retourne pas et il n'y a rien à en conclure : elle a des comptes à faire, c'est mardi." },
+  ],
+  effets:{ flags:['px_nuit','px_liaison','a2_prix_paye','a2_liaison_verneuil'],
+           suspicion:9,
+           faire:() => { PRIX().liaisons.push('sibylle');
+                         retenir('caleb', "une maison de la vallée a payé le Sang, ce qui se sait et se compte"); },
+           exploit:{ eclat:6, temoins:'quelques', quoi:"le Prix du Paria, payé dans sa forme complète" },
+           marque:"Verneuil a payé le Sang. Dame Sibylle voulait un actif, et quatre ans de rien.",
+           court:"Quatre ans" },
+  plusTard:"Une maison qui a payé le Sang figure dans les conversations de trois provinces pendant vingt ans, et ses enfants l'entendent.",
+  suite:'px_apres', libelleSuite:"La suite" },
+
+px_partir:{
+  qui:'sibylle',
+  titre:"La porte refermée",
+  texte:[
+    "Vous vous levez et vous allez à la porte.",
+    { sobre:"Elle ne vous retient pas.",
+      intense:"Elle ne vous retient pas, ne demande pas pourquoi, et ne change pas de visage. Elle range son feuillet.",
+      extreme:"Elle ne vous retient pas, ne demande aucune explication, et son visage ne change pas d'un iota. Elle replie son état de fermage en trois, soigneusement, et le range dans sa manche — le geste d'une femme qui a présenté un dossier, qui l'a vu refusé, et qui range le dossier." },
+    "« Vous direz à mon oncle que c'est moi qui ai refusé », dit-elle.",
+    "« Ce n'est pas vrai. »",
+    { sobre:"« Non. Mais c'est mieux pour tout le monde. »",
+      intense:"« Non. C'est mieux pour tout le monde, et ça ne coûte rien qu'à moi, et je suis la seule ici à savoir combien ça coûte. » Elle ouvre elle-même la porte. « Bonne nuit, messire. »",
+      extreme:"« Non, ce n'est pas vrai. » Elle se lève. « Mais c'est mieux pour tout le monde : mieux pour cette maison, qui n'aura pas à porter d'avoir été dédaignée par un Paria ; mieux pour vous, qui n'aurez pas un vieil homme humilié comme ennemi ; et ça ne coûte qu'à moi, ce qui est un arrangement dont j'ai l'habitude. » Elle ouvre elle-même la porte et s'écarte. « Bonne nuit, messire. »" },
+    "§ Elle vous fait raccompagner et vous ne la reverrez pas de tout le contrat.",
+    "Le montant est versé sans un mot. L'intendant est glacial. Personne ne vous explique rien.",
+  ],
+  effets:{ or:400, flags:['px_partir_dame','px_refuse_une'],
+           faire:() => { PRIX().dame = null; },
+           marque:"Vous êtes parti. Elle a dit qu'elle dirait que c'était elle. « Ça ne coûte qu'à moi. »",
+           court:"La porte refermée" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+/* — Le désir, dit sans décoration. Une cadette qui n'a rien à administrer,
+     qui a vu ce que la province raconte, et qui a choisi. */
+px_alix:{
+  qui:'alix',
+  lieu:"Bragelonne · la galerie",
+  titre:"Elle n'a pas de compte à tenir",
+  texte:[
+    "Dame Alix de Bragelonne a vingt-quatre ans, deux frères aînés, et rien du tout à administrer — ce qui, dans une maison qui va bien, est une condition très particulière.",
+    { sobre:"Elle n'a pas attendu qu'on la fasse venir.",
+      intense:"On n'a pas eu à la faire venir. Elle attendait dans la galerie, et il est très clair qu'elle savait depuis avant votre arrivée ce qui allait se dire dans le cabinet.",
+      extreme:"On n'a pas eu à la faire venir : elle attendait dans la galerie, appuyée au chambranle, et il est parfaitement clair qu'elle savait ce qui allait se dire dans le cabinet de son père avant même que vous mettiez pied à terre dans la cour. Une maison de province n'a aucun secret pour ses cadettes — elles sont les seules à avoir le temps d'écouter." },
+    "« Il a mis quarante minutes à me le dire. Il aurait pu mettre quatre. »",
+    "« Il ne voulait pas le dire. »",
+    "« Personne ne veut le dire. C'est une coutume conçue pour que personne ne veuille la dire. » Elle hausse une épaule. « J'ai vingt-quatre ans, messire, on m'a expliqué le Prix du Paria à onze. »",
+    "§ Elle n'a ni feuillet, ni état, ni calcul.",
+    { sobre:"« Je ne vais rien vous vendre. »",
+      intense:"« Je ne vais rien vous vendre et je n'ai rien à défendre. » Elle marche jusqu'à la fenêtre. « Mes frères ont les terres, ma sœur a un contrat de mariage depuis ses quinze ans, et moi j'ai une chambre au bout d'une galerie et quarante ans devant moi. »",
+      extreme:"« Je ne vais rien vous vendre et je n'ai strictement rien à défendre — ni un domaine, ni une charge, ni un avenir qu'un enfant pourrait consolider. Vous n'aurez pas droit à l'état de fermage. » Elle marche jusqu'à la fenêtre de la galerie et regarde la cour. « Mes deux frères ont les terres. Ma sœur a un contrat de mariage signé depuis ses quinze ans, avec onze pages de clauses qu'elle n'a jamais lues. Et moi j'ai une chambre au bout de cette galerie, une rente de veuve sans avoir été mariée, et quarante ans devant moi dans lesquels il n'arrivera rigoureusement rien. »" },
+    "« Alors pourquoi ? »",
+    "Elle se retourne, et elle ne prend pas de détour.",
+    { sobre:"« Parce que j'en ai envie. »",
+      intense:"« Parce que j'en ai envie. » Elle soutient le regard sans effort. « C'est tout. Ça vous suffit ou ça ne vous suffit pas, mais ne cherchez pas autre chose : il n'y a rien d'autre. »",
+      extreme:"« Parce que j'en ai envie. » Elle soutient votre regard sans le moindre effort et sans une once de provocation, ce qui est infiniment plus déstabilisant que si elle en avait mis. « C'est tout. Il n'y a pas de calcul, pas de dette de maison, pas d'enfant à produire, pas de courbe à redresser. J'ai vu passer un homme dont trois provinces racontent des choses, mon père doit une coutume, et j'en ai envie. Ça vous suffit ou ça ne vous suffit pas — mais ne cherchez rien derrière, vous ne trouverez rien, et vous allez me faire perdre le peu de nerf qu'il m'a fallu pour descendre cette galerie. »" },
+    "§ « On vous a poussée ? »",
+    { sobre:"« Mon père a essayé de m'en dissuader pendant vingt minutes. »",
+      intense:"« Mon père a passé vingt de ses quarante minutes à essayer de m'en dissuader. » Elle a un vrai sourire, le premier. « Il m'a proposé de payer l'or lui-même sur sa cassette. Je lui ai dit non deux fois. »",
+      extreme:"« Mon père a passé vingt de ses quarante minutes à tenter de m'en dissuader, et les vingt autres à me décrire ce qu'on dirait de moi dans la vallée. » Elle a un vrai sourire, le premier de la soirée. « Il m'a proposé de payer l'or lui-même, de sa propre cassette, pour que la question ne se pose pas. Je lui ai dit non deux fois, et la seconde fois assez fort pour que la cuisine entende. Alors non, messire : personne ne m'a poussée. On a fait tout ce qu'on a pu dans l'autre sens. »" },
+  ],
+  choix:[
+    { t:"Rester",
+      detail:"elle a été très claire · il n'y a rien à ajouter et elle déteste qu'on ajoute",
+      risque:"définitif", definitif:true, va:'px_nuit_alix' },
+    { t:"« Vous savez ce qu'on dira de vous. »",
+      detail:"le lui poser une fois, en face · elle a vingt-quatre ans et quarante devant elle",
+      risque:"calculé", va:'px_alix_dira' },
+    { t:"Partir",
+      detail:"prendre l'or et refermer · sans explication, parce qu'il n'y en a pas de bonne",
+      risque:"prudent", va:'px_partir' },
+  ],
+},
+
+px_alix_dira:{
+  qui:'alix',
+  titre:"Ce qu'on dira",
+  texte:[
+    "« Vous savez ce qu'on dira de vous. »",
+    { sobre:"« Mot pour mot. »",
+      intense:"« Mot pour mot », dit-elle. « Je pourrais vous l'écrire ce soir et vous vérifierez dans six mois. »",
+      extreme:"« Mot pour mot », dit-elle, sans se départir. « Je pourrais vous l'écrire ce soir, mettre le papier dans une enveloppe, et vous le feriez ouvrir dans six mois pour vérifier. Je me trompe rarement là-dessus : j'ai eu vingt-quatre ans pour écouter ce qu'on dit des femmes de cette vallée, et il n'y a que quatre phrases en circulation. Elles servent pour tout le monde. »" },
+    "« Et ça ne compte pas ? »",
+    "« Bien sûr que ça compte. » Elle se rassoit sur le rebord. « Ça comptera pendant deux ans, ça deviendra une plaisanterie pendant trois, et ensuite je serai une femme de trente ans dont on a dit quelque chose il y a longtemps. C'est un coût. Je l'ai chiffré. »",
+    "« Vous venez de dire que vous ne calculiez rien. »",
+    { sobre:"« J'ai dit que je n'avais rien à vendre. Ce n'est pas pareil. »",
+      intense:"« J'ai dit que je n'avais rien à vous vendre. Je n'ai pas dit que j'étais idiote. » Elle a l'air franchement amusée. « J'ai calculé ce que ça me coûte. J'ai simplement décidé que ça les valait. C'est ça, vouloir quelque chose, messire — ce n'est pas ne pas savoir le prix. »",
+      extreme:"« J'ai dit que je n'avais rien à *vous* vendre. Je n'ai jamais dit que j'étais idiote, et ce serait bien la première fois qu'on me le reprocherait dans cette maison. » Elle a l'air franchement amusée, et c'est pire. « Bien sûr que j'ai calculé ce que ça me coûte : deux ans de vallée, une réputation, et un contrat de mariage qui aurait pu être un peu meilleur dans huit ans. J'ai fait le compte et j'ai décidé que ça les valait. C'est ça, vouloir quelque chose. Ce n'est pas ignorer le prix — n'importe qui peut vouloir en ignorant le prix, ça n'a aucun mérite. »" },
+    "§ Elle vous regarde un instant de trop.",
+    "« Autre chose ? Parce que je vous préviens : j'ai eu besoin d'un certain courage pour descendre cette galerie, et il ne durera pas toute la nuit. »",
+  ],
+  effets:{ flags:['px_alix_lucide'],
+           marque:"« Vouloir quelque chose, ce n'est pas ignorer le prix. » Elle avait tout chiffré.",
+           court:"Elle avait chiffré" },
+  suite:'px_nuit_alix', libelleSuite:"Non, rien d'autre" },
+
+px_nuit_alix:{
+  qui:'alix',
+  lieu:"Bragelonne · au bout de la galerie",
+  titre:"Au bout de la galerie",
+  texte:[
+    { sobre:"Elle ferme la porte au verrou, ce qui n'est pas rien dans une maison pleine.",
+      intense:"Elle pousse le verrou — ce qui, dans une maison de vingt personnes avec deux frères aînés, est la décision de la soirée et pas ce qui suit.",
+      extreme:"Elle pousse le verrou derrière elle, et il faut mesurer ce que c'est : dans une maison de vingt personnes, avec deux frères aînés, une mère et un domestique qui dort au bout du couloir, un verrou tiré à cette heure-là est un fait que trois personnes auront constaté avant l'aube. C'est la vraie décision de la soirée, et elle est prise, et ce qui suit n'est plus une décision." },
+    "Elle est nerveuse et elle ne le cache pas, ce qui est infiniment plus honnête que le contraire.",
+    { sobre:"Puis elle cesse de l'être.",
+      intense:"Puis elle cesse de l'être, assez vite, et ce qui reste est une jeune femme de vingt-quatre ans qui voulait quelque chose depuis un moment et qui n'a plus aucune raison de faire comme si non.",
+      extreme:"Puis elle cesse de l'être, assez vite et sans transition nette, et ce qui reste est une femme de vingt-quatre ans qui voulait ça depuis suffisamment longtemps pour y avoir pensé en détail, qui n'a désormais plus aucune raison de faire semblant du contraire, et qui découvre avec une franchise déconcertante qu'elle n'a aucune envie d'être délicate." },
+    "§ Elle demande des choses. Elle en refuse d'autres, aussi nettement, sans que ça ait l'air de coûter quoi que ce soit à personne.",
+    "Elle a la peau chaude, elle mord, et elle rit deux fois dans la nuit — franchement, pas du tout à voix basse, ce qui est un problème de maison et pas un problème de chambre.",
+    { sobre:"Au matin elle est de très bonne humeur.",
+      intense:"Au matin elle est de très bonne humeur, ce à quoi rien ne vous avait préparé, et elle n'a pas la moindre intention de s'excuser auprès de qui que ce soit.",
+      extreme:"Au matin elle est de franchement bonne humeur — ce à quoi absolument rien dans dix ans de contrats ne vous avait préparé — et elle n'a pas la plus petite intention de s'excuser auprès de qui que ce soit, ni ce matin ni jamais. Elle prend son temps. Elle ouvre les volets en grand alors qu'il est tôt et que la cour est pleine." },
+    "« Vous allez avoir des ennuis », dites-vous.",
+    "« J'ai déjà des ennuis. Ils commencent en bas de l'escalier et ils dureront deux ans. » Elle attache sa robe. « Je vous ai dit que j'avais chiffré. »",
+    "§ Elle s'arrête à la porte.",
+    { sobre:"« Ne m'écrivez pas. »",
+      intense:"« Ne m'écrivez pas », dit-elle. « Ça ferait de cette histoire une autre histoire, et je tiens beaucoup à celle-ci telle qu'elle est. »",
+      extreme:"« Ne m'écrivez pas. » Elle le dit sans dureté, en tirant le verrou. « Une lettre ferait de cette nuit autre chose, et cette autre chose est très bien pour les gens à qui elle arrive, mais ce n'est pas ce que j'ai voulu et je n'en ai pas envie. Je tiens beaucoup à celle-ci exactement telle qu'elle est : une nuit que j'ai décidée, dont j'ai payé le prix d'avance, et dont personne ne pourra jamais me dire qu'on me l'a arrangée. »" },
+  ],
+  effets:{ flags:['px_nuit','px_liaison','a2_prix_paye','a2_liaison_bragelonne'],
+           suspicion:11,
+           faire:() => { PRIX().liaisons.push('alix');
+                         retenir('caleb', "Bragelonne a payé le Sang et la cadette n'en fait pas mystère"); },
+           exploit:{ eclat:5, temoins:'quelques', quoi:"une cadette de Bragelonne a tiré un verrou" },
+           marque:"« Ne m'écrivez pas. Ça ferait de cette histoire une autre histoire. »",
+           court:"Le verrou" },
+  suite:'px_apres', libelleSuite:"La suite" },
+
+/* — Le refus. Il existe, il est écrit en clair, et l'option disparaît. */
+px_hersende:{
+  qui:'verneuil',
+  lieu:"Chastel-Bas · le seuil",
+  titre:"Personne ne consent",
+  texte:[
+    "On ne vous fait pas entrer dans une salle. On vous répond sur le seuil, ce qui est déjà une réponse.",
+    { sobre:"L'intendant récite quelque chose qu'on lui a fait apprendre.",
+      intense:"L'intendant récite trois phrases qu'on lui a manifestement fait apprendre par cœur une heure plus tôt, et il les récite mal, en regardant le sol.",
+      extreme:"L'intendant récite trois phrases qu'on lui a fait apprendre par cœur une heure plus tôt. Il les récite mal, sans lever les yeux du seuil, et il s'y reprend une fois — parce que ce n'est pas son métier, parce qu'il connaît la dame en question depuis douze ans, et parce qu'il sait parfaitement que le message est humiliant pour les deux maisons à la fois." },
+    "« Dame Hersende de Chastel-Bas a été informée. Elle décline. »",
+    "« Elle décline. »",
+    "« Elle a chargé de vous dire pourquoi, ce qui n'était pas obligé. »",
+    "§ Il déplie un billet et lit, mot pour mot, parce qu'on lui a demandé de ne pas résumer.",
+    { sobre:"*« J'ai un fils de neuf ans. »*",
+      intense:"*« J'ai un fils de neuf ans qui héritera de cette maison. Tout ce qui affaiblit son titre, je le refuse — sans considération pour l'homme, dont je n'ai rien à dire, et sans considération pour la coutume, que je trouve juste. »*",
+      extreme:"*« J'ai un fils de neuf ans qui héritera de cette maison, et sa position est déjà contestée par une branche cadette qui n'attend qu'un prétexte. Tout ce qui affaiblit son titre, je le refuse. Cela vaut pour cette coutume comme pour le reste, sans aucune considération pour l'homme, dont je n'ai rien à dire ni en bien ni en mal, et sans aucune considération pour la coutume elle-même, que je tiens d'ailleurs pour juste : une maison qui appelle un Paria doit payer, et ma maison paiera — en or, et elle paiera plein tarif. »*" },
+    "« C'est tout ? »",
+    "« Il y a une dernière ligne. »",
+    "*« Qu'on ne me propose personne d'autre de cette maison. J'ai vérifié : il n'y a personne d'autre en âge, et je ne veux pas qu'on aille chercher. »*",
+    "§ Elle a fermé la porte devant tout le monde, y compris devant ceux de sa propre maison qui auraient été tentés d'insister.",
+    "L'or est versé en entier, plein tarif, sans rabais coutumier. C'est la maison qui l'a voulu ainsi.",
+  ],
+  effets:{ or:400, flags:['px_hersende','px_refuse_maison','a2_prix_indisponible'],
+           faire:() => { PRIX().dame = null; PRIX().termes = 'or'; },
+           marque:"Chastel-Bas décline, avec la raison écrite. « Qu'on ne me propose personne d'autre. »",
+           court:"Elle décline" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+/* ══ CE QUE ÇA DEVIENT ═══════════════════════════════════════════════════ */
+px_apres:{
+  lieu:() => `${LIEUX[A2().lieu].nom} · ${dateA2()}`,
+  titre:"Ce qu'une liaison fait dans une province",
+  texte:[
+    "Une liaison de Prix n'est ni secrète ni publique : elle est **sue**, ce qui est un troisième état que seules les provinces savent produire.",
+    { sobre:"Ce qui change est concret.",
+      intense:"Personne n'en parle devant vous. Tout le monde en parle. Et ce qui change est parfaitement concret, dans les deux sens.",
+      extreme:"Personne n'en parlera jamais devant vous. Tout le monde en parle. Et ce qui change est parfaitement concret, dans les deux sens à la fois, ce qui est la partie que les récits ne rendent jamais : une maison qui a payé le Sang est une maison qui ne peut plus vous traiter en fournisseur, et c'est aussi bien une alliance qu'une plaie." },
+    "**Chez les maisons humaines.** On vous reçoit moins bien et on vous paie mieux. Un homme qui a réclamé le Prix est un homme qui connaît ses droits, et un homme qui connaît ses droits coûte cher.",
+    "**Chez les Parias.** Le mot passe en trois semaines par des chemins que vous ne connaissez pas. Un des quarante et un vous fait porter quelque chose sans un mot d'explication : une bourse, ou une information, ou rien du tout qu'un signe.",
+    "**Au bailliage.** Rien. La coutume n'est écrite nulle part, donc elle ne s'instruit pas.",
+    () => a('a2_alycia_epouse') || a('ml_signe') || a('ml_termes')
+      ? "§ Et Alycia l'apprend, comme tout le reste, par le réseau, avant vous.\n\nElle ne fait pas de scène — elle n'en a jamais fait. Elle dit une phrase, un soir, sans lever les yeux : « C'est votre droit et je ne le discute pas. Mais la prochaine fois, vous me le direz avant, ou je l'apprendrai comme les autres et je le prendrai comme les autres. »"
+      : "§ Il n'y a personne à qui l'expliquer, ce qui rend les choses plus simples et pas meilleures.",
+    "Et il y a la question qu'on ne pose pas et qui met des mois à se répondre.",
+    { sobre:"On saura, ou on ne saura pas.",
+      intense:"Une maison qui a un enfant du Prix ne l'annonce pas : elle a un enfant, voilà tout, et il porte son nom à elle. On l'apprend par recoupement, des années plus tard, ou jamais.",
+      extreme:"Une maison qui a un enfant du Prix ne l'annonce évidemment pas : elle a un enfant, voilà tout, il porte son nom à elle, il est inscrit à son registre à elle et personne n'a rien à ajouter. On l'apprend par recoupement — une date, un baptême, un silence bien tenu — des années plus tard, ou jamais du tout. Certains Parias en ont onze dans quatre provinces et n'en ont jamais vu un seul." },
+  ],
+  effets:{ flags:['px_apres','a2_liaison'],
+           faire:() => { ETAT.renom += 6;
+                         if(typeof bouger === 'function' && (a('ml_signe') || a('a2_alycia_epouse')))
+                           bouger('alycia', { confiance:-3 }); },
+           marque:"La liaison est sue, ce qui n'est ni secret ni public. On vous reçoit moins bien et on vous paie mieux.",
+           court:"Sue" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+};
+
+enregistrerScenes(PRIX_SCENES);
+
+Object.assign(GENS, {
+  verneuil: { nom:"Sire Gaucher de Verneuil", role:"soixante et un ans · quatre fermes et un moulin en indivision", lettre:"G" },
+  sibylle:  { nom:"Dame Sibylle de Verneuil", role:"vingt-neuf ans · veuve · elle tient les comptes", lettre:"S" },
+  alix:     { nom:"Dame Alix de Bragelonne",  role:"vingt-quatre ans · cadette · rien à administrer", lettre:"A" },
+});
+
+/* Qui vient dépend de la maison et de l'état du monde, jamais d'un dé. */
+DYN.px_elle = () => {
+  const d = dameDuJour();
+  if(d.mobile === 'refus') return aller('px_hersende');
+  aller(d.mobile === 'desir' ? 'px_alix' : 'px_sibylle');
+};
+
+offrir({ id:'px_termes', lieu:'cendrepont', va:'px_termes',
+         titre:"Une maison vous fait demander",
+         si:() => !a('px_termes') && ETAT.renom >= 20 });
+
+entree2('px_sibylle', 'px_alix', 'px_hersende');
 
 </script>
 <script>
@@ -19463,6 +20901,130 @@ DYN.a2_epilogue = () => {
 
 </script>
 <script>
+/* ── menu.js ── */
+/* PARIAS — le seuil
+ * ═══════════════════════════════════════════════════════════════════════
+ * Un jeu qui démarre tout seul sur la dernière sauvegarde est un jeu qui
+ * décide à la place du joueur. On ouvre donc sur un écran qui ne fait que
+ * trois choses : reprendre, recommencer, régler la crudité.
+ *
+ * La reprise affiche ce qu'on reprend — le lieu, la saison, l'état du corps,
+ * la dernière chose inscrite au journal. Sinon on rouvre à l'aveugle une
+ * partie de trois heures dont on ne se souvient plus.
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+/* Ce qu'on lit d'une sauvegarde sans la charger : de quoi décider. */
+function apercuSauvegarde(){
+  let d = null;
+  try{ d = JSON.parse(localStorage.getItem(CLE) || 'null'); }catch(e){ return null; }
+  if(!d || !d.scene) return null;
+
+  const flags = new Set(d.flags || []);
+  const acte2 = d.acte2 && d.acte2.annee !== undefined;
+  const ou = acte2 && typeof LIEUX === 'object' && LIEUX[d.acte2.lieu]
+    ? LIEUX[d.acte2.lieu].nom : null;
+
+  const saisons = ["printemps", "été", "automne", "hiver"];
+  const annees = ["vingt-et-unième", "vingt-deuxième", "vingt-troisième", "vingt-quatrième"];
+
+  return {
+    acte: acte2 ? 'II' : 'I',
+    quand: acte2
+      ? `${saisons[d.acte2.saison] || 'printemps'} de la ${annees[d.acte2.annee] || 'vingt-et-unième'} année`
+      : "dix-neuvième année après la Purge",
+    ou: ou || (flags.has('as_arrivee') ? "Chastel" : "la Route Grise"),
+    renom: d.renom || 0,
+    suspicion: d.suspicion || 0,
+    or: d.or || 0,
+    blessures: (d.blessures || []).length,
+    dernier: (d.faits || []).slice(-1)[0] || null,
+    portes: (d.portes || []).length,
+  };
+}
+
+const RANG_DIT = r =>
+  r >= 95 ? "On dit : « Nous cherchons Yohan de Karlsberg. »"
+  : r >= 45 ? "On dit : « Nous cherchons Yohan. »"
+  : "On dit : « Nous cherchons un Paria. »";
+
+const SUSPICION_DIT = s =>
+  s >= 75 ? "Ce n'est plus une rumeur. C'est un dossier."
+  : s >= 45 ? "On enquête. Deux maisons ont demandé des relevés."
+  : "Personne ne sait encore ce que vous êtes.";
+
+function rendreMenu(){
+  const s = apercuSauvegarde();
+  const el = document.getElementById('scene');
+
+  el.innerHTML = `
+    <div class="seuil">
+      <p class="lieu">Chroniques de Vardhen</p>
+      <h1>PARIAS</h1>
+      <p class="recit seuil-sous">Dernier héritier connu d'une maison rayée pendant la
+        Grande Purge. Deux pistolets à silex, une épée bâtarde, et dans les veines
+        une chose qui fatigue autant qu'elle détruit.</p>
+
+      ${s ? `
+      <div class="seuil-reprise">
+        <p class="etiquette">Une partie en cours — acte ${s.acte}</p>
+        <p class="recit"><b>${s.ou}</b> · ${s.quand}</p>
+        <p class="recit seuil-etat">${RANG_DIT(s.renom)} ${SUSPICION_DIT(s.suspicion)}</p>
+        <p class="recit seuil-etat">${s.or} or · ${
+          s.blessures ? `<span class="mal">${s.blessures} blessure${s.blessures > 1 ? 's' : ''} non refermée${s.blessures > 1 ? 's' : ''}</span>` : "aucune blessure ouverte"
+        }${s.portes ? ` · ${s.portes} porte${s.portes > 1 ? 's' : ''} fermée${s.portes > 1 ? 's' : ''} pour de bon` : ''}</p>
+        ${s.dernier ? `<p class="recit seuil-dernier">« ${s.dernier} »</p>` : ''}
+      </div>` : `
+      <div class="seuil-reprise seuil-vide">
+        <p class="recit">Aucune partie enregistrée. Ce qui se décidera ici ne se reprendra pas.</p>
+      </div>`}
+
+      <div class="choix">
+        ${s ? `<button data-m="reprendre">
+          <span class="ch-t">Reprendre</span>
+          <span class="ch-detail">là où vous vous êtes arrêté</span>
+        </button>` : ''}
+        <button data-m="neuf" ${s ? 'data-risque="définitif"' : ''} class="${s ? 'definitif' : ''}">
+          <span class="ch-t">Nouvelle partie</span>
+          ${s ? '<span class="ch-risque">définitif</span>' : ''}
+          <span class="ch-detail">${s ? "efface la partie en cours · rien ne se récupère" : "commencer par le prologue"}</span>
+        </button>
+      </div>
+
+      <div class="seuil-gore">
+        <p class="etiquette">Crudité du récit</p>
+        <p class="recit seuil-etat">Ce réglage change ce qui est décrit, jamais ce qui arrive :
+          les conséquences sont les mêmes aux trois niveaux.</p>
+        <div id="seuilGore">
+          ${GORES.map(g => `<button data-g="${g}" aria-pressed="${String(ETAT.gore === g)}">${GORE_NOMS[g]}</button>`).join('')}
+        </div>
+      </div>
+    </div>`;
+
+  el.querySelector('[data-m="reprendre"]')?.addEventListener('click', () => {
+    charger();
+    document.querySelectorAll('#gore button').forEach(b =>
+      b.setAttribute('aria-pressed', String(b.dataset.g === ETAT.gore)));
+    majBandeau();
+    aller(ETAT.scene);
+  });
+
+  el.querySelector('[data-m="neuf"]').addEventListener('click', () => {
+    if(s && !confirm("Recommencer efface la partie en cours. Rien ne se récupère.")) return;
+    nouvelle();
+  });
+
+  el.querySelectorAll('#seuilGore button').forEach(b =>
+    b.addEventListener('click', () => {
+      reglerGore(b.dataset.g);
+      el.querySelectorAll('#seuilGore button').forEach(x =>
+        x.setAttribute('aria-pressed', String(x.dataset.g === ETAT.gore)));
+    }));
+
+  window.scrollTo({ top:0, behavior:'instant' });
+}
+
+</script>
+<script>
 /* ── jeu.js ── */
 /* PARIAS — Acte I · la partie
  * ═══════════════════════════════════════════════════════════════════════
@@ -19483,7 +21045,7 @@ function sauver(){
       /* L'Acte II a son propre calendrier, ses cinq crises, ses trois pistes
        * et les quatre axes de chaque lien. Sans ces deux lignes, recharger au
        * milieu de l'acte rend un monde neuf à un homme qui ne l'est pas. */
-      acte2:ETAT.acte2, liens:ETAT.liens,
+      acte2:ETAT.acte2, liens:ETAT.liens, pistolets:ETAT.pistolets,
     }));
   }catch(e){ /* navigation privée, quota, tout ça : on joue quand même */ }
 }
@@ -19533,21 +21095,24 @@ function nouvelle(){
 function demarrer(){
   document.getElementById('bJournal').onclick = () => basculerJournal();
   document.getElementById('jFermer').onclick  = () => basculerJournal(false);
-  document.getElementById('bNeuf').onclick    = () => {
-    if(confirm("Recommencer efface la partie en cours. Rien ne se récupère.")) nouvelle();
-  };
+  document.getElementById('bNeuf').onclick    = () => auSeuil();
   document.querySelectorAll('#gore button').forEach(b =>
     b.onclick = () => reglerGore(b.dataset.g));
   document.addEventListener('keydown', e => { if(e.key === 'Escape') basculerJournal(false); });
 
-  if(charger()){
-    document.querySelectorAll('#gore button').forEach(b =>
-      b.setAttribute('aria-pressed', String(b.dataset.g === ETAT.gore)));
-    majBandeau();
-    aller(ETAT.scene);
-  }else{
-    nouvelle();
-  }
+  /* On n'ouvre plus sur la dernière sauvegarde : on ouvre sur le seuil, et
+   * c'est le joueur qui décide de reprendre ou de recommencer. */
+  const d = (() => { try { return JSON.parse(localStorage.getItem(CLE) || 'null'); } catch(e){ return null; } })();
+  if(d && d.gore) ETAT.gore = d.gore;
+  document.querySelectorAll('#gore button').forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.g === ETAT.gore)));
+  rendreMenu();
+}
+
+/* Le bandeau propose de revenir au seuil sans perdre la partie en cours. */
+function auSeuil(){
+  if(typeof sauver === 'function' && ETAT.scene) sauver();
+  rendreMenu();
 }
 
 if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);

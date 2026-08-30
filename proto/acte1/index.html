@@ -287,6 +287,32 @@ h1{
   .ch-detail{ padding-right:0; }
   .ch-risque{ position:static; order:-1; }
 }
+
+/* ── Le seuil ──────────────────────────────────────────────────────────── */
+.seuil{ max-width:44rem; margin:0 auto; padding:2rem 0 4rem; }
+.seuil h1{
+  font-size:clamp(3rem, 12vw, 5.5rem); line-height:.9; letter-spacing:.06em;
+  margin:.2rem 0 1.6rem; font-weight:400; color:var(--parchemin);
+}
+.seuil-sous{ color:var(--parchemin-bas); font-style:italic; max-width:34rem; }
+.seuil-reprise{
+  margin:2.4rem 0; padding:1.2rem 1.4rem;
+  border-left:2px solid var(--sang); background:var(--schiste);
+}
+.seuil-vide{ border-left-color:var(--trait); }
+.seuil-etat{ font-size:.92rem; color:var(--parchemin-bas); margin:.35rem 0; }
+.seuil-dernier{
+  margin-top:.9rem; padding-top:.9rem; border-top:1px solid var(--trait);
+  font-style:italic; color:var(--cendre); font-size:.92rem;
+}
+.seuil-gore{ margin-top:3rem; padding-top:1.4rem; border-top:1px solid var(--trait); }
+#seuilGore{ display:flex; gap:.5rem; margin-top:.7rem; flex-wrap:wrap; }
+#seuilGore button{
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.08em; text-transform:uppercase;
+  background:transparent; color:var(--cendre); border:1px solid var(--trait);
+  padding:.45rem .9rem; cursor:pointer;
+}
+#seuilGore button[aria-pressed="true"]{ color:var(--parchemin); border-color:var(--sang); }
 </style>
 </head>
 <body>
@@ -316,11 +342,12 @@ h1{
   <div id="journalCorps"></div>
   <h2>La partie</h2>
   <p class="sous">Une seule sauvegarde. Elle se fait toute seule.</p>
-  <button id="bNeuf" style="font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sang-clair);background:transparent;border:1px solid #4A2028;padding:.5rem .8rem;cursor:pointer;">Tout recommencer</button>
+  <button id="bNeuf" style="font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sang-clair);background:transparent;border:1px solid #4A2028;padding:.5rem .8rem;cursor:pointer;">Menu</button>
 </aside>
 
 <script src="moteur.js"></script>
 <script src="monde.js"></script>
+<script src="arsenal.js"></script>
 <script src="machine.js"></script>
 <script src="arc_wyverne.js"></script>
 <script src="arc_c02.js"></script>
@@ -343,8 +370,11 @@ h1{
 <script src="../acte2/mariage.js"></script>
 <script src="../acte2/mariage_libre.js"></script>
 <script src="../acte2/dragon.js"></script>
+<script src="../acte2/duel.js"></script>
+<script src="../acte2/prix.js"></script>
 <script src="../acte2/alycia_2.js"></script>
 <script src="../acte2/fin2.js"></script>
+<script src="menu.js"></script>
 <script src="jeu.js"></script>
 </body>
 </html>

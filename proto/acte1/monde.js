@@ -82,6 +82,7 @@ function neuf(){
    * lecture : il suffit de le vider ici, sinon une nouvelle partie hérite du
    * calendrier et des relations de la précédente. */
   ETAT.acte2 = null; ETAT.liens = null; ETAT.melee = null;
+  ETAT.pistolets = 2;
 }
 
 /* ── Les six affaires de l'Acte I ──────────────────────────────────────────

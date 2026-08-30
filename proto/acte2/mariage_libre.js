@@ -478,3 +478,145 @@ offrir({ id:'enf_question', lieu:'karlsberg', va:'enf_question',
                && palierPossible('alycia', { relation:12, confiance:10, attirance:10 }).ok });
 
 entree2('aly_epouser', 'el_epouser', 'enf_question');
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * ALARIELLE — DEUX CENT ONZE ANS, ET PERSONNE
+ * ═══════════════════════════════════════════════════════════════════════
+ * Ce n'est pas de la pudeur et ce n'est pas une vertu au sens où sa cour
+ * l'entendrait : chez eux, ce qui n'est pas contracté n'existe pas, et
+ * personne ne contracte avec une fille de la maison d'Eltharion sans y
+ * mettre trois cents ans de conséquences. Elle a donc deux cent onze ans
+ * et il ne s'est jamais rien passé — pas par refus, par arithmétique.
+ *
+ * Elle le dit elle-même, sans gêne et sans solennité, parce qu'elle a eu
+ * deux siècles pour cesser d'en faire une affaire. Ce qui la met mal à
+ * l'aise n'est pas l'acte : c'est de n'avoir rien à comparer.
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+const ALARIELLE_NUIT = {
+
+el_nuit:{
+  qui:'alarielle',
+  lieu:"Aelthiriel · le jardin fermé · la nuit",
+  titre:"Deux cent onze ans",
+  texte:[
+    "Elle vous fait venir au jardin fermé un soir où il n'y a rien à discuter, ce qui n'est jamais arrivé.",
+    { sobre:"« Je vais dire quelque chose et vous n'allez pas le prendre correctement. »",
+      intense:"« Je vais dire quelque chose, et je vous demande à l'avance de ne pas le prendre comme les humains le prennent. » Elle reste debout. « Vous allez vouloir en faire une chose grave. Ce n'en est pas une. »",
+      extreme:"« Je vais dire quelque chose, et je vous demande à l'avance de ne pas le prendre comme les humains le prennent toujours. » Elle reste debout, ce qui chez elle veut dire qu'elle a préparé la phrase et qu'elle veut pouvoir partir. « Vous allez vouloir en faire une chose grave, avec du respect dedans, et de la précaution. Ce n'en est pas une, et la précaution est exactement ce qui la rendrait insupportable. »" },
+    "« Dites. »",
+    "« Il ne s'est jamais rien passé. »",
+    "§ Elle laisse ça, et elle voit très bien que vous ne comprenez pas de quoi elle parle.",
+    { sobre:"« Jamais. Avec personne. Deux cent onze ans. »",
+      intense:"« Jamais. Avec personne, en deux cent onze ans. » Elle a un geste d'impatience. « Et ce n'est pas de la vertu, ne me regardez pas comme ça — c'est de la comptabilité. »",
+      extreme:"« Jamais. Avec personne. En deux cent onze ans. » Elle a un geste d'impatience, contre vous cette fois. « Et cessez immédiatement de me regarder comme ça, ce n'est pas de la vertu et ce n'est pas un sacrifice : c'est de la comptabilité. Chez nous, ce qui n'est pas contracté n'existe pas — je vous l'ai déjà expliqué et vous n'aviez pas fait le calcul jusqu'au bout. Personne ne contracte avec une fille de la maison d'Eltharion sans y mettre trois siècles de conséquences politiques. Alors on ne contracte pas. Et comme rien n'existe hors du contrat : rien. »" },
+    "« Vous n'avez jamais voulu ? »",
+    "« Bien sûr que si. » Elle le dit sèchement. « Onze fois. J'ai le compte, j'ai les dates, et j'ai les noms de quatre d'entre eux. Ça ne change rien à ce que je viens de vous dire. »",
+    "§ Elle s'assoit enfin, et elle regarde le mur au lieu de vous.",
+    { sobre:"« Ce qui me gêne, ce n'est pas ça. »",
+      intense:"« Ce qui me gêne n'est pas ce que vous croyez. Ce n'est pas l'acte : à deux cent onze ans, on a lu, on a écouté, on n'est ignorante de rien. » Un temps. « C'est que je n'aurai rien à comparer. Jamais. Ce sera ça, et ce sera tout ce que j'aurai jamais su, pendant deux cents ans encore. »",
+      extreme:"« Ce qui me gêne n'est pas du tout ce que vous imaginez, et c'est bien pour ça que je préférais le dire moi-même. Ce n'est pas l'acte : à deux cent onze ans, on a lu, on a écouté, on a vécu à trois pas de gens qui vivaient — je ne suis ignorante de rien et je ne serai pas effrayée. » Elle continue de regarder le mur. « C'est que je n'aurai rien à comparer. Jamais. Vous serez ça, et ce sera tout ce que j'en aurai su, et il me restera deux siècles pour y penser. Un humain a le temps de se tromper et de recommencer. Moi, ce que je décide ce soir a la même durée qu'une guerre. »" },
+    "« Alors ne le décidez pas ce soir. »",
+    "« J'y pense depuis quatre ans. »",
+    "§ Elle se tourne enfin.",
+    "« Ce n'est pas une faveur que je vous fais et je ne veux pas être remerciée. Ne dites rien. Vous allez dire quelque chose de correct et ça va tout abîmer. »",
+  ],
+  choix:[
+    { t:"Ne rien dire",
+      detail:"elle vient de le demander deux fois · c'est la seule chose à faire et c'est difficile",
+      risque:"définitif", definitif:true, va:'el_nuit_oui' },
+
+    { t:"« Alors dites-moi ce que vous voulez, précisément. »",
+      detail:"deux cent onze ans à écouter et à lire · elle sait exactement ce qu'elle veut",
+      risque:"calculé", va:'el_nuit_precis' },
+
+    { t:"« Pas ce soir. »",
+      detail:"quatre ans, ça peut faire cinq · et elle en a deux cents devant elle",
+      risque:"prudent", va:'el_nuit_non' },
+  ],
+},
+
+el_nuit_precis:{
+  qui:'alarielle',
+  titre:"Précisément",
+  texte:[
+    "« Alors dites-moi ce que vous voulez. Précisément. »",
+    { sobre:"Elle ne rougit pas. Les elfes ne rougissent pas.",
+      intense:"Elle ne rougit pas — les elfes ne rougissent pas, c'est une des premières choses qu'on remarque et une des plus déstabilisantes — et elle répond avec une netteté qui vous laisse sur place.",
+      extreme:"Elle ne rougit pas. Les elfes ne rougissent pas, c'est physiologique, et c'est l'une des premières choses qu'on remarque chez eux et l'une des plus déroutantes : il n'y a aucun signal, jamais, et il faut apprendre à s'en passer. Elle répond donc avec une netteté qui vous laisse complètement sur place — parce qu'elle y a pensé, longtemps, et qu'elle a eu deux cent onze ans pour cesser de trouver la question indécente." },
+    "Elle le dit. Sans détour, sans euphémisme, en trois ou quatre phrases très précises.",
+    "§ Elle finit par : « Et je veux qu'il y ait de la lumière. Je ne veux pas de la nuit et du noir et du silence, comme si on faisait quelque chose de honteux. Ce sera la seule fois qu'il y aura une première fois. Je veux voir. »",
+    { sobre:"Ça, ça ne se refuse pas.",
+      intense:"Il n'y a rien à répondre à ça et elle le sait — c'est même pour ça qu'elle l'a gardé pour la fin.",
+      extreme:"Il n'y a rigoureusement rien à répondre à ça, et elle le sait parfaitement : c'est pour cette raison qu'elle l'a gardé pour la fin, comme une clause qu'on place quand l'autre a déjà accepté le reste. Deux cent onze ans de cour elfique apprennent à négocier, même quand on jure qu'on ne négocie pas." },
+  ],
+  effets:{ flags:['el_nuit_precis'],
+           faire:() => bouger('alarielle', { relation:4, confiance:5, attirance:6 }),
+           marque:"« Ce sera la seule fois qu'il y aura une première fois. Je veux voir. »",
+           court:"De la lumière" },
+  suite:'el_nuit_oui', libelleSuite:"Il y a de la lumière" },
+
+el_nuit_oui:{
+  qui:'alarielle',
+  lieu:"Aelthiriel · sa chambre",
+  titre:"La seule fois qu'il y aura une première fois",
+  texte:[
+    () => a('el_nuit_precis')
+      ? "Il y a de la lumière, comme elle l'a demandé : quatre lampes, et elle en allume une cinquième."
+      : "Elle allume les lampes une par une, quatre, puis une cinquième, sans expliquer pourquoi et sans qu'on ait besoin de le lui demander.",
+    { sobre:"Elle est plus calme que vous.",
+      intense:"Elle est considérablement plus calme que vous, ce qui est humiliant et parfaitement logique : elle a eu quatre ans pour y penser et vous avez eu une heure.",
+      extreme:"Elle est considérablement plus calme que vous, ce qui est humiliant sur le moment et parfaitement logique après coup : elle y pense depuis quatre ans, elle a répété la conversation, elle a décidé de la lumière, elle a même décidé du nombre de lampes. Vous avez eu une heure. C'est elle qui mène, du début à la fin, et pas une seconde par jeu." },
+    "§ Elle est curieuse plus que timide, et elle pose des questions au milieu, ce qui est déroutant et finit par être drôle.",
+    { sobre:"Il y a une seconde où elle a mal et où elle ne le cache pas.",
+      intense:"Il y a un moment où elle a mal et où elle ne le cache pas, ne le minimise pas et ne le dramatise pas : elle le dit, elle attend, et elle reprend. C'est très elle.",
+      extreme:"Il y a un moment où elle a mal. Elle ne le cache pas, ne le minimise pas, n'en fait aucune histoire : elle le dit à voix haute, du ton dont on signale un fait, elle attend ce qu'il faut attendre, et elle reprend là où on en était. C'est exactement la façon dont elle fait tout le reste — les archives, sa cour, son frère — et c'est la première fois que vous voyez ce trait s'appliquer à autre chose qu'à de la politique." },
+    "Elle a la peau plus froide qu'une humaine, ce qui n'était écrit nulle part, et elle se réchauffe très lentement.",
+    "Et à un moment, elle ferme les yeux et cesse complètement de piloter, et ça dure un long moment, et c'est la seule fois de quatre ans où vous la voyez ne rien contrôler du tout.",
+    "§ Après, elle ne dort pas. Les elfes dorment peu et elle dort moins que les autres.",
+    { sobre:"« Ce n'était pas ce que je croyais. »",
+      intense:"« Ce n'était pas ce que je croyais », dit-elle dans le noir — elle a soufflé les lampes une par une, plus tard, en prenant son temps.\n\n« C'est-à-dire ? »\n\n« Je ne vous le dirai pas. » Un temps. « Pas par pudeur. Parce que je veux le garder entier, et que le raconter l'abîmerait, et que j'ai deux cents ans pour m'en souvenir. »",
+      extreme:"« Ce n'était pas ce que je croyais », dit-elle dans le noir — elle a soufflé les cinq lampes une par une, beaucoup plus tard, en prenant son temps à chacune.\n\n« C'est-à-dire ? »\n\n« Je ne vous le dirai pas. » Elle n'a pas bougé. « Et pas par pudeur, vous savez très bien que ce n'est pas mon problème. Parce que je veux le garder entier. Tout ce qu'on raconte s'abîme un peu — on le dit une fois, puis deux, et à la quatrième c'est une anecdote et ce n'est plus la chose. J'ai deux cents ans devant moi pour m'en souvenir. Je ne vais pas commencer par le réduire à une phrase la nuit même. »" },
+    "« Vous regrettez ? »",
+    "« Non », dit-elle immédiatement. « Et je vous préviens : c'est aussi ce que ma tante a répondu. »",
+  ],
+  effets:{ flags:['el_nuit','el_amants','a2_alarielle_liee'],
+           faire:() => { bouger('alarielle', { relation:9, confiance:8, attirance:10, devoir:-2 });
+                         retenir('alarielle', "il n'a rien dit de correct, ce que je lui avais demandé deux fois"); },
+           exploit:{ eclat:2, temoins:'aucun', quoi:"vous n'avez rien dit de correct" },
+           marque:"Cinq lampes. « Je veux le garder entier. J'ai deux cents ans pour m'en souvenir. »",
+           court:"Cinq lampes" },
+  plusTard:"« Non, je ne regrette pas. Et je vous préviens : c'est aussi ce que ma tante a répondu. »",
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+el_nuit_non:{
+  qui:'alarielle',
+  titre:"Pas ce soir",
+  texte:[
+    "« Pas ce soir. »",
+    { sobre:"Elle encaisse mieux que vous.",
+      intense:"Elle encaisse nettement mieux que vous, et elle a la bonté de ne pas le montrer plus d'une seconde.",
+      extreme:"Elle encaisse nettement mieux que vous, ce qui est logique — elle a eu quatre ans pour envisager cette réponse aussi — et elle a la correction de ne laisser voir quelque chose qu'une seconde entière, ce qui chez elle est un aveu immense." },
+    "« Pourquoi ? »",
+    "« Parce que vous avez dit que ça durait comme une guerre. »",
+    "§ Elle réfléchit, honnêtement, ce qu'elle fait toujours.",
+    "« C'est un bon argument », dit-elle enfin. « Je vous le retournerai plus tard et vous n'aurez rien à répondre — mais ce soir, c'est un bon argument. »",
+    "Elle se lève et souffle les lampes qu'elle n'avait pas encore allumées.",
+    { sobre:"« Ne me le proposez pas, la prochaine fois. »",
+      intense:"« Une chose, tout de même. » Elle s'arrête à la porte. « La prochaine fois, ne me proposez rien et ne décidez rien. Attendez que je revienne, et je reviendrai, parce que je ne fais jamais une chose à moitié. »",
+      extreme:"« Une chose, tout de même, et retenez-la. » Elle s'arrête à la porte du jardin fermé. « La prochaine fois, ne me proposez rien, ne décidez rien, et surtout ne me protégez pas — c'est la deuxième fois que vous décidez à ma place en croyant bien faire, et je vous ai dit ce que ça me rappelle. Attendez simplement que je revienne. Je reviendrai. Je ne fais jamais une chose à moitié, c'est mon seul vrai défaut, et il m'a coûté beaucoup plus cher que le vôtre. »" },
+  ],
+  effets:{ flags:['el_nuit_reporte'],
+           faire:() => bouger('alarielle', { confiance:4, attirance:-2, devoir:2 }),
+           marque:"« Attendez que je revienne. Je ne fais jamais une chose à moitié. »",
+           court:"Pas ce soir" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+};
+
+enregistrerScenes(ALARIELLE_NUIT);
+
+offrir({ id:'el_nuit', lieu:'aelthiriel', va:'el_nuit',
+         titre:"Elle vous fait venir au jardin fermé",
+         si:() => !a('el_nuit') && !a('el_amants')
+               && palierPossible('alarielle', { relation:10, confiance:10, attirance:5 }).ok });

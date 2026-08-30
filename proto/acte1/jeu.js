@@ -17,7 +17,7 @@ function sauver(){
       /* L'Acte II a son propre calendrier, ses cinq crises, ses trois pistes
        * et les quatre axes de chaque lien. Sans ces deux lignes, recharger au
        * milieu de l'acte rend un monde neuf à un homme qui ne l'est pas. */
-      acte2:ETAT.acte2, liens:ETAT.liens,
+      acte2:ETAT.acte2, liens:ETAT.liens, pistolets:ETAT.pistolets,
     }));
   }catch(e){ /* navigation privée, quota, tout ça : on joue quand même */ }
 }
@@ -67,21 +67,24 @@ function nouvelle(){
 function demarrer(){
   document.getElementById('bJournal').onclick = () => basculerJournal();
   document.getElementById('jFermer').onclick  = () => basculerJournal(false);
-  document.getElementById('bNeuf').onclick    = () => {
-    if(confirm("Recommencer efface la partie en cours. Rien ne se récupère.")) nouvelle();
-  };
+  document.getElementById('bNeuf').onclick    = () => auSeuil();
   document.querySelectorAll('#gore button').forEach(b =>
     b.onclick = () => reglerGore(b.dataset.g));
   document.addEventListener('keydown', e => { if(e.key === 'Escape') basculerJournal(false); });
 
-  if(charger()){
-    document.querySelectorAll('#gore button').forEach(b =>
-      b.setAttribute('aria-pressed', String(b.dataset.g === ETAT.gore)));
-    majBandeau();
-    aller(ETAT.scene);
-  }else{
-    nouvelle();
-  }
+  /* On n'ouvre plus sur la dernière sauvegarde : on ouvre sur le seuil, et
+   * c'est le joueur qui décide de reprendre ou de recommencer. */
+  const d = (() => { try { return JSON.parse(localStorage.getItem(CLE) || 'null'); } catch(e){ return null; } })();
+  if(d && d.gore) ETAT.gore = d.gore;
+  document.querySelectorAll('#gore button').forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.g === ETAT.gore)));
+  rendreMenu();
+}
+
+/* Le bandeau propose de revenir au seuil sans perdre la partie en cours. */
+function auSeuil(){
+  if(typeof sauver === 'function' && ETAT.scene) sauver();
+  rendreMenu();
 }
 
 if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);

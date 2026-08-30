@@ -31,13 +31,13 @@ const style  = head.match(/<style>[\s\S]*?<\/style>/)[0];
 
 /* Les quatre scripts, dans l'ordre de chargement — qui est le contrat de
  * dépendances : le moteur, puis le monde, puis l'arc, puis la partie. */
-const SCRIPTS = ['moteur.js', 'monde.js', 'machine.js', 'arc_wyverne.js', 'arc_c02.js', 'arc_c03.js', 'arc_c04.js', 'arc_c05.js', 'arc_c06.js', 'climax_assise.js',
+const SCRIPTS = ['moteur.js', 'monde.js', 'arsenal.js', 'machine.js', 'arc_wyverne.js', 'arc_c02.js', 'arc_c03.js', 'arc_c04.js', 'arc_c05.js', 'arc_c06.js', 'climax_assise.js',
   '../acte2/monde2.js', '../acte2/boucle2.js', '../acte2/alycia.js', '../acte2/karlsberg.js',
   '../acte2/piste_papier.js', '../acte2/piste_sang.js', '../acte2/alarielle.js', '../acte2/gens.js',
   '../acte2/lointains.js', '../acte2/chantier.js', '../acte2/politique.js',
-  '../acte2/mariage.js', '../acte2/mariage_libre.js', '../acte2/dragon.js',
+  '../acte2/mariage.js', '../acte2/mariage_libre.js', '../acte2/dragon.js', '../acte2/duel.js', '../acte2/prix.js',
   '../acte2/alycia_2.js', '../acte2/fin2.js',
-  'jeu.js'];
+  'menu.js', 'jeu.js'];
 const scripts = SCRIPTS.map(f => `<script>\n/* ── ${f} ── */\n${lire(f)}\n</script>`).join('\n');
 
 const corps = body.replace(/<script src="[^"]*"><\/script>\s*/g, '').trimEnd();

@@ -271,11 +271,14 @@ function aller(id){
     h += '<div class="choix">' + choix.map((c, i) => {
       const bloque = c.requisOr && ETAT.or < c.requisOr;
       const ferme = val2(c.ferme);
+      /* `t` et `detail` acceptent une fonction : un choix qui compte des
+       * charges ou lit l'état doit pouvoir le dire au moment du rendu. */
+      const t = val2(c.t), detail = val2(c.detail);
       return `<button data-i="${i}" class="${c.definitif ? 'definitif' : ''}"${
         c.risque ? ` data-risque="${c.risque}"` : ''}${bloque ? ' disabled' : ''}>
-        <span class="ch-t">${c.t}</span>
+        <span class="ch-t">${t}</span>
         ${c.risque ? `<span class="ch-risque">${c.risque}</span>` : ''}
-        ${c.detail ? `<span class="ch-detail">${bloque ? `Il vous manque ${c.requisOr - ETAT.or} or — ` : ''}${c.detail}</span>` : ''}
+        ${detail ? `<span class="ch-detail">${bloque ? `Il vous manque ${c.requisOr - ETAT.or} or — ` : ''}${detail}</span>` : ''}
         ${ferme ? `<span class="ch-ferme">${ferme}</span>` : ''}
       </button>`;
     }).join('') + '</div>';
