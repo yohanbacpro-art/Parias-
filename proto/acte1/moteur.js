@@ -182,6 +182,80 @@ function texteDe(p){
   return p[ETAT.gore] || p.intense || p.sobre || '';
 }
 
+/* ── Le souffle de la page ─────────────────────────────────────────────────
+ * Un jeu narratif se lit à l'écran, et un écran ne pardonne pas le pavé :
+ * au-delà de six ou sept lignes d'affilée, l'œil décroche et saute. On
+ * découpe donc les longs paragraphes sur les fins de phrase — jamais au
+ * milieu d'une réplique, jamais en laissant un orphelin de trois mots.
+ *
+ * C'est du rendu, pas de la réécriture : le texte est le même, il respire. */
+const MESURE = 290;          // caractères visés par bloc
+const RESTE_MIN = 90;        // en dessous, on ne détache pas : ça fait un moignon
+
+function decouper(t){
+  if(!t || t.length <= MESURE * 1.35) return [t];
+  /* Les fins de phrase, y compris après un guillemet fermant ou un point de
+   * suspension. On ne coupe pas après une abréviation courante. */
+  const bouts = t.split(/(?<=[.!?…][»"]?)\s+(?=[«—A-ZÀ-ÖØ-Þ])/);
+  if(bouts.length < 2) return [t];
+
+  const blocs = [];
+  let cour = '';
+  for(const b of bouts){
+    if(cour && (cour.length + b.length) > MESURE){ blocs.push(cour); cour = b; }
+    else cour = cour ? cour + ' ' + b : b;
+  }
+  if(cour){
+    /* Un dernier bloc trop court se recolle au précédent. */
+    if(blocs.length && cour.length < RESTE_MIN) blocs[blocs.length - 1] += ' ' + cour;
+    else blocs.push(cour);
+  }
+  return blocs;
+}
+
+/* Une réplique se reconnaît et se compose autrement : serrée contre la
+ * précédente, elle rend une conversation lisible comme une conversation. */
+const estReplique = t => /^[«—@^]/.test(t.trim());
+
+/* ── À qui est cette voix ? ────────────────────────────────────────────────
+ * Dans un récit à la deuxième personne, on perd très vite le fil de qui
+ * parle : tout est entre guillemets et rien n'est attribué. On tranche donc
+ * à l'affichage, dans cet ordre :
+ *
+ *   1. un `@` en tête de réplique désigne Yohan, sans discussion ;
+ *   2. un `^` désigne l'autre, également sans discussion — c'est ce qu'il
+ *      faut quand le même interlocuteur enchaîne deux répliques de suite
+ *      et que l'alternance se tromperait ;
+ *   3. une incise le désigne aussi — *dites-vous*, *demandez-vous* ;
+ *   4. une incise désigne l'autre — *dit-elle*, *répond-il*, *ajoute* ;
+ *   5. à défaut, on alterne — mais seulement d'une réplique à la réplique
+ *      qui la suit immédiatement. Dès qu'une ligne de récit s'intercale,
+ *      l'alternance est coupée et on retombe sur l'interlocuteur.
+ *
+ * Ce dernier point vaut d'être expliqué. Un échange serré alterne ; un
+ * monologue de PNJ entrecoupé de didascalies — « … » / *Elle se lève.* /
+ * « … » — n'alterne pas du tout, et c'est la forme la plus fréquente du
+ * jeu. Alterner par-dessus le récit attribuait une phrase sur deux au
+ * mauvais personnage. Après du récit, donc, la parole revient à celui qui
+ * est en face, et `@` sert à dire que non, cette fois, c'est Yohan.
+ *
+ * L'interlocuteur ouvre presque toujours : c'est lui qui vient. */
+const DIT_YOHAN = /\b(dites-vous|demandez-vous|répondez-vous|reprenez-vous|dites-le|lâchez-vous)\b/;
+const DIT_AUTRE = /»\s*(Elle|Il|Le |La )|\b(dit-elle|dit-il|répond-elle|répond-il|demande-t-elle|demande-t-il|répète-t-elle|répète-t-il|ajoute-t-elle|ajoute-t-il|reprend-elle|reprend-il|corrige-t-elle|constate-t-elle|fait-elle|souffle-t-elle)\b/;
+
+function voixDe(t, dernier){
+  if(/^@/.test(t.trim())) return 'yohan';
+  if(/^\^/.test(t.trim())) return 'autre';
+  if(DIT_YOHAN.test(t)) return 'yohan';
+  if(DIT_AUTRE.test(t)) return 'autre';
+  return dernier === 'autre' ? 'yohan' : 'autre';
+}
+
+/* `dernier` vaut null dès qu'on a traversé du récit : l'alternance ne
+ * franchit pas une didascalie. Le souffle (`§`) fait exception — c'est le
+ * narrateur qui s'invite au milieu d'un échange, pas l'échange qui s'arrête. */
+const coupeVoix = () => null;
+
 /* ── Les effets d'une scène ou d'un choix ──────────────────────────────── */
 function appliquer(e){
   if(!e) return [];
@@ -260,9 +334,30 @@ function aller(id){
   if(perte) tags.push(`<span class="mal">−${perte} sang</span>`);
   if(tags.length) h += `<div class="effets">${tags.join('')}</div>`;
 
-  h += (s.texte || []).map(texteDe).filter(Boolean).map(t =>
-    t.startsWith('§') ? `<p class="souffle">${md(t.slice(1))}</p>` : `<p class="recit">${md(t)}</p>`
-  ).join('');
+  let voixCourante = null;
+  h += (s.texte || []).map(texteDe).filter(Boolean).map(t => {
+    if(t.startsWith('§')) return `<p class="souffle">${md(t.slice(1))}</p>`;
+    /* Un paragraphe peut porter ses propres sauts : on les respecte d'abord,
+     * puis on découpe ce qui reste trop long. Une tirade coupée en trois
+     * reste une tirade : le découpage garde la voix de son premier morceau,
+     * sinon la suite d'une réplique s'afficherait comme du récit. */
+    let n = 0;
+    return t.split(/\n\n+/).filter(Boolean).map(seg => {
+      const parle = estReplique(seg);
+      if(!parle) voixCourante = coupeVoix();
+      else voixCourante = voixDe(seg, voixCourante);
+      const voix = voixCourante;
+      return decouper(seg).filter(Boolean).map(b => {
+        const cls = ['recit'];
+        if(parle){
+          cls.push('dit', voix === 'yohan' ? 'moi' : 'lui');
+          b = b.replace(/^\s*[@^]/, '');
+        }
+        if(n++ > 0) cls.push('suite-p');
+        return `<p class="${cls.join(' ')}">${md(b)}</p>`;
+      }).join('');
+    }).join('');
+  }).join('');
 
   if(s.issue) h += blocIssue(s);
 

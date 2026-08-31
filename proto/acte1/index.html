@@ -33,7 +33,7 @@ body{
   color:var(--parchemin);
   font-family:var(--serif);
   font-size:20px;
-  line-height:1.62;
+  line-height:1.72;
   -webkit-font-smoothing:antialiased;
 }
 
@@ -91,9 +91,34 @@ h1{
   margin:0 0 1.8rem; text-wrap:balance; letter-spacing:-.01em;
 }
 
-.recit{ margin:0 0 1.15rem; }
+/* Le récit. Mesure courte, air entre les blocs : un écran ne pardonne pas
+ * le pavé, et un jeu narratif se lit deux heures d'affilée. */
+.recit{ margin:0 0 1.3rem; max-width:34rem; }
 .recit b{ font-weight:600; color:#F3ECDD; }
 .recit i{ font-style:italic; color:var(--parchemin-bas); }
+
+/* Un bloc détaché du paragraphe précédent respire moins : c'est la même
+ * respiration, pas une nouvelle idée. */
+.recit.suite-p{ margin-top:-.35rem; }
+
+/* Une réplique se compose comme une réplique. Serrée contre la précédente,
+ * légèrement décalée, en teinte de voix : une conversation redevient lisible
+ * comme une conversation au lieu de fondre dans la prose. */
+.recit.dit{
+  margin:0 0 .5rem; padding-left:1.05rem;
+  border-left:2px solid transparent;
+}
+
+/* Qui parle se lit à la couleur, pas à l'attribution. Yohan porte la teinte
+ * de l'Onde — froide, la sienne ; l'autre garde le parchemin de la page.
+ * On ne met pas de nom devant les répliques : un jeu narratif n'est pas une
+ * pièce de théâtre imprimée. */
+.recit.dit.moi{ color:#B8DCD7; border-left-color:var(--onde); }
+.recit.dit.lui{ color:#EFE6D3; border-left-color:#3A2A2E; }
+.recit.dit i{ color:inherit; opacity:.82; }
+
+.recit.dit + .recit:not(.dit){ margin-top:1.3rem; }
+.recit:not(.dit) + .recit.dit{ margin-top:1.1rem; }
 
 .souffle{
   margin:2rem 0; padding-left:1.2rem;
