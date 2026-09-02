@@ -73,7 +73,7 @@ aly_ep_chapelle:{
   lieu:"Karlsberg · la chapelle",
   titre:"Trente-quatre témoins sans visage",
   texte:[
-    "« Alors on se passera du greffe. »",
+    "@« Alors on se passera du greffe. »",
     { sobre:"« Ça ne vaudra rien. »",
       intense:"« Ça ne vaudra rien », dit-elle immédiatement. « Aucun tribunal, aucun bailliage, aucune succession. »",
       extreme:"« Ça ne vaudra rien », dit-elle immédiatement, et sans une once de sentiment, parce qu'elle a passé six semaines sur la question et qu'elle connaît le dossier mieux que vous. « Aucun tribunal ne le reconnaîtra. Aucun bailliage ne l'inscrira. Aucun enfant né de là n'héritera de quoi que ce soit. Devant le droit de quatre provinces, ce sera très exactement rien du tout. »" },
@@ -117,7 +117,7 @@ aly_ep_callensbourg:{
   lieu:"Chastel · le guichet des titres",
   titre:"Relever Callensbourg",
   texte:[
-    "« Alors je vous en donne une. »",
+    "@« Alors je vous en donne une. »",
     "« Une quoi ? »",
     "« Une maison. »",
     { sobre:"Elle met du temps à comprendre, puis elle refuse.",
@@ -131,7 +131,7 @@ aly_ep_callensbourg:{
     "§ Voilà le vrai coût, et il n'est pas pour vous.",
     "« Si j'entre dans ce guichet et que je dis mon nom entier », dit-elle, « je passe de *quelqu'un qu'on cherche* à *quelqu'un dont on a l'adresse*, en une signature. C'est la seule protection que j'aie eue en quinze ans et vous me demandez de la vendre pour un contrat de mariage. »",
     "Long silence.",
-    { sobre:"« Alors n'entrez pas. »",
+    { sobre:"@« Alors n'entrez pas. »",
       intense:"« Alors n'entrez pas », dites-vous. « J'y vais seul. »",
       extreme:"« Alors n'entrez pas », dites-vous. « J'y vais seul, avec ce que j'ai : un relèvement déjà obtenu, un titre au registre, et le droit d'attester en justice pour une maison éteinte de la même province. Ce n'est pas la bonne procédure. C'est une procédure voisine, et un commissaire aux titres fatigué un vendredi peut confondre les deux. »" },
     "« Ça ne marchera pas. »",
@@ -165,7 +165,7 @@ aly_ep_non:{
   qui:'alycia',
   titre:"La sortie qu'elle avait préparée",
   texte:[
-    "« Vous avez raison. C'est réglé. »",
+    "@« Vous avez raison. C'est réglé. »",
     { sobre:"Elle acquiesce.",
       intense:"Elle acquiesce, une fois, et reprend ce qu'elle faisait. Elle avait préparé cette sortie, elle l'avait polie pendant six semaines, et elle sert exactement à ça.",
       extreme:"Elle acquiesce une fois et reprend ce qu'elle faisait. Elle avait préparé cette sortie, l'avait polie pendant six semaines de vérifications juridiques inutiles, et elle sert exactement à ça : à ce que la conversation puisse se terminer sans que personne ait à dire non." },
@@ -232,7 +232,7 @@ el_ep_elle:{
   qui:'alarielle',
   titre:"La quatrième",
   texte:[
-    "« Alors dites-moi ce que vous voulez, vous. »",
+    "@« Alors dites-moi ce que vous voulez, vous. »",
     { sobre:"« Vous m'avez déjà posé cette question une fois. »",
       intense:"« Vous m'avez déjà posé cette question une fois », dit-elle. « Vous êtes le seul à l'avoir fait en quatre-vingt-onze ans, et vous êtes maintenant le seul à l'avoir faite deux fois. »",
       extreme:"« Vous m'avez déjà posé cette question une fois », dit-elle, et sa voix change de quelque chose de très léger. « Vous êtes la seule personne à me l'avoir posée en quatre-vingt-onze ans. Vous êtes maintenant la seule à me l'avoir posée deux fois. Je ne sais pas si vous mesurez la différence entre les deux, mais elle est considérable et elle est en votre faveur. »" },
@@ -373,7 +373,7 @@ enf_elle:{
   qui:'alycia',
   titre:"Elle décide",
   texte:[
-    "« Décidez, vous. »",
+    "@« Décidez, vous. »",
     { sobre:"« Non. »",
       intense:"« Non », dit-elle immédiatement. « Ne me faites pas ça. »",
       extreme:"« Non », dit-elle immédiatement, et il y a de la colère dedans. « Ne me faites pas ça. C'est très exactement le genre de générosité qui coûte cher : vous me donnez la décision entière, ce qui veut dire que vous me donnez aussi la faute entière, et dans dix-huit ans, quand cet enfant sera devant un commissaire aux titres, il y aura une seule personne dans cette maison qui aura décidé. »" },

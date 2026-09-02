@@ -75,7 +75,7 @@ kar_porte:{
 kar_demande:{
   qui:'alycia',
   texte:[
-    "« Qu'est-ce que vous savez de cette porte ? »",
+    "@« Qu'est-ce que vous savez de cette porte ? »",
     "Elle ne répond pas tout de suite, et quand elle répond elle répond à une autre question, ce qui est sa façon de dire la vérité.",
     { sobre:"« Il y en a une dans chaque maison qui avait ça. »",
       intense:"« Il y en a une dans chaque maison qui avait ça sous les côtes. Une par maison, jamais deux, toujours cachée, et toujours sur une paume. » Elle passe le pouce sur le bord du creux. « Ce ne sont pas des maisons qui avaient un pouvoir, messire. Ce sont des maisons qui gardaient quelque chose. »",
@@ -156,7 +156,7 @@ kar_autre_ko:{
     "Vous cherchez deux jours. Il y a un puits comblé, une cave effondrée, un conduit qui se termine sur de la maçonnerie neuve — neuve : quelqu'un a muré ce conduit après la Purge, ce qui est en soi un renseignement dont vous ne saurez rien faire.",
     "Le troisième jour, Alycia s'assied sur une pierre et dit la chose que vous refusiez d'entendre depuis deux jours.",
     "§ « Il y a une porte faite pour ta main, à quarante pas d'ici, et tu passes trois jours dans des trous. »",
-    "« Oui. »",
+    "@« Oui. »",
     "« Pourquoi ? »",
     "« Parce que si je la pose, ça se saura. »",
     "« Ça se sait déjà. » Elle montre le sud d'un mouvement de menton. « Il y a de la fumée à deux lieues depuis hier soir, et ce n'est pas un charbonnier : un charbonnier fume trois jours, celle-là a fumé quatre heures et s'est arrêtée. »",
@@ -170,7 +170,7 @@ kar_repart:{
   qui:'alycia',
   titre:"On repart",
   texte:[
-    "« Les Karlsberg sont morts. On repart. »",
+    "@« Les Karlsberg sont morts. On repart. »",
     "Alycia ne discute pas. Elle remonte à cheval, elle attend que vous soyez en selle, et elle prend la route du sud sans un mot pendant deux heures.",
     { sobre:"Au bout de deux heures : « C'est une décision ou c'est de la peur ? »",
       intense:"Au bout de deux heures, sans tourner la tête : « C'est une décision ou c'est de la peur ? Je demande sans jugement : les deux se défendent, et j'ai pris la deuxième à dix-sept ans devant une ferme avec six vaches. »",
@@ -392,9 +392,9 @@ kar_feinte_cout:{
 kar_echange_dom:{
   melee:true,
   texte:[
-    "« Vous êtes venus pour le coffre. Je suis assis dessus. »",
+    "@« Vous êtes venus pour le coffre. Je suis assis dessus. »",
     "Silence dans l'escalier.",
-    "« Et vous avez quatre camarades par terre autour de moi qui n'ont pas de blessure. »",
+    "@« Et vous avez quatre camarades par terre autour de moi qui n'ont pas de blessure. »",
     { sobre:"« Qu'est-ce que vous proposez ? »",
       intense:"« Qu'est-ce que vous proposez ? » La voix d'en haut n'a pas bougé d'un ton. C'est un homme qui négocie depuis un escalier avec quatre morts en bas, et il négocie exactement comme s'il était dans un bureau.",
       extreme:"« Qu'est-ce que vous proposez ? » La voix d'en haut n'a pas bougé d'un demi-ton. Un homme qui négocie depuis un escalier, avec quatre de ses hommes morts en bas sans une blessure, et qui négocie exactement du ton dont on discute d'un prix de fourrage. C'est le renseignement le plus utile de la journée." },
@@ -414,7 +414,7 @@ kar_echange_dom:{
 kar_echange_cout:{
   melee:true,
   texte:[
-    "« Les archives contre le nom de votre commanditaire. »",
+    "@« Les archives contre le nom de votre commanditaire. »",
     "« Non. »",
     "C'est net, immédiat, et sans regret : un homme qui refuse en une seconde a déjà pesé l'offre avant qu'on la fasse.",
     "« Vous me proposez de vendre celui qui me paie pour un coffre que je vais prendre de toute façon quand vous serez mort. Vous n'êtes pas en position de proposer quoi que ce soit, messire, vous êtes en position de proposer un délai, et un délai je peux vous le donner : partez maintenant et je ne fais pas tirer. »",
@@ -513,7 +513,7 @@ kar_berold_mort:{
 
 kar_berold_garde:{
   texte:[
-    "« Vous venez avec nous. »",
+    "@« Vous venez avec nous. »",
     "« Non. »",
     "« Ce n'était pas une question. »",
     { sobre:"« Si. » Il s'assied sur une marche.",
@@ -570,7 +570,7 @@ kar_derniere_page:{
     "*Ma sœur*",
     "§ Quatre. Trois fonctions et une personne.",
     "Le chapelain et le maître d'armes n'ont pas de nom. Ils n'en avaient pas besoin : celle qui écrivait savait qui ils étaient, et elle écrivait pour elle-même, dans une pièce, trois jours avant.",
-    { sobre:"« Votre tante est vivante ? »",
+    { sobre:"@« Votre tante est vivante ? »",
       intense:"« Votre tante est vivante ? » demande Alycia, à quatre pas, sans être venue voir la page.\n\n« Je ne sais pas. »\n\n« Vous ne savez pas si votre tante est vivante. »\n\n« Je ne sais pas si j'ai une tante. J'avais neuf ans. »",
       extreme:"« Votre tante est vivante ? » demande Alycia depuis ses quatre pas, sans être venue voir la page, ce qui veut dire qu'elle a entendu la liste dans le silence de votre lecture.\n\n« Je ne sais pas. »\n\n« Vous ne savez pas si votre tante est vivante. »\n\n« Je ne sais pas si j'ai une tante. J'avais neuf ans, et à neuf ans on ne compte pas les adultes d'une maison de sept cents personnes : on en connaît onze et on croit que c'est tout le monde. »" },
     "Quatre lignes. Quatre personnes qui savaient, trois jours avant.",
@@ -657,7 +657,7 @@ kar_fermer:{
 kar_refuge:{
   qui:'alycia',
   texte:[
-    "« Pas un château. Des gens. »",
+    "@« Pas un château. Des gens. »",
     "Elle vous laisse développer et elle écoute jusqu'au bout, ce qu'elle fait mieux que la plupart.",
     "Pas de bannière, pas d'acte, pas de nom déposé nulle part. La façade nord reste des ruines vues de l'extérieur, et elle le restera : rien ne se relève, rien ne se répare qui se voie à trois cents pas.",
     { sobre:"En dessous, c'est autre chose : il y a quatre-vingts pieds de voûte sèche.",
@@ -690,7 +690,7 @@ kar_bannieres:{
       extreme:"Ça prend une saison entière : un déplacement à Chastel, un guichet, un formulaire de relèvement de titre en trois exemplaires, une taxe de onze couronnes, et un commissaire aux titres qui regarde le formulaire pendant très longtemps avant de le prendre. Il ne dit rien. Il le prend. Il le cote, il le date, et il le pose sur la pile de droite — et il n'y a rien de plus définitif au monde qu'une pièce posée sur la pile de droite." },
     "Alycia n'est pas venue à Chastel.",
     "Elle est partie le matin où vous avez annoncé ce que vous alliez faire, sans dispute, sans reproche, en donnant à ses affaires le temps normal qu'il faut pour les charger sur un cheval.",
-    "« Vous m'en voulez ? »",
+    "@« Vous m'en voulez ? »",
     "« Non. »",
     "« Alycia. »",
     { sobre:"« Je ne vous en veux pas. Je ne vous amènerai personne. Les deux sont vrais. »",

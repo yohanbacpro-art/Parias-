@@ -516,7 +516,7 @@ palier_nomme:{
     "§ Onze ans à n'être personne. Onze ans qui viennent de finir dans une salle basse, un jour de semaine, par une phrase d'aubergiste.",
     "Ce n'est pas que du mauvais. Une maison qui demande un homme par son nom paie ce nom : les sommes du mur montent de moitié à partir d'aujourd'hui, et on cesse de vous proposer des escortes de laine.",
     "Ce qui monte aussi, c'est le nombre de gens qui n'ont pas besoin de vous pour du travail.",
-    "« Il a laissé un nom, l'homme ? »",
+    "@« Il a laissé un nom, l'homme ? »",
     "« Non, messire. Il a laissé un signalement. Le vôtre. »",
   ],
   effets:{ flags:['palier_nomme'],

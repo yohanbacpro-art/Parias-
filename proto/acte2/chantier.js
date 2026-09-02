@@ -445,7 +445,7 @@ ka_ch_donjon:{
     "§ Le jour où le faîte est posé, on compte onze cavaliers sur la crête ouest, immobiles, à trop grande distance pour qu'on lise leurs couleurs.",
     "Ils regardent pendant une heure. Puis ils repartent vers le sud, sans être descendus, sans avoir parlé à personne.",
     "Le maître d'œuvre les regarde partir et dit : « Voilà. Maintenant c'est fait. »",
-    "« Quoi ? »",
+    "@« Quoi ? »",
     { sobre:"« Vous existez. »",
       intense:"« Vous existez », dit-il. « Avant, vous étiez une rumeur avec des murs. Maintenant vous êtes une adresse sur une carte d'état-major, et ces onze-là vont la reporter. »",
       extreme:"« Vous existez », dit-il, sans lever les yeux de son fil à plomb. « Avant aujourd'hui, vous étiez une rumeur avec des murs bas — désagréable, pas grave. Maintenant vous êtes un point sur une carte d'état-major, avec une hauteur estimée, un développement d'enceinte et un effectif supposé. Ces onze-là sont venus prendre les mesures, et ils les ont prises. Tout ce qui vous arrivera à partir de maintenant vous arrivera parce que ce donjon est là. »" },

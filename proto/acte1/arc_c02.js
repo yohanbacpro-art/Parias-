@@ -63,7 +63,7 @@ ro_audience:{
 ro_ordre_dom:{
   qui:'guichard',
   texte:[
-    "« Vous avez leurs noms ? »",
+    "@« Vous avez leurs noms ? »",
     "« Bien sûr que j'ai leurs noms. »",
     "« Dans l'ordre où ils sont morts. Et à côté de chacun, où il servait il y a deux ans. »",
     { sobre:"Il faut une heure et le rôle de la garnison. Ça se voit tout de suite.",
@@ -104,7 +104,7 @@ ro_ordre_ok:{
 ro_ordre_ko:{
   qui:'guichard',
   texte:[
-    "« Dans quel ordre ? »",
+    "@« Dans quel ordre ? »",
     "« Dans l'ordre où on les a trouvés, messire. Je ne tiens pas un livre de comptes de mes morts. »",
     "C'est faux — toutes les maisons tiennent un livre de comptes de leurs morts, ne serait-ce que pour les soldes — et le fait qu'il choisisse ce mensonge-là plutôt qu'un autre est en soi un renseignement.",
     "§ Sauf que vous ne savez pas encore quoi en faire, et qu'un renseignement dont on ne sait rien faire n'est qu'une gêne.",
@@ -125,7 +125,7 @@ ro_aveu:{
       extreme:"« Et une nuit d'octobre, il est reparti sur la lande, à cheval, la figure enveloppée dans un linge, et ma patrouille l'a escorté jusqu'à la borne comme on escorte un hôte de qualité. Quatorze hommes sont partis. Quatorze sont revenus. Et le lendemain matin, on a lavé le sol de la chambre haute, et personne — personne, messire — n'a demandé pourquoi il y avait à laver. »" },
     "« Qui lui a pris le visage ? »",
     "Silence.",
-    "« Vous ne me paierez pas quatre cents couronnes pour tuer un homme dont vous refusez de me dire pourquoi il tue. »",
+    "@« Vous ne me paierez pas quatre cents couronnes pour tuer un homme dont vous refusez de me dire pourquoi il tue. »",
     "« Si. C'est exactement ce que je vais faire. »",
     "§ Il a raison, et vous le savez tous les deux, et c'est la partie du métier dont on ne parle pas au moment de signer.",
     "« Vous êtes le douzième nom sur cette liste. »",
@@ -208,7 +208,7 @@ ro_ermengarde:{
     "« Une nuit entière. »",
     "Elle dit ça sans effet, en regardant les cadres.",
     "§ « Il n'a pas crié. C'est la chose dont je ne me suis jamais remise. Il n'a pas crié une seule fois, et j'ai su à ce moment-là qu'il en sortirait vivant. »",
-    "« Qui ? »",
+    "@« Qui ? »",
     "« Ser Baudoin d'Escaut. Le mari de ma tante. Il a quarante ans, il est aimé de toute cette maison, il m'a appris à monter à cheval et il m'apporte des oranges à la Saint-Marc. »",
     "Un temps.",
     "« Ils étaient quatre dans la chambre et quatorze dans le couloir. Les quatre ont fait, les quatorze ont regardé, et tout le monde ici sait que ça a eu lieu et personne ne sait le dire à voix haute — moi comprise, messire, jusqu'à il y a quatre minutes. »",
@@ -258,7 +258,7 @@ ro_termes:{
 ro_or_seul:{
   qui:'guichard',
   texte:[
-    "« L'or. Rien d'autre. »",
+    "@« L'or. Rien d'autre. »",
     "Guichard de Rochebrune vous regarde comme s'il n'avait pas entendu, puis il comprend qu'il a entendu.",
     { sobre:"« Vous savez que ça se remarque. »",
       intense:"« Vous savez que ça se remarque, messire ? Un Paria qui ne réclame pas la coutume. Dans les maisons du nord ça fait une histoire, et les histoires arrivent avant les hommes. »",
@@ -273,7 +273,7 @@ ro_or_seul:{
 ro_apres:{
   qui:'guichard',
   texte:[
-    "« On verra après. »",
+    "@« On verra après. »",
     "« Non », dit Guichard de Rochebrune, et c'est la première fois qu'il dit non de tout l'entretien. « On ne verra pas après. »",
     { sobre:"« Après, il y aura un mort et une dette. »",
       intense:"« Après, messire, il y aura un mort, une dette, un homme couvert de sang dans ma salle d'armes et une maison qui vous doit tout. Vous savez très bien ce qui se passe dans ces cas-là. Moi aussi : j'ai cinquante-trois ans et j'ai vu ça deux fois. »",
@@ -323,7 +323,7 @@ ro_demande:{
 ro_accord:{
   qui:'ermengarde',
   texte:[
-    "« Alors c'est dit. »",
+    "@« Alors c'est dit. »",
     "« C'est dit. » Elle ajoute, sans changer de ton : « Après. Pas avant. Je ne veux pas de la version où vous montez sur cette lande en me devant quelque chose. »",
     "§ Elle vient d'appliquer la règle mieux que vous. C'est fréquent et ça ne s'améliore pas avec l'âge.",
     "Elle décroche une clef de sa ceinture et la pose sur un tonneau.",
@@ -337,7 +337,7 @@ ro_accord:{
 ro_refus:{
   qui:'ermengarde',
   texte:[
-    "« Non. Pas comme ça. »",
+    "@« Non. Pas comme ça. »",
     "Elle ne bouge pas d'un pouce.",
     "« Développez. »",
     "« Vous ne dites pas oui à moi. Vous dites non à votre père et à votre tante, et je suis l'instrument. Je ne suis pas contre être un instrument, ça m'est arrivé souvent — mais pas de cet instrument-là. »",
@@ -913,7 +913,7 @@ ro_heaume_ote:{
 ro_arret_dom:{
   qui:'aldren',
   texte:[
-    "« Arrêtez. »",
+    "@« Arrêtez. »",
     "Il s'arrête. Pas parce que vous l'avez demandé : parce qu'un homme qui parle pendant un combat vient de faire une chose que personne n'a faite depuis deux ans.",
     "« Vous ne pouvez rien me proposer, messire. »",
     "« Non. »",
@@ -949,7 +949,7 @@ ro_arret_dom:{
 ro_arret_cout:{
   qui:'aldren',
   texte:[
-    "« Arrêtez. »",
+    "@« Arrêtez. »",
     "« Non. »",
     "Il n'y a rien d'autre. Pas de discours, pas d'explication : un homme qui a passé deux ans sur une lande à descendre une liste ne s'arrête pas parce qu'un inconnu le lui demande en pleine nuit.",
     { sobre:"Il ne s'arrête pas et vous avez baissé la garde pour parler.",
@@ -987,7 +987,7 @@ ro_battu:{
 ro_laisser:{
   qui:'aldren',
   texte:[
-    "« Finissez. Je ne vous gêne pas. »",
+    "@« Finissez. Je ne vous gêne pas. »",
     "Le heaume ne bouge pas pendant un long moment.",
     "« Vous êtes payé quatre cents couronnes pour me tuer. »",
     "« Oui. »",
@@ -1010,7 +1010,7 @@ ro_laisser:{
 ro_vivant:{
   qui:'aldren',
   texte:[
-    "« Je vous ramène à Rochebrune. Vivant. »",
+    "@« Je vous ramène à Rochebrune. Vivant. »",
     "« Pour quoi faire ? »",
     "« Pour que quatorze noms soient dits à voix haute dans une salle. »",
     { sobre:"Le heaume s'incline. C'est peut-être un rire.",

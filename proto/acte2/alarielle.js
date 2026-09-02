@@ -127,14 +127,14 @@ el_sortir:{
 el_neuf_dom:{
   qui:'tyrion',
   texte:[
-    "« Neuf sur combien ? »",
+    "@« Neuf sur combien ? »",
     "Il ne répond pas.",
     "« Vous les comptez toutes les semaines. On ne compte pas ce qui ne bouge pas. »",
     { sobre:"« Neuf sur vingt-trois. »",
       intense:"« Neuf sur vingt-trois », dit-il enfin, et il le dit du ton d'un homme qui pose une pièce sur une table parce que la partie est finie. « Il y a quatre ans, elles étaient trois. »",
       extreme:"« Neuf sur vingt-trois », dit-il enfin, du ton d'un homme qui pose une pièce sur la table parce que la partie est finie et qu'il préfère la finir proprement. « Il y a quatre ans, elles étaient trois. Il y a un an, six. Vous voyez pourquoi je compte. »" },
     "§ Il ne vous chasse plus. Ce n'est pas de la sympathie : c'est qu'un homme qui vient de vous donner un chiffre a changé de conversation.",
-    "« Vous voulez savoir ce que je crains vraiment, humain ? Ce n'est pas votre peuple et ce n'est pas le vôtre en particulier. »",
+    "^« Vous voulez savoir ce que je crains vraiment, humain ? Ce n'est pas votre peuple et ce n'est pas le vôtre en particulier. »",
     "« Quoi, alors ? »",
     "« Que ma sœur ait raison. Parce que si elle a raison, alors nous avons regardé quatre siècles de chasse en sachant, et il n'y a pas de guerre assez grande pour excuser ça. »",
     "Il fait trois pas dans le couloir de cent quarante pieds, puis il s'arrête.",
@@ -150,7 +150,7 @@ el_neuf_dom:{
 el_neuf_cout:{
   qui:'tyrion',
   texte:[
-    "« Neuf sur combien ? »",
+    "@« Neuf sur combien ? »",
     "« Ça ne vous regarde pas. »",
     "« Vous les comptez toutes les semaines. »",
     { sobre:"Il vous regarde longtemps et il change de ton.",
@@ -168,7 +168,7 @@ el_neuf_cout:{
 el_neuf_ko:{
   qui:'tyrion',
   texte:[
-    "« Neuf sur combien ? »",
+    "@« Neuf sur combien ? »",
     "« Sur assez. »",
     "Il ne dit rien d'autre et il ne bouge pas, et vous restez debout dans un couloir de cent quarante pieds à attendre une suite qui ne vient pas.",
     "§ C'est une technique. Elle a quatre cents ans de plus que vous.",
@@ -281,7 +281,7 @@ el_jardin:{
 el_rien_du:{
   qui:'alarielle',
   texte:[
-    "« Vous ne me devez rien. »",
+    "@« Vous ne me devez rien. »",
     "Elle tourne la tête. C'est la première fois qu'elle a l'air surprise.",
     "« Pardon ? »",
     "« Ce que vous devez, vous le devez à onze maisons dont il reste quarante et une personnes. Moi, vous ne me devez rien : je ne suis pas onze maisons, je suis un homme assis sur de la mousse. »",
@@ -300,7 +300,7 @@ el_rien_du:{
 el_longevite:{
   qui:'alarielle',
   texte:[
-    "« Deux cent quarante ans. Et moi trente, et dans ce métier on ne fait pas soixante. »",
+    "@« Deux cent quarante ans. Et moi trente, et dans ce métier on ne fait pas soixante. »",
     "« Oui. »",
     "« Ça ne vous gêne pas ? »",
     { sobre:"« Si. Ça me gêne depuis cent quatre-vingts ans. »",

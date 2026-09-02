@@ -139,7 +139,7 @@ an_donner:{
 an_refus:{
   titre:"En face",
   texte:[
-    "« Je ne viendrai pas. »",
+    "@« Je ne viendrai pas. »",
     "« Je sais », dit Anarion.",
     "« Vous savez ? »",
     { sobre:"« Vous relevez quelque chose. On ne vient pas ici en relevant. »",
@@ -358,7 +358,7 @@ kh_arrivee:{
 kh_pourquoi:{
   titre:"Deux puits",
   texte:[
-    "« Comprendre pourquoi vous y allez. »",
+    "@« Comprendre pourquoi vous y allez. »",
     "Il regarde le puits de Sarad — la margelle, la corde, les deux femmes qui tirent.",
     { sobre:"« Parce que celui-ci baisse depuis quarante ans. »",
       intense:"« Parce que celui-ci baisse depuis quarante ans. » Il n'ajoute rien pendant un moment. « Voilà. C'est toute la réponse et personne au nord ne l'a jamais demandée. »",
@@ -436,7 +436,7 @@ kh_dire:{
 kh_nord:{
   titre:"Debout",
   texte:[
-    "« Que vous n'alliez pas au nord. »",
+    "@« Que vous n'alliez pas au nord. »",
     { sobre:"Le puits se tait.",
       intense:"Les quinze personnes assises autour du puits se taisent en même temps, ce qui n'est pas un silence : c'est une chose qu'un groupe fait quand il attend de savoir s'il doit se lever.",
       extreme:"Les quinze personnes assises autour du puits se taisent exactement en même temps, et ce n'est pas un silence : c'est ce que fait un groupe qui attend de savoir s'il doit se lever. Vous avez vu ça deux fois dans votre vie et les deux fois quelqu'un est mort dans la minute." },
@@ -457,7 +457,7 @@ kh_nord:{
 kh_rien:{
   titre:"Un homme qui ne veut rien",
   texte:[
-    "« Rien. »",
+    "@« Rien. »",
     "Khal-Vaene vous regarde un long moment.",
     { sobre:"« C'est très rare dans un désert. »",
       intense:"« C'est très rare dans un désert », dit-il. « Ici, tout le monde veut quelque chose : c'est même la définition d'un désert. »",

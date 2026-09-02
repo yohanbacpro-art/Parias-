@@ -24,7 +24,7 @@ sa_reseau:{
     { sobre:"Ce n'est pas une forteresse. C'est une ferme.",
       intense:"Quand on vous retire le bandeau, ce n'est pas une forteresse, pas une grotte, pas une ruine. C'est une ferme. Une vraie, avec des bêtes, des enfants, du linge qui sèche et une femme qui bat du beurre sous un auvent.",
       extreme:"Quand on vous retire le bandeau : une ferme. Pas une forteresse, pas une grotte, pas une ruine romantique. Une ferme de la moyenne montagne avec onze vaches, quatre enfants, du linge qui sèche sur une haie et une femme d'une cinquantaine d'années qui bat du beurre sous un auvent et qui ne lève pas la tête." },
-    "« Combien ici ? »",
+    "@« Combien ici ? »",
     "« Deux. »",
     "« Sur quarante et un. »",
     "« Sur trente-huit que je connais. » Elle descend de cheval. « Vous vous attendiez à un endroit. Il n'y a pas d'endroit, messire : il y a trente-huit vies ordinaires dans trente-quatre endroits ordinaires, et c'est ça, le système. Il n'y a rien à prendre d'assaut parce qu'il n'y a rien. »",
@@ -56,7 +56,7 @@ sa_maitre:{
     { sobre:"Gerbaud. Maître d'armes de Karlsberg.",
       intense:"Gerbaud. Maître d'armes de Karlsberg pendant vingt-neuf ans. C'est lui qui vous a fait répéter une signature qui n'était pas la vôtre pendant trois nuits dans une remise, à seize ans, en disant que ça vous sauverait la vie plus souvent qu'une épée.\n\nIl avait raison. Ça vous l'a sauvée quatre fois.",
       extreme:"Gerbaud. Maître d'armes de Karlsberg pendant vingt-neuf ans. C'est lui, la remise, les trois nuits, la signature qui n'était pas la vôtre, et la phrase — *ça te sauvera la vie plus souvent qu'une épée* — dite par un homme de cinquante et un ans à un garçon de seize qui ne comprenait pas pourquoi on lui apprenait à écrire au lieu de lui apprendre à tuer.\n\nIl avait raison. Ça vous l'a sauvée quatre fois, et une épée deux." },
-    "« Vous êtes le maître d'armes. »",
+    "@« Vous êtes le maître d'armes. »",
     "« Oui. »",
     "« Vous êtes sur une liste de quatre. »",
     "« Je sais », dit Gerbaud. « Je l'ai écrite. »",
@@ -71,7 +71,7 @@ sa_maitre:{
 sa_liste:{
   titre:"« Je l'ai écrite »",
   texte:[
-    "« La dernière page est de la main de ma mère. »",
+    "@« La dernière page est de la main de ma mère. »",
     "« Elle l'a écrite. Je la lui ai dictée. »",
     { sobre:"Il se rassied sur le billot. C'est une longue histoire et il le sait.",
       intense:"Il se rassied sur le billot parce que c'est long et qu'à soixante-dix ans on s'assied pour les choses longues.\n\n« Trois jours avant. Votre père avait reçu quelque chose de Chastel — une convocation, une notification, je n'ai jamais su le mot exact et ça n'a plus d'importance. Il a réuni quatre personnes. »",

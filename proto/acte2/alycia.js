@@ -96,7 +96,7 @@ al_mauvaise:{
 al_non:{
   qui:'alycia',
   texte:[
-    "« Non. »",
+    "@« Non. »",
     "Elle attend la suite. Il n'y en a pas.",
     { sobre:"« Vous ne demandez rien ? »",
       intense:"« Vous ne demandez pas qui paie. Vous ne demandez pas ce qu'elle a fait. Vous ne demandez pas si trois cents se négocient — et ça se négocie, tout se négocie. »\n\n« Non. »\n\n« Pourquoi ? »\n\n« Parce que vous avez dit *des gens qui cherchent des Parias* en me regardant. »",
@@ -123,7 +123,7 @@ al_non:{
 al_qui:{
   qui:'alycia',
   texte:[
-    "« Qui paie ? »",
+    "@« Qui paie ? »",
     "« J'ai dit que je ne le dirais pas. »",
     "« Et moi je ne dis rien avant de le savoir. On peut rester assis. »",
     { sobre:"On reste assis. Onze minutes.",
@@ -148,7 +148,7 @@ al_qui:{
 al_oui:{
   qui:'alycia',
   texte:[
-    "« Trois cents. Où est-elle ? »",
+    "@« Trois cents. Où est-elle ? »",
     { sobre:"Elle ne cille pas. Un lieu, une route, un délai.",
       intense:"Elle ne cille pas. Un lieu — un relais de bûcherons à onze lieues à l'est —, une route, neuf jours, et la moitié de l'acompte en pièces qu'elle sort d'une bourse déjà préparée.",
       extreme:"Elle ne cille pas d'un cil. Un lieu — un relais de bûcherons à onze lieues à l'est —, une route, un délai de neuf jours, et cent cinquante couronnes d'acompte en pièces comptées d'avance qu'elle sort d'une bourse manifestement préparée pour ce moment précis, ce qui devrait vous alerter et ne vous alerte pas.\n\nPuis elle se lève, vous souhaite bonne route d'une voix parfaitement égale, et monte se coucher." },
@@ -170,7 +170,7 @@ al_oui:{
 al_devinee:{
   qui:'alycia',
   texte:[
-    "« C'est vous. »",
+    "@« C'est vous. »",
     "Silence.",
     { sobre:"« Qu'est-ce qui m'a trahie ? »",
       intense:"« Qu'est-ce qui m'a trahie ? » Elle demande ça sans une once d'inquiétude, avec un intérêt strictement professionnel, et elle tire une tablette de cire de sa manche — vraiment, une tablette de cire — pour noter.\n\n« Les mains à plat. »\n\n« Ah. » Elle note. « Merci. »",
@@ -322,7 +322,7 @@ al_quatre_ko:{
 al_arret_dom:{
   melee:true,
   texte:[
-    "« Arrêtez. »",
+    "@« Arrêtez. »",
     "Elle s'arrête. Ce n'est pas rien : une femme qui a passé dix-huit mois à faire disparaître des gens s'arrête au milieu, sur un mot, dit par quelqu'un qu'elle connaît depuis trois semaines.",
     "« Pourquoi ? »",
     "« Parce qu'ils savent qui les paie et que nous, non. »",
@@ -344,7 +344,7 @@ al_arret_dom:{
 al_arret_cout:{
   melee:true,
   texte:[
-    "« Arrêtez. »",
+    "@« Arrêtez. »",
     "Elle ne s'arrête pas tout de suite. Elle s'arrête après le troisième, ce qui fait une différence considérable pour le troisième.",
     { sobre:"« J'étais lancée. »",
       intense:"« J'étais lancée », dit-elle, et c'est la première fois qu'elle a l'air de quelqu'un qui s'excuse de quelque chose. « Ça ne se coupe pas comme un robinet. Personne ne m'a jamais appris à couper. »",
@@ -485,7 +485,7 @@ al_route:{
 al_route_couper:{
   qui:'alycia',
   texte:[
-    "« Personne ne vous a appris à couper. »",
+    "@« Personne ne vous a appris à couper. »",
     "« Personne ne m'a rien appris du tout. »",
     "« Moi non plus. Mais je me suis arrêté. »",
     "« Quand ? »",
@@ -509,7 +509,7 @@ al_route_couper:{
 al_route_callensbourg:{
   qui:'alycia',
   texte:[
-    "« Qu'est-ce que vous avez trouvé, à dix-sept ans ? »",
+    "@« Qu'est-ce que vous avez trouvé, à dix-sept ans ? »",
     "Elle met deux jours à répondre. Pas par refus : elle dit *plus tard* le premier soir, et *pas encore* le deuxième, et le troisième elle répond au milieu d'une conversation sur autre chose.",
     { sobre:"« Une ferme. »",
       intense:"« Une ferme. » Elle tient les rênes d'une main. « Ils n'avaient pas brûlé Callensbourg. Ils avaient brûlé les registres, gratté les pierres, rebaptisé le hameau, et ils avaient **vendu**. Il y avait une ferme dessus. Des gens dedans. Des enfants. »",
@@ -557,7 +557,7 @@ al_route_mere:{
       extreme:"Elle arrête son cheval au milieu de la route — ce qu'elle n'a pas fait une seule fois en douze jours — et elle reste immobile assez longtemps pour que le vôtre s'impatiente et cherche l'herbe du bas-côté. Quand elle parle enfin, sa voix a changé de registre, et c'est la première fois." },
     "« Redites-le. »",
     "Vous le redites.",
-    "« *Du bas de la maison.* »",
+    "@« *Du bas de la maison.* »",
     "« Oui. »",
     "« Callensbourg aussi. »",
     "§ Elle le dit sans une hésitation, comme on constate qu'il pleut.",

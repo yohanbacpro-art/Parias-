@@ -119,7 +119,7 @@ aly_ment_face:{
       extreme:"« Non. Je me suis servie d'une description. Écoutez-moi bien parce que je ne le redirai pas : en Nivôse, je ne vous connaissais pas. Je n'avais pas votre nom, je n'avais pas votre visage, j'avais le fait qu'il existait un neuvième sur cette liste, qu'il vivait de contrats, et qu'il était grand. J'ai pris ce qui était sur le papier et j'en ai fait un appât. Le papier, pas l'homme. »" },
     "« Et quand vous avez eu le nom ? »",
     "Silence.",
-    "« Quand vous avez eu le nom, Alycia. »",
+    "@« Quand vous avez eu le nom, Alycia. »",
     "« Quand j'ai eu le nom, je suis venue à Cendrepont vous proposer un contrat pour tuer un Paria, pour voir ce que vous étiez. » Elle soutient votre regard. « Et j'ai continué à ne rien vous dire pendant onze semaines de route. Ça, c'est le mensonge. Le reste, c'est du travail. »",
   ],
   effets:{ flags:['aly_appat_su'],
@@ -148,7 +148,7 @@ aly_ment_verifier:{
   texte:[
     "Bourg-l'Aigre est un village de sel avec une étape et un mur à papiers. Quatre jours de route, et vous n'avez pas dit où vous alliez.",
     "Le guetteur d'étape est un ancien sergent qui a perdu un pied et qui tient le registre des passages parce que c'est ce qu'on donne aux sergents qui ont perdu un pied. Il se souvient. Il se souvient très bien, parce qu'on l'a interrogé trois fois depuis, chaque fois par des gens différents et chaque fois plus poliment.",
-    "« Une femme brune, seule. »",
+    "@« Une femme brune, seule. »",
     "« Seule ? »",
     { sobre:"« Seule à cheval. Mais le charretier a dit qu'ils étaient deux. »",
       intense:"« Seule à cheval, je l'ai vue passer sous ma fenêtre. Mais le charretier de la saline est venu le soir même me dire qu'ils étaient deux, avec la description de l'autre, et comme c'est le charretier qui parle aux gens de Mont-Draken et pas moi, c'est sa version qui est partie. »",
@@ -189,7 +189,7 @@ aly_ment_solde:{
   qui:'alycia',
   titre:"Une chose dite",
   texte:[
-    "« Vous auriez dû me le dire à Cendrepont. Le premier soir. Avant le contrat, avant l'épreuve, avant tout. »",
+    "@« Vous auriez dû me le dire à Cendrepont. Le premier soir. Avant le contrat, avant l'épreuve, avant tout. »",
     "« Je sais. »",
     "« Ce n'est pas une réponse. »",
     { sobre:"« Non. C'est un aveu, et c'est tout ce que j'ai. »",
@@ -215,7 +215,7 @@ aly_ment_pardon:{
   qui:'alycia',
   titre:"Le compte du moulin",
   texte:[
-    "« La femme du moulin est toujours au moulin. »",
+    "@« La femme du moulin est toujours au moulin. »",
     "Elle ne répond pas tout de suite.",
     "« Vous prenez le compte comme je le tiens », dit-elle.",
     "« Je prends le compte comme il est. Huit vivants, un mensonge. C'est un bon compte. J'en ai signé de bien pires pour de l'argent. »",
@@ -239,7 +239,7 @@ aly_ment_limite:{
   qui:'alycia',
   titre:"La limite",
   texte:[
-    "« Ne refaites jamais ça. »",
+    "@« Ne refaites jamais ça. »",
     "« Vous servir sans vous le dire ? »",
     "« Décider de ce que je risque sans me le demander. »",
     { sobre:"Elle réfléchit sérieusement. C'est plus long qu'on ne voudrait.",
@@ -359,7 +359,7 @@ aly_nuit_elle:{
   qui:'alycia',
   titre:"Mal",
   texte:[
-    "« Alors demandez mal. »",
+    "@« Alors demandez mal. »",
     { sobre:"Elle prend une respiration.",
       intense:"Elle prend une respiration, et pendant cette respiration vous voyez très clairement qu'elle envisage encore de descendre l'escalier.",
       extreme:"Elle prend une respiration. Pendant cette respiration — deux secondes, pas plus — vous voyez très clairement qu'elle envisage encore de descendre l'escalier, et qu'il n'y a rien au monde qui l'en empêcherait, et que c'est précisément pour ça qu'elle ne le fait pas." },
@@ -574,7 +574,7 @@ aly_couronne_elle:{
   qui:'alycia',
   titre:"Ce qu'elle veut",
   texte:[
-    "« Qu'est-ce que vous voulez, vous ? »",
+    "@« Qu'est-ce que vous voulez, vous ? »",
     { sobre:"Elle ne répond pas pendant un long moment.",
       intense:"Elle ne répond pas pendant un long moment, et pour une fois ce n'est pas de la technique : elle cherche vraiment.",
       extreme:"Elle ne répond pas pendant un long moment. Pour une fois ce n'est pas de la technique — vous avez appris à distinguer ses silences, et celui-ci n'est pas le silence de quelqu'un qui laisse l'autre se noyer. C'est le silence de quelqu'un qui n'a pas la réponse toute faite parce que personne ne lui a jamais posé la question, et qui est en train de constater ça en même temps que vous." },
@@ -744,7 +744,7 @@ aly_choix_libre:{
   qui:'alycia',
   titre:"Trente-huit",
   texte:[
-    "« Prenez vos trente-huit. Je continuerai seul. »",
+    "@« Prenez vos trente-huit. Je continuerai seul. »",
     { sobre:"Elle ferme les yeux une seconde.",
       intense:"Elle ferme les yeux une seconde. Quand elle les rouvre, quelque chose a changé de place dans son visage et vous ne savez pas quoi.",
       extreme:"Elle ferme les yeux une seconde entière, ce que vous ne l'avez jamais vue faire ailleurs que dans une chambre haute d'auberge. Quand elle les rouvre, quelque chose a changé de place dans son visage, et vous n'arrivez pas à dire quoi, et vous y penserez encore dans dix ans." },
@@ -775,7 +775,7 @@ aly_choix_demande:{
   qui:'alycia',
   titre:"Avoir besoin",
   texte:[
-    "« Restez. J'ai besoin de vous. »",
+    "@« Restez. J'ai besoin de vous. »",
     { sobre:"Le mot tombe mal et vous le savez en le disant.",
       intense:"Vous entendez le mot atterrir. *Besoin.* Chez cette femme-là, c'est le mot d'une chaîne, et vous venez de le poser sur la table sans le vouloir.",
       extreme:"Vous entendez le mot atterrir dans la pièce. *Besoin.* Chez n'importe qui d'autre c'est un aveu touchant ; chez cette femme-là c'est le vocabulaire exact de la dépendance, celui qu'elle a passé quinze ans à démonter, et vous venez de le poser sur la table à voix haute, devant une carte à trente-huit points." },
@@ -801,7 +801,7 @@ aly_choix_karlsberg:{
   qui:'alycia',
   titre:"Une adresse",
   texte:[
-    "« Amenez-les à Karlsberg. Tous. Il y a de la place, il y a des murs, et il y a des hommes. »",
+    "@« Amenez-les à Karlsberg. Tous. Il y a de la place, il y a des murs, et il y a des hommes. »",
     { sobre:"Elle ne répond pas tout de suite.",
       intense:"Elle regarde son croquis, les trente-huit points répartis sur quatre provinces, et elle passe le pouce dessus comme on efface.",
       extreme:"Elle regarde son croquis — trente-huit points répartis sur quatre provinces, trente-quatre endroits, quinze ans de travail — et elle passe le pouce dessus lentement, comme on efface une ligne de craie, en suivant du regard ce que ça donnerait si les trente-huit devenaient un." },
@@ -904,11 +904,11 @@ aly_loup_ensemble:{
   qui:'alycia',
   titre:"Le même bois",
   texte:[
-    "« Alors qu'on nous cherche ensemble. »",
+    "@« Alors qu'on nous cherche ensemble. »",
     { sobre:"Elle ne répond pas tout de suite. Puis : « Vous savez ce que ça coûte. »",
       intense:"« Vous savez ce que ça coûte », dit-elle. « Deux personnes qu'on cherche ensemble, ça se trouve deux fois plus vite. C'est de l'arithmétique, pas de la morale. »",
       extreme:"« Vous savez ce que ça coûte », dit-elle, et elle le pose comme un fait technique parce que c'en est un. « Deux personnes qu'on cherche séparément, il faut deux enquêtes. Deux personnes qu'on cherche ensemble, il en faut une, et elle est deux fois plus facile parce qu'on a deux descriptions à recouper au lieu d'une. C'est de l'arithmétique. Ce n'est pas de la morale et ce n'est pas du courage. »" },
-    "« Je sais. »",
+    "@« Je sais. »",
     "« Dites-le en connaissant le chiffre, alors. »",
     "« Je le dis en connaissant le chiffre. »",
     "§ Elle sort le placard de sa sacoche, le déplie, et regarde les deux gravures côte à côte.",
@@ -938,7 +938,7 @@ aly_loup_separer:{
   qui:'alycia',
   titre:"Deux bois",
   texte:[
-    "« Séparons-nous. Une gravure de chacun vaut mieux qu'une des deux. »",
+    "@« Séparons-nous. Une gravure de chacun vaut mieux qu'une des deux. »",
     { sobre:"« Oui », dit-elle immédiatement. « C'est ce qu'il faut faire. »",
       intense:"« Oui », dit-elle immédiatement, sans une seconde d'hésitation, parce qu'elle avait fait le calcul avant d'arracher le placard du mur. « C'est ce qu'il faut faire. »",
       extreme:"« Oui », dit-elle immédiatement, sans une seconde d'hésitation, et vous comprenez qu'elle avait fait ce calcul avant même d'arracher le placard du mur — probablement pendant la deuxième lecture. « C'est ce qu'il faut faire, et je vous remercie de l'avoir dit le premier, parce que si je l'avais dit la première vous auriez cru que je partais. »" },

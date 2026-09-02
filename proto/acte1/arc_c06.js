@@ -66,7 +66,7 @@ ha_audience:{
 ha_rancon:{
   qui:'hauterive',
   texte:[
-    "« Quelle rançon ? »",
+    "@« Quelle rançon ? »",
     "Il y a un silence de trois secondes, et trois secondes chez un homme qui a fermé les portes avant de dire bonjour, c'est une réponse complète.",
     "« Il n'y en a pas eu. »",
     "« Dix-huit jours et pas de demande. »",
@@ -88,7 +88,7 @@ ha_rancon:{
 ha_chambriere:{
   texte:[
     "Elle s'appelle Guiote, elle a quarante ans, elle habille Isabeau de Hauterive depuis onze ans, et elle est la seule personne de cette maison qui pleure vraiment.",
-    "« Elle a emporté quoi, pour son pèlerinage ? »",
+    "@« Elle a emporté quoi, pour son pèlerinage ? »",
     "« Un coffre. »",
     "« Quelle taille ? »",
     { sobre:"« Grand comme ça. » Elle montre. C'est petit.",
@@ -99,7 +99,7 @@ ha_chambriere:{
     "« Guiote. »",
     "Elle regarde la porte. Elle a quarante ans, elle a onze ans de place dans cette maison, et il n'y a rien d'autre pour elle à trente lieues.",
     "§ « Des lettres. Elle les rangeait la nuit et elle les ressortait la nuit, et elle en a recopié pendant trois mois. »",
-    "« Recopié ? »",
+    "@« Recopié ? »",
     "« De sa main. Elle recopiait des lettres qui n'étaient pas d'elle. »",
     "Un temps.",
     "« Et elle a demandé au palefrenier, en Ventôse, combien de jours il faut pour aller à Chastel par les petites routes. »",
@@ -132,7 +132,7 @@ ha_termes:{
   qui:'hauterive',
   titre:"Ce que Hauterive doit",
   texte:[
-    "« Vous avez écrit les cinq mots. »",
+    "@« Vous avez écrit les cinq mots. »",
     "« Mon clerc les a écrits. C'est la formule d'usage quand on s'adresse à un homme de votre sorte, et je ne l'ai pas relue. »",
     "§ Voilà une chose qu'aucune maison n'avait encore dite à voix haute : la coutume ancienne est devenue une formule de politesse dans un modèle de lettre.",
     "« Elle est due ou elle ne l'est pas. »",
@@ -142,7 +142,7 @@ ha_termes:{
     { sobre:"Il pose une bourse sur la table.",
       intense:"Il pose une bourse sur la table, et le geste est celui d'un homme qui règle un compte, pas d'un homme qui achète quelque chose.\n\n« Deux cent quatre-vingts, et deux cents de plus au titre de la coutume, en argent, parce que je n'ai personne à qui la demander et que je ne vais pas demander à quelqu'un qui n'est pas de ma maison. »",
       extreme:"Il pose une bourse sur la table, du geste d'un homme qui règle un compte et non de celui qui achète quelque chose.\n\n« Deux cent quatre-vingts, et deux cents de plus au titre de la coutume, en argent. Je n'ai personne à qui la demander, je ne vais pas demander à quelqu'un qui n'est pas de ma maison, et l'idée de vous proposer ma femme quand vous partez la chercher me paraît d'une bassesse qui dépasse même ce que vous devez déjà penser de moi. »" },
-    "« C'est régulier ? »",
+    "@« C'est régulier ? »",
     "« C'est régulier. La coutume prévoit la compensation quand la maison ne peut pas fournir. Vérifiez si vous voulez : c'est écrit, ça date de trois cents ans, et ça a été écrit par des gens qui avaient prévu ce cas exact. »",
     "§ Il a raison. C'est le seul point de toute cette affaire où cet homme est irréprochable, et il tient à ce qu'on le note.",
   ],
@@ -159,11 +159,11 @@ ha_termes:{
 ha_compensation:{
   qui:'hauterive',
   texte:[
-    "« J'accepte la compensation. »",
+    "@« J'accepte la compensation. »",
     "« Bien. »",
     "Il compte. Il compte vite et bien, comme tout ce qu'il fait.",
     "§ Quatre cent quatre-vingts couronnes avant d'avoir monté à cheval. C'est le plus gros paiement de l'acte et il arrive avant le travail, ce qui n'arrive jamais.",
-    "« Vous payez d'avance. »",
+    "@« Vous payez d'avance. »",
     "« Je paie d'avance parce que je veux que vous soyez déjà payé quand vous la verrez. »",
     "« Pourquoi ? »",
     "« Parce qu'elle vous offrira davantage. »",
@@ -176,7 +176,7 @@ ha_compensation:{
 ha_refus_comp:{
   qui:'hauterive',
   texte:[
-    "« Non. La coutume n'est pas une somme. Quand une maison ne peut pas fournir, elle ne fournit pas : elle ne rachète pas. »",
+    "@« Non. La coutume n'est pas une somme. Quand une maison ne peut pas fournir, elle ne fournit pas : elle ne rachète pas. »",
     { sobre:"Il vous regarde d'une façon nouvelle.",
       intense:"Il vous regarde d'une façon nouvelle — pas avec sympathie : avec intérêt, ce qui est beaucoup plus dangereux chez un homme qui va siéger au conseil de province.",
       extreme:"Il vous regarde d'une façon nouvelle. Pas avec sympathie : avec intérêt, ce qui est infiniment plus dangereux chez un homme qui va siéger au conseil de province et qui vient de découvrir qu'un Paria peut refuser deux cents couronnes pour une raison de forme." },
@@ -237,7 +237,7 @@ ha_isabeau:{
     { sobre:"Elle ouvre le coffret. Il y a des lettres.",
       intense:"Elle ouvre le coffret et le tourne vers vous. Il y a des lettres, quarante ou cinquante, en deux liasses : une de papier jauni, une de papier neuf de la même main.\n\n« Les vieilles sont de lui. Les neuves sont de moi : je les ai recopiées pendant trois mois, la nuit, parce qu'une seule liasse se brûle et que deux liasses dans deux endroits ne se brûlent pas. »",
       extreme:"Elle ouvre le coffret et le tourne vers vous : quarante ou cinquante lettres, en deux liasses — une de papier jauni, une de papier neuf de la même main d'écriture.\n\n« Les vieilles sont de lui. Les neuves sont de moi : recopiées pendant trois mois, la nuit, à la chandelle, mot pour mot, avec les ratures et les abréviations, parce qu'une liasse se brûle et que deux liasses dans deux endroits différents ne se brûlent pas. Il m'a fallu onze semaines pour comprendre ça toute seule. Personne n'apprend ça à une femme. »" },
-    "« Elles disent quoi ? »",
+    "@« Elles disent quoi ? »",
     "« Que mon mari a fait empoisonner Ansel de Vermoise en Brumaire de l'an dernier, pour un siège au conseil de province qu'il occupera en Prairial. »",
     "§ Elle le dit comme on lit un inventaire, ce qui veut dire qu'elle l'a dit à voix haute cent fois, seule, dans une chambre, pour pouvoir le dire une fois devant quelqu'un.",
     "« Pourquoi ne pas être partie, simplement ? »",
@@ -705,7 +705,7 @@ ha_fin_parti:{
   titre:"Le moulin était vide",
   qui:'hauterive',
   texte:[
-    "« Le moulin était vide. »",
+    "@« Le moulin était vide. »",
     "Il vous regarde pendant onze secondes. C'est un homme qui a fermé les portes avant de dire bonjour et il sait parfaitement ce qu'il est en train d'entendre.",
     "« Vide. »",
     "« Vide depuis plusieurs jours. Feux froids, litières emportées. Ils sont partis vers le sud. »",

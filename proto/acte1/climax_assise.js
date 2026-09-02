@@ -372,7 +372,7 @@ as_parler_loys:{
     { sobre:"Il a quinze ans et il essaie d'être poli. C'est ça qui est difficile à regarder.",
       intense:"Il a quinze ans et il essaie d'être poli, et c'est ça qui est insoutenable — pas la peur, la politesse. Il ne demande pas ce qu'il risque. Il demande si sa mère a été prévenue et si on peut lui dire qu'il n'a rien cassé.",
       extreme:"Quinze ans, et il essaie d'être poli. C'est ça qui est insoutenable — pas la peur, la politesse. Il ne demande pas ce qu'il risque : il demande si sa mère a été prévenue, si on peut lui dire qu'il n'a rien cassé, et — parce qu'un garçon de quinze ans pense à ça avant le reste — si on lui rendra son couteau, qui était à son père." },
-    "« Loys. Le loup sur la borne. Tu l'as dit à combien de personnes ? »",
+    "@« Loys. Le loup sur la borne. Tu l'as dit à combien de personnes ? »",
     "« La salle était pleine. »",
     "« Et avant la salle ? »",
     "Il réfléchit vraiment. C'est un garçon sérieux.",
@@ -415,7 +415,7 @@ as_parler_tailleur:{
     { sobre:"Il a raison. C'est vérifiable et c'est vrai.",
       intense:"Il a raison. Vous le revoyez faire : le pouce dans le sillon du loup, deux fois, dans le sens de la gravure, puis la toile rabattue et cette phrase sur son grand-père qui a taillé pour une maison rayée. Personne ne lui a rien demandé.",
       extreme:"Il a raison, et vous le revoyez faire : le pouce dans le sillon, deux fois, dans le sens de la gravure. Puis la toile rabattue. Puis la phrase sur son grand-père, payé deux ans par des gens qui n'existaient plus. Personne ne lui a rien demandé. Il a décidé tout seul, dans son hangar, pour une raison qui n'appartient qu'à lui et qu'il ne vous dira pas." },
-    "« Vous saviez ce que c'était. »",
+    "@« Vous saviez ce que c'était. »",
     "« Je savais que c'était de l'arpentage. Je ne savais pas de qui. »",
     "Il se tait, et il ajoute, sans vous regarder :",
     "§ « Je ne le sais toujours pas, messire, et je préfère. Ce que je ne sais pas, je ne peux pas le dire sur un tabouret. »",
@@ -433,7 +433,7 @@ as_parler_amaury:{
     { sobre:"Il se trompe. Ce n'est pas pour ça.",
       intense:"Il se trompe, et c'est ce qui rend cette conversation intéressante : il croit qu'on le pend pour ce qu'il a fait. On le pend parce que Chastel a racheté les archives de Valombre avec la tour, qu'on y a trouvé quarante-trois relevés d'arpentage, et qu'il faut bien une raison publique de descendre dans cette vallée avec deux chariots de registres.",
       extreme:"Il se trompe, et c'est ce qui rend la conversation intéressante. Il croit qu'on le pend pour ce qu'il a fait. On le pend parce que Chastel a racheté les archives de Valombre en même temps que la tour, qu'on y a trouvé quarante-trois relevés antérieurs, et qu'il faut bien un motif public pour descendre dans une vallée fermée avec deux chariots de papier et trente hommes." },
-    "« Votre mère a vendu la tour à qui ? »",
+    "@« Votre mère a vendu la tour à qui ? »",
     "Il s'arrête. Un fils de maison ruinée sait exactement à qui sa mère a vendu la tour.",
     "« … à Chastel. »",
     "« En même temps que les archives. »",
@@ -454,7 +454,7 @@ as_parler_gassien:{
     { sobre:"Il ne menace pas. Il expose une offre.",
       intense:"Il ne menace à aucun moment. Il expose une situation avec la neutralité d'un homme qui vend du sel : il a une marchandise, il y a un acheteur dans la pièce d'à côté, et il préférerait de très loin conclure avec vous parce que vous êtes plus près et que le transport coûte moins cher.",
       extreme:"Il ne menace pas une seule fois. Il expose, avec la neutralité d'un homme qui vend du sel : il a une marchandise, il y a un acheteur dans la pièce d'à côté, et il préférerait conclure avec vous parce que vous êtes plus près et que le transport revient moins cher. Il sourit pendant tout l'exposé. Le sourire est parfaitement chaleureux et n'a jamais eu le moindre rapport avec quoi que ce soit." },
-    "« Qu'est-ce que vous voulez ? »",
+    "@« Qu'est-ce que vous voulez ? »",
     "« Que vous vous leviez. Contestez la cause, prenez le rond, et si vous gagnez, l'entente tombe avec le chef. Je repars avec deux mules et une amende. »",
     "« Et si je ne me lève pas ? »",
     "§ « Alors je me lève, moi. Et je raconte à maître Vasque une histoire vraie qui commence à cent quarante pieds au-dessus du gué. »",
@@ -473,7 +473,7 @@ as_parler_sergent:{
     { sobre:"Il vous regarde. Il vous replace. Ça prend trois secondes.",
       intense:"Il vous regarde, et vous voyez le classement se faire — un homme qui écrit onze à quarante lignes par semaine depuis douze ans a une mémoire d'un genre particulier, qui ne retient pas les visages mais les circonstances. Trois secondes. Puis il détourne les yeux, ce qui est la réponse.",
       extreme:"Il vous regarde, et le classement se fait devant vous : un homme qui porte onze à quarante lignes par semaine pendant douze ans développe une mémoire qui ne retient pas les visages mais les circonstances — le temps qu'il faisait, la monture, l'heure, et si l'homme a hésité avant de donner son nom. Trois secondes. Puis il détourne les yeux, et c'est toute la réponse." },
-    "« Ils m'ont demandé une ligne en particulier ? »",
+    "@« Ils vous ont demandé une ligne en particulier ? »",
     "« Ils m'ont demandé de reconnaître mon écriture sur trois cent quatre lignes. Trois cent quatre. Sur douze ans. »",
     "« Vous les avez reconnues ? »",
     "« Toutes. C'est mon écriture. »",
@@ -631,7 +631,7 @@ as_loi_dom:{
   qui:'vasque',
   titre:"« Sur quel fondement ? »",
   texte:[
-    "« Je conteste la cause. »",
+    "@« Je conteste la cause. »",
     "Il y a un bruit dans la salle, un seul, et c'est le greffier qui vient de poser sa plume — ce qu'il n'a pas fait de la journée.",
     "Vasque ne se retourne pas vers le public. Il remet ses lunettes, ce qui est le seul geste d'un homme qui vient de décider que la soirée serait plus longue que prévu.",
     "« Sur quel fondement ? »",
@@ -661,7 +661,7 @@ as_loi_dom:{
 as_loi_cout:{
   qui:'vasque',
   texte:[
-    "« Je conteste la cause. »",
+    "@« Je conteste la cause. »",
     "Vous la contestez, et vous la contestez bien — mais vous la contestez en homme qui a appris ça dans un couloir il y a deux heures, et Vasque a onze ans de répertoire.",
     "« Sur quel fondement ? »",
     "« La rature. »",
@@ -685,7 +685,7 @@ as_loi_cout:{
 as_loi_ko:{
   qui:'vasque',
   texte:[
-    "« Je conteste la cause. »",
+    "@« Je conteste la cause. »",
     "« À quel titre ? »",
     "Ce n'est pas la même question que *sur quel fondement*, et vous mettez une seconde de trop à voir la différence. Cette seconde vous coûte l'audience entière.",
     { sobre:"« Un particulier ne conteste pas une cause de titres. »",
@@ -960,7 +960,7 @@ as_r1_parler_dom:{
     "« Non. Je crois que vous n'avez pas envie d'être ici, et que ça fait trente ans que ça dure. »",
     "Il donne deux passes, courtes, presque distraites. Vous les prenez.",
     "§ « Quarante et un », dit-il. « Pas un seul que Chastel pouvait perdre. Vous savez ce que c'est, de gagner quarante et une fois sans avoir jamais rien gagné ? »",
-    "« Je crois, oui. »",
+    "@« Je crois, oui. »",
     "Il lève deux doigts vers le seuil sans vous quitter des yeux.",
     "« Temps. »",
   ],
@@ -1495,7 +1495,7 @@ as_r3_ceder_dom:{
   qui:'sorgue', melee:true,
   texte:[
     "Vous baissez la pointe. C'est tout ce que vous faites, et dans un rond de neuf pas c'est énorme.",
-    "« Renaud Sorgue. Cédez. »",
+    "@« Renaud Sorgue. Cédez. »",
     "La cour fait un bruit. Personne n'a jamais entendu ça et pour cause : on ne demande pas à un champion judiciaire de céder, on le tue ou on sort du cercle, et il n'existe pas de troisième colonne au registre.",
     "« Je ne peux pas céder, messire. Un champion qui cède n'est plus un champion. »",
     "« Vous avez quarante et un duels. Vous m'avez dit que vous n'en aviez gagné aucun. »",
@@ -1519,7 +1519,7 @@ as_r3_ceder_dom:{
 as_r3_ceder_cout:{
   qui:'sorgue', melee:true,
   texte:[
-    "« Renaud Sorgue. Cédez. »",
+    "@« Renaud Sorgue. Cédez. »",
     "« Non. »",
     "Ce n'est pas de l'orgueil : c'est un homme qui a construit trente ans sur une seule règle et à qui l'on demande de la casser dans une cour de province devant un garçon de dix-sept ans qui lui apporte de l'eau.",
     "Il vient. Il vient d'une jambe, mal, et vous n'avez pas remonté la garde parce que vous étiez en train de parler.",
@@ -1540,7 +1540,7 @@ as_r3_ceder_cout:{
 as_r3_ceder_ko:{
   qui:'sorgue', melee:true,
   texte:[
-    "« Renaud Sorgue. Cédez. »",
+    "@« Renaud Sorgue. Cédez. »",
     "Il ne répond pas et il ne s'arrête pas, et vous comprenez trop tard ce que vous venez de faire : vous avez parlé, la pointe basse, à trois pas d'un homme qui compte, dans le troisième échange d'un duel judiciaire.",
     { sobre:"Il ne vous tue pas. Il fait mieux.",
       intense:"Il ne vous tue pas — quatre morts en trente ans, il ne cherche pas le cinquième. Il fait mieux : il vous prend l'épaule d'un coup à plat, il passe la jambe, et il vous met **dehors**. Pas au sol : dehors. Deux pieds de l'autre côté de la craie, debout, intact, et parfaitement visible de toute la cour.",
@@ -1630,7 +1630,7 @@ as_rôle:{
       risque:"calculé", definitif:true, va:'as_fin_yohan',
       effets:{ flags:['as_prenom'] } },
 
-    { t:"« Yohan de Karlsberg. »",
+    { t:"@« Yohan de Karlsberg. »",
       detail:"Le nom entier · devant le répertoire général de la province",
       ferme:"Ferme : dix-neuf ans passés à n'être personne",
       risque:"définitif", definitif:true, va:'as_fin_nom',
@@ -1648,7 +1648,7 @@ as_nom_dom:{
   qui:'vasque',
   titre:"« Je la conteste comme héritier »",
   texte:[
-    "« Je conteste la cause. »",
+    "@« Je conteste la cause. »",
     "« Sur quel fondement ? »",
     "« Sur celui-ci : la contradiction est ouverte à la maison intéressée. »",
     { sobre:"Vasque repose la pièce. Très lentement.",
@@ -1657,9 +1657,9 @@ as_nom_dom:{
     "« La maison intéressée est éteinte. »",
     "« La maison intéressée est **raturée**. Vous l'avez dit vous-même, dans une arrière-cuisine, il y a deux heures : en travers, à l'encre, dans une main qui n'est pas celle du volume, et sans ordonnance jointe. »",
     "Silence.",
-    "« Volume cent-quarante-trois, section des titres éteints. La gorge de Cendrepont, le gué, le droit de passage et le quart du sel. »",
+    "@« Volume cent-quarante-trois, section des titres éteints. La gorge de Cendrepont, le gué, le droit de passage et le quart du sel. »",
     "§ Il y a un moment, dans certaines vies, où l'on entend sa propre voix dire une chose et où l'on sait qu'on ne la reprendra pas.",
-    "« Yohan de Karlsberg. »",
+    "@« Yohan de Karlsberg. »",
     { sobre:"La salle ne fait aucun bruit. Personne ne sait ce que ce nom veut dire.",
       intense:"La salle ne fait aucun bruit, et c'est ce qui est extraordinaire : sur quarante personnes debout dans cette pièce, il y en a peut-être trois qui savent ce que ce nom veut dire. Les autres attendent poliment la suite d'une phrase.",
       extreme:"La salle ne fait aucun bruit. Sur quarante personnes debout, trois peut-être savent ce que ce nom veut dire ; les autres attendent poliment la suite d'une phrase. C'est ça, dix-neuf ans de travail d'effacement bien fait : on peut prononcer le nom d'une maison de sept cents personnes dans une salle pleine, dans sa propre vallée, et n'être compris de personne." },

@@ -203,7 +203,7 @@ prologue_lettre:{
 },
 prologue_nom:{
   texte:[
-    "« Yohan. »",
+    "@« Yohan. »",
     "Le sergent d'étape écrit le nom sur son registre d'entrée avec l'application d'un homme qui sait à peine tenir une plume et qui y met un point d'honneur.",
     "« Yohan de quoi ? »",
     "« Yohan. »",
@@ -219,7 +219,7 @@ prologue_nom:{
 
 prologue_faux:{
   texte:[
-    "« Perrin. Perrin de Saulx. »",
+    "@« Perrin. Perrin de Saulx. »",
     "Le sergent d'étape écrit *Perrin de Saulx, homme d'armes, seul, à cheval* et ne lève pas les yeux une seule fois. C'est un bon faux nom : assez banal pour ne rien dire, assez précis pour ne pas sonner faux.",
     "« Signez, messire. Et si vous montez à Cendrepont, faites-le avant la nuit. On n'ouvre plus les portes après. »",
     "§ Vous signez d'une main qui n'est pas la vôtre. Vous savez le faire. Vous avez appris à le faire à seize ans, dans une remise, en trois nuits, parce que celui qui vous cachait alors avait dit que ça vous sauverait la vie plus souvent qu'une épée.",

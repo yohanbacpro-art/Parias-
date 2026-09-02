@@ -548,7 +548,7 @@ du_apres:{
     "§ Elle a raison sur les deux points et elle le sait, ce qui est sa manière habituelle d'avoir raison.",
     "« Il vous en reste combien ? »",
     () => charges() === 0 ? "« Aucun. Je recharge les deux. »" : "« Un. »",
-    { sobre:"« Deux coups. Dans une vie entière. »",
+    { sobre:"@« Deux coups. Dans une vie entière. »",
       intense:"« Deux coups », dit-elle. « Vous avez deux coups dans une vie entière, à cause d'un délai de quarante secondes que personne n'a jamais réussi à raccourcir en deux cents ans. » Elle se lève. « Réfléchissez très bien à qui vous les donnez. »",
       extreme:"« Deux coups. » Elle se lève et remet son manteau. « Vous avez deux coups à disposition dans une vie entière, parce qu'aucun armurier de ce monde n'a réussi en deux cents ans à raccourcir un rechargement en dessous de quarante secondes, et que quarante secondes n'existent pas quand quelqu'un veut vous tuer. » Elle s'arrête à la porte. « Alors réfléchissez très bien à qui vous les donnez, messire. Un jour il y aura quelqu'un en face de vous qui vaudra vraiment un de ces deux coups, et j'aimerais assez que vous l'ayez encore. »" },
   ],

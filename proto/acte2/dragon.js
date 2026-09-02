@@ -103,7 +103,7 @@ dr_nains:{
     () => a('a2_maitre_oeuvre')
       ? "Brann de Kar-Durak dit six mots par jour. Ce jour-là il en dit quatre-vingts, ce qui n'était pas arrivé depuis onze ans, et il faut aller chercher quelqu'un pour traduire parce qu'il passe au nain à la troisième phrase."
       : "Il faut onze jours pour qu'un Nain accepte de venir, et celui qui vient a deux cent dix ans et n'est pas content d'être là.",
-    "« Vous avez une carte de la montagne ? »",
+    "@« Vous avez une carte de la montagne ? »",
     "On sort une carte de la montagne. Il la retourne, parce qu'elle est fausse dans le sens où on l'a dessinée.",
     { sobre:"« Onze portes. Quatre sont tombées. »",
       intense:"« Onze portes. Quatre sont tombées en deux ans. » Il pose le doigt sur la plus haute. « Celle-ci en Ventôse, il y a vingt-six mois. On l'appelle la galerie haute. C'est là qu'étaient nos archives. »\n\n« Je sais. »\n\n« Vous ne savez pas ce qu'il y avait sous nos archives. »",
@@ -787,7 +787,7 @@ dr_fin_nains:{
     "§ Il faut deux mois, soixante Nains et une route entière refaite pour remonter quarante tonnes à la montagne.",
     "Ils ne la font pas entrer par la galerie haute, qui est aux mains des Peaux-Vertes.",
     "Ils rouvrent la onzième porte — celle qui est fermée depuis six cents ans, celle dont le plan porte un mot qui n'est pas un nom — et ils la font descendre par là, et ils la referment derrière.",
-    "« Vous rouvrez une porte que vous n'ouvrez pas. »",
+    "@« Vous rouvrez une porte que vous n'ouvrez pas. »",
     { sobre:"« Une fois. »",
       intense:"« Une fois », dit-il. « On la referme le soir même. Il y a un ordre des choses, messire, et il ne dit pas ce que vous croyez : il ne dit pas *ne pas savoir*. Il dit *remettre*. »",
       extreme:"« Une fois. On la referme le soir même, avec les mêmes pierres, dans le même ordre. » Il vous regarde de ses deux cent dix ans. « Vous croyez que notre règle est de ne pas savoir ce qu'il y a dessous. Ce n'est pas ça du tout, et c'est ce que les hommes ne comprennent jamais de nous. Nous savons parfaitement ce qu'il y a dessous : c'est écrit, c'est daté, c'est mesuré, et depuis avant-hier c'est même mesuré correctement. Notre règle, c'est de **remettre**. »" },

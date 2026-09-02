@@ -113,7 +113,7 @@ wy_corps_ko:{
 wy_pourquoi_dom:{
   qui:'heloise',
   texte:[
-    "« Une wyverne ne s'installe pas en six semaines, madame. Elle bâtit un nid, et un nid de cette taille demande une saison entière. Elle est là depuis l'automne. »",
+    "@« Une wyverne ne s'installe pas en six semaines, madame. Elle bâtit un nid, et un nid de cette taille demande une saison entière. Elle est là depuis l'automne. »",
     "Le silence dure trois secondes de trop.",
     "« Depuis l'automne, oui. »",
     "« Et elle n'a rien pris pendant quatre mois. »",
@@ -134,7 +134,7 @@ wy_pourquoi_dom:{
 wy_pourquoi_ok:{
   qui:'heloise',
   texte:[
-    "« Une wyverne ne s'installe pas en six semaines. Elle est là depuis plus longtemps. »",
+    "@« Une wyverne ne s'installe pas en six semaines. Elle est là depuis plus longtemps. »",
     "Elle ne le nie pas, et elle ne le développe pas.",
     "« Depuis l'automne. Elle prenait des moutons sur le versant nord. Nous payions les bergers et nous nous taisions. »",
     "« Et qu'est-ce qui a changé ? »",
@@ -197,15 +197,15 @@ wy_termes:{
 wy_demande:{
   qui:'alienor',
   texte:[
-    "« Je ne le demanderai pas à votre tante. Je vous le demande à vous, et vous pouvez dire non devant elle. »",
+    "@« Je ne le demanderai pas à votre tante. Je vous le demande à vous, et vous pouvez dire non devant elle. »",
     "Héloïse ouvre la bouche. Aliénor lève deux doigts de la table et sa tante se tait, ce qui apprend sur cette maison davantage que le registre des dettes.",
     "« Bien. » La nièce se penche en avant, coudes sur les genoux, dans une posture d'homme qu'elle n'a manifestement jamais eu l'intention de corriger. « Alors on va parler comme des adultes, et je vais vous dire ce que j'y gagne, parce que je ne crois pas une seconde que vous accepteriez si je faisais celle qui vous trouve beau. »",
-    "« Cette maison a un héritier et c'est mon cousin Amaury. Vous ne l'avez pas encore rencontré. Vous allez le rencontrer, et dans un quart d'heure vous saurez ce que tout le monde ici sait depuis dix ans : c'est un homme faible qui se croit habile, et il finira par vendre cette vallée à quelqu'un qui lui dira qu'il est intelligent. »",
-    "« Ma tante tient la maison depuis onze ans parce qu'elle est meilleure que lui à tout. Le jour où elle meurt, il hérite. C'est la loi et la loi est bête. »",
+    "^« Cette maison a un héritier et c'est mon cousin Amaury. Vous ne l'avez pas encore rencontré. Vous allez le rencontrer, et dans un quart d'heure vous saurez ce que tout le monde ici sait depuis dix ans : c'est un homme faible qui se croit habile, et il finira par vendre cette vallée à quelqu'un qui lui dira qu'il est intelligent. »",
+    "^« Ma tante tient la maison depuis onze ans parce qu'elle est meilleure que lui à tout. Le jour où elle meurt, il hérite. C'est la loi et la loi est bête. »",
     "§ « Moi, je n'hérite de rien. Sauf si j'ai un enfant, et sauf si cet enfant a quelque chose que le sien n'aura pas. »",
     "Elle laisse ça poser. Le feu craque.",
     "« Le sang Paria se transmet une fois sur deux. Je le sais, ma tante le sait, et les archives de trois maisons de cette province le savent. Un enfant qui porte l'Onde, avec un nom de Valombre et une revendication écrite, ça ne se marie pas : ça se négocie. »",
-    "« Alors oui, messire. Pas pour vous. Vous n'y êtes pour rien et vous n'y serez pour rien : je ne vous demanderai jamais de le reconnaître, je ne vous écrirai pas, et si vous repassez dans huit ans je ne vous présenterai personne. »",
+    "^« Alors oui, messire. Pas pour vous. Vous n'y êtes pour rien et vous n'y serez pour rien : je ne vous demanderai jamais de le reconnaître, je ne vous écrirai pas, et si vous repassez dans huit ans je ne vous présenterai personne. »",
     "Un temps.",
     "« Si ça vous convient, dites-le maintenant. Si ça vous dégoûte, dites-le aussi — je préfère un homme qui trouve ça sale à un homme qui fait semblant de ne pas comprendre. »",
   ],
@@ -234,13 +234,13 @@ wy_demande:{
 wy_pretendant_dom:{
   qui:'alienor',
   texte:[
-    "« Vous n'êtes pas en train de me demander un service. Vous êtes en train de fabriquer un prétendant, et vous voulez que le géniteur soit quelqu'un qui ne reviendra jamais réclamer quoi que ce soit. »",
+    "@« Vous n'êtes pas en train de me demander un service. Vous êtes en train de fabriquer un prétendant, et vous voulez que le géniteur soit quelqu'un qui ne reviendra jamais réclamer quoi que ce soit. »",
     "Elle ne cille pas. Sa tante, au fond, s'assied — pour la première fois de l'entretien.",
     "« Oui. »",
     "§ « Et je vais vous dire ce qui me plaît chez vous, messire : vous venez de le dire à voix haute devant ma tante, ce que personne dans cette maison n'a osé faire en six ans. »",
     "Elle se redresse et son ton change, à peine.",
     "« Alors autant aller jusqu'au bout. Il y a une chose que je n'ai pas dite. Si j'ai un enfant de vous et qu'Amaury l'apprend, il essaiera de le faire disparaître. Pas moi — moi je suis sa cousine et il n'aura pas le cran. L'enfant, oui. »",
-    "« Je vous le dis parce que si vous acceptez, vous acceptez ça aussi, et je ne veux pas que vous puissiez prétendre plus tard que vous ne saviez pas. »",
+    "^« Je vous le dis parce que si vous acceptez, vous acceptez ça aussi, et je ne veux pas que vous puissiez prétendre plus tard que vous ne saviez pas. »",
     "Héloïse, du fond de la salle, sans lever la tête : « Elle a raison au sujet de mon fils. »",
     "C'est la phrase la plus lourde qui ait été prononcée dans cette pièce, et c'est une mère qui la dit.",
   ],
@@ -265,7 +265,7 @@ wy_pretendant_dom:{
 wy_pretendant_ok:{
   qui:'alienor',
   texte:[
-    "« Vous fabriquez un prétendant. »",
+    "@« Vous fabriquez un prétendant. »",
     "« Évidemment. » Elle a presque l'air agacée qu'il ait fallu le dire. « Vous croyiez quoi ? »",
     "Héloïse, du fond : « Ma nièce est franche par calcul, messire, pas par vertu. C'est plus fiable. »",
     "§ C'est probablement le compliment le plus laid que quelqu'un ait fait à quelqu'un d'autre devant vous.",
@@ -316,7 +316,7 @@ wy_pretendant_ko:{
 wy_or_seul:{
   qui:'heloise',
   texte:[
-    "« L'or seul. »",
+    "@« L'or seul. »",
     "Héloïse de Valombre fait apporter cinq cents couronnes et les compte devant vous. Une partie est en écus rognés de province ; elle le sait, vous le voyez, et elle continue de compter sans ralentir.",
     "Aliénor est encore là. Elle ne dit rien pendant tout le compte, et à la dernière pile elle sort sans regarder personne.",
     "§ Vous mettrez trois jours à comprendre que ce n'était pas du mépris.",
@@ -346,7 +346,7 @@ wy_or_apres:{
 wy_accord:{
   qui:'alienor',
   texte:[
-    "« Alors c'est dit. »",
+    "@« Alors c'est dit. »",
     "Héloïse fait apporter deux cent cinquante couronnes et un contrat en deux exemplaires, manifestement rédigé avant l'audience — ce qu'Aliénor remarque en même temps que vous et souligne d'un regard.",
     "Aliénor le lit en entier, debout, sans se presser, et raye trois lignes avant de signer. Elle fait recopier les ratures sur le second exemplaire et attend que l'encre sèche.",
     "« La première disait que je ne pouvais pas rompre. La deuxième disait que vous ne pouviez pas. La troisième disait que l'enfant éventuel serait présenté à la maison. »",
@@ -354,7 +354,7 @@ wy_accord:{
     "« Ma tante rédige des contrats comme elle tient des comptes : en se ménageant une porte partout. C'est ce qui a sauvé cette maison et c'est ce qui fait qu'on ne peut rien signer chez elle sans lire. »",
     "Héloïse ne le dément pas. Elle a même l'air, une seconde, presque fière.",
     "§ « Vous partez après-demain », dit Aliénor. « Je viendrai ce soir, quand votre entretien avec mon cousin sera fini. »",
-    "« Mon entretien avec votre cousin ? »",
+    "@« Mon entretien avec votre cousin ? »",
     "« Il viendra. Il vient toujours. »",
   ],
   effets:{ flags:['wy_prevenu_amaury'],
@@ -365,7 +365,7 @@ wy_accord:{
 wy_refus:{
   qui:'heloise',
   texte:[
-    "« Non. »",
+    "@« Non. »",
     "Elle ne discute pas, ne marchande pas, ne s'offusque pas. Elle reprend la lettre au sceau du héron et la range dans le coffret dont elle est sortie.",
     "« Vous avez lu les cinq mots que j'avais écrits et vous avez fait quatre jours de route pour venir me dire non en personne. C'est presque courtois. »",
     "Elle referme le coffret.",
@@ -385,7 +385,7 @@ wy_refus:{
 wy_coutume_imposee:{
   qui:'alienor',
   texte:[
-    "« L'or et le sang. »",
+    "@« L'or et le sang. »",
     "Héloïse hoche la tête. La coutume respectée est une chose qu'elle sait ranger, classer et oublier ; c'est même précisément à ça que servent les coutumes.",
     "Aliénor vous regarde longuement. Assez longuement pour que ce soit inconfortable, et sans une once d'hostilité — ce qui est pire.",
     "Puis elle dit, à sa tante et pas à vous : « Qu'on m'écrive les termes. Je les lirai avant de les tenir. »",
@@ -443,13 +443,13 @@ wy_amaury:{
 wy_amaury_dom:{
   qui:'amaury',
   texte:[
-    "« Qui vous a appris qu'une wyverne qui défend un territoire défend une couvée ? »",
+    "@« Qui vous a appris qu'une wyverne qui défend un territoire défend une couvée ? »",
     "Il ouvre la bouche. La referme. Et pendant une seconde entière, son visage fait exactement ce que fait le visage d'un homme qui vient de comprendre qu'il a récité.",
     "« C'est… tout le monde sait ça. »",
     "« Non. Moi je le sais parce que j'ai passé onze ans à me faire payer pour tuer des choses. Vous, vous ne savez pas monter à cheval sans étrier. Qui vous l'a dit ? »",
     "Il tient huit secondes. C'est plus que ce que vous auriez parié.",
     "§ « Gassien. Gassien le Lièvre. Il tient le relais de sel à trois lieues, au bas du gué. »",
-    "« Et pourquoi un homme qui tient un relais de sel sait-il ce qu'il y a dans un nid de wyverne ? »",
+    "@« Et pourquoi un homme qui tient un relais de sel sait-il ce qu'il y a dans un nid de wyverne ? »",
     "Cette fois il ne répond pas du tout, ce qui est la réponse.",
     "« Cent cinquante », dit-il à la place, très vite. « Cent cinquante couronnes et vous ne prononcez pas son nom devant ma mère. »",
   ],
@@ -472,7 +472,7 @@ wy_amaury_dom:{
 wy_amaury_ok:{
   qui:'amaury',
   texte:[
-    "« Qui vous a appris qu'il y avait une couvée ? »",
+    "@« Qui vous a appris qu'il y avait une couvée ? »",
     "« Personne. C'est de notoriété. »",
     "Il ment mal, mais il ment vite, et il enchaîne avant que vous puissiez revenir dessus — ce qui, chez un homme de vingt-huit ans qui n'a jamais rien porté de lourd, est probablement la seule compétence qu'il ait développée.",
     "« Cent couronnes, messire. Un œuf. C'est tout. »",
@@ -509,13 +509,13 @@ wy_amaury_ko:{
 wy_amaury_prix:{
   qui:'amaury',
   texte:[
-    "« Combien vaut un œuf de wyverne ? »",
+    "@« Combien vaut un œuf de wyverne ? »",
     "Il sourit. C'est la première chose sincère qu'il fait depuis qu'il est entré, et c'est laid.",
     "« Un œuf fécondé, sorti d'un nid, avec un témoin qui peut jurer de sa provenance ? »",
-    "« Entre huit cents et mille deux cents couronnes. Une bête montable, dressée depuis l'éclosion, tenue par quelqu'un qui sait ce qu'il fait : quatre mille. »",
+    "^« Entre huit cents et mille deux cents couronnes. Une bête montable, dressée depuis l'éclosion, tenue par quelqu'un qui sait ce qu'il fait : quatre mille. »",
     "§ « Il y en a trois dans ce nid, messire. Vous êtes en train de calculer, et vous avez raison de calculer. »",
     "« Ma mère va vendre la tour cette année. Elle vous l'a dit ? Elle le dit à tout le monde comme si c'était une fatalité. Ce n'est pas une fatalité. C'est un manque d'imagination. »",
-    "« Trois œufs, c'est trois mille couronnes. Trois mille couronnes, c'est la tour, les dettes de mon père, et de quoi tenir sept ans. »",
+    "^« Trois œufs, c'est trois mille couronnes. Trois mille couronnes, c'est la tour, les dettes de mon père, et de quoi tenir sept ans. »",
     "Il se penche.",
     "« Je ne suis pas un imbécile. Je suis le seul dans cette maison à voir qu'on est assis sur trois mille couronnes et qu'on paie un mercenaire pour aller les casser. »",
   ],
@@ -613,7 +613,7 @@ wy_nuit_sortie:{
   qui:'alienor',
   texte:[
     "Elle s'arrête, la bouteille à mi-chemin de sa bouche.",
-    "« Pourquoi ? »",
+    "@« Pourquoi ? »",
     "« Parce que je ne saurai pas quoi en faire demain. »",
     "« Ce n'est pas une raison, c'est un inconfort. » Elle boit. « Et ce n'est pas à vous d'être mal à l'aise à ma place. Je vous rappelle que c'est moi qui ai demandé. »",
     "Elle repose la bouteille sur le coffre, sèchement.",
@@ -630,7 +630,7 @@ wy_nuit_sortie:{
 wy_nuit_veut:{
   qui:'alienor',
   texte:[
-    "« Qu'est-ce que vous voulez, vous, cette nuit ? »",
+    "@« Qu'est-ce que vous voulez, vous, cette nuit ? »",
     "Elle ne répond pas tout de suite. Elle regarde l'entaille de sa paume droite, la rouvre du pouce, la referme.",
     "« Personne ne me l'a demandé depuis six ans. »",
     "Elle boit. Elle tend la bouteille.",
@@ -693,7 +693,7 @@ wy_nuit_ensemble:{
 wy_nuit_ellipse:{
   qui:'alienor',
   texte:[
-    "« On peut passer la nuit à parler. Le contrat n'oblige personne à autre chose que ce que les deux veulent. »",
+    "@« On peut passer la nuit à parler. Le contrat n'oblige personne à autre chose que ce que les deux veulent. »",
     "Elle vous regarde un long moment. Puis elle hausse une épaule, remonte les deux pieds sous elle sur le coffre, et tend la bouteille.",
     "« D'accord. »",
     "C'est tout. Pas de soulagement, pas de reproche, pas de scène — et c'est précisément ce qui rend la chose facile.",
@@ -808,7 +808,7 @@ wy_bracq_dom:{
     "§ « Ceux-là. Ceux que je viens de tendre. »",
     "Il repose le carreau dans la caisse et il n'a plus du tout envie de rire.",
     "« Quelqu'un a sorti une de mes balistes à l'automne, l'a montée quelque part sur le versant nord, a tiré sur une bête qui mangeait des moutons et ne descendait pas, l'a blessée, et l'a remontée dans son râtelier avant que je m'en aperçoive. »",
-    "« Il y a trois hommes dans cette vallée qui savent tendre un de ces engins. Moi, et deux de mes servants. Et mes deux servants étaient à Chastel en octobre. »",
+    "^« Il y a trois hommes dans cette vallée qui savent tendre un de ces engins. Moi, et deux de mes servants. Et mes deux servants étaient à Chastel en octobre. »",
   ],
   effets:{ flags:['wy_sait_fleches','wy_sait_baliste','wy_bracq_allie'],
            exploit:{ eclat:4, temoins:'quelques', quoi:"vous avez posé la question que personne n'osait" },
@@ -819,7 +819,7 @@ wy_bracq_dom:{
 wy_bracq_ok:{
   qui:'bracq',
   texte:[
-    "« On a retiré un carreau de son aile gauche à la première caravane. Un carreau, pas une flèche. »",
+    "@« On a retiré un carreau de son aile gauche à la première caravane. Un carreau, pas une flèche. »",
     "Il vous montre la caisse mais ne l'ouvre pas.",
     "« Militaire. Poinçonné. Je ne vous dirai pas de quel arsenal parce que je tiens à ma place et à mes trois doigts. »",
     "§ « Mais posez-vous la question suivante, messire, et posez-la à quelqu'un d'autre que moi : qui, dans une vallée de bergers, a de quoi tirer un carreau de baliste sur une bête à cent pieds ? »",
@@ -1055,7 +1055,7 @@ wy_gassien_cout:{
 wy_gassien_ko:{
   qui:'gassien',
   texte:[
-    "« Vous rabattez les caravanes sous le nid. »",
+    "@« Vous rabattez les caravanes sous le nid. »",
     "Il ne bouge pas d'un cil.",
     "« Je vends du sel. »",
     "Et il continue de vendre du sel pendant un quart d'heure, avec une patience de saint, en répondant à côté de chaque question avec une précision qui n'est possible que chez un homme qui a préparé cet entretien.",
@@ -1091,10 +1091,10 @@ wy_gassien_choix:{
   texte:[
     "Il attend. Il ne supplie pas, ne menace pas, ne se lève même pas de sa caisse.",
     "« Vous avez trois façons de finir cette conversation, messire, et je vais vous les donner parce que vous les trouverez tout seul de toute façon. »",
-    "« Vous me tuez. Personne ne me pleure, mes quatre hommes se dispersent, et le fils de Valombre trouve quelqu'un d'autre dans le mois — il a l'argent et il a maintenant l'idée, et l'idée est la partie difficile. »",
-    "« Vous me livrez. Le prévôt me pend ou ne me pend pas selon ce qu'il touche, et dans les deux cas le nom du fils de Valombre sort au procès, et la maison qui vous paie tombe avec moi. »",
+    "^« Vous me tuez. Personne ne me pleure, mes quatre hommes se dispersent, et le fils de Valombre trouve quelqu'un d'autre dans le mois — il a l'argent et il a maintenant l'idée, et l'idée est la partie difficile. »",
+    "^« Vous me livrez. Le prévôt me pend ou ne me pend pas selon ce qu'il touche, et dans les deux cas le nom du fils de Valombre sort au procès, et la maison qui vous paie tombe avec moi. »",
     "§ « Ou vous prenez ma part. Trois œufs, mille couronnes pièce, je fournis les caisses, les mules et l'homme qui sait les tenir chauds. »",
-    "« Je ne vous conseille rien. Je constate que vous êtes payé deux cent cinquante couronnes pour un travail qui en vaut trois mille. »",
+    "^« Je ne vous conseille rien. Je constate que vous êtes payé deux cent cinquante couronnes pour un travail qui en vaut trois mille. »",
   ],
   choix:[
     { t:"Le tuer",
@@ -1873,7 +1873,7 @@ wy_c2_gauche_ko:{
 wy_c2_baliste_dom:{
   melee:true, qui:'bracq',
   texte:[
-    "« BRACQ ! LIGNE ! »",
+    "@« BRACQ ! LIGNE ! »",
     "Vous ne criez pas pour être entendu — à quatre-vingts pas, dans une gorge, on n'entend rien. Vous criez pour qu'il voie la bouche bouger et qu'il comprenne le seul mot qui compte.",
     "Il comprend. Un homme qui monte des machines de siège depuis onze ans dans le froid ne comprend jamais autre chose que ce mot-là.",
     "Ensuite c'est de l'arithmétique, et l'arithmétique se fait avec les jambes : vous devez la garder derrière vous et vous mettre hors de l'axe en huit secondes, sur un sol qui ne pardonne pas, avec une bête qui vous suit parce que vous êtes ce qui bouge.",
@@ -1893,7 +1893,7 @@ wy_c2_baliste_dom:{
 wy_c2_baliste_cout:{
   melee:true,
   texte:[
-    "« BRACQ ! LIGNE ! »",
+    "@« BRACQ ! LIGNE ! »",
     "Il comprend, il fait armer, et vous courez — et à la sixième seconde vous savez déjà que huit ne suffiront pas.",
     { sobre:"Le carreau de gauche part trop tôt. Il vous passe assez près pour vous décoiffer.",
       intense:"Le carreau de gauche part une seconde trop tôt, parce qu'un servant de dix-neuf ans a lâché le déclencheur en voyant arriver une chose de trente-quatre pieds. Il vous passe à hauteur de tempe. Un carreau de baliste à quatre-vingts pas ne siffle pas : il claque, une seule fois, et l'air derrière lui vous gifle.",

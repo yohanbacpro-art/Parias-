@@ -102,7 +102,7 @@ ar_plan_dom:{
       extreme:"§ Un plan trop propre est un plan recopié. Et on ne recopie pas un plan de mine pour le plaisir : on le recopie pour en retirer quelque chose, et ce qu'on retire laisse toujours la même trace, qui est un vide." },
     "Le puits trois descend à cent quatre-vingts pieds et dessert quatre tailles. Les quatre tailles sont cotées, chiffrées, datées.",
     "Entre la deuxième et la troisième, il y a soixante-dix pieds de galerie sans un seul repère coté. Soixante-dix pieds de rien, sur un plan où tout est coté tous les vingt.",
-    "« Maître Corbeil, qu'y a-t-il entre la deuxième et la troisième taille du puits trois ? »",
+    "@« Maître Corbeil, qu'y a-t-il entre la deuxième et la troisième taille du puits trois ? »",
     "« Du roc. »",
     "« Soixante-dix pieds de roc sur lesquels on n'a pas jugé utile de porter une cote. »",
     "§ Il ne se trouble pas une seconde. Les hommes de sa sorte ne se troublent jamais : ils vous laissent avoir raison et ils comptent sur le fait que ça ne vous servira à rien.",
@@ -171,7 +171,7 @@ ar_termes:{
   qui:'maelys',
   titre:"Ce qu'Arquenay doit",
   texte:[
-    "« Corbeil m'a dit que vous refuseriez. »",
+    "@« Corbeil m'a dit que vous refuseriez. »",
     "« Corbeil dit ça de tout ce que je fais depuis huit mois, et il a eu raison huit fois sur onze. »",
     "Elle s'assied sur le timon d'un chariot vide, ce qu'une fille de maison ne fait pas, et qu'elle fait manifestement souvent.",
     "« Vous savez que je me marie en Floréal. »",
@@ -203,7 +203,7 @@ ar_termes:{
 ar_accord:{
   qui:'maelys',
   texte:[
-    "« Alors oui. »",
+    "@« Alors oui. »",
     "« Bien. » Elle se lève du timon et elle époussette sa robe, ce qui ne sert à rien sur une cour de roulage. « Après. Quand vous serez remonté. Et si vous ne remontez pas, ça n'aura été qu'une phrase dite dans une cour, ce qui est déjà plus que ce que j'ai dit en huit mois. »",
     "§ Elle a vingt ans et elle négocie mieux que son régisseur.",
     "« Une chose, messire. Quand vous serez en bas : si vous devez choisir entre le ramener lui et ramener quelqu'un d'autre, ramenez quelqu'un d'autre. »",
@@ -218,7 +218,7 @@ ar_accord:{
 ar_or_seul:{
   qui:'maelys',
   texte:[
-    "« L'or seul. »",
+    "@« L'or seul. »",
     "Elle hoche la tête une fois, sans commentaire, et c'est probablement la réponse la plus élégante possible.",
     "« Corbeil aura eu raison neuf fois sur douze. Il en sera insupportable. »",
     "§ Elle sourit. C'est la première fois en onze jours et ça ne dure pas.",
@@ -531,7 +531,7 @@ ar_dixneuf:{
 ar_tous:{
   melee:true,
   texte:[
-    "« Dans l'ordre où vous êtes assis. »",
+    "@« Dans l'ordre où vous êtes assis. »",
     "C'est la seule règle qu'on puisse énoncer à haute voix devant trente-quatre personnes sans avoir à la justifier, et c'est pour ça qu'on la choisit.",
     { sobre:"Douze cycles. Trois heures et demie. Le bois chante.",
       intense:"Douze cycles. Trois heures et demie. Personne ne discute l'ordre, personne ne triche, personne ne pousse — et c'est extraordinaire, et c'est aussi ce qui va coûter cher : des gens qui ne trichent pas mettent exactement le temps qu'il faut, et le temps qu'il faut est le temps qu'on n'a pas.",

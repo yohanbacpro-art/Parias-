@@ -608,8 +608,8 @@ const estReplique = t => /^[«—@^]/.test(t.trim());
  * est en face, et `@` sert à dire que non, cette fois, c'est Yohan.
  *
  * L'interlocuteur ouvre presque toujours : c'est lui qui vient. */
-const DIT_YOHAN = /\b(dites-vous|demandez-vous|répondez-vous|reprenez-vous|dites-le|lâchez-vous)\b/;
-const DIT_AUTRE = /»\s*(Elle|Il|Le |La )|\b(dit-elle|dit-il|répond-elle|répond-il|demande-t-elle|demande-t-il|répète-t-elle|répète-t-il|ajoute-t-elle|ajoute-t-il|reprend-elle|reprend-il|corrige-t-elle|constate-t-elle|fait-elle|souffle-t-elle)\b/;
+const DIT_YOHAN = /»[^«»]{0,24}?\b(dites|demandez|répondez|reprenez|constatez|répétez|lancez|corrigez|glissez|coupez|insistez|soufflez|ajoutez|concédez|admettez|articulez|murmurez|proposez|lâchez|objectez|précisez)-vous\b/;
+const DIT_AUTRE = /»[,.]?\s*(dit|répond|demande|ajoute|reprend|constate|lâche|souffle|concède|corrige|glisse|coupe|conclut|observe|remarque|répète|note|admet|lit|traduit|explique|précise|insiste|murmure|articule|fait|finit|objecte)[a-zéèêà-]*\s+(?:[A-ZÀ-Þ]|l['’]|l[ea] |une? |s[oa]n |m[oa] )|»\s*(Elle|Il|Le |La )|\b(dit|répond|demande|répète|ajoute|reprend|corrige|constate|fait|souffle|concède|lâche|conclut|observe|remarque|note|admet|explique|précise|insiste|murmure|articule|objecte)-t?-?(elle|il)\b/;
 
 function voixDe(t, dernier){
   if(/^@/.test(t.trim())) return 'yohan';
@@ -1077,7 +1077,7 @@ prologue_lettre:{
 },
 prologue_nom:{
   texte:[
-    "« Yohan. »",
+    "@« Yohan. »",
     "Le sergent d'étape écrit le nom sur son registre d'entrée avec l'application d'un homme qui sait à peine tenir une plume et qui y met un point d'honneur.",
     "« Yohan de quoi ? »",
     "« Yohan. »",
@@ -1093,7 +1093,7 @@ prologue_nom:{
 
 prologue_faux:{
   texte:[
-    "« Perrin. Perrin de Saulx. »",
+    "@« Perrin. Perrin de Saulx. »",
     "Le sergent d'étape écrit *Perrin de Saulx, homme d'armes, seul, à cheval* et ne lève pas les yeux une seule fois. C'est un bon faux nom : assez banal pour ne rien dire, assez précis pour ne pas sonner faux.",
     "« Signez, messire. Et si vous montez à Cendrepont, faites-le avant la nuit. On n'ouvre plus les portes après. »",
     "§ Vous signez d'une main qui n'est pas la vôtre. Vous savez le faire. Vous avez appris à le faire à seize ans, dans une remise, en trois nuits, parce que celui qui vous cachait alors avait dit que ça vous sauverait la vie plus souvent qu'une épée.",
@@ -1834,7 +1834,7 @@ palier_nomme:{
     "§ Onze ans à n'être personne. Onze ans qui viennent de finir dans une salle basse, un jour de semaine, par une phrase d'aubergiste.",
     "Ce n'est pas que du mauvais. Une maison qui demande un homme par son nom paie ce nom : les sommes du mur montent de moitié à partir d'aujourd'hui, et on cesse de vous proposer des escortes de laine.",
     "Ce qui monte aussi, c'est le nombre de gens qui n'ont pas besoin de vous pour du travail.",
-    "« Il a laissé un nom, l'homme ? »",
+    "@« Il a laissé un nom, l'homme ? »",
     "« Non, messire. Il a laissé un signalement. Le vôtre. »",
   ],
   effets:{ flags:['palier_nomme'],
@@ -2028,7 +2028,7 @@ wy_corps_ko:{
 wy_pourquoi_dom:{
   qui:'heloise',
   texte:[
-    "« Une wyverne ne s'installe pas en six semaines, madame. Elle bâtit un nid, et un nid de cette taille demande une saison entière. Elle est là depuis l'automne. »",
+    "@« Une wyverne ne s'installe pas en six semaines, madame. Elle bâtit un nid, et un nid de cette taille demande une saison entière. Elle est là depuis l'automne. »",
     "Le silence dure trois secondes de trop.",
     "« Depuis l'automne, oui. »",
     "« Et elle n'a rien pris pendant quatre mois. »",
@@ -2049,7 +2049,7 @@ wy_pourquoi_dom:{
 wy_pourquoi_ok:{
   qui:'heloise',
   texte:[
-    "« Une wyverne ne s'installe pas en six semaines. Elle est là depuis plus longtemps. »",
+    "@« Une wyverne ne s'installe pas en six semaines. Elle est là depuis plus longtemps. »",
     "Elle ne le nie pas, et elle ne le développe pas.",
     "« Depuis l'automne. Elle prenait des moutons sur le versant nord. Nous payions les bergers et nous nous taisions. »",
     "« Et qu'est-ce qui a changé ? »",
@@ -2112,15 +2112,15 @@ wy_termes:{
 wy_demande:{
   qui:'alienor',
   texte:[
-    "« Je ne le demanderai pas à votre tante. Je vous le demande à vous, et vous pouvez dire non devant elle. »",
+    "@« Je ne le demanderai pas à votre tante. Je vous le demande à vous, et vous pouvez dire non devant elle. »",
     "Héloïse ouvre la bouche. Aliénor lève deux doigts de la table et sa tante se tait, ce qui apprend sur cette maison davantage que le registre des dettes.",
     "« Bien. » La nièce se penche en avant, coudes sur les genoux, dans une posture d'homme qu'elle n'a manifestement jamais eu l'intention de corriger. « Alors on va parler comme des adultes, et je vais vous dire ce que j'y gagne, parce que je ne crois pas une seconde que vous accepteriez si je faisais celle qui vous trouve beau. »",
-    "« Cette maison a un héritier et c'est mon cousin Amaury. Vous ne l'avez pas encore rencontré. Vous allez le rencontrer, et dans un quart d'heure vous saurez ce que tout le monde ici sait depuis dix ans : c'est un homme faible qui se croit habile, et il finira par vendre cette vallée à quelqu'un qui lui dira qu'il est intelligent. »",
-    "« Ma tante tient la maison depuis onze ans parce qu'elle est meilleure que lui à tout. Le jour où elle meurt, il hérite. C'est la loi et la loi est bête. »",
+    "^« Cette maison a un héritier et c'est mon cousin Amaury. Vous ne l'avez pas encore rencontré. Vous allez le rencontrer, et dans un quart d'heure vous saurez ce que tout le monde ici sait depuis dix ans : c'est un homme faible qui se croit habile, et il finira par vendre cette vallée à quelqu'un qui lui dira qu'il est intelligent. »",
+    "^« Ma tante tient la maison depuis onze ans parce qu'elle est meilleure que lui à tout. Le jour où elle meurt, il hérite. C'est la loi et la loi est bête. »",
     "§ « Moi, je n'hérite de rien. Sauf si j'ai un enfant, et sauf si cet enfant a quelque chose que le sien n'aura pas. »",
     "Elle laisse ça poser. Le feu craque.",
     "« Le sang Paria se transmet une fois sur deux. Je le sais, ma tante le sait, et les archives de trois maisons de cette province le savent. Un enfant qui porte l'Onde, avec un nom de Valombre et une revendication écrite, ça ne se marie pas : ça se négocie. »",
-    "« Alors oui, messire. Pas pour vous. Vous n'y êtes pour rien et vous n'y serez pour rien : je ne vous demanderai jamais de le reconnaître, je ne vous écrirai pas, et si vous repassez dans huit ans je ne vous présenterai personne. »",
+    "^« Alors oui, messire. Pas pour vous. Vous n'y êtes pour rien et vous n'y serez pour rien : je ne vous demanderai jamais de le reconnaître, je ne vous écrirai pas, et si vous repassez dans huit ans je ne vous présenterai personne. »",
     "Un temps.",
     "« Si ça vous convient, dites-le maintenant. Si ça vous dégoûte, dites-le aussi — je préfère un homme qui trouve ça sale à un homme qui fait semblant de ne pas comprendre. »",
   ],
@@ -2149,13 +2149,13 @@ wy_demande:{
 wy_pretendant_dom:{
   qui:'alienor',
   texte:[
-    "« Vous n'êtes pas en train de me demander un service. Vous êtes en train de fabriquer un prétendant, et vous voulez que le géniteur soit quelqu'un qui ne reviendra jamais réclamer quoi que ce soit. »",
+    "@« Vous n'êtes pas en train de me demander un service. Vous êtes en train de fabriquer un prétendant, et vous voulez que le géniteur soit quelqu'un qui ne reviendra jamais réclamer quoi que ce soit. »",
     "Elle ne cille pas. Sa tante, au fond, s'assied — pour la première fois de l'entretien.",
     "« Oui. »",
     "§ « Et je vais vous dire ce qui me plaît chez vous, messire : vous venez de le dire à voix haute devant ma tante, ce que personne dans cette maison n'a osé faire en six ans. »",
     "Elle se redresse et son ton change, à peine.",
     "« Alors autant aller jusqu'au bout. Il y a une chose que je n'ai pas dite. Si j'ai un enfant de vous et qu'Amaury l'apprend, il essaiera de le faire disparaître. Pas moi — moi je suis sa cousine et il n'aura pas le cran. L'enfant, oui. »",
-    "« Je vous le dis parce que si vous acceptez, vous acceptez ça aussi, et je ne veux pas que vous puissiez prétendre plus tard que vous ne saviez pas. »",
+    "^« Je vous le dis parce que si vous acceptez, vous acceptez ça aussi, et je ne veux pas que vous puissiez prétendre plus tard que vous ne saviez pas. »",
     "Héloïse, du fond de la salle, sans lever la tête : « Elle a raison au sujet de mon fils. »",
     "C'est la phrase la plus lourde qui ait été prononcée dans cette pièce, et c'est une mère qui la dit.",
   ],
@@ -2180,7 +2180,7 @@ wy_pretendant_dom:{
 wy_pretendant_ok:{
   qui:'alienor',
   texte:[
-    "« Vous fabriquez un prétendant. »",
+    "@« Vous fabriquez un prétendant. »",
     "« Évidemment. » Elle a presque l'air agacée qu'il ait fallu le dire. « Vous croyiez quoi ? »",
     "Héloïse, du fond : « Ma nièce est franche par calcul, messire, pas par vertu. C'est plus fiable. »",
     "§ C'est probablement le compliment le plus laid que quelqu'un ait fait à quelqu'un d'autre devant vous.",
@@ -2231,7 +2231,7 @@ wy_pretendant_ko:{
 wy_or_seul:{
   qui:'heloise',
   texte:[
-    "« L'or seul. »",
+    "@« L'or seul. »",
     "Héloïse de Valombre fait apporter cinq cents couronnes et les compte devant vous. Une partie est en écus rognés de province ; elle le sait, vous le voyez, et elle continue de compter sans ralentir.",
     "Aliénor est encore là. Elle ne dit rien pendant tout le compte, et à la dernière pile elle sort sans regarder personne.",
     "§ Vous mettrez trois jours à comprendre que ce n'était pas du mépris.",
@@ -2261,7 +2261,7 @@ wy_or_apres:{
 wy_accord:{
   qui:'alienor',
   texte:[
-    "« Alors c'est dit. »",
+    "@« Alors c'est dit. »",
     "Héloïse fait apporter deux cent cinquante couronnes et un contrat en deux exemplaires, manifestement rédigé avant l'audience — ce qu'Aliénor remarque en même temps que vous et souligne d'un regard.",
     "Aliénor le lit en entier, debout, sans se presser, et raye trois lignes avant de signer. Elle fait recopier les ratures sur le second exemplaire et attend que l'encre sèche.",
     "« La première disait que je ne pouvais pas rompre. La deuxième disait que vous ne pouviez pas. La troisième disait que l'enfant éventuel serait présenté à la maison. »",
@@ -2269,7 +2269,7 @@ wy_accord:{
     "« Ma tante rédige des contrats comme elle tient des comptes : en se ménageant une porte partout. C'est ce qui a sauvé cette maison et c'est ce qui fait qu'on ne peut rien signer chez elle sans lire. »",
     "Héloïse ne le dément pas. Elle a même l'air, une seconde, presque fière.",
     "§ « Vous partez après-demain », dit Aliénor. « Je viendrai ce soir, quand votre entretien avec mon cousin sera fini. »",
-    "« Mon entretien avec votre cousin ? »",
+    "@« Mon entretien avec votre cousin ? »",
     "« Il viendra. Il vient toujours. »",
   ],
   effets:{ flags:['wy_prevenu_amaury'],
@@ -2280,7 +2280,7 @@ wy_accord:{
 wy_refus:{
   qui:'heloise',
   texte:[
-    "« Non. »",
+    "@« Non. »",
     "Elle ne discute pas, ne marchande pas, ne s'offusque pas. Elle reprend la lettre au sceau du héron et la range dans le coffret dont elle est sortie.",
     "« Vous avez lu les cinq mots que j'avais écrits et vous avez fait quatre jours de route pour venir me dire non en personne. C'est presque courtois. »",
     "Elle referme le coffret.",
@@ -2300,7 +2300,7 @@ wy_refus:{
 wy_coutume_imposee:{
   qui:'alienor',
   texte:[
-    "« L'or et le sang. »",
+    "@« L'or et le sang. »",
     "Héloïse hoche la tête. La coutume respectée est une chose qu'elle sait ranger, classer et oublier ; c'est même précisément à ça que servent les coutumes.",
     "Aliénor vous regarde longuement. Assez longuement pour que ce soit inconfortable, et sans une once d'hostilité — ce qui est pire.",
     "Puis elle dit, à sa tante et pas à vous : « Qu'on m'écrive les termes. Je les lirai avant de les tenir. »",
@@ -2358,13 +2358,13 @@ wy_amaury:{
 wy_amaury_dom:{
   qui:'amaury',
   texte:[
-    "« Qui vous a appris qu'une wyverne qui défend un territoire défend une couvée ? »",
+    "@« Qui vous a appris qu'une wyverne qui défend un territoire défend une couvée ? »",
     "Il ouvre la bouche. La referme. Et pendant une seconde entière, son visage fait exactement ce que fait le visage d'un homme qui vient de comprendre qu'il a récité.",
     "« C'est… tout le monde sait ça. »",
     "« Non. Moi je le sais parce que j'ai passé onze ans à me faire payer pour tuer des choses. Vous, vous ne savez pas monter à cheval sans étrier. Qui vous l'a dit ? »",
     "Il tient huit secondes. C'est plus que ce que vous auriez parié.",
     "§ « Gassien. Gassien le Lièvre. Il tient le relais de sel à trois lieues, au bas du gué. »",
-    "« Et pourquoi un homme qui tient un relais de sel sait-il ce qu'il y a dans un nid de wyverne ? »",
+    "@« Et pourquoi un homme qui tient un relais de sel sait-il ce qu'il y a dans un nid de wyverne ? »",
     "Cette fois il ne répond pas du tout, ce qui est la réponse.",
     "« Cent cinquante », dit-il à la place, très vite. « Cent cinquante couronnes et vous ne prononcez pas son nom devant ma mère. »",
   ],
@@ -2387,7 +2387,7 @@ wy_amaury_dom:{
 wy_amaury_ok:{
   qui:'amaury',
   texte:[
-    "« Qui vous a appris qu'il y avait une couvée ? »",
+    "@« Qui vous a appris qu'il y avait une couvée ? »",
     "« Personne. C'est de notoriété. »",
     "Il ment mal, mais il ment vite, et il enchaîne avant que vous puissiez revenir dessus — ce qui, chez un homme de vingt-huit ans qui n'a jamais rien porté de lourd, est probablement la seule compétence qu'il ait développée.",
     "« Cent couronnes, messire. Un œuf. C'est tout. »",
@@ -2424,13 +2424,13 @@ wy_amaury_ko:{
 wy_amaury_prix:{
   qui:'amaury',
   texte:[
-    "« Combien vaut un œuf de wyverne ? »",
+    "@« Combien vaut un œuf de wyverne ? »",
     "Il sourit. C'est la première chose sincère qu'il fait depuis qu'il est entré, et c'est laid.",
     "« Un œuf fécondé, sorti d'un nid, avec un témoin qui peut jurer de sa provenance ? »",
-    "« Entre huit cents et mille deux cents couronnes. Une bête montable, dressée depuis l'éclosion, tenue par quelqu'un qui sait ce qu'il fait : quatre mille. »",
+    "^« Entre huit cents et mille deux cents couronnes. Une bête montable, dressée depuis l'éclosion, tenue par quelqu'un qui sait ce qu'il fait : quatre mille. »",
     "§ « Il y en a trois dans ce nid, messire. Vous êtes en train de calculer, et vous avez raison de calculer. »",
     "« Ma mère va vendre la tour cette année. Elle vous l'a dit ? Elle le dit à tout le monde comme si c'était une fatalité. Ce n'est pas une fatalité. C'est un manque d'imagination. »",
-    "« Trois œufs, c'est trois mille couronnes. Trois mille couronnes, c'est la tour, les dettes de mon père, et de quoi tenir sept ans. »",
+    "^« Trois œufs, c'est trois mille couronnes. Trois mille couronnes, c'est la tour, les dettes de mon père, et de quoi tenir sept ans. »",
     "Il se penche.",
     "« Je ne suis pas un imbécile. Je suis le seul dans cette maison à voir qu'on est assis sur trois mille couronnes et qu'on paie un mercenaire pour aller les casser. »",
   ],
@@ -2528,7 +2528,7 @@ wy_nuit_sortie:{
   qui:'alienor',
   texte:[
     "Elle s'arrête, la bouteille à mi-chemin de sa bouche.",
-    "« Pourquoi ? »",
+    "@« Pourquoi ? »",
     "« Parce que je ne saurai pas quoi en faire demain. »",
     "« Ce n'est pas une raison, c'est un inconfort. » Elle boit. « Et ce n'est pas à vous d'être mal à l'aise à ma place. Je vous rappelle que c'est moi qui ai demandé. »",
     "Elle repose la bouteille sur le coffre, sèchement.",
@@ -2545,7 +2545,7 @@ wy_nuit_sortie:{
 wy_nuit_veut:{
   qui:'alienor',
   texte:[
-    "« Qu'est-ce que vous voulez, vous, cette nuit ? »",
+    "@« Qu'est-ce que vous voulez, vous, cette nuit ? »",
     "Elle ne répond pas tout de suite. Elle regarde l'entaille de sa paume droite, la rouvre du pouce, la referme.",
     "« Personne ne me l'a demandé depuis six ans. »",
     "Elle boit. Elle tend la bouteille.",
@@ -2608,7 +2608,7 @@ wy_nuit_ensemble:{
 wy_nuit_ellipse:{
   qui:'alienor',
   texte:[
-    "« On peut passer la nuit à parler. Le contrat n'oblige personne à autre chose que ce que les deux veulent. »",
+    "@« On peut passer la nuit à parler. Le contrat n'oblige personne à autre chose que ce que les deux veulent. »",
     "Elle vous regarde un long moment. Puis elle hausse une épaule, remonte les deux pieds sous elle sur le coffre, et tend la bouteille.",
     "« D'accord. »",
     "C'est tout. Pas de soulagement, pas de reproche, pas de scène — et c'est précisément ce qui rend la chose facile.",
@@ -2723,7 +2723,7 @@ wy_bracq_dom:{
     "§ « Ceux-là. Ceux que je viens de tendre. »",
     "Il repose le carreau dans la caisse et il n'a plus du tout envie de rire.",
     "« Quelqu'un a sorti une de mes balistes à l'automne, l'a montée quelque part sur le versant nord, a tiré sur une bête qui mangeait des moutons et ne descendait pas, l'a blessée, et l'a remontée dans son râtelier avant que je m'en aperçoive. »",
-    "« Il y a trois hommes dans cette vallée qui savent tendre un de ces engins. Moi, et deux de mes servants. Et mes deux servants étaient à Chastel en octobre. »",
+    "^« Il y a trois hommes dans cette vallée qui savent tendre un de ces engins. Moi, et deux de mes servants. Et mes deux servants étaient à Chastel en octobre. »",
   ],
   effets:{ flags:['wy_sait_fleches','wy_sait_baliste','wy_bracq_allie'],
            exploit:{ eclat:4, temoins:'quelques', quoi:"vous avez posé la question que personne n'osait" },
@@ -2734,7 +2734,7 @@ wy_bracq_dom:{
 wy_bracq_ok:{
   qui:'bracq',
   texte:[
-    "« On a retiré un carreau de son aile gauche à la première caravane. Un carreau, pas une flèche. »",
+    "@« On a retiré un carreau de son aile gauche à la première caravane. Un carreau, pas une flèche. »",
     "Il vous montre la caisse mais ne l'ouvre pas.",
     "« Militaire. Poinçonné. Je ne vous dirai pas de quel arsenal parce que je tiens à ma place et à mes trois doigts. »",
     "§ « Mais posez-vous la question suivante, messire, et posez-la à quelqu'un d'autre que moi : qui, dans une vallée de bergers, a de quoi tirer un carreau de baliste sur une bête à cent pieds ? »",
@@ -2970,7 +2970,7 @@ wy_gassien_cout:{
 wy_gassien_ko:{
   qui:'gassien',
   texte:[
-    "« Vous rabattez les caravanes sous le nid. »",
+    "@« Vous rabattez les caravanes sous le nid. »",
     "Il ne bouge pas d'un cil.",
     "« Je vends du sel. »",
     "Et il continue de vendre du sel pendant un quart d'heure, avec une patience de saint, en répondant à côté de chaque question avec une précision qui n'est possible que chez un homme qui a préparé cet entretien.",
@@ -3006,10 +3006,10 @@ wy_gassien_choix:{
   texte:[
     "Il attend. Il ne supplie pas, ne menace pas, ne se lève même pas de sa caisse.",
     "« Vous avez trois façons de finir cette conversation, messire, et je vais vous les donner parce que vous les trouverez tout seul de toute façon. »",
-    "« Vous me tuez. Personne ne me pleure, mes quatre hommes se dispersent, et le fils de Valombre trouve quelqu'un d'autre dans le mois — il a l'argent et il a maintenant l'idée, et l'idée est la partie difficile. »",
-    "« Vous me livrez. Le prévôt me pend ou ne me pend pas selon ce qu'il touche, et dans les deux cas le nom du fils de Valombre sort au procès, et la maison qui vous paie tombe avec moi. »",
+    "^« Vous me tuez. Personne ne me pleure, mes quatre hommes se dispersent, et le fils de Valombre trouve quelqu'un d'autre dans le mois — il a l'argent et il a maintenant l'idée, et l'idée est la partie difficile. »",
+    "^« Vous me livrez. Le prévôt me pend ou ne me pend pas selon ce qu'il touche, et dans les deux cas le nom du fils de Valombre sort au procès, et la maison qui vous paie tombe avec moi. »",
     "§ « Ou vous prenez ma part. Trois œufs, mille couronnes pièce, je fournis les caisses, les mules et l'homme qui sait les tenir chauds. »",
-    "« Je ne vous conseille rien. Je constate que vous êtes payé deux cent cinquante couronnes pour un travail qui en vaut trois mille. »",
+    "^« Je ne vous conseille rien. Je constate que vous êtes payé deux cent cinquante couronnes pour un travail qui en vaut trois mille. »",
   ],
   choix:[
     { t:"Le tuer",
@@ -3788,7 +3788,7 @@ wy_c2_gauche_ko:{
 wy_c2_baliste_dom:{
   melee:true, qui:'bracq',
   texte:[
-    "« BRACQ ! LIGNE ! »",
+    "@« BRACQ ! LIGNE ! »",
     "Vous ne criez pas pour être entendu — à quatre-vingts pas, dans une gorge, on n'entend rien. Vous criez pour qu'il voie la bouche bouger et qu'il comprenne le seul mot qui compte.",
     "Il comprend. Un homme qui monte des machines de siège depuis onze ans dans le froid ne comprend jamais autre chose que ce mot-là.",
     "Ensuite c'est de l'arithmétique, et l'arithmétique se fait avec les jambes : vous devez la garder derrière vous et vous mettre hors de l'axe en huit secondes, sur un sol qui ne pardonne pas, avec une bête qui vous suit parce que vous êtes ce qui bouge.",
@@ -3808,7 +3808,7 @@ wy_c2_baliste_dom:{
 wy_c2_baliste_cout:{
   melee:true,
   texte:[
-    "« BRACQ ! LIGNE ! »",
+    "@« BRACQ ! LIGNE ! »",
     "Il comprend, il fait armer, et vous courez — et à la sixième seconde vous savez déjà que huit ne suffiront pas.",
     { sobre:"Le carreau de gauche part trop tôt. Il vous passe assez près pour vous décoiffer.",
       intense:"Le carreau de gauche part une seconde trop tôt, parce qu'un servant de dix-neuf ans a lâché le déclencheur en voyant arriver une chose de trente-quatre pieds. Il vous passe à hauteur de tempe. Un carreau de baliste à quatre-vingts pas ne siffle pas : il claque, une seule fois, et l'air derrière lui vous gifle.",
@@ -4955,7 +4955,7 @@ ro_audience:{
 ro_ordre_dom:{
   qui:'guichard',
   texte:[
-    "« Vous avez leurs noms ? »",
+    "@« Vous avez leurs noms ? »",
     "« Bien sûr que j'ai leurs noms. »",
     "« Dans l'ordre où ils sont morts. Et à côté de chacun, où il servait il y a deux ans. »",
     { sobre:"Il faut une heure et le rôle de la garnison. Ça se voit tout de suite.",
@@ -4996,7 +4996,7 @@ ro_ordre_ok:{
 ro_ordre_ko:{
   qui:'guichard',
   texte:[
-    "« Dans quel ordre ? »",
+    "@« Dans quel ordre ? »",
     "« Dans l'ordre où on les a trouvés, messire. Je ne tiens pas un livre de comptes de mes morts. »",
     "C'est faux — toutes les maisons tiennent un livre de comptes de leurs morts, ne serait-ce que pour les soldes — et le fait qu'il choisisse ce mensonge-là plutôt qu'un autre est en soi un renseignement.",
     "§ Sauf que vous ne savez pas encore quoi en faire, et qu'un renseignement dont on ne sait rien faire n'est qu'une gêne.",
@@ -5017,7 +5017,7 @@ ro_aveu:{
       extreme:"« Et une nuit d'octobre, il est reparti sur la lande, à cheval, la figure enveloppée dans un linge, et ma patrouille l'a escorté jusqu'à la borne comme on escorte un hôte de qualité. Quatorze hommes sont partis. Quatorze sont revenus. Et le lendemain matin, on a lavé le sol de la chambre haute, et personne — personne, messire — n'a demandé pourquoi il y avait à laver. »" },
     "« Qui lui a pris le visage ? »",
     "Silence.",
-    "« Vous ne me paierez pas quatre cents couronnes pour tuer un homme dont vous refusez de me dire pourquoi il tue. »",
+    "@« Vous ne me paierez pas quatre cents couronnes pour tuer un homme dont vous refusez de me dire pourquoi il tue. »",
     "« Si. C'est exactement ce que je vais faire. »",
     "§ Il a raison, et vous le savez tous les deux, et c'est la partie du métier dont on ne parle pas au moment de signer.",
     "« Vous êtes le douzième nom sur cette liste. »",
@@ -5100,7 +5100,7 @@ ro_ermengarde:{
     "« Une nuit entière. »",
     "Elle dit ça sans effet, en regardant les cadres.",
     "§ « Il n'a pas crié. C'est la chose dont je ne me suis jamais remise. Il n'a pas crié une seule fois, et j'ai su à ce moment-là qu'il en sortirait vivant. »",
-    "« Qui ? »",
+    "@« Qui ? »",
     "« Ser Baudoin d'Escaut. Le mari de ma tante. Il a quarante ans, il est aimé de toute cette maison, il m'a appris à monter à cheval et il m'apporte des oranges à la Saint-Marc. »",
     "Un temps.",
     "« Ils étaient quatre dans la chambre et quatorze dans le couloir. Les quatre ont fait, les quatorze ont regardé, et tout le monde ici sait que ça a eu lieu et personne ne sait le dire à voix haute — moi comprise, messire, jusqu'à il y a quatre minutes. »",
@@ -5150,7 +5150,7 @@ ro_termes:{
 ro_or_seul:{
   qui:'guichard',
   texte:[
-    "« L'or. Rien d'autre. »",
+    "@« L'or. Rien d'autre. »",
     "Guichard de Rochebrune vous regarde comme s'il n'avait pas entendu, puis il comprend qu'il a entendu.",
     { sobre:"« Vous savez que ça se remarque. »",
       intense:"« Vous savez que ça se remarque, messire ? Un Paria qui ne réclame pas la coutume. Dans les maisons du nord ça fait une histoire, et les histoires arrivent avant les hommes. »",
@@ -5165,7 +5165,7 @@ ro_or_seul:{
 ro_apres:{
   qui:'guichard',
   texte:[
-    "« On verra après. »",
+    "@« On verra après. »",
     "« Non », dit Guichard de Rochebrune, et c'est la première fois qu'il dit non de tout l'entretien. « On ne verra pas après. »",
     { sobre:"« Après, il y aura un mort et une dette. »",
       intense:"« Après, messire, il y aura un mort, une dette, un homme couvert de sang dans ma salle d'armes et une maison qui vous doit tout. Vous savez très bien ce qui se passe dans ces cas-là. Moi aussi : j'ai cinquante-trois ans et j'ai vu ça deux fois. »",
@@ -5215,7 +5215,7 @@ ro_demande:{
 ro_accord:{
   qui:'ermengarde',
   texte:[
-    "« Alors c'est dit. »",
+    "@« Alors c'est dit. »",
     "« C'est dit. » Elle ajoute, sans changer de ton : « Après. Pas avant. Je ne veux pas de la version où vous montez sur cette lande en me devant quelque chose. »",
     "§ Elle vient d'appliquer la règle mieux que vous. C'est fréquent et ça ne s'améliore pas avec l'âge.",
     "Elle décroche une clef de sa ceinture et la pose sur un tonneau.",
@@ -5229,7 +5229,7 @@ ro_accord:{
 ro_refus:{
   qui:'ermengarde',
   texte:[
-    "« Non. Pas comme ça. »",
+    "@« Non. Pas comme ça. »",
     "Elle ne bouge pas d'un pouce.",
     "« Développez. »",
     "« Vous ne dites pas oui à moi. Vous dites non à votre père et à votre tante, et je suis l'instrument. Je ne suis pas contre être un instrument, ça m'est arrivé souvent — mais pas de cet instrument-là. »",
@@ -5805,7 +5805,7 @@ ro_heaume_ote:{
 ro_arret_dom:{
   qui:'aldren',
   texte:[
-    "« Arrêtez. »",
+    "@« Arrêtez. »",
     "Il s'arrête. Pas parce que vous l'avez demandé : parce qu'un homme qui parle pendant un combat vient de faire une chose que personne n'a faite depuis deux ans.",
     "« Vous ne pouvez rien me proposer, messire. »",
     "« Non. »",
@@ -5841,7 +5841,7 @@ ro_arret_dom:{
 ro_arret_cout:{
   qui:'aldren',
   texte:[
-    "« Arrêtez. »",
+    "@« Arrêtez. »",
     "« Non. »",
     "Il n'y a rien d'autre. Pas de discours, pas d'explication : un homme qui a passé deux ans sur une lande à descendre une liste ne s'arrête pas parce qu'un inconnu le lui demande en pleine nuit.",
     { sobre:"Il ne s'arrête pas et vous avez baissé la garde pour parler.",
@@ -5879,7 +5879,7 @@ ro_battu:{
 ro_laisser:{
   qui:'aldren',
   texte:[
-    "« Finissez. Je ne vous gêne pas. »",
+    "@« Finissez. Je ne vous gêne pas. »",
     "Le heaume ne bouge pas pendant un long moment.",
     "« Vous êtes payé quatre cents couronnes pour me tuer. »",
     "« Oui. »",
@@ -5902,7 +5902,7 @@ ro_laisser:{
 ro_vivant:{
   qui:'aldren',
   texte:[
-    "« Je vous ramène à Rochebrune. Vivant. »",
+    "@« Je vous ramène à Rochebrune. Vivant. »",
     "« Pour quoi faire ? »",
     "« Pour que quatorze noms soient dits à voix haute dans une salle. »",
     { sobre:"Le heaume s'incline. C'est peut-être un rire.",
@@ -6189,7 +6189,7 @@ ar_plan_dom:{
       extreme:"§ Un plan trop propre est un plan recopié. Et on ne recopie pas un plan de mine pour le plaisir : on le recopie pour en retirer quelque chose, et ce qu'on retire laisse toujours la même trace, qui est un vide." },
     "Le puits trois descend à cent quatre-vingts pieds et dessert quatre tailles. Les quatre tailles sont cotées, chiffrées, datées.",
     "Entre la deuxième et la troisième, il y a soixante-dix pieds de galerie sans un seul repère coté. Soixante-dix pieds de rien, sur un plan où tout est coté tous les vingt.",
-    "« Maître Corbeil, qu'y a-t-il entre la deuxième et la troisième taille du puits trois ? »",
+    "@« Maître Corbeil, qu'y a-t-il entre la deuxième et la troisième taille du puits trois ? »",
     "« Du roc. »",
     "« Soixante-dix pieds de roc sur lesquels on n'a pas jugé utile de porter une cote. »",
     "§ Il ne se trouble pas une seconde. Les hommes de sa sorte ne se troublent jamais : ils vous laissent avoir raison et ils comptent sur le fait que ça ne vous servira à rien.",
@@ -6258,7 +6258,7 @@ ar_termes:{
   qui:'maelys',
   titre:"Ce qu'Arquenay doit",
   texte:[
-    "« Corbeil m'a dit que vous refuseriez. »",
+    "@« Corbeil m'a dit que vous refuseriez. »",
     "« Corbeil dit ça de tout ce que je fais depuis huit mois, et il a eu raison huit fois sur onze. »",
     "Elle s'assied sur le timon d'un chariot vide, ce qu'une fille de maison ne fait pas, et qu'elle fait manifestement souvent.",
     "« Vous savez que je me marie en Floréal. »",
@@ -6290,7 +6290,7 @@ ar_termes:{
 ar_accord:{
   qui:'maelys',
   texte:[
-    "« Alors oui. »",
+    "@« Alors oui. »",
     "« Bien. » Elle se lève du timon et elle époussette sa robe, ce qui ne sert à rien sur une cour de roulage. « Après. Quand vous serez remonté. Et si vous ne remontez pas, ça n'aura été qu'une phrase dite dans une cour, ce qui est déjà plus que ce que j'ai dit en huit mois. »",
     "§ Elle a vingt ans et elle négocie mieux que son régisseur.",
     "« Une chose, messire. Quand vous serez en bas : si vous devez choisir entre le ramener lui et ramener quelqu'un d'autre, ramenez quelqu'un d'autre. »",
@@ -6305,7 +6305,7 @@ ar_accord:{
 ar_or_seul:{
   qui:'maelys',
   texte:[
-    "« L'or seul. »",
+    "@« L'or seul. »",
     "Elle hoche la tête une fois, sans commentaire, et c'est probablement la réponse la plus élégante possible.",
     "« Corbeil aura eu raison neuf fois sur douze. Il en sera insupportable. »",
     "§ Elle sourit. C'est la première fois en onze jours et ça ne dure pas.",
@@ -6618,7 +6618,7 @@ ar_dixneuf:{
 ar_tous:{
   melee:true,
   texte:[
-    "« Dans l'ordre où vous êtes assis. »",
+    "@« Dans l'ordre où vous êtes assis. »",
     "C'est la seule règle qu'on puisse énoncer à haute voix devant trente-quatre personnes sans avoir à la justifier, et c'est pour ça qu'on la choisit.",
     { sobre:"Douze cycles. Trois heures et demie. Le bois chante.",
       intense:"Douze cycles. Trois heures et demie. Personne ne discute l'ordre, personne ne triche, personne ne pousse — et c'est extraordinaire, et c'est aussi ce qui va coûter cher : des gens qui ne trichent pas mettent exactement le temps qu'il faut, et le temps qu'il faut est le temps qu'on n'a pas.",
@@ -7097,7 +7097,7 @@ va_lu_ko:{
   texte:[
     "Trois pages. Vous les lisez et vous comprenez la première.",
     "§ Un homme d'armes qui lit un acte de clerc est un homme d'armes qui regarde du papier, et c'est très exactement la raison pour laquelle il y a des clercs.",
-    "« Ça a l'air en ordre. »",
+    "@« Ça a l'air en ordre. »",
     "« Ça l'est », dit Aymar de Vauclair.",
     "Et c'est vrai. C'est parfaitement en ordre, et c'est le problème.",
   ],
@@ -7111,7 +7111,7 @@ va_concession:{
     { sobre:"Vauclair a la concession depuis six ans. Elle porte sur onze mille arpents.",
       intense:"Aymar de Vauclair a obtenu la concession d'exploitation il y a six ans, l'année de son héritage, sur onze mille arpents de marais. C'est en ordre, c'est enregistré, c'est payé.",
       extreme:"Aymar de Vauclair a obtenu la concession d'exploitation six ans plus tôt, l'année de son héritage, sur onze mille arpents. C'est en ordre, enregistré, payé, contresigné. Il n'y a pas la moindre irrégularité et le greffier le dit avec une pointe de fierté professionnelle, comme on parle d'un dossier bien tenu." },
-    "« Et les gens qui habitent dedans ? »",
+    "@« Et les gens qui habitent dedans ? »",
     "« Une concession d'exploitation ne porte pas sur les habitants, messire. Elle porte sur la tourbe. »",
     "« Donc ils peuvent rester. »",
     "Le greffier réfléchit sérieusement, parce que c'est un homme sérieux.",
@@ -7185,7 +7185,7 @@ va_termes:{
 va_accord:{
   qui:'iselle',
   texte:[
-    "« C'est dit. »",
+    "@« C'est dit. »",
     "« C'est dit. » Elle referme son registre. « Après. Et pas dans cette maison : à l'auberge du bourg, où tout le monde nous verra, parce que c'est tout l'intérêt. »",
     "§ Elle organise sa propre disgrâce avec la même application qu'une colonne de chiffres, et elle est la seule personne de cette province à avoir un plan.",
     "« Une dernière chose, messire. Quand vous serez dans le marais. »",
@@ -7202,7 +7202,7 @@ va_accord:{
 va_or_seul:{
   qui:'iselle',
   texte:[
-    "« L'or seul. »",
+    "@« L'or seul. »",
     "« Bien. » Elle rouvre son registre, et il faut trois secondes pour voir que c'est un geste de contenance. « Vous m'obligez à trouver autre chose, ce qui est ennuyeux mais faisable. »",
     "§ Elle n'est ni blessée ni soulagée. Elle recalcule, c'est tout, et c'est ce qu'elle fait de mieux.",
     "« Je vous dois quand même un renseignement, puisque vous n'avez rien pris. Estève parle, et il ment très bien. Écoutez le petit : il a dix-neuf ans et il n'a pas encore appris. »",
@@ -7289,7 +7289,7 @@ va_passes_ko:{
 va_guide:{
   texte:[
     "Le guide s'appelle Perrot, il a soixante ans, il coupe du saule pour les vanniers, et il connaît les passes parce que tout le bourg les connaît.",
-    "« Tout le bourg les connaît ? »",
+    "@« Tout le bourg les connaît ? »",
     "« Tout le bourg y a de la famille, messire. C'est la même famille. »",
     { sobre:"C'est le renseignement le plus important de l'affaire et il tombe en quatre mots.",
       intense:"C'est le renseignement le plus important de toute l'affaire et il tombe en quatre mots, sur un chemin, à un étranger qui a payé quarante couronnes. Les quatre-vingts du marais et les six cents du bourg ne sont pas deux populations : c'est une seule, coupée en deux il y a trente ans par quelque chose, et les deux moitiés se marient encore entre elles.",
@@ -7464,7 +7464,7 @@ va_greffe_ko:{
 va_deux:{
   qui:'esteve',
   texte:[
-    "« Deux. »",
+    "@« Deux. »",
     "Estève met un moment à comprendre, puis il comprend, et ce qu'il fait alors est la chose la plus difficile à regarder de tout le contrat : il hoche la tête.",
     "« Deux cents couronnes au lieu de six cents. Vous perdez quatre cents. »",
     "« Oui. »",
@@ -7505,7 +7505,7 @@ va_fin_greffe:{
     "« Je vous paie les deux cents. Vous n'avez ramené personne, mais vous avez rempli le contrat au sens strict : le marais ne me pose plus de problème de police. Il me pose un problème de droit, ce qui est plus cher et plus long. »",
     "Il compte lui-même, en piles de vingt.",
     "§ « Une chose, messire, et ce n'est pas une menace, c'est un point de fait. Un acte s'attaque. Ça prend des années et de l'argent, et j'ai les deux. »",
-    "« Ils ont trente ans de possession et un registre. »",
+    "@« Ils ont trente ans de possession et un registre. »",
     "« Ils ont ça, oui. Et moi j'ai le temps, et eux ont vingt-six enfants à nourrir dans un marais dont je possède la tourbe. »",
     "Il pousse les deux cents couronnes vers vous.",
     "« Vous avez gagné une génération. C'est plus que ce que gagne la plupart des gens. »",
@@ -7647,7 +7647,7 @@ tr_audience:{
     "« Et le troll. »",
     "« Il s'appelle Harn. »",
     "§ Elle a dit un nom. Personne ne donne un nom à ce qu'on paie pour tuer, et elle vient de le faire en trois secondes sans y penser.",
-    "« Il tient ce pont depuis avant ma grand-mère. Il prenait un sou par essieu et un mouton par an, et ça a marché pendant deux cents ans parce que c'est moins cher qu'un huitième. »",
+    "^« Il tient ce pont depuis avant ma grand-mère. Il prenait un sou par essieu et un mouton par an, et ça a marché pendant deux cents ans parce que c'est moins cher qu'un huitième. »",
     "« Et maintenant ? »",
     "« Maintenant il ne veut plus d'argent. Il demande une histoire vraie. »",
     "Elle dit ça sans ironie et sans embarras, du ton dont on rapporte un fait de gestion.",
@@ -7725,7 +7725,7 @@ tr_meunier:{
   qui:'meunier',
   texte:[
     "Le meunier de l'amont a soixante-trois ans et il passe ce pont depuis qu'il en a vingt-trois. Quarante ans de sacs, quarante ans de sous par essieu.",
-    "« Vous lui avez parlé, en quarante ans ? »",
+    "@« Vous lui avez parlé, en quarante ans ? »",
     "« Tous les mois. »",
     "§ Personne dans cette province n'a pensé à poser cette question et il y répond comme si elle allait de soi.",
     "« Il connaît mon père, mon grand-père et mon arrière-grand-père. Il me raconte des choses sur mon arrière-grand-père que ma famille a oubliées. Il sait qu'il boitait. Il sait de quel côté. »",
@@ -7790,7 +7790,7 @@ tr_pont:{
     "Il a une main posée à plat sur la pierre du parapet, et il en caresse le joint avec le pouce, sans y penser, comme un homme caresse la table de sa cuisine.",
     "« Tu es le douzième. »",
     "La voix est basse et elle porte peu : il ne fait aucun effort pour être impressionnant, ce qui est infiniment plus impressionnant.",
-    "« Je suis le douzième. »",
+    "@« Je suis le douzième. »",
     "« Les onze ont menti. Pas tous en mentant — trois ont dit des choses vraies qu'ils s'étaient déjà dites cent fois, ce qui est la même chose et qui coûte pareil. »",
     "§ « Une chose vraie que tu n'as dite à personne. Et que tu ne t'es pas dite non plus. »",
     "« Sinon ? »",
@@ -7956,7 +7956,7 @@ tr_karlsberg:{
       intense:"Vous racontez mal. Vous commencez par le milieu, vous revenez, vous vous arrêtez sur un détail sans importance — l'odeur du buis coupé dans la cour, parce qu'on avait taillé le buis ce jour-là — et vous restez deux minutes sur ce buis sans arriver à en sortir. C'est ce qui fait que ça marche.",
       extreme:"Vous racontez mal. Vous commencez par le milieu, vous revenez, vous vous arrêtez sur un détail sans importance — l'odeur du buis coupé dans la cour, parce qu'on avait taillé le buis ce jour-là — et vous restez deux minutes sur ce buis sans arriver à en sortir. Vous cherchez le nom d'une servante et vous ne le retrouvez pas. Vous employez trois fois de suite le même mot médiocre. C'est ce qui fait que ça marche, et vous ne le faites pas exprès." },
     "Vous dites le nom. Vous le dites au milieu, sans préparation, parce qu'il faut bien nommer une maison pour raconter ce qui lui est arrivé.",
-    "« Karlsberg. »",
+    "@« Karlsberg. »",
     "§ Il ne bouge pas. Sa main s'arrête sur le joint de pierre et elle y reste.",
     "Vous racontez dix-neuf ans en un peu plus d'une heure. Il ne vous interrompt pas une fois.",
     "Quand vous avez fini, il attend encore — longtemps, beaucoup plus longtemps que pour les autres — puis il dit une seule chose :",
@@ -7991,7 +7991,7 @@ tr_mere:{
       intense:"Il ferme les yeux — la seule fois de tout l'entretien — et quand il parle, la voix change : elle devient plus rapide, plus haute, et ce n'est plus tout à fait la sienne. Il ne raconte pas ce qu'elle a dit. Il le **rend**.",
       extreme:"Il ferme les yeux, la seule fois de tout l'entretien, et quand il parle, la voix change. Plus rapide, plus haute, avec un défaut de prononciation sur les *r* qui n'est pas le sien. Il ne raconte pas ce qu'elle a dit : il le rend. Deux cent onze ans de mémoire ne sont pas un livre où l'on prend des notes — c'est autre chose, et personne dans cette province n'a jamais eu à en supporter la démonstration." },
     "« *Ils avaient l'ordonnance. Je l'ai vue sur la table de mon mari trois jours avant. Elle était signée du bas de la maison, pas du haut : ce n'est pas Chastel qui a fait rayer Karlsberg, c'est quelqu'un de chez nous qui le leur a demandé, et Chastel a simplement dit oui parce qu'on dit toujours oui à ce genre de demande.* »",
-    "« *Je ne dirai pas le nom à mes enfants. Ils passeront leur vie à le chercher et ils mourront pour ça. Je préfère qu'ils ne sachent rien et qu'ils vivent vieux.* »",
+    "^« *Je ne dirai pas le nom à mes enfants. Ils passeront leur vie à le chercher et ils mourront pour ça. Je préfère qu'ils ne sachent rien et qu'ils vivent vieux.* »",
     "§ Il rouvre les yeux.",
     "« Voilà. Je te l'ai rendu entier. Elle n'a pas dit le nom : elle ne l'a dit à personne, et je ne l'ai pas. »",
     "« Elle est morte trois ans après. »",
@@ -8102,7 +8102,7 @@ tr_c_onde_dom:{
     "Il se rassied à sa place, sur le parapet, les pieds vers l'amont.",
     "« Karlsberg. »",
     "Vous ne l'avez pas dit.",
-    "« Je n'ai pas dit— »",
+    "@« Je n'ai pas dit— »",
     "« Non. » Il caresse le joint du pouce. « Mais j'ai deux cent onze ans, et j'ai vu ça deux fois, et la deuxième c'était une femme sur ce pont il y a vingt ans qui avait deux enfants et une charrette de louage. »",
     "« Passe, le fils. Le grain passera aussi. »",
     "§ Il ne demande pas d'histoire. Il vient d'en recevoir une et vous ne l'avez pas racontée.",
@@ -8352,7 +8352,7 @@ ha_audience:{
 ha_rancon:{
   qui:'hauterive',
   texte:[
-    "« Quelle rançon ? »",
+    "@« Quelle rançon ? »",
     "Il y a un silence de trois secondes, et trois secondes chez un homme qui a fermé les portes avant de dire bonjour, c'est une réponse complète.",
     "« Il n'y en a pas eu. »",
     "« Dix-huit jours et pas de demande. »",
@@ -8374,7 +8374,7 @@ ha_rancon:{
 ha_chambriere:{
   texte:[
     "Elle s'appelle Guiote, elle a quarante ans, elle habille Isabeau de Hauterive depuis onze ans, et elle est la seule personne de cette maison qui pleure vraiment.",
-    "« Elle a emporté quoi, pour son pèlerinage ? »",
+    "@« Elle a emporté quoi, pour son pèlerinage ? »",
     "« Un coffre. »",
     "« Quelle taille ? »",
     { sobre:"« Grand comme ça. » Elle montre. C'est petit.",
@@ -8385,7 +8385,7 @@ ha_chambriere:{
     "« Guiote. »",
     "Elle regarde la porte. Elle a quarante ans, elle a onze ans de place dans cette maison, et il n'y a rien d'autre pour elle à trente lieues.",
     "§ « Des lettres. Elle les rangeait la nuit et elle les ressortait la nuit, et elle en a recopié pendant trois mois. »",
-    "« Recopié ? »",
+    "@« Recopié ? »",
     "« De sa main. Elle recopiait des lettres qui n'étaient pas d'elle. »",
     "Un temps.",
     "« Et elle a demandé au palefrenier, en Ventôse, combien de jours il faut pour aller à Chastel par les petites routes. »",
@@ -8418,7 +8418,7 @@ ha_termes:{
   qui:'hauterive',
   titre:"Ce que Hauterive doit",
   texte:[
-    "« Vous avez écrit les cinq mots. »",
+    "@« Vous avez écrit les cinq mots. »",
     "« Mon clerc les a écrits. C'est la formule d'usage quand on s'adresse à un homme de votre sorte, et je ne l'ai pas relue. »",
     "§ Voilà une chose qu'aucune maison n'avait encore dite à voix haute : la coutume ancienne est devenue une formule de politesse dans un modèle de lettre.",
     "« Elle est due ou elle ne l'est pas. »",
@@ -8428,7 +8428,7 @@ ha_termes:{
     { sobre:"Il pose une bourse sur la table.",
       intense:"Il pose une bourse sur la table, et le geste est celui d'un homme qui règle un compte, pas d'un homme qui achète quelque chose.\n\n« Deux cent quatre-vingts, et deux cents de plus au titre de la coutume, en argent, parce que je n'ai personne à qui la demander et que je ne vais pas demander à quelqu'un qui n'est pas de ma maison. »",
       extreme:"Il pose une bourse sur la table, du geste d'un homme qui règle un compte et non de celui qui achète quelque chose.\n\n« Deux cent quatre-vingts, et deux cents de plus au titre de la coutume, en argent. Je n'ai personne à qui la demander, je ne vais pas demander à quelqu'un qui n'est pas de ma maison, et l'idée de vous proposer ma femme quand vous partez la chercher me paraît d'une bassesse qui dépasse même ce que vous devez déjà penser de moi. »" },
-    "« C'est régulier ? »",
+    "@« C'est régulier ? »",
     "« C'est régulier. La coutume prévoit la compensation quand la maison ne peut pas fournir. Vérifiez si vous voulez : c'est écrit, ça date de trois cents ans, et ça a été écrit par des gens qui avaient prévu ce cas exact. »",
     "§ Il a raison. C'est le seul point de toute cette affaire où cet homme est irréprochable, et il tient à ce qu'on le note.",
   ],
@@ -8445,11 +8445,11 @@ ha_termes:{
 ha_compensation:{
   qui:'hauterive',
   texte:[
-    "« J'accepte la compensation. »",
+    "@« J'accepte la compensation. »",
     "« Bien. »",
     "Il compte. Il compte vite et bien, comme tout ce qu'il fait.",
     "§ Quatre cent quatre-vingts couronnes avant d'avoir monté à cheval. C'est le plus gros paiement de l'acte et il arrive avant le travail, ce qui n'arrive jamais.",
-    "« Vous payez d'avance. »",
+    "@« Vous payez d'avance. »",
     "« Je paie d'avance parce que je veux que vous soyez déjà payé quand vous la verrez. »",
     "« Pourquoi ? »",
     "« Parce qu'elle vous offrira davantage. »",
@@ -8462,7 +8462,7 @@ ha_compensation:{
 ha_refus_comp:{
   qui:'hauterive',
   texte:[
-    "« Non. La coutume n'est pas une somme. Quand une maison ne peut pas fournir, elle ne fournit pas : elle ne rachète pas. »",
+    "@« Non. La coutume n'est pas une somme. Quand une maison ne peut pas fournir, elle ne fournit pas : elle ne rachète pas. »",
     { sobre:"Il vous regarde d'une façon nouvelle.",
       intense:"Il vous regarde d'une façon nouvelle — pas avec sympathie : avec intérêt, ce qui est beaucoup plus dangereux chez un homme qui va siéger au conseil de province.",
       extreme:"Il vous regarde d'une façon nouvelle. Pas avec sympathie : avec intérêt, ce qui est infiniment plus dangereux chez un homme qui va siéger au conseil de province et qui vient de découvrir qu'un Paria peut refuser deux cents couronnes pour une raison de forme." },
@@ -8523,7 +8523,7 @@ ha_isabeau:{
     { sobre:"Elle ouvre le coffret. Il y a des lettres.",
       intense:"Elle ouvre le coffret et le tourne vers vous. Il y a des lettres, quarante ou cinquante, en deux liasses : une de papier jauni, une de papier neuf de la même main.\n\n« Les vieilles sont de lui. Les neuves sont de moi : je les ai recopiées pendant trois mois, la nuit, parce qu'une seule liasse se brûle et que deux liasses dans deux endroits ne se brûlent pas. »",
       extreme:"Elle ouvre le coffret et le tourne vers vous : quarante ou cinquante lettres, en deux liasses — une de papier jauni, une de papier neuf de la même main d'écriture.\n\n« Les vieilles sont de lui. Les neuves sont de moi : recopiées pendant trois mois, la nuit, à la chandelle, mot pour mot, avec les ratures et les abréviations, parce qu'une liasse se brûle et que deux liasses dans deux endroits différents ne se brûlent pas. Il m'a fallu onze semaines pour comprendre ça toute seule. Personne n'apprend ça à une femme. »" },
-    "« Elles disent quoi ? »",
+    "@« Elles disent quoi ? »",
     "« Que mon mari a fait empoisonner Ansel de Vermoise en Brumaire de l'an dernier, pour un siège au conseil de province qu'il occupera en Prairial. »",
     "§ Elle le dit comme on lit un inventaire, ce qui veut dire qu'elle l'a dit à voix haute cent fois, seule, dans une chambre, pour pouvoir le dire une fois devant quelqu'un.",
     "« Pourquoi ne pas être partie, simplement ? »",
@@ -8991,7 +8991,7 @@ ha_fin_parti:{
   titre:"Le moulin était vide",
   qui:'hauterive',
   texte:[
-    "« Le moulin était vide. »",
+    "@« Le moulin était vide. »",
     "Il vous regarde pendant onze secondes. C'est un homme qui a fermé les portes avant de dire bonjour et il sait parfaitement ce qu'il est en train d'entendre.",
     "« Vide. »",
     "« Vide depuis plusieurs jours. Feux froids, litières emportées. Ils sont partis vers le sud. »",
@@ -9403,7 +9403,7 @@ as_parler_loys:{
     { sobre:"Il a quinze ans et il essaie d'être poli. C'est ça qui est difficile à regarder.",
       intense:"Il a quinze ans et il essaie d'être poli, et c'est ça qui est insoutenable — pas la peur, la politesse. Il ne demande pas ce qu'il risque. Il demande si sa mère a été prévenue et si on peut lui dire qu'il n'a rien cassé.",
       extreme:"Quinze ans, et il essaie d'être poli. C'est ça qui est insoutenable — pas la peur, la politesse. Il ne demande pas ce qu'il risque : il demande si sa mère a été prévenue, si on peut lui dire qu'il n'a rien cassé, et — parce qu'un garçon de quinze ans pense à ça avant le reste — si on lui rendra son couteau, qui était à son père." },
-    "« Loys. Le loup sur la borne. Tu l'as dit à combien de personnes ? »",
+    "@« Loys. Le loup sur la borne. Tu l'as dit à combien de personnes ? »",
     "« La salle était pleine. »",
     "« Et avant la salle ? »",
     "Il réfléchit vraiment. C'est un garçon sérieux.",
@@ -9446,7 +9446,7 @@ as_parler_tailleur:{
     { sobre:"Il a raison. C'est vérifiable et c'est vrai.",
       intense:"Il a raison. Vous le revoyez faire : le pouce dans le sillon du loup, deux fois, dans le sens de la gravure, puis la toile rabattue et cette phrase sur son grand-père qui a taillé pour une maison rayée. Personne ne lui a rien demandé.",
       extreme:"Il a raison, et vous le revoyez faire : le pouce dans le sillon, deux fois, dans le sens de la gravure. Puis la toile rabattue. Puis la phrase sur son grand-père, payé deux ans par des gens qui n'existaient plus. Personne ne lui a rien demandé. Il a décidé tout seul, dans son hangar, pour une raison qui n'appartient qu'à lui et qu'il ne vous dira pas." },
-    "« Vous saviez ce que c'était. »",
+    "@« Vous saviez ce que c'était. »",
     "« Je savais que c'était de l'arpentage. Je ne savais pas de qui. »",
     "Il se tait, et il ajoute, sans vous regarder :",
     "§ « Je ne le sais toujours pas, messire, et je préfère. Ce que je ne sais pas, je ne peux pas le dire sur un tabouret. »",
@@ -9464,7 +9464,7 @@ as_parler_amaury:{
     { sobre:"Il se trompe. Ce n'est pas pour ça.",
       intense:"Il se trompe, et c'est ce qui rend cette conversation intéressante : il croit qu'on le pend pour ce qu'il a fait. On le pend parce que Chastel a racheté les archives de Valombre avec la tour, qu'on y a trouvé quarante-trois relevés d'arpentage, et qu'il faut bien une raison publique de descendre dans cette vallée avec deux chariots de registres.",
       extreme:"Il se trompe, et c'est ce qui rend la conversation intéressante. Il croit qu'on le pend pour ce qu'il a fait. On le pend parce que Chastel a racheté les archives de Valombre en même temps que la tour, qu'on y a trouvé quarante-trois relevés antérieurs, et qu'il faut bien un motif public pour descendre dans une vallée fermée avec deux chariots de papier et trente hommes." },
-    "« Votre mère a vendu la tour à qui ? »",
+    "@« Votre mère a vendu la tour à qui ? »",
     "Il s'arrête. Un fils de maison ruinée sait exactement à qui sa mère a vendu la tour.",
     "« … à Chastel. »",
     "« En même temps que les archives. »",
@@ -9485,7 +9485,7 @@ as_parler_gassien:{
     { sobre:"Il ne menace pas. Il expose une offre.",
       intense:"Il ne menace à aucun moment. Il expose une situation avec la neutralité d'un homme qui vend du sel : il a une marchandise, il y a un acheteur dans la pièce d'à côté, et il préférerait de très loin conclure avec vous parce que vous êtes plus près et que le transport coûte moins cher.",
       extreme:"Il ne menace pas une seule fois. Il expose, avec la neutralité d'un homme qui vend du sel : il a une marchandise, il y a un acheteur dans la pièce d'à côté, et il préférerait conclure avec vous parce que vous êtes plus près et que le transport revient moins cher. Il sourit pendant tout l'exposé. Le sourire est parfaitement chaleureux et n'a jamais eu le moindre rapport avec quoi que ce soit." },
-    "« Qu'est-ce que vous voulez ? »",
+    "@« Qu'est-ce que vous voulez ? »",
     "« Que vous vous leviez. Contestez la cause, prenez le rond, et si vous gagnez, l'entente tombe avec le chef. Je repars avec deux mules et une amende. »",
     "« Et si je ne me lève pas ? »",
     "§ « Alors je me lève, moi. Et je raconte à maître Vasque une histoire vraie qui commence à cent quarante pieds au-dessus du gué. »",
@@ -9504,7 +9504,7 @@ as_parler_sergent:{
     { sobre:"Il vous regarde. Il vous replace. Ça prend trois secondes.",
       intense:"Il vous regarde, et vous voyez le classement se faire — un homme qui écrit onze à quarante lignes par semaine depuis douze ans a une mémoire d'un genre particulier, qui ne retient pas les visages mais les circonstances. Trois secondes. Puis il détourne les yeux, ce qui est la réponse.",
       extreme:"Il vous regarde, et le classement se fait devant vous : un homme qui porte onze à quarante lignes par semaine pendant douze ans développe une mémoire qui ne retient pas les visages mais les circonstances — le temps qu'il faisait, la monture, l'heure, et si l'homme a hésité avant de donner son nom. Trois secondes. Puis il détourne les yeux, et c'est toute la réponse." },
-    "« Ils m'ont demandé une ligne en particulier ? »",
+    "@« Ils vous ont demandé une ligne en particulier ? »",
     "« Ils m'ont demandé de reconnaître mon écriture sur trois cent quatre lignes. Trois cent quatre. Sur douze ans. »",
     "« Vous les avez reconnues ? »",
     "« Toutes. C'est mon écriture. »",
@@ -9662,7 +9662,7 @@ as_loi_dom:{
   qui:'vasque',
   titre:"« Sur quel fondement ? »",
   texte:[
-    "« Je conteste la cause. »",
+    "@« Je conteste la cause. »",
     "Il y a un bruit dans la salle, un seul, et c'est le greffier qui vient de poser sa plume — ce qu'il n'a pas fait de la journée.",
     "Vasque ne se retourne pas vers le public. Il remet ses lunettes, ce qui est le seul geste d'un homme qui vient de décider que la soirée serait plus longue que prévu.",
     "« Sur quel fondement ? »",
@@ -9692,7 +9692,7 @@ as_loi_dom:{
 as_loi_cout:{
   qui:'vasque',
   texte:[
-    "« Je conteste la cause. »",
+    "@« Je conteste la cause. »",
     "Vous la contestez, et vous la contestez bien — mais vous la contestez en homme qui a appris ça dans un couloir il y a deux heures, et Vasque a onze ans de répertoire.",
     "« Sur quel fondement ? »",
     "« La rature. »",
@@ -9716,7 +9716,7 @@ as_loi_cout:{
 as_loi_ko:{
   qui:'vasque',
   texte:[
-    "« Je conteste la cause. »",
+    "@« Je conteste la cause. »",
     "« À quel titre ? »",
     "Ce n'est pas la même question que *sur quel fondement*, et vous mettez une seconde de trop à voir la différence. Cette seconde vous coûte l'audience entière.",
     { sobre:"« Un particulier ne conteste pas une cause de titres. »",
@@ -9991,7 +9991,7 @@ as_r1_parler_dom:{
     "« Non. Je crois que vous n'avez pas envie d'être ici, et que ça fait trente ans que ça dure. »",
     "Il donne deux passes, courtes, presque distraites. Vous les prenez.",
     "§ « Quarante et un », dit-il. « Pas un seul que Chastel pouvait perdre. Vous savez ce que c'est, de gagner quarante et une fois sans avoir jamais rien gagné ? »",
-    "« Je crois, oui. »",
+    "@« Je crois, oui. »",
     "Il lève deux doigts vers le seuil sans vous quitter des yeux.",
     "« Temps. »",
   ],
@@ -10526,7 +10526,7 @@ as_r3_ceder_dom:{
   qui:'sorgue', melee:true,
   texte:[
     "Vous baissez la pointe. C'est tout ce que vous faites, et dans un rond de neuf pas c'est énorme.",
-    "« Renaud Sorgue. Cédez. »",
+    "@« Renaud Sorgue. Cédez. »",
     "La cour fait un bruit. Personne n'a jamais entendu ça et pour cause : on ne demande pas à un champion judiciaire de céder, on le tue ou on sort du cercle, et il n'existe pas de troisième colonne au registre.",
     "« Je ne peux pas céder, messire. Un champion qui cède n'est plus un champion. »",
     "« Vous avez quarante et un duels. Vous m'avez dit que vous n'en aviez gagné aucun. »",
@@ -10550,7 +10550,7 @@ as_r3_ceder_dom:{
 as_r3_ceder_cout:{
   qui:'sorgue', melee:true,
   texte:[
-    "« Renaud Sorgue. Cédez. »",
+    "@« Renaud Sorgue. Cédez. »",
     "« Non. »",
     "Ce n'est pas de l'orgueil : c'est un homme qui a construit trente ans sur une seule règle et à qui l'on demande de la casser dans une cour de province devant un garçon de dix-sept ans qui lui apporte de l'eau.",
     "Il vient. Il vient d'une jambe, mal, et vous n'avez pas remonté la garde parce que vous étiez en train de parler.",
@@ -10571,7 +10571,7 @@ as_r3_ceder_cout:{
 as_r3_ceder_ko:{
   qui:'sorgue', melee:true,
   texte:[
-    "« Renaud Sorgue. Cédez. »",
+    "@« Renaud Sorgue. Cédez. »",
     "Il ne répond pas et il ne s'arrête pas, et vous comprenez trop tard ce que vous venez de faire : vous avez parlé, la pointe basse, à trois pas d'un homme qui compte, dans le troisième échange d'un duel judiciaire.",
     { sobre:"Il ne vous tue pas. Il fait mieux.",
       intense:"Il ne vous tue pas — quatre morts en trente ans, il ne cherche pas le cinquième. Il fait mieux : il vous prend l'épaule d'un coup à plat, il passe la jambe, et il vous met **dehors**. Pas au sol : dehors. Deux pieds de l'autre côté de la craie, debout, intact, et parfaitement visible de toute la cour.",
@@ -10661,7 +10661,7 @@ as_rôle:{
       risque:"calculé", definitif:true, va:'as_fin_yohan',
       effets:{ flags:['as_prenom'] } },
 
-    { t:"« Yohan de Karlsberg. »",
+    { t:"@« Yohan de Karlsberg. »",
       detail:"Le nom entier · devant le répertoire général de la province",
       ferme:"Ferme : dix-neuf ans passés à n'être personne",
       risque:"définitif", definitif:true, va:'as_fin_nom',
@@ -10679,7 +10679,7 @@ as_nom_dom:{
   qui:'vasque',
   titre:"« Je la conteste comme héritier »",
   texte:[
-    "« Je conteste la cause. »",
+    "@« Je conteste la cause. »",
     "« Sur quel fondement ? »",
     "« Sur celui-ci : la contradiction est ouverte à la maison intéressée. »",
     { sobre:"Vasque repose la pièce. Très lentement.",
@@ -10688,9 +10688,9 @@ as_nom_dom:{
     "« La maison intéressée est éteinte. »",
     "« La maison intéressée est **raturée**. Vous l'avez dit vous-même, dans une arrière-cuisine, il y a deux heures : en travers, à l'encre, dans une main qui n'est pas celle du volume, et sans ordonnance jointe. »",
     "Silence.",
-    "« Volume cent-quarante-trois, section des titres éteints. La gorge de Cendrepont, le gué, le droit de passage et le quart du sel. »",
+    "@« Volume cent-quarante-trois, section des titres éteints. La gorge de Cendrepont, le gué, le droit de passage et le quart du sel. »",
     "§ Il y a un moment, dans certaines vies, où l'on entend sa propre voix dire une chose et où l'on sait qu'on ne la reprendra pas.",
-    "« Yohan de Karlsberg. »",
+    "@« Yohan de Karlsberg. »",
     { sobre:"La salle ne fait aucun bruit. Personne ne sait ce que ce nom veut dire.",
       intense:"La salle ne fait aucun bruit, et c'est ce qui est extraordinaire : sur quarante personnes debout dans cette pièce, il y en a peut-être trois qui savent ce que ce nom veut dire. Les autres attendent poliment la suite d'une phrase.",
       extreme:"La salle ne fait aucun bruit. Sur quarante personnes debout, trois peut-être savent ce que ce nom veut dire ; les autres attendent poliment la suite d'une phrase. C'est ça, dix-neuf ans de travail d'effacement bien fait : on peut prononcer le nom d'une maison de sept cents personnes dans une salle pleine, dans sa propre vallée, et n'être compris de personne." },
@@ -11645,7 +11645,7 @@ al_mauvaise:{
 al_non:{
   qui:'alycia',
   texte:[
-    "« Non. »",
+    "@« Non. »",
     "Elle attend la suite. Il n'y en a pas.",
     { sobre:"« Vous ne demandez rien ? »",
       intense:"« Vous ne demandez pas qui paie. Vous ne demandez pas ce qu'elle a fait. Vous ne demandez pas si trois cents se négocient — et ça se négocie, tout se négocie. »\n\n« Non. »\n\n« Pourquoi ? »\n\n« Parce que vous avez dit *des gens qui cherchent des Parias* en me regardant. »",
@@ -11672,7 +11672,7 @@ al_non:{
 al_qui:{
   qui:'alycia',
   texte:[
-    "« Qui paie ? »",
+    "@« Qui paie ? »",
     "« J'ai dit que je ne le dirais pas. »",
     "« Et moi je ne dis rien avant de le savoir. On peut rester assis. »",
     { sobre:"On reste assis. Onze minutes.",
@@ -11697,7 +11697,7 @@ al_qui:{
 al_oui:{
   qui:'alycia',
   texte:[
-    "« Trois cents. Où est-elle ? »",
+    "@« Trois cents. Où est-elle ? »",
     { sobre:"Elle ne cille pas. Un lieu, une route, un délai.",
       intense:"Elle ne cille pas. Un lieu — un relais de bûcherons à onze lieues à l'est —, une route, neuf jours, et la moitié de l'acompte en pièces qu'elle sort d'une bourse déjà préparée.",
       extreme:"Elle ne cille pas d'un cil. Un lieu — un relais de bûcherons à onze lieues à l'est —, une route, un délai de neuf jours, et cent cinquante couronnes d'acompte en pièces comptées d'avance qu'elle sort d'une bourse manifestement préparée pour ce moment précis, ce qui devrait vous alerter et ne vous alerte pas.\n\nPuis elle se lève, vous souhaite bonne route d'une voix parfaitement égale, et monte se coucher." },
@@ -11719,7 +11719,7 @@ al_oui:{
 al_devinee:{
   qui:'alycia',
   texte:[
-    "« C'est vous. »",
+    "@« C'est vous. »",
     "Silence.",
     { sobre:"« Qu'est-ce qui m'a trahie ? »",
       intense:"« Qu'est-ce qui m'a trahie ? » Elle demande ça sans une once d'inquiétude, avec un intérêt strictement professionnel, et elle tire une tablette de cire de sa manche — vraiment, une tablette de cire — pour noter.\n\n« Les mains à plat. »\n\n« Ah. » Elle note. « Merci. »",
@@ -11871,7 +11871,7 @@ al_quatre_ko:{
 al_arret_dom:{
   melee:true,
   texte:[
-    "« Arrêtez. »",
+    "@« Arrêtez. »",
     "Elle s'arrête. Ce n'est pas rien : une femme qui a passé dix-huit mois à faire disparaître des gens s'arrête au milieu, sur un mot, dit par quelqu'un qu'elle connaît depuis trois semaines.",
     "« Pourquoi ? »",
     "« Parce qu'ils savent qui les paie et que nous, non. »",
@@ -11893,7 +11893,7 @@ al_arret_dom:{
 al_arret_cout:{
   melee:true,
   texte:[
-    "« Arrêtez. »",
+    "@« Arrêtez. »",
     "Elle ne s'arrête pas tout de suite. Elle s'arrête après le troisième, ce qui fait une différence considérable pour le troisième.",
     { sobre:"« J'étais lancée. »",
       intense:"« J'étais lancée », dit-elle, et c'est la première fois qu'elle a l'air de quelqu'un qui s'excuse de quelque chose. « Ça ne se coupe pas comme un robinet. Personne ne m'a jamais appris à couper. »",
@@ -12034,7 +12034,7 @@ al_route:{
 al_route_couper:{
   qui:'alycia',
   texte:[
-    "« Personne ne vous a appris à couper. »",
+    "@« Personne ne vous a appris à couper. »",
     "« Personne ne m'a rien appris du tout. »",
     "« Moi non plus. Mais je me suis arrêté. »",
     "« Quand ? »",
@@ -12058,7 +12058,7 @@ al_route_couper:{
 al_route_callensbourg:{
   qui:'alycia',
   texte:[
-    "« Qu'est-ce que vous avez trouvé, à dix-sept ans ? »",
+    "@« Qu'est-ce que vous avez trouvé, à dix-sept ans ? »",
     "Elle met deux jours à répondre. Pas par refus : elle dit *plus tard* le premier soir, et *pas encore* le deuxième, et le troisième elle répond au milieu d'une conversation sur autre chose.",
     { sobre:"« Une ferme. »",
       intense:"« Une ferme. » Elle tient les rênes d'une main. « Ils n'avaient pas brûlé Callensbourg. Ils avaient brûlé les registres, gratté les pierres, rebaptisé le hameau, et ils avaient **vendu**. Il y avait une ferme dessus. Des gens dedans. Des enfants. »",
@@ -12106,7 +12106,7 @@ al_route_mere:{
       extreme:"Elle arrête son cheval au milieu de la route — ce qu'elle n'a pas fait une seule fois en douze jours — et elle reste immobile assez longtemps pour que le vôtre s'impatiente et cherche l'herbe du bas-côté. Quand elle parle enfin, sa voix a changé de registre, et c'est la première fois." },
     "« Redites-le. »",
     "Vous le redites.",
-    "« *Du bas de la maison.* »",
+    "@« *Du bas de la maison.* »",
     "« Oui. »",
     "« Callensbourg aussi. »",
     "§ Elle le dit sans une hésitation, comme on constate qu'il pleut.",
@@ -12208,7 +12208,7 @@ kar_porte:{
 kar_demande:{
   qui:'alycia',
   texte:[
-    "« Qu'est-ce que vous savez de cette porte ? »",
+    "@« Qu'est-ce que vous savez de cette porte ? »",
     "Elle ne répond pas tout de suite, et quand elle répond elle répond à une autre question, ce qui est sa façon de dire la vérité.",
     { sobre:"« Il y en a une dans chaque maison qui avait ça. »",
       intense:"« Il y en a une dans chaque maison qui avait ça sous les côtes. Une par maison, jamais deux, toujours cachée, et toujours sur une paume. » Elle passe le pouce sur le bord du creux. « Ce ne sont pas des maisons qui avaient un pouvoir, messire. Ce sont des maisons qui gardaient quelque chose. »",
@@ -12289,7 +12289,7 @@ kar_autre_ko:{
     "Vous cherchez deux jours. Il y a un puits comblé, une cave effondrée, un conduit qui se termine sur de la maçonnerie neuve — neuve : quelqu'un a muré ce conduit après la Purge, ce qui est en soi un renseignement dont vous ne saurez rien faire.",
     "Le troisième jour, Alycia s'assied sur une pierre et dit la chose que vous refusiez d'entendre depuis deux jours.",
     "§ « Il y a une porte faite pour ta main, à quarante pas d'ici, et tu passes trois jours dans des trous. »",
-    "« Oui. »",
+    "@« Oui. »",
     "« Pourquoi ? »",
     "« Parce que si je la pose, ça se saura. »",
     "« Ça se sait déjà. » Elle montre le sud d'un mouvement de menton. « Il y a de la fumée à deux lieues depuis hier soir, et ce n'est pas un charbonnier : un charbonnier fume trois jours, celle-là a fumé quatre heures et s'est arrêtée. »",
@@ -12303,7 +12303,7 @@ kar_repart:{
   qui:'alycia',
   titre:"On repart",
   texte:[
-    "« Les Karlsberg sont morts. On repart. »",
+    "@« Les Karlsberg sont morts. On repart. »",
     "Alycia ne discute pas. Elle remonte à cheval, elle attend que vous soyez en selle, et elle prend la route du sud sans un mot pendant deux heures.",
     { sobre:"Au bout de deux heures : « C'est une décision ou c'est de la peur ? »",
       intense:"Au bout de deux heures, sans tourner la tête : « C'est une décision ou c'est de la peur ? Je demande sans jugement : les deux se défendent, et j'ai pris la deuxième à dix-sept ans devant une ferme avec six vaches. »",
@@ -12525,9 +12525,9 @@ kar_feinte_cout:{
 kar_echange_dom:{
   melee:true,
   texte:[
-    "« Vous êtes venus pour le coffre. Je suis assis dessus. »",
+    "@« Vous êtes venus pour le coffre. Je suis assis dessus. »",
     "Silence dans l'escalier.",
-    "« Et vous avez quatre camarades par terre autour de moi qui n'ont pas de blessure. »",
+    "@« Et vous avez quatre camarades par terre autour de moi qui n'ont pas de blessure. »",
     { sobre:"« Qu'est-ce que vous proposez ? »",
       intense:"« Qu'est-ce que vous proposez ? » La voix d'en haut n'a pas bougé d'un ton. C'est un homme qui négocie depuis un escalier avec quatre morts en bas, et il négocie exactement comme s'il était dans un bureau.",
       extreme:"« Qu'est-ce que vous proposez ? » La voix d'en haut n'a pas bougé d'un demi-ton. Un homme qui négocie depuis un escalier, avec quatre de ses hommes morts en bas sans une blessure, et qui négocie exactement du ton dont on discute d'un prix de fourrage. C'est le renseignement le plus utile de la journée." },
@@ -12547,7 +12547,7 @@ kar_echange_dom:{
 kar_echange_cout:{
   melee:true,
   texte:[
-    "« Les archives contre le nom de votre commanditaire. »",
+    "@« Les archives contre le nom de votre commanditaire. »",
     "« Non. »",
     "C'est net, immédiat, et sans regret : un homme qui refuse en une seconde a déjà pesé l'offre avant qu'on la fasse.",
     "« Vous me proposez de vendre celui qui me paie pour un coffre que je vais prendre de toute façon quand vous serez mort. Vous n'êtes pas en position de proposer quoi que ce soit, messire, vous êtes en position de proposer un délai, et un délai je peux vous le donner : partez maintenant et je ne fais pas tirer. »",
@@ -12646,7 +12646,7 @@ kar_berold_mort:{
 
 kar_berold_garde:{
   texte:[
-    "« Vous venez avec nous. »",
+    "@« Vous venez avec nous. »",
     "« Non. »",
     "« Ce n'était pas une question. »",
     { sobre:"« Si. » Il s'assied sur une marche.",
@@ -12703,7 +12703,7 @@ kar_derniere_page:{
     "*Ma sœur*",
     "§ Quatre. Trois fonctions et une personne.",
     "Le chapelain et le maître d'armes n'ont pas de nom. Ils n'en avaient pas besoin : celle qui écrivait savait qui ils étaient, et elle écrivait pour elle-même, dans une pièce, trois jours avant.",
-    { sobre:"« Votre tante est vivante ? »",
+    { sobre:"@« Votre tante est vivante ? »",
       intense:"« Votre tante est vivante ? » demande Alycia, à quatre pas, sans être venue voir la page.\n\n« Je ne sais pas. »\n\n« Vous ne savez pas si votre tante est vivante. »\n\n« Je ne sais pas si j'ai une tante. J'avais neuf ans. »",
       extreme:"« Votre tante est vivante ? » demande Alycia depuis ses quatre pas, sans être venue voir la page, ce qui veut dire qu'elle a entendu la liste dans le silence de votre lecture.\n\n« Je ne sais pas. »\n\n« Vous ne savez pas si votre tante est vivante. »\n\n« Je ne sais pas si j'ai une tante. J'avais neuf ans, et à neuf ans on ne compte pas les adultes d'une maison de sept cents personnes : on en connaît onze et on croit que c'est tout le monde. »" },
     "Quatre lignes. Quatre personnes qui savaient, trois jours avant.",
@@ -12790,7 +12790,7 @@ kar_fermer:{
 kar_refuge:{
   qui:'alycia',
   texte:[
-    "« Pas un château. Des gens. »",
+    "@« Pas un château. Des gens. »",
     "Elle vous laisse développer et elle écoute jusqu'au bout, ce qu'elle fait mieux que la plupart.",
     "Pas de bannière, pas d'acte, pas de nom déposé nulle part. La façade nord reste des ruines vues de l'extérieur, et elle le restera : rien ne se relève, rien ne se répare qui se voie à trois cents pas.",
     { sobre:"En dessous, c'est autre chose : il y a quatre-vingts pieds de voûte sèche.",
@@ -12823,7 +12823,7 @@ kar_bannieres:{
       extreme:"Ça prend une saison entière : un déplacement à Chastel, un guichet, un formulaire de relèvement de titre en trois exemplaires, une taxe de onze couronnes, et un commissaire aux titres qui regarde le formulaire pendant très longtemps avant de le prendre. Il ne dit rien. Il le prend. Il le cote, il le date, et il le pose sur la pile de droite — et il n'y a rien de plus définitif au monde qu'une pièce posée sur la pile de droite." },
     "Alycia n'est pas venue à Chastel.",
     "Elle est partie le matin où vous avez annoncé ce que vous alliez faire, sans dispute, sans reproche, en donnant à ses affaires le temps normal qu'il faut pour les charger sur un cheval.",
-    "« Vous m'en voulez ? »",
+    "@« Vous m'en voulez ? »",
     "« Non. »",
     "« Alycia. »",
     { sobre:"« Je ne vous en veux pas. Je ne vous amènerai personne. Les deux sont vrais. »",
@@ -13032,7 +13032,7 @@ sa_reseau:{
     { sobre:"Ce n'est pas une forteresse. C'est une ferme.",
       intense:"Quand on vous retire le bandeau, ce n'est pas une forteresse, pas une grotte, pas une ruine. C'est une ferme. Une vraie, avec des bêtes, des enfants, du linge qui sèche et une femme qui bat du beurre sous un auvent.",
       extreme:"Quand on vous retire le bandeau : une ferme. Pas une forteresse, pas une grotte, pas une ruine romantique. Une ferme de la moyenne montagne avec onze vaches, quatre enfants, du linge qui sèche sur une haie et une femme d'une cinquantaine d'années qui bat du beurre sous un auvent et qui ne lève pas la tête." },
-    "« Combien ici ? »",
+    "@« Combien ici ? »",
     "« Deux. »",
     "« Sur quarante et un. »",
     "« Sur trente-huit que je connais. » Elle descend de cheval. « Vous vous attendiez à un endroit. Il n'y a pas d'endroit, messire : il y a trente-huit vies ordinaires dans trente-quatre endroits ordinaires, et c'est ça, le système. Il n'y a rien à prendre d'assaut parce qu'il n'y a rien. »",
@@ -13064,7 +13064,7 @@ sa_maitre:{
     { sobre:"Gerbaud. Maître d'armes de Karlsberg.",
       intense:"Gerbaud. Maître d'armes de Karlsberg pendant vingt-neuf ans. C'est lui qui vous a fait répéter une signature qui n'était pas la vôtre pendant trois nuits dans une remise, à seize ans, en disant que ça vous sauverait la vie plus souvent qu'une épée.\n\nIl avait raison. Ça vous l'a sauvée quatre fois.",
       extreme:"Gerbaud. Maître d'armes de Karlsberg pendant vingt-neuf ans. C'est lui, la remise, les trois nuits, la signature qui n'était pas la vôtre, et la phrase — *ça te sauvera la vie plus souvent qu'une épée* — dite par un homme de cinquante et un ans à un garçon de seize qui ne comprenait pas pourquoi on lui apprenait à écrire au lieu de lui apprendre à tuer.\n\nIl avait raison. Ça vous l'a sauvée quatre fois, et une épée deux." },
-    "« Vous êtes le maître d'armes. »",
+    "@« Vous êtes le maître d'armes. »",
     "« Oui. »",
     "« Vous êtes sur une liste de quatre. »",
     "« Je sais », dit Gerbaud. « Je l'ai écrite. »",
@@ -13079,7 +13079,7 @@ sa_maitre:{
 sa_liste:{
   titre:"« Je l'ai écrite »",
   texte:[
-    "« La dernière page est de la main de ma mère. »",
+    "@« La dernière page est de la main de ma mère. »",
     "« Elle l'a écrite. Je la lui ai dictée. »",
     { sobre:"Il se rassied sur le billot. C'est une longue histoire et il le sait.",
       intense:"Il se rassied sur le billot parce que c'est long et qu'à soixante-dix ans on s'assied pour les choses longues.\n\n« Trois jours avant. Votre père avait reçu quelque chose de Chastel — une convocation, une notification, je n'ai jamais su le mot exact et ça n'a plus d'importance. Il a réuni quatre personnes. »",
@@ -13276,14 +13276,14 @@ el_sortir:{
 el_neuf_dom:{
   qui:'tyrion',
   texte:[
-    "« Neuf sur combien ? »",
+    "@« Neuf sur combien ? »",
     "Il ne répond pas.",
     "« Vous les comptez toutes les semaines. On ne compte pas ce qui ne bouge pas. »",
     { sobre:"« Neuf sur vingt-trois. »",
       intense:"« Neuf sur vingt-trois », dit-il enfin, et il le dit du ton d'un homme qui pose une pièce sur une table parce que la partie est finie. « Il y a quatre ans, elles étaient trois. »",
       extreme:"« Neuf sur vingt-trois », dit-il enfin, du ton d'un homme qui pose une pièce sur la table parce que la partie est finie et qu'il préfère la finir proprement. « Il y a quatre ans, elles étaient trois. Il y a un an, six. Vous voyez pourquoi je compte. »" },
     "§ Il ne vous chasse plus. Ce n'est pas de la sympathie : c'est qu'un homme qui vient de vous donner un chiffre a changé de conversation.",
-    "« Vous voulez savoir ce que je crains vraiment, humain ? Ce n'est pas votre peuple et ce n'est pas le vôtre en particulier. »",
+    "^« Vous voulez savoir ce que je crains vraiment, humain ? Ce n'est pas votre peuple et ce n'est pas le vôtre en particulier. »",
     "« Quoi, alors ? »",
     "« Que ma sœur ait raison. Parce que si elle a raison, alors nous avons regardé quatre siècles de chasse en sachant, et il n'y a pas de guerre assez grande pour excuser ça. »",
     "Il fait trois pas dans le couloir de cent quarante pieds, puis il s'arrête.",
@@ -13299,7 +13299,7 @@ el_neuf_dom:{
 el_neuf_cout:{
   qui:'tyrion',
   texte:[
-    "« Neuf sur combien ? »",
+    "@« Neuf sur combien ? »",
     "« Ça ne vous regarde pas. »",
     "« Vous les comptez toutes les semaines. »",
     { sobre:"Il vous regarde longtemps et il change de ton.",
@@ -13317,7 +13317,7 @@ el_neuf_cout:{
 el_neuf_ko:{
   qui:'tyrion',
   texte:[
-    "« Neuf sur combien ? »",
+    "@« Neuf sur combien ? »",
     "« Sur assez. »",
     "Il ne dit rien d'autre et il ne bouge pas, et vous restez debout dans un couloir de cent quarante pieds à attendre une suite qui ne vient pas.",
     "§ C'est une technique. Elle a quatre cents ans de plus que vous.",
@@ -13430,7 +13430,7 @@ el_jardin:{
 el_rien_du:{
   qui:'alarielle',
   texte:[
-    "« Vous ne me devez rien. »",
+    "@« Vous ne me devez rien. »",
     "Elle tourne la tête. C'est la première fois qu'elle a l'air surprise.",
     "« Pardon ? »",
     "« Ce que vous devez, vous le devez à onze maisons dont il reste quarante et une personnes. Moi, vous ne me devez rien : je ne suis pas onze maisons, je suis un homme assis sur de la mousse. »",
@@ -13449,7 +13449,7 @@ el_rien_du:{
 el_longevite:{
   qui:'alarielle',
   texte:[
-    "« Deux cent quarante ans. Et moi trente, et dans ce métier on ne fait pas soixante. »",
+    "@« Deux cent quarante ans. Et moi trente, et dans ce métier on ne fait pas soixante. »",
     "« Oui. »",
     "« Ça ne vous gêne pas ? »",
     { sobre:"« Si. Ça me gêne depuis cent quatre-vingts ans. »",
@@ -13549,7 +13549,7 @@ acte_charles:{
 ch_oui:{
   qui:'charles',
   texte:[
-    "« Oui. »",
+    "@« Oui. »",
     { sobre:"Il hoche la tête. Il ne se lève pas.",
       intense:"Il hoche la tête, une fois, et il ne se lève pas et il n'appelle personne. Il reste assis avec son gobelet et il regarde la table pendant un temps déraisonnable.\n\n« Merci. »",
       extreme:"Il hoche la tête une fois. Il ne se lève pas, il n'appelle personne, il ne pose pas la main sur quoi que ce soit. Il reste assis avec son gobelet et il regarde le bois de la table pendant un temps déraisonnable — trente secondes, peut-être quarante, ce qui est très long entre deux hommes qui ne se parlent pas.\n\n« Merci. »" },
@@ -13570,7 +13570,7 @@ ch_oui:{
 ch_non:{
   qui:'charles',
   texte:[
-    "« Non. »",
+    "@« Non. »",
     { sobre:"Il vous regarde longtemps et il ne dit pas s'il vous croit.",
       intense:"Il vous regarde longtemps et il ne dit pas s'il vous croit, ce qui est le pire de tout : un homme qui vous croit vous laisse tranquille, un homme qui ne vous croit pas vous arrête, et un homme qui ne dit rien vous met dans une colonne dont vous ne connaîtrez jamais le titre.",
       extreme:"Il vous regarde longtemps et il ne dit pas s'il vous croit. C'est le pire de tout : un homme qui vous croit vous laisse tranquille, un homme qui ne vous croit pas vous arrête, et un homme qui ne dit rien vous range dans une colonne dont vous ne connaîtrez jamais le titre. Il a vingt-deux ans d'habitude et il ne fait plus ça exprès." },
@@ -13591,7 +13591,7 @@ ch_non:{
 ch_retour_dom:{
   qui:'charles',
   texte:[
-    "« Vous en avez tué combien, vous ? »",
+    "@« Vous en avez tué combien, vous ? »",
     "« Cent quatorze morts. Ce n'est pas la question que vous posez. »",
     "« Non. »",
     { sobre:"« Trois cent onze. »",
@@ -13615,7 +13615,7 @@ ch_retour_dom:{
 ch_retour_cout:{
   qui:'charles',
   texte:[
-    "« Vous en avez tué combien, vous ? »",
+    "@« Vous en avez tué combien, vous ? »",
     "« Ce n'est pas une conversation », dit-il en se levant. « C'est une esquive, et je les reconnais depuis vingt-deux ans. »",
     "§ Il ne s'énerve pas. Il range, ce qui est pire.",
     "« Je suis venu chercher une réponse et je repars avec une manière de ne pas répondre, ce qui est une réponse. »",
@@ -13699,7 +13699,7 @@ lu_offre:{
 lu_sait:{
   qui:'lucius',
   texte:[
-    "« Vous savez ce que je suis. »",
+    "@« Vous savez ce que je suis. »",
     "« Un Paria. Oui. »",
     "« Et vous proposez une alliance publique à un Paria. »",
     { sobre:"« Je propose une alliance publique à une maison relevée. »",
@@ -13736,7 +13736,7 @@ lu_accepte:{
 lu_refus:{
   qui:'lucius',
   texte:[
-    "« Non. »",
+    "@« Non. »",
     "Il ne discute pas et ne réessaie pas. C'est peut-être ce qu'il a de plus impressionnant : il retire l'offre de la table en une phrase et il passe à autre chose.",
     "« Dommage. Sincèrement, et sans rancune : j'aurais aimé. »",
     "§ « Une chose, avant que vous partiez, et ce n'est pas une menace parce que ça ne me sert à rien. »",
@@ -13752,7 +13752,7 @@ lu_refus:{
 lu_plus_tard:{
   qui:'lucius',
   texte:[
-    "« Plus tard. »",
+    "@« Plus tard. »",
     "« Combien plus tard ? »",
     "« Je ne sais pas. »",
     { sobre:"Il accepte, ce qui surprend.",
@@ -13776,7 +13776,7 @@ ca_fort:{
     () => a('a2_bannieres')
       ? "« Karlsberg. » Il tapote une chemise sur son bureau. « J'ai ouvert un dossier le jour de l'enregistrement. Il fait déjà onze feuillets. »"
       : "« Vous n'avez rien relevé. » Il tapote une chemise. « Ça fait de vous une curiosité et pas un dossier, et je préfère les curiosités : elles ne coûtent rien. »",
-    "« Vous ouvrez un dossier sur tout le monde ? »",
+    "@« Vous ouvrez un dossier sur tout le monde ? »",
     "« Sur toute maison susceptible d'exister à moins de quarante lieues. Il y en a cent onze. » Il écarte les mains. « Ce n'est pas de l'hostilité, c'est de la comptabilité. Je n'ai pas d'ennemis, messire : j'ai des concurrents, et un concurrent, ça se rachète. »",
     "§ C'est la première fois de l'année que quelqu'un vous explique ce qu'il fera de vous en termes purement commerciaux, et c'est reposant.",
     "« Vous voulez racheter quoi ? »",
@@ -13806,7 +13806,7 @@ ca_fort:{
 ca_autre:{
   qui:'caleb',
   texte:[
-    "« Quoi d'autre ? »",
+    "@« Quoi d'autre ? »",
     "« Sainte-Ombre. »",
     "§ Il le dit sans préparation, et il vous regarde le recevoir.",
     { sobre:"« Le couvent est sur mes terres. »",
@@ -13834,7 +13834,7 @@ ca_marche:{
   qui:'caleb',
   texte:[
     "L'acte tient en une page et il est rédigé avant que vous ayez fini de dire oui, ce qui veut dire qu'il était rédigé avant votre arrivée.",
-    "« Vous l'aviez préparé. »",
+    "@« Vous l'aviez préparé. »",
     "« J'ai préparé les quatre. » Il range les trois autres sans les montrer. « Un homme qui ne prépare qu'une version d'un entretien est un homme qui va perdre trois entretiens sur quatre. »",
     "§ Il vous donne une lettre de recommandation à la mère supérieure de Sainte-Ombre, cachetée, et il ne la cachette pas devant vous, ce qui est délibéré.",
     "« Une chose, messire, et elle est gratuite. »",
@@ -13850,7 +13850,7 @@ ca_marche:{
 ca_vend:{
   qui:'caleb',
   texte:[
-    "« Combien ? »",
+    "@« Combien ? »",
     "« Six cents comptant. »",
     "« Il vaut onze cents par an. »",
     "« Il vaut onze cents par an à quelqu'un qui peut le faire reconnaître. Vous ne le pouvez pas : il faudrait une instance contre Valombre, six ans, un avocat, et une maison qui existe assez pour ester en justice. » Il compte déjà. « Six cents comptant, c'est le prix d'une chose que vous ne pouvez pas utiliser. C'est même généreux, et je suis généreux uniquement quand ça se remarque. »",
@@ -13866,7 +13866,7 @@ ca_vend:{
 ca_garde:{
   qui:'caleb',
   texte:[
-    "« Je le garde. »",
+    "@« Je le garde. »",
     "« Bien. » Il referme la chemise sans une trace de contrariété. « C'est le bon choix, d'ailleurs, si vous êtes encore vivant dans six ans. »",
     "« Et si je ne le suis pas ? »",
     "« Alors c'est le mauvais, et je rachèterai le droit à vos héritiers, ou à personne, et ça ne changera rien à ma vie. »",
@@ -14032,7 +14032,7 @@ an_donner:{
 an_refus:{
   titre:"En face",
   texte:[
-    "« Je ne viendrai pas. »",
+    "@« Je ne viendrai pas. »",
     "« Je sais », dit Anarion.",
     "« Vous savez ? »",
     { sobre:"« Vous relevez quelque chose. On ne vient pas ici en relevant. »",
@@ -14251,7 +14251,7 @@ kh_arrivee:{
 kh_pourquoi:{
   titre:"Deux puits",
   texte:[
-    "« Comprendre pourquoi vous y allez. »",
+    "@« Comprendre pourquoi vous y allez. »",
     "Il regarde le puits de Sarad — la margelle, la corde, les deux femmes qui tirent.",
     { sobre:"« Parce que celui-ci baisse depuis quarante ans. »",
       intense:"« Parce que celui-ci baisse depuis quarante ans. » Il n'ajoute rien pendant un moment. « Voilà. C'est toute la réponse et personne au nord ne l'a jamais demandée. »",
@@ -14329,7 +14329,7 @@ kh_dire:{
 kh_nord:{
   titre:"Debout",
   texte:[
-    "« Que vous n'alliez pas au nord. »",
+    "@« Que vous n'alliez pas au nord. »",
     { sobre:"Le puits se tait.",
       intense:"Les quinze personnes assises autour du puits se taisent en même temps, ce qui n'est pas un silence : c'est une chose qu'un groupe fait quand il attend de savoir s'il doit se lever.",
       extreme:"Les quinze personnes assises autour du puits se taisent exactement en même temps, et ce n'est pas un silence : c'est ce que fait un groupe qui attend de savoir s'il doit se lever. Vous avez vu ça deux fois dans votre vie et les deux fois quelqu'un est mort dans la minute." },
@@ -14350,7 +14350,7 @@ kh_nord:{
 kh_rien:{
   titre:"Un homme qui ne veut rien",
   texte:[
-    "« Rien. »",
+    "@« Rien. »",
     "Khal-Vaene vous regarde un long moment.",
     { sobre:"« C'est très rare dans un désert. »",
       intense:"« C'est très rare dans un désert », dit-il. « Ici, tout le monde veut quelque chose : c'est même la définition d'un désert. »",
@@ -14833,7 +14833,7 @@ ka_ch_donjon:{
     "§ Le jour où le faîte est posé, on compte onze cavaliers sur la crête ouest, immobiles, à trop grande distance pour qu'on lise leurs couleurs.",
     "Ils regardent pendant une heure. Puis ils repartent vers le sud, sans être descendus, sans avoir parlé à personne.",
     "Le maître d'œuvre les regarde partir et dit : « Voilà. Maintenant c'est fait. »",
-    "« Quoi ? »",
+    "@« Quoi ? »",
     { sobre:"« Vous existez. »",
       intense:"« Vous existez », dit-il. « Avant, vous étiez une rumeur avec des murs. Maintenant vous êtes une adresse sur une carte d'état-major, et ces onze-là vont la reporter. »",
       extreme:"« Vous existez », dit-il, sans lever les yeux de son fil à plomb. « Avant aujourd'hui, vous étiez une rumeur avec des murs bas — désagréable, pas grave. Maintenant vous êtes un point sur une carte d'état-major, avec une hauteur estimée, un développement d'enceinte et un effectif supposé. Ces onze-là sont venus prendre les mesures, et ils les ont prises. Tout ce qui vous arrivera à partir de maintenant vous arrivera parce que ce donjon est là. »" },
@@ -15102,14 +15102,14 @@ cb_racheter:{
   qui:'caleb',
   titre:"Neuf cents couronnes",
   texte:[
-    "« Combien pour les onze ? »",
+    "@« Combien pour les onze ? »",
     "Il donne le chiffre sans consulter l'état, ce qui veut dire qu'il l'avait préparé.",
     "« Neuf cents. »",
     "« C'est trois fois le pair. »",
     "« C'est deux fois et demie, et vous les paierez, parce que la seule chose qui vaille moins qu'une créance qu'on ne peut pas appeler, c'est un chantier qu'on ne peut pas approvisionner. »",
     "§ Il a raison sur le chiffre et il a raison sur le reste.",
     "Vous payez. Les quatre clercs mettent une heure à établir les actes de cession, et Caleb les signe tous les onze de la même main régulière, sans en relire un seul.",
-    { sobre:"« Vous n'êtes pas fâché », constatez-vous.",
+    { sobre:"@« Vous n'êtes pas fâché », constatez-vous.",
       intense:"« Vous n'avez pas l'air fâché », constatez-vous en signant le dernier.\n\n« Pourquoi le serais-je ? J'ai acheté onze créances au pair et je les ai revendues à deux et demie. C'est ma meilleure opération du trimestre. »",
       extreme:"« Vous n'avez pas l'air fâché », constatez-vous en signant le dernier acte.\n\n« Pourquoi diable le serais-je ? » Il a l'air sincèrement surpris qu'on le lui demande. « J'ai acheté onze créances au pair il y a quatre mois, je les revends à deux et demie aujourd'hui, en une heure, sans risque et sans un mot plus haut que l'autre. C'est ma meilleure opération du trimestre et de loin. Vous croyiez quoi — que je voulais votre ruine ? Je veux un rendement, messire. Votre ruine ne rapporte rien du tout. »" },
     "« Et si je n'avais pas payé ? »",
@@ -15127,7 +15127,7 @@ cb_veut:{
   qui:'caleb',
   titre:"Ce qu'il veut",
   texte:[
-    "« Qu'est-ce que vous voulez ? »",
+    "@« Qu'est-ce que vous voulez ? »",
     { sobre:"« Bonne question. Enfin. »",
       intense:"« Bonne question », dit-il. « Enfin. Vous n'imaginez pas le nombre de gens qui viennent ici me menacer avant de la poser. »",
       extreme:"« Bonne question », dit-il, et pour la première fois il s'assoit. « Enfin. Vous n'imaginez pas le nombre de seigneurs de cette province qui viennent dans cette pièce, découvrent que je tiens leurs fournisseurs, et passent une demi-heure à me menacer avant de poser la seule question qui pouvait leur servir à quelque chose. Trois sur quatre. Et ce sont des gens qui ont hérité de terres. »" },
@@ -15136,7 +15136,7 @@ cb_veut:{
     "**Deux.** Qu'il ait un droit de préemption sur ce que produit votre forge, au prix du marché. « Pas un privilège. Un droit de premier refus. »",
     "**Trois.** Que si Karlsberg tombe, ce qui en reste lui revienne avant tout autre créancier.",
     "§ Les trois sont raisonnables. La troisième est un couteau.",
-    "« Vous pariez sur ma chute. »",
+    "@« Vous pariez sur ma chute. »",
     "« Je me couvre contre elle, ce qui est le contraire. » Il pousse la feuille. « Un homme qui parie sur votre chute la provoque. Un homme qui s'en couvre s'en désintéresse — et je vous garantis que vous préférez la deuxième sorte devant chez vous. »",
   ],
   effets:{ flags:['cb_termes','a2_caleb_vu'],
@@ -15181,7 +15181,7 @@ cb_deux:{
   qui:'caleb',
   titre:"Deux sur trois",
   texte:[
-    "« Les deux premières. Pas la troisième. »",
+    "@« Les deux premières. Pas la troisième. »",
     { sobre:"Il ne discute pas.",
       intense:"Il ne discute pas une seconde, ce qui vous inquiète immédiatement — un marchand qui ne discute pas une clause qu'il a écrite lui-même vient d'apprendre quelque chose.",
       extreme:"Il ne discute pas une seule seconde. Il raye la troisième ligne, paraphe la rature, fait recopier. Et c'est précisément ce qui devrait vous inquiéter : un marchand qui ne défend pas une clause qu'il a écrite de sa main vient soit d'obtenir ce qu'il voulait ailleurs, soit d'apprendre quelque chose qui vaut plus que la clause." },
@@ -15202,7 +15202,7 @@ cb_ailleurs:{
   qui:'caleb',
   titre:"Sans lui",
   texte:[
-    "« Alors je bâtirai avec des gens qui ne vous doivent rien. »",
+    "@« Alors je bâtirai avec des gens qui ne vous doivent rien. »",
     { sobre:"Il réfléchit sérieusement.",
       intense:"Il réfléchit sérieusement, et il fait le calcul devant vous, à voix haute, parce que c'est un homme qui pense mieux en parlant.",
       extreme:"Il réfléchit sérieusement, et il fait le calcul devant vous à voix haute, parce que c'est un homme qui pense mieux en parlant et qui n'a jamais eu besoin de cacher son raisonnement à qui que ce soit." },
@@ -15399,7 +15399,7 @@ ls_pourquoi:{
     "**Deux.** « Une maison rayée qui se relève est le meilleur argument possible pour une couronne qui se relève. Vous êtes ma démonstration. Vingt ans de ronces, et un donjon. »",
     "**Trois.** « Et vous êtes un Paria. »",
     "§ Il le dit sans changer de ton, et il n'y a pas de question dans sa voix.",
-    "« Je n'ai pas dit ça. »",
+    "@« Je n'ai pas dit ça. »",
     "« Non. Moi si. » Il écarte les mains. « Je m'en moque absolument, ce qui est ma quatrième raison. Les vingt-quatre autres maisons ne s'en moquent pas. Le jour où ça se saura — et ça se saura, messire, un donjon de quatre étages ne reste pas anonyme — vous n'aurez plus qu'un seul allié possible dans quatre provinces, et ce sera celui à qui ça ne fait rien. »",
     "« Ça ne vous fait rien. »",
     { sobre:"« Non. Astrah a eu trois rois de l'Onde. »",
@@ -15416,7 +15416,7 @@ ls_prix:{
   qui:'lucius',
   titre:"Le prix",
   texte:[
-    "« Là comment ? »",
+    "@« Là comment ? »",
     "« Debout, à ma droite, le jour du couronnement, avec vos couleurs. »",
     "« C'est tout ? »",
     { sobre:"« C'est tout, et c'est énorme. »",
@@ -15425,7 +15425,7 @@ ls_prix:{
     "« Combien en avez-vous ? »",
     "« Trois maisons du sud, qui ont signé pour des raisons de grenier et qui repartiront si ça tourne. » Il ne se ment pas à lui-même, ce qui est sa qualité et son danger. « Il m'en faut sept. »",
     "§ Il y a une deuxième partie et il l'annonce sans transition, ce qui est sa manière de dire qu'elle n'est pas négociable.",
-    "« Et cent hommes pendant deux saisons, l'année du couronnement. Pas pour se battre : pour tenir les portes d'Astrah pendant que ça se fait. Si la cérémonie est interrompue, elle n'a pas lieu, et si elle n'a pas lieu une fois, elle n'a lieu jamais. »",
+    "^« Et cent hommes pendant deux saisons, l'année du couronnement. Pas pour se battre : pour tenir les portes d'Astrah pendant que ça se fait. Si la cérémonie est interrompue, elle n'a pas lieu, et si elle n'a pas lieu une fois, elle n'a lieu jamais. »",
     "« Cent hommes pendant deux saisons, c'est mon chantier arrêté un an. »",
     "« Oui », dit-il. « Et une ligne à la première page d'un rôle royal, que ni Chastel, ni Mont-Draken, ni Fort-aux-Princes ne pourront jamais rayer. Vous mettez un an de pierre en face d'un titre inattaquable. C'est un très bon prix et vous le savez. »",
   ],
@@ -15489,7 +15489,7 @@ ls_symbole:{
   qui:'lucius',
   titre:"Sans les cent hommes",
   texte:[
-    "« Je serai là. Je ne vous donnerai pas cent hommes. »",
+    "@« Je serai là. Je ne vous donnerai pas cent hommes. »",
     { sobre:"Il réfléchit longtemps.",
       intense:"Il réfléchit longtemps, et vous le voyez peser la chose exactement comme un homme pèse une chose : ce qu'il perd, ce qu'il garde, ce que ça dit.",
       extreme:"Il réfléchit longtemps, debout devant quatre mille registres, et vous le voyez peser la chose comme un homme pèse réellement une chose — pas la mise en scène de la réflexion, la réflexion : ce qu'il perd en sécurité, ce qu'il garde en symbole, et surtout ce que ça dira de lui qu'une maison ait accepté d'être là sans accepter de le garder." },
@@ -15513,7 +15513,7 @@ ls_apres:{
   qui:'lucius',
   titre:"Après",
   texte:[
-    "« Faites-vous couronner. Je viendrai après. »",
+    "@« Faites-vous couronner. Je viendrai après. »",
     { sobre:"C'est la seule réponse qui l'atteint.",
       intense:"C'est, de toutes les réponses possibles, la seule qui l'atteigne — et vous le voyez, parce qu'il met une seconde de trop à répondre et qu'il n'en met jamais.",
       extreme:"C'est, de toutes les réponses possibles, la seule qui l'atteigne réellement. Vous le voyez à une chose et une seule : il met une seconde de trop à répondre, et cet homme n'en met jamais. Le refus l'aurait laissé froid — il en a eu dix-huit. L'acceptation lui aurait coûté une dette. Ceci ne lui coûte rien, ne lui donne rien, et le renvoie exactement à ce qu'il craint le plus." },
@@ -15537,7 +15537,7 @@ ls_refus:{
   qui:'lucius',
   titre:"Sans témoins",
   texte:[
-    "« Non. Une couronne qu'on se donne n'est pas une couronne. »",
+    "@« Non. Une couronne qu'on se donne n'est pas une couronne. »",
     { sobre:"Il encaisse sans broncher.",
       intense:"Il encaisse sans broncher. Il vient de vous dire, sans témoins, qu'il compte se faire roi ; vous venez de lui répondre non, sans témoins ; et il n'y a strictement rien qu'il puisse faire de ça.",
       extreme:"Il encaisse sans broncher, et c'est le moment le plus dangereux de tout l'entretien. Il vient de vous dire, seul à seul et sans témoin, qu'il compte ceindre une couronne à laquelle il n'a pas droit. Vous venez de lui répondre non. Il n'y a strictement rien qu'il puisse faire de cette situation, sauf une chose, et vous êtes tous les deux en train de penser à cette chose en même temps, dans une salle de quatre mille registres où personne ne vous a vus entrer." },
@@ -15594,7 +15594,7 @@ cd_registre:{
   qui:'charles',
   titre:"Ce qu'il en ferait",
   texte:[
-    "« Et si le registre existait ? Qu'est-ce que vous en feriez ? »",
+    "@« Et si le registre existait ? Qu'est-ce que vous en feriez ? »",
     { sobre:"« Trois choses. »",
       intense:"« Trois choses, et je les ai écrites il y a onze ans dans un mémoire que personne n'a lu. »",
       extreme:"« Trois choses. Je les ai écrites il y a onze ans dans un mémoire de quarante-deux pages que j'ai fait porter à quatre conseils et que personne n'a jamais lu — j'ai vérifié : les exemplaires sont revenus non coupés. »" },
@@ -15602,7 +15602,7 @@ cd_registre:{
     "**Deux.** « Une école. Pas ici — ailleurs, tenue par des gens qui en ont. On ne forme pas un enfant à ne pas faire tomber les murs en lui expliquant que les murs ne doivent pas tomber. »",
     "**Trois.** « Et l'interdiction, sous peine capitale, de régler un cas par le village. »",
     "§ Vous mettez un moment à comprendre ce que vous venez d'entendre.",
-    "« Vous voulez protéger les enfants de l'Onde. »",
+    "@« Vous voulez protéger les enfants de l'Onde. »",
     { sobre:"« Je veux protéger les hommes. »",
       intense:"« Je veux protéger les hommes de ce qui n'en est pas, et je n'ai jamais dit autre chose. » Il vous regarde. « Simplement, un enfant de onze ans qui fait tomber un mur en est un. C'est même toute la difficulté de ma vie. »",
       extreme:"« Je veux protéger les hommes de ce qui n'en est pas. Je n'ai jamais dit autre chose, je ne le dirai jamais autrement, et trois cent onze pièces sur ce mur disent que j'ai raison de le vouloir. » Il vous regarde longuement. « Simplement : un enfant de onze ans qui fait tomber un mur sans le vouloir en est un. Un homme de trente ans qui pousse quatre adversaires à distance dans une crypte en est un aussi, probablement. C'est toute la difficulté de ma vie, messire, et je la traîne depuis trente ans sans que personne ne m'ait jamais aidé à la porter, parce que les deux camps trouvent plus confortable que je sois un boucher. »" },
@@ -15619,7 +15619,7 @@ cd_inscrire:{
   qui:'charles',
   titre:"Le premier nom",
   texte:[
-    "« Vous voulez me faire inscrire. »",
+    "@« Vous voulez me faire inscrire. »",
     "« Oui. »",
     "Pas d'hésitation, pas d'enrobage.",
     { sobre:"« Vous ne le nierez pas ? »",
@@ -15651,7 +15651,7 @@ cd_rechappe:{
   qui:'charles',
   titre:"Quatre-vingts",
   texte:[
-    "« Quatre-vingts cas en trente ans. Combien en ont réchappé ? »",
+    "@« Quatre-vingts cas en trente ans. Combien en ont réchappé ? »",
     { sobre:"Il ne répond pas tout de suite.",
       intense:"Il ne répond pas tout de suite, et c'est la première fois. Il regarde les deux cents élèves à quarante pas.",
       extreme:"Il ne répond pas tout de suite. C'est la première fois de l'entretien, et probablement la première fois qu'on lui pose cette question dans cet ordre-là — pas *combien en avez-vous tué*, qu'on lui a demandée cent fois et à laquelle il a une réponse toute faite : *combien en ont réchappé*. Il regarde ses deux cents élèves travailler à quarante pas." },
@@ -15709,14 +15709,14 @@ cd_refus:{
   qui:'charles',
   titre:"Rien",
   texte:[
-    "« Non. »",
+    "@« Non. »",
     "« Bien », dit Charles de Mont-Draken.",
     { sobre:"Et il ne se passe rien non plus.",
       intense:"Et il ne se passe rien non plus, ce qui est le point : il avait dit qu'il ne se passerait rien, et il ne se passe rien.",
       extreme:"Et il ne se passe rien non plus. C'est très exactement le point, et il faut un moment pour le voir : il avait dit qu'il ne se passerait rien si vous refusiez, et il ne se passe rien. Pas de menace voilée, pas de « réfléchissez », pas d'homme sur la route trois jours plus tard. Cet homme fait ce qu'il dit, dans les deux sens, et c'est ce qui le rend beaucoup plus dangereux que s'il mentait." },
     "Il vous raccompagne aux écuries et parle de la vallée haute, des loups qui redescendent, d'un pont à refaire.",
     "Sur le seuil : « Je vous le redemanderai. »",
-    "« Je sais. »",
+    "@« Je sais. »",
     "« Pas cette année. Peut-être pas dans dix ans. » Il hausse une épaule. « J'ai soixante et un ans, messire, et le registre est vide. Il le sera probablement à ma mort. C'est comme ça. Trois cent onze pièces sur ce mur, et la seule chose que je n'aurai pas obtenue, c'est un cahier. »",
     "§ Vous partez sans être inscrit, sans être menacé, et avec le désagrément durable d'avoir refusé quelque chose de raisonnable à quelqu'un de raisonnable.",
   ],
@@ -15731,7 +15731,7 @@ cd_autre:{
   qui:'charles',
   titre:"Quelqu'un d'autre",
   texte:[
-    "« Inscrivez-en un autre d'abord. »",
+    "@« Inscrivez-en un autre d'abord. »",
     { sobre:"Il se raidit.",
       intense:"Il se raidit — la première réaction physique de tout l'entretien — et sa voix change.",
       extreme:"Il se raidit, et c'est la première réaction physique de tout l'entretien : les épaules, la mâchoire, une seconde entière. Sa voix change de registre quand elle revient, et elle descend au lieu de monter, ce qui chez un homme de cette sorte est nettement plus inquiétant." },
@@ -15823,7 +15823,7 @@ cd_onde:{
       extreme:"Il regarde. Très attentivement, jusqu'au bout, sans dégainer, sans un mouvement vers ses deux élèves, sans un mot. Pour un homme qui a consacré trente ans de sa vie à mettre des choses non humaines à terre dès qu'elles se manifestent, et qui a fait pendre deux enfants, l'effort que représente cette immobilité-là ne se mesure pas. Il vous regardera plus tard, mais pas tout de suite : d'abord il regarde ce que vous faites, en professionnel, jusqu'à la fin." },
     "Quand c'est fini, il s'approche du corps, pas de vous, et il l'examine pendant une demi-heure.",
     "Puis, sans se relever : « Les côtes sont enfoncées sur toute la ligne, régulièrement. Ce n'est pas un coup. C'est une pression. »",
-    "« Oui. »",
+    "@« Oui. »",
     "« Vous pouvez faire ça à un homme. »",
     "« Oui. »",
     "§ Il se relève. Ses deux élèves sont à dix pas et ils ne savent pas où se mettre.",
@@ -15845,7 +15845,7 @@ cd_eleves:{
   qui:'charles',
   titre:"Dernière année",
   texte:[
-    "« Envoyez-les devant. C'est leur dernière année. »",
+    "@« Envoyez-les devant. C'est leur dernière année. »",
     { sobre:"Charles accepte.",
       intense:"Charles accepte sans discuter, ce qui vous surprend, et vous comprenez pourquoi trois heures plus tard.",
       extreme:"Charles accepte sans discuter une seconde, ce qui vous surprend assez pour que vous le regardiez deux fois. Vous comprendrez pourquoi trois heures plus tard, et ce sera désagréable." },
@@ -15997,7 +15997,7 @@ ma_dire:{
   qui:'epouse',
   titre:"De vive voix",
   texte:[
-    "« Dites-le-moi plutôt. »",
+    "@« Dites-le-moi plutôt. »",
     { sobre:"Elle range la note. Ça ne la gêne pas.",
       intense:"Elle range la note dans la malle sans la relire, ce qui veut dire qu'elle la connaît par cœur, ce qui veut dire qu'elle l'a écrite plus d'une fois.",
       extreme:"Elle range la note dans la malle sans un regard, ce qui veut dire qu'elle la sait par cœur, ce qui veut dire qu'elle l'a écrite plus d'une fois — trois ou quatre versions, probablement, pendant les onze semaines de voyage et les deux ans de correspondance. Elle n'a pas l'air contrariée. Elle a l'air d'ajuster une méthode." },
@@ -16072,7 +16072,7 @@ ma_preavis_alycia:{
   titre:"Le préavis",
   texte:[
     "Vous le dites un soir de Frimaire, dans la salle basse, sans préparer.",
-    "« Il y a quelqu'un. »",
+    "@« Il y a quelqu'un. »",
     { sobre:"Elle pose sa plume.",
       intense:"Elle pose sa plume dans l'encrier, referme le registre des feux sur son doigt, et attend. Elle ne demande pas qui.",
       extreme:"Elle pose sa plume dans l'encrier, referme le registre des feux du bourg sur son doigt pour ne pas perdre sa page, et attend. Elle ne demande pas qui. C'est la première chose que vous remarquez et c'est la plus étrange : la question évidente ne vient pas, et il faut un moment pour comprendre qu'elle ne vient pas parce qu'elle est déjà répondue depuis longtemps." },
@@ -16084,7 +16084,7 @@ ma_preavis_alycia:{
     "**Une.** « Jamais sous ce toit. Le bourg, une maison de la vallée, ailleurs — pas ici. Ce n'est pas de la pudeur : trente feux nous regardent et une maison qu'on ne respecte pas ne se fait pas payer ses baux. »",
     "**Deux.** « Elle n'a aucun rang, aucune préséance, aucune voix aux comptes. Si un jour elle décide de quoi que ce soit qui touche à l'intendance, je pars le lendemain avec ma dot et vous perdez le grain de trois vallées. »",
     "**Trois.** « Nos deux enfants d'abord. Après quoi vous ferez ce que vous voulez et je ferai ce que je veux. »",
-    "« La troisième est nouvelle. »",
+    "@« La troisième est nouvelle. »",
     { sobre:"« Oui. »",
       intense:"« Oui. » Elle ne développe pas. « Vous avez signé onze pages, messire, et j'ai signé les mêmes. Elles n'étaient pas plus favorables de mon côté que du vôtre. »",
       extreme:"« Oui. » Elle ne développe pas d'un mot, et son visage n'exprime absolument rien. « Vous avez signé onze pages. J'ai signé les mêmes onze pages. Elles n'étaient pas plus favorables de mon côté que du vôtre — vous avez peut-être cru le contraire, les hommes le croient toujours. Alors non, je ne vais pas développer, et vous ne me le demanderez pas deux fois. »" },
@@ -16113,14 +16113,14 @@ ma_preavis_alarielle:{
   qui:'epouse',
   titre:"Le préavis, et une difficulté de vocabulaire",
   texte:[
-    "« Il y a quelqu'un. »",
+    "@« Il y a quelqu'un. »",
     "Elle pose sa plume. Elle ne demande pas qui — et cette fois elle se trompe.",
     "« Alycia de Callensbourg. »",
     "« Non. »",
     { sobre:"Ça, ça l'arrête.",
       intense:"Ça, ça l'arrête net. C'est la première fois en onze mois que vous la voyez ne pas savoir quelque chose.",
       extreme:"Ça l'arrête net, et c'est un spectacle : c'est la première fois en onze mois que vous voyez cette femme ne pas savoir quelque chose sur sa propre maison. Elle repasse visiblement en revue tout ce qu'elle croyait tenir, et elle ne trouve pas, et elle déteste ça." },
-    "« Alarielle. »",
+    "@« Alarielle. »",
     "Silence long.",
     "« L'elfe. »",
     "« Oui. »",
@@ -16188,7 +16188,7 @@ ma_seul:{
   qui:'epouse',
   titre:"Personne",
   texte:[
-    "« Il n'y a personne d'autre. »",
+    "@« Il n'y a personne d'autre. »",
     { sobre:"Elle vous regarde un moment.",
       intense:"Elle vous regarde un moment, comme on vérifie un compte, et vous laissez faire.",
       extreme:"Elle vous regarde un moment sans rien dire, exactement comme elle regarde une colonne de chiffres qui tombe juste du premier coup — avec méfiance, parce que dans son expérience les colonnes qui tombent juste du premier coup cachent en général une erreur de report." },
@@ -16212,7 +16212,7 @@ ma_ligne_deux:{
   qui:'epouse',
   titre:"La deuxième ligne",
   texte:[
-    "« La deuxième, non. Elle décidera de choses. »",
+    "@« La deuxième, non. Elle décidera de choses. »",
     { sobre:"Elle plisse les yeux.",
       intense:"« Lesquelles ? » Ce n'est pas une objection : c'est une intendante qui demande un périmètre.",
       extreme:"« Lesquelles ? » Ce n'est pas une objection et ce n'est pas de la jalousie : c'est une intendante qui demande un périmètre, parce qu'une clause sans périmètre est une clause qui finira devant un tribunal." },
@@ -16236,7 +16236,7 @@ ma_franc:{
   qui:'epouse',
   titre:"Sans fiction",
   texte:[
-    "« Je ne mentirai pas sur elle. »",
+    "@« Je ne mentirai pas sur elle. »",
     { sobre:"« Ce n'est pas un mensonge. C'est un silence tenu par écrit. »",
       intense:"« Ce n'est pas un mensonge, messire, c'est un silence — et un silence tenu par écrit est ce qui empêche les gens de s'entretuer depuis trois cents ans dans cette province. »",
       extreme:"« Ce n'est pas un mensonge, messire, ne vous drapez pas. C'est un silence, et un silence organisé par écrit est très précisément ce qui empêche les maisons de cette province de s'entretuer depuis trois cents ans. Tout le monde sait. Personne ne dit. Chacun peut continuer à traiter avec l'autre. Vous voulez remplacer ça par quoi — par la vérité ? Ils n'en veulent pas. Ils n'en ont jamais voulu. Ils veulent pouvoir venir dîner. »" },
@@ -16288,7 +16288,7 @@ ma_choisit_epouse:{
   qui:'epouse',
   titre:"Personne d'autre",
   texte:[
-    "« Alors il n'y aura personne. »",
+    "@« Alors il n'y aura personne. »",
     { sobre:"Elle ne dit pas merci.",
       intense:"Elle ne dit pas merci, ce qui est correct : on ne remercie pas quelqu'un d'exécuter un contrat.",
       extreme:"Elle ne dit pas merci, et c'est parfaitement correct : on ne remercie pas quelqu'un d'exécuter les termes qu'il a signés, ce serait admettre qu'on ne s'y attendait pas. Elle hoche la tête une fois, reprend sa plume, et rouvre le registre des feux à la page où son doigt était." },
@@ -16366,11 +16366,11 @@ ml_signe:{
   qui:'alycia',
   titre:"La troisième signature",
   texte:[
-    "« Alors signez-le. »",
+    "@« Alors signez-le. »",
     { sobre:"Elle ne comprend pas tout de suite.",
       intense:"Elle ne comprend pas tout de suite, et il faut le répéter, et c'est la première fois qu'il faut répéter quelque chose à cette femme.",
       extreme:"Elle ne comprend pas tout de suite. Il faut le répéter, et c'est la première fois depuis Cendrepont qu'il faut répéter quoi que ce soit à cette femme — elle qui devine les phrases à la moitié et qui finit celles des autres depuis quinze ans." },
-    "« Le papier. Les trois lignes. Il y a deux signatures dessus. Mettez la troisième. »",
+    "@« Le papier. Les trois lignes. Il y a deux signatures dessus. Mettez la troisième. »",
     "« Ce n'est pas comme ça que ça se fait. »",
     "« Non. »",
     "« Il n'y a aucun exemple de ça dans trois cents ans de cette province. »",
@@ -16399,7 +16399,7 @@ ml_ses_termes:{
   qui:'alycia',
   titre:"Ce qu'elle exige",
   texte:[
-    "« Écrivez vos propres termes. »",
+    "@« Écrivez vos propres termes. »",
     "Elle prend la plume comme on prend une arme qu'on n'a pas l'habitude de porter.",
     { sobre:"Elle écrit quatre lignes. Elles sont plus dures que les trois autres.",
       intense:"Elle écrit quatre lignes en une demi-heure, en s'y reprenant, et elles sont considérablement plus dures que les trois de l'épouse.",
@@ -16408,7 +16408,7 @@ ml_ses_termes:{
     "**Deux.** « Je ne prends rien. Pas d'argent, pas de terre, pas de rente, pas de cadeau. Si vous me donnez quelque chose je le vends et je donne l'argent, et ce sera très humiliant pour nous deux. »",
     "**Trois.** « Vos enfants ne sauront pas qui je suis avant leurs quinze ans. Ensuite ils sauront tout, d'un coup, de votre bouche, et vous ne mentirez pas une seule fois. »",
     "**Quatre.** « Et le jour où je vous dirai que c'est fini, ce sera fini le jour même, sans conversation. »",
-    "« La quatrième est cruelle. »",
+    "@« La quatrième est cruelle. »",
     { sobre:"« La quatrième est la seule qui me protège. »",
       intense:"« La quatrième est la seule des quatre qui me protège », dit-elle. « Les trois autres protègent votre maison. Regardez-les mieux. »",
       extreme:"« La quatrième est la seule des quatre qui me protège, et les trois autres protègent votre maison — regardez-les mieux, messire, vous êtes en train de vous attendrir sur des clauses qui sont toutes à votre avantage sauf une. » Elle repousse la feuille. « Je ne vous quitte pas. Je me réserve de pouvoir le faire en un jour, sans avoir à en discuter avec un homme qui parle mieux que moi. C'est tout. C'est même très peu. »" },
@@ -16429,7 +16429,7 @@ ml_partir:{
   qui:'alycia',
   titre:"Ne dépendre de rien",
   texte:[
-    "« Alors ne dépendez de rien. Partez. »",
+    "@« Alors ne dépendez de rien. Partez. »",
     { sobre:"Elle encaisse mal. C'est la première fois.",
       intense:"Elle encaisse mal, et c'est la première fois que vous la voyez encaisser mal quoi que ce soit — parce que c'est son propre argument, retourné, et qu'il n'y a rien à répondre à son propre argument.",
       extreme:"Elle encaisse mal, et c'est la première fois en trois ans que vous voyez cette femme encaisser mal quoi que ce soit. C'est son propre argument, retourné, servi entier : elle a passé quinze ans à expliquer que dépendre est une chaîne, on lui propose de n'en porter aucune, et il n'existe pas de réponse à ça — sauf une, qu'elle ne dira pas, et vous savez tous les deux laquelle." },
@@ -16518,7 +16518,7 @@ ml_el_elle:{
   qui:'alarielle',
   titre:"Ce qu'elle veut",
   texte:[
-    "« Que voulez-vous, vous ? »",
+    "@« Que voulez-vous, vous ? »",
     { sobre:"« Personne ne me l'a demandé depuis quatre-vingt-onze ans. »",
       intense:"Elle met du temps.\n\n« On ne me l'a pas demandé depuis quatre-vingt-onze ans », dit-elle. « Je sais le chiffre exact, ce qui devrait vous dire quelque chose sur ces quatre-vingt-onze ans. »",
       extreme:"Elle met du temps. Beaucoup plus qu'une humaine, et pas pour les mêmes raisons.\n\n« On ne me l'a pas demandé depuis quatre-vingt-onze ans », dit-elle enfin. « Je connais le chiffre exact, à l'année près, et je crois que ça devrait vous dire à peu près tout ce qu'il y a à savoir sur ces quatre-vingt-onze ans et sur la maison dans laquelle je les ai passés. »" },
@@ -16611,7 +16611,7 @@ ml_el_non:{
   qui:'alarielle',
   titre:"Ce n'est pas à elle de payer",
   texte:[
-    "« Ce n'est pas à vous de payer ça. »",
+    "@« Ce n'est pas à vous de payer ça. »",
     { sobre:"Elle ne répond pas immédiatement.",
       intense:"Elle ne répond pas immédiatement, et quand elle répond, c'est pour vous reprendre.",
       extreme:"Elle ne répond pas immédiatement. Quand elle le fait, c'est pour vous reprendre, très calmement, et vous découvrez que vous venez de commettre exactement l'erreur que fait tout le monde avec elle depuis deux cent onze ans." },
@@ -16669,7 +16669,7 @@ ml_fin_alarielle:{
   titre:"Sept mots",
   texte:[
     "Vous faites la route jusqu'à Aelthiriel pour le dire en face. Onze semaines aller-retour pour une conversation de sept mots.",
-    "« J'ai choisi ma maison. Je suis venu le dire. »",
+    "@« J'ai choisi ma maison. Je suis venu le dire. »",
     { sobre:"Elle met un temps très long.",
       intense:"Elle met un temps très long — un temps elfique, celui qu'on ne supporte pas quand on vit quatre-vingts ans.",
       extreme:"Elle met un temps très long à répondre. Un temps elfique : celui qu'on ne supporte pas quand on vit quatre-vingts ans et qu'on compte les siennes. Vous restez debout dans le jardin fermé pendant ce qui doit faire deux minutes entières, et vous comprenez à la fin que ce n'était pas de l'hésitation." },
@@ -16780,7 +16780,7 @@ aly_ep_chapelle:{
   lieu:"Karlsberg · la chapelle",
   titre:"Trente-quatre témoins sans visage",
   texte:[
-    "« Alors on se passera du greffe. »",
+    "@« Alors on se passera du greffe. »",
     { sobre:"« Ça ne vaudra rien. »",
       intense:"« Ça ne vaudra rien », dit-elle immédiatement. « Aucun tribunal, aucun bailliage, aucune succession. »",
       extreme:"« Ça ne vaudra rien », dit-elle immédiatement, et sans une once de sentiment, parce qu'elle a passé six semaines sur la question et qu'elle connaît le dossier mieux que vous. « Aucun tribunal ne le reconnaîtra. Aucun bailliage ne l'inscrira. Aucun enfant né de là n'héritera de quoi que ce soit. Devant le droit de quatre provinces, ce sera très exactement rien du tout. »" },
@@ -16824,7 +16824,7 @@ aly_ep_callensbourg:{
   lieu:"Chastel · le guichet des titres",
   titre:"Relever Callensbourg",
   texte:[
-    "« Alors je vous en donne une. »",
+    "@« Alors je vous en donne une. »",
     "« Une quoi ? »",
     "« Une maison. »",
     { sobre:"Elle met du temps à comprendre, puis elle refuse.",
@@ -16838,7 +16838,7 @@ aly_ep_callensbourg:{
     "§ Voilà le vrai coût, et il n'est pas pour vous.",
     "« Si j'entre dans ce guichet et que je dis mon nom entier », dit-elle, « je passe de *quelqu'un qu'on cherche* à *quelqu'un dont on a l'adresse*, en une signature. C'est la seule protection que j'aie eue en quinze ans et vous me demandez de la vendre pour un contrat de mariage. »",
     "Long silence.",
-    { sobre:"« Alors n'entrez pas. »",
+    { sobre:"@« Alors n'entrez pas. »",
       intense:"« Alors n'entrez pas », dites-vous. « J'y vais seul. »",
       extreme:"« Alors n'entrez pas », dites-vous. « J'y vais seul, avec ce que j'ai : un relèvement déjà obtenu, un titre au registre, et le droit d'attester en justice pour une maison éteinte de la même province. Ce n'est pas la bonne procédure. C'est une procédure voisine, et un commissaire aux titres fatigué un vendredi peut confondre les deux. »" },
     "« Ça ne marchera pas. »",
@@ -16872,7 +16872,7 @@ aly_ep_non:{
   qui:'alycia',
   titre:"La sortie qu'elle avait préparée",
   texte:[
-    "« Vous avez raison. C'est réglé. »",
+    "@« Vous avez raison. C'est réglé. »",
     { sobre:"Elle acquiesce.",
       intense:"Elle acquiesce, une fois, et reprend ce qu'elle faisait. Elle avait préparé cette sortie, elle l'avait polie pendant six semaines, et elle sert exactement à ça.",
       extreme:"Elle acquiesce une fois et reprend ce qu'elle faisait. Elle avait préparé cette sortie, l'avait polie pendant six semaines de vérifications juridiques inutiles, et elle sert exactement à ça : à ce que la conversation puisse se terminer sans que personne ait à dire non." },
@@ -16939,7 +16939,7 @@ el_ep_elle:{
   qui:'alarielle',
   titre:"La quatrième",
   texte:[
-    "« Alors dites-moi ce que vous voulez, vous. »",
+    "@« Alors dites-moi ce que vous voulez, vous. »",
     { sobre:"« Vous m'avez déjà posé cette question une fois. »",
       intense:"« Vous m'avez déjà posé cette question une fois », dit-elle. « Vous êtes le seul à l'avoir fait en quatre-vingt-onze ans, et vous êtes maintenant le seul à l'avoir faite deux fois. »",
       extreme:"« Vous m'avez déjà posé cette question une fois », dit-elle, et sa voix change de quelque chose de très léger. « Vous êtes la seule personne à me l'avoir posée en quatre-vingt-onze ans. Vous êtes maintenant la seule à me l'avoir posée deux fois. Je ne sais pas si vous mesurez la différence entre les deux, mais elle est considérable et elle est en votre faveur. »" },
@@ -17080,7 +17080,7 @@ enf_elle:{
   qui:'alycia',
   titre:"Elle décide",
   texte:[
-    "« Décidez, vous. »",
+    "@« Décidez, vous. »",
     { sobre:"« Non. »",
       intense:"« Non », dit-elle immédiatement. « Ne me faites pas ça. »",
       extreme:"« Non », dit-elle immédiatement, et il y a de la colère dedans. « Ne me faites pas ça. C'est très exactement le genre de générosité qui coûte cher : vous me donnez la décision entière, ce qui veut dire que vous me donnez aussi la faute entière, et dans dix-huit ans, quand cet enfant sera devant un commissaire aux titres, il y aura une seule personne dans cette maison qui aura décidé. »" },
@@ -17453,7 +17453,7 @@ dr_nains:{
     () => a('a2_maitre_oeuvre')
       ? "Brann de Kar-Durak dit six mots par jour. Ce jour-là il en dit quatre-vingts, ce qui n'était pas arrivé depuis onze ans, et il faut aller chercher quelqu'un pour traduire parce qu'il passe au nain à la troisième phrase."
       : "Il faut onze jours pour qu'un Nain accepte de venir, et celui qui vient a deux cent dix ans et n'est pas content d'être là.",
-    "« Vous avez une carte de la montagne ? »",
+    "@« Vous avez une carte de la montagne ? »",
     "On sort une carte de la montagne. Il la retourne, parce qu'elle est fausse dans le sens où on l'a dessinée.",
     { sobre:"« Onze portes. Quatre sont tombées. »",
       intense:"« Onze portes. Quatre sont tombées en deux ans. » Il pose le doigt sur la plus haute. « Celle-ci en Ventôse, il y a vingt-six mois. On l'appelle la galerie haute. C'est là qu'étaient nos archives. »\n\n« Je sais. »\n\n« Vous ne savez pas ce qu'il y avait sous nos archives. »",
@@ -18137,7 +18137,7 @@ dr_fin_nains:{
     "§ Il faut deux mois, soixante Nains et une route entière refaite pour remonter quarante tonnes à la montagne.",
     "Ils ne la font pas entrer par la galerie haute, qui est aux mains des Peaux-Vertes.",
     "Ils rouvrent la onzième porte — celle qui est fermée depuis six cents ans, celle dont le plan porte un mot qui n'est pas un nom — et ils la font descendre par là, et ils la referment derrière.",
-    "« Vous rouvrez une porte que vous n'ouvrez pas. »",
+    "@« Vous rouvrez une porte que vous n'ouvrez pas. »",
     { sobre:"« Une fois. »",
       intense:"« Une fois », dit-il. « On la referme le soir même. Il y a un ordre des choses, messire, et il ne dit pas ce que vous croyez : il ne dit pas *ne pas savoir*. Il dit *remettre*. »",
       extreme:"« Une fois. On la referme le soir même, avec les mêmes pierres, dans le même ordre. » Il vous regarde de ses deux cent dix ans. « Vous croyez que notre règle est de ne pas savoir ce qu'il y a dessous. Ce n'est pas ça du tout, et c'est ce que les hommes ne comprennent jamais de nous. Nous savons parfaitement ce qu'il y a dessous : c'est écrit, c'est daté, c'est mesuré, et depuis avant-hier c'est même mesuré correctement. Notre règle, c'est de **remettre**. »" },
@@ -18748,7 +18748,7 @@ du_apres:{
     "§ Elle a raison sur les deux points et elle le sait, ce qui est sa manière habituelle d'avoir raison.",
     "« Il vous en reste combien ? »",
     () => charges() === 0 ? "« Aucun. Je recharge les deux. »" : "« Un. »",
-    { sobre:"« Deux coups. Dans une vie entière. »",
+    { sobre:"@« Deux coups. Dans une vie entière. »",
       intense:"« Deux coups », dit-elle. « Vous avez deux coups dans une vie entière, à cause d'un délai de quarante secondes que personne n'a jamais réussi à raccourcir en deux cents ans. » Elle se lève. « Réfléchissez très bien à qui vous les donnez. »",
       extreme:"« Deux coups. » Elle se lève et remet son manteau. « Vous avez deux coups à disposition dans une vie entière, parce qu'aucun armurier de ce monde n'a réussi en deux cents ans à raccourcir un rechargement en dessous de quarante secondes, et que quarante secondes n'existent pas quand quelqu'un veut vous tuer. » Elle s'arrête à la porte. « Alors réfléchissez très bien à qui vous les donnez, messire. Un jour il y aura quelqu'un en face de vous qui vaudra vraiment un de ces deux coups, et j'aimerais assez que vous l'ayez encore. »" },
   ],
@@ -19505,7 +19505,7 @@ aly_ment_face:{
       extreme:"« Non. Je me suis servie d'une description. Écoutez-moi bien parce que je ne le redirai pas : en Nivôse, je ne vous connaissais pas. Je n'avais pas votre nom, je n'avais pas votre visage, j'avais le fait qu'il existait un neuvième sur cette liste, qu'il vivait de contrats, et qu'il était grand. J'ai pris ce qui était sur le papier et j'en ai fait un appât. Le papier, pas l'homme. »" },
     "« Et quand vous avez eu le nom ? »",
     "Silence.",
-    "« Quand vous avez eu le nom, Alycia. »",
+    "@« Quand vous avez eu le nom, Alycia. »",
     "« Quand j'ai eu le nom, je suis venue à Cendrepont vous proposer un contrat pour tuer un Paria, pour voir ce que vous étiez. » Elle soutient votre regard. « Et j'ai continué à ne rien vous dire pendant onze semaines de route. Ça, c'est le mensonge. Le reste, c'est du travail. »",
   ],
   effets:{ flags:['aly_appat_su'],
@@ -19534,7 +19534,7 @@ aly_ment_verifier:{
   texte:[
     "Bourg-l'Aigre est un village de sel avec une étape et un mur à papiers. Quatre jours de route, et vous n'avez pas dit où vous alliez.",
     "Le guetteur d'étape est un ancien sergent qui a perdu un pied et qui tient le registre des passages parce que c'est ce qu'on donne aux sergents qui ont perdu un pied. Il se souvient. Il se souvient très bien, parce qu'on l'a interrogé trois fois depuis, chaque fois par des gens différents et chaque fois plus poliment.",
-    "« Une femme brune, seule. »",
+    "@« Une femme brune, seule. »",
     "« Seule ? »",
     { sobre:"« Seule à cheval. Mais le charretier a dit qu'ils étaient deux. »",
       intense:"« Seule à cheval, je l'ai vue passer sous ma fenêtre. Mais le charretier de la saline est venu le soir même me dire qu'ils étaient deux, avec la description de l'autre, et comme c'est le charretier qui parle aux gens de Mont-Draken et pas moi, c'est sa version qui est partie. »",
@@ -19575,7 +19575,7 @@ aly_ment_solde:{
   qui:'alycia',
   titre:"Une chose dite",
   texte:[
-    "« Vous auriez dû me le dire à Cendrepont. Le premier soir. Avant le contrat, avant l'épreuve, avant tout. »",
+    "@« Vous auriez dû me le dire à Cendrepont. Le premier soir. Avant le contrat, avant l'épreuve, avant tout. »",
     "« Je sais. »",
     "« Ce n'est pas une réponse. »",
     { sobre:"« Non. C'est un aveu, et c'est tout ce que j'ai. »",
@@ -19601,7 +19601,7 @@ aly_ment_pardon:{
   qui:'alycia',
   titre:"Le compte du moulin",
   texte:[
-    "« La femme du moulin est toujours au moulin. »",
+    "@« La femme du moulin est toujours au moulin. »",
     "Elle ne répond pas tout de suite.",
     "« Vous prenez le compte comme je le tiens », dit-elle.",
     "« Je prends le compte comme il est. Huit vivants, un mensonge. C'est un bon compte. J'en ai signé de bien pires pour de l'argent. »",
@@ -19625,7 +19625,7 @@ aly_ment_limite:{
   qui:'alycia',
   titre:"La limite",
   texte:[
-    "« Ne refaites jamais ça. »",
+    "@« Ne refaites jamais ça. »",
     "« Vous servir sans vous le dire ? »",
     "« Décider de ce que je risque sans me le demander. »",
     { sobre:"Elle réfléchit sérieusement. C'est plus long qu'on ne voudrait.",
@@ -19745,7 +19745,7 @@ aly_nuit_elle:{
   qui:'alycia',
   titre:"Mal",
   texte:[
-    "« Alors demandez mal. »",
+    "@« Alors demandez mal. »",
     { sobre:"Elle prend une respiration.",
       intense:"Elle prend une respiration, et pendant cette respiration vous voyez très clairement qu'elle envisage encore de descendre l'escalier.",
       extreme:"Elle prend une respiration. Pendant cette respiration — deux secondes, pas plus — vous voyez très clairement qu'elle envisage encore de descendre l'escalier, et qu'il n'y a rien au monde qui l'en empêcherait, et que c'est précisément pour ça qu'elle ne le fait pas." },
@@ -19960,7 +19960,7 @@ aly_couronne_elle:{
   qui:'alycia',
   titre:"Ce qu'elle veut",
   texte:[
-    "« Qu'est-ce que vous voulez, vous ? »",
+    "@« Qu'est-ce que vous voulez, vous ? »",
     { sobre:"Elle ne répond pas pendant un long moment.",
       intense:"Elle ne répond pas pendant un long moment, et pour une fois ce n'est pas de la technique : elle cherche vraiment.",
       extreme:"Elle ne répond pas pendant un long moment. Pour une fois ce n'est pas de la technique — vous avez appris à distinguer ses silences, et celui-ci n'est pas le silence de quelqu'un qui laisse l'autre se noyer. C'est le silence de quelqu'un qui n'a pas la réponse toute faite parce que personne ne lui a jamais posé la question, et qui est en train de constater ça en même temps que vous." },
@@ -20130,7 +20130,7 @@ aly_choix_libre:{
   qui:'alycia',
   titre:"Trente-huit",
   texte:[
-    "« Prenez vos trente-huit. Je continuerai seul. »",
+    "@« Prenez vos trente-huit. Je continuerai seul. »",
     { sobre:"Elle ferme les yeux une seconde.",
       intense:"Elle ferme les yeux une seconde. Quand elle les rouvre, quelque chose a changé de place dans son visage et vous ne savez pas quoi.",
       extreme:"Elle ferme les yeux une seconde entière, ce que vous ne l'avez jamais vue faire ailleurs que dans une chambre haute d'auberge. Quand elle les rouvre, quelque chose a changé de place dans son visage, et vous n'arrivez pas à dire quoi, et vous y penserez encore dans dix ans." },
@@ -20161,7 +20161,7 @@ aly_choix_demande:{
   qui:'alycia',
   titre:"Avoir besoin",
   texte:[
-    "« Restez. J'ai besoin de vous. »",
+    "@« Restez. J'ai besoin de vous. »",
     { sobre:"Le mot tombe mal et vous le savez en le disant.",
       intense:"Vous entendez le mot atterrir. *Besoin.* Chez cette femme-là, c'est le mot d'une chaîne, et vous venez de le poser sur la table sans le vouloir.",
       extreme:"Vous entendez le mot atterrir dans la pièce. *Besoin.* Chez n'importe qui d'autre c'est un aveu touchant ; chez cette femme-là c'est le vocabulaire exact de la dépendance, celui qu'elle a passé quinze ans à démonter, et vous venez de le poser sur la table à voix haute, devant une carte à trente-huit points." },
@@ -20187,7 +20187,7 @@ aly_choix_karlsberg:{
   qui:'alycia',
   titre:"Une adresse",
   texte:[
-    "« Amenez-les à Karlsberg. Tous. Il y a de la place, il y a des murs, et il y a des hommes. »",
+    "@« Amenez-les à Karlsberg. Tous. Il y a de la place, il y a des murs, et il y a des hommes. »",
     { sobre:"Elle ne répond pas tout de suite.",
       intense:"Elle regarde son croquis, les trente-huit points répartis sur quatre provinces, et elle passe le pouce dessus comme on efface.",
       extreme:"Elle regarde son croquis — trente-huit points répartis sur quatre provinces, trente-quatre endroits, quinze ans de travail — et elle passe le pouce dessus lentement, comme on efface une ligne de craie, en suivant du regard ce que ça donnerait si les trente-huit devenaient un." },
@@ -20290,11 +20290,11 @@ aly_loup_ensemble:{
   qui:'alycia',
   titre:"Le même bois",
   texte:[
-    "« Alors qu'on nous cherche ensemble. »",
+    "@« Alors qu'on nous cherche ensemble. »",
     { sobre:"Elle ne répond pas tout de suite. Puis : « Vous savez ce que ça coûte. »",
       intense:"« Vous savez ce que ça coûte », dit-elle. « Deux personnes qu'on cherche ensemble, ça se trouve deux fois plus vite. C'est de l'arithmétique, pas de la morale. »",
       extreme:"« Vous savez ce que ça coûte », dit-elle, et elle le pose comme un fait technique parce que c'en est un. « Deux personnes qu'on cherche séparément, il faut deux enquêtes. Deux personnes qu'on cherche ensemble, il en faut une, et elle est deux fois plus facile parce qu'on a deux descriptions à recouper au lieu d'une. C'est de l'arithmétique. Ce n'est pas de la morale et ce n'est pas du courage. »" },
-    "« Je sais. »",
+    "@« Je sais. »",
     "« Dites-le en connaissant le chiffre, alors. »",
     "« Je le dis en connaissant le chiffre. »",
     "§ Elle sort le placard de sa sacoche, le déplie, et regarde les deux gravures côte à côte.",
@@ -20324,7 +20324,7 @@ aly_loup_separer:{
   qui:'alycia',
   titre:"Deux bois",
   texte:[
-    "« Séparons-nous. Une gravure de chacun vaut mieux qu'une des deux. »",
+    "@« Séparons-nous. Une gravure de chacun vaut mieux qu'une des deux. »",
     { sobre:"« Oui », dit-elle immédiatement. « C'est ce qu'il faut faire. »",
       intense:"« Oui », dit-elle immédiatement, sans une seconde d'hésitation, parce qu'elle avait fait le calcul avant d'arracher le placard du mur. « C'est ce qu'il faut faire. »",
       extreme:"« Oui », dit-elle immédiatement, sans une seconde d'hésitation, et vous comprenez qu'elle avait fait ce calcul avant même d'arracher le placard du mur — probablement pendant la deuxième lecture. « C'est ce qu'il faut faire, et je vous remercie de l'avoir dit le premier, parce que si je l'avais dit la première vous auriez cru que je partais. »" },
@@ -20493,7 +20493,7 @@ fi_parloir:{
     "« Vous savez qui je suis. »",
     "« Vous êtes le fils cadet d'Aymar. Loys est mort à neuf ans dans la cour, donc vous êtes Yohan, donc vous avez trente ans. » Elle a le calcul immédiat. « Asseyez-vous ou ne vous asseyez pas, mais fermez la porte, il y a des femmes qui passent. »",
     "Vous fermez la porte.",
-    "« Vous m'attendiez. »",
+    "@« Vous m'attendiez. »",
     { sobre:"« Depuis dix-neuf ans. »",
       intense:"« Depuis dix-neuf ans, tous les matins, de six heures à dix heures. » Elle croise les mains sur le registre. « C'est pour ça que je tiens les comptes au parloir et pas au bureau. On m'a proposé le bureau quatre fois. »",
       extreme:"« Depuis dix-neuf ans, tous les matins, de six heures à dix heures, y compris le dimanche. » Elle croise les mains sur la couverture du registre. « C'est exactement pour ça que je tiens les comptes de cette maison au parloir et pas au bureau, qui serait plus commode, mieux chauffé et plus clair. On m'a proposé le bureau quatre fois en dix-neuf ans. J'ai refusé quatre fois et je n'ai jamais donné de raison, et comme c'est ici, personne n'a insisté. »" },
@@ -20520,7 +20520,7 @@ fi_parloir_pourquoi:{
   qui:'ysabel',
   titre:"Pourquoi le parloir",
   texte:[
-    "« Pourquoi le parloir ? »",
+    "@« Pourquoi le parloir ? »",
     "C'est la première chose qui la déplace. Un mouvement des sourcils, très bref.",
     "« Parce qu'il fallait qu'on puisse me trouver », dit-elle.",
     "« Vous vouliez qu'on vous trouve. »",
@@ -20565,7 +20565,7 @@ fi_aveu:{
   qui:'ysabel',
   titre:"Quatre lignes et une nuit",
   texte:[
-    "« Est-ce que c'est vous ? »",
+    "@« Est-ce que c'est vous ? »",
     "« Oui. »",
     { sobre:"Aucun délai. Aucune préparation.",
       intense:"Aucun délai, aucune préparation, aucune des trois secondes qu'un être humain prend d'ordinaire avant d'avouer une chose de cette taille. Elle a eu dix-neuf ans pour préparer cette syllabe-là.",
@@ -20603,7 +20603,7 @@ fi_pourquoi:{
   qui:'ysabel',
   titre:"Un enfant sur trois",
   texte:[
-    "« Pourquoi. »",
+    "@« Pourquoi. »",
     "Elle prend son temps, cette fois. C'est la première fois de la matinée.",
     "« Vous savez ce que la maison gardait. »",
     "« Oui. »",
@@ -20635,7 +20635,7 @@ fi_loys:{
   qui:'ysabel',
   titre:"Loys",
   texte:[
-    "« Loys avait neuf ans. »",
+    "@« Loys avait neuf ans. »",
     { sobre:"Elle ferme les yeux.",
       intense:"Elle ferme les yeux, et c'est la première défaillance de toute la matinée — pas des larmes : une fermeture.",
       extreme:"Elle ferme les yeux. C'est la première défaillance visible de toute la matinée, et ce ne sont pas des larmes : c'est une fermeture, nette, comme on ferme un volet à une heure décidée d'avance parce qu'on sait ce qui passe dans la rue à ce moment-là." },
@@ -20663,13 +20663,13 @@ fi_enfants:{
   qui:'ysabel',
   titre:"La cave",
   texte:[
-    "« Le chapelain m'a fait descendre par la cave. »",
+    "@« Le chapelain m'a fait descendre par la cave. »",
     "« Oui. »",
     "« Comment savait-il qu'il fallait le faire cette nuit-là ? »",
     { sobre:"Silence.",
       intense:"Elle ne répond pas. Pour la première fois, elle regarde la table.",
       extreme:"Elle ne répond pas. Pour la première fois de la matinée elle regarde la table, et pas vous, et pas la fenêtre — et vous comprenez que vous venez de poser la seule question qu'elle n'a pas passé dix-neuf ans à préparer, parce que c'est la seule dont la réponse pourrait ressembler à une défense." },
-    "« Ysabel. »",
+    "@« Ysabel. »",
     "« Je le lui ai dit », dit-elle.",
     "§ La pièce ne change pas. C'est vous qui changez de place dedans.",
     "« Vous le lui avez dit. »",
@@ -20746,7 +20746,7 @@ fi_derniere:{
   qui:'ysabel',
   titre:"La dernière chose",
   texte:[
-    "« Une dernière chose. »",
+    "@« Une dernière chose. »",
     "« Je vous écoute. »",
     "« Vous avez recommencé ? »",
     { sobre:"« Pardon ? »",
@@ -20822,7 +20822,7 @@ fi_ecrire:{
   qui:'ysabel',
   titre:"De sa main",
   texte:[
-    "« Écrivez. »",
+    "@« Écrivez. »",
     "« Quoi ? »",
     "« Tout. Les quatre lignes, la date, le cachet, le chapelain, la cave, la fenêtre du haut. De votre main, signé, scellé de ce cachet de cadet si vous l'avez encore. »",
     { sobre:"« Je l'ai encore. »",
@@ -20852,7 +20852,7 @@ fi_emmener:{
   qui:'ysabel',
   titre:"Hors d'ici",
   texte:[
-    "« Levez-vous. Vous venez avec moi. »",
+    "@« Levez-vous. Vous venez avec moi. »",
     { sobre:"C'est la seule chose de la matinée qu'elle n'avait pas envisagée.",
       intense:"Elle vous regarde comme si vous aviez parlé une autre langue. C'est la seule chose de toute la matinée qu'elle n'avait pas envisagée en dix-neuf ans.",
       extreme:"Elle vous regarde comme si vous aviez parlé une autre langue, et vous comprenez que c'est la seule chose de toute cette matinée — de ces dix-neuf ans — qu'elle n'avait pas envisagée. Elle avait préparé la mort. Elle avait préparé l'aveu. Elle avait même préparé, on le devine, le fait que personne ne vienne jamais. Elle n'avait pas préparé de sortir." },
@@ -20869,7 +20869,7 @@ fi_emmener:{
       intense:"Elle monte en croupe, et il faut s'y reprendre à deux fois : elle n'est pas montée à cheval depuis dix-neuf ans et elle a soixante-quatre ans.",
       extreme:"Elle monte en croupe, et il faut s'y reprendre à deux fois parce qu'elle n'a pas monté à cheval depuis dix-neuf ans, qu'elle a soixante-quatre ans, et qu'elle refuse absolument qu'on l'aide au-delà d'une main. À la deuxième tentative elle est en selle, très droite, les deux mains sur la sacoche, et elle ne se retourne pas vers le mur." },
     "À la première halte, elle demande : « Qu'est-ce que vous allez faire de moi ? »",
-    "« Je ne sais pas. »",
+    "@« Je ne sais pas. »",
     "« Alors ce sera long », dit-elle, et elle mange son pain.",
   ],
   effets:{ flags:['fi_emmenee','a2_ysabel_vivante','a2_ysabel_avec'],

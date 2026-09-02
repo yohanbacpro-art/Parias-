@@ -52,7 +52,7 @@ acte_charles:{
 ch_oui:{
   qui:'charles',
   texte:[
-    "« Oui. »",
+    "@« Oui. »",
     { sobre:"Il hoche la tête. Il ne se lève pas.",
       intense:"Il hoche la tête, une fois, et il ne se lève pas et il n'appelle personne. Il reste assis avec son gobelet et il regarde la table pendant un temps déraisonnable.\n\n« Merci. »",
       extreme:"Il hoche la tête une fois. Il ne se lève pas, il n'appelle personne, il ne pose pas la main sur quoi que ce soit. Il reste assis avec son gobelet et il regarde le bois de la table pendant un temps déraisonnable — trente secondes, peut-être quarante, ce qui est très long entre deux hommes qui ne se parlent pas.\n\n« Merci. »" },
@@ -73,7 +73,7 @@ ch_oui:{
 ch_non:{
   qui:'charles',
   texte:[
-    "« Non. »",
+    "@« Non. »",
     { sobre:"Il vous regarde longtemps et il ne dit pas s'il vous croit.",
       intense:"Il vous regarde longtemps et il ne dit pas s'il vous croit, ce qui est le pire de tout : un homme qui vous croit vous laisse tranquille, un homme qui ne vous croit pas vous arrête, et un homme qui ne dit rien vous met dans une colonne dont vous ne connaîtrez jamais le titre.",
       extreme:"Il vous regarde longtemps et il ne dit pas s'il vous croit. C'est le pire de tout : un homme qui vous croit vous laisse tranquille, un homme qui ne vous croit pas vous arrête, et un homme qui ne dit rien vous range dans une colonne dont vous ne connaîtrez jamais le titre. Il a vingt-deux ans d'habitude et il ne fait plus ça exprès." },
@@ -94,7 +94,7 @@ ch_non:{
 ch_retour_dom:{
   qui:'charles',
   texte:[
-    "« Vous en avez tué combien, vous ? »",
+    "@« Vous en avez tué combien, vous ? »",
     "« Cent quatorze morts. Ce n'est pas la question que vous posez. »",
     "« Non. »",
     { sobre:"« Trois cent onze. »",
@@ -118,7 +118,7 @@ ch_retour_dom:{
 ch_retour_cout:{
   qui:'charles',
   texte:[
-    "« Vous en avez tué combien, vous ? »",
+    "@« Vous en avez tué combien, vous ? »",
     "« Ce n'est pas une conversation », dit-il en se levant. « C'est une esquive, et je les reconnais depuis vingt-deux ans. »",
     "§ Il ne s'énerve pas. Il range, ce qui est pire.",
     "« Je suis venu chercher une réponse et je repars avec une manière de ne pas répondre, ce qui est une réponse. »",
@@ -202,7 +202,7 @@ lu_offre:{
 lu_sait:{
   qui:'lucius',
   texte:[
-    "« Vous savez ce que je suis. »",
+    "@« Vous savez ce que je suis. »",
     "« Un Paria. Oui. »",
     "« Et vous proposez une alliance publique à un Paria. »",
     { sobre:"« Je propose une alliance publique à une maison relevée. »",
@@ -239,7 +239,7 @@ lu_accepte:{
 lu_refus:{
   qui:'lucius',
   texte:[
-    "« Non. »",
+    "@« Non. »",
     "Il ne discute pas et ne réessaie pas. C'est peut-être ce qu'il a de plus impressionnant : il retire l'offre de la table en une phrase et il passe à autre chose.",
     "« Dommage. Sincèrement, et sans rancune : j'aurais aimé. »",
     "§ « Une chose, avant que vous partiez, et ce n'est pas une menace parce que ça ne me sert à rien. »",
@@ -255,7 +255,7 @@ lu_refus:{
 lu_plus_tard:{
   qui:'lucius',
   texte:[
-    "« Plus tard. »",
+    "@« Plus tard. »",
     "« Combien plus tard ? »",
     "« Je ne sais pas. »",
     { sobre:"Il accepte, ce qui surprend.",
@@ -279,7 +279,7 @@ ca_fort:{
     () => a('a2_bannieres')
       ? "« Karlsberg. » Il tapote une chemise sur son bureau. « J'ai ouvert un dossier le jour de l'enregistrement. Il fait déjà onze feuillets. »"
       : "« Vous n'avez rien relevé. » Il tapote une chemise. « Ça fait de vous une curiosité et pas un dossier, et je préfère les curiosités : elles ne coûtent rien. »",
-    "« Vous ouvrez un dossier sur tout le monde ? »",
+    "@« Vous ouvrez un dossier sur tout le monde ? »",
     "« Sur toute maison susceptible d'exister à moins de quarante lieues. Il y en a cent onze. » Il écarte les mains. « Ce n'est pas de l'hostilité, c'est de la comptabilité. Je n'ai pas d'ennemis, messire : j'ai des concurrents, et un concurrent, ça se rachète. »",
     "§ C'est la première fois de l'année que quelqu'un vous explique ce qu'il fera de vous en termes purement commerciaux, et c'est reposant.",
     "« Vous voulez racheter quoi ? »",
@@ -309,7 +309,7 @@ ca_fort:{
 ca_autre:{
   qui:'caleb',
   texte:[
-    "« Quoi d'autre ? »",
+    "@« Quoi d'autre ? »",
     "« Sainte-Ombre. »",
     "§ Il le dit sans préparation, et il vous regarde le recevoir.",
     { sobre:"« Le couvent est sur mes terres. »",
@@ -337,7 +337,7 @@ ca_marche:{
   qui:'caleb',
   texte:[
     "L'acte tient en une page et il est rédigé avant que vous ayez fini de dire oui, ce qui veut dire qu'il était rédigé avant votre arrivée.",
-    "« Vous l'aviez préparé. »",
+    "@« Vous l'aviez préparé. »",
     "« J'ai préparé les quatre. » Il range les trois autres sans les montrer. « Un homme qui ne prépare qu'une version d'un entretien est un homme qui va perdre trois entretiens sur quatre. »",
     "§ Il vous donne une lettre de recommandation à la mère supérieure de Sainte-Ombre, cachetée, et il ne la cachette pas devant vous, ce qui est délibéré.",
     "« Une chose, messire, et elle est gratuite. »",
@@ -353,7 +353,7 @@ ca_marche:{
 ca_vend:{
   qui:'caleb',
   texte:[
-    "« Combien ? »",
+    "@« Combien ? »",
     "« Six cents comptant. »",
     "« Il vaut onze cents par an. »",
     "« Il vaut onze cents par an à quelqu'un qui peut le faire reconnaître. Vous ne le pouvez pas : il faudrait une instance contre Valombre, six ans, un avocat, et une maison qui existe assez pour ester en justice. » Il compte déjà. « Six cents comptant, c'est le prix d'une chose que vous ne pouvez pas utiliser. C'est même généreux, et je suis généreux uniquement quand ça se remarque. »",
@@ -369,7 +369,7 @@ ca_vend:{
 ca_garde:{
   qui:'caleb',
   texte:[
-    "« Je le garde. »",
+    "@« Je le garde. »",
     "« Bien. » Il referme la chemise sans une trace de contrariété. « C'est le bon choix, d'ailleurs, si vous êtes encore vivant dans six ans. »",
     "« Et si je ne le suis pas ? »",
     "« Alors c'est le mauvais, et je rachèterai le droit à vos héritiers, ou à personne, et ça ne changera rien à ma vie. »",

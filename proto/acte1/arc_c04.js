@@ -99,7 +99,7 @@ va_lu_ko:{
   texte:[
     "Trois pages. Vous les lisez et vous comprenez la première.",
     "§ Un homme d'armes qui lit un acte de clerc est un homme d'armes qui regarde du papier, et c'est très exactement la raison pour laquelle il y a des clercs.",
-    "« Ça a l'air en ordre. »",
+    "@« Ça a l'air en ordre. »",
     "« Ça l'est », dit Aymar de Vauclair.",
     "Et c'est vrai. C'est parfaitement en ordre, et c'est le problème.",
   ],
@@ -113,7 +113,7 @@ va_concession:{
     { sobre:"Vauclair a la concession depuis six ans. Elle porte sur onze mille arpents.",
       intense:"Aymar de Vauclair a obtenu la concession d'exploitation il y a six ans, l'année de son héritage, sur onze mille arpents de marais. C'est en ordre, c'est enregistré, c'est payé.",
       extreme:"Aymar de Vauclair a obtenu la concession d'exploitation six ans plus tôt, l'année de son héritage, sur onze mille arpents. C'est en ordre, enregistré, payé, contresigné. Il n'y a pas la moindre irrégularité et le greffier le dit avec une pointe de fierté professionnelle, comme on parle d'un dossier bien tenu." },
-    "« Et les gens qui habitent dedans ? »",
+    "@« Et les gens qui habitent dedans ? »",
     "« Une concession d'exploitation ne porte pas sur les habitants, messire. Elle porte sur la tourbe. »",
     "« Donc ils peuvent rester. »",
     "Le greffier réfléchit sérieusement, parce que c'est un homme sérieux.",
@@ -187,7 +187,7 @@ va_termes:{
 va_accord:{
   qui:'iselle',
   texte:[
-    "« C'est dit. »",
+    "@« C'est dit. »",
     "« C'est dit. » Elle referme son registre. « Après. Et pas dans cette maison : à l'auberge du bourg, où tout le monde nous verra, parce que c'est tout l'intérêt. »",
     "§ Elle organise sa propre disgrâce avec la même application qu'une colonne de chiffres, et elle est la seule personne de cette province à avoir un plan.",
     "« Une dernière chose, messire. Quand vous serez dans le marais. »",
@@ -204,7 +204,7 @@ va_accord:{
 va_or_seul:{
   qui:'iselle',
   texte:[
-    "« L'or seul. »",
+    "@« L'or seul. »",
     "« Bien. » Elle rouvre son registre, et il faut trois secondes pour voir que c'est un geste de contenance. « Vous m'obligez à trouver autre chose, ce qui est ennuyeux mais faisable. »",
     "§ Elle n'est ni blessée ni soulagée. Elle recalcule, c'est tout, et c'est ce qu'elle fait de mieux.",
     "« Je vous dois quand même un renseignement, puisque vous n'avez rien pris. Estève parle, et il ment très bien. Écoutez le petit : il a dix-neuf ans et il n'a pas encore appris. »",
@@ -291,7 +291,7 @@ va_passes_ko:{
 va_guide:{
   texte:[
     "Le guide s'appelle Perrot, il a soixante ans, il coupe du saule pour les vanniers, et il connaît les passes parce que tout le bourg les connaît.",
-    "« Tout le bourg les connaît ? »",
+    "@« Tout le bourg les connaît ? »",
     "« Tout le bourg y a de la famille, messire. C'est la même famille. »",
     { sobre:"C'est le renseignement le plus important de l'affaire et il tombe en quatre mots.",
       intense:"C'est le renseignement le plus important de toute l'affaire et il tombe en quatre mots, sur un chemin, à un étranger qui a payé quarante couronnes. Les quatre-vingts du marais et les six cents du bourg ne sont pas deux populations : c'est une seule, coupée en deux il y a trente ans par quelque chose, et les deux moitiés se marient encore entre elles.",
@@ -466,7 +466,7 @@ va_greffe_ko:{
 va_deux:{
   qui:'esteve',
   texte:[
-    "« Deux. »",
+    "@« Deux. »",
     "Estève met un moment à comprendre, puis il comprend, et ce qu'il fait alors est la chose la plus difficile à regarder de tout le contrat : il hoche la tête.",
     "« Deux cents couronnes au lieu de six cents. Vous perdez quatre cents. »",
     "« Oui. »",
@@ -507,7 +507,7 @@ va_fin_greffe:{
     "« Je vous paie les deux cents. Vous n'avez ramené personne, mais vous avez rempli le contrat au sens strict : le marais ne me pose plus de problème de police. Il me pose un problème de droit, ce qui est plus cher et plus long. »",
     "Il compte lui-même, en piles de vingt.",
     "§ « Une chose, messire, et ce n'est pas une menace, c'est un point de fait. Un acte s'attaque. Ça prend des années et de l'argent, et j'ai les deux. »",
-    "« Ils ont trente ans de possession et un registre. »",
+    "@« Ils ont trente ans de possession et un registre. »",
     "« Ils ont ça, oui. Et moi j'ai le temps, et eux ont vingt-six enfants à nourrir dans un marais dont je possède la tourbe. »",
     "Il pousse les deux cents couronnes vers vous.",
     "« Vous avez gagné une génération. C'est plus que ce que gagne la plupart des gens. »",
