@@ -16,7 +16,7 @@ const fs = require('fs');
 const path = require('path');
 
 const RACINE = path.resolve(__dirname, '..');
-const DOSSIERS = ['proto/acte1', 'proto/acte2'];
+const DOSSIERS = ['proto/acte1', 'proto/acte2', 'proto/acte3'];
 
 const fichiers = DOSSIERS.flatMap(d =>
   fs.readdirSync(path.join(RACINE, d))

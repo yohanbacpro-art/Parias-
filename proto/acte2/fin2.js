@@ -718,6 +718,10 @@ DYN.a2_epilogue = () => {
          : "Trois ans, trois pistes, et une question entière.",
     apres: verdictsA2(),
     plusTard:"Les crises qui arrivent maintenant ne se jouent plus à l'échelle d'un homme. Le monde ne se referme pas : il monte d'un cran.",
+    /* L'épilogue de l'Acte II n'est une fin que la première fois. Douze ans
+     * plus tard, tout ce qu'il vient d'énumérer redevient une situation. */
+    suite: a('a3_ouvert') ? null : 'a3_bascule',
+    libelleSuite:"Douze ans plus tard",
   };
   aller('a2_epilogue');
 };

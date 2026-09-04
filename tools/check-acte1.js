@@ -45,14 +45,17 @@ const dit = (ok, quoi, note) => {
    * composer avant de lire le graphe, sinon ses six entrées n'existent pas. */
   const graphe = await page.evaluate(() => {
     rendreHub();
+    /* Une destination peut être une fonction — après un `avant`, ou pour
+     * ouvrir une bataille. Elle ne se lit alors pas dans le graphe : la
+     * scène visée s'inscrit à la main au registre des entrées. */
     const cibles = s => {
       const out = [];
-      if(s.suite) out.push(s.suite);
+      if(typeof s.suite === 'string') out.push(s.suite);
       for(const c of (s.choix || [])){
-        if(c.va) out.push(c.va);
+        if(typeof c.va === 'string') out.push(c.va);
         if(c.degres) out.push(...Object.values(c.degres));
       }
-      return out;
+      return out.filter(x => typeof x === 'string' && x);
     };
     const def = Object.keys(SCENES);
     const ref = {};
@@ -69,7 +72,11 @@ const dit = (ok, quoi, note) => {
       .concat(ENTREES2)
       /* Les chasses et le duel ne se référencent nulle part : c'est la file
        * de l'entre-saisons qui va les chercher quand le monde est prêt. */
-      .concat(RENCONTRES);
+      .concat(RENCONTRES)
+      /* L'Acte III se compose : le siège n'a pas de champ écrit et ses
+       * scènes se rappellent entre elles par des aiguillages. */
+      .concat(['a3_bascule', 'a3_ceux_qui_viennent', 'a3_convergence',
+               'a3_siege', 'a3_apres_siege']);
     return { def, ref, dyn:Object.keys(DYN), echos:Object.keys(ECHOS),
              parBanc, parOffre, parNeuf, parBeat };
   });

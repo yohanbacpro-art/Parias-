@@ -631,3 +631,103 @@ entree2('ka_palier', ...OUVRAGES.map(o => 'ka_' + o.id));
 offrir({ id:'ka_chantier', lieu:'karlsberg', va:'ka_chantier',
          titre:"Le chantier", permanent:true,
          si:() => a('kar_refuge') || a('a2_bannieres') || CHANTIER().faits.length > 0 });
+
+/* ══ LA ROUTE GRISE ════════════════════════════════════════════════════════
+ * `route_sure` est une condition et pas un stock : c'est un état du monde,
+ * et un état du monde ne s'achète pas. Trois chemins l'ouvrent — le péage,
+ * l'alliance de Mont-Draken, l'enceinte. En voici un quatrième, et c'est le
+ * seul qu'on paie de sa personne.
+ *
+ * Les hommes qu'on lève ici sont ceux de l'Acte I. Le hameau qu'on a sauvé,
+ * le pont qu'on a rouvert, le puits d'où l'on a sorti sept hommes : ils ne
+ * viennent pas pour une solde, ils viennent parce que c'est vous. C'est très
+ * exactement ce que le renom achète, et c'est la seule chose qu'il achète. */
+const LEVEE = () => [
+  a('ch_meute_faite') && !a('ch_meute_ignoree')
+    ? { type:'frondeurs', quoi:"Fontaine-Basse, qui a passé l'hiver" } : null,
+  a('ch_reine_faite') && !a('ch_reine_refusee')
+    ? { type:'lanciers', effectifPct:0.8, quoi:"les contreforts, et le puits sept" } : null,
+  a('ch_colosse_fait') && !a('ch_colosse_ignore')
+    ? { type:'lanciers', effectifPct:0.6, quoi:"les coupeurs des tourbières hautes" } : null,
+  a('wy_route_reouverte')
+    ? { type:'archers', effectifPct:0.8, quoi:"Cendrepont, qui doit sa route" } : null,
+  { type:'frondeurs', effectifPct:0.6, quoi:"ce que la vallée trouve, et ce n'est pas grand-chose" },
+].filter(Boolean);
+
+const ROUTE_GRISE = {
+
+rg_route:{
+  lieu:"Cendrepont · le mur du Héron",
+  titre:"Ce qui monte, et ce qui ne monte pas",
+  texte:[
+    "Rien de lourd ne monte à Karlsberg. C'est le fait qui commande tout le reste et il n'a rien de mystérieux : la Route Grise est coupée à trois lieues sous Cendrepont depuis six semaines.",
+    { sobre:"Trois cents pillards. Mal commandés, mais trois cents.",
+      intense:"Trois cents pillards, mal commandés, mal nourris et parfaitement inutiles à qui que ce soit — mais trois cents, et une charrette de pierre de taille ne se défend pas.",
+      extreme:"Trois cents pillards. Mal commandés, mal nourris, sans intention politique et sans intérêt pour personne — et trois cents.\n\nUne charrette de pierre de taille fait quatre lieues par jour, ne quitte pas la chaussée, et ne se défend pas. C'est tout ce qu'il faut savoir : on ne monte pas une muraille avec ce qu'on peut porter à dos d'homme, et la Route Grise est la seule chaussée qui aille de la carrière à la vallée." },
+    "@« Qui les tient ? »",
+    "« Personne », dit l'aubergiste du Héron. « C'est bien le problème. S'il y avait quelqu'un, on pourrait le payer. »",
+    "§ Il n'y a pas de contrat pour ça. Il n'y a personne à qui l'adresser : une route coupée n'appartient à aucune maison, ce qui est exactement pourquoi elle reste coupée.",
+    () => {
+      const l = LEVEE();
+      return `Ce que vous pouvez lever, en revanche, tient en une phrase : ${l.map(x => x.quoi).join(' · ')}.`;
+    },
+    { sobre:"Ils ne viennent pas pour une solde.",
+      intense:"Ils ne viennent pas pour une solde — personne ne paie personne dans cette affaire. Ils viennent parce que c'est vous, ce qui est très exactement ce que le renom achète et la seule chose qu'il achète.",
+      extreme:"Ils ne viennent pas pour une solde. Il n'y a pas de solde, il n'y a pas de commanditaire, il n'y a pas d'acte à signer et pas un sou à toucher au bout.\n\nIls viennent parce que c'est vous. C'est très exactement ce que le renom achète dans ce monde, c'est la seule chose qu'il achète, et c'est aussi la raison pour laquelle un homme d'armes qui travaille gratuitement une fois travaille gratuitement partout — sauf que cette fois-ci, c'est vous qui encaissez." },
+  ],
+  effets:{ marque:"La Route Grise est coupée à trois lieues sous Cendrepont. Rien de lourd ne monte.",
+           court:"La route coupée" },
+  choix:[
+    { t:"Lever la vallée et rouvrir la route",
+      detail:() => `${LEVEE().length} compagnies · trois cents en face · et personne pour vous payer`,
+      risque:"définitif",
+      va:() => ouvrirBataille('bat_route', 'rg_apres', LEVEE()) },
+
+    { t:"Attendre qu'un autre s'en charge",
+      detail:"Chastel finira par envoyer une compagnie · dans deux ans, peut-être trois",
+      risque:"prudent", va:'rg_attendre' },
+  ],
+},
+
+rg_attendre:{
+  titre:"Deux ans, peut-être trois",
+  texte:[
+    "Vous n'y allez pas. C'est raisonnable : un homme seul ne lève pas une vallée pour une chaussée.",
+    "§ Karlsberg monte quand même, avec ce qu'on peut porter à dos d'homme. C'est plus lent, c'est plus cher, et ça se voit sur les murs.",
+    "Chastel enverra une compagnie. Elle mettra onze jours et quatre morts, elle rouvrira la route, et elle installera un péage à Cendrepont dont vous paierez deux sous par essieu pendant vingt ans.",
+  ],
+  effets:{ flags:['rg_attendu'], cout:{ moral:3 },
+           marque:"Vous n'avez pas levé la vallée. Chastel rouvrira la route, et posera son péage.",
+           court:"Le péage de Chastel" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+rg_apres:{
+  lieu:"La Route Grise · au matin",
+  titre:"Ce qui monte, maintenant",
+  texte:[
+    () => ETAT.derniereBataille === 'gagnee'
+      ? "La chaussée est libre sur onze lieues. La première charrette de pierre de taille passe le surlendemain, à quatre lieues par jour, sans escorte."
+      : "La colonne décroche par le talus. On ramène ce qu'on peut ramener, et la Route Grise reste ce qu'elle était hier.",
+    () => ETAT.derniereBataille === 'gagnee'
+      ? { sobre:"Personne ne vous paie. C'était prévu.",
+          intense:"Personne ne vous paie et personne n'avait promis de le faire. Ce qu'on vous donne, c'est que onze lieues de chaussée s'appellent désormais votre route dans la bouche des charretiers, et qu'un charretier parle à tous ceux qu'il croise.",
+          extreme:"Personne ne vous paie. Personne n'avait promis de le faire et personne n'y a pensé une seconde.\n\nCe qu'on vous donne est autre chose, et dans cette province ça vaut infiniment plus cher : onze lieues de chaussée s'appellent désormais *votre route* dans la bouche des charretiers. Un charretier fait quatre lieues par jour, parle à tout ce qu'il croise, et n'a rien d'autre à raconter que la route.\n\nEn Messidor, trois provinces sauront qu'un homme a levé une vallée sans contrat et rouvert une chaussée que Chastel laissait fermée depuis six semaines. C'est une très bonne nouvelle et c'est une très mauvaise nouvelle, et ce sont exactement les mêmes gens qui l'apprendront." }
+      : "Les pillards tiennent la chaussée. Ils tiendront jusqu'à ce que quelqu'un d'autre monte, et ce quelqu'un d'autre posera un péage.",
+  ],
+  effets:{ faire:() => { if(ETAT.derniereBataille === 'gagnee') ETAT.flags.add('a2_route_franche'); },
+           flags:['rg_faite'],
+           marque:"La Route Grise, levée sans contrat.", court:"La Route Grise" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+};
+
+enregistrerScenes(ROUTE_GRISE);
+
+entree2('rg_route', 'rg_attendre', 'rg_apres');
+
+/* Elle ne se propose que quand elle sert : il faut bâtir, et la route doit
+ * être encore coupée. */
+offrir({ id:'rg_route', lieu:'cendrepont', va:'rg_route',
+         titre:"La chaussée est coupée à trois lieues",
+         si:() => !a('a2_route_franche') && !a('rg_attendu')
+                  && (a('kar_refuge') || a('a2_bannieres') || CHANTIER().faits.length > 0) });

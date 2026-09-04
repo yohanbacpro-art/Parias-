@@ -397,7 +397,10 @@ function finDeBataille(){
  * C'est le cas normal avant Karlsberg — un homme sans maison n'a pas d'armée,
  * on lui en confie une, et ce qui en revient ne lui appartient toujours pas. */
 function ouvrirBataille(idChamp, retour, pretees){
-  const def = CHAMPS[idChamp];
+  /* On accepte un identifiant de `CHAMPS`, ou un champ construit à la volée :
+   * le siège de Karlsberg n'a pas de composition écrite d'avance, il a celle
+   * que douze ans de parties ont produite. */
+  const def = typeof idChamp === 'string' ? CHAMPS[idChamp] : idChamp;
   if(!def) return;
   const roster = pretees
     ? pretees.map(p => instancierUnite(p.type, p.effectifPct)).filter(Boolean)
@@ -417,7 +420,10 @@ function ouvrirBataille(idChamp, retour, pretees){
     pretees:!!pretees,
   };
   bataille.effectifInitialEnnemi = bataille.fronts.reduce((s, f) => s + effectifTotal(f.ennemis), 0);
-  aller('bat_champ');
+  /* On **rend** la scène au lieu d'y aller : un choix qui ouvre une bataille
+   * s'écrit `va:() => ouvrirBataille(...)`. Le faire dans un `avant` ouvrait
+   * le champ puis naviguait par-dessus, et la bataille n'avait jamais lieu. */
+  return 'bat_champ';
 }
 
 /* ── Lire un front ──────────────────────────────────────────────────────

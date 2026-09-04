@@ -109,8 +109,94 @@ an_anarion:{
     { t:"Prendre le poste de Vaeth comme une porte de sortie",
       detail:"ne rien promettre · et savoir que la porte existe",
       risque:"calculé", va:'an_porte' },
+
+    { t:"« Le gué d'Aumance tient jusqu'à quand ? »",
+      detail:"une ligne de fleuve ne se gagne pas · elle se tient une saison de plus",
+      risque:"calculé", va:'an_gue' },
   ],
 },
+
+/* ══ LA LIGNE DU FLEUVE ════════════════════════════════════════════════════
+ * Anarion ne demande rien : c'est sa méthode et elle est totale. Il ne
+ * demandera donc pas non plus qu'on tienne son gué. Il dira où il est, à
+ * quelle heure il tombe, et il laissera un homme décider tout seul — ce qui
+ * est de très loin la façon la plus efficace de faire faire quelque chose à
+ * quelqu'un, et il le sait depuis soixante ans. */
+an_gue:{
+  qui:'anarion',
+  lieu:"Vaeth · la salle des liasses",
+  titre:"Le gué d'Aumance",
+  texte:[
+    "@« Le gué d'Aumance tient jusqu'à quand ? »",
+    { sobre:"« Onze jours. Peut-être neuf. »",
+      intense:"Il ne consulte rien. « Onze jours. Peut-être neuf : la crue baisse et un gué qui redevient un gué se défend deux fois moins bien. »",
+      extreme:"Il ne consulte aucune liasse, ne demande rien à aucun secrétaire, ne marque pas la moindre hésitation.\n\n« Onze jours. Peut-être neuf. »\n\nUn temps.\n\n« La crue baisse depuis Floréal. Un gué en crue est une position ; un gué qui redevient un gué est un chemin, et un chemin se défend deux fois moins bien. Eltharion le sait aussi et il a un mois d'avance sur nous là-dessus, parce qu'il fait mesurer la hauteur d'eau tous les matins depuis quatre cents ans et que nous le faisons depuis six. »" },
+    "@« Et vous y envoyez qui ? »",
+    { sobre:"« Quatre cents hommes de la file, et personne pour les commander. »",
+      intense:"« Quatre cents hommes de la file. » Il n'adoucit rien. « Des Parias du sud, un clerc, quatre Hommes-Bêtes qui labouraient il y a deux hivers. Ils tiendront parce qu'ils n'ont nulle part où aller. Personne ne les commande : mes capitaines sont à l'ouest. »",
+      extreme:"« Quatre cents hommes de la file. »\n\nIl n'adoucit rigoureusement rien, ce qui est chez lui une forme de politesse.\n\n« Deux familles de Parias du sud comme celles que vous avez vues au poste. Un ancien clerc de Chastel qui n'a jamais tenu autre chose qu'une plume. Quatre Hommes-Bêtes qui labouraient il y a deux hivers et qui n'ont jamais compris un seul de nos ordres. Et deux compagnies franches payées d'avance, qui tiendront exactement le temps pour lequel on a payé.\n\nIls tiendront le gué parce qu'ils n'ont nulle part ailleurs où aller. C'est la seule chose qui les tienne et c'est plus solide qu'une solde.\n\nPersonne ne les commande. Tous mes capitaines sont à l'ouest, et j'en ai onze pour quatre lignes. »" },
+    "§ Il ne demande pas. Il ne demandera pas : c'est toute sa méthode et il vient de passer une heure à vous expliquer pourquoi.",
+    "Il repose la liasse, il vous regarde, et il attend exactement le temps qu'il faut pour que le silence devienne le vôtre.",
+  ],
+  effets:{ flags:['an_gue_su'],
+           marque:"Le gué d'Aumance tombe dans onze jours. Quatre cents hommes de la file, aucun capitaine.",
+           court:"Le gué d'Aumance" },
+  choix:[
+    { t:"Y aller",
+      detail:"quatre cents hommes qui n'ont nulle part où aller · une saison de plus, pas davantage",
+      risque:"définitif",
+      ferme:"Ferme : l'idée que vous ne devez rien à la Marche noire",
+      va:() => ouvrirBataille('bat_marche', 'an_apres', [
+        { type:'parias', effectifPct:0.9 }, { type:'lanciers', effectifPct:0.8 },
+        { type:'frondeurs' }, { type:'mercenaires', effectifPct:0.7 },
+        { type:'eclaireurs' },
+      ]) },
+
+    { t:"« Ce n'est pas ma guerre. »",
+      detail:"c'est vrai · il ne le contestera pas · c'est bien le problème",
+      risque:"prudent", va:'an_gue_non' },
+  ],
+},
+
+an_gue_non:{
+  qui:'anarion',
+  titre:"Ce n'est pas votre guerre",
+  texte:[
+    "@« Ce n'est pas ma guerre. »",
+    { sobre:"« Non. »",
+      intense:"« Non », dit-il, et il reprend sa liasse. C'est tout. Il ne discute pas, ne plaide pas, ne fait pas remarquer que vous venez de passer une heure à regarder une file de gens rayés comme vous.",
+      extreme:"« Non. »\n\nIl reprend sa liasse. C'est tout, c'est fini, et la conversation passe à autre chose dans la seconde.\n\nIl ne discute pas. Il ne plaide pas. Il ne fait pas remarquer que vous venez de passer trois jours à regarder une file de trente personnes rayées exactement comme vous, ni que deux familles de cette file monteront au gué dans onze jours sans savoir tenir une pique.\n\nUn homme qui ne demande jamais rien n'a rien à vous reprocher quand vous ne donnez rien, et c'est très exactement pour ça que sa méthode fonctionne depuis soixante ans." },
+    "§ Le gué d'Aumance tombe le neuvième jour.",
+    "Vous l'apprendrez à Chastel, six semaines plus tard, par un charretier qui raconte ça comme une nouvelle du nord et qui ne connaît aucun des noms.",
+  ],
+  effets:{ flags:['an_gue_refuse','a2_eltharion_soutenu'], cout:{ moral:8 },
+           faire:() => retenir('anarion', "il a vu la file et il n'est pas monté au gué"),
+           marque:"Vous n'êtes pas monté au gué d'Aumance. Il est tombé le neuvième jour.",
+           court:"Le neuvième jour" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+an_apres:{
+  qui:'anarion',
+  lieu:"Le gué d'Aumance · au soir",
+  titre:"Ce qu'on achète avec une saison",
+  texte:[
+    () => ETAT.derniereBataille === 'gagnee'
+      ? "Anarion vient au gué trois jours après. Il ne vient jamais aux lignes : c'est la première fois en six ans et deux secrétaires le notent."
+      : "Anarion vient au gué trois jours après, ce qu'il ne fait jamais. Il regarde la berge sud, longuement, et il ne dit rien pendant un temps considérable.",
+    () => ETAT.derniereBataille === 'gagnee'
+      ? { sobre:"« Une saison », dit-il. « C'est tout ce que ça achète. »",
+          intense:"« Une saison », dit-il. « C'est tout ce que ça achète et c'est ce que je vous avais dit. »\n\n@« Ça ne vous suffit pas ? »\n\n« Si. Une saison, c'est onze mille personnes qui sèment. Je voulais seulement m'assurer que vous ne croyiez pas avoir gagné une guerre. »",
+          extreme:"« Une saison », dit-il. « C'est tout ce que ça achète, et c'est exactement ce que je vous avais annoncé. »\n\n@« Ça ne vous suffit pas ? »\n\n« Si. » Il regarde la berge nord, où quatre cents personnes sont en train de compter leurs morts. « Une saison, ce sont onze mille personnes qui sèment au lieu de marcher. Dans mon métier c'est énorme et je ne l'obtiens pas trois fois par décennie.\n\nJe voulais simplement m'assurer que vous ne croyiez pas avoir gagné une guerre. Les hommes qui croient ça reviennent, et ceux qui reviennent finissent par y rester. »\n\nUn temps.\n\n« Vous, je préfère que vous reveniez à cinquante ans. »" }
+      : { sobre:"« Quatre lieues », dit-il enfin.",
+          intense:"« Quatre lieues », dit-il enfin. « La ligne descend de quatre lieues. »\n\n@« Onze hameaux. »\n\n« Onze. Vous les avez comptés. » Il hoche la tête. « Alors vous ferez un capitaine. Ceux qui ne comptent pas n'en font jamais. »",
+          extreme:"« Quatre lieues », dit-il enfin. « La ligne descend de quatre lieues. »\n\n@« Onze hameaux. »\n\n« Onze. » Il vous regarde pour la première fois depuis qu'il est arrivé. « Vous les avez comptés. »\n\n@« Oui. »\n\n« Alors vous ferez un capitaine, messire. Ceux qui ne comptent pas n'en font jamais un : ils font des héros, et un héros coûte plus cher qu'une défaite. »\n\nIl repart vers Vaeth le soir même. Onze hameaux évacuent dans les quinze jours, et personne ne vous en tient rigueur, ce qui reste la façon la plus dure dont cet endroit traite les gens." },
+  ],
+  effets:{ flags:['an_gue_tenu'],
+           faire:() => retenir('anarion', ETAT.derniereBataille === 'gagnee'
+             ? "il a tenu le gué d'Aumance avec quatre cents personnes de la file"
+             : "il est monté au gué d'Aumance et il a compté les hameaux"),
+           marque:"Le gué d'Aumance, commandé par un Paria.", court:"Le gué" },
+  suite:'a2_carte', libelleSuite:"La carte" },
 
 an_donner:{
   titre:"Ce qui se paie en choses humaines",
@@ -262,12 +348,11 @@ kd_commander:{
     { t:"Prendre le commandement",
       detail:"trois fronts · leurs hommes · ce qui ne revient pas ne vous appartenait pas",
       risque:"définitif",
-      avant:() => ouvrirBataille('bat_kardurak', 'kd_apres', [
+      va:() => ouvrirBataille('bat_kardurak', 'kd_apres', [
         { type:'sapeurs' }, { type:'sapeurs', effectifPct:0.8 },
         { type:'arbaletriers' }, { type:'lanciers', effectifPct:0.7 },
         { type:'frondeurs' },
-      ]),
-      va:'kd_commander' },
+      ]) },
 
     { t:"« Trouvez quelqu'un d'autre. »",
       detail:"vous n'avez jamais commandé plus de neuf hommes · c'est vrai et ça ne l'intéresse pas",
@@ -575,4 +660,4 @@ offrir({ id:'acte_charles', lieu:'montdraken', va:'acte_charles',
 
 /* Le retour de bataille est une chaîne passée à `ouvrirBataille` : le graphe
  * de l'épreuve ne peut pas la voir, on l'inscrit. */
-entree2('kd_apres');
+entree2('kd_apres', 'an_apres');

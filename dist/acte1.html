@@ -14033,8 +14033,94 @@ an_anarion:{
     { t:"Prendre le poste de Vaeth comme une porte de sortie",
       detail:"ne rien promettre · et savoir que la porte existe",
       risque:"calculé", va:'an_porte' },
+
+    { t:"« Le gué d'Aumance tient jusqu'à quand ? »",
+      detail:"une ligne de fleuve ne se gagne pas · elle se tient une saison de plus",
+      risque:"calculé", va:'an_gue' },
   ],
 },
+
+/* ══ LA LIGNE DU FLEUVE ════════════════════════════════════════════════════
+ * Anarion ne demande rien : c'est sa méthode et elle est totale. Il ne
+ * demandera donc pas non plus qu'on tienne son gué. Il dira où il est, à
+ * quelle heure il tombe, et il laissera un homme décider tout seul — ce qui
+ * est de très loin la façon la plus efficace de faire faire quelque chose à
+ * quelqu'un, et il le sait depuis soixante ans. */
+an_gue:{
+  qui:'anarion',
+  lieu:"Vaeth · la salle des liasses",
+  titre:"Le gué d'Aumance",
+  texte:[
+    "@« Le gué d'Aumance tient jusqu'à quand ? »",
+    { sobre:"« Onze jours. Peut-être neuf. »",
+      intense:"Il ne consulte rien. « Onze jours. Peut-être neuf : la crue baisse et un gué qui redevient un gué se défend deux fois moins bien. »",
+      extreme:"Il ne consulte aucune liasse, ne demande rien à aucun secrétaire, ne marque pas la moindre hésitation.\n\n« Onze jours. Peut-être neuf. »\n\nUn temps.\n\n« La crue baisse depuis Floréal. Un gué en crue est une position ; un gué qui redevient un gué est un chemin, et un chemin se défend deux fois moins bien. Eltharion le sait aussi et il a un mois d'avance sur nous là-dessus, parce qu'il fait mesurer la hauteur d'eau tous les matins depuis quatre cents ans et que nous le faisons depuis six. »" },
+    "@« Et vous y envoyez qui ? »",
+    { sobre:"« Quatre cents hommes de la file, et personne pour les commander. »",
+      intense:"« Quatre cents hommes de la file. » Il n'adoucit rien. « Des Parias du sud, un clerc, quatre Hommes-Bêtes qui labouraient il y a deux hivers. Ils tiendront parce qu'ils n'ont nulle part où aller. Personne ne les commande : mes capitaines sont à l'ouest. »",
+      extreme:"« Quatre cents hommes de la file. »\n\nIl n'adoucit rigoureusement rien, ce qui est chez lui une forme de politesse.\n\n« Deux familles de Parias du sud comme celles que vous avez vues au poste. Un ancien clerc de Chastel qui n'a jamais tenu autre chose qu'une plume. Quatre Hommes-Bêtes qui labouraient il y a deux hivers et qui n'ont jamais compris un seul de nos ordres. Et deux compagnies franches payées d'avance, qui tiendront exactement le temps pour lequel on a payé.\n\nIls tiendront le gué parce qu'ils n'ont nulle part ailleurs où aller. C'est la seule chose qui les tienne et c'est plus solide qu'une solde.\n\nPersonne ne les commande. Tous mes capitaines sont à l'ouest, et j'en ai onze pour quatre lignes. »" },
+    "§ Il ne demande pas. Il ne demandera pas : c'est toute sa méthode et il vient de passer une heure à vous expliquer pourquoi.",
+    "Il repose la liasse, il vous regarde, et il attend exactement le temps qu'il faut pour que le silence devienne le vôtre.",
+  ],
+  effets:{ flags:['an_gue_su'],
+           marque:"Le gué d'Aumance tombe dans onze jours. Quatre cents hommes de la file, aucun capitaine.",
+           court:"Le gué d'Aumance" },
+  choix:[
+    { t:"Y aller",
+      detail:"quatre cents hommes qui n'ont nulle part où aller · une saison de plus, pas davantage",
+      risque:"définitif",
+      ferme:"Ferme : l'idée que vous ne devez rien à la Marche noire",
+      va:() => ouvrirBataille('bat_marche', 'an_apres', [
+        { type:'parias', effectifPct:0.9 }, { type:'lanciers', effectifPct:0.8 },
+        { type:'frondeurs' }, { type:'mercenaires', effectifPct:0.7 },
+        { type:'eclaireurs' },
+      ]) },
+
+    { t:"« Ce n'est pas ma guerre. »",
+      detail:"c'est vrai · il ne le contestera pas · c'est bien le problème",
+      risque:"prudent", va:'an_gue_non' },
+  ],
+},
+
+an_gue_non:{
+  qui:'anarion',
+  titre:"Ce n'est pas votre guerre",
+  texte:[
+    "@« Ce n'est pas ma guerre. »",
+    { sobre:"« Non. »",
+      intense:"« Non », dit-il, et il reprend sa liasse. C'est tout. Il ne discute pas, ne plaide pas, ne fait pas remarquer que vous venez de passer une heure à regarder une file de gens rayés comme vous.",
+      extreme:"« Non. »\n\nIl reprend sa liasse. C'est tout, c'est fini, et la conversation passe à autre chose dans la seconde.\n\nIl ne discute pas. Il ne plaide pas. Il ne fait pas remarquer que vous venez de passer trois jours à regarder une file de trente personnes rayées exactement comme vous, ni que deux familles de cette file monteront au gué dans onze jours sans savoir tenir une pique.\n\nUn homme qui ne demande jamais rien n'a rien à vous reprocher quand vous ne donnez rien, et c'est très exactement pour ça que sa méthode fonctionne depuis soixante ans." },
+    "§ Le gué d'Aumance tombe le neuvième jour.",
+    "Vous l'apprendrez à Chastel, six semaines plus tard, par un charretier qui raconte ça comme une nouvelle du nord et qui ne connaît aucun des noms.",
+  ],
+  effets:{ flags:['an_gue_refuse','a2_eltharion_soutenu'], cout:{ moral:8 },
+           faire:() => retenir('anarion', "il a vu la file et il n'est pas monté au gué"),
+           marque:"Vous n'êtes pas monté au gué d'Aumance. Il est tombé le neuvième jour.",
+           court:"Le neuvième jour" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+an_apres:{
+  qui:'anarion',
+  lieu:"Le gué d'Aumance · au soir",
+  titre:"Ce qu'on achète avec une saison",
+  texte:[
+    () => ETAT.derniereBataille === 'gagnee'
+      ? "Anarion vient au gué trois jours après. Il ne vient jamais aux lignes : c'est la première fois en six ans et deux secrétaires le notent."
+      : "Anarion vient au gué trois jours après, ce qu'il ne fait jamais. Il regarde la berge sud, longuement, et il ne dit rien pendant un temps considérable.",
+    () => ETAT.derniereBataille === 'gagnee'
+      ? { sobre:"« Une saison », dit-il. « C'est tout ce que ça achète. »",
+          intense:"« Une saison », dit-il. « C'est tout ce que ça achète et c'est ce que je vous avais dit. »\n\n@« Ça ne vous suffit pas ? »\n\n« Si. Une saison, c'est onze mille personnes qui sèment. Je voulais seulement m'assurer que vous ne croyiez pas avoir gagné une guerre. »",
+          extreme:"« Une saison », dit-il. « C'est tout ce que ça achète, et c'est exactement ce que je vous avais annoncé. »\n\n@« Ça ne vous suffit pas ? »\n\n« Si. » Il regarde la berge nord, où quatre cents personnes sont en train de compter leurs morts. « Une saison, ce sont onze mille personnes qui sèment au lieu de marcher. Dans mon métier c'est énorme et je ne l'obtiens pas trois fois par décennie.\n\nJe voulais simplement m'assurer que vous ne croyiez pas avoir gagné une guerre. Les hommes qui croient ça reviennent, et ceux qui reviennent finissent par y rester. »\n\nUn temps.\n\n« Vous, je préfère que vous reveniez à cinquante ans. »" }
+      : { sobre:"« Quatre lieues », dit-il enfin.",
+          intense:"« Quatre lieues », dit-il enfin. « La ligne descend de quatre lieues. »\n\n@« Onze hameaux. »\n\n« Onze. Vous les avez comptés. » Il hoche la tête. « Alors vous ferez un capitaine. Ceux qui ne comptent pas n'en font jamais. »",
+          extreme:"« Quatre lieues », dit-il enfin. « La ligne descend de quatre lieues. »\n\n@« Onze hameaux. »\n\n« Onze. » Il vous regarde pour la première fois depuis qu'il est arrivé. « Vous les avez comptés. »\n\n@« Oui. »\n\n« Alors vous ferez un capitaine, messire. Ceux qui ne comptent pas n'en font jamais un : ils font des héros, et un héros coûte plus cher qu'une défaite. »\n\nIl repart vers Vaeth le soir même. Onze hameaux évacuent dans les quinze jours, et personne ne vous en tient rigueur, ce qui reste la façon la plus dure dont cet endroit traite les gens." },
+  ],
+  effets:{ flags:['an_gue_tenu'],
+           faire:() => retenir('anarion', ETAT.derniereBataille === 'gagnee'
+             ? "il a tenu le gué d'Aumance avec quatre cents personnes de la file"
+             : "il est monté au gué d'Aumance et il a compté les hameaux"),
+           marque:"Le gué d'Aumance, commandé par un Paria.", court:"Le gué" },
+  suite:'a2_carte', libelleSuite:"La carte" },
 
 an_donner:{
   titre:"Ce qui se paie en choses humaines",
@@ -14186,12 +14272,11 @@ kd_commander:{
     { t:"Prendre le commandement",
       detail:"trois fronts · leurs hommes · ce qui ne revient pas ne vous appartenait pas",
       risque:"définitif",
-      avant:() => ouvrirBataille('bat_kardurak', 'kd_apres', [
+      va:() => ouvrirBataille('bat_kardurak', 'kd_apres', [
         { type:'sapeurs' }, { type:'sapeurs', effectifPct:0.8 },
         { type:'arbaletriers' }, { type:'lanciers', effectifPct:0.7 },
         { type:'frondeurs' },
-      ]),
-      va:'kd_commander' },
+      ]) },
 
     { t:"« Trouvez quelqu'un d'autre. »",
       detail:"vous n'avez jamais commandé plus de neuf hommes · c'est vrai et ça ne l'intéresse pas",
@@ -14499,7 +14584,7 @@ offrir({ id:'acte_charles', lieu:'montdraken', va:'acte_charles',
 
 /* Le retour de bataille est une chaîne passée à `ouvrirBataille` : le graphe
  * de l'épreuve ne peut pas la voir, on l'inscrit. */
-entree2('kd_apres');
+entree2('kd_apres', 'an_apres');
 
 </script>
 <script>
@@ -15137,6 +15222,106 @@ entree2('ka_palier', ...OUVRAGES.map(o => 'ka_' + o.id));
 offrir({ id:'ka_chantier', lieu:'karlsberg', va:'ka_chantier',
          titre:"Le chantier", permanent:true,
          si:() => a('kar_refuge') || a('a2_bannieres') || CHANTIER().faits.length > 0 });
+
+/* ══ LA ROUTE GRISE ════════════════════════════════════════════════════════
+ * `route_sure` est une condition et pas un stock : c'est un état du monde,
+ * et un état du monde ne s'achète pas. Trois chemins l'ouvrent — le péage,
+ * l'alliance de Mont-Draken, l'enceinte. En voici un quatrième, et c'est le
+ * seul qu'on paie de sa personne.
+ *
+ * Les hommes qu'on lève ici sont ceux de l'Acte I. Le hameau qu'on a sauvé,
+ * le pont qu'on a rouvert, le puits d'où l'on a sorti sept hommes : ils ne
+ * viennent pas pour une solde, ils viennent parce que c'est vous. C'est très
+ * exactement ce que le renom achète, et c'est la seule chose qu'il achète. */
+const LEVEE = () => [
+  a('ch_meute_faite') && !a('ch_meute_ignoree')
+    ? { type:'frondeurs', quoi:"Fontaine-Basse, qui a passé l'hiver" } : null,
+  a('ch_reine_faite') && !a('ch_reine_refusee')
+    ? { type:'lanciers', effectifPct:0.8, quoi:"les contreforts, et le puits sept" } : null,
+  a('ch_colosse_fait') && !a('ch_colosse_ignore')
+    ? { type:'lanciers', effectifPct:0.6, quoi:"les coupeurs des tourbières hautes" } : null,
+  a('wy_route_reouverte')
+    ? { type:'archers', effectifPct:0.8, quoi:"Cendrepont, qui doit sa route" } : null,
+  { type:'frondeurs', effectifPct:0.6, quoi:"ce que la vallée trouve, et ce n'est pas grand-chose" },
+].filter(Boolean);
+
+const ROUTE_GRISE = {
+
+rg_route:{
+  lieu:"Cendrepont · le mur du Héron",
+  titre:"Ce qui monte, et ce qui ne monte pas",
+  texte:[
+    "Rien de lourd ne monte à Karlsberg. C'est le fait qui commande tout le reste et il n'a rien de mystérieux : la Route Grise est coupée à trois lieues sous Cendrepont depuis six semaines.",
+    { sobre:"Trois cents pillards. Mal commandés, mais trois cents.",
+      intense:"Trois cents pillards, mal commandés, mal nourris et parfaitement inutiles à qui que ce soit — mais trois cents, et une charrette de pierre de taille ne se défend pas.",
+      extreme:"Trois cents pillards. Mal commandés, mal nourris, sans intention politique et sans intérêt pour personne — et trois cents.\n\nUne charrette de pierre de taille fait quatre lieues par jour, ne quitte pas la chaussée, et ne se défend pas. C'est tout ce qu'il faut savoir : on ne monte pas une muraille avec ce qu'on peut porter à dos d'homme, et la Route Grise est la seule chaussée qui aille de la carrière à la vallée." },
+    "@« Qui les tient ? »",
+    "« Personne », dit l'aubergiste du Héron. « C'est bien le problème. S'il y avait quelqu'un, on pourrait le payer. »",
+    "§ Il n'y a pas de contrat pour ça. Il n'y a personne à qui l'adresser : une route coupée n'appartient à aucune maison, ce qui est exactement pourquoi elle reste coupée.",
+    () => {
+      const l = LEVEE();
+      return `Ce que vous pouvez lever, en revanche, tient en une phrase : ${l.map(x => x.quoi).join(' · ')}.`;
+    },
+    { sobre:"Ils ne viennent pas pour une solde.",
+      intense:"Ils ne viennent pas pour une solde — personne ne paie personne dans cette affaire. Ils viennent parce que c'est vous, ce qui est très exactement ce que le renom achète et la seule chose qu'il achète.",
+      extreme:"Ils ne viennent pas pour une solde. Il n'y a pas de solde, il n'y a pas de commanditaire, il n'y a pas d'acte à signer et pas un sou à toucher au bout.\n\nIls viennent parce que c'est vous. C'est très exactement ce que le renom achète dans ce monde, c'est la seule chose qu'il achète, et c'est aussi la raison pour laquelle un homme d'armes qui travaille gratuitement une fois travaille gratuitement partout — sauf que cette fois-ci, c'est vous qui encaissez." },
+  ],
+  effets:{ marque:"La Route Grise est coupée à trois lieues sous Cendrepont. Rien de lourd ne monte.",
+           court:"La route coupée" },
+  choix:[
+    { t:"Lever la vallée et rouvrir la route",
+      detail:() => `${LEVEE().length} compagnies · trois cents en face · et personne pour vous payer`,
+      risque:"définitif",
+      va:() => ouvrirBataille('bat_route', 'rg_apres', LEVEE()) },
+
+    { t:"Attendre qu'un autre s'en charge",
+      detail:"Chastel finira par envoyer une compagnie · dans deux ans, peut-être trois",
+      risque:"prudent", va:'rg_attendre' },
+  ],
+},
+
+rg_attendre:{
+  titre:"Deux ans, peut-être trois",
+  texte:[
+    "Vous n'y allez pas. C'est raisonnable : un homme seul ne lève pas une vallée pour une chaussée.",
+    "§ Karlsberg monte quand même, avec ce qu'on peut porter à dos d'homme. C'est plus lent, c'est plus cher, et ça se voit sur les murs.",
+    "Chastel enverra une compagnie. Elle mettra onze jours et quatre morts, elle rouvrira la route, et elle installera un péage à Cendrepont dont vous paierez deux sous par essieu pendant vingt ans.",
+  ],
+  effets:{ flags:['rg_attendu'], cout:{ moral:3 },
+           marque:"Vous n'avez pas levé la vallée. Chastel rouvrira la route, et posera son péage.",
+           court:"Le péage de Chastel" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+rg_apres:{
+  lieu:"La Route Grise · au matin",
+  titre:"Ce qui monte, maintenant",
+  texte:[
+    () => ETAT.derniereBataille === 'gagnee'
+      ? "La chaussée est libre sur onze lieues. La première charrette de pierre de taille passe le surlendemain, à quatre lieues par jour, sans escorte."
+      : "La colonne décroche par le talus. On ramène ce qu'on peut ramener, et la Route Grise reste ce qu'elle était hier.",
+    () => ETAT.derniereBataille === 'gagnee'
+      ? { sobre:"Personne ne vous paie. C'était prévu.",
+          intense:"Personne ne vous paie et personne n'avait promis de le faire. Ce qu'on vous donne, c'est que onze lieues de chaussée s'appellent désormais votre route dans la bouche des charretiers, et qu'un charretier parle à tous ceux qu'il croise.",
+          extreme:"Personne ne vous paie. Personne n'avait promis de le faire et personne n'y a pensé une seconde.\n\nCe qu'on vous donne est autre chose, et dans cette province ça vaut infiniment plus cher : onze lieues de chaussée s'appellent désormais *votre route* dans la bouche des charretiers. Un charretier fait quatre lieues par jour, parle à tout ce qu'il croise, et n'a rien d'autre à raconter que la route.\n\nEn Messidor, trois provinces sauront qu'un homme a levé une vallée sans contrat et rouvert une chaussée que Chastel laissait fermée depuis six semaines. C'est une très bonne nouvelle et c'est une très mauvaise nouvelle, et ce sont exactement les mêmes gens qui l'apprendront." }
+      : "Les pillards tiennent la chaussée. Ils tiendront jusqu'à ce que quelqu'un d'autre monte, et ce quelqu'un d'autre posera un péage.",
+  ],
+  effets:{ faire:() => { if(ETAT.derniereBataille === 'gagnee') ETAT.flags.add('a2_route_franche'); },
+           flags:['rg_faite'],
+           marque:"La Route Grise, levée sans contrat.", court:"La Route Grise" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+};
+
+enregistrerScenes(ROUTE_GRISE);
+
+entree2('rg_route', 'rg_attendre', 'rg_apres');
+
+/* Elle ne se propose que quand elle sert : il faut bâtir, et la route doit
+ * être encore coupée. */
+offrir({ id:'rg_route', lieu:'cendrepont', va:'rg_route',
+         titre:"La chaussée est coupée à trois lieues",
+         si:() => !a('a2_route_franche') && !a('rg_attendu')
+                  && (a('kar_refuge') || a('a2_bannieres') || CHANTIER().faits.length > 0) });
 
 </script>
 <script>
@@ -21240,6 +21425,10 @@ DYN.a2_epilogue = () => {
          : "Trois ans, trois pistes, et une question entière.",
     apres: verdictsA2(),
     plusTard:"Les crises qui arrivent maintenant ne se jouent plus à l'échelle d'un homme. Le monde ne se referme pas : il monte d'un cran.",
+    /* L'épilogue de l'Acte II n'est une fin que la première fois. Douze ans
+     * plus tard, tout ce qu'il vient d'énumérer redevient une situation. */
+    suite: a('a3_ouvert') ? null : 'a3_bascule',
+    libelleSuite:"Douze ans plus tard",
   };
   aller('a2_epilogue');
 };
