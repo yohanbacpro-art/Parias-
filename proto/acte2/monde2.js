@@ -166,7 +166,13 @@ Object.assign(GENS, {
   tyrion:    { nom:"Tyrion",                 role:"prince elfe · frère d'Alarielle",                          lettre:"T" },
   berold:    { nom:"Bérold",                 role:"chef de meute · onze ans à Mont-Draken",                   lettre:"B" },
   gerbaud:   { nom:"Gerbaud",                role:"maître d'armes de Karlsberg · soixante-dix ans",           lettre:"G" },
-  ysabel:    { nom:"Ysabel de Karlsberg",    role:"sœur cadette de votre père · soixante-quatre ans",         lettre:"Y" },
+  /* Il n'a jamais eu de carte : ses scènes de l'Acte I se passent sur une
+   * route, et celle de l'Acte III sur un chemin de ronde. */
+  sault:     { nom:"Guillaume de Sault",     role:"il tient un carnet, et ce n'est jamais à mort",            lettre:"G" },
+  /* Pas d'âge sur la ligne de rôle : elle reparaît à l'Acte III, neuf ans
+   * plus tard, et un chiffre figé ment forcément dans l'un des deux. Le
+   * texte le donne là où il est juste. */
+  ysabel:    { nom:"Ysabel de Karlsberg",    role:"sœur cadette de votre père · la dernière du sang",        lettre:"Y" },
   epouse:    { nom:"Votre épouse",           role:"elle a signé les mêmes onze pages que vous",               lettre:"É" },
 });
 

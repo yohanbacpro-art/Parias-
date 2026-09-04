@@ -7,7 +7,7 @@
  * besoin : il l'est parce qu'on lui a fait quelque chose de précis, à une
  * date précise, et que le jeu s'en souvient depuis. Amaury de Valombre
  * n'attaque pas Karlsberg parce qu'il est le méchant du chapitre. Il vient
- * parce qu'on l'a chassé d'une pièce à Cendrepont il y a douze ans devant
+ * parce qu'on l'a chassé d'une pièce à Cendrepont il y a neuf ans devant
  * onze personnes, qu'il a vendu la tour de sa mère l'année suivante, et
  * qu'il n'a jamais eu à se demander qui blâmer.
  *
@@ -38,7 +38,7 @@
 const INIMITIES = {
 
 /* ── Ceux de l'Acte I ─────────────────────────────────────────────────────
- * Douze ans ont passé. Ils n'ont pas oublié, parce que personne n'oublie la
+ * Neuf ans ont passé. Ils n'ont pas oublié, parce que personne n'oublie la
  * seule fois de sa vie où quelqu'un lui a dit non devant témoins. */
 
 amaury:{
@@ -49,9 +49,9 @@ amaury:{
              || (a('wy_prevenu_amaury') && !a('wy_amaury_paye')),
   grief:() => a('wy_amaury_ennemi')
     ? "Vous l'avez dénoncé à sa mère. Il a hérité d'une maison qui savait, et il a vendu la tour à Chastel dans l'année — les archives, les registres, et l'endroit où son père est enterré."
-    : "Vous avez pris son argent et vous n'avez pas rapporté les œufs. Il a passé douze ans à expliquer à qui voulait l'entendre qu'un mercenaire lui avait volé trois mille couronnes.",
+    : "Vous avez pris son argent et vous n'avez pas rapporté les œufs. Il a passé neuf ans à expliquer à qui voulait l'entendre qu'un mercenaire lui avait volé trois mille couronnes.",
   unites:[{ type:'mercenaires', effectifPct:0.8 }, { type:'archers_merc', effectifPct:0.6 }],
-  dit:"« Trois mille couronnes, messire. Je les ai comptées pendant douze ans. »",
+  dit:"« Trois mille couronnes, messire. Je les ai comptées pendant neuf ans. »",
 },
 
 gassien:{
@@ -85,7 +85,7 @@ sault:{
   ou:"quelque part, avec un carnet",
   poids:1,
   hostile:() => a('ch_du_revoir') || a('ch_du_perdu'),
-  grief:() => "Il a écrit *à revoir dans deux ans* dans un carnet qu'il tient depuis onze ans. Il l'a écrit six fois en tout. Il est venu voir.",
+  grief:() => "Il a écrit *à revoir dans deux ans* dans un carnet qu'il tient depuis vingt ans. Il l'a écrit six fois en tout. Il est venu voir.",
   unites:[],
   champion:'in_sault',
   dit:"« Ce n'est toujours pas à mort. Je n'ai pas changé de méthode, seulement de page. »",
@@ -105,7 +105,7 @@ caleb:{
   hostile:() => a('a2_caleb_hostile') || a('cb_sans') || a('cb_renvoye')
              || (a('a2_caleb_froid') && a('a2_bannieres')),
   grief:() => a('cb_sans')
-    ? "Vous lui avez dit que vous bâtiriez avec des gens qui ne lui devaient rien. Il a trouvé ça très intelligent et il a passé onze ans à racheter ces gens-là un par un."
+    ? "Vous lui avez dit que vous bâtiriez avec des gens qui ne lui devaient rien. Il a trouvé ça très intelligent et il a passé sept ans à racheter ces gens-là un par un."
     : "Il vous a proposé un rendement et vous avez refusé de le lui donner. Un homme qui se couvre contre votre chute finit par avoir intérêt à ce qu'elle arrive.",
   unites:[{ type:'mercenaires' }, { type:'mercenaires', effectifPct:0.8 },
           { type:'archers_merc', effectifPct:0.9 }],
@@ -133,7 +133,7 @@ charles:{
   hostile:() => a('cd_refus') || a('cd_denonce') || a('a2_charles_froid')
              || (a('a2_paria_declare') && !a('a2_charles_allie')),
   grief:() => a('cd_denonce')
-    ? "Vous lui avez proposé d'inscrire quelqu'un d'autre à votre place. Il n'a pas relevé sur le moment. Il a mis onze ans à décider ce que ça disait de vous, et il a fini par décider."
+    ? "Vous lui avez proposé d'inscrire quelqu'un d'autre à votre place. Il n'a pas relevé sur le moment. Il a mis neuf ans à décider ce que ça disait de vous, et il a fini par décider."
     : a('cd_refus')
     ? "Il vous a demandé de vous laisser inscrire et vous avez dit non. Il vous avait prévenu qu'il le redemanderait. Il le redemande, avec une commission de province et vingt hommes."
     : "Vous êtes devenu, publiquement, la chose qu'il a passé trente ans à ranger dans un registre. Il n'a jamais eu de haine pour rien de ce qu'il a tué.",

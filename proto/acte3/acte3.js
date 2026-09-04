@@ -31,7 +31,7 @@
  * Pas de nouveau mystère : le nom est trouvé ou il ne l'est pas, et ajouter
  * un coupable derrière le coupable annulerait l'Acte II.
  * Pas de montée en puissance : Yohan ne devient pas plus fort, le monde
- * devient plus grand. Deux coups de pistolet, un drain, et douze ans de
+ * devient plus grand. Deux coups de pistolet, un drain, et neuf ans de
  * plus dans les articulations.
  * Jamais « ACTE III » à l'écran.
  * ═══════════════════════════════════════════════════════════════════════ */
@@ -40,10 +40,30 @@ const A3 = () => (ETAT.acte3 = ETAT.acte3 || {
   annee:0, front:null, tenus:[], perdus:[], siege:null,
 });
 
-/* Douze ans. C'est ce qu'il faut pour qu'un garçon de douze ans en ait
- * vingt-quatre, pour qu'une maison relevée compte dans les états d'une
+/* Neuf ans. C'est ce qu'il faut pour qu'un garçon de douze ans en ait
+ * vingt et un, pour qu'une maison relevée compte dans les états d'une
  * province, et pour que cinq guerres arrivent à maturité. */
-const AGE3 = () => 29 + 12 + A3().annee;
+const AGE3 = () => 29 + 9 + A3().annee;
+
+/* Le jeu écrit ses nombres en toutes lettres. Un âge calculé ne fait pas
+ * exception : « Vous avez 38 ans » au milieu de deux cents nombres écrits se
+ * voit tout de suite. De un à quatre-vingt-dix-neuf, ce qui couvre les âges. */
+function enLettres(n){
+  const U = ['zéro','un','deux','trois','quatre','cinq','six','sept','huit','neuf',
+             'dix','onze','douze','treize','quatorze','quinze','seize','dix-sept',
+             'dix-huit','dix-neuf'];
+  const D = ['', '', 'vingt','trente','quarante','cinquante','soixante','soixante',
+             'quatre-vingt','quatre-vingt'];
+  if(n < 0 || n > 99 || n !== Math.floor(n)) return String(n);
+  if(n < 20) return U[n];
+  const d = Math.floor(n / 10), u = n % 10;
+  /* Soixante-dix et quatre-vingt-dix comptent par seize : soixante-onze,
+   * quatre-vingt-douze. Et quatre-vingts ne prend son s que tout seul. */
+  if(d === 7 || d === 9) return D[d] + '-' + U[10 + u];
+  if(u === 0) return d === 8 ? 'quatre-vingts' : D[d];
+  if(u === 1 && d !== 8) return D[d] + ' et un';
+  return D[d] + '-' + U[u];
+}
 
 /* Ce que Karlsberg est devenue. Le chantier de l'Acte II a tranché ; on ne
  * redemande pas. */
@@ -91,25 +111,25 @@ const DEMANDES = [
 
 const demandesOuvertes = () => DEMANDES.filter(d => d.si());
 
-/* Qui tient les comptes de Karlsberg douze ans plus tard.
+/* Qui tient les comptes de Karlsberg neuf ans plus tard.
  *
  * Ce n'est pas un détail de couleur : c'est la vérification la plus simple
  * que l'Acte III lit bien l'Acte I. Un garçon de douze ans qu'on a couvert
- * en a vingt-quatre et sait compter mieux que personne. Un garçon qu'on a
+ * en a vingt et un et sait compter mieux que personne. Un garçon qu'on a
  * dénoncé devant quarante personnes a tenu deux ans, peut-être trois, et
  * n'est plus là. Un hameau où l'on n'est jamais monté n'a jamais entendu
  * parler de vous. */
 function intendant(){
   if(a('ch_meute_faite') && !a('ch_meute_ignoree') && !a('ch_colin_denonce'))
-    return { nom:"Colin", de:"Fontaine-Basse", age:24,
+    return { nom:"Colin", de:"Fontaine-Basse", age:21,
       note:"il ne parle jamais de la façon dont il a appris à compter",
       mot:"« Mon grand-père disait qu'on ne compte jamais ce qui descend des tourbières. On compte ce qu'on a perdu, une fois, au matin. »" };
   if(a('ch_colin_denonce'))
-    return { nom:"Perrine", de:"Fontaine-Basse", age:31,
+    return { nom:"Perrine", de:"Fontaine-Basse", age:28,
       note:"elle est la sœur d'un garçon dont on ne prononce pas le nom dans son hameau",
       mot:"« Chez nous on ne compte pas les gens. On a essayé une fois. »" };
   if(a('ch_reine_faite') && a('ch_re_sept'))
-    return { nom:"Bergrun le jeune", de:"les contreforts", age:29,
+    return { nom:"Bergrun le jeune", de:"les contreforts", age:26,
       note:"son père est l'un des sept qu'on a remontés du puits sept",
       mot:"« On compte au matin, une fois. Mon père compte encore, et il ne descend plus. »" };
   return { nom:"maître Ferrand", de:"Chastel", age:52,
@@ -120,7 +140,7 @@ function intendant(){
 const ACTE3 = {
 
 /* ══ 1 · LA BASCULE ════════════════════════════════════════════════════════
- * On ne recommence pas une partie : on la reprend douze ans plus tard, avec
+ * On ne recommence pas une partie : on la reprend neuf ans plus tard, avec
  * tout ce qu'elle a produit. */
 a3_bascule:{ dyn:true, texte:[] },
 
@@ -146,13 +166,13 @@ DYN.a3_bascule = () => {
 
   SCENES.a3_bascule = {
     dyn:true,
-    lieu:`Karlsberg · la trente-troisième année après la Purge`,
-    titre:"Douze ans",
+    lieu:`Karlsberg · la vingt-neuvième année après la Purge`,
+    titre:"Cinq ans",
     texte:[
-      "Douze ans.",
+      "Cinq ans depuis que vous avez su. Neuf depuis Cendrepont.",
       { sobre:"C'est le temps qu'il faut à cinq guerres pour cesser d'être des guerres.",
         intense:"C'est très exactement le temps qu'il faut à cinq guerres pour cesser d'être des guerres et devenir l'état normal du monde. Personne, aujourd'hui, ne se souvient d'une année sans.",
-        extreme:"C'est très exactement le temps qu'il faut à cinq guerres pour cesser d'être des guerres.\n\nOn ne dit plus *la guerre d'Eltharion et d'Anarion* : on dit *le fleuve*, et tout le monde sait de quoi il s'agit. On ne dit plus *l'unification khesh* : on dit *le sud*. Un enfant né l'année où vous êtes entré à Cendrepont a aujourd'hui douze ans et n'a jamais connu autre chose.\n\nC'est ainsi que finissent les guerres, dans les faits. Elles ne finissent pas. Elles deviennent la géographie." },
+        extreme:"C'est très exactement le temps qu'il faut à cinq guerres pour cesser d'être des guerres.\n\nOn ne dit plus *la guerre d'Eltharion et d'Anarion* : on dit *le fleuve*, et tout le monde sait de quoi il s'agit. On ne dit plus *l'unification khesh* : on dit *le sud*. Un enfant né l'année où vous êtes entré à Cendrepont a aujourd'hui neuf ans et n'a jamais connu autre chose.\n\nC'est ainsi que finissent les guerres, dans les faits. Elles ne finissent pas. Elles deviennent la géographie." },
       hautes.length
         ? `Arrivées à maturité : ${hautes.join(' · ')}.`
         : "Aucune des cinq n'est allée jusqu'au bout. C'est le meilleur état du monde qu'on pouvait espérer et personne n'en saura jamais rien.",
@@ -160,16 +180,16 @@ DYN.a3_bascule = () => {
       () => {
         const n = ETAT.blessures.length;
         return n
-          ? `Vous avez ${AGE3()} ans. Vous portez ${n === 1 ? "une chose" : n + " choses"} qui ne s'en iront plus : ${ETAT.blessures.map(b => b.zone).join(' · ')}.`
-          : `Vous avez ${AGE3()} ans, et le compte de ce que vous portez est étonnamment court. Ça ne durera pas.`;
+          ? `Vous avez ${enLettres(AGE3())} ans. Vous portez ${n === 1 ? "une chose" : enLettres(n) + " choses"} qui ne s'en iront plus : ${ETAT.blessures.map(b => b.zone).join(' · ')}.`
+          : `Vous avez ${enLettres(AGE3())} ans, et le compte de ce que vous portez est étonnamment court. Ça ne durera pas.`;
       },
       { sobre:"§ Rien de nouveau n'arrive cet hiver-là. C'est le problème.",
         intense:"§ Rien de nouveau n'arrive cet hiver-là. Tout ce qui arrive était déjà là, et arrive en même temps.",
-        extreme:"§ Rien de nouveau n'arrive cet hiver-là, et c'est très exactement ce qui le rend impossible à tenir. Tout ce qui arrive existait déjà — depuis trois ans, depuis douze, depuis dix-neuf. La seule chose qui change, c'est que ça arrive le même hiver." },
+        extreme:"§ Rien de nouveau n'arrive cet hiver-là, et c'est très exactement ce qui le rend impossible à tenir. Tout ce qui arrive existait déjà — depuis trois ans, depuis neuf, depuis vingt-neuf. La seule chose qui change, c'est que ça arrive le même hiver." },
     ],
     effets:{ flags:['a3_ouvert'],
-             marque:`Douze ans ont passé. Karlsberg est ${p === 'ruines' ? "toujours en ruines" : "un " + p}.`,
-             court:"Douze ans" },
+             marque:`Cinq ans ont passé, neuf depuis Cendrepont. Karlsberg est ${p === 'ruines' ? "toujours en ruines" : "un " + p}.`,
+             court:"Cinq ans" },
     suite:'a3_ceux_qui_viennent', libelleSuite:"Qui vient",
   };
   aller('a3_bascule');
@@ -182,15 +202,15 @@ DYN.a3_ceux_qui_viennent = () => {
 
   const i = intendant();
   const texte = [
-    `Quelqu'un tient les comptes de Karlsberg, et ce quelqu'un a ${i.age} ans. ${i.nom}, de ${i.de} — ${i.note}.`,
+    `Quelqu'un tient les comptes de Karlsberg, et ce quelqu'un a ${enLettres(i.age)} ans. ${i.nom}, de ${i.de} — ${i.note}.`,
     "On pose devant vous une liste qu'il a fallu quatre mois pour établir, et on la pose sans commentaire parce qu'il n'y en a pas à faire.",
   ];
 
   if(!liste.length){
     texte.push("§ La liste est vide.");
     texte.push({ sobre:"Personne ne vient. C'est très rare et ça ne veut pas dire qu'on est en sécurité.",
-      intense:"Personne ne vient. En douze ans, vous n'avez humilié personne d'assez important pour qu'il en fasse une affaire, et c'est un résultat qu'aucune maison de cette province n'obtient jamais.\n\nCe n'est pas la même chose qu'être en sécurité. Ça veut dire que ce qui vient n'a pas de visage.",
-      extreme:"Personne ne vient.\n\nEn douze ans, vous n'avez humilié personne d'assez important pour qu'il en fasse une affaire personnelle. Vous avez payé ce qu'il fallait payer, épargné correctement ceux qu'il fallait épargner, et donné à chacun de quoi ne pas avoir besoin de vous détruire.\n\nAucune maison de cette province n'obtient jamais ce résultat, et il a coûté exactement ce qu'il devait coûter — vous savez quoi, et à qui.\n\nCe n'est pas du tout la même chose qu'être en sécurité. Ça veut dire seulement que ce qui monte vers la vallée cet hiver n'a pas de visage particulier, et qu'il faudra le tenir sans savoir à qui parler." });
+      intense:"Personne ne vient. En neuf ans, vous n'avez humilié personne d'assez important pour qu'il en fasse une affaire, et c'est un résultat qu'aucune maison de cette province n'obtient jamais.\n\nCe n'est pas la même chose qu'être en sécurité. Ça veut dire que ce qui vient n'a pas de visage.",
+      extreme:"Personne ne vient.\n\nEn neuf ans, vous n'avez humilié personne d'assez important pour qu'il en fasse une affaire personnelle. Vous avez payé ce qu'il fallait payer, épargné correctement ceux qu'il fallait épargner, et donné à chacun de quoi ne pas avoir besoin de vous détruire.\n\nAucune maison de cette province n'obtient jamais ce résultat, et il a coûté exactement ce qu'il devait coûter — vous savez quoi, et à qui.\n\nCe n'est pas du tout la même chose qu'être en sécurité. Ça veut dire seulement que ce qui monte vers la vallée cet hiver n'a pas de visage particulier, et qu'il faudra le tenir sans savoir à qui parler." });
   } else {
     texte.push(`§ ${liste.length === 1 ? "Un nom" : liste.length + " noms"}.`);
     for(const g of liste){
@@ -237,7 +257,7 @@ DYN.a3_convergence = () => {
   ];
 
   if(!d.length){
-    texte.push("§ Personne ne vous demande rien. Vous avez passé douze ans à ne devoir à personne, et le monde vous rend exactement ce que vous lui avez donné.");
+    texte.push("§ Personne ne vous demande rien. Vous avez passé neuf ans à ne devoir à personne, et le monde vous rend exactement ce que vous lui avez donné.");
     texte.push("Ce qui monte vers la vallée cet hiver montera donc sur une maison qui n'a aucun allié à appeler.");
   } else {
     for(const x of d){
@@ -251,7 +271,7 @@ DYN.a3_convergence = () => {
 
   texte.push({ sobre:"On tient deux théâtres. Jamais trois.",
     intense:"On tient deux théâtres. Jamais trois — ce n'est pas une règle du monde, c'est une question de nombre d'hommes, et le nombre d'hommes est ce qu'il est.",
-    extreme:"On tient deux théâtres. Jamais trois.\n\nCe n'est pas une règle morale, ce n'est pas une leçon, et personne ne l'a décidé : c'est le nombre d'hommes que vous avez, divisé par le nombre de lieues entre les endroits où l'on vous demande d'être. Un capitaine qui essaie d'en tenir trois n'en tient aucun et perd les trois, et cette phrase-là est le seul enseignement que douze ans de guerre aient produit dans quatre provinces.\n\nLe troisième se déroulera sans vous. On vous racontera comment." });
+    extreme:"On tient deux théâtres. Jamais trois.\n\nCe n'est pas une règle morale, ce n'est pas une leçon, et personne ne l'a décidé : c'est le nombre d'hommes que vous avez, divisé par le nombre de lieues entre les endroits où l'on vous demande d'être. Un capitaine qui essaie d'en tenir trois n'en tient aucun et perd les trois, et cette phrase-là est le seul enseignement que neuf ans de guerre aient produit dans quatre provinces.\n\nLe troisième se déroulera sans vous. On vous racontera comment." });
 
   const choix = d.map(x => ({
     t:`Répondre à ${x.qui}`,
@@ -311,14 +331,14 @@ DYN.a3_siege = () => {
     nom:"Le siège de Karlsberg",
     lieu:"Karlsberg · la vallée",
     intro:noms.length
-      ? `Ils arrivent par la route de poste, ensemble, et ils n'ont pas eu à s'écrire pour ça : ${noms.join(', ')}. Douze ans, et une seule vallée à remonter.`
+      ? `Ils arrivent par la route de poste, ensemble, et ils n'ont pas eu à s'écrire pour ça : ${noms.join(', ')}. Neuf ans, et une seule vallée à remonter.`
       : "Ils arrivent par la route de poste. Personne ne les commande et personne ne les a envoyés : une vallée qui a du grain et pas de maître attire ce qui a faim, et c'est tout ce qu'il y a à comprendre.",
     mise:"Ce qu'on tient, on le tient. Ce qu'on lâche brûle avant la nuit, et ce qui brûle ici n'est pas de la pierre.",
     fronts,
     victoire:{ renom:20, temoins:'province', flags:['a3_siege_tenu'],
       texte:"Karlsberg tient. Au matin, on ne compte pas ce qui a été gagné — on compte les feux qui fument encore dans le bourg, et il y en a plus qu'hier soir on n'aurait osé l'espérer." },
     defaite:{ renom:-8, flags:['a3_siege_perdu'],
-      texte:"La courtine cède avant la nuit. Ce qui reste de la maison sort par le chemin creux, en emportant ce qu'on peut porter, et Karlsberg redevient ce qu'elle était il y a treize ans : un endroit que trois provinces cesseront de nommer." },
+      texte:"La courtine cède avant la nuit. Ce qui reste de la maison sort par le chemin creux, en emportant ce qu'on peut porter, et Karlsberg redevient ce qu'elle était il y a neuf ans : un endroit que trois provinces cesseront de nommer." },
   };
 
   const garnison = ETAT.armee && ETAT.armee.length
@@ -339,7 +359,7 @@ DYN.a3_siege = () => {
         : `Vous avez un rôle : ${ETAT.armee.map(u => `${u.nom} (${u.effectif})`).join(' · ')}.`,
       { sobre:"§ On ne défend pas des pierres.",
         intense:"§ On ne défend pas des pierres. Personne n'a jamais défendu des pierres : les pierres ne s'en aperçoivent pas.",
-        extreme:"§ On ne défend pas des pierres. Personne n'a jamais défendu des pierres et les pierres ne s'en sont jamais aperçues.\n\nCe qu'il y a derrière la courtine ce matin : trois cents personnes qui n'ont rien demandé, un intendant de vingt-quatre ans qui vient d'un hameau de onze feux, et le fait qu'un nom rayé il y a trente-trois ans figure à nouveau dans le registre d'une province." },
+        extreme:"§ On ne défend pas des pierres. Personne n'a jamais défendu des pierres et les pierres ne s'en sont jamais aperçues.\n\nCe qu'il y a derrière la courtine ce matin : trois cents personnes qui n'ont rien demandé, un intendant qui vient d'un hameau de onze feux, et le fait qu'un nom rayé il y a vingt-neuf ans figure à nouveau dans le registre d'une province." },
     ],
     choix:[
       { t:"Tenir",
@@ -368,13 +388,13 @@ DYN.a3_apres_siege = () => {
         : "§ Personne ne vous attend au soir. C'est le meilleur résultat disponible et il n'a rien de glorieux.",
       tenu
         ? "Il reste à savoir ce que devient une maison qui a tenu — et c'est une question à laquelle aucun siège ne répond."
-        : "Il reste à savoir ce que devient un homme dont la maison est tombée deux fois en trente-trois ans.",
+        : "Il reste à savoir ce que devient un homme dont la maison est tombée deux fois en vingt-neuf ans.",
     ],
     effets:{ flags:[tenu ? 'a3_tenu' : 'a3_tombee'],
              marque:tenu ? "Karlsberg a tenu le siège." : "Karlsberg est tombée une seconde fois.",
              court:tenu ? "Elle a tenu" : "Une seconde fois" },
     issue:tenu ? "Le siège est levé" : "La maison est tombée",
-    bilan:tenu ? "Karlsberg, la trente-troisième année" : "Karlsberg, deux fois en trente-trois ans",
+    bilan:tenu ? "Karlsberg, la vingt-neuvième année" : "Karlsberg, deux fois en vingt-neuf ans",
     suite:'a3_champions', libelleSuite:ch.length ? "Ceux qui viennent seuls" : "Ce que le monde en a fait",
   };
   aller('a3_apres_siege');

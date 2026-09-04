@@ -721,7 +721,7 @@ DYN.a2_epilogue = () => {
     /* L'épilogue de l'Acte II n'est une fin que la première fois. Douze ans
      * plus tard, tout ce qu'il vient d'énumérer redevient une situation. */
     suite: a('a3_ouvert') ? null : 'a3_bascule',
-    libelleSuite:"Douze ans plus tard",
+    libelleSuite:"Cinq ans plus tard",
   };
   aller('a2_epilogue');
 };
