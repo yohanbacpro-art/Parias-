@@ -113,7 +113,7 @@ function scannerFichier(rel){
 }
 
 const fichiers = [];
-for(const acte of ['acte1', 'acte2']){
+for(const acte of ['acte1', 'acte2', 'acte3']){
   const d = path.join(RACINE, acte);
   if(!fs.existsSync(d)) continue;
   for(const f of fs.readdirSync(d).filter(f => f.endsWith('.js')).sort())

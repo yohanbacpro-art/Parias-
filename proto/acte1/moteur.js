@@ -172,7 +172,13 @@ function exploit(e){
  * conséquence mécanique, jamais. */
 /* Un peu de gras et d'italique, rien d'autre : le récit n'a pas besoin de plus. */
 function md(t){
-  return t.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>').replace(/\*([^*]+)\*/g, '<i>$1</i>');
+  return t.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>').replace(/\*([^*]+)\*/g, '<i>$1</i>')
+    /* Typographie française : une espace fine insécable colle le guillemet à
+     * ce qu'il ouvre ou ferme. Sans elle, un « » se retrouve seul en bas de
+     * paragraphe quand la ligne précédente est pleine. Même règle pour les
+     * deux-points et le point-virgule, qui traînent au même endroit. */
+    .replace(/«\s+/g, '« ').replace(/\s+»/g, ' »')
+    .replace(/\s+([;:!?])/g, ' $1');
 }
 
 function texteDe(p){
@@ -344,12 +350,19 @@ function aller(id){
      * puis on découpe ce qui reste trop long. Une tirade coupée en trois
      * reste une tirade : le découpage garde la voix de son premier morceau,
      * sinon la suite d'une réplique s'afficherait comme du récit. */
-    let n = 0;
+    let n = 0, citation = 0;
     return t.split(/\n\n+/).filter(Boolean).map(seg => {
-      const parle = estReplique(seg);
+      /* Un guillemet ouvrant que rien ne referme laisse la parole ouverte :
+       * le paragraphe suivant du même bloc est la suite de la même tirade,
+       * même s'il ne rouvre pas les guillemets. C'est le cas normal d'un
+       * personnage qui parle trois paragraphes d'affilée. */
+      const suite = citation > 0;
+      const parle = suite || estReplique(seg);
       if(!parle) voixCourante = coupeVoix();
-      else voixCourante = voixDe(seg, voixCourante);
+      else if(!suite) voixCourante = voixDe(seg, voixCourante);
       const voix = voixCourante;
+      citation = Math.max(0, citation
+        + (seg.match(/«/g) || []).length - (seg.match(/»/g) || []).length);
       return decouper(seg).filter(Boolean).map(b => {
         const cls = ['recit'];
         if(parle){

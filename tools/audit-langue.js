@@ -88,7 +88,7 @@ function scanner(rel){
 }
 
 const fichiers = [];
-for(const acte of ['acte1', 'acte2'])
+for(const acte of ['acte1', 'acte2', 'acte3'])
   for(const f of fs.readdirSync(path.join(RACINE, acte)).filter(f => f.endsWith('.js')).sort())
     fichiers.push(`${acte}/${f}`);
 

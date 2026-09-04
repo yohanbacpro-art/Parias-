@@ -196,6 +196,10 @@ DYN.a3_ceux_qui_viennent = () => {
     for(const g of liste){
       texte.push(`**${g.nom}** — *${g.ou}.*\n\n${g.quoi}`);
       texte.push(`^${g.dit}`);
+      /* Un seul de la liste n'est pas un ennemi, et l'intendant le sait :
+       * il l'a inscrit quand même parce qu'il vient, et que sa charge est
+       * de dire qui vient, pas qui veut du mal. */
+      if(g.neutre) texte.push(`^« Celui-là, je l'ai mis parce qu'il vient. Je ne crois pas qu'il vienne contre nous. Je n'ai pas de colonne pour ça. »`);
     }
   }
 
@@ -371,7 +375,7 @@ DYN.a3_apres_siege = () => {
              court:tenu ? "Elle a tenu" : "Une seconde fois" },
     issue:tenu ? "Le siège est levé" : "La maison est tombée",
     bilan:tenu ? "Karlsberg, la trente-troisième année" : "Karlsberg, deux fois en trente-trois ans",
-    suite:'a2_epilogue', libelleSuite:"Ce que le monde en a fait",
+    suite:'a3_champions', libelleSuite:ch.length ? "Ceux qui viennent seuls" : "Ce que le monde en a fait",
   };
   aller('a3_apres_siege');
 };
