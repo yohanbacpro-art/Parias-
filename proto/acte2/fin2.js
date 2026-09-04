@@ -96,7 +96,7 @@ fi_parloir:{
     "« Vous auriez pu partir. »",
     "« Oui. »",
     "« Vous auriez pu changer de nom. »",
-    "« Oui. » Elle soutient votre regard sans effort apparent. « Posez la vraie question, messire. Vous n'avez pas fait quatre lieues pour l'organisation de mes matinées. »",
+    "« Oui. » Elle soutient votre regard sans effort apparent. « Posez la vraie question, messire. Vous n'avez pas fait quatre lieues pour savoir comment j'occupe mes matinées. »",
   ],
   choix:[
     { t:"« Est-ce que c'est vous ? »",
@@ -207,7 +207,7 @@ fi_pourquoi:{
     "« Oui. »",
     { sobre:"« Moi non. »",
       intense:"« Moi non. » Elle le dit exactement du même ton qu'elle a dit *oui*. « Un enfant sur trois, dans cette famille, naît sans. Ce n'est écrit nulle part parce qu'on n'écrit pas ce genre de chose : on le sait, on le constate à onze ou douze ans, et on n'en reparle plus jamais. »",
-      extreme:"« Moi non. » Elle le dit du même ton exactement qu'elle a dit *oui* à la question de savoir si elle avait fait rayer sa propre maison. « Un enfant sur trois, dans cette famille, naît sans. Ce n'est écrit nulle part — on n'écrit pas ce genre de chose, on n'en fait pas la statistique, on le constate à onze ou douze ans quand rien ne vient, et ensuite on n'en reparle plus jamais de toute la vie de l'enfant. C'est ça, la mécanique. Pas la cruauté : le silence poli. »" },
+      extreme:"« Moi non. » Elle le dit du même ton exactement qu'elle a dit *oui* à la question de savoir si elle avait fait rayer sa propre maison. « Un enfant sur trois, dans cette famille, naît sans. Ce n'est écrit nulle part — on n'écrit pas ce genre de chose, on n'en tient pas le compte, on le constate à onze ou douze ans quand rien ne vient, et ensuite on n'en reparle plus jamais de toute la vie de l'enfant. C'est ça, la mécanique. Pas la cruauté : le silence poli. »" },
     "« Et alors ? »",
     "« Et alors j'ai passé quarante-cinq ans dans une maison de quatorze personnes où j'étais la seule à qui l'on n'expliquait rien. » Elle a un geste minuscule de la main. « Pas la seule qu'on maltraitait. La seule à qui l'on n'expliquait rien, ce qui est très différent et beaucoup plus long. On ne m'a jamais rien refusé, messire. On ne m'a jamais rien proposé. »",
     "« Ce n'est pas une raison de faire tuer quatorze personnes. »",

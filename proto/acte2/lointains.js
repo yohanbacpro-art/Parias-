@@ -202,7 +202,7 @@ kd_arrivee:{
     "« Voir. »",
     "« Personne ne vient voir. » Elle vous fait signe de la suivre. « Venez voir, alors. »",
     "§ Elle vous montre la galerie basse : deux cents pieds de front, huit hommes en poste, et une odeur qui monte depuis quatre mois.",
-    "« Les Peaux-Vertes ne prennent pas les portes », dit-elle. « Ils les usent. Ils envoient trente des leurs toutes les nuits pour tuer trois des nôtres, et ils ont trente mille et nous avons deux mille trois cents. C'est tout. Il n'y a pas de stratégie. Il n'y a qu'une soustraction. »",
+    "« Les Peaux-Vertes ne prennent pas les portes », dit-elle. « Ils les usent. Ils envoient trente des leurs toutes les nuits pour tuer trois des nôtres, et ils ont trente mille et nous avons deux mille trois cents. C'est tout. Il n'y a pas d'art là-dedans. Il n'y a qu'une soustraction. »",
     "« Que vous faut-il ? »",
     "« Des bras et du temps, et vous n'avez ni l'un ni l'autre. »",
   ],

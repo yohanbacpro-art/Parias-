@@ -19,7 +19,7 @@ sa_reseau:{
   titre:"Trente-huit",
   texte:[
     "Elle vous bande les yeux. Elle le fait sans s'excuser et sans le présenter comme une précaution : elle le présente comme la condition.",
-    "« Ce n'est pas contre vous. C'est le protocole, il a quinze ans, et je me le suis appliqué à moi-même la première fois que quelqu'un m'a menée quelque part. »",
+    "« Ce n'est pas contre vous. C'est la règle, elle a quinze ans, et je me le suis appliqué à moi-même la première fois que quelqu'un m'a menée quelque part. »",
     "§ Quatre heures de cheval. Elle ne parle pas et elle change trois fois de direction, ce que vous savez parce qu'on sent le soleil.",
     { sobre:"Ce n'est pas une forteresse. C'est une ferme.",
       intense:"Quand on vous retire le bandeau, ce n'est pas une forteresse, pas une grotte, pas une ruine. C'est une ferme. Une vraie, avec des bêtes, des enfants, du linge qui sèche et une femme qui bat du beurre sous un auvent.",
@@ -27,7 +27,7 @@ sa_reseau:{
     "@« Combien ici ? »",
     "« Deux. »",
     "« Sur quarante et un. »",
-    "« Sur trente-huit que je connais. » Elle descend de cheval. « Vous vous attendiez à un endroit. Il n'y a pas d'endroit, messire : il y a trente-huit vies ordinaires dans trente-quatre endroits ordinaires, et c'est ça, le système. Il n'y a rien à prendre d'assaut parce qu'il n'y a rien. »",
+    "« Sur trente-huit que je connais. » Elle descend de cheval. « Vous vous attendiez à un endroit. Il n'y a pas d'endroit, messire : il y a trente-huit vies ordinaires dans trente-quatre endroits ordinaires, et c'est ça, tout l'ouvrage. Il n'y a rien à prendre d'assaut parce qu'il n'y a rien. »",
     "§ La femme qui bat du beurre a soixante-deux ans. Elle vous regarde enfin, longuement, et elle ne dit rien du tout.",
     "« Elle sait qui je suis ? »",
     "« Elle sait qu'il y a un neuvième nom sur une liste. Elle ne sait pas votre visage et elle ne le saura pas : vous repartez ce soir. »",

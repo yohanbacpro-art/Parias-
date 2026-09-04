@@ -138,7 +138,7 @@ va_iselle:{
     { sobre:"« Ah. Bien. »",
       intense:"« Ah. » Elle repose sa plume. « Bien. C'est la première fois qu'on me pose la bonne question, et je travaille ici depuis quatre ans. »",
       extreme:"« Ah. » Elle repose sa plume et elle vous regarde vraiment pour la première fois. « Bien. C'est la première fois qu'on me pose la bonne question dans cette maison, et j'y travaille depuis quatre ans. Les gens demandent toujours si Aymar est un monstre. La réponse est non, et elle ne sert à rien. »" },
-    "« La tourbe se vend au chariot. Onze mille arpents à la profondeur moyenne du marais font environ quatre-vingt mille chariots. »",
+    "« La tourbe se vend au chariot. Onze mille arpents, au fond qu'a ce marais l'un dans l'autre font environ quatre-vingt mille chariots. »",
     "« Et avec quatre-vingts personnes dedans ? »",
     "« Vingt-deux mille. On ne creuse pas là où les gens habitent : leurs huttes sont sur les buttes, et les buttes sont exactement les endroits où la tourbe est la plus épaisse, parce que c'est la tourbe épaisse qui fait les buttes. »",
     "§ Cinquante-huit mille chariots. C'est le prix de quatre-vingts personnes, et il est calculable, et quelqu'un l'a calculé.",
@@ -450,7 +450,7 @@ va_greffe_ko:{
   texte:[
     "« Il me faut une attestation de qualité, messire. »",
     "« La Nonne a soixante-douze ans et trente ans de possession. »",
-    "« Elle est la possédante. Elle ne peut pas s'attester elle-même : c'est toute la difficulté de sa situation et c'est pour ça qu'elle dure depuis trente ans. »",
+    "« Elle est la possédante. Elle ne peut pas s'attester elle-même. C'est là tout son embarras, et c'est aussi ce qui la fait durer depuis trente ans. »",
     { sobre:"§ Il faut quelqu'un de qualité. Vous n'en connaissez pas.",
       intense:"§ Il faut quelqu'un de qualité — un noble, un ecclésiastique, un officier de justice. Vous n'en connaissez aucun dans cette province qui n'appartienne pas d'une façon ou d'une autre à Aymar de Vauclair, et c'est précisément l'objet de six ans de patience.",
       extreme:"§ Il faut quelqu'un de qualité : un noble, un ecclésiastique, un officier de justice. Dans cette province, ils appartiennent tous, d'une façon ou d'une autre, à Aymar de Vauclair — pas par vice, par arithmétique : il est le premier employeur à onze lieues à la ronde. C'est l'objet de six ans de patience, et ce n'est pas un piège tendu contre vous : c'est un mur bâti avant votre arrivée." },

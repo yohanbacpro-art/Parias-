@@ -65,7 +65,7 @@ al_mauvaise:{
     "« Employés par qui ? »",
     { sobre:"« Des gens qui cherchent des Parias. »",
       intense:"« Des gens dont c'est le métier de trouver des Parias. » Elle ne baisse pas la voix d'un demi-ton. « Il y en a. Beaucoup plus qu'on ne croit. Ce n'est pas une confrérie, c'est un marché : tarif à la tête, payé au résultat, et le tarif a doublé en six ans. »",
-      extreme:"« Des gens dont c'est le métier de trouver des Parias. » Elle ne baisse pas la voix d'un demi-ton, et deux têtes se tournent, et elle ne les regarde pas. « Il y en a. Beaucoup plus qu'on ne croit et pas du tout ceux qu'on croit. Ce n'est pas une confrérie de fanatiques, messire, c'est un marché — tarif à la tête, payé au résultat, plus une prime si on ramène de quoi identifier. Le tarif a doublé en six ans. Ça vous dira quelque chose sur ce qui reste en stock. »" },
+      extreme:"« Des gens dont c'est le métier de trouver des Parias. » Elle ne baisse pas la voix d'un demi-ton, et deux têtes se tournent, et elle ne les regarde pas. « Il y en a. Beaucoup plus qu'on ne croit et pas du tout ceux qu'on croit. Ce n'est pas une confrérie de fanatiques, messire, c'est un marché — tarif à la tête, payé au résultat, plus une prime si on ramène de quoi identifier. Le tarif a doublé en six ans. Ça vous dira quelque chose sur ce qu'il en reste à prendre. »" },
     "« Et on veut qu'on l'arrête. »",
     "« On veut qu'on la crève. Trois cents couronnes. »",
     { sobre:"Elle pose les deux mains à plat sur la table.",
