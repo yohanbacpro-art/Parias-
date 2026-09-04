@@ -22,13 +22,18 @@ const fs = require('fs');
 const path = require('path');
 
 const RACINE = path.join(__dirname, '..', 'proto');
+
 const filtre = process.argv[2] || '';
 /* `coupe` (défaut) : seulement les répliques que l'alternance ne couvre pas.
  * `enchaine` : aussi celles qu'elle couvre, pour débusquer les tirades. */
 const mode = process.argv[3] || 'coupe';
 
-const DIT_YOHAN = /\b(dites-vous|demandez-vous|répondez-vous|reprenez-vous|dites-le|lâchez-vous)\b/;
-const DIT_AUTRE = /»\s*(Elle|Il|Le |La )|\b(dit-elle|dit-il|répond-elle|répond-il|demande-t-elle|demande-t-il|répète-t-elle|répète-t-il|ajoute-t-elle|ajoute-t-il|reprend-elle|reprend-il|corrige-t-elle|constate-t-elle|fait-elle|souffle-t-elle)\b/;
+/* Ces deux expressions sont **celles du moteur**, recopiées de
+ * `proto/acte1/moteur.js`. Si elles divergent, l'outil ment : il signale des
+ * répliques que le moteur attribue très bien, et se tait sur celles qu'il
+ * attribue mal. Toute modification là-bas se recopie ici. */
+const DIT_YOHAN = /»[^«»]{0,24}?\b(dites|demandez|répondez|reprenez|constatez|répétez|lancez|corrigez|glissez|coupez|insistez|soufflez|ajoutez|concédez|admettez|articulez|murmurez|proposez|lâchez|objectez|précisez)-vous\b/;
+const DIT_AUTRE = /»[,.]?\s*(dit|répond|demande|ajoute|reprend|constate|lâche|souffle|concède|corrige|glisse|coupe|conclut|observe|remarque|répète|note|admet|lit|traduit|explique|précise|insiste|murmure|articule|fait|finit|objecte)[a-zéèêà-]*\s+(?:[A-ZÀ-Þ]|l['’]|l[ea] |une? |s[oa]n |m[oa] )|»\s*(Elle|Il|Le |La )|\b(dit|répond|demande|répète|ajoute|reprend|corrige|constate|fait|souffle|concède|lâche|conclut|observe|remarque|note|admet|explique|précise|insiste|murmure|articule|objecte)-t?-?(elle|il)\b/;
 
 const estReplique = t => /^[«—@^]/.test(t.trim());
 

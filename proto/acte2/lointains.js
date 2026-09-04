@@ -221,11 +221,94 @@ kd_arrivee:{
       detail:"une maison humaine doit à cette montagne depuis quatre-vingts ans · payez-la",
       requisOr:400, risque:"calculé", va:'kd_dette' },
 
+    { t:"Prendre la onzième porte, et la commander",
+      detail:"ils ont deux mille trois cents défenseurs et plus un seul capitaine · vous en êtes un",
+      risque:"définitif",
+      ferme:"Ferme : l'idée que vous n'êtes qu'un homme d'armes",
+      va:'kd_commander' },
+
     { t:"Repartir",
       detail:"il n'y a pas de version de cette histoire que vous puissiez gagner",
       risque:"prudent", va:'kd_repartir' },
   ],
 },
+
+/* ══ LA ONZIÈME PORTE ══════════════════════════════════════════════════════
+ * La première bataille du jeu, et elle ne se donne pas : un homme sans
+ * maison n'a pas d'armée. Kar-Durak en a une et n'a plus personne pour la
+ * commander, ce qui est exactement le problème d'une montagne qui a perdu
+ * quatre portes en deux ans.
+ *
+ * Les troupes sont prêtées. Ce qui en revient ne vous appartient pas, et ce
+ * qui n'en revient pas non plus — c'est ce qui rend les ordres difficiles. */
+kd_commander:{
+  qui:'capitaine_naine',
+  lieu:"Kar-Durak · la salle des capitaines",
+  titre:"Ils n'ont plus personne",
+  texte:[
+    "@« Combien de capitaines vous reste-t-il ? »",
+    { sobre:"« Quatre. Il en faut onze. »",
+      intense:"« Quatre. » Elle ne détourne pas les yeux et elle ne baisse pas la voix. « Il en faut onze, un par porte, et il en reste quatre. C'est le vrai chiffre de cette guerre et je ne l'ai dit à personne d'extérieur en deux ans. »",
+      extreme:"« Quatre. »\n\nElle ne détourne pas les yeux et elle ne baisse pas la voix d'un demi-ton — ni l'un ni l'autre ne se fait ici.\n\n« Il en faut onze. Un par porte. Il en reste quatre, dont moi, et je tiens la troisième depuis huit mois sans dormir plus de quatre heures d'affilée.\n\nVoilà le vrai chiffre de cette guerre. Ce n'est pas deux mille trois cents contre trente mille : deux mille trois cents, ça se tient. C'est quatre contre onze, et ça ne se tient pas du tout. » Un temps. « Je ne l'ai dit à personne d'extérieur en deux ans. »" },
+    "§ La onzième porte est fermée depuis six cents ans. C'est celle du bas, celle du plan que le traducteur refuse d'abord de rendre, et les Peaux-Vertes viennent d'ouvrir la galerie qui y mène.",
+    { sobre:"« Vous commandez, ou elle tombe cette nuit. »",
+      intense:"« Je vous donne ce que j'ai : deux compagnies de sapeurs, une d'arbalétriers, et la levée du milieu. Vous commandez, ou la onzième tombe cette nuit et nous en aurons cinq. »",
+      extreme:"« Je vous donne ce que j'ai, et ce que j'ai n'est pas beaucoup : deux compagnies de sapeurs, une d'arbalétriers, la levée du milieu et ce qui reste des lanciers de la septième.\n\nVous commandez, ou la onzième tombe cette nuit et nous en aurons cinq — et une montagne qui tient sur cinq portes n'est plus une montagne, c'est un siège avec un couvercle. »\n\nElle pose les deux mains à plat sur la table de pierre.\n\n« Je ne vous demande pas si vous savez le faire. Je vous demande si vous le faites. Ce ne sont pas les mêmes hommes qui répondent aux deux questions et je n'ai le temps que pour la seconde. »" },
+  ],
+  effets:{ flags:['kd_commande'],
+           marque:"Kar-Durak vous a confié la onzième porte : quatre capitaines pour onze portes.",
+           court:"La onzième" },
+  choix:[
+    { t:"Prendre le commandement",
+      detail:"trois fronts · leurs hommes · ce qui ne revient pas ne vous appartenait pas",
+      risque:"définitif",
+      avant:() => ouvrirBataille('bat_kardurak', 'kd_apres', [
+        { type:'sapeurs' }, { type:'sapeurs', effectifPct:0.8 },
+        { type:'arbaletriers' }, { type:'lanciers', effectifPct:0.7 },
+        { type:'frondeurs' },
+      ]),
+      va:'kd_commander' },
+
+    { t:"« Trouvez quelqu'un d'autre. »",
+      detail:"vous n'avez jamais commandé plus de neuf hommes · c'est vrai et ça ne l'intéresse pas",
+      risque:"prudent", va:'kd_refuse_commander' },
+  ],
+},
+
+kd_refuse_commander:{
+  qui:'capitaine_naine',
+  titre:"Il n'y a personne d'autre",
+  texte:[
+    "@« Trouvez quelqu'un d'autre. Je n'ai jamais commandé plus de neuf hommes. »",
+    { sobre:"« Je sais. »",
+      intense:"« Je sais. » Elle ne discute pas une seconde. « Il n'y a personne d'autre, et vous le savez aussi, et c'est pour ça que vous me le dites au lieu de partir. »",
+      extreme:"« Je sais. »\n\nElle ne discute pas une seconde et elle n'insiste pas non plus, ce qui est infiniment plus difficile à supporter.\n\n« Il n'y a personne d'autre. Vous le savez, je le sais, et c'est très exactement pour cette raison que vous me le dites au lieu de tourner les talons. Un homme qui n'a pas l'intention de le faire ne prend pas la peine d'expliquer pourquoi il ne peut pas. »\n\nElle ramasse sa hache.\n\n« Je la prends, alors. J'ai la troisième et j'aurai la onzième, et l'une des deux tombera. »" },
+    "§ Elle descend elle-même à la galerie basse cette nuit-là. Elle a cent quarante ans et le tiers du visage brûlé.",
+    "La onzième porte tient. La troisième ne tient pas.",
+  ],
+  effets:{ flags:['kd_refuse','a2_kardurak_troisieme_perdue'], cout:{ moral:10 },
+           marque:"Vous avez refusé la onzième porte. Elle l'a prise, et c'est la troisième qui est tombée.",
+           court:"La troisième" },
+  suite:'a2_carte', libelleSuite:"La carte" },
+
+kd_apres:{
+  lieu:"Kar-Durak · la onzième porte · au matin",
+  titre:"Ce qu'on referme",
+  texte:[
+    () => ETAT.derniereBataille === 'gagnee'
+      ? "La capitaine de la troisième vient voir au matin. Elle ne dit rien pendant un long moment — elle compte, et compter prend le temps que ça prend."
+      : "La capitaine de la troisième vient voir au matin. Elle compte aussi, et elle arrive au même chiffre que vous.",
+    () => ETAT.derniereBataille === 'gagnee'
+      ? { sobre:"« Cinq capitaines », dit-elle enfin.",
+          intense:"« Cinq capitaines », dit-elle enfin, ce qui est la seule chose qu'elle dira sur le sujet et ce qui vaut un discours.\n\n@« Je ne suis pas des vôtres. »\n\n« Je n'ai pas dit *des nôtres*. J'ai dit *cinq*. »",
+          extreme:"« Cinq capitaines », dit-elle enfin.\n\nC'est la seule chose qu'elle dira sur le sujet, ce matin-là ni jamais, et chez ces gens-là c'est un discours entier.\n\n@« Je ne suis pas des vôtres. »\n\n« Je n'ai pas dit *des nôtres*. » Elle regarde la porte qu'on est en train de refermer, pierre par pierre, dans le même ordre. « J'ai dit *cinq*. C'est un compte, pas une adoption. Ne vous flattez pas. »\n\nEt elle repart vers la troisième porte, où huit hommes tiennent deux cents pieds de front depuis huit mois." }
+      : { sobre:"« Cinq portes », dit-elle.",
+          intense:"« Cinq portes », dit-elle. « On tenait sur six hier. »\n\nIl n'y a pas de reproche là-dedans, et c'est bien le problème : elle constate, et un Nain qui constate a déjà rangé la chose au registre.",
+          extreme:"« Cinq portes », dit-elle. « On tenait sur six hier. »\n\nIl n'y a aucun reproche là-dedans et c'est très exactement le problème. Elle constate. Un Nain qui constate a déjà porté la chose au registre, avec la date, le nombre et le nom de qui commandait — et ce registre-là se lit encore dans huit cents ans.\n\n@« J'aurais dû refuser. »\n\n« Non. » Elle ne réfléchit pas avant de répondre. « Vous auriez dû gagner. Ce n'est pas la même faute et la seconde se répare. »" },
+    "§ On referme ce qui peut l'être. Ici, on referme toujours : c'est l'ordre des choses, et il ne dit pas *ne pas savoir*, il dit *remettre*.",
+  ],
+  effets:{ marque:"La onzième porte de Kar-Durak, commandée par un Paria.", court:"La onzième" },
+  suite:'a2_carte', libelleSuite:"La carte" },
 
 kd_tenir:{
   melee:true,
@@ -489,3 +572,7 @@ offrir({ id:'acte_charles', lieu:'montdraken', va:'acte_charles',
          titre:"Charles de Mont-Draken",
          si:() => (a('kar_berold') || ETAT.suspicion >= 30)
                && !['ch_avoue','ch_nie','ch_esquive','ch_trois_cent_onze'].some(a) });
+
+/* Le retour de bataille est une chaîne passée à `ouvrirBataille` : le graphe
+ * de l'épreuve ne peut pas la voir, on l'inscrit. */
+entree2('kd_apres');

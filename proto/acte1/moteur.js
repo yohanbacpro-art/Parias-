@@ -422,7 +422,10 @@ function jouer(c){
     aller(cible(c.degres, r.degre));
     return;
   }
-  aller(c.va);
+  /* `va` accepte une fonction : après un `avant`, la destination dépend
+   * parfois de ce que celui-ci vient de changer — reste-t-il une unité à
+   * déployer, par exemple. */
+  aller(val2(c.va));
 }
 
 /* Une scène par degré, et un repli vers le voisin le plus proche : on n'oblige
