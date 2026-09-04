@@ -118,7 +118,7 @@ dr_nains:{
     "« Elle est sortie. »",
     "« Elle est sortie, elle a trouvé la lumière, et elle a faim. »",
     "§ Il n'y a rien d'autre. Pas de dessein, pas de vengeance, pas de destin.",
-    "« Elle en veut à quelqu'un ? »",
+    "@« Elle en veut à quelqu'un ? »",
     "Le Nain vous regarde un long moment, et sa réponse est ce que vous retiendrez de toute cette affaire.",
     { sobre:"« C'est une bête. »",
       intense:"« C'est une bête, messire. Elle ne veut rien à personne. » Il replie la carte. « Elle est déplacée, elle est énorme, elle mange, et vous êtes sur son chemin parce que votre vallée est ce qu'il y a de plus bas entre la montagne et la plaine. C'est tout. Il n'y a rien à comprendre de plus et il n'y a rien à lui dire. »",
