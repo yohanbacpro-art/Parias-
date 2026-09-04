@@ -66,7 +66,10 @@ const dit = (ok, quoi, note) => {
     /* Les étapes d'Alycia ne se référencent nulle part : c'est elle qui
      * vient, et l'aiguillage choisit laquelle. */
     const parBeat = BEATS_ALYCIA.map(b => [b.id, b.rate]).flat().filter(Boolean)
-      .concat(ENTREES2);
+      .concat(ENTREES2)
+      /* Les chasses et le duel ne se référencent nulle part : c'est la file
+       * de l'entre-saisons qui va les chercher quand le monde est prêt. */
+      .concat(RENCONTRES);
     return { def, ref, dyn:Object.keys(DYN), echos:Object.keys(ECHOS),
              parBanc, parOffre, parNeuf, parBeat };
   });

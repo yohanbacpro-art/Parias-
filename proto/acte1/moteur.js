@@ -277,8 +277,11 @@ function appliquer(e){
   }
   if(e.soigne && soigner(e.soigne.id, e.soigne.comment)) T('bien', "blessure pansée");
 
-  if(e.exploit){
-    const r = exploit(e.exploit);
+  /* L'exploit accepte une fonction, comme `lieu` et `titre` : ce qu'on a
+   * réellement fait ne se connaît parfois qu'au moment où la scène s'ouvre.
+   * Elle peut rendre `null` — on n'a alors rien accompli du tout. */
+  if(val2(e.exploit)){
+    const r = exploit(val2(e.exploit));
     if(r.gagne > 0) T('renom', `+${r.gagne} renom · vu par ${r.temoins.nom}`);
     else T('rien', "personne n'a vu");
     if(r.monte) T('rang', `On dit désormais : « ${r.rang.cri} »`);

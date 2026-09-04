@@ -26,6 +26,22 @@
 const PRIME = { inconnu:1, nomme:1.4, karlsberg:1.8 };
 const prime = n => Math.round(n * PRIME[rangActuel().id]);
 
+/* ── Ce qu'on rencontre sur la route ───────────────────────────────────────
+ * Les chasses et le duel de `chasses.js`. Chacune a une condition qui dit
+ * quand le monde est prêt à la poser devant vous — jamais une condition qui
+ * la rende obligatoire, et jamais deux dans la même entre-saisons.
+ *
+ * La meute vient tôt : c'est la première créature du jeu et il faut qu'elle
+ * arrive avant que le joueur ait décidé que Vardhen est un monde d'hommes.
+ * Le duelliste vient quand on a un nom, parce qu'on ne collectionne pas un
+ * homme dont personne ne parle. */
+const RENCONTRES_ROUTE = [
+  { scene:'ch_meute',     fait:'ch_meute_faite',     si:() => ETAT.acte.saison >= 1 },
+  { scene:'ch_duelliste', fait:'ch_duel_fait',       si:() => rangActuel().id !== 'inconnu' },
+  { scene:'ch_colosse',   fait:'ch_colosse_fait',    si:() => ETAT.acte.saison >= 2 },
+  { scene:'ch_reine',     fait:'ch_reine_faite',     si:() => ETAT.acte.saison >= 3 },
+];
+
 /* ── 3 · Le corps ──────────────────────────────────────────────────────────
  * Une blessure ne disparaît pas : elle descend d'un cran, ou elle reste. */
 function reposer(crans){
@@ -72,6 +88,15 @@ function prochaineDeLEntreSaison(){
   /* c) Le palier de renom qu'on vient de franchir. */
   const r = rangActuel().id;
   if(r !== 'inconnu' && !a('palier_' + r)) return 'palier_' + r;
+
+  /* c bis) Ce qu'on rencontre sur la route.
+   *
+   * Personne ne les affiche au mur du Héron et personne ne les paie : elles
+   * arrivent. C'est la seule façon de garantir qu'une partie, quels que
+   * soient les trois contrats pris, croise autre chose que des hommes.
+   * Une par entre-saisons, jamais deux, et dans cet ordre. */
+  const rencontre = RENCONTRES_ROUTE.find(x => !a(x.fait) && x.si());
+  if(rencontre) return rencontre.scene;
 
   /* d) L'entre-deux : le corps, l'argent, et ce qu'on décide d'en faire. */
   if(!a('soins_' + A.saison)) return 'convalescence';
