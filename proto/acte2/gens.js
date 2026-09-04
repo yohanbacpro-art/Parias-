@@ -17,7 +17,7 @@ acte_charles:{
   titre:"Il vient lui-même",
   texte:[
     "Il ne fait pas envoyer. Il vient, avec quatre hommes qui restent dehors, et il entre dans la salle commune d'un relais comme entre un homme qui a payé la salle pour la soirée — parce qu'il l'a payée.",
-    "Charles de Mont-Draken a cinquante-huit ans. Il est plus petit que sa réputation et il a des mains de charpentier.",
+    "Charles de Mont-Draken a cinquante-trois ans. Il est plus petit que sa réputation et il a des mains de charpentier.",
     "« Je ne suis pas venu vous prendre. Si j'étais venu vous prendre, il y aurait vingt hommes et un magistrat, et ce serait à quatre heures du matin. »",
     "« Pourquoi, alors ? »",
     { sobre:"« Parce que six de mes hommes ne sont pas rentrés d'une crypte. »",
@@ -137,7 +137,7 @@ lu_astrah:{
   titre:"Le trône vide",
   texte:[
     "Astrah n'a plus de roi depuis quarante ans et la ville est plus riche qu'elle ne l'a jamais été, ce qui est le genre de fait qu'on ne dit pas à voix haute dans une salle de conseil.",
-    "Lucius Furius Augustus a quarante-huit ans. Il vous reçoit debout, il vous serre l'avant-bras, et il vous appelle par votre nom entier dès la première phrase.",
+    "Lucius Furius Augustus a quarante-trois ans. Il vous reçoit debout, il vous serre l'avant-bras, et il vous appelle par votre nom entier dès la première phrase.",
     () => a('a2_bannieres')
       ? "« Yohan de Karlsberg. Volume cent-quarante-trois, section des titres relevés. Je l'ai lu le jour de l'enregistrement : je paie un homme à Chastel pour me lire les relevés. »"
       : "« Yohan de Karlsberg. Ne faites pas cette tête : je paie un homme à Chastel pour me lire les registres, et vous êtes dedans depuis Nivôse. »",
@@ -275,7 +275,7 @@ ca_fort:{
   titre:"Celui qui compte",
   texte:[
     "Fort-aux-Princes ne ressemble pas à un fort. C'est un comptoir avec des murs, et le cabinet des créances est la plus grande pièce de la maison.",
-    "Caleb de Fort-aux-Princes a quarante et un ans et il ne se lève pas non plus.",
+    "Caleb de Fort-aux-Princes a trente-six ans et il ne se lève pas non plus.",
     () => a('a2_bannieres')
       ? "« Karlsberg. » Il tapote une chemise sur son bureau. « J'ai ouvert un dossier le jour de l'enregistrement. Il fait déjà onze feuillets. »"
       : "« Vous n'avez rien relevé. » Il tapote une chemise. « Ça fait de vous une curiosité et pas un dossier, et je préfère les curiosités : elles ne coûtent rien. »",

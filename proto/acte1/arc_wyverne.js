@@ -1936,7 +1936,7 @@ wy_c2_couvee_dom:{
       intense:"Elle s'arrête. Ce n'est pas un ralentissement : c'est un arrêt, total, à mi-pas, une patte encore en l'air. Et tout ce qui était méthode chez elle depuis deux minutes s'efface d'un seul coup, remplacé par autre chose de beaucoup plus vieux et de beaucoup plus bête. Elle baisse la tête. Elle siffle — un son bas, continu, sur deux notes, qui n'est pas une menace mais une supplique.",
       extreme:"Elle s'arrête à mi-pas, une patte en l'air. Tout ce qui était méthode chez elle disparaît d'un coup, remplacé par quelque chose de beaucoup plus vieux et de beaucoup plus bête. Elle baisse la tête au ras du sol, elle siffle — un son bas, continu, à deux notes, qui n'est pas une menace : c'est une supplique — et elle recule. Douze cents livres reculent d'un pas. Puis d'un autre. La chose de la taille d'un chien de berger se traîne entre ses pattes et se met à crier, et elle ne le regarde même pas, parce qu'elle ne peut pas quitter des yeux la pointe posée sur la coquille." },
     "§ Voilà. C'est aussi simple que ça, et c'est aussi laid que ça.",
-    "Vous êtes un homme de vingt-neuf ans qui tient une famille en otage pour rouvrir une route de sel. Aucune version de cette matinée ne vous rendra ce que vous venez de dépenser ici.",
+    "Vous êtes un homme de vingt-quatre ans qui tient une famille en otage pour rouvrir une route de sel. Aucune version de cette matinée ne vous rendra ce que vous venez de dépenser ici.",
     "Elle est ouverte, désarmée, à sept pas, et elle ne bougera plus tant que la pointe sera où elle est.",
   ],
   effets:{ flags:['wy_otage','wy_ouverte','wy_couvee_menacee'], cout:{ moral:15 },
@@ -2251,7 +2251,7 @@ wy_mort:{
     "On enterre un mercenaire sans nom au bord de la route, à l'endroit exact où le péage de sa propre famille prélevait un sou par essieu, il y a deux cents ans.",
   ],
   issue:"Fin",
-  bilan:"Le dernier Karlsberg est mort au gué de Cendrepont, à vingt-neuf ans, et personne ne l'a su",
+  bilan:"Le dernier Karlsberg est mort au gué de Cendrepont, à vingt-quatre ans, et personne ne l'a su",
   apres:[
     "Ce n'est pas une punition. C'est ce qui arrive quand on entre en dernier échange avec trois blessures ouvertes et un choix qui demandait un corps entier.",
     "L'Acte I s'arrête ici. Il n'y a pas d'héritier, il n'y a pas de suite, et il n'y a rien à récupérer : c'est ce que veut dire *définitif*.",

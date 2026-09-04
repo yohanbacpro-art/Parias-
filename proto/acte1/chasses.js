@@ -896,9 +896,9 @@ ch_duelliste:{
   titre:"Un homme qui tient une liste",
   texte:[
     "Il vous attend dans la salle depuis deux jours. L'aubergiste le sait, la salle le sait, et personne ne vous a prévenu — ce qui vous apprend déjà quelque chose sur ce que la salle attend de la soirée.",
-    { sobre:"Guillaume de Sault a trente-six ans et il est très propre.",
-      intense:"Guillaume de Sault a trente-six ans, un pourpoint de bonne coupe entretenu par quelqu'un, et des mains sans une seule marque. C'est la première chose qu'on remarque chez un homme d'armes et c'est la seule qui compte : des mains sans marque veulent dire qu'on n'a jamais eu à parer avec.",
-      extreme:"Guillaume de Sault a trente-six ans, un pourpoint gris de bonne coupe entretenu par quelqu'un dont c'est le travail, et des mains sans une seule marque.\n\nC'est la première chose qu'on regarde chez un homme d'armes et c'est la seule qui renseigne vraiment. Des avant-bras sans cicatrices de parade, des jointures intactes, deux doigts qui se plient normalement. Ça veut dire l'une de deux choses : ou il n'a jamais rien fait, ou il n'a jamais eu à encaisser.\n\nIl a une épée de duel à la hanche, montée à Chastel, et la garde est usée à un seul endroit — à l'endroit exact où le pouce se pose. Un homme qui n'a jamais rien fait n'use pas une garde." },
+    { sobre:"Guillaume de Sault a trente et un ans et il est très propre.",
+      intense:"Guillaume de Sault a trente et un ans, un pourpoint de bonne coupe entretenu par quelqu'un, et des mains sans une seule marque. C'est la première chose qu'on remarque chez un homme d'armes et c'est la seule qui compte : des mains sans marque veulent dire qu'on n'a jamais eu à parer avec.",
+      extreme:"Guillaume de Sault a trente et un ans, un pourpoint gris de bonne coupe entretenu par quelqu'un dont c'est le travail, et des mains sans une seule marque.\n\nC'est la première chose qu'on regarde chez un homme d'armes et c'est la seule qui renseigne vraiment. Des avant-bras sans cicatrices de parade, des jointures intactes, deux doigts qui se plient normalement. Ça veut dire l'une de deux choses : ou il n'a jamais rien fait, ou il n'a jamais eu à encaisser.\n\nIl a une épée de duel à la hanche, montée à Chastel, et la garde est usée à un seul endroit — à l'endroit exact où le pouce se pose. Un homme qui n'a jamais rien fait n'use pas une garde." },
     "Il se lève quand vous entrez. Il ne s'approche pas.",
     "« On m'a dit qu'il y avait un homme à Cendrepont qu'on demande maintenant par son nom. »",
     "@« On vous a dit. »",

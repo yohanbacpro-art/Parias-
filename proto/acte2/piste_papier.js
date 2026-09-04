@@ -104,7 +104,7 @@ pa_lettre:{
     { sobre:"*Maître Ombelin, à Fort-aux-Princes. Registre de la 141ᵉ année, folio 44.*",
       intense:"*Maître Ombelin, tailleur de sceaux à Fort-aux-Princes, registre de la cent-quarante-et-unième année, folio quarante-quatre : un cachet de cadet, maison de Karlsberg, loup au filet vide, commandé et payé par le chef de maison pour sa sœur cadette.*",
       extreme:"*Maître Ombelin, tailleur de sceaux à Fort-aux-Princes, registre de la cent-quarante-et-unième année, folio quarante-quatre. Un cachet de cadet, maison de Karlsberg, loup de profil au filet vide, argent, commandé et payé par le chef de maison pour sa sœur cadette. Le registre porte la date, le prix — onze couronnes — et le nom, parce qu'un tailleur de sceaux inscrit toujours le nom : c'est ce qui distingue un artisan d'un faussaire.*" },
-    "§ *Ysabel de Karlsberg. Née la cent-vingt-cinquième année. Elle aurait aujourd'hui soixante-quatre ans.*",
+    "§ *Ysabel de Karlsberg. Née la cent-cinquième année. Elle aurait aujourd'hui cinquante-neuf ans.*",
     "*Je ne l'ai pas cherchée. Ce n'est pas mon métier et je ne l'aurais pas trouvée : les commissaires aux titres trouvent des inscriptions, pas des gens.*",
     "*Une dernière chose, et je vous la dis parce que vous en ferez ce que vous voudrez et que ça ne me regarde plus.*",
     "*Onze ans que je cherche qui a raturé cette ligne. Je pensais trouver un crime d'administration. J'ai trouvé une lettre de famille.*",

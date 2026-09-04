@@ -43,7 +43,7 @@ const A3 = () => (ETAT.acte3 = ETAT.acte3 || {
 /* Neuf ans. C'est ce qu'il faut pour qu'un garçon de douze ans en ait
  * vingt et un, pour qu'une maison relevée compte dans les états d'une
  * province, et pour que cinq guerres arrivent à maturité. */
-const AGE3 = () => 29 + 9 + A3().annee;
+const AGE3 = () => 24 + 9 + A3().annee;
 
 /* Le jeu écrit ses nombres en toutes lettres. Un âge calculé ne fait pas
  * exception : « Vous avez 38 ans » au milieu de deux cents nombres écrits se
@@ -359,7 +359,7 @@ DYN.a3_siege = () => {
         : `Vous avez un rôle : ${ETAT.armee.map(u => `${u.nom} (${u.effectif})`).join(' · ')}.`,
       { sobre:"§ On ne défend pas des pierres.",
         intense:"§ On ne défend pas des pierres. Personne n'a jamais défendu des pierres : les pierres ne s'en aperçoivent pas.",
-        extreme:"§ On ne défend pas des pierres. Personne n'a jamais défendu des pierres et les pierres ne s'en sont jamais aperçues.\n\nCe qu'il y a derrière la courtine ce matin : trois cents personnes qui n'ont rien demandé, un intendant qui vient d'un hameau de onze feux, et le fait qu'un nom rayé il y a vingt-neuf ans figure à nouveau dans le registre d'une province." },
+        extreme:"§ On ne défend pas des pierres. Personne n'a jamais défendu des pierres et les pierres ne s'en sont jamais aperçues.\n\nCe qu'il y a derrière la courtine ce matin : trois cents personnes qui n'ont rien demandé, un intendant qui vient d'un hameau de onze feux, et le fait qu'un nom rayé il y a vingt-huit ans figure à nouveau dans le registre d'une province." },
     ],
     choix:[
       { t:"Tenir",
@@ -388,13 +388,13 @@ DYN.a3_apres_siege = () => {
         : "§ Personne ne vous attend au soir. C'est le meilleur résultat disponible et il n'a rien de glorieux.",
       tenu
         ? "Il reste à savoir ce que devient une maison qui a tenu — et c'est une question à laquelle aucun siège ne répond."
-        : "Il reste à savoir ce que devient un homme dont la maison est tombée deux fois en vingt-neuf ans.",
+        : "Il reste à savoir ce que devient un homme dont la maison est tombée deux fois en vingt-huit ans.",
     ],
     effets:{ flags:[tenu ? 'a3_tenu' : 'a3_tombee'],
              marque:tenu ? "Karlsberg a tenu le siège." : "Karlsberg est tombée une seconde fois.",
              court:tenu ? "Elle a tenu" : "Une seconde fois" },
     issue:tenu ? "Le siège est levé" : "La maison est tombée",
-    bilan:tenu ? "Karlsberg, la vingt-neuvième année" : "Karlsberg, deux fois en vingt-neuf ans",
+    bilan:tenu ? "Karlsberg, la vingt-neuvième année" : "Karlsberg, deux fois en vingt-huit ans",
     suite:'a3_champions', libelleSuite:ch.length ? "Ceux qui viennent seuls" : "Ce que le monde en a fait",
   };
   aller('a3_apres_siege');

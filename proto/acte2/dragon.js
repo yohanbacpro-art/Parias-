@@ -770,7 +770,7 @@ dr_fin_montdraken:{
            exploit:{ eclat:16, temoins:'province', quoi:"la trois cent treizième pièce du mur de Mont-Draken" } },
   apres:[
     "Le mur de Mont-Draken a une pièce de plus et trois noms de plus, dont un nain.",
-    "Charles de Mont-Draken a soixante et un ans, un registre vide dans une armoire, et une raison de vous devoir quelque chose.",
+    "Charles de Mont-Draken a cinquante-six ans, un registre vide dans une armoire, et une raison de vous devoir quelque chose.",
   ],
   plusTard:"Onze demandes écrites en trente ans, onze fois la même réponse. Vous avez obtenu en une nuit ce qu'il cherchait depuis trente ans.",
   suite:'a2_epilogue' },

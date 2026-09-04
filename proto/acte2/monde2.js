@@ -158,14 +158,14 @@ const LIEUX = {
  * personne : ce qui suit n'est pas de la décoration, c'est la condition
  * pour qu'un interlocuteur ait un nom à l'écran. */
 Object.assign(GENS, {
-  alycia:    { nom:"Alycia de Callensbourg", role:"Paria · trente-deux ans · elle fait disparaître les gens", lettre:"A" },
+  alycia:    { nom:"Alycia de Callensbourg", role:"Paria · vingt-sept ans · elle fait disparaître les gens", lettre:"A" },
   alarielle: { nom:"Alarielle",              role:"elfe · elle ne détourne pas les yeux",                     lettre:"Æ" },
   charles:   { nom:"Charles de Mont-Draken", role:"il protège les hommes de ce qui n'en est pas",             lettre:"C" },
   lucius:    { nom:"Lucius Furius Augustus", role:"il compte les soutiens d'un trône vide",                   lettre:"L" },
   caleb:     { nom:"Caleb de Fort-aux-Princes", role:"il achète des dettes, il ne prête pas",                 lettre:"C" },
   tyrion:    { nom:"Tyrion",                 role:"prince elfe · frère d'Alarielle",                          lettre:"T" },
   berold:    { nom:"Bérold",                 role:"chef de meute · onze ans à Mont-Draken",                   lettre:"B" },
-  gerbaud:   { nom:"Gerbaud",                role:"maître d'armes de Karlsberg · soixante-dix ans",           lettre:"G" },
+  gerbaud:   { nom:"Gerbaud",                role:"maître d'armes de Karlsberg · soixante-cinq ans",           lettre:"G" },
   /* Il n'a jamais eu de carte : ses scènes de l'Acte I se passent sur une
    * route, et celle de l'Acte III sur un chemin de ronde. */
   sault:     { nom:"Guillaume de Sault",     role:"il tient un carnet, et ce n'est jamais à mort",            lettre:"G" },

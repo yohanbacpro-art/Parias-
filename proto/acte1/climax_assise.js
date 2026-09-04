@@ -16,7 +16,7 @@
  *
  *     quelqu'un a remué une pierre qu'on avait couchée il y a dix-neuf ans.
  *
- * L'ordalie n'est pas une bête. C'est un homme de cinquante-deux ans qui a
+ * L'ordalie n'est pas une bête. C'est un homme de quarante-sept ans qui a
  * gagné quarante et un duels judiciaires parce que Chastel n'apporte jamais
  * une cause qu'elle peut perdre — et parce que les règles du rond sont
  * écrites par son employeur.
@@ -1012,7 +1012,7 @@ Object.assign(ASSISE, ASSISE_5);
  * Le temps est la vraie arme de Chastel : il en a trois, vous n'en avez
  * aucun, et chacun casse ce que vous venez de construire. Toute la forme du
  * duel tient là — survivre à ses trois temps, après quoi il n'est plus qu'un
- * homme de cinquante-deux ans avec une hanche morte.
+ * homme de quarante-sept ans avec une hanche morte.
  * ══════════════════════════════════════════════════════════════════════════ */
 
 DYN.as_rond_temps = () => {
@@ -1036,7 +1036,7 @@ as_temps_1:{
     "Un temps dure ce que le champion décide, et personne ne le chronomètre parce que personne n'a jamais osé demander comment on le chronomètre.",
     "Il sort du rond — lui a le droit — il s'assied sur le billot à démonter les roues, et un garçon de l'escorte lui apporte de l'eau dans un gobelet d'étain. C'est manifestement un rite : le garçon sait exactement où se placer et Sorgue ne le remercie pas, ce qui veut dire qu'il l'a remercié les cent premières fois.",
     { sobre:"Vous restez dans le rond. Vous n'avez pas le droit d'en sortir.",
-      intense:"Vous restez dans le rond, parce qu'un requérant qui sort du rond s'est retiré, temps ou pas temps. Vous restez donc debout au milieu d'un cercle de craie, seul, sous quarante regards, pendant qu'un homme de cinquante-deux ans boit de l'eau assis à six pas.",
+      intense:"Vous restez dans le rond, parce qu'un requérant qui sort du rond s'est retiré, temps ou pas temps. Vous restez donc debout au milieu d'un cercle de craie, seul, sous quarante regards, pendant qu'un homme de quarante-sept ans boit de l'eau assis à six pas.",
       extreme:"Vous restez dans le rond : un requérant qui sort s'est retiré, temps ou pas temps. Vous restez donc debout, seul, au milieu d'un cercle de craie, sous quarante regards et deux torches, pendant qu'un homme assis à six pas boit de l'eau lentement. C'est ça, le temps. Ce n'est pas du repos — c'est une humiliation qui se donne des airs de règlement." },
     "§ Il ne se repose pas beaucoup. Il vous laisse refroidir.",
     "Au bout d'un moment il dit, sans lever la tête :",
@@ -1062,7 +1062,7 @@ as_temps_2:{
   texte:[
     "Il ne va pas jusqu'au billot cette fois. Il sort d'un pas, il reste debout, et il pose la main gauche sur le mur de l'écurie — pas pour s'appuyer, pour vérifier qu'il pourrait s'appuyer.",
     { sobre:"Il souffle par la bouche. Il ne l'a pas fait depuis trente ans devant témoins.",
-      intense:"Il souffle par la bouche, franchement, en décembre, dans une cour à quatre degrés. Un homme de cinquante-deux ans qui a passé trente ans à ne jamais souffler devant témoins est en train de le faire devant toute la vallée, et quelques personnes dans cette cour viennent de comprendre quelque chose.",
+      intense:"Il souffle par la bouche, franchement, en décembre, dans une cour à quatre degrés. Un homme de quarante-sept ans qui a passé trente ans à ne jamais souffler devant témoins est en train de le faire devant toute la vallée, et quelques personnes dans cette cour viennent de comprendre quelque chose.",
       extreme:"Il souffle par la bouche, franchement, dans une cour à quatre degrés, et la vapeur sort en grosses bouffées irrégulières. Trente ans à ne jamais souffler devant témoins, et il le fait devant toute la vallée. Sur le seuil, Ancelin Vasque a changé de position pour la première fois de la soirée. Quelques personnes dans cette cour viennent de comprendre quelque chose et n'osent pas encore se le dire." },
     "« Dernier », dit-il, en levant deux doigts. « Il ne m'en restera plus. »",
     "« Je sais. »",
@@ -1070,9 +1070,9 @@ as_temps_2:{
     "§ Il ne dit pas ça comme un compliment. Il le dit comme un homme qui pose un objet.",
     () => a('as_hanche_travaille')
       ? "« Vous m'avez fait faire trente-quatre pas. » Il regarde sa jambe gauche comme on regarde un cheval qui boite. « En trente ans, mon record était onze. »"
-      : "« Vous ne m'avez pas encore fait marcher. C'est la seule chose qui vous reste et vous ne l'avez pas trouvée. »",
+      : "^« Vous ne m'avez pas encore fait marcher. C'est la seule chose qui vous reste et vous ne l'avez pas trouvée. »",
     "Il remonte la garde. Il la remonte moins haut qu'au début et vous êtes probablement le seul, avec Vasque, à voir de combien.",
-    "« Après ce temps-là, messire, il n'y a plus de règlement. Il n'y a plus qu'un homme de cinquante-deux ans et un homme de vingt-neuf, dans un rond de neuf pas, et pas de troisième temps. »",
+    "« Après ce temps-là, messire, il n'y a plus de règlement. Il n'y a plus qu'un homme de quarante-sept ans et un homme de vingt-quatre, dans un rond de neuf pas, et pas de troisième temps. »",
     "« Ça vous inquiète ? »",
     "« Ça me repose. »",
   ],
@@ -1243,9 +1243,9 @@ as_r2_attendre_dom:{
   texte:[
     "Vous ne faites rien.",
     "Vous vous mettez en garde au centre, vous respirez, et vous attendez — et vous découvrez la seule chose que Renaud Sorgue ne peut pas se permettre : le temps.",
-    { sobre:"Il a deux cent dix livres, cinquante-deux ans et une jambe. Debout coûte.",
-      intense:"Il a deux cent dix livres, cinquante-deux ans et une jambe qui travaille pour deux. Rester debout lui coûte. Rester debout en garde lui coûte davantage. Rester debout en garde devant un homme qui ne bouge pas, sans pouvoir appeler de temps parce qu'il vient d'en dépenser un, lui coûte plus que trois passes.",
-      extreme:"Deux cent dix livres, cinquante-deux ans, une jambe qui travaille pour deux. Rester debout coûte ; rester debout en garde coûte davantage ; rester debout en garde devant un homme immobile, sans pouvoir appeler de temps parce qu'il vient d'en brûler un, coûte plus que trois passes. À la quarantième seconde, sa jambe droite commence à trembler d'un tremblement fin et régulier, de fatigue, celui qu'on ne commande pas." },
+    { sobre:"Il a deux cent dix livres, quarante-sept ans et une jambe. Debout coûte.",
+      intense:"Il a deux cent dix livres, quarante-sept ans et une jambe qui travaille pour deux. Rester debout lui coûte. Rester debout en garde lui coûte davantage. Rester debout en garde devant un homme qui ne bouge pas, sans pouvoir appeler de temps parce qu'il vient d'en dépenser un, lui coûte plus que trois passes.",
+      extreme:"Deux cent dix livres, quarante-sept ans, une jambe qui travaille pour deux. Rester debout coûte ; rester debout en garde coûte davantage ; rester debout en garde devant un homme immobile, sans pouvoir appeler de temps parce qu'il vient d'en brûler un, coûte plus que trois passes. À la quarantième seconde, sa jambe droite commence à trembler d'un tremblement fin et régulier, de fatigue, celui qu'on ne commande pas." },
     "§ Quarante et un hommes ont cru qu'il fallait faire quelque chose. C'était l'inverse.",
     "Il finit par venir, parce qu'un champion qui ne vient pas n'est pas un champion et qu'il y a quarante personnes.",
     "Il vient mal. Il vient d'une jambe.",
@@ -1280,8 +1280,8 @@ as_r2_attendre_ko:{
     "Il avance de deux pas, il donne quatre passes en six secondes, et à la quatrième il lève la main gauche.",
     "« Temps. »",
     { sobre:"Il sort du rond en pleine action. Vous restez dedans, la garde haute, seul.",
-      intense:"Il sort du rond au milieu de l'échange, en laissant votre garde levée sur rien, et il va boire. Vous restez au centre d'un cercle de craie, l'épée en l'air, devant quarante personnes, à attendre qu'un homme de cinquante-deux ans ait fini son gobelet.",
-      extreme:"Il sort du rond au milieu de l'échange, laissant votre garde levée sur rien, et il va boire. Vous restez au centre, l'épée en l'air, devant quarante personnes, pendant qu'un homme de cinquante-deux ans finit un gobelet d'étain sans se presser. C'est là que trois personnes dans cette cour se mettent à rire, et c'est là que vous comprenez comment on perd quarante et une fois." },
+      intense:"Il sort du rond au milieu de l'échange, en laissant votre garde levée sur rien, et il va boire. Vous restez au centre d'un cercle de craie, l'épée en l'air, devant quarante personnes, à attendre qu'un homme de quarante-sept ans ait fini son gobelet.",
+      extreme:"Il sort du rond au milieu de l'échange, laissant votre garde levée sur rien, et il va boire. Vous restez au centre, l'épée en l'air, devant quarante personnes, pendant qu'un homme de quarante-sept ans finit un gobelet d'étain sans se presser. C'est là que trois personnes dans cette cour se mettent à rire, et c'est là que vous comprenez comment on perd quarante et une fois." },
     "§ Le temps n'est pas un repos. C'est une arme, et c'est la seule qu'il ait vraiment.",
   ],
   effets:{ faire:() => { pousser(1); prendreTemps(); }, cout:{ endurance:16, moral:10 },
@@ -1345,7 +1345,7 @@ Object.assign(ASSISE, ASSISE_6);
  * PARTIE 7 — TROIS
  *
  * Plus de temps. Il n'y a plus de règlement qui le protège : il n'y a qu'un
- * homme de cinquante-deux ans avec une hanche morte, et un de vingt-neuf qui
+ * homme de quarante-sept ans avec une hanche morte, et un de vingt-neuf qui
  * saigne. C'est la seule partie du duel qui soit un duel.
  * ══════════════════════════════════════════════════════════════════════════ */
 const ASSISE_7 = {
@@ -1404,8 +1404,8 @@ as_r3_finir_dom:{
   qui:'sorgue', melee:true,
   texte:[
     { sobre:"Ça ne prend pas longtemps et il ne se défend pas beaucoup.",
-      intense:"Ça ne prend pas longtemps. Il se défend — il se défend correctement, comme il a tout fait correctement pendant trente ans — mais un homme sur une jambe, sans temps, contre un homme de vingt-neuf ans, ça ne se défend pas très longtemps.",
-      extreme:"Ça ne prend pas longtemps. Il se défend correctement, comme il a tout fait correctement pendant trente ans, mais un homme sur une jambe et sans temps ne tient pas contre vingt-neuf ans. La pointe entre au-dessus de la clavicule et descend, et il ne tombe pas tout de suite : il reste debout deux secondes en vous tenant l'avant-bras, non pas pour se retenir mais pour vous empêcher de retirer, parce qu'un homme qui a vu quatre morts sait que ce qui fait mal c'est le retrait." },
+      intense:"Ça ne prend pas longtemps. Il se défend — il se défend correctement, comme il a tout fait correctement pendant trente ans — mais un homme sur une jambe, sans temps, contre un homme de vingt-quatre ans, ça ne se défend pas très longtemps.",
+      extreme:"Ça ne prend pas longtemps. Il se défend correctement, comme il a tout fait correctement pendant trente ans, mais un homme sur une jambe et sans temps ne tient pas contre vingt-quatre ans. La pointe entre au-dessus de la clavicule et descend, et il ne tombe pas tout de suite : il reste debout deux secondes en vous tenant l'avant-bras, non pas pour se retenir mais pour vous empêcher de retirer, parce qu'un homme qui a vu quatre morts sait que ce qui fait mal c'est le retrait." },
     "Il s'assied avant de tomber. C'est une chose qu'on ne voit pas souvent et c'est extraordinairement digne : il plie les jambes et il s'assied sur le pavé de sa propre cour, dans son propre rond, et il pose l'épée à côté de lui.",
     "« Quarante et un », dit-il.",
     "« Quarante-deux », dites-vous.",
@@ -1500,7 +1500,7 @@ as_r3_ceder_dom:{
     "« Je ne peux pas céder, messire. Un champion qui cède n'est plus un champion. »",
     "« Vous avez quarante et un duels. Vous m'avez dit que vous n'en aviez gagné aucun. »",
     { sobre:"Il ne répond pas tout de suite.",
-      intense:"Il ne répond pas tout de suite. Il reste où il est, la garde à mi-hauteur, un homme de cinquante-deux ans dans une cour glacée devant quarante personnes qui viennent d'entendre quelque chose qu'elles ne comprennent pas.",
+      intense:"Il ne répond pas tout de suite. Il reste où il est, la garde à mi-hauteur, un homme de quarante-sept ans dans une cour glacée devant quarante personnes qui viennent d'entendre quelque chose qu'elles ne comprennent pas.",
       extreme:"Il ne répond pas tout de suite. Il reste où il est, la garde à mi-hauteur, dans une cour à quatre degrés, devant quarante personnes qui viennent d'entendre une phrase qu'elles ne comprennent pas et une réponse qui n'arrive pas. Sur le seuil, Ancelin Vasque a cessé de faire semblant de regarder ailleurs." },
     "§ « Le jour où je dis non, ils prennent quelqu'un de vingt-cinq ans. » C'est ce qu'il vous a dit au premier temps.",
     "« Ils prendront quelqu'un de vingt-cinq ans », dit-il enfin.",
@@ -1664,7 +1664,7 @@ as_nom_dom:{
       intense:"La salle ne fait aucun bruit, et c'est ce qui est extraordinaire : sur quarante personnes debout dans cette pièce, il y en a peut-être trois qui savent ce que ce nom veut dire. Les autres attendent poliment la suite d'une phrase.",
       extreme:"La salle ne fait aucun bruit. Sur quarante personnes debout, trois peut-être savent ce que ce nom veut dire ; les autres attendent poliment la suite d'une phrase. C'est ça, dix-neuf ans de travail d'effacement bien fait : on peut prononcer le nom d'une maison de sept cents personnes dans une salle pleine, dans sa propre vallée, et n'être compris de personne." },
     "Les trois qui savent : le greffier, qui a lu le volume. Vasque, qui le cherche depuis onze ans.",
-    "Et, contre le mur du fond, un homme de cinquante-deux ans qui vient de décoller l'épaule de la pierre et qui ne bougera plus du reste de la soirée.",
+    "Et, contre le mur du fond, un homme de quarante-sept ans qui vient de décoller l'épaule de la pierre et qui ne bougera plus du reste de la soirée.",
     "Vasque remet ses lunettes. Ses mains sont parfaitement stables et sa voix n'a pas monté d'un demi-ton.",
     "« Greffier. Portez : contradiction soulevée par la partie intéressée, sur la validité de l'inscription au volume cent-quarante-trois. La cause est renvoyée. »",
     "Puis, à vous, presque doucement :",
@@ -1813,7 +1813,7 @@ as_fin_nom:{
     "Vous passez l'hiver à Cendrepont, parce que le col est fermé et qu'il n'y a nulle part où aller. Quatre mois. On vous salue dans la rue.",
     () => a('as_sorgue_mort')
       ? "On enterre Renaud Sorgue le surlendemain, dans le cimetière du bourg, parce qu'on ne remonte pas un corps à Chastel en décembre. Il y a onze personnes. Le garçon qui lui apportait l'eau est l'une des onze, et il repart avec l'épée courte, que personne ne lui a donnée et que personne ne lui réclame."
-      : "Renaud Sorgue quitte le service de Chastel avant le printemps. Un champion défait n'est plus un champion : c'est écrit dans la même ligne du même règlement. Il a cinquante-deux ans, une hanche morte, trente ans de service et aucune pension, parce que le règlement ne prévoyait pas qu'il perde un jour.",
+      : "Renaud Sorgue quitte le service de Chastel avant le printemps. Un champion défait n'est plus un champion : c'est écrit dans la même ligne du même règlement. Il a quarante-sept ans, une hanche morte, trente ans de service et aucune pension, parce que le règlement ne prévoyait pas qu'il perde un jour.",
     () => a('as_vasque_allie')
       ? "Ancelin Vasque repart à Chastel au printemps avec deux chariots de registres, un rôle en trois exemplaires, et une contradiction soulevée sur le volume cent-quarante-trois qu'il va devoir instruire lui-même. Il vous a dit de rester en vie six mois. Ce n'était pas une menace ; c'était un délai de procédure, et c'est infiniment plus inquiétant."
       : "Ancelin Vasque repart à Chastel au printemps. Il a onze ans de recherche sur une ligne raturée, et il a désormais un nom à mettre en face. Ce qu'il en fera dépend d'un homme que vous avez rencontré deux heures et que vous n'avez pas eu le temps de comprendre.",
@@ -1955,7 +1955,7 @@ as_fin_perdu:{
   bilan:"Vous vous êtes levé, et ça n'a pas suffi",
   apres:[
     () => `${ETAT.or} couronnes, ${ETAT.blessures.length} blessure${ETAT.blessures.length > 1 ? 's' : ''}, et un hiver de quatre mois dans un bourg où tout le monde sait.`,
-    "Ce n'est pas un échec de joueur. Il y a des ronds qu'on ne gagne pas, des règlements écrits par l'adversaire, et des hommes de cinquante-deux ans qui ont fait ça quarante et une fois.",
+    "Ce n'est pas un échec de joueur. Il y a des ronds qu'on ne gagne pas, des règlements écrits par l'adversaire, et des hommes de quarante-sept ans qui ont fait ça quarante et une fois.",
     "Le reste — ce que vous avez appris, ce que vous portez, ce que la province a vu — ne s'annule pas. Rien ne s'annule dans ce jeu. C'est même le seul principe.",
   ],
   plusTard:"L'Acte II s'ouvre au printemps, sur un homme qui a une raison très précise de retourner à Chastel.",

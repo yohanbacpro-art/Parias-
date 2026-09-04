@@ -76,9 +76,9 @@ fi_parloir:{
   titre:"Sœur Ysabel",
   texte:[
     "Le parloir est une pièce de dix pieds sur douze, avec une table, deux bancs, une fenêtre haute et un registre ouvert.",
-    { sobre:"Une femme de soixante-quatre ans y tient des comptes.",
-      intense:"Une femme de soixante-quatre ans y tient des comptes : la colonne de gauche en chiffres, la colonne de droite en toutes lettres, et une troisième colonne dont vous ne comprenez pas l'usage. Elle écrit d'une main petite et régulière.",
-      extreme:"Une femme de soixante-quatre ans y tient des comptes. La colonne de gauche en chiffres, celle du milieu en toutes lettres, et une troisième à droite dont vous ne comprenez pas l'usage — un système à elle, mis au point sur des années, pour une fondation qui doit brasser trois cents couronnes l'an. Elle écrit d'une main petite, régulière, sans une rature, et elle ne lève pas la tête quand la porte s'ouvre parce que la porte s'ouvre douze fois par matinée." },
+    { sobre:"Une femme de cinquante-neuf ans y tient des comptes.",
+      intense:"Une femme de cinquante-neuf ans y tient des comptes : la colonne de gauche en chiffres, la colonne de droite en toutes lettres, et une troisième colonne dont vous ne comprenez pas l'usage. Elle écrit d'une main petite et régulière.",
+      extreme:"Une femme de cinquante-neuf ans y tient des comptes. La colonne de gauche en chiffres, celle du milieu en toutes lettres, et une troisième à droite dont vous ne comprenez pas l'usage — un système à elle, mis au point sur des années, pour une fondation qui doit brasser trois cents couronnes l'an. Elle écrit d'une main petite, régulière, sans une rature, et elle ne lève pas la tête quand la porte s'ouvre parce que la porte s'ouvre douze fois par matinée." },
     "Elle lève la tête à la troisième seconde, parce que vous n'êtes pas entré comme les autres.",
     "§ Vous avez le visage de votre père. On vous l'a dit onze fois en onze ans par des gens qui ne l'avaient jamais vu.",
     "Elle, elle l'a vu.",
@@ -281,7 +281,7 @@ fi_enfants:{
       extreme:"« Les deux. » Elle relève la tête et vous regarde de nouveau, et il n'y a rien dans son visage qui demande quoi que ce soit. « Ne cherchez pas laquelle des deux est la vraie. C'est ce que tout le monde fait et c'est ce qui empêche de comprendre quoi que ce soit à ce genre d'histoire. Il n'y a pas de vraie. J'ai écrit quatre lignes pour faire rayer cette maison, et je suis allée trois jours plus tôt faire jurer à un prêtre de sortir les enfants par la cave. Même mois. Même main. Même femme, parfaitement lucide dans les deux cas. »\n\n« Pourquoi les enfants ? »\n\n« Parce que vous n'aviez rien décidé. »" },
     "§ Vous êtes vivant à cause d'elle. Loys est mort à cause d'elle. Les deux sont vrais et il n'y a aucune façon de n'en garder qu'un.",
     "« Loys était dans la cour », dites-vous.",
-    "« Loys était dans la cour parce qu'il est sorti par la porte au lieu de descendre par la cave », dit-elle, et sa voix casse enfin, sur ce mot-là et pas un autre, dix-neuf ans plus tard, à soixante-quatre ans, dans un parloir de campagne. « Le chapelain l'a appelé deux fois. »",
+    "« Loys était dans la cour parce qu'il est sorti par la porte au lieu de descendre par la cave », dit-elle, et sa voix casse enfin, sur ce mot-là et pas un autre, dix-neuf ans plus tard, à cinquante-neuf ans, dans un parloir de campagne. « Le chapelain l'a appelé deux fois. »",
   ],
   effets:{ flags:['fi_enfants','a2_ysabel_complet'],
            faire:() => { ETAT.faits.push("Elle a écrit la lettre et fait jurer au chapelain de sortir les enfants. Les deux."); },
@@ -399,8 +399,8 @@ fi_tuer:{
     "« Le coffre de la fondation, messire, pas le mien. Je n'ai rien à moi. »",
     "§ C'est tout. Il n'y a pas de dernier mot, pas de pardon demandé, pas de nom prononcé.",
     { sobre:"C'est très court.",
-      intense:"C'est très court, et c'est la partie que personne ne raconte : une femme de soixante-quatre ans assise à une table ne se défend pas, ne fuit pas, n'oppose rien. Il n'y a aucune difficulté technique. Absolument aucune.",
-      extreme:"C'est très court. C'est la partie que personne ne raconte jamais dans ces histoires-là : une femme de soixante-quatre ans assise à une table de parloir ne se défend pas, ne fuit pas, n'oppose strictement rien à un homme de trente ans qui a onze ans de contrats derrière lui. Il n'y a aucune difficulté technique. Il n'y a rien du tout. Toute la difficulté était avant, et elle est restée avant." },
+      intense:"C'est très court, et c'est la partie que personne ne raconte : une femme de cinquante-neuf ans assise à une table ne se défend pas, ne fuit pas, n'oppose rien. Il n'y a aucune difficulté technique. Absolument aucune.",
+      extreme:"C'est très court. C'est la partie que personne ne raconte jamais dans ces histoires-là : une femme de cinquante-neuf ans assise à une table de parloir ne se défend pas, ne fuit pas, n'oppose strictement rien à un homme de trente ans qui a onze ans de contrats derrière lui. Il n'y a aucune difficulté technique. Il n'y a rien du tout. Toute la difficulté était avant, et elle est restée avant." },
     "Vous ressortez à neuf heures quarante. La femme au balai est toujours sur le seuil.",
     "« Elle est morte », dites-vous.",
     "« Oui », dit la femme, et elle continue de balayer, et vous ne saurez jamais ce que ce *oui* voulait dire.",
@@ -462,8 +462,8 @@ fi_emmener:{
     "« Sœur Ysabel s'en va », dit Ysabel.",
     "« Oui », dit la femme, et c'est tout, et personne n'essaie de rien.",
     { sobre:"Elle monte en croupe. Elle n'a pas monté à cheval depuis dix-neuf ans.",
-      intense:"Elle monte en croupe, et il faut s'y reprendre à deux fois : elle n'est pas montée à cheval depuis dix-neuf ans et elle a soixante-quatre ans.",
-      extreme:"Elle monte en croupe, et il faut s'y reprendre à deux fois parce qu'elle n'a pas monté à cheval depuis dix-neuf ans, qu'elle a soixante-quatre ans, et qu'elle refuse absolument qu'on l'aide au-delà d'une main. À la deuxième tentative elle est en selle, très droite, les deux mains sur la sacoche, et elle ne se retourne pas vers le mur." },
+      intense:"Elle monte en croupe, et il faut s'y reprendre à deux fois : elle n'est pas montée à cheval depuis dix-neuf ans et elle a cinquante-neuf ans.",
+      extreme:"Elle monte en croupe, et il faut s'y reprendre à deux fois parce qu'elle n'a pas monté à cheval depuis dix-neuf ans, qu'elle a cinquante-neuf ans, et qu'elle refuse absolument qu'on l'aide au-delà d'une main. À la deuxième tentative elle est en selle, très droite, les deux mains sur la sacoche, et elle ne se retourne pas vers le mur." },
     "À la première halte, elle demande : « Qu'est-ce que vous allez faire de moi ? »",
     "@« Je ne sais pas. »",
     "« Alors ce sera long », dit-elle, et elle mange son pain.",
@@ -564,7 +564,7 @@ function verdictsA2(){
   else if(a('a2_aveu_signe'))
     v.push("**L'affaire de Karlsberg est rouverte.** Quatre pages d'une écriture petite et régulière, scellées d'un cachet de cadet, déposées au commissariat aux titres. Ce qui s'ouvre n'est pas une réhabilitation : c'est une enquête publique sur ce que la maison gardait.");
   else if(a('a2_ysabel_avec'))
-    v.push("**Elle voyage avec vous.** Une femme de soixante-quatre ans, une sacoche, un cachet, et la totalité de ce qui s'est passé cette nuit-là dans une seule tête. Personne ne sait quoi en faire, elle la première.");
+    v.push("**Elle voyage avec vous.** Une femme de cinquante-neuf ans, une sacoche, un cachet, et la totalité de ce qui s'est passé cette nuit-là dans une seule tête. Personne ne sait quoi en faire, elle la première.");
   else if(a('a2_ysabel_laissee'))
     v.push("**Elle est toujours au parloir, de six à dix.** Elle vous l'avait dit : ce n'était pas une clémence, et rien n'a changé pour elle. Gerbaud continue de venir s'asseoir contre le mur sud, tous les ans, en Prairial.");
   else if(a('a2_nom_trouve'))
@@ -680,7 +680,7 @@ function verdictsA2(){
   else if(a('a2_lucius_froid'))  hommes.push("**Lucius** a mis une seconde de trop à répondre, et il n'en met jamais");
 
   if(a('a2_declare'))            hommes.push("**Le registre de Mont-Draken n'est plus vide** : il y a un nom au folio un, écrit de votre main, et il ne s'est rien passé");
-  else if(a('a2_charles_attend'))hommes.push("**Charles** a soixante et un ans, un cahier vide dans une armoire, et il vous le redemandera");
+  else if(a('a2_charles_attend'))hommes.push("**Charles** a cinquante-six ans, un cahier vide dans une armoire, et il vous le redemandera");
   else if(a('a2_charles_froid')) hommes.push("**Charles** a rangé son registre neuf le jour où vous lui avez proposé quelqu'un d'autre, et vous avez entendu la clef");
   if(hommes.length) v.push(hommes.join(" · ") + ".");
 

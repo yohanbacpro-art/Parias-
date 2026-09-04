@@ -9,8 +9,8 @@
  * pèsent. Et aucune des quatre ne veut la même chose :
  *
  *   RENAUD SORGUE  finit une phrase commencée il y a neuf ans dans un
- *                  rond de neuf pas. Il avait cinquante-deux ans ; il en a
- *                  soixante et un. Vous en aviez vingt-neuf.
+ *                  rond de neuf pas. Il avait quarante-sept ans ; il en a
+ *                  cinquante-six. Vous en aviez vingt-quatre.
  *
  *   CHARLES        ne se bat pas. Il sert un papier, ce qui est pire, et
  *                  il a raison — il a toujours eu raison, c'est toute la
@@ -42,11 +42,11 @@ const CHAMPIONS = {
 a3_champions:{ dyn:true, texte:[] },
 
 /* ══════════════════════════════════════════════════════════════════════════
- * RENAUD SORGUE · soixante et un ans
+ * RENAUD SORGUE · cinquante-six ans
  *
  * Il l'a dit lui-même, il y a neuf ans, à la fin du deuxième temps :
  * « Après ce temps-là, il n'y a plus de règlement. Il n'y a plus qu'un
- * homme de cinquante-deux ans et un homme de vingt-neuf. »
+ * homme de quarante-sept ans et un homme de vingt-quatre. »
  *
  * Il vient finir la phrase. L'écart s'est creusé du mauvais côté pour lui
  * et il le sait mieux que personne — c'est très exactement son métier de
@@ -55,21 +55,21 @@ a3_champions:{ dyn:true, texte:[] },
 in_sorgue:{
   qui:'sorgue',
   lieu:"Karlsberg · la cour · au jour",
-  titre:"Un homme de soixante et un ans",
+  titre:"Un homme de cinquante-six ans",
   texte:[
     "Il arrive seul, à cheval, sans escorte et sans héraut, et il attend dans la cour qu'on veuille bien descendre. Il a mis quatre jours et il en mettra quatre pour repartir, s'il repart.",
-    { sobre:"Il a soixante et un ans. Ça se voit et il ne le cache pas.",
-      intense:"Il a soixante et un ans. Ça se voit à la façon dont il descend de cheval — en deux temps, en s'appuyant, sans se presser — et il ne fait rien du tout pour le cacher, ce qui est déjà un renseignement.",
-      extreme:"Il a soixante et un ans et ça se voit à une seule chose : il descend de cheval en deux temps, la main gauche à plat sur le troussequin, en posant d'abord le pied droit.\n\nIl ne fait rigoureusement rien pour le dissimuler. Un homme de son métier qui laisse voir ça devant témoins a fait un calcul et l'a fait il y a longtemps : il n'y a plus rien à cacher, il ne travaille plus à l'illusion, et il économise ce qui lui reste pour l'endroit où ça comptera.\n\nC'est infiniment plus inquiétant que si vous ne l'aviez pas vu." },
+    { sobre:"Il a cinquante-six ans. Ça se voit et il ne le cache pas.",
+      intense:"Il a cinquante-six ans. Ça se voit à la façon dont il descend de cheval — en deux temps, en s'appuyant, sans se presser — et il ne fait rien du tout pour le cacher, ce qui est déjà un renseignement.",
+      extreme:"Il a cinquante-six ans et ça se voit à une seule chose : il descend de cheval en deux temps, la main gauche à plat sur le troussequin, en posant d'abord le pied droit.\n\nIl ne fait rigoureusement rien pour le dissimuler. Un homme de son métier qui laisse voir ça devant témoins a fait un calcul et l'a fait il y a longtemps : il n'y a plus rien à cacher, il ne travaille plus à l'illusion, et il économise ce qui lui reste pour l'endroit où ça comptera.\n\nC'est infiniment plus inquiétant que si vous ne l'aviez pas vu." },
     "« Chastel m'envoie », dit-il. « Ce n'est pas la raison pour laquelle je suis là, mais c'est la raison qui figurera sur le rôle, alors autant qu'elle soit dite en premier. »",
     "@« Et la vraie ? »",
     { sobre:"« Vous savez la vraie. »",
       intense:"« Vous la savez. » Il détache ses gants, un doigt à la fois. « Il n'y avait pas de troisième temps, ce soir-là. Je vous l'avais dit avant qu'on entre. »",
-      extreme:"« Vous la savez, messire, et si vous ne la saviez pas vous ne seriez pas descendu seul dans une cour où un homme de Chastel attend à cheval. »\n\nIl détache ses gants, un doigt après l'autre, sans lever les yeux.\n\n« Il n'y avait pas de troisième temps, ce soir-là. Je vous l'avais annoncé avant qu'on entre dans le rond, et je l'ai répété au deuxième. J'ai dit : après ce temps-là il n'y a plus de règlement, il n'y a plus qu'un homme de cinquante-deux ans et un homme de vingt-neuf.\n\nJe n'ai pas menti. J'ai simplement été interrompu. »" },
-    "§ Neuf ans. Il en a soixante et un. Vous en avez trente-huit.",
+      extreme:"« Vous la savez, messire, et si vous ne la saviez pas vous ne seriez pas descendu seul dans une cour où un homme de Chastel attend à cheval. »\n\nIl détache ses gants, un doigt après l'autre, sans lever les yeux.\n\n« Il n'y avait pas de troisième temps, ce soir-là. Je vous l'avais annoncé avant qu'on entre dans le rond, et je l'ai répété au deuxième. J'ai dit : après ce temps-là il n'y a plus de règlement, il n'y a plus qu'un homme de quarante-sept ans et un homme de vingt-quatre.\n\nJe n'ai pas menti. J'ai simplement été interrompu. »" },
+    "§ Neuf ans. Il en a cinquante-six. Vous en avez trente-trois.",
     { sobre:"^« L'écart s'est refermé. »",
-      intense:"^« L'écart s'est refermé du mauvais côté pour moi », dit-il, et il le dit comme on lit un relevé. « Vingt-trois ans d'écart, alors. Vingt-trois aujourd'hui. Sauf que vingt-neuf contre cinquante-deux et trente-huit contre soixante et un, ce n'est pas la même arithmétique. »",
-      extreme:"^« L'écart n'a pas bougé et il s'est refermé quand même », dit-il, exactement du ton dont il lisait les règles du rond. « C'est ce que je n'avais pas prévu à cinquante-deux ans.\n\nVingt-trois ans nous séparaient alors, vingt-trois nous séparent aujourd'hui. Mais vingt-neuf contre cinquante-deux, c'est un homme qui a l'expérience contre un homme qui a le souffle. Trente-huit contre soixante et un, c'est un homme qui a les deux contre un homme qui n'a plus que l'expérience.\n\nJe le sais. C'est même ma spécialité, savoir ce genre de chose. Quarante et un duels, et je n'en ai jamais perdu un parce que je m'étais trompé sur l'arithmétique. »\n\nIl finit avec le gant gauche.\n\n« Je suis venu quand même. Ça devrait vous renseigner sur ce que ce soir-là m'a coûté. »" },
+      intense:"^« L'écart s'est refermé du mauvais côté pour moi », dit-il, et il le dit comme on lit un relevé. « Vingt-trois ans d'écart, alors. Vingt-trois aujourd'hui. Sauf que vingt-quatre contre quarante-sept et trente-trois contre cinquante-six, ce n'est pas la même arithmétique. »",
+      extreme:"^« L'écart n'a pas bougé et il s'est refermé quand même », dit-il, exactement du ton dont il lisait les règles du rond. « C'est ce que je n'avais pas prévu à quarante-sept ans.\n\nVingt-trois ans nous séparaient alors, vingt-trois nous séparent aujourd'hui. Mais vingt-quatre contre quarante-sept, c'est un homme qui a l'expérience contre un homme qui a le souffle. Trente-trois contre cinquante-six, c'est un homme qui a les deux contre un homme qui n'a plus que l'expérience.\n\nJe le sais. C'est même ma spécialité, savoir ce genre de chose. Quarante et un duels, et je n'en ai jamais perdu un parce que je m'étais trompé sur l'arithmétique. »\n\nIl finit avec le gant gauche.\n\n« Je suis venu quand même. Ça devrait vous renseigner sur ce que ce soir-là m'a coûté. »" },
   ],
   effets:{ flags:['in_sorgue_vu'],
            marque:"Renaud Sorgue est venu seul à Karlsberg. Soixante et un ans, et une phrase à finir.",
@@ -80,7 +80,7 @@ in_sorgue:{
       risque:"définitif", va:'in_so_rond' },
 
     { t:"« Non. »",
-      detail:"un homme de soixante et un ans qui a fait quatre jours de route · et vous dites non",
+      detail:"un homme de cinquante-six ans qui a fait quatre jours de route · et vous dites non",
       risque:"calculé", va:'in_so_non' },
 
     { t:"Lui demander ce que Chastel a écrit",
@@ -159,7 +159,7 @@ in_so_role_ko:{
       detail:"neuf pas · c'est tout ce qu'il a jamais demandé",
       risque:"définitif", va:'in_so_rond' },
     { t:"« Non. »",
-      detail:"un homme de soixante et un ans, quatre jours de route, et un refus",
+      detail:"un homme de cinquante-six ans, quatre jours de route, et un refus",
       risque:"calculé", va:'in_so_non' },
   ],
 },
@@ -198,7 +198,7 @@ in_so_non:{
   ],
   effets:{ flags:['in_sorgue_fait','in_fait_sorgue','in_so_refuse'],
            faire:() => { ETAT.renom = Math.max(0, ETAT.renom - 3); },
-           exploit:{ eclat:2, temoins:'quelques', quoi:"vous avez refusé le rond à un homme de soixante et un ans" },
+           exploit:{ eclat:2, temoins:'quelques', quoi:"vous avez refusé le rond à un homme de cinquante-six ans" },
            marque:"Vous avez refusé le rond. « Vous auriez gagné. Ne le dites à personne. »",
            court:"Quatre-vingt-dix secondes" },
   suite:'a3_champions', libelleSuite:"Après" },
@@ -215,7 +215,7 @@ in_so_rond:{
       extreme:"La maison entière est sortie et s'est rangée d'elle-même contre les murs de la cour, à la distance exacte où l'on se met quand on a déjà vu ça ou qu'on l'a assez entendu raconter.\n\nTrois cents personnes. Pas un bruit, pas un pari, pas un commentaire.\n\nElles savent toutes qui est cet homme. On leur a raconté l'assise d'hiver pendant neuf ans, tous les hivers, et l'histoire s'est considérablement améliorée en route — mais le nom, lui, n'a pas bougé d'un pouce." },
     "« Trois temps chacun », dit-il. « Comme la dernière fois. »",
     "@« Vous n'en aviez pris qu'un. »",
-    "« J'en prendrai trois. » Il n'y a pas d'humour là-dedans. « C'est l'autre chose qui change à soixante et un ans : on prend tous ses temps, et on les prend tôt. »",
+    "« J'en prendrai trois. » Il n'y a pas d'humour là-dedans. « C'est l'autre chose qui change à cinquante-six ans : on prend tous ses temps, et on les prend tôt. »",
     { sobre:"§ Il salue. Le salut est exactement le même.",
       intense:"§ Il salue, et le salut est exactement le même qu'il y a neuf ans : pointe basse, pied arrière, la tête qui ne dépasse pas ce qu'elle doit dépasser. Pas un pouce de perdu.\n\nC'est la dernière chose de cet homme qui n'ait pas vieilli.",
       extreme:"§ Il salue, et le salut est rigoureusement identique à celui d'il y a neuf ans. Pointe basse. Pied arrière. Une inclinaison de tête qui ne dépasse pas d'un pouce ce qu'elle doit dépasser.\n\nPas un cheveu de perdu, pas une hésitation, pas un tremblement.\n\nC'est la dernière chose chez cet homme qui n'ait pas vieilli, et il le sait, et c'est probablement la raison pour laquelle il l'a fait si lentement." },
@@ -254,11 +254,11 @@ in_so_attente:{
       extreme:"Il vient, et il vient extraordinairement bien.\n\nLes mêmes appels du pied. La même pointe qui ne va nulle part et qui vous oblige quand même à la regarder. La même façon de prendre la moitié du rond avant vous. Quarante et un duels judiciaires ne se désapprennent pas en neuf ans et ne se désapprendront jamais : à quatre-vingts ans il ferait encore ça mieux que n'importe qui.\n\nCe qui ne tient pas, ce n'est pas la main. C'est tout le reste." },
     { sobre:"À la quatre-vingtième seconde, la garde descend de trois pouces.",
       intense:"À la quatre-vingtième seconde, la garde descend de trois pouces. Pas par fatigue visible, pas par relâchement : le bras la descend tout seul, sans demander, et il n'y a rien à faire contre ça.\n\nIl le sent au moment où ça se produit. Il lève deux doigts.",
-      extreme:"À la quatre-vingtième seconde, la garde descend de trois pouces.\n\nCe n'est pas de la fatigue visible. Il ne souffle pas, il ne ralentit pas, son visage ne dit rien du tout. Le bras descend la garde tout seul, sans demander la permission à personne, et il n'existe aucune volonté au monde qui fasse remonter un bras de soixante et un ans quand il a décidé.\n\nIl le sent à la seconde exacte où ça se produit — il a passé quarante ans à guetter ça chez les autres.\n\nIl lève deux doigts. Premier temps." },
+      extreme:"À la quatre-vingtième seconde, la garde descend de trois pouces.\n\nCe n'est pas de la fatigue visible. Il ne souffle pas, il ne ralentit pas, son visage ne dit rien du tout. Le bras descend la garde tout seul, sans demander la permission à personne, et il n'existe aucune volonté au monde qui fasse remonter un bras de cinquante-six ans quand il a décidé.\n\nIl le sent à la seconde exacte où ça se produit — il a passé quarante ans à guetter ça chez les autres.\n\nIl lève deux doigts. Premier temps." },
     "§ Il en prendra deux autres. Il vous l'avait annoncé et il n'avait pas menti.",
     { sobre:"Au troisième, il baisse la lame lui-même.",
       intense:"Au troisième temps, il ne remonte pas la garde. Il baisse la lame, à hauteur de cuisse, et il reste comme ça au milieu du rond devant trois cents personnes.\n\n« Voilà », dit-il. « C'était ça, la phrase. »",
-      extreme:"Au troisième temps, il ne remonte pas la garde.\n\nIl baisse la lame à hauteur de cuisse, il reste debout au milieu du rond, et il ne dit rien pendant un temps que personne dans cette cour n'ose interrompre.\n\n« Voilà », dit-il enfin. « C'était ça, la phrase. »\n\n@« Vous saviez. »\n\n« Depuis le premier soir. » Il regarde la craie. « Un homme de cinquante-deux ans et un homme de vingt-neuf : je vous ai dit ça il y a neuf ans en croyant que c'était une menace. C'en était une, à l'époque.\n\nJ'ai eu neuf ans pour comprendre que c'était une date. »" },
+      extreme:"Au troisième temps, il ne remonte pas la garde.\n\nIl baisse la lame à hauteur de cuisse, il reste debout au milieu du rond, et il ne dit rien pendant un temps que personne dans cette cour n'ose interrompre.\n\n« Voilà », dit-il enfin. « C'était ça, la phrase. »\n\n@« Vous saviez. »\n\n« Depuis le premier soir. » Il regarde la craie. « Un homme de quarante-sept ans et un homme de vingt-quatre : je vous ai dit ça il y a neuf ans en croyant que c'était une menace. C'en était une, à l'époque.\n\nJ'ai eu neuf ans pour comprendre que c'était une date. »" },
   ],
   effets:{ flags:['in_sorgue_fait','in_fait_sorgue','in_so_fini','in_so_epargne'],
            cout:{ endurance:24 },
@@ -276,11 +276,11 @@ in_so_entree:{
     "Vous entrez dedans à la première seconde, et cette fois vous savez pourquoi personne ne le fait — sauf que cette fois, c'est la bonne réponse.",
     { sobre:"Il n'a pas les jambes.",
       intense:"Il a la main. Il a toujours la main et il l'aura jusqu'au bout. Il n'a pas les jambes, et une entrée franche ne se pare pas avec la main : elle s'évite avec les jambes.",
-      extreme:"Il a la main. Il a toujours la main, il l'aura jusqu'au dernier jour, et il vous détourne la première attaque avec une économie que personne d'autre au monde n'obtient.\n\nMais une entrée franche ne se pare pas avec la main. Elle s'évite avec les jambes, en cédant un demi-pas de côté au bon moment — et le bon moment, à soixante et un ans, arrive un tiers de seconde trop tard.\n\nUn tiers de seconde. C'est tout ce qui sépare cet homme de ce qu'il était." },
+      extreme:"Il a la main. Il a toujours la main, il l'aura jusqu'au dernier jour, et il vous détourne la première attaque avec une économie que personne d'autre au monde n'obtient.\n\nMais une entrée franche ne se pare pas avec la main. Elle s'évite avec les jambes, en cédant un demi-pas de côté au bon moment — et le bon moment, à cinquante-six ans, arrive un tiers de seconde trop tard.\n\nUn tiers de seconde. C'est tout ce qui sépare cet homme de ce qu'il était." },
     "Vous êtes au contact en trois secondes, garde contre garde, et il n'y a plus d'escrime du tout.",
     { sobre:"Vous le mettez au sol. Il ne se relève pas seul.",
       intense:"Vous le mettez au sol de l'épaule. Il tombe correctement — il tombera correctement toute sa vie — et il ne se relève pas seul, et personne dans la cour ne bouge pour l'aider parce que personne n'ose.",
-      extreme:"Vous le mettez au sol de l'épaule, sans élégance, avec tout le poids.\n\nIl tombe correctement. Il tombera correctement jusqu'à sa dernière heure, c'est la chose qu'on lui a apprise en premier et ce sera la dernière à partir.\n\nEt il ne se relève pas seul.\n\nTrois cents personnes regardent un homme de soixante et un ans essayer de se remettre debout sur des pavés, et pas une ne bouge — pas par cruauté : parce que personne n'ose lui faire ça.\n\nVous lui tendez la main. Il la prend, ce qui est de très loin la chose la plus dure qu'il ait faite de la journée." },
+      extreme:"Vous le mettez au sol de l'épaule, sans élégance, avec tout le poids.\n\nIl tombe correctement. Il tombera correctement jusqu'à sa dernière heure, c'est la chose qu'on lui a apprise en premier et ce sera la dernière à partir.\n\nEt il ne se relève pas seul.\n\nTrois cents personnes regardent un homme de cinquante-six ans essayer de se remettre debout sur des pavés, et pas une ne bouge — pas par cruauté : parce que personne n'ose lui faire ça.\n\nVous lui tendez la main. Il la prend, ce qui est de très loin la chose la plus dure qu'il ait faite de la journée." },
   ],
   effets:{ flags:['in_sorgue_fait','in_fait_sorgue','in_so_fini','in_so_battu'],
            cout:{ endurance:18 },
@@ -299,8 +299,8 @@ in_so_rien:{
       intense:"Il met quarante secondes à comprendre, ce qui est très long pour lui. Puis il s'arrête net au milieu du rond.\n\n« Ah », dit-il.",
       extreme:"Il met environ quarante secondes à comprendre, ce qui est très long pour un homme qui lit un adversaire en trois passes.\n\nPuis il s'arrête net au milieu du rond, la lame à mi-hauteur, et il ne bouge plus.\n\n« Ah », dit-il.\n\nC'est tout. De sa part c'est un discours entier et trois cents personnes viennent d'assister à quelque chose dont aucune ne saisit la nature." },
     { sobre:"^« Vous me faites marcher. »",
-      intense:"^« Vous me faites marcher. » Il baisse la lame. « Il y a neuf ans, dans une salle de Cendrepont, j'ai dit à un homme de vingt-neuf ans qu'il ne m'avait pas encore fait marcher et que c'était la seule chose qui lui restait. »\n\n@« Vous vous en souvenez. »\n\n« Je me souviens de tout. C'est la partie du métier dont personne ne parle. »",
-      extreme:"^« Vous me faites marcher. »\n\nIl baisse la lame complètement.\n\n« Il y a neuf ans, dans une salle de Cendrepont, entre le deuxième et le troisième temps, j'ai dit à un homme de vingt-neuf ans qu'il ne m'avait pas encore fait marcher et que c'était très exactement la seule chose qui lui restait à essayer. »\n\n@« Vous vous en souvenez. »\n\n« Je me souviens de tout, messire. De tout, dans l'ordre, avec le temps qu'il faisait. C'est la partie de ce métier dont personne ne parle jamais et c'est celle qui coûte le plus cher. »\n\nIl regarde le rond qu'il vient de tracer sur vos pavés.\n\n« Quarante et un duels. Je peux vous les réciter. Il n'y en a pas un seul dont j'aie envie. »" },
+      intense:"^« Vous me faites marcher. » Il baisse la lame. « Il y a neuf ans, dans une salle de Cendrepont, j'ai dit à un homme de vingt-quatre ans qu'il ne m'avait pas encore fait marcher et que c'était la seule chose qui lui restait. »\n\n@« Vous vous en souvenez. »\n\n« Je me souviens de tout. C'est la partie du métier dont personne ne parle. »",
+      extreme:"^« Vous me faites marcher. »\n\nIl baisse la lame complètement.\n\n« Il y a neuf ans, dans une salle de Cendrepont, entre le deuxième et le troisième temps, j'ai dit à un homme de vingt-quatre ans qu'il ne m'avait pas encore fait marcher et que c'était très exactement la seule chose qui lui restait à essayer. »\n\n@« Vous vous en souvenez. »\n\n« Je me souviens de tout, messire. De tout, dans l'ordre, avec le temps qu'il faisait. C'est la partie de ce métier dont personne ne parle jamais et c'est celle qui coûte le plus cher. »\n\nIl regarde le rond qu'il vient de tracer sur vos pavés.\n\n« Quarante et un duels. Je peux vous les réciter. Il n'y en a pas un seul dont j'aie envie. »" },
     "§ Il sort du rond de lui-même. Les deux pieds, franchement, sans que personne ait à le compter.",
   ],
   effets:{ flags:['in_sorgue_fait','in_fait_sorgue','in_so_fini','in_so_marche'],
@@ -314,7 +314,7 @@ in_so_cout:{
   melee:true, qui:'sorgue',
   titre:"Il a encore la main",
   texte:[
-    "Il a soixante et un ans et il a encore la main, et vous l'apprenez de la façon dont on apprend ce genre de chose.",
+    "Il a cinquante-six ans et il a encore la main, et vous l'apprenez de la façon dont on apprend ce genre de chose.",
     { sobre:"La pointe entre sous les côtes, à droite.",
       intense:"La pointe entre sous les côtes flottantes, à droite, sur trois pouces, et ressort. C'est mesuré, c'est propre, et ce n'était pas fait pour tuer — un homme qui a gagné quarante et un duels judiciaires n'a pas passé sa vie à tuer, il a passé sa vie à finir.",
       extreme:"La pointe entre sous les côtes flottantes, à droite, sur trois pouces exactement, et ressort par le même trajet.\n\nC'est mesuré, c'est propre, c'est placé à un demi-pouce de l'endroit où ça vous tuerait, et ça n'y est pas.\n\nUn homme qui a gagné quarante et un duels judiciaires n'a pas passé quarante ans à tuer des gens : il a passé quarante ans à **finir** des duels, ce qui n'est pas le même métier et ce qui demande infiniment plus de main." },
@@ -327,7 +327,7 @@ in_so_cout:{
                                  gravite:3, douleur:3, saignement:3, fonction:['endurance'],
                                  cicatrice:"une entrée et une sortie sous les côtes flottantes droites" }),
            exploit:{ eclat:7, temoins:'foule', quoi:"vous avez battu Renaud Sorgue, et il vous a ouvert le flanc" },
-           marque:"Il vous a ouvert le flanc à soixante et un ans. Vous l'avez fini onze secondes plus tard.",
+           marque:"Il vous a ouvert le flanc à cinquante-six ans. Vous l'avez fini onze secondes plus tard.",
            court:"Onze secondes" },
   suite:'in_so_apres', libelleSuite:"Ce qu'on en fait" },
 
@@ -336,9 +336,9 @@ in_so_ko:{
   titre:"Quarante-deux",
   texte:[
     "Il vous a.",
-    { sobre:"Il a soixante et un ans et il vous a, et il n'y a rien à en dire.",
-      intense:"Il a soixante et un ans, quatre jours de route dans les jambes, une garde qui descend de trois pouces — et il vous a.\n\nIl n'y a rien à en dire. C'est ce qu'un homme fait quand il a passé quarante ans à faire une seule chose.",
-      extreme:"Il a soixante et un ans. Il a quatre jours de route dans les jambes, une garde qui lui descend toute seule de trois pouces, et quatre-vingt-dix secondes en tout.\n\nIl vous a en soixante-dix.\n\nIl n'y a rigoureusement rien à en dire, aucune leçon à en tirer et aucun réconfort à y chercher. C'est ce qu'un homme obtient quand il a passé quarante ans à faire une seule chose et rien d'autre, et c'est pour cette raison exacte que Chastel n'a jamais apporté une cause qu'elle pouvait perdre." },
+    { sobre:"Il a cinquante-six ans et il vous a, et il n'y a rien à en dire.",
+      intense:"Il a cinquante-six ans, quatre jours de route dans les jambes, une garde qui descend de trois pouces — et il vous a.\n\nIl n'y a rien à en dire. C'est ce qu'un homme fait quand il a passé quarante ans à faire une seule chose.",
+      extreme:"Il a cinquante-six ans. Il a quatre jours de route dans les jambes, une garde qui lui descend toute seule de trois pouces, et quatre-vingt-dix secondes en tout.\n\nIl vous a en soixante-dix.\n\nIl n'y a rigoureusement rien à en dire, aucune leçon à en tirer et aucun réconfort à y chercher. C'est ce qu'un homme obtient quand il a passé quarante ans à faire une seule chose et rien d'autre, et c'est pour cette raison exacte que Chastel n'a jamais apporté une cause qu'elle pouvait perdre." },
     "La pointe se pose sous votre mâchoire et n'y entre pas. Trois cents personnes de votre maison regardent.",
     "« Cédez », dit-il. Et plus bas, pour vous seul : « Ne les faites pas regarder ça. »",
   ],
@@ -359,9 +359,9 @@ in_so_apres:{
       ? "Il ne vous emmène pas. Il aurait dû, il avait le rôle pour, et il ne le fait pas."
       : "Il reste jusqu'au soir. Personne ne lui demande de partir et il ne demande à personne s'il peut rester.",
     () => a('in_so_perdu')
-      ? { sobre:"@« Vous avez une sommation. »\n\n« J'ai une sommation. J'ai aussi soixante et un ans. »",
-          intense:"@« Vous avez une sommation. »\n\n« J'ai une sommation, oui. » Il la sort, la regarde, la remet. « J'ai aussi soixante et un ans, quarante et un duels, et exactement une chose que je voulais de vous. Je l'ai eue ce matin.\n\nChastel voulait autre chose. Chastel n'a qu'à venir la chercher elle-même. »",
-          extreme:"@« Vous avez une sommation. »\n\n« J'ai une sommation, oui. »\n\nIl la sort de son pourpoint, la déplie, la regarde comme on regarde un objet qui appartient à quelqu'un d'autre, et la remet.\n\n« J'ai aussi soixante et un ans, quarante et un duels judiciaires, une charge que je vais perdre, et exactement une chose que je voulais de vous. Je l'ai eue ce matin, dans votre cour, devant trois cents personnes.\n\nChastel voulait autre chose. Chastel a trois cents hommes et une commission de province : elle n'a qu'à venir la chercher elle-même, et elle viendra, et ça ne me regarde plus.\n\nJe n'ai jamais travaillé pour Chastel, messire. J'ai travaillé dans des ronds. Ce n'est pas la même chose et il m'a fallu quarante ans pour m'autoriser à le dire. »" }
+      ? { sobre:"@« Vous avez une sommation. »\n\n« J'ai une sommation. J'ai aussi cinquante-six ans. »",
+          intense:"@« Vous avez une sommation. »\n\n« J'ai une sommation, oui. » Il la sort, la regarde, la remet. « J'ai aussi cinquante-six ans, quarante et un duels, et exactement une chose que je voulais de vous. Je l'ai eue ce matin.\n\nChastel voulait autre chose. Chastel n'a qu'à venir la chercher elle-même. »",
+          extreme:"@« Vous avez une sommation. »\n\n« J'ai une sommation, oui. »\n\nIl la sort de son pourpoint, la déplie, la regarde comme on regarde un objet qui appartient à quelqu'un d'autre, et la remet.\n\n« J'ai aussi cinquante-six ans, quarante et un duels judiciaires, une charge que je vais perdre, et exactement une chose que je voulais de vous. Je l'ai eue ce matin, dans votre cour, devant trois cents personnes.\n\nChastel voulait autre chose. Chastel a trois cents hommes et une commission de province : elle n'a qu'à venir la chercher elle-même, et elle viendra, et ça ne me regarde plus.\n\nJe n'ai jamais travaillé pour Chastel, messire. J'ai travaillé dans des ronds. Ce n'est pas la même chose et il m'a fallu quarante ans pour m'autoriser à le dire. »" }
       : { sobre:"@« Pourquoi être venu ? »\n\n« Pour savoir. »",
           intense:"@« Vous avez fait quatre jours de route pour ça. »\n\n« J'ai fait quarante ans de route pour ça. » Il regarde la craie sur vos pavés. « Quarante et un duels, messire, et pas un seul dont j'aie envie. Un seul dont je me demandais.\n\nMaintenant je sais. Je vais pouvoir m'arrêter. »",
           extreme:"@« Vous avez fait quatre jours de route pour ça. »\n\n« J'ai fait quarante ans de route pour ça. »\n\nIl regarde la craie qui s'efface déjà sur vos pavés, là où trois cents personnes ont marché dessus tout l'après-midi.\n\n« Quarante et un duels judiciaires. Je peux tous vous les réciter, avec la date, le temps qu'il faisait et le nom. Il n'y en a pas un seul dont j'aie envie de me souvenir et j'y suis condamné.\n\nUn seul m'a occupé. Un seul, en quarante ans, où quelqu'un a fait quelque chose que je n'avais pas prévu — et Chastel a payé pour que la cause tombe, et je n'ai jamais su ce qui se serait passé au troisième temps.\n\nMaintenant je sais. » Il ramasse ses gants. « Je vais pouvoir m'arrêter. C'est tout ce que je suis venu chercher et je ne pouvais l'obtenir de personne d'autre au monde. »" },
@@ -373,7 +373,7 @@ in_so_apres:{
   suite:'a3_champions', libelleSuite:"Après" },
 
 /* ══════════════════════════════════════════════════════════════════════════
- * CHARLES DE MONT-DRAKEN · soixante-sept ans
+ * CHARLES DE MONT-DRAKEN · soixante-deux ans
  *
  * Il ne se bat pas. Il n'a jamais eu de haine pour rien de ce qu'il a tué,
  * il compte depuis trente ans, et il a raison — c'est toute la difficulté
@@ -390,9 +390,9 @@ in_charles:{
   titre:"Trois cent douze pièces",
   texte:[
     "Il arrive avec vingt hommes et il les laisse dans la cour. Il monte seul, il retire son manteau, et il s'assied sans qu'on l'y invite — comme la première fois, il y a neuf ans, dans une salle de relais.",
-    { sobre:"Il a soixante-sept ans. Il tient toujours son compte.",
-      intense:"Il a soixante-sept ans. Les mains sont les mêmes — des mains de charpentier avec un ongle noir — et il pose sur la table un registre relié qu'il n'avait pas la dernière fois.",
-      extreme:"Il a soixante-sept ans et il n'a rien perdu de ce qui comptait chez lui : les mains sont les mêmes, des mains de charpentier avec un ongle noir, et elles se posent à plat sur le bois avant qu'il ne parle, exactement comme il y a neuf ans.\n\nCe qui est nouveau, c'est le registre. Un volume relié, épais de deux pouces, qu'il pose devant lui sans l'ouvrir et sur lequel il garde la main gauche pendant tout l'entretien." },
+    { sobre:"Il a soixante-deux ans. Il tient toujours son compte.",
+      intense:"Il a soixante-deux ans. Les mains sont les mêmes — des mains de charpentier avec un ongle noir — et il pose sur la table un registre relié qu'il n'avait pas la dernière fois.",
+      extreme:"Il a soixante-deux ans et il n'a rien perdu de ce qui comptait chez lui : les mains sont les mêmes, des mains de charpentier avec un ongle noir, et elles se posent à plat sur le bois avant qu'il ne parle, exactement comme il y a neuf ans.\n\nCe qui est nouveau, c'est le registre. Un volume relié, épais de deux pouces, qu'il pose devant lui sans l'ouvrir et sur lequel il garde la main gauche pendant tout l'entretien." },
     "« Trois cent quarante-six », dit-il. « Pièces sur le mur. C'était trois cent douze la dernière fois. »",
     "@« Et le registre ? »",
     { sobre:"« Quatre-vingt-quatorze inscrits. »",
@@ -434,7 +434,7 @@ in_ch_inscrit:{
     "@« Écrivez. »",
     { sobre:"Il ouvre le volume. Il ne dit pas merci.",
       intense:"Il ouvre le volume à la page en cours, il trempe sa plume, et il ne dit pas merci — cet homme n'a jamais remercié personne d'avoir fait ce qu'il fallait faire.\n\nIl écrit lentement. Six lignes, pas une.",
-      extreme:"Il ouvre le volume à la page en cours et trempe sa plume dans un encrier qu'il a apporté.\n\nIl ne dit pas merci. Cet homme n'a jamais remercié personne d'avoir fait ce qu'il fallait faire, et il ne commencera pas à soixante-sept ans.\n\nIl écrit lentement, en formant chaque lettre, et il n'écrit pas une ligne : il en écrit six. Le nom, la date, le lieu. Ce que vous portez, dans les termes du registre et pas dans ceux de la rumeur. Devant combien de témoins. Ce qui a été fait avec, en trois occasions datées.\n\nEt une sixième, qu'il ajoute après avoir posé la plume et l'avoir reprise :\n\n*A tenu Karlsberg. Trois cents feux. N'a pas été demandé.*" },
+      extreme:"Il ouvre le volume à la page en cours et trempe sa plume dans un encrier qu'il a apporté.\n\nIl ne dit pas merci. Cet homme n'a jamais remercié personne d'avoir fait ce qu'il fallait faire, et il ne commencera pas à soixante-deux ans.\n\nIl écrit lentement, en formant chaque lettre, et il n'écrit pas une ligne : il en écrit six. Le nom, la date, le lieu. Ce que vous portez, dans les termes du registre et pas dans ceux de la rumeur. Devant combien de témoins. Ce qui a été fait avec, en trois occasions datées.\n\nEt une sixième, qu'il ajoute après avoir posé la plume et l'avoir reprise :\n\n*A tenu Karlsberg. Trois cents feux. N'a pas été demandé.*" },
     "@« Qu'est-ce que ça change ? »",
     { sobre:"« Pour vous, rien aujourd'hui. »",
       intense:"« Pour vous ? Rien aujourd'hui. Vous serez inscrit, ce qui veut dire qu'un magistrat peut vous convoquer et que personne ne peut vous brûler sans passer devant lui. C'est tout ce que ça donne et c'est déjà beaucoup plus que ce qu'ont les quatre-vingt-quatorze autres. »",
@@ -458,10 +458,10 @@ in_ch_non:{
     "@« Non. Pour la deuxième fois. »",
     { sobre:"Il hoche la tête. Il referme le volume.",
       intense:"Il hoche la tête, referme le volume, et le remet sous son bras. Il ne discute pas — il n'a jamais discuté avec personne, c'est peut-être son seul défaut.",
-      extreme:"Il hoche la tête une fois. Il referme le volume, le range sous son bras gauche, et se lève sans s'appuyer sur la table, ce qu'un homme de soixante-sept ans ne fait pas facilement.\n\nIl ne discute pas. Il n'a jamais discuté avec quiconque en trente ans : il expose, il demande, et il encaisse la réponse. C'est peut-être son seul défaut et c'est celui qui lui a coûté trois refus de conseil." },
+      extreme:"Il hoche la tête une fois. Il referme le volume, le range sous son bras gauche, et se lève sans s'appuyer sur la table, ce qu'un homme de soixante-deux ans ne fait pas facilement.\n\nIl ne discute pas. Il n'a jamais discuté avec quiconque en trente ans : il expose, il demande, et il encaisse la réponse. C'est peut-être son seul défaut et c'est celui qui lui a coûté trois refus de conseil." },
     { sobre:"^« Je ne redemanderai pas. »",
       intense:"^« Je ne redemanderai pas », dit-il sur le seuil. « Ce n'est pas une menace : c'est mon dernier hiver. Il y aura quelqu'un après moi et je ne sais pas qui. »",
-      extreme:"^« Je ne redemanderai pas », dit-il sur le seuil, sans se retourner complètement.\n\n« Ce n'est pas une menace et je vous demande de ne pas l'entendre comme ça. C'est mon dernier hiver de commission. On m'a accordé quatre ans en Ventôse, il y en a eu sept parce que personne ne voulait la place, et j'ai soixante-sept ans.\n\nIl y aura quelqu'un après moi. Je ne sais pas qui et je n'ai aucun moyen de le choisir. »\n\nUn temps.\n\n« Ce que je sais, c'est que le prochain n'aura pas mon registre. Il aura ce que le conseil lui donnera, et le conseil donne toujours à quelqu'un qui promet d'aller plus vite. »\n\nIl remet son manteau.\n\n« Bonne route, messire. Restez à l'ouest de la Route Grise. »" },
+      extreme:"^« Je ne redemanderai pas », dit-il sur le seuil, sans se retourner complètement.\n\n« Ce n'est pas une menace et je vous demande de ne pas l'entendre comme ça. C'est mon dernier hiver de commission. On m'a accordé quatre ans en Ventôse, il y en a eu sept parce que personne ne voulait la place, et j'ai soixante-deux ans.\n\nIl y aura quelqu'un après moi. Je ne sais pas qui et je n'ai aucun moyen de le choisir. »\n\nUn temps.\n\n« Ce que je sais, c'est que le prochain n'aura pas mon registre. Il aura ce que le conseil lui donnera, et le conseil donne toujours à quelqu'un qui promet d'aller plus vite. »\n\nIl remet son manteau.\n\n« Bonne route, messire. Restez à l'ouest de la Route Grise. »" },
     "§ Il a dit exactement ça il y a neuf ans, dans une salle de relais, en partant. C'est la seule chose qu'il ait répétée de toute sa vie.",
   ],
   effets:{ flags:['in_charles_fait','in_fait_charles','in_ch_refuse'],
@@ -480,7 +480,7 @@ in_ch_registre:{
     { sobre:"C'est la première fois en trente ans qu'on lui demande ça.",
       intense:"Il ne répond pas. C'est, très probablement, la première fois en trente ans qu'on lui demande cette chose-là, et il n'a pas de réponse préparée parce qu'il n'a jamais envisagé qu'on la demande.",
       extreme:"Il ne répond pas.\n\nEt vous comprenez, en le regardant ne pas répondre, que c'est la première fois en trente ans qu'on lui demande ça. Pas *ce qu'il y a dedans* — ça, on le lui a demandé, et il a refusé, et deux magistrats ont fini par l'obtenir.\n\nLe volume. Qu'il le donne.\n\nIl n'a aucune réponse préparée parce qu'il n'a jamais, en trente ans, envisagé une seconde que quelqu'un veuille le porter." },
-    "@« Vous avez soixante-sept ans, c'est votre dernier hiver, et le prochain n'aura pas votre registre. Vous l'avez dit vous-même. »",
+    "@« Vous avez soixante-deux ans, c'est votre dernier hiver, et le prochain n'aura pas votre registre. Vous l'avez dit vous-même. »",
     "« Je ne l'ai pas encore dit. »",
     "@« Vous alliez. »",
     { sobre:"Long silence.",
@@ -538,7 +538,7 @@ in_ch_registre_ko:{
   suite:'a3_champions', libelleSuite:"Après" },
 
 /* ══════════════════════════════════════════════════════════════════════════
- * GUILLAUME DE SAULT · quarante-cinq ans
+ * GUILLAUME DE SAULT · quarante ans
  *
  * Il n'est pas un ennemi. Il ne l'a jamais été et il ne le sera jamais : il
  * tient un carnet, il a écrit *à revoir dans deux ans* sous un nom, et il a
@@ -553,9 +553,9 @@ in_sault:{
   titre:"Trois lignes",
   texte:[
     "Il monte au chemin de ronde tout seul, sans qu'on l'ait annoncé, et il regarde la vallée pendant un long moment avant de s'apercevoir qu'on est derrière lui.",
-    { sobre:"Il a quarante-cinq ans et le même pourpoint gris.",
-      intense:"Quarante-cinq ans, le même pourpoint gris de bonne coupe entretenu par quelqu'un, et le carnet dans la même poche intérieure.\n\nLes mains ont des marques, maintenant. Deux.",
-      extreme:"Quarante-cinq ans. Le même pourpoint gris de bonne coupe, entretenu par quelqu'un dont c'est le travail, et le carnet dans la même poche intérieure.\n\nLes mains ont des marques, maintenant. Deux : une sur le dos de la gauche, une qui traverse le pouce droit.\n\nEn neuf ans, il a eu à parer deux fois. C'est un renseignement complet sur ce qu'ont été ces neuf ans." },
+    { sobre:"Il a quarante ans et le même pourpoint gris.",
+      intense:"Quarante ans, le même pourpoint gris de bonne coupe entretenu par quelqu'un, et le carnet dans la même poche intérieure.\n\nLes mains ont des marques, maintenant. Deux.",
+      extreme:"Quarante ans. Le même pourpoint gris de bonne coupe, entretenu par quelqu'un dont c'est le travail, et le carnet dans la même poche intérieure.\n\nLes mains ont des marques, maintenant. Deux : une sur le dos de la gauche, une qui traverse le pouce droit.\n\nEn neuf ans, il a eu à parer deux fois. C'est un renseignement complet sur ce qu'ont été ces neuf ans." },
     "« J'ai écrit *à revoir dans deux ans* », dit-il sans se retourner. « Il y a neuf. »",
     "@« Vous êtes en retard. »",
     { sobre:"« Je suis en retard de sept ans et j'ai une bonne raison. »",
@@ -599,7 +599,7 @@ in_sa_rond:{
       extreme:"Il ne bouge pas d'un pouce. Il regarde la craie qu'il n'a pas sortie, le chemin de ronde, la vallée.\n\nPuis il rit. Une fois, court, sans une once d'amertume — très exactement le même rire qu'il y a neuf ans, dans une cour de relais, quand vous lui aviez servi son propre enchaînement.\n\n« Non », dit-il." },
     { sobre:"^« Je ne suis pas venu pour ça. »",
       intense:"^« Je ne suis pas venu pour ça, et vous le savez, et vous me le proposez pour m'éviter d'avoir à le dire. »\n\nIl remet le carnet dans sa poche.\n\n« C'est courtois. C'est la chose la plus courtoise qu'on m'ait faite en vingt ans, et je préfère quand même le dire. »",
-      extreme:"^« Je ne suis pas venu pour ça. Vous le savez parfaitement, et vous venez de me le proposer pour m'éviter d'avoir à le dire à voix haute.\n\nC'est courtois. C'est très probablement la chose la plus courtoise qu'on m'ait faite en vingt ans de carnet, et je préfère quand même le dire. »\n\nIl remet le carnet dans sa poche intérieure.\n\n« Un rond de neuf pas entre un homme de quarante-cinq ans et un homme de trente-huit ans qui a tenu un siège il y a trois semaines ne renseigne sur rien du tout. Ça ferait trois lignes fausses.\n\nJ'ai soixante-neuf pages. Je peux vivre avec une blanche. Je ne peux pas vivre avec une fausse. »" },
+      extreme:"^« Je ne suis pas venu pour ça. Vous le savez parfaitement, et vous venez de me le proposer pour m'éviter d'avoir à le dire à voix haute.\n\nC'est courtois. C'est très probablement la chose la plus courtoise qu'on m'ait faite en vingt ans de carnet, et je préfère quand même le dire. »\n\nIl remet le carnet dans sa poche intérieure.\n\n« Un rond de neuf pas entre un homme de quarante ans et un homme de trente-trois ans qui a tenu un siège il y a trois semaines ne renseigne sur rien du tout. Ça ferait trois lignes fausses.\n\nJ'ai soixante-neuf pages. Je peux vivre avec une blanche. Je ne peux pas vivre avec une fausse. »" },
     "§ Il repart le lendemain. La page reste blanche et le carnet repart avec elle.",
   ],
   effets:{ flags:['in_sault_fait','in_fait_sault','in_sa_blanche'],
@@ -652,7 +652,7 @@ in_sa_rester:{
   suite:'a3_champions', libelleSuite:"Après" },
 
 /* ══════════════════════════════════════════════════════════════════════════
- * YSABEL DE KARLSBERG · soixante-dix ans
+ * YSABEL DE KARLSBERG · soixante-cinq ans
  *
  * Elle a rayé cette maison une fois. Elle sait comment on s'y prend, c'est
  * la seule personne vivante qui le sache, et vous l'avez laissée vivante
@@ -665,11 +665,11 @@ in_ysabel:{
   lieu:"Karlsberg · la salle basse · Nivôse",
   titre:"Quatre lignes, une seconde fois",
   texte:[
-    "Elle n'est pas venue. Elle a soixante-dix ans et elle n'a pas quitté Sainte-Ombre depuis vingt-neuf ans.",
+    "Elle n'est pas venue. Elle a soixante-cinq ans et elle n'a pas quitté Sainte-Ombre depuis vingt-huit ans.",
     "Ce qui arrive, c'est une copie. Un clerc du commissariat aux titres de Chastel la porte lui-même, avec l'air d'un homme qui préférerait être ailleurs.",
     { sobre:"Quatre lignes. Écrites de sa main, scellées de son cachet.",
-      intense:"Quatre lignes, écrites d'une main de soixante-dix ans qui n'a pas tremblé, scellées d'un cachet que vous connaissez parce que vous en avez tenu le pareil dans une crypte il y a vingt-neuf ans.\n\nLe clerc vous les lit à voix haute. La forme l'exige.",
-      extreme:"Quatre lignes.\n\nÉcrites d'une main de soixante-dix ans qui n'a pas tremblé une seule fois sur quatre lignes, scellées d'un cachet que vous reconnaissez immédiatement : vous en avez tenu le pareil dans une crypte, il y a vingt-neuf ans, sur un coffre dont votre tante avait la clef.\n\nLe clerc vous les lit à voix haute parce que la forme l'exige et parce qu'un acte doit être entendu par celui qu'il vise.\n\nIl lit mal. Il lit comme un homme qui a compris ce qu'il porte." },
+      intense:"Quatre lignes, écrites d'une main de soixante-cinq ans qui n'a pas tremblé, scellées d'un cachet que vous connaissez parce que vous en avez tenu le pareil dans une crypte, enfant.\n\nLe clerc vous les lit à voix haute. La forme l'exige.",
+      extreme:"Quatre lignes.\n\nÉcrites d'une main de soixante-cinq ans qui n'a pas tremblé une seule fois sur quatre lignes, scellées d'un cachet que vous reconnaissez immédiatement : vous en avez tenu le pareil dans une crypte, enfant, sur un coffre dont votre tante avait la clef.\n\nLe clerc vous les lit à voix haute parce que la forme l'exige et parce qu'un acte doit être entendu par celui qu'il vise.\n\nIl lit mal. Il lit comme un homme qui a compris ce qu'il porte." },
     "§ *La maison de Karlsberg est relevée par un acte du bailliage de Chastel, la vingt-quatrième année. La soussignée, née Karlsberg, dernière du sang par ordre de naissance, déclare le relèvement régulier en la forme et le confirme.*",
     { sobre:"Elle ne raye rien. Elle confirme.",
       intense:"Elle ne raye rien.\n\nElle confirme. Un relèvement de titre contesté par personne devient inattaquable le jour où le dernier survivant du sang, par ordre de naissance, le confirme par écrit devant le commissariat. C'est la seule chose au monde qui puisse fermer définitivement le dossier de Karlsberg, et elle est la seule personne vivante à pouvoir la faire.",
@@ -701,13 +701,13 @@ in_ys_repondre:{
   texte:[
     "Vous écrivez. Ça prend trois soirs et deux brouillons brûlés, ce qui est peu pour une lettre qu'on doit à quelqu'un depuis neuf ans.",
     { sobre:"Vous n'écrivez pas de pardon. Il n'y en a pas à donner.",
-      intense:"Vous n'écrivez pas de pardon. Il n'y en a pas à donner : sept cents personnes, dont un garçon de neuf ans dans une cour, et rien de ce qu'on écrit ne touche à ça.\n\nVous écrivez ce qu'elle vous a demandé sans le demander : ce que vous vouliez, en fermant cette porte.",
-      extreme:"Vous n'écrivez pas de pardon.\n\nIl n'y en a pas à donner et elle serait la première à refuser d'en recevoir un. Sept cents personnes se sont couchées nobles et se sont réveillées inexistantes ; un garçon de neuf ans est sorti par la porte au lieu de descendre par la cave ; et rien de ce qu'un homme peut écrire ne touche à ça, jamais, sous aucune forme.\n\nVous écrivez la seule chose qu'elle vous ait demandée en neuf ans sans jamais la demander : ce que vous vouliez, ce matin-là, en refermant la porte du parloir." },
+      intense:"Vous n'écrivez pas de pardon. Il n'y en a pas à donner : sept cents personnes, dont un garçon de cinq ans dans une cour, et rien de ce qu'on écrit ne touche à ça.\n\nVous écrivez ce qu'elle vous a demandé sans le demander : ce que vous vouliez, en fermant cette porte.",
+      extreme:"Vous n'écrivez pas de pardon.\n\nIl n'y en a pas à donner et elle serait la première à refuser d'en recevoir un. Sept cents personnes se sont couchées nobles et se sont réveillées inexistantes ; un garçon de cinq ans est sorti par la porte au lieu de descendre par la cave ; et rien de ce qu'un homme peut écrire ne touche à ça, jamais, sous aucune forme.\n\nVous écrivez la seule chose qu'elle vous ait demandée en neuf ans sans jamais la demander : ce que vous vouliez, ce matin-là, en refermant la porte du parloir." },
     "§ Vous ne le saviez pas ce matin-là. Vous le savez maintenant, ce qui est très exactement ce qui vous a pris neuf ans.",
     { sobre:"Sa réponse fait deux lignes.",
       intense:"Sa réponse arrive en Ventôse et fait deux lignes.\n\n^« Vous vouliez que quelqu'un qui savait reste en vie pour le voir. C'est ce que j'ai fait pendant neuf ans et c'est la seule chose utile que j'aie faite de ma vie entière. »",
       extreme:"Sa réponse arrive en Ventôse. Elle fait deux lignes, écrites de la même main qui n'a pas tremblé.\n\n^« Vous vouliez que quelqu'un qui savait reste en vie assez longtemps pour le voir. C'est ce que j'ai fait pendant neuf ans, depuis un parloir de dix pieds sur douze, et c'est très exactement la seule chose utile que j'aie faite de ma vie entière.\n\nJe meurs cet hiver. Ne venez pas. Quatre lieues, c'est trop peu pour que ça veuille dire quelque chose, et vous le savez depuis le premier jour. »" },
-    "Elle meurt en Germinal. Sainte-Ombre l'enterre au carré des sœurs, sous le nom qu'elle a porté vingt-neuf ans.",
+    "Elle meurt en Germinal. Sainte-Ombre l'enterre au carré des sœurs, sous le nom qu'elle a porté vingt-huit ans.",
   ],
   effets:{ flags:['in_ys_lettre','in_ys_morte'],
            marque:"« Vous vouliez que quelqu'un qui savait reste en vie pour le voir. » Elle est morte en Germinal.",
@@ -720,9 +720,9 @@ in_ys_silence:{
   texte:[
     "Vous n'écrivez pas. C'est ce que vous avez fait il y a neuf ans en refermant une porte, et c'est cohérent, et la cohérence n'a jamais été une vertu.",
     { sobre:"Elle n'écrit pas non plus.",
-      intense:"Elle n'écrit pas non plus. Elle n'a jamais rien demandé et elle ne commencera pas à soixante-dix ans.\n\nLa confirmation, elle, tient. Un acte de commissariat ne dépend pas de ce qu'on en fait ensuite.",
-      extreme:"Elle n'écrit pas non plus.\n\nElle n'a rien demandé en neuf ans, elle n'a rien demandé dans le parloir, elle n'a rien demandé dans les quatre lignes de l'acte — et elle ne commencera pas à soixante-dix ans.\n\nLa confirmation tient. Un acte de commissariat aux titres ne dépend absolument pas de ce qu'on en fait ensuite : il est enregistré, il est daté, il est scellé, et il rendra le relèvement de Karlsberg inattaquable pendant trois cents ans, que quiconque lui réponde ou non.\n\nC'est probablement le seul geste entièrement gratuit de toute cette histoire." },
-    "§ Elle meurt en Germinal. Sainte-Ombre l'enterre au carré des sœurs, sous le nom qu'elle a porté vingt-neuf ans, et personne de Karlsberg n'y est.",
+      intense:"Elle n'écrit pas non plus. Elle n'a jamais rien demandé et elle ne commencera pas à soixante-cinq ans.\n\nLa confirmation, elle, tient. Un acte de commissariat ne dépend pas de ce qu'on en fait ensuite.",
+      extreme:"Elle n'écrit pas non plus.\n\nElle n'a rien demandé en neuf ans, elle n'a rien demandé dans le parloir, elle n'a rien demandé dans les quatre lignes de l'acte — et elle ne commencera pas à soixante-cinq ans.\n\nLa confirmation tient. Un acte de commissariat aux titres ne dépend absolument pas de ce qu'on en fait ensuite : il est enregistré, il est daté, il est scellé, et il rendra le relèvement de Karlsberg inattaquable pendant trois cents ans, que quiconque lui réponde ou non.\n\nC'est probablement le seul geste entièrement gratuit de toute cette histoire." },
+    "§ Elle meurt en Germinal. Sainte-Ombre l'enterre au carré des sœurs, sous le nom qu'elle a porté vingt-huit ans, et personne de Karlsberg n'y est.",
   ],
   effets:{ flags:['in_ys_silence','in_ys_morte'], cout:{ moral:8 },
            marque:"Vous n'avez pas répondu. Elle est morte en Germinal, et personne de Karlsberg n'y était.",
