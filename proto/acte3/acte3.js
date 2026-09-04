@@ -280,7 +280,10 @@ DYN.a3_convergence = () => {
     ferme:x.exclut && d.some(y => y.id === x.exclut)
       ? `Ferme : ce que ${DEMANDES.find(y => y.id === x.exclut).qui} vous aurait donné` : null,
     avant:() => { A.tenus.push(x.id); ETAT.flags.add('a3_' + x.id); },
-    va:() => A.tenus.length >= 2 ? 'a3_siege' : 'a3_convergence',
+    /* Chaque demande ouvre son théâtre. C'est là qu'elle se paie, et
+     * `a3_retour` ramène ici tant qu'on n'en a pas tenu deux. */
+    va:{ lucius:'a3_th_lucius', charles:'a3_th_charles',
+         fleuve:'a3_th_fleuve', porte:'a3_th_porte' }[x.id],
   }));
 
   choix.push({
@@ -288,7 +291,7 @@ DYN.a3_convergence = () => {
     detail:"tenir Karlsberg et rien d'autre · c'est un choix et il se paie",
     risque:'prudent',
     avant:() => { ETAT.flags.add('a3_seul'); },
-    va:'a3_siege' });
+    va:'a3_sans_vous' });
 
   SCENES.a3_convergence = {
     dyn:true,
