@@ -16,6 +16,7 @@ function apercuSauvegarde(){
   if(!d || !d.scene) return null;
 
   const flags = new Set(d.flags || []);
+  const acte3 = d.acte3 && d.acte3.annee !== undefined;
   const acte2 = d.acte2 && d.acte2.annee !== undefined;
   const ou = acte2 && typeof LIEUX === 'object' && LIEUX[d.acte2.lieu]
     ? LIEUX[d.acte2.lieu].nom : null;
@@ -24,8 +25,10 @@ function apercuSauvegarde(){
   const annees = ["vingt-et-unième", "vingt-deuxième", "vingt-troisième", "vingt-quatrième"];
 
   return {
-    acte: acte2 ? 'II' : 'I',
-    quand: acte2
+    acte: acte3 ? 'III' : acte2 ? 'II' : 'I',
+    quand: acte3
+      ? "vingt-neuvième année après la Purge"
+      : acte2
       ? `${saisons[d.acte2.saison] || 'printemps'} de la ${annees[d.acte2.annee] || 'vingt-et-unième'} année`
       : "dix-neuvième année après la Purge",
     ou: ou || (flags.has('as_arrivee') ? "Chastel" : "la Route Grise"),

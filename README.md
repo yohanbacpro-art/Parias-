@@ -46,6 +46,23 @@ python3 -m http.server 8000   # puis http://localhost:8000
 `dist/parias.html` est le même jeu en un seul fichier, à partager par simple
 lien. Il se régénère avec `node tools/build-standalone.js`.
 
+### Entrer dans l'Acte III sans rejouer les deux premiers
+
+L'Acte III commence après plusieurs heures de jeu. Pour le relire ou
+l'équilibrer, `proto/acte1/essai.js` ouvre une porte de service — **invisible
+tant que l'adresse ne la demande pas** : sans paramètre, le jeu ouvre sur son
+seuil normal et rien n'apparaît nulle part.
+
+| Adresse | Ce qu'on obtient |
+|---|---|
+| `index.html?essai=riche` | une partie qui a beaucoup fait : Colin tient les comptes, six fronts s'ouvrent, le siège a des visages |
+| `index.html?essai=pauvre` | une partie qui n'a presque rien fait : maître Ferrand tient les comptes, personne ne demande rien, ce qui monte n'a pas de nom |
+| `index.html?essai=chronique` | directement la chanson du barde, sur l'état « riche » |
+
+La différence entre les deux premières n'est pas cosmétique : l'acte compose
+ses demandes, son siège et son épilogue à partir de l'état réel du monde.
+C'est aussi la façon la plus rapide de vérifier qu'il le fait.
+
 ## Ce qui est jouable
 
 | Système | État |
