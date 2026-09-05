@@ -28597,8 +28597,14 @@ function monterEssai(p){
 }
 
 (function entreeDEssai(){
+  /* Deux écritures, parce que la publication sert le jeu dans un cadre qui
+   * peut manger la partie « ? » de l'adresse. Le « # » y survit mieux, et il
+   * ne coûte rien de lire les deux. */
   let quoi = null;
-  try { quoi = new URLSearchParams(location.search).get('essai'); } catch(e){ return; }
+  try {
+    quoi = new URLSearchParams(location.search).get('essai')
+        || new URLSearchParams((location.hash || '').replace(/^#/, '')).get('essai');
+  } catch(e){ return; }
   if(!quoi) return;
 
   /* On attend que tout soit chargé : l'ordre des scripts est le contrat de

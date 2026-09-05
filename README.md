@@ -55,7 +55,7 @@ seuil normal et rien n'apparaît nulle part.
 
 | Adresse | Ce qu'on obtient |
 |---|---|
-| `index.html?essai=riche` | une partie qui a beaucoup fait : Colin tient les comptes, six fronts s'ouvrent, le siège a des visages |
+|  `index.html?essai=riche` ou `index.html#essai=riche` | une partie qui a beaucoup fait : Colin tient les comptes, six fronts s'ouvrent, le siège a des visages |
 | `index.html?essai=pauvre` | une partie qui n'a presque rien fait : maître Ferrand tient les comptes, personne ne demande rien, ce qui monte n'a pas de nom |
 | `index.html?essai=chronique` | directement la chanson du barde, sur l'état « riche » |
 
