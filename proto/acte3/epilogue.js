@@ -15,22 +15,25 @@
  *
  * ═══ LE CADRE ═══
  *
- * Ce n'est plus vous. C'est un homme de Chastel qui écrit soixante ans plus
- * tard, dans le volume qui suit le cent-quarante-troisième — celui où la
- * maison a été rayée. Il a des pièces et il a des trous, et il dit lesquels
- * sont lesquels, parce que c'est le métier.
+ * Ce n'est plus vous. C'est un barde, quarante ans plus tard, à l'auberge du
+ * Héron de Cendrepont — c'est-à-dire à onze pas de l'endroit exact où tout a
+ * commencé, et il ne le sait pas.
  *
- * Le changement de voix est délibéré et il est le dernier effet du jeu : on
- * passe du présent de la deuxième personne au passé d'un greffe. Ce qui
- * était vécu devient consigné, et ce qui n'a pas été consigné disparaît.
+ * Le changement de voix est le dernier effet du jeu : on passe du présent de
+ * la deuxième personne au passé d'une chanson. Un barde n'est pas un greffe.
+ * Il se trompe sur les chiffres, il arrange les fins, et il est le seul à
+ * savoir dire les choses qu'aucun registre ne peut porter.
  *
- * ═══ LA DERNIÈRE SECTION ═══
+ * ═══ LES DEUX DERNIÈRES SECTIONS ═══
  *
- * *Ce que la chronique ne dit pas.* Elle liste ce que le joueur a fait et
- * dont aucun document ne porte trace : les onze hameaux passés dans la
- * nuit, le village qui a déclaré au lieu de brûler, les onze assis contre
- * un mur à onze cents pieds. Un greffe ne sait écrire que ce qu'on lui
- * apporte, et personne n'apporte ces choses-là.
+ * *Ce que le greffe n'a pas su écrire.* Les onze hameaux passés dans la
+ * nuit, le village qui a déclaré au lieu de brûler, les onze assis contre un
+ * mur à onze cents pieds. Un greffe ne note que ce qui a coûté ou rapporté ;
+ * ces choses-là ne survivent que parce que quelqu'un les chante.
+ *
+ * *Et l'avenir de la maison.* Un greffier s'arrête aux faits. Un barde dit
+ * ce qui vient après, parce que la salle où il chante est faite des gens à
+ * qui ça arrivera.
  * ═══════════════════════════════════════════════════════════════════════ */
 
 /* Un fragment de chronique : un chapeau en gras, puis ce qu'on en sait. */
@@ -49,7 +52,7 @@ function chroniqueKarlsberg(){
 
   if(a('a3_siege_tenu'))
     v.push(fragment("La maison de Karlsberg a tenu son siège.",
-      "C'est le fait le mieux établi de tout ce dossier : quatre relations concordantes, deux rôles de garde et un état de vivres. On s'accorde même sur le nombre de feux au pied du mur, ce qui n'arrive jamais."));
+      "C'est le morceau le mieux établi de toute l'histoire : quatre relations concordantes, deux rôles de garde et un état de vivres. Quatre relations qui s'accordent sur le nombre de feux au pied du mur, ça ne se voit pas trois fois par siècle."));
   else if(a('a3_siege_perdu'))
     v.push(fragment("La maison de Karlsberg est tombée une seconde fois.",
       "Vingt-huit ans après la première. Le greffe de Chastel a porté la seconde rature à la suite de la première, sur la même ligne, de la même encre — un clerc consciencieux a jugé que c'était la place, et personne ne l'a repris."));
@@ -86,7 +89,7 @@ function chroniqueYohan(){
 
   if(a('in_ch_inscrit') || a('a3_ch_inscrit'))
     v.push(fragment("Il est inscrit.",
-      "De sa propre main, de son plein gré, au registre de la commission de Mont-Draken. C'est la pièce la plus étrange de ce dossier : un homme qui avait passé sa vie à ne pas être trouvé a demandé qu'on l'écrive."));
+      "De sa propre main, de son plein gré, au registre de la commission de Mont-Draken. C'est la chose la plus étrange de toute cette vie : un homme qui avait passé sa vie à ne pas être trouvé a demandé qu'on l'écrive."));
   else if(ETAT.suspicion >= 70)
     v.push(fragment("Il n'a jamais été inscrit nulle part, et tout le monde savait.",
       "C'est un état qui n'a pas de nom en droit. Il n'existe aucune procédure pour un homme que trois provinces reconnaissent et qu'aucun registre ne porte, et l'absence de procédure a été, très longtemps, sa seule protection."));
@@ -96,7 +99,7 @@ function chroniqueYohan(){
 
   if(blessures)
     v.push(fragment(`Il portait ${blessures === 1 ? "une chose" : enLettres(blessures) + " choses"} qui ne s'en sont jamais allées.`,
-      `${(ETAT.blessures || []).map(b => b.zone).join(' · ')}. Aucune n'est mentionnée dans les relations officielles, qui préfèrent les hommes entiers.`));
+      `${(ETAT.blessures || []).map(b => b.zone).join(' · ')}. Aucune ne figure dans les chansons, qui préfèrent les hommes entiers.`));
 
   if(ETAT.renom >= 70)
     v.push(fragment("Sa réputation a dépassé ce qu'il avait fait, ce qui arrive à tout le monde et ne s'arrête jamais.",
@@ -172,7 +175,7 @@ function chroniqueLesNeuf(){
       "On en discute toujours. C'est la position exacte où il savait qu'il serait, et il l'a fait quand même : les relations concordent sur ce point et c'est peut-être la seule chose admirable qu'on lui accorde."));
   else if(a('a3_lucius_refuse'))
     v.push(fragment("Lucius Furius Augustus s'est couronné seul et l'a payé.",
-      "Astrah a eu un roi pendant six ans. Ce qui a suivi n'appartient plus à ce dossier et n'a rien d'agréable."));
+      "Astrah a eu un roi pendant six ans. Ce qui a suivi n'appartient plus à cette chanson et n'a rien d'agréable."));
   else
     v.push(fragment("Lucius Furius Augustus a compté des soutiens jusqu'à sa mort.",
       "Il en avait deux mille et il lui en manquait un. Les rôles d'Astrah s'arrêtent avec lui, sur une page laissée blanche pour un règne qui n'a pas eu lieu."));
@@ -236,7 +239,7 @@ function chroniqueGuerres(){
   /* — Khesh — */
   const kh = etapeCrise('khesh');
   v.push(fragment(`${kh.nom} :`, `*${kh.dit}.* ${
-    kh.n >= 4 ? "Khal-Vaene a réuni douze tribus sous un serment que personne n'a rompu de son vivant, puis il a tourné le désert vers le nord. Ce qu'il en a fait ensuite dépasse ce dossier."
+    kh.n >= 4 ? "Khal-Vaene a réuni douze tribus sous un serment que personne n'a rompu de son vivant, puis il a tourné le désert vers le nord. Ce qu'il en a fait ensuite dépasse cette chanson."
     : kh.n >= 3 ? "Khal-Vaene a réuni le désert et il est mort avant de s'en servir. Le serment a tenu onze ans après lui, ce que personne au nord n'avait prévu."
     : kh.n >= 1 ? "Khal-Vaene y a passé sa vie. Il en manquait cinq à sa mort, et son successeur a fait cinq guerres pour les avoir."
     : "Khal-Vaene n'a jamais réuni le désert. Les feux se sont rallumés un par un après lui, et il y en a de nouveau douze."}`));
@@ -263,7 +266,7 @@ function chroniquePeuples(){
     ? "on dit aujourd'hui qu'ils ont gagné, ce qui est faux et commode. Ils ont obtenu la marche, le fleuve et le silence des deux cours, et ils n'ont jamais obtenu d'être autre chose que ce qu'on raconte d'eux."
     : "on ne dit à peu près que des sottises. Ils sont élégants, ils sont patients, et ils tiennent des maisons dont les alliances ne survivent pas à leurs auteurs."));
 
-  v.push(fragment("Des humains,", "il n'y a rien de général à écrire, ce qui est le propre des humains : quatre provinces, vingt-cinq maisons, et pas deux qui aient traversé ces années de la même façon."));
+  v.push(fragment("Des humains,", "il n'y a rien de général à chanter, ce qui est le propre des humains : quatre provinces, vingt-cinq maisons, et pas deux qui aient traversé ces années de la même façon."));
 
   v.push(fragment("D'Astrah,", as.n >= 4
     ? "il reste une couronne, une salle des rôles, et onze règnes qui n'ont produit aucun roi jusqu'à celui-là. On discute encore de savoir s'il compte."
@@ -286,7 +289,7 @@ function chroniquePeuples(){
     : "il reste des troupeaux qui manquent, ce qui est leur façon d'exister dans nos documents depuis toujours."));
 
   v.push(fragment("Des Peaux-Vertes,", kd.n >= 4
-    ? "il reste trente mille des leurs sous Kar-Durak et pas un seul chef que nous sachions nommer. C'est un aveu et je l'écris comme tel."
+    ? "il reste trente mille des leurs sous Kar-Durak et pas un seul chef que nous sachions nommer. C'est un aveu et je le chante comme tel."
     : "il reste ce qu'on savait : ils ne prennent pas, ils usent, et nous avons mis onze cents ans à comprendre la différence."));
   return v;
 }
@@ -312,16 +315,58 @@ function chroniqueTrous(){
     t.push("que le mot *perte*, dans un rapport d'état, ne désigne que ce qui figurait déjà quelque part ;");
 
   if(!t.length)
-    return ["§ Un greffe ne sait écrire que ce qu'on lui apporte. On ne lui a rien apporté de cette vallée, et ce n'est pas une négligence : personne, là-bas, n'a jamais pensé que ça s'écrivait."];
+    return ["§ Il y a une chose que je n'ai pas. De cette vallée-là, personne ne m'a jamais rien rapporté — et ce n'est pas de la négligence : là-bas, personne n'a jamais pensé que ça se chantait."];
 
   return [
-    "§ Il faut, pour finir, dire ce que ce dossier ne contient pas.",
-    "Un greffe ne sait écrire que ce qu'on lui apporte, et il ne lui a été apporté, de tout ceci, aucune pièce. Je le tiens de relais, de gens âgés et de deux hommes qui y étaient. Rien de ce qui suit n'est établi et je l'écris quand même, parce qu'un registre qui n'écrit que ce qu'il sait mesurer ment par omission pendant quatre cents ans.",
-    "**On ne trouvera nulle part** " + t.join('\n\n'),
+    "§ Et maintenant la partie que le greffe n'a pas.",
+    { sobre:"Rien de ce qui suit n'est écrit nulle part. Je le tiens de gens qui y étaient.",
+      intense:"Rien de ce qui suit n'est écrit nulle part. Aucun rôle, aucun état, aucun volume. Je le tiens de relais, de vieux, et de deux hommes qui y étaient et qui n'en parlaient pas volontiers.\n\nÇa ne vaut donc rien devant un magistrat. C'est très exactement pour ça que ça se chante.",
+      extreme:"Rien de ce qui suit n'est écrit nulle part.\n\nAucun rôle, aucun état de vivres, aucun volume de répertoire. Je le tiens de relais, de gens très âgés, et de deux hommes qui y étaient et qui n'en parlaient pas volontiers — l'un des deux ne me l'a donné qu'à la quatrième fois que je suis passé.\n\nÇa ne vaudrait rien devant un magistrat. Un greffe note ce qui a coûté et ce qui a rapporté, et il le fait bien : c'est son métier et je ne le lui reproche pas.\n\nMais il n'a pas de colonne pour le reste, et le reste est la seule partie que quelqu'un, quarante ans après, ait encore envie d'entendre." },
+    "**On ne trouvera dans aucun volume** " + t.join('\n\n'),
     { sobre:"C'est ce qui reste quand les guerres deviennent la géographie.",
-      intense:"Ce sont les choses dont un homme fait sa vie, et ce sont exactement celles qu'un greffe ne peut pas porter. J'ai vérifié quatre cents ans de nos volumes : nous n'avons jamais su écrire que ce qui a coûté ou rapporté.",
-      extreme:"Ce sont les choses dont un homme fait sa vie, et ce sont très exactement celles qu'un greffe ne sait pas porter.\n\nJ'ai relu quatre cents ans de nos volumes avant d'écrire cette page. Nous savons noter ce qui a coûté, ce qui a rapporté, ce qui a été pris et ce qui a été rendu. Nous n'avons pas de colonne pour une nuit où quelqu'un a décidé de faire passer les gens avant de casser le pont.\n\nJe n'en ouvrirai pas une : je n'ai pas qualité pour ça, et je n'ai plus l'âge. Je signale seulement, à qui tiendra ce volume après moi, que le trou est là et qu'il est de notre fait." },
+      intense:"Ce sont les choses dont un homme fait sa vie, et ce sont exactement celles qu'un registre ne sait pas porter. Elles ne tiennent que tant que quelqu'un les redit, et c'est un fil très mince, et c'est le mien.",
+      extreme:"Ce sont les choses dont un homme fait sa vie, et ce sont très exactement celles qu'un registre ne sait pas porter.\n\nElles ne tiennent que tant que quelqu'un les redit. C'est un fil très mince — une salle, un hiver, douze personnes dont trois écoutent — et il casse à chaque génération qui ne trouve pas à qui le passer.\n\nJe le tiens depuis vingt-deux ans. Je ne sais pas de qui je le tiens : l'homme qui me l'a donné était vieux et il ne s'est pas nommé." },
   ];
+}
+
+/* ── ET L'AVENIR DE LA MAISON ─────────────────────────────────────────────
+ * Un greffier s'arrête aux faits. Un barde dit ce qui vient après, parce que
+ * la salle où il chante est faite des gens à qui ça arrivera. */
+function chroniqueAvenir(){
+  const v = ["§ **Et de ce qui vient.**"];
+  const p = palierKarlsberg();
+  const tenu = a('a3_siege_tenu');
+
+  if(a('a2_heritier') && tenu)
+    v.push(fragment("La maison n'est pas finie.",
+      "Elle a un héritier, elle a une vallée, et elle a la seule chose qu'aucune des vingt-cinq maisons de cette province ne peut acheter : un nom que quelqu'un a repris à la main sur un registre où il avait été rayé. Ça ne se refait pas deux fois et tout le monde le sait."));
+  else if(a('a2_heritier'))
+    v.push(fragment("Il y a un héritier, et il n'y a plus de mur.",
+      "C'est arrivé onze fois en quatre cents ans dans ces provinces, et sur les onze, quatre maisons sont revenues. Ce n'est pas une bonne proportion. Ce n'est pas zéro non plus."));
+  else if(tenu)
+    v.push(fragment("La maison a tenu et elle n'a personne.",
+      "Une vallée, trois cents feux, un nom au registre, et pas de nom après le sien. C'est la fin la plus tranquille et c'est celle dont on ne fait pas de chanson, alors je la dis en passant."));
+  else
+    v.push(fragment("Il n'y a rien à donner et personne à qui le donner.",
+      "Ce n'est pas si rare. Sur quatre cents ans de maisons rayées, c'est même la règle, et les quelques-unes qui font exception sont les seules dont vous ayez entendu parler. On ne chante pas les autres : voilà pourquoi vous croyez qu'elles n'existent pas."));
+
+  if(p === 'domaine' || p === 'puissance')
+    v.push(fragment("On dit que la vallée n'a plus jamais été traversée sans qu'on demande.",
+      "Je ne sais pas si c'est vrai. Je sais qu'on le dit à quatre relais de distance et que les quatre le disent dans les mêmes termes, ce qui, pour une chose qu'on répète, est déjà beaucoup."));
+
+  if(a('a2_liaison'))
+    v.push(fragment("Et le sang a fait ce que le sang des Parias fait depuis quatre cents ans.",
+      "Il est parti ailleurs, sous d'autres noms, dans des maisons qui ne le savent pas ou qui ne le disent pas. Il ressort tous les trois ou quatre âges, dans un hameau de onze feux, chez quelqu'un qui ne comprend rien à ce qui lui arrive et à qui personne n'a laissé de mode d'emploi."));
+
+  if(a('a3_ch_inscrit') || a('in_ch_inscrit') || a('a3_registre_couronne'))
+    v.push(fragment("Et il y a le registre.",
+      "C'est la partie que les gens n'aiment pas, dans cette histoire, parce qu'elle ne ressemble pas à une victoire. Il y a aujourd'hui, dans quatre provinces, des enfants qu'on ne brûle pas parce qu'un homme a accepté d'être la première ligne d'une page. Ça n'a jamais fait pleurer personne dans une salle. Ça fait vivre à peu près six cents personnes."));
+
+  v.push("Le greffe de Chastel a les chiffres. Il les a bien. Personne n'y est jamais allé pour cette histoire-là.");
+  v.push({ sobre:"Voilà. C'est tout ce que j'ai.",
+    intense:"Voilà. C'est tout ce que j'ai, et j'en ai déjà dit plus que ce qu'on paie pour un souper.\n\nSi l'un de vous repasse par ici dans vingt ans, qu'il demande si on la chante encore.",
+    extreme:"Voilà. C'est tout ce que j'ai, et j'en ai déjà dit très largement plus que ce qu'on paie pour un souper et un coin de paille.\n\nJe la chante depuis vingt-deux ans. Elle a changé quatre fois, toujours dans le même sens : les chiffres grossissent et les gens rétrécissent. Je me bats contre ça et je perds, parce que c'est ce qu'une salle veut entendre et qu'une salle a raison contre un homme seul.\n\nSi l'un de vous repasse par ici dans vingt ans, qu'il demande si on la chante encore. Et si on ne la chante plus, qu'il la dise lui-même, même mal. Mal vaut mieux que le trou." });
+  return v;
 }
 
 /* ── LA SCÈNE ─────────────────────────────────────────────────────────── */
@@ -333,9 +378,10 @@ DYN.a3_chronique = () => {
   const tenu = a('a3_siege_tenu');
 
   const texte = [
-    { sobre:"Ce qui suit est tiré du volume qui fait suite au cent-quarante-troisième, au greffe de Chastel.",
-      intense:"Ce qui suit est tiré du volume qui fait suite au cent-quarante-troisième — celui où la maison a été rayée — au greffe général de Chastel. La main est celle d'un clerc dont nous n'avons pas le nom, écrivant soixante ans après les faits.",
-      extreme:"Ce qui suit est tiré du volume qui fait suite au cent-quarante-troisième, au greffe général de Chastel.\n\nLe cent-quarante-troisième est celui où la maison a été rayée. Le suivant a été ouvert quatre-vingts ans plus tard par un clerc dont nous n'avons pas le nom, qui écrivait soixante ans après les faits, avec des pièces, des trous, et l'habitude de dire lesquels étaient lesquels.\n\nOn ne sait pas pourquoi il a jugé que c'était la place." },
+    { sobre:"Quarante ans plus tard, à l'auberge du Héron, un homme se fait payer un souper pour la chanter.",
+      intense:"Quarante ans plus tard, à l'auberge du Héron de Cendrepont, un homme se fait payer un souper et un coin de paille pour la chanter.\n\nIl y a douze personnes dans la salle. Trois écoutent. Il ne sait pas qu'il est à onze pas de l'endroit où ça a commencé.",
+      extreme:"Quarante ans plus tard, à l'auberge du Héron de Cendrepont, un homme se fait payer un souper et un coin de paille pour la chanter.\n\nIl y a douze personnes dans la salle. Trois écoutent vraiment, deux écoutent à moitié, et les sept autres sont là pour le feu.\n\nIl ne sait pas qu'il est à onze pas du gué. Il ne sait pas que le mur où l'on cloue les papiers, dans la cour, est le mur exact où un contrat a été décroché un matin de Frimaire. Personne dans cette salle ne le sait, et lui moins que les autres : il a appris la chanson à trois cents lieues d'ici, d'un vieux qui ne s'est pas nommé." },
+    "^« Je la donne comme on me l'a donnée », dit-il. « Avec les trous. On m'a appris à ne pas les boucher, et c'est le seul conseil que j'aie gardé. »",
 
     "§ **De la maison de Karlsberg, des Marches Grises.**",
     ...chroniqueKarlsberg(),
@@ -354,21 +400,22 @@ DYN.a3_chronique = () => {
     ...chroniquePeuples(),
 
     ...chroniqueTrous(),
+
+    ...chroniqueAvenir(),
   ];
 
   SCENES.a3_chronique = {
     dyn:true,
-    lieu:"Chastel · le greffe général · soixante ans plus tard",
-    titre:"Ce qu'on a fini par écrire",
+    lieu:"Cendrepont · l'auberge du Héron · quarante ans plus tard",
+    titre:"Ce qu'on chante encore",
     texte,
     effets:{ flags:['a3_chronique'],
-             marque:tenu ? "Karlsberg figure au volume qui suit le cent-quarante-troisième."
+             marque:tenu ? "On la chante encore au Héron, quarante ans après, devant douze personnes dont trois écoutent."
                           : "La seconde rature a été portée à la suite de la première, sur la même ligne.",
-             court:"La chronique" },
-    issue:"La chronique est close",
+             court:"On la chante encore" },
+    issue:"La chanson est finie",
     bilan:tenu ? `Karlsberg, ${palierKarlsberg() === 'ruines' ? "des pierres" : "une maison"}, et un nom qui a été réécrit`
                : "Karlsberg, deux fois en vingt-huit ans",
-    plusTard:"Le volume est encore à Chastel. On le consulte quatre fois par siècle, et jamais pour cette page-là.",
   };
   aller('a3_chronique');
 };

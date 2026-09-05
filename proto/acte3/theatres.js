@@ -981,6 +981,8 @@ const SANS_VOUS = {
   charles:"**Ravières.** Le bûcher a été allumé le lendemain du départ de la commission. On l'apprend par un relais, six semaines plus tard, dans une phrase qui ne s'attarde pas parce que celui qui écrit ne sait pas que vous connaissiez le nom.",
   fleuve:"**Le pont de Saulaie.** La troisième arche est tombée un matin de Germinal. La ligne descend de quatre lieues. Les onze hameaux étaient encore devant : le rapport porte *sans perte*, ce qui est exact dans la seule colonne où quelqu'un compte.",
   porte:"**Kar-Durak.** Personne n'est descendu. Ils tiennent sur trois portes, ce qui fait vingt ans, et la capitaine a écrit une lettre de trois lignes pour dire qu'elle ne vous en veut pas, ce qui est la chose la plus naine qu'on puisse faire.",
+  khesh:"**Le puits de Sarad.** Personne n'est entré dans le cercle. Il reste cinq feux, puis quatre, puis douze — un désert qu'on ne réunit pas se défait dans l'ordre inverse, et Khal-Vaene est mort avant la fin de la troisième année.",
+  horde:"**Trois-Chênes.** Le seuil est tombé un matin de Fructidor. Personne n'a jamais su pourquoi six mille descendaient sans rien piller ; le carnet du mort de Chastel est encore au greffe, et la dernière page dit *les mères sont devant*.",
 };
 
 DYN.a3_sans_vous = () => {

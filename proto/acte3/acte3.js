@@ -107,6 +107,16 @@ const DEMANDES = [
     quoi:"Il reste trois portes. On demande qu'on rouvre la onzième — celle du bas, celle du plan qu'on ne traduit pas.",
     coute:"ce qui est dessous",
     exclut:null },
+  { id:'khesh', qui:"le puits de Sarad",
+    si:() => a('a2_khesh_vu') || a('a2_khesh_su'),
+    quoi:"Il reste cinq feux. Khal-Vaene ne peut pas prendre le cinquième lui-même, et il demande quelqu'un qui n'appartienne à aucune tribu.",
+    coute:"un désert réuni, qui monte ensuite vers le nord",
+    exclut:null },
+  { id:'horde', qui:"la marche humaine",
+    si:() => ((A2().crises || {}).hordes || 0) >= 2,
+    quoi:"Six mille descendent en trois colonnes sans rien piller, et les mères sont devant. Le seuil de Trois-Chênes fait quatre cents pas.",
+    coute:"trois maisons, ou une bataille qu'on ne peut pas gagner",
+    exclut:null },
 ];
 
 const demandesOuvertes = () => DEMANDES.filter(d => d.si());
@@ -283,7 +293,8 @@ DYN.a3_convergence = () => {
     /* Chaque demande ouvre son théâtre. C'est là qu'elle se paie, et
      * `a3_retour` ramène ici tant qu'on n'en a pas tenu deux. */
     va:{ lucius:'a3_th_lucius', charles:'a3_th_charles',
-         fleuve:'a3_th_fleuve', porte:'a3_th_porte' }[x.id],
+         fleuve:'a3_th_fleuve', porte:'a3_th_porte',
+         khesh:'a3_th_khesh',   horde:'a3_th_horde' }[x.id],
   }));
 
   choix.push({
