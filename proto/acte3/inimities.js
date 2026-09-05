@@ -128,7 +128,7 @@ lucius:{
 
 charles:{
   nom:"Charles de Mont-Draken",
-  ou:"une commission, vingt hommes, et une marche sans frontière",
+  ou:"une principauté, une commission, et ce qui dort au sommet du mont",
   poids:5,
   hostile:() => a('cd_refus') || a('cd_denonce') || a('a2_charles_froid')
              || (a('a2_paria_declare') && !a('a2_charles_allie')),

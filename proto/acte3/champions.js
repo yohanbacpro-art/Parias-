@@ -12,9 +12,9 @@
  *                  rond de neuf pas. Il avait quarante-sept ans ; il en a
  *                  cinquante-six. Vous en aviez vingt-quatre.
  *
- *   CHARLES        ne se bat pas. Il sert un papier, ce qui est pire, et
- *                  il a raison — il a toujours eu raison, c'est toute la
- *                  difficulté de sa vie et il la traîne depuis trente ans.
+ *   CHARLES        pourrait prendre ce qu'il vient chercher. Il vient le
+ *                  demander, ce qui est pire, et il a raison — il a toujours
+ *                  eu raison, c'est toute la difficulté de sa vie.
  *
  *   GUILLAUME      n'est pas un ennemi et n'en a jamais été un. Il vient
  *   DE SAULT       écrire trois lignes, parce qu'il est le seul homme au
@@ -375,24 +375,28 @@ in_so_apres:{
 /* ══════════════════════════════════════════════════════════════════════════
  * CHARLES DE MONT-DRAKEN · soixante-deux ans
  *
- * Il ne se bat pas. Il n'a jamais eu de haine pour rien de ce qu'il a tué,
- * il compte depuis trente ans, et il a raison — c'est toute la difficulté
- * de sa vie et il la traîne sans que personne l'ait jamais aidé à la
- * porter, parce que les deux camps trouvent plus confortable qu'il soit un
- * boucher.
+ * L'homme qui a tué le plus de choses non humaines de quatre provinces est
+ * celui qui tient la liste de ceux qu'il refuse de brûler. Ce n'est pas une
+ * contradiction : c'est la même main. Il n'a jamais eu de haine pour rien de
+ * ce qu'il a tué, il compte depuis trente ans, et il a raison — c'est toute
+ * la difficulté de sa vie et il la porte seul, parce que les deux camps
+ * trouvent plus confortable qu'il soit un boucher.
  *
- * Cette confrontation-là n'a pas d'issue par les armes. Elle en a une par
- * le registre, et c'est celle que personne n'attend.
+ * Cette confrontation-là *a* une issue par les armes. Elle est immédiate,
+ * elle est disponible, et c'est la seule qu'il ne prendra pas.
  * ══════════════════════════════════════════════════════════════════════════ */
 in_charles:{
   qui:'charles',
   lieu:"Karlsberg · la salle basse",
   titre:"Trois cent douze pièces",
   texte:[
-    "Il arrive avec vingt hommes et il les laisse dans la cour. Il monte seul, il retire son manteau, et il s'assied sans qu'on l'y invite — comme la première fois, il y a neuf ans, dans une salle de relais.",
+    { sobre:"Il arrive à cheval, avec vingt hommes, et il les laisse dans la cour.",
+      intense:"Il arrive à cheval, avec vingt hommes, et il les laisse dans la cour.\n\nÀ cheval : la vallée entière l'a noté avant vous. On a passé trois jours à guetter autre chose au-dessus de la crête est, et il n'est rien venu.",
+      extreme:"Il arrive à cheval, avec vingt hommes, et il les laisse dans la cour.\n\nÀ cheval. La vallée entière l'a noté avant vous, et Colin est monté deux fois sur la courtine dans la matinée pour regarder la crête est, où il n'y avait rien.\n\nOn sait, dans quatre provinces, ce que veut dire un déplacement de Mont-Draken à cheval. Ce n'est pas une politesse et ce n'est pas une économie : c'est une phrase, dite d'avance, à trois jours de distance, et elle dit *ceci n'est pas une affaire de guerre*.\n\nIl aurait pu poser la question depuis le ciel. Il a mis quatre jours de selle pour ne pas avoir à la poser comme ça." },
+    "Il monte seul, il retire son manteau, et il s'assied sans qu'on l'y invite — comme la première fois, il y a neuf ans, dans une salle de relais.",
     { sobre:"Il a soixante-deux ans. Il tient toujours son compte.",
-      intense:"Il a soixante-deux ans. Les mains sont les mêmes — des mains de charpentier avec un ongle noir — et il pose sur la table un registre relié qu'il n'avait pas la dernière fois.",
-      extreme:"Il a soixante-deux ans et il n'a rien perdu de ce qui comptait chez lui : les mains sont les mêmes, des mains de charpentier avec un ongle noir, et elles se posent à plat sur le bois avant qu'il ne parle, exactement comme il y a neuf ans.\n\nCe qui est nouveau, c'est le registre. Un volume relié, épais de deux pouces, qu'il pose devant lui sans l'ouvrir et sur lequel il garde la main gauche pendant tout l'entretien." },
+      intense:"Il a soixante-deux ans et il est toujours exactement de la taille de sa réputation. La main gauche porte la même brûlure de lanière, plus vieille de neuf ans, et il pose sur la table un registre relié qu'il n'avait pas la dernière fois.",
+      extreme:"Il a soixante-deux ans et il n'a rien perdu de ce qui comptait chez lui. Il est toujours très exactement de la taille de sa réputation, et la main gauche porte la même brûlure plate du poignet au petit doigt, plus vieille de neuf ans, que rien n'a jamais fait pâlir.\n\nCe qui est nouveau, c'est le registre. Un volume relié, épais de deux pouces, qu'il pose devant lui sans l'ouvrir et sur lequel il garde cette main-là pendant tout l'entretien." },
     "« Trois cent quarante-six », dit-il. « Pièces sur le mur. C'était trois cent douze la dernière fois. »",
     "@« Et le registre ? »",
     { sobre:"« Quatre-vingt-quatorze inscrits. »",
@@ -401,7 +405,7 @@ in_charles:{
     "§ Voilà ce que ça donne, une commission accordée en Ventôse à un homme qu'on croyait vouloir tuer les enfants de l'Onde.",
     { sobre:"^« Il manque une ligne. »",
       intense:"^« Il manque une ligne », dit-il, et c'est là qu'il pose enfin la main sur le volume. « Une seule. Elle manque depuis neuf ans et je n'ai jamais réussi à en tenir un autre compte. »",
-      extreme:"^« Il manque une ligne. »\n\nIl pose enfin la main à plat sur le volume, ce qu'il n'avait pas fait en s'asseyant.\n\n« Une seule. Elle manque depuis neuf ans et j'ai essayé quatre fois d'en tenir un autre compte pour ne plus y penser, et ça n'a jamais marché.\n\nJe ne suis pas venu vous arrêter, messire. J'ai vingt hommes dans votre cour parce qu'on ne traverse pas la marche sans vingt hommes et pour aucune autre raison. Il n'y a aucun magistrat avec moi. Je n'ai pas de commission pour vous : j'ai demandé qu'on m'en accorde une et on me l'a refusée trois fois, parce que trois conseils successifs ont estimé qu'une maison qui a tenu un siège vaut mieux qu'un principe.\n\nJe suis venu vous le demander. Comme il y a neuf ans, et pour la dernière fois : c'est mon dernier hiver de commission. »" },
+      extreme:"^« Il manque une ligne. »\n\nIl pose enfin la main à plat sur le volume, ce qu'il n'avait pas fait en s'asseyant.\n\n« Une seule. Elle manque depuis neuf ans et j'ai essayé quatre fois d'en tenir un autre compte pour ne plus y penser, et ça n'a jamais marché.\n\nJe ne suis pas venu vous arrêter, messire. J'ai vingt hommes dans votre cour parce qu'on ne traverse pas la marche sans vingt hommes et pour aucune autre raison. Il n'y a aucun magistrat avec moi. Je n'ai pas de commission pour vous : j'ai demandé qu'on m'en accorde une et on me l'a refusée trois fois, parce que trois conseils successifs ont estimé qu'une maison qui a tenu un siège vaut mieux qu'un principe. »\n\nUn temps.\n\n« Nous savons tous les deux que je n'ai besoin ni de commission ni de magistrat, et que je pourrais avoir cette ligne avant le soir. On m'appelle le Sourire de Fer depuis vingt-trois ans, et personne n'a jamais su que ce n'était pas un nom de cruauté : c'est ce que ma figure fait quand j'ai décidé. Trois cent quarante-six fois. On la voit de loin et on a raison d'avoir peur.\n\nJe ne l'ai pas faite depuis que je suis entré dans cette salle, et vous l'avez remarqué avant moi.\n\nJe suis venu vous le demander. Comme il y a neuf ans, et pour la dernière fois : c'est mon dernier hiver de commission. »" },
   ],
   effets:{ flags:['in_charles_vu'],
            marque:"Quatre-vingt-quatorze inscrits, soixante et onze vivants, aucun brûlé. Il manque une ligne.",

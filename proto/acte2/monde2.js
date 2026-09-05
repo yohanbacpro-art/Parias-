@@ -139,7 +139,7 @@ const LIEUX = {
   fortauxprinces: { nom:"Fort-aux-Princes", region:"le sud humain", loin:2,
                     note:"Caleb y compte ses concurrents avec une exactitude de marchand." },
   montdraken:     { nom:"Mont-Draken", region:"la marche humaine", loin:3,
-                    note:"On y forme des hommes à tuer ce qui n'est pas humain. C'est une école, pas un château." },
+                    note:"Une principauté qui est aussi une école : on y forme des hommes à tuer ce qui n'est pas humain, et le mont porte le nom de ce qui y dort." },
   astrah:         { nom:"Astrah", region:"le trône vide", loin:4,
                     note:"Une capitale sans roi depuis quarante ans, et un homme qui compte les soutiens." },
   aelthiriel:     { nom:"Aelthiriel", region:"la cour elfique", loin:4,
@@ -160,7 +160,7 @@ const LIEUX = {
 Object.assign(GENS, {
   alycia:    { nom:"Alycia de Callensbourg", role:"Paria · vingt-sept ans · elle fait disparaître les gens", lettre:"A" },
   alarielle: { nom:"Alarielle",              role:"elfe · elle ne détourne pas les yeux",                     lettre:"Æ" },
-  charles:   { nom:"Charles de Mont-Draken", role:"il protège les hommes de ce qui n'en est pas",             lettre:"C" },
+  charles:   { nom:"Charles de Mont-Draken", role:"le Sourire de Fer · prince de Mont-Draken",                  lettre:"C" },
   lucius:    { nom:"Lucius Furius Augustus", role:"il compte les soutiens d'un trône vide",                   lettre:"L" },
   caleb:     { nom:"Caleb de Fort-aux-Princes", role:"il achète des dettes, il ne prête pas",                 lettre:"C" },
   tyrion:    { nom:"Tyrion",                 role:"prince elfe · frère d'Alarielle",                          lettre:"T" },
