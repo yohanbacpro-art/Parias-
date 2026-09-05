@@ -31,8 +31,14 @@ const tout = Object.values(src).join('\n');
  * On les pose de quatre façons : `flags:[...]`, `flag:'x'`, `ETAT.flags.add`,
  * et les identifiants d'ouvrage, qui sont posés par le chantier. */
 const poses = new Set();
-for(const m of tout.matchAll(/flags:\s*\[([^\]]*)\]/g))
-  for(const q of m[1].matchAll(/'([^']+)'/g)) poses.add(q[1]);
+/* `flags:` porte souvent un ternaire — `flags:gagne ? [...] : [...]`. Ne lire
+ * que la forme `flags:[` laissait ces drapeaux-là invisibles : l'outil les
+ * déclarait « lus sans être posés » alors qu'ils l'étaient deux lignes plus
+ * haut. On accepte donc un petit bout d'expression avant le crochet, et une
+ * seconde branche après. */
+for(const m of tout.matchAll(/flags:\s*[^[\n]{0,60}?\[([^\]]*)\](?:\s*:\s*\[([^\]]*)\])?/g))
+  for(const groupe of [m[1], m[2]])
+    if(groupe) for(const q of groupe.matchAll(/'([^']+)'/g)) poses.add(q[1]);
 for(const m of tout.matchAll(/\bflag:\s*'([^']+)'/g)) poses.add(m[1]);
 for(const m of tout.matchAll(/ETAT\.flags\.add\(\s*'([^']+)'/g)) poses.add(m[1]);
 /* Les composés : `'fait_' + o.id`, `'acte_' + id + …`, `'crise_' + id + …` */

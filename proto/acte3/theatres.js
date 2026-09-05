@@ -283,7 +283,7 @@ a3_lu_accepte:{
       extreme:"^« Voilà. »\n\nIl se retourne, et il le dit du ton précis d'un homme qui vient de sceller un coffrage et qui sait combien de temps le mortier va prendre.\n\n« Maintenant il faut trente ans. Une couronne prise devient une couronne au bout de trente ans, jamais avant, et il n'y a pas d'autre chemin — pas de bataille, pas de mariage, pas de bulle. Trente ans où personne n'a réussi à la reprendre.\n\nJe n'ai pas trente ans devant moi. C'est pour ça qu'il me fallait quelqu'un dans la salle qui vive plus longtemps que moi. »" },
     "§ La lettre de Mont-Draken arrive onze jours plus tard. Elle est courte, elle est polie, et elle ne redemandera rien.",
   ],
-  effets:{ flags:['a3_lucius_tenu','a3_montdraken_ferme'],
+  effets:{ flags:['a3_lucius_tenu','a3_montdraken_ferme','a3_couronne_onze'],
            exploit:{ eclat:7, temoins:'province',
                      quoi:"vous étiez à trois pas quand Lucius Furius Augustus s'est couronné" },
            marque:"Vous étiez dans la salle, à trois pas, sur la droite. Mont-Draken a écrit onze jours plus tard.",

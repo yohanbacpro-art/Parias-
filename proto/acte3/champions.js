@@ -752,7 +752,7 @@ DYN.a3_champions = () => {
           intense:"§ Il n'y a pas de dernière bataille et il n'y en a jamais eu. Ce qui finit une histoire comme celle-ci, ce n'est pas un siège levé : c'est le jour où plus personne n'a de raison de monter.",
           extreme:"§ Il n'y a pas de dernière bataille, il n'y en a jamais eu, et quiconque en attendait une n'a pas compris ce que ce monde fait aux gens.\n\nCe qui finit une histoire comme celle-ci n'est pas un siège levé ni un ennemi abattu. C'est le jour où plus personne, dans quatre provinces, n'a de raison particulière de remonter cette vallée — parce qu'ils sont morts, parce qu'ils ont obtenu ce qu'ils voulaient, ou parce qu'ils ont fini par écrire ce qu'ils étaient venus écrire." },
       ],
-      suite:'a2_epilogue', libelleSuite:"Ce que le monde en a fait",
+      suite:'a3_chronique', libelleSuite:"Ce qu'on a fini par écrire",
     };
     aller('a3_champions');
     return;
