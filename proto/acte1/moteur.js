@@ -454,10 +454,20 @@ function cible(degres, obtenu){
 }
 
 /* ── Habillage ─────────────────────────────────────────────────────────── */
+/* Un portrait quand on en a un, la lettre sinon. `PORTRAITS` est peuplé par
+ * `proto/img/portraits.js`, que `tools/portraits.js` régénère depuis les
+ * planches : des images de cent cinquante pixels affichées à quarante, ce qui
+ * les garde nettes au lieu de les étirer. */
+const PORTRAITS = (typeof PORTRAITS_DATA === 'object') ? PORTRAITS_DATA : {};
+
 function vignette(id){
   const g = GENS[id];
   if(!g) return '';
-  return `<div class="qui"><div class="visage">${g.lettre}</div>
+  const p = PORTRAITS[id];
+  const face = p
+    ? `<img class="visage" src="${p}" alt="" width="42" height="42">`
+    : `<div class="visage">${g.lettre}</div>`;
+  return `<div class="qui">${face}
     <div><div class="nom">${g.nom}</div><div class="role">${g.role}</div></div></div>`;
 }
 

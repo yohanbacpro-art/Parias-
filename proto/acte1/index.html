@@ -135,6 +135,13 @@ h1{
   border:1px solid var(--trait); background:var(--schiste);
   font-size:1.25rem; color:var(--parchemin-bas);
 }
+/* Un portrait est une image de cent cinquante pixels rendue à quarante : on
+ * la cadre par le haut, là où est le visage, et on l'assombrit d'un cran pour
+ * qu'elle ne saute pas à la figure au milieu d'une page de texte. */
+img.visage{
+  object-fit:cover; object-position:50% 30%;
+  filter:saturate(.92) contrast(1.04);
+}
 .qui .nom{ font-size:1.05rem; }
 .qui .role{
   font-family:var(--mono); font-size:.62rem; letter-spacing:.08em;
@@ -370,6 +377,7 @@ h1{
   <button id="bNeuf" style="font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sang-clair);background:transparent;border:1px solid #4A2028;padding:.5rem .8rem;cursor:pointer;">Menu</button>
 </aside>
 
+<script src="../img/portraits.js"></script>
 <script src="moteur.js"></script>
 <script src="monde.js"></script>
 <script src="arsenal.js"></script>
