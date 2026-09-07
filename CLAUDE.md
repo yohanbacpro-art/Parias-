@@ -161,6 +161,7 @@ Audit au 24 août. Ce qui est là, ce qui manque, sans complaisance.
 | Suspicion qui change le monde | **fait** | `suspicion.js`, 4 paliers, 12 événements dédiés |
 | Romances à axes séparés | **fait** | `liens.js` — relation / confiance / attirance / politique |
 | Mémoire narrative longue | **fait** | `chaines_secretes.js` — 10 chaînes armées sur marqueur, en arrière-plan |
+| Une décision se relit plus tard | **fait** | 99 % des drapeaux relus — `renforts.js`, `inimities.js`, `consequences.js` |
 | PNJ majeurs qui agissent seuls | **fait** | `pnj.js` — 9 acteurs, objectifs, mémoire nominative, 32 actes |
 | Crises régionales en étapes | **fait** | `crises.js` — 5 crises, 25 étapes nommées, poussées par l'état du monde |
 | Fin lisant l'état réel du monde | **fait** | `epilogue.js`, 116 verdicts, 8 legs |
@@ -184,7 +185,8 @@ chaînes secrètes armées sur marqueur (30 étapes, 184 scènes, 110 choix, 32
 issues)** · **5 crises régionales en 25 étapes nommées** · **9 acteurs autonomes
 (32 actes, 45 souvenirs possibles)** · 60 affaires locales + 20 dénouements · 50 contrats au registre · 25 maisons nobles ·
 **11 ouvrages de Karlsberg en 6 états, 25 sources de ressources** ·
-116 verdicts d'épilogue.
+116 verdicts d'épilogue · **9 inimitiés et 12 soutiens levés sur ce qu'on a
+fait, 535 lignes de chanson lues sur drapeau**.
 
 ---
 
@@ -234,7 +236,22 @@ Dans cet ordre. À chaque étape, le jeu reste jouable et les épreuves passent.
    transmet pas : le niveau, les pouvoirs, ceux qui l'aimaient, et la moitié de
    ce que le monde soupçonnait. Sans héritier majeur, c'est l'épilogue.
 
-**Les sept étapes de la feuille de route sont faites.** Ce qui suit relève de
+8. ~~Qu'une décision se relise plus tard.~~ **Fait**. Le jeu posait
+   996 drapeaux et n'en relisait que 437 : plus d'une décision sur deux était
+   une case cochée. Écrire 559 suites une par une aurait pris des mois et
+   alourdi le jeu ; on a construit les trois consommateurs qui les lisent en
+   masse. `proto/acte3/renforts.js` — douze soutiens qui montent au siège
+   parce qu'on a fait quelque chose pour eux neuf ans plus tôt, y compris
+   trois maisons qui montent pour n'avoir **pas** eu à payer la coutume ;
+   deux d'entre eux n'amènent pas d'hommes mais retirent une compagnie à
+   l'autre bord, un troisième recoud la veille. `proto/acte3/consequences.js`
+   — 535 lignes dans la voix du barde, une par drapeau, dont la chronique ne
+   garde que les plus lourdes de chaque section : deux parties ne produisent
+   pas la même chanson ni la même longueur. Et `inimities.js`, qui existait
+   déjà, en lit sa part. **99 % des drapeaux sont désormais relus quelque
+   part** (`node tools/audit-acte2.js` l'imprime à chaque passage).
+
+**Les huit étapes de la feuille de route sont faites.** Ce qui suit relève de
 l'écriture et de l'équilibrage, plus de l'architecture.
 
 ---

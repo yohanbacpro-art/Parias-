@@ -212,7 +212,11 @@ DYN.a3_ceux_qui_viennent = () => {
 
   const i = intendant();
   const texte = [
-    `Quelqu'un tient les comptes de Karlsberg, et ce quelqu'un a ${enLettres(i.age)} ans. ${i.nom}, de ${i.de} — ${i.note}.`,
+    /* « maître Ferrand » s'écrit en minuscule partout ailleurs, où il suit
+     * toujours un mot ; ici il ouvre la phrase. Les autres intendants ont
+     * déjà une capitale et la reprendre ne coûte rien. */
+    `Quelqu'un tient les comptes de Karlsberg, et ce quelqu'un a ${enLettres(i.age)} ans. ${
+      i.nom.replace(/^./, c => c.toUpperCase())}, de ${i.de} — ${i.note}.`,
     "On pose devant vous une liste qu'il a fallu quatre mois pour établir, et on la pose sans commentaire parce qu'il n'y en a pas à faire.",
   ];
 
@@ -235,6 +239,25 @@ DYN.a3_ceux_qui_viennent = () => {
 
   if(epargnes.length)
     texte.push(`§ Ne figurent pas sur cette liste, et c'est ce qu'on a acheté : ${epargnes.join(' · ')}.`);
+
+  /* L'autre moitié de la même question, et celle que l'intendant n'a pas
+   * eu à établir : ces gens-là ont écrit d'eux-mêmes. */
+  const avec = soutiensDeclares();
+  if(avec.length){
+    texte.push("§ Et il y a la seconde feuille, que l'intendant pose après la première sans rien dire, parce qu'il n'a pas eu à l'établir : ces gens-là ont écrit d'eux-mêmes.");
+    for(const s of avec){
+      texte.push(`**${s.nom}** — *${s.ou}.*\n\n${s.pourquoi()}`);
+      texte.push(`^${s.dit}`);
+    }
+    texte.push({ sobre:"@« Je n'ai rien demandé à personne. »",
+      intense:"@« Je n'ai rien demandé à personne. »\n\n^« Non, messire. C'est bien pour ça qu'ils viennent. »",
+      extreme:"@« Je n'ai rien demandé à personne. »\n\n^« Non, messire. Aucun de ces noms n'a reçu de lettre de cette maison, et je le sais parce que c'est moi qui tiens les lettres de cette maison.\n\nUne maison qui appelle ses alliés obtient ceux qui lui doivent quelque chose, et elle les obtient au prix du marché. Ce qui est posé sur cette feuille n'a pas de prix de marché parce que personne n'a demandé le prix. »" });
+  } else {
+    texte.push("§ Il n'y a pas de seconde feuille.");
+    texte.push({ sobre:"Personne ne monte avec vous.",
+      intense:"Personne ne monte avec vous. Ce n'est pas un jugement sur ce qui a été fait en neuf ans : c'est une constatation sur ce qui en est resté quelque part, chez quelqu'un, sous une forme qui se rappelle toute seule.",
+      extreme:"Personne ne monte avec vous.\n\nCe n'est pas un jugement sur ce qui a été fait en neuf ans — on a fait beaucoup, et l'or de cette maison le prouve ligne par ligne. C'est une constatation sur ce qu'il en est resté chez quelqu'un d'autre, sous une forme qui se rappelle toute seule au bout de neuf ans, sans qu'on ait à écrire.\n\nCe genre de chose ne se constitue pas quand on en a besoin. On s'en aperçoit le matin où on en aurait eu besoin." });
+  }
 
   texte.push("@« C'est tout ? »");
   texte.push({ sobre:`^« C'est tout ce que j'ai pu établir. Ce n'est pas la même chose. »`,
@@ -320,8 +343,14 @@ DYN.a3_convergence = () => {
  * siège, et aucune ne produit un siège arbitraire. */
 DYN.a3_siege = () => {
   const p = palierKarlsberg();
-  const contre = forcesContre(6);
+  /* Ce qui n'arrive pas en face compte autant que ce qui arrive à côté de
+   * vous. Un réseau qui ferme quatre relais et un greffier qui égare une
+   * attestation ne se voient pas sur un front : ils se voient dans le
+   * nombre de compagnies qui remontent la vallée. */
+  const ec = ecartes();
+  const contre = forcesContre(Math.max(3, 6 - ec.combien));
   const noms = [...new Set(contre.map(u => u.de))];
+  const avec = forcesAvec(5);
 
   /* Faute d'ennemi nommé, ce qui monte est ce qui monte toujours vers une
    * vallée sans maître : des gens qui ont faim et personne pour les tenir. */
@@ -355,11 +384,43 @@ DYN.a3_siege = () => {
       texte:"La courtine cède avant la nuit. Ce qui reste de la maison sort par le chemin creux, en emportant ce qu'on peut porter, et Karlsberg redevient ce qu'elle était il y a neuf ans : un endroit que trois provinces cesseront de nommer." },
   };
 
-  const garnison = ETAT.armee && ETAT.armee.length
-    ? null
-    : [{ type:'lanciers' }, { type:'archers', effectifPct:0.8 },
+  /* La garnison, c'est ce que la vallée lève — plus ce que neuf ans ont
+   * produit ailleurs et qui monte de soi-même. Une armée constituée reçoit
+   * les mêmes renforts : ils ne remplacent personne, ils s'ajoutent. */
+  const leve = [{ type:'lanciers' }, { type:'archers', effectifPct:0.8 },
        { type:'frondeurs' }, ...(a('a2_bannieres') ? [{ type:'parias' }] : []),
        ...(a('a2_caleb_quarante') ? [{ type:'veterans', effectifPct:0.8 }] : [])];
+  const garnison = (ETAT.armee && ETAT.armee.length)
+    /* On repasse par des gabarits pour pouvoir y ajouter les renforts — et
+     * on reporte l'effectif réel, parce qu'une compagnie qui a saigné dans
+     * les théâtres reste saignée sous la courtine. */
+    ? (avec.length
+        ? [...ETAT.armee.filter(u => u.effectif > 0)
+             .map(u => ({ type:u.type, effectifPct:u.effectif / u.effectifMax })), ...avec]
+        : null)
+    : [...leve, ...avec];
+
+  /* Sainte-Ombre recoud. Ce qui est perdu reste perdu — on ne rend pas une
+   * épaule — mais deux chirurgiens dans une cour, la veille, font la
+   * différence entre porter une chose et la traîner. */
+  /* La scène est `dyn` : elle se recompose à chaque `aller()`, donc on ne
+   * recoud qu'une fois et on garde la liste, sinon la seconde entrée ne
+   * trouverait plus rien à panser et le texte disparaîtrait. */
+  const A = A3();
+  if(soinsDisponibles() && !A.recousu){
+    A.recousu = [];
+    for(const b of (ETAT.blessures || [])){
+      if(b.saignement || !b.traitement){
+        b.saignement = 0;
+        b.traitement = "recousue à Sainte-Ombre, la veille";
+        b.gravite = Math.max(1, (b.gravite || 2) - 1);
+        b.douleur = Math.max(1, (b.douleur || 2) - 1);
+        A.recousu.push(b.zone);
+      }
+    }
+    ETAT.ressources.sang = Math.max(ETAT.ressources.sang, 85);
+  }
+  const recousu = A.recousu || [];
 
   SCENES.a3_siege = {
     dyn:true,
@@ -368,9 +429,21 @@ DYN.a3_siege = () => {
     texte:[
       champ.intro,
       DIT_PALIER[p],
-      garnison
-        ? "Vous n'avez pas d'armée. Vous avez ce que la vallée peut lever, ce qui n'est pas la même chose et ce qui a le mérite d'exister."
-        : `Vous avez un rôle : ${ETAT.armee.map(u => `${u.nom} (${u.effectif})`).join(' · ')}.`,
+      (ETAT.armee && ETAT.armee.length)
+        ? `Vous avez un rôle : ${ETAT.armee.filter(u => u.effectif > 0).map(u => `${u.nom} (${u.effectif})`).join(' · ')}.`
+        : "Vous n'avez pas d'armée. Vous avez ce que la vallée peut lever, ce qui n'est pas la même chose et ce qui a le mérite d'exister.",
+      ...(avec.length ? [
+        `§ Et ce qui a monté tout seul : ${[...new Set(avec.map(u => u.de))].join(' · ')}.`,
+        { sobre:"Aucun n'a reçu de lettre de cette maison.",
+          intense:"Aucun n'a reçu de lettre de cette maison. Ils sont arrivés entre avant-hier et ce matin, par quatre routes différentes, et deux d'entre eux ne savaient pas que les autres venaient.",
+          extreme:"Aucun n'a reçu de lettre de cette maison.\n\nIls sont arrivés entre avant-hier et ce matin, par quatre routes différentes, et deux d'entre eux ignoraient jusqu'à hier soir que les autres venaient. Ils ne se connaissent pas. Ils n'ont rien en commun sinon une seule chose, et cette chose n'est écrite sur aucun acte : à un moment donné, dans une affaire qui ne les regardait pas tous, quelqu'un a fait ce qu'il avait dit qu'il ferait.\n\nÇa ne se constitue pas. Ça se constate." },
+      ] : []),
+      ...(ec.combien ? [
+        `§ Et ${ec.combien === 1 ? "une compagnie n'est jamais arrivée" : "deux compagnies ne sont jamais arrivées"} dans la vallée. ${ec.par.map(x => x.nom).join(' · ')} — on sait pourquoi, et cela ne figurera nulle part.`,
+      ] : []),
+      ...(recousu.length ? [
+        `§ On vous a recousu hier soir, dans la cour, sur une table qu'on avait montée sans demander où : ${recousu.join(' · ')}. Ce n'est pas rendu. C'est porté au lieu d'être traîné, et sur une courtine c'est toute la différence.`,
+      ] : []),
       { sobre:"§ On ne défend pas des pierres.",
         intense:"§ On ne défend pas des pierres. Personne n'a jamais défendu des pierres : les pierres ne s'en aperçoivent pas.",
         extreme:"§ On ne défend pas des pierres. Personne n'a jamais défendu des pierres et les pierres ne s'en sont jamais aperçues.\n\nCe qu'il y a derrière la courtine ce matin : trois cents personnes qui n'ont rien demandé, un intendant qui vient d'un hameau de onze feux, et le fait qu'un nom rayé il y a vingt-huit ans figure à nouveau dans le registre d'une province." },

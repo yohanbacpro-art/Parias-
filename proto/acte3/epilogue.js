@@ -73,6 +73,7 @@ function chroniqueKarlsberg(){
   if(a('a2_bannieres'))
     v.push(fragment("La bannière noire au loup blanc a été relevée publiquement.",
       "Volume cent-quarante-trois, section des titres relevés. C'est la première maison rayée à l'avoir été en quatre-vingts ans, et deux provinces ont demandé qu'on vérifie l'acte trois fois."));
+  v.push(...retenues('karlsberg', 5));
   if(a('in_ys_lettre') || a('a3_tenu'))
     v.push(fragment("Le relèvement n'a jamais été contesté.",
       "Il l'aurait été — un relèvement l'est toujours, pendant trois générations — si la dernière du sang par ordre de naissance ne l'avait pas confirmé par écrit devant le commissariat aux titres. Elle l'a fait en quatre lignes."));
@@ -98,8 +99,14 @@ function chroniqueYohan(){
       "Il y a des rumeurs de relais, il y a deux dépositions qui se contredisent, et il y a un greffe qui a refusé de trancher. C'est probablement ce qu'il voulait."));
 
   if(blessures)
-    v.push(fragment(`Il portait ${blessures === 1 ? "une chose" : enLettres(blessures) + " choses"} qui ne s'en sont jamais allées.`,
-      `${(ETAT.blessures || []).map(b => b.zone).join(' · ')}. Aucune ne figure dans les chansons, qui préfèrent les hommes entiers.`));
+    v.push(fragment(blessures === 1
+      ? "Il portait une chose qui ne s'en est jamais allée."
+      : `Il portait ${enLettres(blessures)} choses qui ne s'en sont jamais allées.`,
+      /* Les zones sont écrites en minuscule dans le journal, où elles suivent
+       * toujours un mot ; ici elles ouvrent la phrase. */
+      `${(ETAT.blessures || []).map(b => b.zone).join(' · ').replace(/^./, c => c.toUpperCase())}. ${
+        blessures === 1 ? "Elle ne figure dans aucune chanson : les chansons préfèrent les hommes entiers."
+                        : "Aucune ne figure dans les chansons, qui préfèrent les hommes entiers."}`));
 
   if(ETAT.renom >= 70)
     v.push(fragment("Sa réputation a dépassé ce qu'il avait fait, ce qui arrive à tout le monde et ne s'arrête jamais.",
@@ -122,6 +129,7 @@ function chroniqueMaison(){
   if(a('a2_liaison'))
     v.push(fragment("Il y a des enfants dont la chronique ne porte pas le nom.",
       "Le Prix ancestral a produit ce qu'il produit depuis quatre cents ans : des branches. Les maisons concernées les ont inscrites sous leur propre nom, ce qui est la coutume, et c'est ainsi que le sang des Parias circule sans jamais figurer nulle part."));
+  v.push(...retenues('maison', 5));
   return v;
 }
 
@@ -198,6 +206,7 @@ function chroniqueLesNeuf(){
   else if(a('in_ys_morte') || a('a2_ysabel_morte'))
     v.push(fragment("Ysabel de Karlsberg est morte à Sainte-Ombre.",
       "Onze hospices de route ont perdu leur comptable dans l'année. Trois ont fermé. La fondation a mis quatre ans à retrouver quelqu'un capable de tenir trois colonnes."));
+  v.push(...retenues('neuf', 7));
   return v;
 }
 
@@ -249,6 +258,7 @@ function chroniqueGuerres(){
   v.push(fragment(`${ho.nom} :`, `*${ho.dit}.* ${
     ho.n >= 4 ? "Elle n'a jamais été battue : elle a fini par n'avoir plus rien devant elle, ce qui n'est pas la même chose et ce que les chroniques de l'époque ont toutes confondu."
     : "Elle a profité de tout et n'a rien conclu. C'est la façon dont les hardes fonctionnent et personne dans quatre provinces n'a voulu l'apprendre."}`));
+  v.push(...retenues('guerres', 7));
   return v;
 }
 
@@ -294,6 +304,23 @@ function chroniquePeuples(){
   return v;
 }
 
+/* ── DES AFFAIRES DE CE TEMPS ─────────────────────────────────────────────
+ * Neuf ans de contrats de province. Un barde n'en garde que ce qui a marché
+ * en salle, et ce qui a marché en salle dépend entièrement de ce que la
+ * partie a produit : deux parties différentes ne lui laissent pas le même
+ * matériel, et la chanson n'a pas la même longueur. */
+function chroniqueAffaires(){
+  const l = retenues('affaires', 8);
+  if(!l.length) return [];
+  return [
+    "§ **Des affaires de ce temps.**",
+    { sobre:"Avant tout ça, il a pris des contrats comme tout le monde.",
+      intense:"Avant tout ça, il a pris des contrats comme n'importe quel homme d'épée sans maison : au tableau, à la semaine, pour ce qu'on payait. C'est la partie de sa vie qui a duré le plus longtemps et c'est celle dont on chante le moins.",
+      extreme:"Avant tout ça, il a pris des contrats comme n'importe quel homme d'épée sans maison : au tableau, à la semaine, pour ce qu'on payait, dans des bailliages qui ne savaient pas son nom et ne cherchaient pas à le savoir.\n\nC'est la partie de sa vie qui a duré le plus longtemps — de très loin — et c'est celle dont on chante le moins, parce qu'une salle veut des sièges et des couronnes.\n\nJe la donne quand même. Une maison ne se relève pas dans une salle du trône : elle se relève dans des affaires de province que personne n'a envie d'entendre." },
+    ...l,
+  ];
+}
+
 /* ── CE QUE LA CHRONIQUE NE DIT PAS ───────────────────────────────────── */
 function chroniqueTrous(){
   const t = [];
@@ -313,6 +340,10 @@ function chroniqueTrous(){
     t.push("qu'un garçon de douze ans a nourri une meute pendant six semaines pour sauver le troupeau de son grand-père, et qu'il a tenu les comptes d'une maison neuf ans plus tard ;");
   if(a('a3_fl_casse') && !a('a3_fl_passes'))
     t.push("que le mot *perte*, dans un rapport d'état, ne désigne que ce qui figurait déjà quelque part ;");
+  /* Et tout ce que neuf ans d'affaires ont produit et qu'aucun greffe n'a
+   * eu de colonne pour porter. Six au plus : au-delà ce n'est plus une
+   * énumération, c'est un inventaire, et un inventaire n'émeut personne. */
+  t.push(...retenues('trous', 6));
 
   if(!t.length)
     return ["§ Il y a une chose que je n'ai pas. De cette vallée-là, personne ne m'a jamais rien rapporté — et ce n'est pas de la négligence : là-bas, personne n'a jamais pensé que ça se chantait."];
@@ -395,6 +426,8 @@ DYN.a3_chronique = () => {
 
     "§ **Des guerres de ce temps.**",
     ...chroniqueGuerres(),
+
+    ...chroniqueAffaires(),
 
     "§ **Des peuples.**",
     ...chroniquePeuples(),

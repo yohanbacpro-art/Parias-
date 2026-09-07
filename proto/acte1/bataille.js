@@ -402,8 +402,15 @@ function ouvrirBataille(idChamp, retour, pretees){
    * que douze ans de parties ont produite. */
   const def = typeof idChamp === 'string' ? CHAMPS[idChamp] : idChamp;
   if(!def) return;
+  /* Une entrée prêtée peut porter son propre `nom` : les mineurs d'Arquenay
+   * et les sapeurs de Kar-Durak sont le même gabarit et ne sont pas les mêmes
+   * gens, et un rôle où deux compagnies portent le même nom est illisible. */
   const roster = pretees
-    ? pretees.map(p => instancierUnite(p.type, p.effectifPct)).filter(Boolean)
+    ? pretees.map(p => {
+        const u = instancierUnite(p.type, p.effectifPct);
+        if(u && p.nom) u.nom = p.nom;
+        return u;
+      }).filter(Boolean)
     : armee().filter(u => u.effectif > 0);
 
   bataille = {

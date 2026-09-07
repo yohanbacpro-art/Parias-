@@ -1773,8 +1773,15 @@ function ouvrirBataille(idChamp, retour, pretees){
    * que douze ans de parties ont produite. */
   const def = typeof idChamp === 'string' ? CHAMPS[idChamp] : idChamp;
   if(!def) return;
+  /* Une entrée prêtée peut porter son propre `nom` : les mineurs d'Arquenay
+   * et les sapeurs de Kar-Durak sont le même gabarit et ne sont pas les mêmes
+   * gens, et un rôle où deux compagnies portent le même nom est illisible. */
   const roster = pretees
-    ? pretees.map(p => instancierUnite(p.type, p.effectifPct)).filter(Boolean)
+    ? pretees.map(p => {
+        const u = instancierUnite(p.type, p.effectifPct);
+        if(u && p.nom) u.nom = p.nom;
+        return u;
+      }).filter(Boolean)
     : armee().filter(u => u.effectif > 0);
 
   bataille = {
@@ -25009,7 +25016,7 @@ gassien:{
   ou:"partout où passe du sel",
   poids:2,
   hostile:() => a('wy_gassien_vivant') && (a('wy_gassien_confondu') || a('wy_gassien_donne')
-             || a('as_gassien_marche')),
+             || a('wy_gassien_ennemi') || a('as_gassien_marche')),
   grief:() => a('wy_gassien_donne')
     ? "Vous l'avez livré au prévôt et il n'a pas été pendu, ce qui est la pire des deux issues : un contrebandier qu'on relâche a perdu ses trois chefs et gardé sa mémoire."
     : "Vous l'avez confondu et vous l'avez laissé partir. Il vous a serré la main à la barrière et il a dit *bonne chasse* sincèrement, et il ne l'a jamais oublié.",
@@ -25126,7 +25133,8 @@ ysabel:{
 function ennemisDeclares(){
   return Object.entries(INIMITIES)
     .filter(([, x]) => { try { return x.hostile(); } catch(e){ return false; } })
-    .sort((a, b) => b[1].poids - a[1].poids)
+    /* Pas de paramètre nommé `a` : `a()` est la lecture de drapeau globale. */
+    .sort(([, x], [, y]) => y.poids - x.poids)
     .map(([id, x]) => ({ id, ...x }));
 }
 
@@ -25164,6 +25172,953 @@ function pasEnnemis(){
   return Object.entries(INIMITIES)
     .filter(([, x]) => { try { return !x.hostile(); } catch(e){ return true; } })
     .map(([, x]) => x.nom);
+}
+
+</script>
+<script>
+/* ── ../acte3/renforts.js ── */
+/* PARIAS — Acte III · CEUX QUI MONTENT AVEC VOUS
+ * ═══════════════════════════════════════════════════════════════════════
+ *
+ * `inimities.js` répond à *qui vient contre*. Ce fichier répond à l'autre
+ * moitié de la même question, et c'est la moitié que les jeux oublient :
+ *
+ *     « Un village sauvé envoie des soldats vingt ans plus tard. »
+ *
+ * C'est écrit dans le document fondateur, sous le titre *conséquences
+ * longues*. Jusqu'ici le jeu tenait la mauvaise moitié : on se faisait des
+ * ennemis pour de vraies raisons, et on ne se faisait pas d'amis. Les
+ * quarante-six drapeaux des chasses, les vingt-trois d'Arquenay, les
+ * dix-neuf de Vauclair, les trente et un de Hauterive étaient posés
+ * proprement par des scènes écrites et personne ne les relisait jamais.
+ *
+ * On les relit ici. Trente-quatre mineurs remontés d'une galerie hors plan
+ * il y a neuf ans redescendent boiser une courtine. Quatre-vingts tourbiers
+ * portés au rôle d'un bailliage arrivent avec des frondes parce qu'ils
+ * figurent quelque part et qu'ils savent à qui ils le doivent.
+ *
+ * TROIS RÈGLES, LES MÊMES QU'EN FACE
+ *
+ *   1. **Rien n'est tiré au sort.** `vient()` lit des drapeaux posés par des
+ *      scènes réellement jouées. Aucun renfort n'arrive parce que le siège
+ *      serait trop dur autrement.
+ *
+ *   2. **La raison s'écrit.** Jamais *+1 compagnie*. Une phrase qui dit
+ *      quelle scène a produit ces gens-là, avec ses chiffres.
+ *
+ *   3. **On peut avoir eu raison de ne rien demander.** Trois des maisons
+ *      d'ici montent parce qu'on ne leur a **pas** réclamé la coutume. Le
+ *      Prix du Paria se paie de toute façon : ne pas le prendre coûte sur
+ *      le moment et rapporte neuf ans plus tard, et personne ne le dit au
+ *      joueur avant que ça n'arrive.
+ *
+ * CE QUE CE FICHIER FOURNIT
+ *
+ *   soutiensDeclares()  la liste, du plus lourd au plus léger
+ *   forcesAvec(n)       ce qu'ils amènent — des unités, pour `bataille.js`
+ *   ecartes()           ceux qui n'amènent pas d'hommes mais retirent
+ *                       quelque chose à l'autre bord
+ *   soinsDisponibles()  Sainte-Ombre, si on lui a ouvert la porte
+ *   pasVenus()          ceux qu'on aurait pu avoir et qu'on n'a pas
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+const RENFORTS = {
+
+/* ── Les six affaires de l'Acte I ─────────────────────────────────────────
+ * Neuf ans ont passé. Ce sont des gens ordinaires : ils ne montent pas par
+ * gratitude, ils montent parce qu'ils sont quelque part sur un registre et
+ * qu'ils savent depuis quand. */
+
+arquenay:{
+  nom:"Les tailles d'Arquenay",
+  ou:"le puits trois, à onze lieues de fumée",
+  poids:4,
+  vient:() => a('ar_trente_quatre') || a('ar_tenu') || a('ar_vingt_sept')
+           || (a('ar_ouvert') && !a('ar_sans_retour')),
+  pourquoi:() => a('ar_tenu')
+    ? "Vous avez tenu la recoupe vingt minutes pendant que trente-quatre personnes remontaient d'une galerie qui n'était sur aucun plan. Sur les trente-quatre, dix-neuf sont encore au fond aujourd'hui, dans le même puits, pour la même compagnie. Ils montent avec le matériel de boisage et deux chariots de bois vert."
+    : a('ar_vingt_sept')
+    ? "Vingt-sept sont remontés avant que le bois se taise, parce que vous avez refusé de choisir lesquels. Ceux-là n'ont jamais su comment le dire et ils ne le diront pas davantage ce matin : ils arrivent, ils demandent où sont les étais, et ils commencent."
+    : "Vous avez ouvert le remblai du puits trois. Ils frappaient depuis onze jours et personne au jour ne comptait les coups. Une compagnie de mine sait faire une seule chose sur une courtine, et c'est exactement celle dont on a besoin.",
+  unites:[{ type:'sapeurs' }],
+  dit:"« On boise. On ne se bat pas, on boise. Dites-nous où le mur doit tenir et donnez-nous la nuit. »",
+},
+
+sombreval:{
+  nom:"Les tenanciers de Sombreval",
+  ou:"le marais, et depuis neuf ans le rôle du bailliage",
+  poids:3,
+  vient:() => a('va_marais_sauve') || a('va_tenanciers') || a('va_greffe'),
+  pourquoi:() => a('va_greffe') || a('va_tenanciers')
+    ? "Quatre-vingts personnes, vingt-six enfants, portées au rôle du bailliage avec date et cote parce que quelqu'un a déposé un acte le matin plutôt que l'après-midi. Bertran a vingt-huit ans, il sait toujours écrire, et il est le seul du marais à comprendre ce que ça veut dire d'exister sur un papier. Il en amène quarante."
+    : "Le marais et le bourg sont la même famille, coupée en deux il y a trente ans, et vous êtes la seule personne extérieure à l'avoir compris avant qu'on ne les pende. Ils n'ont pas d'armes. Ils ont des frondes, et ils ont grandi à les avoir.",
+  unites:[{ type:'frondeurs' }],
+  dit:"« On est au rôle, messire. Sur le papier, avec la cote et la date. Je le sais parce que c'est moi qui l'ai écrit. »",
+},
+
+rochebrune:{
+  nom:"Rochebrune",
+  ou:"la lande, et quatorze hommes qui ont regardé",
+  poids:3,
+  vient:() => a('ro_or_seul') || a('ro_aldren_vivant')
+           || (a('ro_vivant') && !a('ro_aldren_mort')),
+  pourquoi:() => a('ro_aldren_vivant')
+    ? "Vous avez laissé Ser Aldren finir sa liste, et vous lui avez dit pourquoi. Ermengarde de Rochebrune n'a jamais approuvé cette décision et elle ne l'approuve toujours pas. Elle envoie trente chevaux quand même, parce qu'elle a passé neuf ans à comprendre que c'était la seule fin où sa maison ne perdait personne d'autre."
+    : "Vous n'avez pas réclamé la coutume à Rochebrune. Une maison à qui un Paria n'a rien demandé est une maison qui n'a rien à cacher sur ce point-là, et c'est plus rare qu'une alliance : ça ne s'écrit nulle part et ça se paie une fois, en entier, le jour où on le demande.",
+  unites:[{ type:'cavalerie', effectifPct:0.8 }],
+  dit:"« Ma maison ne vous doit rien, et c'est exactement pour ça que je peux venir. Une dette, ça se discute. »",
+},
+
+hauterive:{
+  nom:"Hauterive",
+  ou:"quelque part entre un mari et un coffret de lettres",
+  poids:3,
+  vient:() => a('ha_ramenee') || a('ha_refus_comp') || a('ha_isabeau'),
+  pourquoi:() => a('ha_refus_comp')
+    ? "Vous avez refusé que Hauterive rachète la coutume en argent. Il l'a remarqué sur le moment et il ne l'a jamais dit à personne. Il paie une compagnie franche pour la saison, d'avance, et il n'écrit pas son nom sur le contrat."
+    : "Vous avez ramené Isabeau de Hauterive à son mari, avec le coffret et ce qu'il y avait dedans. Ce que cette maison est devenue depuis ne regarde qu'elle. Ce qu'elle envoie ce matin regarde Karlsberg : quarante-cinq hommes payés pour tenir, et pas pour tenir un moment.",
+  unites:[{ type:'veterans', effectifPct:0.8 }],
+  dit:"« On a payé d'avance. C'est notre façon de faire, et vous savez déjà qu'elle ne veut pas dire ce qu'on croit. »",
+},
+
+valombre:{
+  nom:"Valombre",
+  ou:"une tour vendue, et une femme qui a compté ses morts",
+  poids:2,
+  vient:() => a('wy_heloise_dette') || a('wy_heloise_franche') || a('wy_heloise_lucide'),
+  pourquoi:() => a('wy_heloise_lucide') || a('wy_heloise_franche')
+    ? "Héloïse de Valombre a reconnu devant vous, à voix normale, dans sa propre salle, que son fils était un danger. Personne d'autre dans quatre provinces n'a jamais obtenu ça d'elle, et elle sait exactement ce que ça lui a coûté de le dire."
+    : "Onze morts, dont trois hommes qu'elle avait elle-même envoyés voir. Elle tient les comptes de sa maison comme d'autres tiennent leur honneur, et il y a une ligne ouverte à votre nom depuis neuf ans.",
+  unites:[{ type:'archers', effectifPct:0.9 }],
+  dit:"« Je ne suis pas venue vous remercier. Je suis venue solder. Ce n'est pas la même chose et c'est plus sûr. »",
+},
+
+hameaux:{
+  nom:"Les hameaux des tourbières",
+  ou:"Fontaine-Basse, et neuf feux plus haut",
+  poids:2,
+  vient:() => a('ch_hameau_sorti') || a('ch_co_reste') || a('ch_re_neuf_vivants')
+           || (a('ch_meute_faite') && !a('ch_colin_denonce')),
+  pourquoi:() => a('ch_co_reste')
+    ? "Vous leur avez dit qu'il y avait quelqu'un dedans, et ils n'ont pas brûlé la grange. Un hameau qui n'a pas brûlé quelque chose ne se le rappelle pas comme une bonne action : il se le rappelle comme le jour où on ne lui a pas menti."
+    : a('ch_re_neuf_vivants')
+    ? "Neuf personnes sont ressorties d'un puits où l'on ne ressort pas. Elles ont eu neuf ans pour décider ce qu'elles en faisaient, et elles n'ont trouvé qu'une seule chose."
+    : "Un garçon de douze ans a nourri une meute pendant six semaines pour sauver le troupeau de son grand-père, et personne dans la vallée n'a oublié qui a refusé de le pendre pour ça. Ils montent avec ce qu'ils ont, c'est-à-dire des lanières de cuir et un nombre absurde de gens.",
+  unites:[{ type:'frondeurs', effectifPct:0.8 }],
+  dit:"« On ne sait pas se battre, messire. On sait venir. On a mis deux jours. »",
+},
+
+/* ── Ce qu'on est allé chercher loin ──────────────────────────────────────
+ * Ceux-là ne doivent rien à une affaire de province. Ils viennent parce
+ * qu'un homme s'est déplacé jusqu'à eux à un moment où il avait mieux à
+ * faire, et que ce genre de chose se retient très longtemps chez des gens
+ * qui vivent très longtemps. */
+
+kardurak:{
+  nom:"Kar-Durak",
+  ou:"onze portes, trois encore tenues",
+  poids:4,
+  vient:() => a('kd_dette') || a('kd_tenu') || a('a2_kardurak_aide')
+           || a('a3_porte_ouverte') || a('a3_porte_scellee'),
+  pourquoi:() => a('a3_porte_ouverte') || a('a3_porte_scellee')
+    ? "On est descendu à la onzième porte. Chez les Nains, une dette de galerie ne s'éteint pas avec celui qui l'a contractée : elle passe à la charge, et la charge est héréditaire. Vingt-cinq sapeurs et trente-cinq arbalètes remontent une vallée humaine pour la première fois en quatre-vingts ans, et le greffe de Kar-Durak a noté la date."
+    : "Une dette naine. Elle a été inscrite, elle porte un numéro, et le numéro a survécu à deux sièges. Ils ne demandent pas ce qu'on défend : la charge dit où aller, pas pourquoi.",
+  unites:[{ type:'sapeurs', effectifPct:0.9, nom:"Sapeurs de Kar-Durak" },
+          { type:'arbaletriers', effectifPct:0.8, nom:"Arbalétriers de Kar-Durak" }],
+  dit:"« Numéro trois cent onze. On ne discute pas un numéro. Montrez-nous la pierre. »",
+},
+
+marchenoire:{
+  nom:"Les Sans-Nom de la Marche noire",
+  ou:"deux familles, et ce qui en est sorti",
+  poids:5,
+  vient:() => a('an_parias') || a('an_gue_tenu') || a('a2_reseau_protege'),
+  pourquoi:() => a('an_gue_tenu')
+    ? "Le gué d'Aumance, commandé par un Paria devant quatre cents hommes de la file. C'est la seule fois en quatre cents ans qu'une chose pareille a été écrite quelque part, et elle a été écrite. Ils ne sont pas nombreux. Ils n'ont jamais eu besoin de l'être."
+    : "Deux familles de Parias à la Marche noire, et un aîné parti vers l'ouest au bout de deux hivers. Il a mis neuf ans à traverser quatre provinces. Il est arrivé avec dix-neuf autres et il n'a pas expliqué comment.",
+  unites:[{ type:'parias' }],
+  dit:"« On ne se recrute pas. Vous le savez : c'est vous qui nous l'avez appris, et vous ne vous en souvenez probablement pas. »",
+},
+
+khesh:{
+  nom:"Les cavaliers de Sarad",
+  ou:"le désert, et un puits où l'on compte les cailloux",
+  poids:3,
+  vient:() => a('a3_kh_unifie') || a('kh_franc') || a('a3_kh_sorti'),
+  pourquoi:() => a('a3_kh_unifie')
+    ? "Douze tribus sous un serment, et un homme du nord dans le cercle de neuf pas au moment où ça s'est joué. Chez les Khesh, celui qui était là quand la chose s'est faite en fait partie pour toujours, et cela ne se négocie ni ne s'annule."
+    : "« Vous êtes le cinquième. Vous êtes le premier à le dire tout de suite. » Il l'a dit devant les siens, ce qui, chez eux, engage celui qui parle et non celui qui écoute. Ils sont venus vérifier ce que ça valait.",
+  unites:[{ type:'eclaireurs' }],
+  dit:"« Trente ans de cailloux sur la margelle. On a compté, et on est venus. »",
+},
+
+/* ── Ceux qui n'amènent pas d'hommes ──────────────────────────────────────
+ * Un renfort n'est pas forcément une compagnie. Un réseau qui prévient, un
+ * greffier qui écrit, un hospice qui recoud : ça ne se met pas sur un
+ * front et ça change quand même la journée. */
+
+reseau:{
+  nom:"Le réseau de Callensbourg",
+  ou:"deux cents personnes, et pas une ligne écrite",
+  poids:4,
+  vient:() => a('a2_reseau_protege') || a('a2_relais_trois') || a('a2_alycia_reste'),
+  pourquoi:() => "Sept en dix-huit mois au début ; plus de deux cents à la fin, et aucun nulle part sur un papier. Un réseau qui déplace des gens sait aussi les empêcher d'arriver. Une compagnie payée pour six semaines a trouvé les quatre relais de la route de poste fermés, dans l'ordre, sans un mot d'explication.",
+  unites:[],
+  ecarte:1,
+  dit:"« Personne n'a rien fait. C'est ce qu'on fait de mieux et c'est très difficile à obtenir. »",
+},
+
+loys:{
+  nom:"Loys, du greffe de Chastel",
+  ou:"une salle où l'on écrit très lentement",
+  poids:2,
+  vient:() => a('fi_loys') || a('as_loys_parle') || a('assise_loys'),
+  pourquoi:() => "Il a parlé une fois dans sa vie, à l'assise d'hiver, et il n'a jamais cessé de le payer. Il ne peut rien envoyer. Il peut égarer une attestation de qualité pendant onze jours, et une commission de province sans attestation de qualité n'entre pas dans une vallée : elle attend au relais et elle écrit à Chastel.",
+  unites:[],
+  ecarte:1,
+  dit:"« Il manquera une pièce au dossier. Ça arrive tout le temps. Ça n'arrive jamais deux fois au même dossier. »",
+},
+
+sainteombre:{
+  nom:"Sainte-Ombre",
+  ou:"onze hospices de route, et une comptable",
+  poids:2,
+  vient:() => a('ca_sainte_ombre') || a('a2_porte_sainte_ombre') || a('fi_hospices')
+           || a('in_ys_lettre'),
+  pourquoi:() => a('fi_hospices') || a('in_ys_lettre')
+    ? "Onze hospices de route en dix-neuf ans, tenus sur trois colonnes par quelqu'un qui n'a jamais voulu qu'on lui pardonne. Deux chirurgiens et quatre religieuses sont dans la cour depuis avant-hier, et ils ont installé les tables avant qu'on leur dise où."
+    : "Vous avez cédé le droit de passage de Cendrepont contre une lettre pour Sainte-Ombre. Le droit valait onze cents couronnes par an. La lettre a valu ce que valent deux chirurgiens dans une cour, le matin du seul jour où ça compte.",
+  unites:[],
+  soigne:true,
+  dit:"« Posez-les ici. On ne demande rien à personne, jamais, et surtout pas ce matin. »",
+},
+
+};
+
+/* ══ CE QUE ÇA DONNE ═══════════════════════════════════════════════════════ */
+
+/* Ceux qui montent réellement, du plus lourd au plus léger. */
+function soutiensDeclares(){
+  /* Les paramètres du tri ne s'appellent pas `a` : `a()` est la lecture de
+   * drapeau, en portée globale, et l'ombrer ici serait une bombe à retard. */
+  return Object.entries(RENFORTS)
+    .filter(([, x]) => { try { return x.vient(); } catch(e){ return false; } })
+    .sort(([, x], [, y]) => y.poids - x.poids)
+    .map(([id, x]) => ({ id, ...x }));
+}
+
+/* Ce qu'ils posent sur le champ. Même plafond qu'en face, pour la même
+ * raison : une bataille illisible n'est pas une bataille. */
+function forcesAvec(max){
+  const u = [];
+  for(const s of soutiensDeclares()){
+    for(const x of (s.unites || [])){
+      if(u.length >= (max || 5)) return u;
+      /* Chaque compagnie porte le nom de ceux qui l'envoient : sur un rôle,
+       * « Les tailles d'Arquenay » et « Sapeurs de Kar-Durak » sont le même
+       * gabarit et ne sont pas les mêmes gens. */
+      u.push({ ...x, de:s.nom, nom:x.nom || s.nom });
+    }
+  }
+  return u;
+}
+
+/* Ce qui n'arrive jamais en face. On plafonne à deux : au-delà, l'ennemi
+ * n'a plus de siège à faire et la scène perd son objet. */
+function ecartes(){
+  const l = soutiensDeclares().filter(s => s.ecarte);
+  return { combien:Math.min(2, l.reduce((n, s) => n + s.ecarte, 0)), par:l };
+}
+
+/* Sainte-Ombre recoud. Une blessure permanente ne se répare pas ; celle
+ * qu'on porte encore de l'hiver, si. */
+function soinsDisponibles(){
+  return soutiensDeclares().some(s => s.soigne);
+}
+
+/* Ceux qu'on aurait pu avoir. On ne les nomme qu'à la fin, dans la
+ * chronique : les nommer avant le siège serait dire au joueur ce qu'il a
+ * manqué, et ce n'est pas à nous de le lui dire. */
+function pasVenus(){
+  return Object.entries(RENFORTS)
+    .filter(([, x]) => { try { return !x.vient(); } catch(e){ return true; } })
+    .map(([, x]) => x.nom);
+}
+
+</script>
+<script>
+/* ── ../acte3/consequences.js ── */
+/* PARIAS — Acte III · CE QUE LA CHANSON A RETENU
+ * ═══════════════════════════════════════════════════════════════════════
+ *
+ * LE PROBLÈME QUE CE FICHIER RÈGLE
+ *
+ * Le jeu posait neuf cent quatre-vingt-seize drapeaux et n'en relisait que
+ * quatre cent trente-sept. Les cinq cent cinquante-neuf autres étaient
+ * posés proprement, par des scènes écrites à la main, et personne ne les
+ * regardait plus jamais. Une décision qui ne se relit pas n'est pas une
+ * décision : c'est une case cochée.
+ *
+ * Écrire cinq cent cinquante-neuf scènes de conséquence prendrait des mois
+ * et alourdirait un jeu qui n'en a pas besoin. La bonne réponse n'est pas
+ * d'écrire cinq cent cinquante-neuf suites : c'est de construire ce qui
+ * les relit **en masse**. Il y en a trois.
+ *
+ *   · `renforts.js`     qui monte avec vous au siège, et pourquoi
+ *   · `inimities.js`    qui monte contre vous, et pourquoi
+ *   · ce fichier-ci     ce que la chanson en a gardé, quarante ans après
+ *
+ * CE QUE C'EST
+ *
+ * Un registre : un drapeau, une section, un poids, une ligne. La ligne est
+ * dans la voix du barde — passé, troisième personne, chiffres approximatifs
+ * — et non dans celle du journal, qui dit *vous* au présent. Ce n'est pas
+ * une coquetterie : la marque du journal est ce que Yohan a vu ce jour-là,
+ * la ligne d'ici est ce qu'il en restait quarante ans plus tard chez des
+ * gens qui n'y étaient pas. Les deux ne peuvent pas être le même texte.
+ *
+ * COMMENT ÇA S'IMPRIME
+ *
+ * Pas en bloc. `retenues(section, n)` rend les `n` plus lourdes de la
+ * section parmi celles que la partie a réellement produites. Une chanson
+ * qui réciterait deux cents lignes ne serait pas une chanson : un barde
+ * garde ce qui a marché en salle et laisse tomber le reste, et deux
+ * parties différentes ne lui laissent pas le même matériel.
+ *
+ * À poids égal, l'ordre est celui du registre — jamais un tirage. Deux
+ * parties identiques rendent la même chanson.
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+/* Les sections, dans l'ordre où le barde les chante. */
+const SECTIONS_CHANSON = {
+  affaires:  "Des affaires de ce temps",
+  karlsberg: null,   /* fondues dans les sections déjà écrites de l'épilogue */
+  maison:    null,
+  neuf:      null,
+  guerres:   null,
+  trous:     null,
+};
+
+/* Un poids de 3 est un fait que la chanson garde toujours ; 2 se garde
+ * souvent ; 1 ne ressort que dans une partie qui n'a rien fait d'autre. */
+const CONSEQUENCES = {
+
+/* ═══ LES CHASSES DES TOURBIÈRES ═══════════════════════════════════════════
+ * La première affaire, celle par laquelle presque tout le monde entre. */
+
+ch_lu:{ sec:'affaires', poids:1, dit:"Vingt-cinq bêtes qui passaient à sept pas des portes sans y entrer. On a mis quatre ans à comprendre que c'était le renseignement le plus important de l'affaire, et il était donné le premier jour." },
+ch_temoins:{ sec:'affaires', poids:2, dit:"Neuf bêtes perdues au hameau, zéro chez l'homme qui en avait quarante. Une chanson ne sait pas rendre ce genre de compte ; c'est pourtant là que tout était." },
+ch_colin:{ sec:'trous', poids:3, dit:"qu'un garçon de douze ans a nourri une meute six semaines pour sauver le troupeau de son grand-père, et qu'il a été le seul de toute cette histoire à faire un calcul juste ;" },
+ch_colin_arrangement:{ sec:'affaires', poids:2, dit:"L'arrangement de Fontaine-Basse n'a jamais été écrit, jamais dénoncé, et il a tenu vingt ans. On en connaît trois versions et aucune ne s'accorde sur qui a proposé quoi." },
+ch_co_reste:{ sec:'trous', poids:3, dit:"qu'un hameau qui montait un bûcher ne l'a pas allumé, parce que quelqu'un a pris le temps de lui dire ce qu'il y avait dedans ;" },
+ch_co_lie:{ sec:'affaires', poids:2, dit:"Un homme aux mains liées et au crâne ouvert dormait sous la tourbe depuis quatre ans, à deux cents pas d'une maison où l'on dînait tous les soirs." },
+ch_co_lu:{ sec:'affaires', poids:1, dit:"Un creux dans le sol, de la forme exacte d'un tas de briques disparu. Il y a des affaires que personne n'aurait ouvertes sans un homme qui regarde le sol." },
+ch_co_corps:{ sec:'affaires', poids:2, dit:"On a remonté le corps. La province a mis onze ans à décider de quoi il était mort, et elle a fini par ne pas décider." },
+ch_co_fini:{ sec:'affaires', poids:2, dit:"L'affaire des tourbières a été close, ce qui, dans un bailliage, veut dire qu'on a cessé d'écrire dessus." },
+ch_co_noye:{ sec:'affaires', poids:2, dit:"Il est mort dans la tourbe, à l'endroit où il avait mis l'autre. Les gens du pays trouvent ça très satisfaisant et les clercs trouvent ça très embarrassant." },
+ch_co_epee_perdue:{ sec:'affaires', poids:1, dit:"Une lame est restée dans les tourbières de Fontaine-Basse. On la ressort tous les vingt ans, on la remontre, et ce n'est jamais la même." },
+ch_co_drain_vu:{ sec:'affaires', poids:1, dit:"Le drain de la tourbière avait été creusé par quelqu'un qui savait où l'eau allait. Ce genre de détail ne se chante pas et c'est ce qui a fait l'affaire." },
+ch_co_compris:{ sec:'affaires', poids:2, dit:"Ce n'était pas une chasse. Ça n'avait jamais été une chasse, et l'homme qui payait pour une chasse le savait mieux que personne." },
+ch_co_vu_par:{ sec:'affaires', poids:1, dit:"On a été vu. Dans un hameau de onze feux, être vu et être connu sont la même chose à trois jours près." },
+ch_co_frappe:{ sec:'affaires', poids:1, dit:"On a frappé le premier, à Fontaine-Basse, et pour une fois personne dans le pays n'a trouvé à y redire." },
+ch_co_repousse:{ sec:'affaires', poids:1, dit:"On s'est fait repousser dans les tourbières, ce qui arrive à tout le monde et ne figure dans aucune chanson, y compris la mienne, sauf ce soir." },
+ch_grange:{ sec:'affaires', poids:1, dit:"La grange de Fontaine-Basse est toujours debout. C'est la seule chose de toute cette histoire dont je puisse dire qu'elle est vérifiable : elle est là, on peut aller la voir." },
+ch_pre:{ sec:'affaires', poids:1, dit:"On les a pris au pré, à découvert, ce que personne de sensé ne fait avec une meute et ce qui a marché." },
+ch_defile:{ sec:'affaires', poids:1, dit:"On les a pris au défilé, où le nombre ne sert plus à rien. C'est la seule leçon de guerre que cette affaire ait produite et elle a resservi vingt ans plus tard sous une courtine." },
+ch_ligne_tenue:{ sec:'affaires', poids:2, dit:"La ligne a tenu aux tourbières avec des gens qui n'avaient jamais tenu de ligne. On ne sait pas comment on obtient ça et les capitaines qui le savent ne l'expliquent pas." },
+ch_hameau_sorti:{ sec:'trous', poids:2, dit:"qu'un hameau entier est sorti de chez lui pour tenir une ligne qu'on ne lui demandait pas de tenir ;" },
+ch_drain_meute:{ sec:'affaires', poids:1, dit:"On a noyé la meute dans son propre drain. Les gens du pays racontent encore ça aux enfants, et ils l'exagèrent chaque fois d'un tiers." },
+ch_tete_prise:{ sec:'affaires', poids:1, dit:"On a rapporté la tête. C'est ce qu'un bailliage paie, et c'est la seule partie de l'affaire qui figure dans un état de dépenses." },
+ch_onde_sortie:{ sec:'karlsberg', poids:3, dit:"L'Onde est sortie une première fois aux tourbières, devant des gens du pays qui n'avaient pas de mot pour ça. Ils en ont trouvé un depuis, et il n'est pas aimable." },
+ch_pistolets_tires:{ sec:'affaires', poids:1, dit:"Deux coups de pistolet dans une tourbière. Le bruit a porté à trois lieues et l'affaire s'est sue avant qu'on soit rentré." },
+ch_re_vue:{ sec:'affaires', poids:2, dit:"On est descendu voir la reine. Personne d'autre dans quatre provinces n'a jamais eu à écrire cette phrase." },
+ch_re_su:{ sec:'affaires', poids:2, dit:"Du miel, de la viande, et l'air tiède à six cents pieds sous terre. Ce détail-là ne sert à rien dans une chanson et il est vrai." },
+ch_re_brulee:{ sec:'affaires', poids:2, dit:"On a brûlé le puits sept. Il n'a jamais été rouvert : la province l'a porté comme *éboulé* et personne n'a demandé de vérification." },
+ch_re_neuf_vivants:{ sec:'trous', poids:3, dit:"que neuf personnes sont ressorties d'un puits d'où l'on ne ressort pas, et que sept d'entre elles ont eu des enfants ;" },
+ch_re_dit:{ sec:'affaires', poids:2, dit:"On a dit ce qu'il y avait au fond. C'était le mauvais calcul pour la carrière d'un mercenaire et le bon pour à peu près tout le reste." },
+ch_liste_lue:{ sec:'neuf', poids:2, dit:"Le carnet de Guillaume de Sault n'était pas un tableau de chasse. C'était un registre, et un registre suppose qu'on ait l'intention d'être relu." },
+ch_regles_du_rond:{ sec:'neuf', poids:2, dit:"Trente-huit noms dans un carnet, et une place laissée pour un trente-neuvième qu'il n'a jamais rempli de force." },
+ch_sault_vu:{ sec:'neuf', poids:2, dit:"Guillaume de Sault s'est présenté lui-même, en donnant ses règles avant de demander quoi que ce soit. C'était sa manière et elle n'a jamais varié." },
+ch_sault_croix:{ sec:'neuf', poids:2, dit:"Il a mis une croix. Une croix, dans son carnet, ne veut pas dire mort : elle veut dire *fini*, et il n'en a mis que dix-neuf en vingt ans." },
+ch_duel_accepte:{ sec:'neuf', poids:2, dit:"Le rond de craie a été accepté. Ce n'était pas à mort et ça ne l'a jamais été : c'est la chose que les salles comprennent le plus mal quand je la chante." },
+ch_duel_refuse:{ sec:'neuf', poids:2, dit:"Le rond a été refusé, et Sault n'a pas insisté. Il a écrit trois mots et il est parti, ce qui, chez lui, est la seule forme de menace connue." },
+ch_du_cede:{ sec:'neuf', poids:2, dit:"On a cédé dans le rond de craie. Sault a noté la date, la ville, et la façon — il notait toujours la façon." },
+ch_du_craie_gagne:{ sec:'neuf', poids:3, dit:"Le rond a été gagné. Sur trente-huit noms, six ont gagné et deux seulement ont refusé de recommencer ensuite." },
+ch_du_rendue:{ sec:'neuf', poids:2, dit:"On lui a rendu son épée. Il a dit merci, ce qui n'est pas dans ses habitudes, et il l'a écrit, ce qui l'est." },
+ch_du_plat:{ sec:'neuf', poids:1, dit:"Du plat de la lame, dans un rond de craie, devant des gens qui étaient venus voir autre chose." },
+ch_du_temps_pris:{ sec:'neuf', poids:1, dit:"On a pris le temps. Contre un homme qui compte les temps depuis vingt ans, c'était la seule chose qu'il n'avait pas prévue." },
+ch_du_contact:{ sec:'neuf', poids:1, dit:"Le contact a été pris tout de suite, sans mesure et sans salut. Sault a apprécié et l'a écrit ainsi : *sans façons*." },
+ch_du_attendu:{ sec:'neuf', poids:1, dit:"On l'a attendu. C'était la bonne réponse et elle a coûté quatre côtes." },
+vu_raye:{ sec:'karlsberg', poids:2, dit:"Il a vu son propre nom rayé, de sa vie, sur le registre où on l'avait rayé. Peu de gens ont eu à faire ça et aucun n'en a jamais parlé volontiers." },
+
+/* ═══ LA WYVERNE DE CENDREPONT ═════════════════════════════════════════════ */
+
+wy_sait_onze:{ sec:'affaires', poids:2, dit:"Onze morts au gué de Cendrepont, dont trois hommes que Valombre avait elle-même envoyés voir. Cette maison a une façon de compter qui lui est propre." },
+wy_soupcon_couvee:{ sec:'affaires', poids:2, dit:"Une wyverne qui emporte ses proies au lieu de les manger sur place nourrit quelque chose. Toute l'affaire tenait dans cette phrase et personne à Valombre ne l'avait dite." },
+wy_soupcon_fleches:{ sec:'affaires', poids:2, dit:"Elle était là depuis l'automne et elle ne descendait pas. Quelque chose avait changé, et ce quelque chose portait un nom de famille." },
+wy_heloise_franche:{ sec:'affaires', poids:2, dit:"Quelqu'un lui avait tiré dessus à l'automne. C'est ça qui l'a fait descendre sur les gens du bas du gué, et ce n'était pas les gens du bas du gué qui avaient tiré." },
+wy_heloise_lucide:{ sec:'neuf', poids:3, dit:"Héloïse de Valombre a reconnu à voix haute, dans sa propre salle, que son fils était un danger. On ne sait pas ce qu'il faut de plus à une femme pour dire ça et on sait ce que ça lui a coûté." },
+wy_alienor_franche:{ sec:'neuf', poids:2, dit:"Aliénor de Valombre a parlé franc à un mercenaire de passage, ce qui était contraire à tout ce qu'on lui avait appris et qui a probablement sauvé sa maison." },
+wy_alienor_froid:{ sec:'neuf', poids:1, dit:"Aliénor de Valombre n'a rien dit d'utile et n'y était pour rien : on ne lui avait jamais donné de raison de parler à un homme comme celui-là." },
+wy_heloise_dette:{ sec:'neuf', poids:2, dit:"Valombre a inscrit une dette. Cette maison inscrit tout ; c'est ce qui la rend fatigante et c'est ce qui la rend sûre." },
+wy_heloise_menti:{ sec:'affaires', poids:2, dit:"On a livré le contrebandier et couvert le fils. Le calcul était bon pendant six ans et il a cessé de l'être d'un coup." },
+wy_heloise_reserve:{ sec:'affaires', poids:1, dit:"On n'a rien dit à Valombre de ce qu'on avait trouvé au gué. Se taire est gratuit sur le moment et se paie toujours en une seule fois." },
+wy_heloise_curieuse:{ sec:'affaires', poids:1, dit:"On a parlé d'une borne à Héloïse de Valombre, qui a des archives et quelqu'un pour les lire. C'était imprudent et personne ne l'a jamais regretté." },
+wy_sait_valeur:{ sec:'affaires', poids:2, dit:"Un œuf de wyverne valait mille couronnes. Il y en avait trois dans le nid, et à peu près tout le monde dans cette affaire savait faire cette multiplication." },
+wy_gassien_ignore:{ sec:'affaires', poids:2, dit:"On a vu les caisses de laine et on n'a rien dit. Il y a des silences qui se paient neuf ans plus tard, sous une courtine, et celui-là s'est payé." },
+wy_gassien_prevenu:{ sec:'affaires', poids:2, dit:"Gassien le Lièvre a su qu'on savait, et il n'a rien lâché. C'est un homme qui n'a jamais rien lâché de sa vie et il en est mort riche." },
+wy_gassien_avoue:{ sec:'affaires', poids:2, dit:"Il a avoué. Un contrebandier qui avoue ne se repent pas : il calcule qu'avouer coûte moins cher, et il a raison quatre fois sur cinq." },
+wy_gassien_associe:{ sec:'affaires', poids:3, dit:"Les œufs de la Grise ont été vendus deux mille quatre cents couronnes à un contrebandier de sel. C'est la ligne de cette histoire que les salles n'aiment pas et je la chante quand même." },
+wy_associe_gassien:{ sec:'affaires', poids:3, dit:"Il a pris sa part du trafic d'œufs de Cendrepont. Une chanson est censée passer là-dessus. Une chanson qui passe là-dessus n'est plus une chanson, c'est un éloge." },
+wy_amaury_inquiet:{ sec:'neuf', poids:2, dit:"On a soutiré le nom à Amaury de Valombre avant de refuser son or. Il a mis neuf ans à comprendre ce qui lui était arrivé ce jour-là." },
+wy_amaury_associe:{ sec:'neuf', poids:2, dit:"On s'est associé à Amaury de Valombre. Il a tenu parole exactement le temps qu'il avait dit, ce qui, le concernant, était une surprise." },
+wy_promesse_enfant:{ sec:'maison', poids:3, dit:"La coutume a été acceptée en sachant très précisément ce qu'elle ferait courir à un enfant. C'est la seule fois de cette histoire où l'on peut dire qu'il a su d'avance." },
+wy_temoins_foule:{ sec:'affaires', poids:2, dit:"Une caravane vivante employée comme appât au gué de Cendrepont. Ils étaient volontaires, ils étaient payés, et deux ne sont pas rentrés." },
+wy_grise_vivante:{ sec:'affaires', poids:3, dit:"La Grise a survécu au gué de Cendrepont, et l'homme qui était venu la tuer aussi. C'est rare et ça ne s'est pas su tout de suite." },
+wy_couvee_menacee:{ sec:'affaires', poids:2, dit:"On est monté au nid. Ce que fait une wyverne quand on monte au nid n'a besoin d'aucun commentaire." },
+wy_jeune_mort:{ sec:'affaires', poids:2, dit:"Un jeune est mort dans le nid de Cendrepont. La vallée n'a plus eu de wyverne pendant dix-neuf ans et elle en a eu une autre après." },
+wy_verite:{ sec:'affaires', poids:2, dit:"Toute la vérité de l'affaire de la wyverne a été établie, ce qui n'arrive presque jamais et n'a servi à personne." },
+wy_infecte:{ sec:'affaires', poids:1, dit:"Une plaie de wyverne s'infecte. C'est un détail de chirurgien et c'est ce qui décide de la moitié des morts après une chasse." },
+wy_onde_brulure:{ sec:'karlsberg', poids:2, dit:"L'Onde a brûlé celui qui la portait, au gué de Cendrepont. Ceux qui la portent disent qu'elle fait ça quand on la prend au lieu de la laisser venir." },
+wy_onde_ratee:{ sec:'karlsberg', poids:1, dit:"Elle n'est pas venue. Ceux qui la portent disent qu'elle ne vient jamais quand on en a le plus besoin, et ils le disent sans amertume, comme on parle du temps." },
+wy_a_bu:{ sec:'affaires', poids:1, dit:"Il a bu, à Cendrepont, avec des gens qu'il ne connaissait pas. Un mercenaire qui boit dans un village obtient en une nuit ce qu'une enquête obtient en trois semaines." },
+wy_discret:{ sec:'maison', poids:2, dit:"Il n'a rien demandé à Valombre avant de dire oui. Il a fait ça trois fois dans sa vie et c'est chaque fois cette maison-là qui s'en est souvenue." },
+wy_borne_emportee:{ sec:'karlsberg', poids:3, dit:"La dernière borne qui disait ce que Karlsberg possédait a été emportée par une wyverne. Un domaine sans borne est un domaine qui se plaide, et il s'est plaidé pendant vingt ans." },
+
+/* ═══ ROCHEBRUNE, ET SER ALDREN ════════════════════════════════════════════ */
+
+ro_sait_anciens:{ sec:'affaires', poids:2, dit:"Sept des onze morts avaient plus de quarante ans. Il ne tuait pas au hasard : il tuait des anciens, et il fallait onze corps pour s'en apercevoir." },
+ro_sait_liste:{ sec:'affaires', poids:2, dit:"Il y avait une liste. Il y a presque toujours une liste ; ce qui est rare, c'est de la trouver avant qu'elle soit finie." },
+ro_sait_ordre:{ sec:'affaires', poids:2, dit:"Onze cadres de noisetier, numérotés de quatorze à quatre. Il comptait à l'envers, ce qui veut dire qu'il savait où il s'arrêterait." },
+ro_sait_beaufrere:{ sec:'affaires', poids:2, dit:"Ser Baudoin d'Escaut avait défiguré Aldren une nuit entière, et quatorze hommes avaient regardé. Toute l'affaire de Rochebrune tient dans cette phrase et personne à Rochebrune ne voulait la dire." },
+ro_sait_patrouille:{ sec:'affaires', poids:1, dit:"Les onze morts servaient dans la même patrouille, une nuit d'octobre. Un bailliage met deux ans à trouver ça ; un homme seul l'a trouvé en trois jours." },
+ro_sait_quatre:{ sec:'affaires', poids:1, dit:"Il restait quatre noms sur la liste de Rochebrune. Quatre, et une décision à prendre chaque nuit pendant six jours." },
+ro_sait_verifie:{ sec:'affaires', poids:1, dit:"Il vérifiait l'âge de ses victimes avant de les tuer. Ce n'est pas de la folie : c'est le contraire exact de la folie, et c'est bien plus difficile à supporter." },
+ro_sait_chiffres:{ sec:'affaires', poids:1, dit:"Les chiffres de Rochebrune ne s'accordaient pas avec les corps. Ils ne s'accordent jamais ; c'est quand on cherche pourquoi qu'on trouve les affaires." },
+ro_sait_aldren:{ sec:'affaires', poids:2, dit:"On a fini par savoir qui c'était. Le nom d'un chevalier de la maison, et un bailliage qui n'a rien voulu en faire pendant deux ans." },
+ro_baudoin_vu:{ sec:'affaires', poids:2, dit:"Baudoin d'Escaut montait à la tour de guet tous les quinze jours avec deux gobelets, pour que ça finisse. Il a fait ça pendant deux ans." },
+ro_baudoin_avoue:{ sec:'affaires', poids:3, dit:"Il a avoué la nuit entière, le visage, les quatorze hommes, tout. On dit que c'est le seul moment de sa vie où on l'a vu soulagé." },
+ro_appat:{ sec:'affaires', poids:2, dit:"Quatre nuits sur la lande sous le nom d'un mort de la patrouille. Il faut connaître la nuit d'octobre par cœur pour tenir ce mensonge-là quatre nuits." },
+ro_fouille:{ sec:'affaires', poids:1, dit:"Six jours de lande, bande par bande, pour trouver un corps de garde abandonné à onze milles. Personne ne chante six jours de lande." },
+ro_battu:{ sec:'affaires', poids:2, dit:"Aldren l'a mis à terre et l'a laissé vivre, parce qu'il n'était pas sur la liste. C'est la façon dont cet homme comprenait le mot *justice* et il n'en a jamais démordu." },
+ro_heaume_laisse:{ sec:'affaires', poids:2, dit:"On lui a laissé son heaume. Il n'avait plus de paupières et tout le monde à Rochebrune le savait sans jamais l'avoir vu." },
+ro_arret:{ sec:'affaires', poids:2, dit:"Il a rengainé. Il l'a fait deux fois dans sa vie et les deux fois c'était devant le même homme." },
+ro_laisse:{ sec:'trous', poids:3, dit:"qu'un homme est venu de très loin pour tuer un tueur, et qu'il l'a laissé finir sa liste après avoir compris pourquoi elle existait ;" },
+ro_aldren_vivant:{ sec:'neuf', poids:3, dit:"Ser Aldren a fini sa liste et il a survécu à Rochebrune de onze ans. Ce que la province en a fait ensuite est une autre affaire, et pas une belle." },
+ro_aldren_mort:{ sec:'affaires', poids:2, dit:"Ser Aldren est mort dans l'ajonc, à quatre noms de la fin. Les quatre ont vécu vieux et deux d'entre eux n'ont jamais su pourquoi." },
+ro_vivant:{ sec:'affaires', poids:2, dit:"Il s'est rendu, à une condition : qu'on ne le quitte pas. On ne l'a pas quitté, et c'est la partie de l'histoire que les salles trouvent invraisemblable." },
+ro_discret:{ sec:'affaires', poids:1, dit:"L'affaire de Rochebrune s'est réglée sans que la province ait à l'écrire. C'est ce que la maison payait et elle l'a eu." },
+ro_or_seul:{ sec:'maison', poids:3, dit:"Il n'a pas réclamé la coutume à Rochebrune. Une maison à qui un Paria n'a rien demandé garde ça longtemps, et Rochebrune l'a gardé jusqu'au bout." },
+
+/* ═══ ARQUENAY, LE PUITS TROIS ═════════════════════════════════════════════ */
+
+ar_sait_trente_trois:{ sec:'affaires', poids:2, dit:"Trente-trois personnes au fond d'une galerie hors plan, sous dix-neuf mois de bois vert. La compagnie savait le chiffre et ne l'avait écrit nulle part." },
+ar_sait_ferme:{ sec:'affaires', poids:2, dit:"Le remblai avait été monté le douze, sur ordre, et l'ordre existait par écrit. C'est ce genre de papier qui fait tomber une compagnie minière." },
+ar_sait_difference:{ sec:'affaires', poids:1, dit:"Soixante-dix pieds sans cote entre deux tailles. Un contremaître est descendu vérifier une différence de tonnage et n'est jamais remonté." },
+ar_galerie:{ sec:'affaires', poids:2, dit:"Il y avait une galerie qui n'était sur aucun plan, et un plan trop propre pour être honnête." },
+ar_signal:{ sec:'affaires', poids:3, dit:"Ils frappaient trois coups derrière le remblai. Ils frappaient depuis onze jours et personne au jour ne comptait." },
+ar_ouvert:{ sec:'trous', poids:3, dit:"qu'on a ouvert un remblai que la compagnie avait fait monter, et qu'il y avait quelqu'un derrière, et qu'ils frappaient depuis onze jours ;" },
+ar_aerage:{ sec:'affaires', poids:2, dit:"Il est passé par l'aérage. Il faut se déboîter une épaule pour passer un aérage, et on ne repasse pas par là dans l'autre sens." },
+ar_deux_doigts:{ sec:'affaires', poids:1, dit:"Deux doigts sont restés dans le puits trois d'Arquenay. Ils ne figurent dans aucun état et l'homme n'en a jamais fait mention." },
+ar_bois_reveille:{ sec:'affaires', poids:2, dit:"Le boisage s'est réveillé. Un mineur vous dira que c'est le pire son du monde et il ne vous l'expliquera pas." },
+ar_trente_quatre:{ sec:'affaires', poids:3, dit:"Trente-quatre personnes sont remontées du puits trois. Le carnet de tailles est remonté le premier, avec trois mots au charbon dessus qu'on n'a jamais publiés." },
+ar_vingt_sept:{ sec:'affaires', poids:3, dit:"Vingt-sept sont remontés parce qu'il a refusé de choisir lesquels. Les sept autres sont restés, et il n'y a pas de version de cette histoire où ce refus est un tort." },
+ar_tenu:{ sec:'trous', poids:3, dit:"qu'un homme a tenu vingt minutes le ciel d'une recoupe qui descendait, devant vingt-neuf témoins qui n'ont jamais su nommer ce qu'ils voyaient ;" },
+ar_onde:{ sec:'karlsberg', poids:3, dit:"L'Onde a tenu la pierre d'Arquenay devant vingt-neuf mineurs. À partir de ce jour-là, il y a eu quelque chose d'écrit quelque part, et il a mis six ans à l'apprendre." },
+ar_gaspard:{ sec:'affaires', poids:2, dit:"Gaspard d'Arquenay est remonté le premier, contre son propre avis, parce qu'on le lui a ordonné. Il ne s'en est jamais remis et il a tenu la mine trente ans." },
+ar_effondre:{ sec:'affaires', poids:2, dit:"La recoupe est partie. La galerie fait vingt-deux pieds aujourd'hui au lieu de soixante-dix, et on n'y descend plus." },
+ar_sans_retour:{ sec:'affaires', poids:2, dit:"Personne n'est ressorti du puits trois. La compagnie a payé ses amendes et a rouvert ailleurs dans l'année." },
+ar_parti:{ sec:'affaires', poids:1, dit:"Il est remonté dans la benne pendant que le fond partait. Personne ne le lui a reproché à voix haute." },
+ar_descend:{ sec:'affaires', poids:1, dit:"Il est descendu. C'est le genre de phrase qui ne dit rien tant qu'on n'a jamais vu un puits de mine." },
+ar_consigne:{ sec:'maison', poids:2, dit:"Maëlys d'Arquenay a fixé les termes elle-même, et elle a désigné quelqu'un d'autre. Elle avait le droit, elle l'a pris, et cela s'est écrit ainsi." },
+ar_maelys_accord:{ sec:'maison', poids:2, dit:"L'accord d'Arquenay a été conclu dans les formes, avec une clause que la maison a écrite seule." },
+ar_or_seul:{ sec:'maison', poids:3, dit:"Il n'a pas réclamé la coutume à Arquenay. Cette maison a une mine, et une mine se souvient plus longtemps qu'un titre." },
+ar_discret:{ sec:'affaires', poids:1, dit:"L'affaire du puits trois n'est jamais sortie de la vallée d'Arquenay. Elle en est sortie quarante ans après, par une chanson, ce qui n'était pas le marché." },
+onde_vue_mine:{ sec:'karlsberg', poids:3, dit:"Vingt-neuf mineurs ont vu ce qu'ils ont vu à six cents pieds. Ils l'ont raconté chez eux, comme tout le monde, et c'est de là qu'est partie la première rumeur." },
+
+/* ═══ VAUCLAIR, LE MARAIS DE SOMBREVAL ═════════════════════════════════════ */
+
+va_soupcon_page3:{ sec:'affaires', poids:2, dit:"La troisième page de la déposition parlait des gens du marais en langue de clerc. Personne ne lit la troisième page ; c'est pour ça qu'on l'y met." },
+va_sait_quatre_vingts:{ sec:'affaires', poids:3, dit:"Quatre-vingts personnes, vingt-six enfants, qualifiées de *bande* dans un acte. Le mot était choisi et il valait cinquante-huit mille chariots de tourbe." },
+va_sait_signature:{ sec:'affaires', poids:2, dit:"La concession portait sur la tourbe et non sur les habitants. Il suffisait d'appeler les habitants autrement, et quelqu'un l'avait déjà fait." },
+va_freres:{ sec:'affaires', poids:2, dit:"Trois frères, et un bailliage qui n'avait besoin que de deux pour pendre." },
+va_deux:{ sec:'affaires', poids:2, dit:"Deux frères seulement sont rentrés, et ils ont été pendus sans être entendus. Personne n'a signé quoi que ce soit ce jour-là et c'était l'intérêt de tout le monde." },
+va_trois:{ sec:'affaires', poids:3, dit:"Les trois frères sont rentrés vivants, et Bertran a signé des trois noms. Il avait dix-neuf ans et il était le seul du marais à savoir écrire." },
+va_bertran_reste:{ sec:'trous', poids:2, dit:"qu'un garçon de dix-neuf ans a compris avant quatre-vingts personnes ce qu'un acte notarié pouvait faire, et qu'il est resté pour l'écrire ;" },
+va_greffe:{ sec:'affaires', poids:3, dit:"Deux actes ont été enregistrés le même jour au bailliage. Celui du marais portait la cote du matin, et c'est la seule raison pour laquelle Sombreval existe encore." },
+va_greffe_rate:{ sec:'affaires', poids:2, dit:"Le greffe a refusé l'inscription : il manquait une attestation de qualité. Une province se défend toujours par la même pièce et elle ne s'en lasse pas." },
+va_tenanciers:{ sec:'affaires', poids:3, dit:"Quatre-vingts tenanciers portés au rôle avec date et cote. Ils ont cessé d'être une bande le matin où quelqu'un a écrit leur nom." },
+va_marais_sauve:{ sec:'trous', poids:3, dit:"que le marais de Sombreval et le bourg étaient la même famille coupée en deux depuis trente ans, et que la seule personne à l'avoir remarqué n'était pas du pays ;" },
+va_marais_sursis:{ sec:'affaires', poids:2, dit:"Le marais a eu un sursis. Un sursis, dans un bailliage, dure exactement jusqu'à ce que le concessionnaire change de clerc." },
+va_marais_disperse:{ sec:'affaires', poids:2, dit:"Le marais a été dispersé. On en retrouve des noms à quatre provinces d'ici, et ils ne disent jamais d'où ils viennent." },
+va_passes:{ sec:'affaires', poids:2, dit:"Les passes de Sombreval sont marquées sur les saules depuis trente ans. Il faut être né là pour les lire, ou avoir passé une nuit et demie dans la tourbe." },
+va_guide:{ sec:'affaires', poids:1, dit:"Quelqu'un du marais a accepté de guider un étranger. C'est plus rare, là-bas, que de le laisser se noyer." },
+va_bourg_sait:{ sec:'affaires', poids:2, dit:"Le bourg a su ce qu'il faisait à ses propres cousins. Il l'a su, et il a continué douze ans, puis il a arrêté d'un coup sans explication." },
+va_respect:{ sec:'affaires', poids:1, dit:"Le marais l'a respecté. Ça ne se demande pas et ça ne s'achète pas ; on ne sait toujours pas à quoi ça tient." },
+va_coutume:{ sec:'maison', poids:2, dit:"Iselle de Vauclair a fixé les termes pour organiser son propre départ. Elle a réussi son départ et personne dans sa maison ne l'a jamais retrouvée." },
+va_or_seul:{ sec:'maison', poids:3, dit:"Il n'a pas réclamé la coutume à Vauclair. Cette maison a fait semblant de ne pas le remarquer pendant neuf ans et l'a écrit dans son testament." },
+
+/* ═══ LE PONT DE HARN ══════════════════════════════════════════════════════ */
+
+tr_sait_neuf:{ sec:'affaires', poids:2, dit:"Neuf convois disparus au même pont en deux ans, et un péage que personne n'avait pensé à interroger." },
+tr_sait_dedans:{ sec:'affaires', poids:2, dit:"Ce qui tenait le pont était dessous, et y était depuis très longtemps avant le pont." },
+tr_sait_entretien:{ sec:'affaires', poids:1, dit:"Le pont était entretenu. C'est le détail qui aurait dû tout dire à la province et qui n'a jamais intéressé personne." },
+tr_sait_acte:{ sec:'affaires', poids:2, dit:"Il y avait un acte. Il y en a toujours un ; il est simplement plus vieux que la maison qui prétend en bénéficier." },
+tr_pont:{ sec:'affaires', poids:2, dit:"Harn tenait le vieux pont depuis deux cent onze ans, et il commençait à perdre la mémoire, ce qui est chez lui la seule forme connue de vieillesse." },
+tr_adelie:{ sec:'trous', poids:3, dit:"qu'une chose de deux cent onze ans a gardé l'histoire d'une femme appelée Adélie sans la faire payer à personne, et qu'elle la garde encore ;" },
+tr_essai_adelie:{ sec:'affaires', poids:2, dit:"On lui a raconté Adélie de Sombreval. Il écoute, il retient, et c'est tout le péage qu'il ait jamais demandé." },
+tr_essai_mensonge:{ sec:'affaires', poids:2, dit:"On lui a menti et on est passé. Il ne l'a su qu'en Nivôse, et ce qu'il a fait ensuite ne figure dans aucun rapport de route." },
+tr_menti:{ sec:'affaires', poids:2, dit:"Le mensonge a marché. Harn a su, il a laissé passer quand même, et personne n'a jamais compris pourquoi — lui non plus, probablement." },
+tr_essai_blessure:{ sec:'affaires', poids:1, dit:"On lui a raconté une blessure. C'est ce qu'il préfère : les blessures ont des dates et il classe par dates." },
+tr_reconnu:{ sec:'karlsberg', poids:3, dit:"Harn a reconnu l'Onde. Il l'avait vue deux fois en deux cent onze ans et il a nommé les deux autres, qui étaient morts depuis longtemps." },
+tr_rengaine:{ sec:'affaires', poids:2, dit:"Il a rengainé devant Harn, qui a dit que c'était du calcul. Il avait raison et ce n'était pas seulement du calcul." },
+tr_borgne:{ sec:'affaires', poids:2, dit:"Harn a perdu un œil au vieux pont. Il faut voir les deux bouts pour tenir un pont, et un œil ne suffit pas : il ne le tient plus." },
+tr_mort:{ sec:'affaires', poids:3, dit:"Harn est au fond de la rivière, avec deux cent onze ans de mémoire. C'est la plus grosse perte d'archives de ce siècle et personne ne l'a portée nulle part." },
+tr_harn_vivant:{ sec:'affaires', poids:2, dit:"Harn est vivant. Il a deux cent onze ans, il perd la mémoire, et il a encore Karlsberg dedans parce que c'est rentré." },
+tr_harn_perd:{ sec:'trous', poids:3, dit:"qu'un jour quelqu'un demandera un nom à une chose de deux cent onze ans et qu'elle ne l'aura plus, et qu'elle aura encore Karlsberg ;" },
+tr_noye:{ sec:'affaires', poids:2, dit:"Quarante pieds, du haut du vieux pont, dans une eau de Nivôse. On en réchappe une fois sur trois et la chanson ne dit pas laquelle." },
+tr_onde:{ sec:'karlsberg', poids:2, dit:"L'Onde est sortie au vieux pont, devant la seule créature de quatre provinces capable de la nommer." },
+tr_passe:{ sec:'affaires', poids:2, dit:"Le grain est passé. C'est tout ce que le contrat demandait, et c'est la seule ligne que le commanditaire ait lue." },
+tr_or_seul:{ sec:'maison', poids:2, dit:"Il n'a pas réclamé la coutume sur cette affaire-là non plus. À force, dans quatre provinces, ça a fini par se dire." },
+karlsberg_ordonnance:{ sec:'karlsberg', poids:2, dit:"Une ordonnance ancienne de Karlsberg est ressortie d'un péage. Un nom rayé laisse toujours des papiers derrière lui : c'est ce qui le rend dangereux à porter." },
+
+/* ═══ HAUTERIVE, ET LE COFFRET ═════════════════════════════════════════════ */
+
+ha_sait_pas_rancon:{ sec:'affaires', poids:3, dit:"Dix-huit jours d'enlèvement et pas une demande de rançon. Toute l'affaire de Hauterive tient dans cette absence." },
+ha_sait_coffret:{ sec:'affaires', poids:2, dit:"Elle avait emporté un coffret de lettres recopiées, et elle avait demandé la route de Chastel. Une femme enlevée ne demande pas la route." },
+ha_sait_convoyeur:{ sec:'affaires', poids:2, dit:"Jaufré n'avait jamais rompu un contrat en quatorze ans, et ce n'était pas un preneur d'otages : c'était un convoyeur, ce qui est le contraire exact." },
+ha_sait_elle_paie:{ sec:'affaires', poids:3, dit:"Jaufré était payé six cents couronnes par Isabeau elle-même. Elle n'a jamais été attachée un seul jour des dix-huit." },
+ha_sait_lettres:{ sec:'affaires', poids:3, dit:"Le coffret prouvait un empoisonnement, et Chastel était à onze lieues. Elle ne fuyait pas son mari : elle portait une pièce à conviction." },
+ha_sait_chastel:{ sec:'affaires', poids:2, dit:"Tout allait vers Chastel. Dans cette province, tout va toujours vers Chastel, et c'est ce que les maisons paient pour éviter." },
+ha_soupcon_elle:{ sec:'affaires', poids:2, dit:"Elle avait signé les registres d'étape en toutes lettres, à chaque relais. On ne signe pas les registres quand on est enlevée." },
+ha_moulin:{ sec:'affaires', poids:2, dit:"Le meunier avait été payé pour ne pas avoir de barque cette semaine-là. Il l'a reconnu quatre ans plus tard, en mourant, et personne n'a rouvert le dossier." },
+ha_jaufre:{ sec:'affaires', poids:2, dit:"Jaufré est mort dans une rue de Chastel en finissant son contrat. Quatorze ans sans une rupture, et une fin qui ressemble à une ligne de comptes." },
+ha_relais_fermes:{ sec:'affaires', poids:2, dit:"Hauterive avait écrit à tous les relais avant tout le monde. Un mari qui ferme les relais avant de savoir où est sa femme sait déjà où elle va." },
+ha_escorte:{ sec:'affaires', poids:2, dit:"Huit hommes attendaient au deuxième relais. Deux des six de Jaufré y sont restés et on ne connaît le nom d'aucun des deux." },
+ha_temoins:{ sec:'affaires', poids:1, dit:"Ils ont été vus. Sur une route de poste, être vu une fois suffit : le relais suivant sait avant vous que vous arrivez." },
+ha_rue:{ sec:'affaires', poids:2, dit:"Ça s'est fini dans une rue de Chastel, à onze pas d'un greffe qui ne s'est aperçu de rien." },
+ha_riviere:{ sec:'affaires', poids:2, dit:"Trente-six heures de rivière pour arriver avant tout le monde. Onze flèches au deuxième coude, et un homme tombé par-dessus bord." },
+ha_lettres_mouillees:{ sec:'trous', poids:3, dit:"qu'une femme a séché quarante lettres une par une, au bord d'un gué de printemps, en sachant que chacune valait la vie de quelqu'un ;" },
+ha_discret:{ sec:'affaires', poids:2, dit:"Ils sont passés sans être trouvés : quatre jours de traverses, puis un gué de printemps. Le coffret est arrivé sec, ce qui, dans cette affaire, était toute la question." },
+ha_crete:{ sec:'affaires', poids:2, dit:"Quatre heures de crête. Deux des cinq ne sont pas redescendus et la chanson ne les nomme pas parce que personne ne me les a jamais nommés." },
+ha_ramenee:{ sec:'affaires', poids:3, dit:"Elle a été ramenée à son mari, avec le coffret. C'est la fin que le contrat demandait ; ce n'est pas la fin de l'histoire et tout le monde le savait en la refermant." },
+ha_isabeau_morte:{ sec:'affaires', poids:3, dit:"Isabeau de Hauterive est morte sur la route de Chastel. Le coffret a disparu la même semaine et il n'a jamais été produit devant personne." },
+ha_vendu:{ sec:'affaires', poids:3, dit:"Le coffret a été vendu au mari pour mille deux cents couronnes. C'est le prix qu'une preuve atteint quand celui qu'elle accuse est le seul acheteur." },
+ha_registres:{ sec:'affaires', poids:2, dit:"Les registres d'étape ont fini par être lus. Onze ans après, par un clerc de Chastel qui cherchait autre chose et n'a rien dit." },
+ha_compensation:{ sec:'maison', poids:2, dit:"Hauterive a payé d'avance, la compensation comprise, pour qu'on soit déjà payé en la voyant. C'est une manière de faire, et elle en dit assez." },
+ha_refus_comp:{ sec:'maison', poids:3, dit:"Il a refusé que Hauterive rachète la coutume en argent. Cette maison l'a remarqué et ne l'a jamais dit à personne, et elle est montée à Karlsberg." },
+ha_avance:{ sec:'affaires', poids:1, dit:"On a payé d'avance. Dans quatre provinces, un mercenaire payé d'avance est un mercenaire dont on n'attend pas qu'il pose de questions." },
+ha_remarque:{ sec:'affaires', poids:1, dit:"Il a remarqué. C'est tout ce que cette affaire demandait, et c'est ce que onze personnes payées pour la même chose n'avaient pas fait." },
+ha_un_mort:{ sec:'affaires', poids:1, dit:"Un mort chez les convoyeurs. Sur une route de poste, un mort est une affaire ; sur une traverse, c'est une nouvelle qui n'arrive nulle part." },
+ha_deux_morts:{ sec:'affaires', poids:1, dit:"Deux morts chez les convoyeurs, et un contrat honoré quand même. Jaufré tenait ses gens par autre chose que l'argent et personne n'a jamais su par quoi." },
+ha_coffret_passe:{ sec:'affaires', poids:2, dit:"Le coffret est arrivé à destination. Ce qui s'est passé ensuite à Chastel a occupé un greffe pendant deux ans." },
+
+/* ═══ L'ASSISE D'HIVER DE CHASTEL ══════════════════════════════════════════ */
+
+assise:{ sec:'affaires', poids:3, dit:"L'assise d'hiver de Chastel s'est montée à Cendrepont, cette année-là, parce qu'il y avait trop d'affaires et pas assez de salle." },
+as_sait_regles:{ sec:'neuf', poids:2, dit:"Renaud Sorgue : quarante et un duels judiciaires, une hanche morte, et trois temps contre zéro. C'était écrit sur le mur et personne ne le lisait." },
+as_sait_304:{ sec:'affaires', poids:2, dit:"L'article trois cent quatre. Il existe dans quatre provinces, il n'a jamais été abrogé, et deux avocats sur trois ignorent qu'on peut l'invoquer." },
+as_rond:{ sec:'affaires', poids:2, dit:"Un rond de craie de neuf pas dans une salle d'assise. Chastel écrivait les règles et Chastel fournissait le champion." },
+as_gagne:{ sec:'neuf', poids:3, dit:"Le rond a été gagné contre le champion de Chastel. Quarante et un duels, et une reddition prononcée à voix normale vers le seuil d'une salle pleine." },
+as_perdu:{ sec:'affaires', poids:2, dit:"Le rond a été perdu. Chastel a eu son jugement, et l'affaire est portée aux volumes de la manière dont Chastel voulait qu'elle y soit." },
+as_sorti:{ sec:'affaires', poids:2, dit:"Il est sorti du rond vivant, ce qui suffisait, et c'est une chose que les salles n'acceptent jamais quand je la chante ainsi." },
+as_loi_gagnee:{ sec:'affaires', poids:3, dit:"L'affaire a été gagnée sur le droit et non dans le rond. C'est plus rare, ça tient plus longtemps, et ça ne fait rigoureusement aucun effet dans une chanson." },
+as_loi_ratee:{ sec:'affaires', poids:2, dit:"L'argument de droit n'a pas porté. Une salle de province n'aime pas qu'un étranger connaisse ses articles mieux qu'elle." },
+as_loys_parle:{ sec:'trous', poids:3, dit:"qu'un greffier de Chastel a parlé une fois dans sa vie, à voix haute, dans une salle où il n'avait pas le droit de parler, et qu'il l'a payé dix-neuf ans ;" },
+as_cause_renvoyee:{ sec:'affaires', poids:2, dit:"La cause a été renvoyée. Une cause renvoyée à Chastel, dans ces années-là, revenait en moyenne au bout de sept ans, ou pas du tout." },
+as_greffier_paie:{ sec:'affaires', poids:2, dit:"Un greffier a été payé. C'est la chose la plus banale de cette histoire et c'est celle qui a le plus changé son cours." },
+as_nom_nu:{ sec:'karlsberg', poids:3, dit:"Il a donné son nom, entier, dans une salle d'assise, devant un greffe qui écrivait. Il n'y a pas de plus grand risque dans toute cette vie et il l'a pris là." },
+as_nom_rate:{ sec:'karlsberg', poids:2, dit:"Le nom a été donné et il n'a rien produit. Un greffe de province ne sait pas quoi faire d'une maison rayée : il note et il passe." },
+as_faux_nom:{ sec:'affaires', poids:2, dit:"Il s'est présenté sous un faux nom devant un greffe. C'est un délit dans quatre provinces et il est prescrit depuis longtemps." },
+as_tenu_centre:{ sec:'affaires', poids:1, dit:"Il a tenu le centre du rond. Contre Sorgue, tenir le centre est la seule chose qui marche et personne ne la tient." },
+as_onde_deborde:{ sec:'karlsberg', poids:3, dit:"L'Onde a débordé dans une salle d'assise, devant l'assise entière. C'est le jour où la rumeur a cessé d'être une rumeur." },
+as_sale:{ sec:'affaires', poids:1, dit:"C'est sorti sale. Les affaires de province sortent presque toujours sales et les chansons les repassent toutes au propre." },
+as_pousse:{ sec:'affaires', poids:1, dit:"Il a poussé. Contre un homme qui compte les temps, pousser est une faute, et cette faute-là a marché une fois." },
+as_dernier_temps:{ sec:'affaires', poids:2, dit:"Ça s'est joué au dernier temps. Sorgue a mis dix-neuf ans à admettre que c'était le dernier et non l'avant-dernier." },
+as_vasque_detourne:{ sec:'affaires', poids:1, dit:"Quelqu'un a détourné l'attention près de la vasque. Personne n'a jamais su qui et deux personnes s'en sont attribué le mérite." },
+as_tailleur_ignore:{ sec:'affaires', poids:1, dit:"Le tailleur n'a pas été entendu. Il avait tout vu ; il taillait, il ne parlait pas, et une salle ne demande jamais à un tailleur." },
+as_parti:{ sec:'affaires', poids:1, dit:"Il est parti avant la fin de l'assise. C'est ce qu'on fait quand on a gagné à Chastel : on ne reste pas pour le voir écrire." },
+pierre_saisie:{ sec:'karlsberg', poids:2, dit:"De la pierre de Karlsberg a été saisie par le bailliage. On la retrouve aujourd'hui dans deux murs de Cendrepont et dans le seuil d'une écurie." },
+acte1_silence:{ sec:'affaires', poids:1, dit:"Il est reparti de Cendrepont sans que personne ait su son nom, ce qui était exactement ce qu'il avait payé pour obtenir." },
+assise_loys:{ sec:'affaires', poids:2, dit:"Le greffier a été entendu. Une salle de province qui entend son propre greffier fait une chose qu'elle ne refait pas de la génération." },
+assise_clerc:{ sec:'affaires', poids:2, dit:"Le clerc a parlé. Il n'y avait pas d'ordonnance, il l'a dit, et une affaire montée sur une ordonnance qui n'existe pas est une affaire perdue d'avance pour celui qui l'a montée." },
+assise_tailleur:{ sec:'affaires', poids:2, dit:"Le tailleur a été appelé à la barre. Il taillait la pierre de Karlsberg depuis vingt ans pour le compte du bailliage et il avait toujours su d'où elle venait." },
+assise_amaury:{ sec:'affaires', poids:2, dit:"Amaury de Valombre était dans la salle. Il n'a rien dit ; il est venu, il a écouté toute la séance, et il est reparti avant le jugement." },
+assise_gassien:{ sec:'affaires', poids:2, dit:"Gassien le Lièvre était dans la salle, au fond, avec un chapeau. C'est un homme qui assiste toujours aux assises et qui n'y est jamais cité." },
+assise_sergent:{ sec:'affaires', poids:2, dit:"Le sergent a déposé. Un sergent de bailliage dépose ce qu'on lui a dit de déposer, et c'est quand il ajoute une phrase qu'il faut écouter." },
+ha_verite:{ sec:'affaires', poids:3, dit:"Toute l'affaire de Hauterive a été comprise, jusqu'au dernier ressort. Elle n'a jamais été établie devant personne, ce qui n'est pas la même chose et ce qui a fait toute la différence pour deux morts." },
+ha_deux_morts_crete:{ sec:'affaires', poids:2, dit:"Deux hommes sont restés sur la crête, dans une affaire où personne n'était censé mourir. Jaufré a payé leurs familles sur ses propres six cents couronnes." },
+onde_enferme:{ sec:'karlsberg', poids:3, dit:"Il a appris à l'enfermer. C'est ce que font tous ceux qui la portent, et aucun de ceux qui l'ont fait n'a jamais dit que ça se passait bien." },
+al_sauve_par_elle_2:{ sec:'neuf', poids:3, dit:"Elle lui a sauvé la vie une seconde fois, sur la route de Karlsberg, et elle n'en a jamais fait mention devant lui." },
+a3_seul:{ sec:'karlsberg', poids:3, dit:"Il a refusé de répondre aux quatre courriers. Une maison qui ne promet rien à personne ne doit rien à personne, et elle a tenu son hiver toute seule." },
+a3_tombee:{ sec:'karlsberg', poids:3, dit:"Elle est tombée. On est sorti par le chemin creux, dans l'ordre et sans se presser, parce qu'une colonne qui se presse dans un chemin creux ne sort pas." },
+
+/* ═══ CENDREPONT, LE SEUIL ═════════════════════════════════════════════════ */
+
+faux_nom:{ sec:'karlsberg', poids:2, dit:"Il est entré à Cendrepont sous un faux nom. Ils y sont tous entrés sous un faux nom : c'est la première chose qu'apprend un Paria et la dernière qu'il désapprend." },
+nom_donne:{ sec:'karlsberg', poids:3, dit:"Il est entré à Cendrepont sous son propre nom, le premier jour, sans avoir rien à y gagner. Personne dans quatre provinces n'a jamais compris ce calcul-là." },
+vu_cendrepont:{ sec:'affaires', poids:1, dit:"Il a croisé les gens du bas du gué sur la route du sud. Ils allaient quelque part et personne ne leur avait demandé où." },
+vu_rochebrune:{ sec:'affaires', poids:1, dit:"Trois patrouilleurs sans visage à un carrefour, et une maison qui retire son contrat le lendemain." },
+vu_arquenay:{ sec:'affaires', poids:1, dit:"On voit la fumée d'Arquenay à onze lieues. C'est la seule chose que la compagnie n'ait jamais réussi à cacher." },
+vu_vauclair:{ sec:'affaires', poids:1, dit:"Vauclair, vue de la route : un bourg propre, un marais derrière, et trente ans de silence entre les deux." },
+vu_hauterive:{ sec:'affaires', poids:1, dit:"Hauterive paie ses routes. C'est la première chose qu'on remarque en y arrivant et c'est censé être la seule." },
+vu_sombreval:{ sec:'affaires', poids:1, dit:"Sombreval ne se voit pas de la route. C'est le principe même d'un marais et c'était le principe même de l'affaire." },
+ourdel:{ sec:'affaires', poids:2, dit:"Ourdel, chirurgien de camp, recousait sans poser de questions. Il en a recousu six cents et il n'en a jamais nommé un seul." },
+conv_neglige:{ sec:'affaires', poids:1, dit:"Il est reparti sans rien soigner. On peut faire ça deux ou trois fois dans une vie, et il l'a fait plus souvent que ça." },
+borne_perdue:{ sec:'karlsberg', poids:3, dit:"Il ne reste plus une seule pierre au monde qui dise ce que Karlsberg possédait. Un domaine sans borne se plaide, et il s'est plaidé pendant vingt ans." },
+
+/* ═══ L'ACTE II — LA MAISON, LE NOM ════════════════════════════════════════ */
+
+kar_arrive:{ sec:'karlsberg', poids:3, dit:"Il est revenu à Karlsberg. Vingt ans après la rature, par la route de poste, à pied, un jour ordinaire de Ventôse." },
+kar_ouvert:{ sec:'karlsberg', poids:2, dit:"Il a rouvert Karlsberg. Ce mot-là ne veut rien dire pour une ruine et il a fallu six ans pour lui en donner un." },
+kar_crypte:{ sec:'karlsberg', poids:3, dit:"La crypte de Karlsberg a été rouverte. Il y avait quatre corps et il en connaissait trois." },
+kar_dalle_decouverte:{ sec:'karlsberg', poids:2, dit:"Une dalle a été soulevée sous la chapelle. Ce qu'il y avait dessous n'a jamais été rendu public et ne le sera pas par moi." },
+kar_quatre_corps:{ sec:'trous', poids:3, dit:"qu'un homme a mis quatre noms sur quatre corps dans une crypte, seul, sans témoin et sans clerc, et que personne n'a jamais vérifié son travail ;" },
+kar_chevaliere:{ sec:'karlsberg', poids:3, dit:"La chevalière de la maison a été retrouvée. Elle est en argent, elle ne vaut rien, et trois provinces l'ont recherchée pendant vingt ans." },
+kar_paume:{ sec:'karlsberg', poids:2, dit:"Le mur a reconnu la paume. Je ne sais pas ce que ça veut dire ; je le chante parce que trois relais me l'ont dit dans les mêmes termes." },
+kar_banniere:{ sec:'karlsberg', poids:3, dit:"La bannière a été retrouvée dans les décombres, pliée et intacte, ce qui est impossible après vingt ans et ce qui est pourtant dit partout." },
+kar_bannieres:{ sec:'karlsberg', poids:3, dit:"Les Bannières du Loup ont été relevées. La province a mis onze ans à décider si c'était légal et elle a fini par ne pas décider." },
+kar_fumee:{ sec:'karlsberg', poids:2, dit:"Il y a eu de la fumée à Karlsberg pour la première fois en vingt ans. Trois hameaux l'ont vue le même soir et aucun n'est monté voir." },
+kar_marche:{ sec:'karlsberg', poids:2, dit:"Un marché s'est tenu à Karlsberg. C'est plus difficile à obtenir qu'une garnison et ça vaut plus cher." },
+kar_montdraken_venu:{ sec:'neuf', poids:3, dit:"Mont-Draken est monté à Karlsberg en personne. On ne monte pas en personne pour une ruine : on monte en personne pour vérifier ce qu'on soupçonne." },
+kar_berold_libre:{ sec:'affaires', poids:2, dit:"Bérold est reparti libre. Il a raconté ce qu'il avait vu à qui voulait l'entendre et il n'a jamais varié d'un mot." },
+kar_berold_avec:{ sec:'affaires', poids:2, dit:"Bérold est resté. Il est resté vingt ans, il ne s'est jamais tu, et c'est de lui qu'une bonne moitié de cette chanson descend." },
+kar_berold_mort:{ sec:'affaires', poids:2, dit:"Bérold est mort à Karlsberg. Il avait dit trois secondes avant qu'il ne fallait pas y aller, et il y est allé." },
+kar_chef_vivant:{ sec:'affaires', poids:1, dit:"Le chef de bande a été épargné. Il a tenu la route de Karlsberg encore quatre ans et il n'y a plus touché." },
+kar_chef_pris:{ sec:'affaires', poids:1, dit:"Le chef de bande a été pris vivant et remis au bailliage, qui l'a pendu dans la semaine sans écrire son nom." },
+kar_emb_gagnee:{ sec:'affaires', poids:2, dit:"L'embuscade de la route de Karlsberg a été retournée. Ce genre de chose se sait dans une vallée et vaut deux ans de tranquillité." },
+kar_echange:{ sec:'affaires', poids:1, dit:"Il y a eu un échange. Dans les Marches Grises, on échange plus souvent qu'on ne se bat et aucune chanson ne le dit." },
+kar_discret:{ sec:'karlsberg', poids:2, dit:"Il est revenu sans que la province l'apprenne. Ça a tenu deux ans, ce qui est très long et ce qui n'était pas assez." },
+kar_refuse:{ sec:'karlsberg', poids:2, dit:"Il a refusé quelque chose à Karlsberg, ce premier hiver-là. Personne ne se rappelle quoi ; tout le monde se rappelle qu'il a refusé." },
+kar_un_rendu:{ sec:'affaires', poids:1, dit:"Un homme a été rendu à sa famille. Sur toute cette histoire, c'est arrivé onze fois et j'en connais trois." },
+kar_trois_lettres:{ sec:'affaires', poids:2, dit:"Trois lettres sont parties de Karlsberg le même jour. On sait à qui allaient deux d'entre elles." },
+kar_sait_confie:{ sec:'affaires', poids:1, dit:"Quelqu'un lui a confié quelque chose ce premier hiver. C'est une chose qui n'arrive qu'aux gens qui n'ont rien à gagner à la répéter." },
+kar_perdu_temps:{ sec:'karlsberg', poids:1, dit:"Il a perdu une saison. On perd toujours une saison ; les chansons les suppriment toutes et c'est pour ça qu'elles mentent sur les durées." },
+a2_pierre:{ sec:'karlsberg', poids:2, dit:"La pierre est venue de la carrière du haut, rendue à ses hommes. Aucune de ces pierres n'a été achetée et c'est écrit dans les comptes." },
+a2_karlsberg_eau:{ sec:'karlsberg', poids:3, dit:"Le puits a été rouvert. L'eau est revenue en une nuit ; elle avait toujours été bonne et personne n'avait osé descendre vérifier en vingt ans." },
+a2_karlsberg_habitable:{ sec:'karlsberg', poids:3, dit:"Karlsberg est redevenue habitable un hiver, sans acte, sans titre et sans permission. C'est la seule date de cette histoire dont je sois sûr." },
+a2_karlsberg_close:{ sec:'karlsberg', poids:2, dit:"L'enceinte a été refermée. Un mur fermé change ce qu'une vallée pense d'elle-même, avant même de changer ce qu'elle peut tenir." },
+a2_bourg:{ sec:'karlsberg', poids:3, dit:"Un bourg s'est fait sous Karlsberg. Personne ne l'a fondé et personne ne l'a autorisé ; il y avait trois cents feux au relevé de la vingt-quatrième année." },
+a2_asile_declare:{ sec:'karlsberg', poids:3, dit:"Karlsberg s'est déclarée asile. C'est un mot ancien, à peu près sans effet en droit, et il a fait venir quatre cents personnes en deux ans." },
+rg_faite:{ sec:'karlsberg', poids:2, dit:"La forge a été rallumée. Une maison qui forge cesse d'acheter ses fers et commence à en vendre, et c'est là que les voisins s'inquiètent." },
+a2_commission:{ sec:'neuf', poids:3, dit:"Mont-Draken a obtenu du conseil de province une commission sur les manifestations de l'Onde. C'était il y a trente ans et elle n'a jamais été révoquée." },
+a2_montdraken_sait:{ sec:'neuf', poids:3, dit:"Mont-Draken a su. À partir de ce jour-là, tout ce qui a suivi dans cette histoire est arrivé plus vite." },
+a2_montdraken_certain:{ sec:'neuf', poids:3, dit:"Charles de Mont-Draken a demandé s'il avait tué avec ça. La réponse a été oui, sans détour, et c'est de cette réponse-là que le registre est sorti." },
+a2_montdraken_muet:{ sec:'neuf', poids:2, dit:"Mont-Draken n'a rien dit. Cet homme n'a jamais rien dit sans savoir ce qu'il ferait ensuite, et il a mis neuf ans à le faire." },
+a2_charles_doute:{ sec:'neuf', poids:2, dit:"Il a ignoré d'où venait la liste. Le jour où il l'a su, il est parti avec vingt hommes, et ce jour-là est venu." },
+a2_charles_sait:{ sec:'neuf', poids:3, dit:"Il a su. Charles de Mont-Draken n'a jamais eu de haine pour rien de ce qu'il a tué, et ça n'a jamais protégé personne." },
+a2_charles_onze:{ sec:'neuf', poids:2, dit:"Onze noms lui ont été donnés. Il en a inscrit onze, il en a brûlé zéro, et il l'a dit chaque fois qu'on l'a accusé du contraire." },
+a2_papier_ouvert:{ sec:'karlsberg', poids:2, dit:"Un papier a été ouvert qui aurait dû rester fermé. Dans cette histoire, c'est arrivé quatre fois et trois fois c'était le bon choix." },
+a2_drain_vu:{ sec:'karlsberg', poids:1, dit:"L'arsenal de Karlsberg avait un drain. Une maison qui prévoit un drain sous son arsenal a déjà été assiégée une fois." },
+
+/* ═══ LES LIENS ════════════════════════════════════════════════════════════ */
+
+al_rencontree:{ sec:'neuf', poids:3, dit:"Alycia de Callensbourg l'a testé le premier jour. Il ne l'a ni crue ni démentie, et c'est de là que tout est parti entre eux." },
+al_silence:{ sec:'trous', poids:3, dit:"que deux personnes ont voyagé trois semaines sans rien se demander, et que c'est la femme qui a parlé la première, le dix-neuvième soir ;" },
+al_devinee:{ sec:'neuf', poids:3, dit:"Elle a deviné. Elle devinait tout le monde ; c'était son métier et c'est probablement ce qui l'a le plus coûté." },
+al_mere:{ sec:'neuf', poids:2, dit:"Il a su pour sa mère. Personne d'autre ne l'a su de sa bouche et deux cents personnes vivantes le lui doivent." },
+al_quatre:{ sec:'neuf', poids:2, dit:"Quatre personnes sorties en une nuit, dans l'ordre inverse de leur distance. C'était sa méthode et elle n'en a jamais changé." },
+al_quatre_partis:{ sec:'neuf', poids:2, dit:"Les quatre sont partis. On ne sait pas où : c'est le principe, et c'est ce qui rend le travail de cette femme impossible à raconter." },
+al_un_debout:{ sec:'neuf', poids:2, dit:"Il en est resté un debout. Dans un réseau, celui qui reste debout est celui qui n'a pas voulu partir, jamais celui qu'on a choisi." },
+al_gamin_vivant:{ sec:'trous', poids:3, dit:"qu'un enfant qu'on ne devait pas pouvoir sortir est sorti, et qu'il a aujourd'hui quarante-deux ans et trois enfants qui ignorent tout de ça ;" },
+al_apprend_couper:{ sec:'neuf', poids:2, dit:"Elle lui a appris à couper une piste. C'est la seule chose qu'elle ait jamais enseignée à quelqu'un qui n'était pas du réseau." },
+al_callensbourg_dedans:{ sec:'neuf', poids:2, dit:"Callensbourg était dedans. Une maison qui abrite un réseau ne l'ignore jamais complètement : elle organise seulement de ne pas avoir à le savoir." },
+al_montdraken:{ sec:'neuf', poids:2, dit:"Le réseau et Mont-Draken se sont croisés. Deux façons opposées de tenir la même liste de gens, et une seule des deux les inscrivait." },
+al_route_karlsberg:{ sec:'neuf', poids:2, dit:"La route de Karlsberg est devenue une route du réseau. Ça a sauvé des gens et ça a fini par désigner la vallée." },
+al_bien_commence:{ sec:'neuf', poids:1, dit:"Ça avait bien commencé. C'est ce qu'on dit toujours et c'est presque toujours vrai." },
+aly_appat_su:{ sec:'neuf', poids:3, dit:"Elle avait fait de sa description un appât, quatre mois avant de le connaître. Elle l'a dit elle-même, sans qu'on la force, et c'est la chose la plus difficile qu'elle ait jamais dite." },
+aly_appat_tu:{ sec:'trous', poids:3, dit:"qu'un homme a brûlé un placard sans en parler, qu'elle s'en est aperçue, et qu'elle n'en a rien dit non plus, et que ça a tenu vingt ans ;" },
+aly_nuit:{ sec:'neuf', poids:2, dit:"Une chambre haute, trois jours de pluie, rien de signé. C'est tout ce que je sais et c'est tout ce que quiconque saura." },
+aly_nuit_repoussee:{ sec:'neuf', poids:2, dit:"Il est resté sur le palier. Elle n'y est jamais revenue et elle n'a rien changé à sa façon de travailler avec lui, ce qui est plus rare que le contraire." },
+aly_nuit_ratee:{ sec:'neuf', poids:2, dit:"Il lui a offert une place. Elle a entendu une dette et elle a refermé la porte normalement, sans claquer, ce qui était pire." },
+aly_offert:{ sec:'neuf', poids:2, dit:"Il lui a offert une maison. À une femme qui avait passé quinze ans à n'exister sur aucun papier, une maison est une adresse, et une adresse se donne." },
+aly_limite:{ sec:'neuf', poids:2, dit:"Elle a refusé la grande promesse et donné la petite. Elle a tenu la petite jusqu'au bout, ce que très peu de gens font avec les grandes." },
+aly_ou_elle_va:{ sec:'neuf', poids:2, dit:"Elle a fini par dire où elle allait quand elle partait seule. Rien d'autre n'a changé et c'était énorme." },
+aly_ment_pardon:{ sec:'neuf', poids:2, dit:"« Je n'ai pas de case où vous mettre, et ça fait onze semaines que ça m'agace. » On me l'a rapportée quatre fois dans les mêmes mots." },
+aly_quatrieme_doigt:{ sec:'neuf', poids:2, dit:"Trois choses sur sa liste depuis quinze ans. Il y en avait une quatrième et elle ne l'a jamais nommée devant personne." },
+aly_verifie:{ sec:'neuf', poids:1, dit:"Elle a vérifié. Elle vérifiait tout le monde, y compris ceux qu'elle aimait, et surtout ceux-là." },
+aly_dit_avant:{ sec:'neuf', poids:2, dit:"Il l'a dit avant. C'est la seule chose que cette femme ait jamais demandée à qui que ce soit." },
+aly_ecartee:{ sec:'neuf', poids:2, dit:"Elle a été écartée. Un réseau écarte comme il protège, sans explication, et ceux qu'il écarte ne reviennent pas." },
+aly_rupture:{ sec:'neuf', poids:3, dit:"Ça s'est cassé. Les chansons font durer ces choses-là parce qu'une salle n'aime pas les fins sèches ; celle-ci a été sèche." },
+aly_refuse_mariage:{ sec:'neuf', poids:3, dit:"Elle a refusé de l'épouser. Elle a donné sa raison, elle était bonne, et il ne l'a jamais contestée." },
+aly_choix_part:{ sec:'neuf', poids:2, dit:"Elle est partie. Ce n'était pas une rupture : c'était un choix entre deux cents personnes et une, et elle n'a jamais prétendu que c'en était un difficile." },
+aly_silence_coute:{ sec:'neuf', poids:2, dit:"Un silence a coûté quelque chose. Chez elle, tout se payait en une fois, à la fin, et jamais en petites sommes." },
+aly_graveur:{ sec:'affaires', poids:2, dit:"Un graveur de Chastel a fait des cachets pour deux camps à la fois pendant onze ans. Il est mort dans son lit." },
+aly_couronne_muet:{ sec:'neuf', poids:2, dit:"Il n'a pas répondu à la lettre. On l'a noté ; dans ce réseau-là, tout se notait, et rien ne s'écrivait." },
+a2_lettre_sans_reponse:{ sec:'neuf', poids:2, dit:"Une lettre est restée sans réponse pendant six ans. Elle a été retrouvée dans ses affaires, ouverte." },
+a2_couple_public:{ sec:'neuf', poids:3, dit:"Ils ont été vus ensemble en public. Pour une femme qui n'existait sur aucun papier, être vue est le seul risque qu'elle n'ait jamais pris deux fois." },
+a2_alliance_refusee:{ sec:'neuf', poids:2, dit:"Une alliance a été refusée. Dans quatre provinces, refuser une alliance est plus mémorable que d'en conclure trois." },
+a2_relais_trois:{ sec:'neuf', poids:2, dit:"Trois relais tenus par le réseau sur la route de Karlsberg. Ils ont servi neuf ans et ils ont servi une dernière fois un matin de Nivôse." },
+a2_sainteombre_su:{ sec:'neuf', poids:2, dit:"Sainte-Ombre a été trouvée. Il a mis dix-neuf ans, et la personne qu'il cherchait n'avait pas bougé de dix-neuf ans." },
+a2_ysabel_soupcon:{ sec:'neuf', poids:2, dit:"Le soupçon est venu tard et de biais, par un cachet et une date, comme viennent tous les soupçons qui sont fondés." },
+
+el_jardin:{ sec:'neuf', poids:2, dit:"Alarielle a deux cent quarante ans et elle en a passé cent quatre-vingts à regarder. C'est ce qu'elle a dit un jour à un homme qui en avait vingt-neuf." },
+el_silence_jardin:{ sec:'trous', poids:3, dit:"que trois heures de silence dans un jardin fermé ont décidé de plus de choses, dans cette histoire, que quatre conseils de province ;" },
+el_longevite:{ sec:'neuf', poids:3, dit:"Elle avait eu trois amis humains. Deux étaient morts trop tôt, et le troisième était en train de le faire pendant qu'elle parlait." },
+el_rien_du:{ sec:'neuf', poids:2, dit:"Il a refusé qu'elle lui doive quelque chose. Elle a ri. On me dit qu'elle rit très rarement et que c'est un son désagréable." },
+el_dette:{ sec:'neuf', poids:2, dit:"Une cour elfique a inscrit une dette envers un humain. Elle en avait inscrit quatre en huit cents ans et les trois autres étaient des rois." },
+el_frere:{ sec:'neuf', poids:2, dit:"Tyrion est son frère. Toute la difficulté de cette partie de l'histoire est là, et elle n'a pas de solution." },
+el_tyrion:{ sec:'neuf', poids:2, dit:"Tyrion voulait qu'il sorte avant la nuit. Il l'a dit une fois, poliment, à la porte basse, et il ne l'a jamais répété." },
+el_tyrion_chiffre:{ sec:'neuf', poids:2, dit:"Tyrion avait un chiffre en tête. Les Elfes ont toujours un chiffre en tête et ils le tiennent pendant des siècles." },
+el_tyrion_ferme:{ sec:'neuf', poids:2, dit:"Tyrion a fermé. Une maison elfique qui ferme ne rouvre pas dans une vie d'homme, et elle n'a pas rouvert." },
+el_reste:{ sec:'neuf', poids:2, dit:"Elle est restée. Chez eux, rester est une décision qui se prend en siècles, et elle l'a prise en une saison." },
+a2_onde_origine:{ sec:'karlsberg', poids:3, dit:"On lui a dit d'où venait l'Onde. Il est le seul humain vivant à l'avoir su et il n'en a jamais rien fait." },
+
+/* ═══ LE PRIX, LE MARIAGE, LA LIGNÉE ═══════════════════════════════════════ */
+
+px_su_le_chiffre:{ sec:'maison', poids:3, dit:"« Il portera Verneuil. Vous n'aurez aucun droit dessus. » Elle l'a dit avant, et non dans huit ans, ce qui est la seule forme d'honnêteté que cette coutume autorise." },
+px_alix_lucide:{ sec:'maison', poids:3, dit:"« Vouloir quelque chose, ce n'est pas ignorer le prix. » Elle avait tout chiffré, et elle avait chiffré juste." },
+px_mahaut_acte:{ sec:'maison', poids:3, dit:"L'acte de reconnaissance était écrit en blanc depuis trois semaines. « Il n'est pas cruel. Il est méthodique. »" },
+px_nuit:{ sec:'maison', poids:2, dit:"La coutume a été honorée. Elle l'est depuis quatre cents ans dans ces provinces et elle ne figure dans aucun code." },
+px_or:{ sec:'maison', poids:2, dit:"Il a pris l'or. C'est le terme le plus fréquent et le seul qui ne produise jamais rien vingt ans plus tard." },
+px_entier:{ sec:'maison', poids:3, dit:"Il a pris l'entier. Les maisons qui l'ont accordé l'ont écrit ; celles qui l'ont refusé l'ont écrit aussi." },
+px_refuse:{ sec:'maison', poids:3, dit:"Il a refusé la coutume. Quatre maisons l'ont noté et deux ne l'ont pas cru." },
+px_sang:{ sec:'maison', poids:3, dit:"Le sang a été demandé et donné. C'est ce que la coutume appelle par son nom, et je le chante par son nom." },
+px_liaison:{ sec:'maison', poids:3, dit:"Il y a eu une liaison. Le Prix ancestral produit ce qu'il produit depuis quatre cents ans : des branches, sous d'autres noms." },
+px_apres:{ sec:'maison', poids:2, dit:"Il y a eu un après. C'est ce que les termes ne prévoient jamais et ce qui arrive dans un cas sur trois." },
+a2_prix_paye:{ sec:'maison', poids:3, dit:"Le Prix a été payé dans les formes, avec des termes fixés avant, comme le veut la coutume et comme les maisons l'exigent." },
+a2_prix_or:{ sec:'maison', poids:2, dit:"Le Prix a été soldé en or. Une maison qui solde en or achète le droit de ne plus jamais en parler." },
+a2_prix_entier:{ sec:'maison', poids:3, dit:"L'entier a été accordé. Sur vingt-cinq maisons, sept l'accordent, quatre le refusent, et le reste négocie." },
+a2_prix_sang:{ sec:'maison', poids:3, dit:"Le sang a été porté. Ce que ça a produit ne figure sous aucun nom de Karlsberg, et c'est la règle." },
+a2_prix_refuse:{ sec:'maison', poids:3, dit:"Il a refusé le Prix. On ne le lui a pas rendu ; on l'a noté, ce qui est très différent." },
+a2_liaison_verneuil:{ sec:'maison', poids:2, dit:"Verneuil. Un enfant y porte le nom de la maison, il n'a jamais rien su, et il commandait un pont à quarante ans." },
+a2_liaison_bragelonne:{ sec:'maison', poids:2, dit:"Bragelonne. Cette maison a inscrit l'enfant sous son propre nom le jour même, ce qui est la coutume et ce qui reste dur à entendre." },
+a2_liaison_tourvieille:{ sec:'maison', poids:2, dit:"Tourvieille. La branche y court toujours ; on la reconnaît trois générations plus tard à une chose qui saute dans le sang et qu'aucun médecin ne nomme." },
+ma_termes:{ sec:'maison', poids:3, dit:"Deux signatures au bas de onze pages. « Vous ne m'avez pas demandé si moi, j'avais quelqu'un. » Elle l'a écrit dans la clause." },
+ma_preavis_donne:{ sec:'maison', poids:3, dit:"Elle savait depuis Prairial. Elle a écrit trois lignes et laissé la place pour deux signatures, et elle a attendu six mois qu'il s'en aperçoive." },
+ma_dit:{ sec:'maison', poids:2, dit:"Il l'a dit. Dans un mariage de maison, dire est plus rare que faire et compte davantage." },
+ma_tu:{ sec:'maison', poids:2, dit:"Il s'est tu. Un silence dans un mariage de maison n'est pas un mensonge en droit, et c'en est un partout ailleurs." },
+ma_fidele:{ sec:'maison', poids:2, dit:"Il a tenu la clause. On me dit que ça arrive ; je n'en ai chanté que deux en vingt-deux ans." },
+ma_installee:{ sec:'maison', poids:2, dit:"Elle s'est installée à Karlsberg et elle a pris l'intendance. Une maison relevée a besoin de quelqu'un qui sache tenir trois colonnes, et c'était elle." },
+ma_arrivee:{ sec:'maison', poids:2, dit:"Elle est arrivée un jour de Frimaire avec onze coffres, dont neuf de papiers." },
+ma_seul:{ sec:'maison', poids:2, dit:"Il est resté seul. C'est une fin que les chansons évitent et c'en est une, complète, qui se tient toute seule." },
+ma_note:{ sec:'maison', poids:1, dit:"Elle a noté. Cette femme notait tout, comme l'autre, et les deux femmes de cette histoire tenaient des colonnes." },
+ma_surete:{ sec:'maison', poids:2, dit:"Une sûreté a été demandée dans les termes. Toutes les maisons en demandent une ; celle-ci a été écrite en clair." },
+ma_preavis:{ sec:'maison', poids:2, dit:"Il y avait un préavis dans le contrat. Personne ne lit les préavis, et un préavis finit toujours par être compté." },
+ml_el_contrat:{ sec:'maison', poids:2, dit:"Une cour elfique a accepté de contracter avec une maison humaine relevée de la veille. Neuf maisons ont voté contre." },
+ml_el_veut:{ sec:'neuf', poids:3, dit:"Elle a voulu. Ce mot-là, chez eux, engage deux cents ans et se prononce une fois." },
+ml_el_recule:{ sec:'neuf', poids:3, dit:"Elle a reculé. Elle avait deux cents ans devant elle pour y repenser et elle y a repensé." },
+ml_el_sans:{ sec:'neuf', poids:2, dit:"Il n'y a pas eu de contrat. Il y a eu autre chose, sans nom en droit humain ni en droit elfique." },
+el_ep_tante:{ sec:'neuf', poids:3, dit:"« Non. C'est bien pire que ça : je ne regrette rien, et il me reste deux cents ans pour ne rien regretter. » Sa tante l'a rapporté à trois personnes." },
+el_ep_retire:{ sec:'neuf', poids:2, dit:"L'offre a été retirée. Chez eux, une offre retirée ne se représente pas dans la vie de celui qui l'avait reçue." },
+el_nuit_reporte:{ sec:'neuf', poids:2, dit:"« Attendez que je revienne. Je ne fais jamais une chose à moitié. » Elle est revenue." },
+aly_ep_reporte:{ sec:'neuf', poids:2, dit:"Elle avait préparé la sortie. Personne ne l'a franchie ce soir-là et la porte est restée ouverte onze ans." },
+ml_partie:{ sec:'neuf', poids:2, dit:"Elle est partie. Toutes les femmes de cette histoire sont parties au moins une fois et deux sont revenues." },
+ml_fin:{ sec:'neuf', poids:2, dit:"Ça s'est fini. Les fins de ce genre n'ont pas de date : on s'aperçoit après coup qu'il y en avait une." },
+a2_loyse:{ sec:'maison', poids:2, dit:"Loyse. On ne me l'a nommée qu'une fois et je n'ai jamais pu vérifier." },
+enf_ne:{ sec:'maison', poids:3, dit:"Un enfant est né à Karlsberg. C'est la première naissance portée sous ce nom en vingt-neuf ans et le greffe a fait recopier l'acte trois fois." },
+enf_non:{ sec:'maison', poids:2, dit:"Il n'y a pas eu d'enfant. Sur quatre cents ans de maisons rayées, c'est la règle et non l'exception." },
+a2_epouse_expose:{ sec:'maison', poids:2, dit:"L'épouse a été exposée. Une femme qui épouse un nom relevé épouse aussi tout ce qui vient le contester." },
+a2_intendance:{ sec:'karlsberg', poids:2, dit:"L'intendance a été confiée. Une maison se perd par les comptes bien plus souvent que par les armes." },
+a2_alycia_surete:{ sec:'neuf', poids:2, dit:"Une sûreté a été prise pour elle dans les termes du mariage. Elle ne l'avait pas demandée et elle l'a lue." },
+a2_alycia_travail:{ sec:'neuf', poids:2, dit:"Son travail a été porté dans les termes. C'est la seule fois où le métier de cette femme a figuré sur un papier, et c'était pour le protéger." },
+
+/* ═══ LA POLITIQUE ═════════════════════════════════════════════════════════ */
+
+lu_offre:{ sec:'neuf', poids:3, dit:"Lucius offrait deux cents hommes, un maçon et une reconnaissance publique, contre un nom au bas d'un acte. C'était une bonne offre et c'est ce qui la rendait dangereuse." },
+lu_franc:{ sec:'neuf', poids:3, dit:"Lucius a décrit à l'avance le jour où il trahirait. Il l'a fait sans emphase, comme on donne une date de foire, et il a tenu parole aux deux bouts." },
+lu_delai:{ sec:'neuf', poids:2, dit:"Il a accordé un délai en expliquant pourquoi il n'y perdait rien. C'est sa manière ; on la trouve odieuse jusqu'au jour où l'on comprend qu'elle ne ment jamais." },
+lu_refuse:{ sec:'neuf', poids:3, dit:"Lucius a été refusé. Une maison sans alliance est disponible, pas neutre, et il le lui a dit ce jour-là." },
+lu_allie:{ sec:'neuf', poids:3, dit:"L'alliance a été conclue avec Astrah. Elle a valu ce que valent les alliances d'Astrah : exactement ce qui était écrit, ni plus ni moins." },
+ls_pourquoi:{ sec:'neuf', poids:3, dit:"Lucius savait ce qu'il était et s'en moquait. Astrah a eu trois rois de l'Onde ; il avait fait relever la tombe du dernier, à ses frais, deux ans plus tôt." },
+ls_apres:{ sec:'neuf', poids:2, dit:"Il y a eu un après avec Lucius. Il y a toujours un après avec Lucius : c'est un homme qui ne clôt jamais un compte." },
+cb_termes:{ sec:'neuf', poids:3, dit:"Trois clauses : pas de péage, préemption sur la forge, et ce qui reste de Karlsberg si elle tombe. Caleb de Fort-aux-Princes ne prête pas, il se positionne." },
+cb_creances:{ sec:'neuf', poids:2, dit:"Les créances sont passées à sa nièce. Elle les a tenues avec la même exactitude et beaucoup moins de patience." },
+cb_rachete:{ sec:'neuf', poids:2, dit:"La dette a été rachetée. Racheter une dette à Caleb coûte le double et se fait une fois." },
+cb_deux:{ sec:'neuf', poids:2, dit:"Il a proposé deux fois. Cet homme ne proposait jamais deux fois à personne, et je n'ai pas d'explication." },
+cb_garde:{ sec:'neuf', poids:2, dit:"Il a gardé quelque chose en garantie. On ne sait pas quoi ; sa nièce l'a rendu vingt ans plus tard sans commentaire." },
+cb_menace:{ sec:'neuf', poids:2, dit:"Il a menacé, une seule fois, du ton dont il lisait un état de fermage. C'est la version de la menace qui fonctionne le mieux." },
+a2_caleb_paye:{ sec:'neuf', poids:2, dit:"Caleb a été payé. Il l'a noté, et il note toujours dans la bonne colonne." },
+a2_caleb_pression:{ sec:'neuf', poids:2, dit:"Il a mis la pression. Chez lui, la pression consiste à racheter les gens autour de vous, un par un, sans vous en parler." },
+a2_incorruptible:{ sec:'karlsberg', poids:3, dit:"Il n'a pas été acheté. Sur vingt-cinq maisons de province, ça se dit de deux, et l'une des deux est morte pauvre." },
+ca_droit_su:{ sec:'karlsberg', poids:2, dit:"La gorge de Cendrepont valait onze cents couronnes par an et figurait au relevé comme appartenant à Karlsberg. Personne à Karlsberg ne le savait." },
+ca_droit_garde:{ sec:'karlsberg', poids:3, dit:"Le droit de passage a été gardé. Onze cents couronnes par an sur trente ans : c'est ce qui a payé la moitié des murs." },
+ca_droit_vendu:{ sec:'maison', poids:3, dit:"Le droit de passage a été cédé contre une lettre. Onze cents couronnes par an, contre une porte qui s'ouvre une fois." },
+ca_lettre:{ sec:'maison', poids:2, dit:"La lettre a été obtenue. Il n'y en avait qu'une à obtenir dans quatre provinces et elle a coûté ce qu'elle valait." },
+ca_garde:{ sec:'karlsberg', poids:2, dit:"Caleb a noté qu'il gardait. Il notait tout, y compris ce qu'on lui refusait, et surtout ça." },
+ca_sainte_ombre:{ sec:'neuf', poids:2, dit:"Caleb dotait Sainte-Ombre depuis onze ans. Personne ne sait pourquoi, sa nièce non plus, et la dotation court encore." },
+a2_porte_sainte_ombre:{ sec:'maison', poids:3, dit:"La porte de Sainte-Ombre s'est ouverte. C'est la seule chose de toute cette histoire qui ait été achetée au prix fort et payée d'avance." },
+cd_inscrit:{ sec:'neuf', poids:3, dit:"Une inscription a été portée au registre de Mont-Draken. Ce registre compte aujourd'hui plus de six cents noms et il n'en a jamais été retiré un seul." },
+cd_onze:{ sec:'neuf', poids:2, dit:"Onze noms ont été donnés à la commission. C'est la partie de l'histoire dont personne ne veut, et elle a sauvé onze personnes." },
+cd_onde:{ sec:'karlsberg', poids:3, dit:"Il a montré l'Onde à Charles de Mont-Draken. C'est le geste le plus imprudent de toute cette vie et il a produit un registre." },
+cd_eleve_blesse:{ sec:'neuf', poids:2, dit:"Un élève de la commission a été blessé. Charles a payé le chirurgien et n'a pas ouvert de dossier, ce qui, chez lui, était un aveu." },
+
+/* ═══ LE DRAGON ════════════════════════════════════════════════════════════ */
+
+dr_sait:{ sec:'guerres', poids:3, dit:"Il a su, avant tout le monde, ce qui dormait au sommet du mont. Trois provinces ont mis vingt ans à admettre le même mot." },
+a2_dragon_su:{ sec:'guerres', poids:3, dit:"Ce qui dort au sommet de Mont-Draken n'est pas une figure de style. La maison le sait, elle le tait, et c'est sa véritable puissance." },
+dr_bourg_vide:{ sec:'guerres', poids:2, dit:"Un bourg entier vidé en une nuit, sans un mort. C'est ce qu'on obtient quand la chose au-dessus de vous a été nourrie et non provoquée." },
+dr_veille:{ sec:'guerres', poids:2, dit:"Il a veillé. Une nuit de veille sous une crête où quelque chose respire vaut trois campagnes pour ce qu'elle apprend." },
+dr_bete:{ sec:'guerres', poids:3, dit:"Il l'a vue. Douze personnes vivantes dans quatre provinces peuvent en dire autant et neuf sont de la même maison." },
+dr_cou:{ sec:'guerres', poids:2, dit:"Il l'a touchée au cou. On ne touche pas ces choses-là au cou ; on ne les touche pas du tout." },
+dr_touchee:{ sec:'guerres', poids:3, dit:"Elle a été touchée. C'est la seule fois en cent quarante ans, et le nom de celui qui l'a fait n'a jamais été écrit dans les archives de Mont-Draken." },
+dr_genee:{ sec:'guerres', poids:2, dit:"Elle a été gênée. Gêner une chose pareille, c'est déjà gagner la journée : on ne gagne rien d'autre contre elle." },
+dr_file_tenue:{ sec:'guerres', poids:3, dit:"La file a tenu sous elle. Des gens ordinaires ont tenu une file pendant que ça passait au-dessus, et ils ne se sont pas dispersés." },
+dr_nains:{ sec:'guerres', poids:2, dit:"Les Nains étaient là. Ils sont toujours là où il y a quelque chose de très ancien et ils n'expliquent jamais pourquoi." },
+dr_epaule_finie:{ sec:'guerres', poids:2, dit:"Une épaule a fini là. Elle ne s'est jamais remise, et il a porté ça trente ans sans jamais dire d'où ça venait." },
+dr_cout_1:{ sec:'guerres', poids:1, dit:"Ça a coûté. Ce genre de chose coûte toujours et le compte n'est jamais présenté sur le moment." },
+dr_cout_2:{ sec:'guerres', poids:2, dit:"Ça a coûté deux fois. La seconde fois est celle dont il n'a jamais parlé." },
+dr_echec_2:{ sec:'guerres', poids:2, dit:"Ça a raté. Contre cette chose-là, rater est le résultat normal et survivre est l'exception." },
+
+/* ═══ LES LOINTAINS ════════════════════════════════════════════════════════ */
+
+kd_vu:{ sec:'guerres', poids:2, dit:"Il est allé à Kar-Durak et il en est reparti. Deux mille trois cents Nains pour onze portes, et une arithmétique que personne au jour n'a voulu faire." },
+kd_dette:{ sec:'guerres', poids:3, dit:"Une dette naine a été inscrite à son nom. Elle porte un numéro. Elle a survécu à deux sièges et à lui." },
+kd_route:{ sec:'guerres', poids:2, dit:"La route de Kar-Durak a été rouverte. Une route naine rouverte est un traité qui n'a pas eu besoin d'être écrit." },
+kd_tenu:{ sec:'guerres', poids:3, dit:"Il a tenu quelque chose à Kar-Durak. Les Nains ont noté la date, le lieu, le nombre, et ils ont refusé de traduire la mention qui suit." },
+kd_refuse:{ sec:'guerres', poids:2, dit:"Il a refusé Kar-Durak. Un refus, chez eux, se classe : il ne se venge pas, il attend d'être utile." },
+a2_kardurak_troisieme_perdue:{ sec:'guerres', poids:3, dit:"La troisième porte est tombée. Chez eux, une porte perdue se dit *un délai raccourci* et jamais *une défaite*." },
+an_gue_su:{ sec:'guerres', poids:2, dit:"Le gué d'Aumance devait tomber dans onze jours. Quatre cents hommes de la file et aucun capitaine : c'est comme ça que tombent les gués." },
+an_gue_tenu:{ sec:'guerres', poids:3, dit:"Le gué d'Aumance, commandé par un Paria devant quatre cents hommes. C'est la seule fois en quatre cents ans et c'est écrit quelque part." },
+an_gue_refuse:{ sec:'guerres', poids:2, dit:"Il n'a pas pris le gué. Quatre cents hommes sont passés sans capitaine et il en est resté cent quatre-vingts." },
+an_parias:{ sec:'trous', poids:3, dit:"que deux familles de Parias vivaient à la Marche noire, qu'on ne rend pas les gens là-bas, et qu'au bout de deux hivers l'aîné est parti vers l'ouest ;" },
+an_refus:{ sec:'guerres', poids:2, dit:"Anarion a été refusé. Il l'a très bien pris, ce qui, le concernant, ne veut rien dire du tout." },
+an_vu_seulement:{ sec:'guerres', poids:2, dit:"Il a vu la file du poste de Vaeth et il n'est pas entré. C'est une des trois choses dont on me dit qu'il a parlé sans qu'on le lui demande." },
+kh_puits:{ sec:'guerres', poids:2, dit:"Le puits de Sarad. On y compte les cailloux sur la margelle et la pile fait trente ans de hauteur." },
+kh_trois_jours:{ sec:'guerres', poids:2, dit:"Trois jours de descente au puits de Sarad. On descend, chez eux ; on ne demande jamais l'eau, on descend la chercher." },
+kh_franc:{ sec:'guerres', poids:3, dit:"« Vous êtes le cinquième. Vous êtes le premier à le dire tout de suite. » Chez les Khesh, ce genre de phrase engage celui qui la prononce." },
+kh_dit:{ sec:'guerres', poids:2, dit:"Il a dit. Dans le désert, dire est irrévocable et se paie comptant ; c'est pour ça qu'on y parle si peu." },
+kh_pourquoi:{ sec:'guerres', poids:2, dit:"Il a demandé pourquoi. C'est la question que personne du nord ne pose jamais et c'est celle qui a tout ouvert." },
+
+/* ═══ SAINTE-OMBRE, ET CE QUI RESTAIT DE LA MAISON ═════════════════════════ */
+
+fi_parloir_su:{ sec:'neuf', poids:3, dit:"« Je voulais qu'on puisse me trouver. Ce n'est pas pareil. » Dix-neuf ans au parloir d'un hospice, sous son propre nom." },
+fi_pourquoi:{ sec:'trous', poids:3, dit:"qu'un enfant sur trois naît sans, que c'était son cas à elle, et que son père allait s'en servir en public le mois suivant ;" },
+fi_preuve:{ sec:'neuf', poids:3, dit:"Le cachet avait été taillé en Ventôse et non en Nivôse. Toute la rature de Karlsberg tenait dans ce mois d'écart." },
+fi_avoue:{ sec:'neuf', poids:3, dit:"Elle a avoué en corrigeant une date. C'est la façon dont avouent les gens qui ont tenu des colonnes toute leur vie." },
+fi_hospices:{ sec:'neuf', poids:3, dit:"Onze hospices de route en dix-neuf ans. « Ce n'est pas une balance, c'est une liste. » Elle n'a jamais demandé qu'on la lui pardonne." },
+fi_assis:{ sec:'trous', poids:3, dit:"qu'un homme s'est assis une heure contre le mur sud de Sainte-Ombre, là où l'herbe est usée par ceux qui font ça, et qu'il n'est pas entré ce jour-là ;" },
+fi_ecrit:{ sec:'neuf', poids:2, dit:"Elle a écrit. Quatre lignes suffisent à rayer une maison ; elle l'avait prouvé une fois." },
+fi_emmenee:{ sec:'neuf', poids:2, dit:"Elle a été emmenée. On ne sait pas où et je n'ai jamais voulu le demander à ceux qui savent." },
+fi_laissee:{ sec:'neuf', poids:3, dit:"Elle a été laissée là. Ce n'était pas une clémence et elle l'a compris avant lui." },
+fi_tuee:{ sec:'neuf', poids:3, dit:"Elle est morte à Sainte-Ombre. Onze hospices ont perdu leur comptable dans l'année et trois ont fermé." },
+fi_loys:{ sec:'affaires', poids:2, dit:"Loys a reparu. Il avait vieilli de dix-neuf ans et il tenait encore la même colonne, dans le même greffe, sur le même tabouret." },
+fi_enfants:{ sec:'neuf', poids:3, dit:"Il y avait des enfants à Sainte-Ombre. C'est ce que fait une femme qui a rayé une maison : elle ouvre des hospices, et ça ne compense rien, et elle ne l'a jamais prétendu." },
+a2_affaire_rouverte:{ sec:'karlsberg', poids:3, dit:"L'affaire de la rature a été rouverte. Un bailliage n'aime rien moins que rouvrir une affaire vieille de vingt ans et il a fallu l'y contraindre." },
+a2_loys_su:{ sec:'affaires', poids:2, dit:"Loys a su. Il savait depuis dix-neuf ans ; ce qui a changé, c'est qu'on le lui a demandé." },
+a2_ysabel_complet:{ sec:'neuf', poids:3, dit:"On a fini par tout savoir. C'est arrivé une fois dans cette histoire et ça n'a rendu personne plus heureux." },
+sa_ysabel:{ sec:'neuf', poids:2, dit:"Un nom est sorti du sang. Il a mis six ans à venir et il est venu par une piste que personne ne suivait." },
+sa_reseau:{ sec:'neuf', poids:2, dit:"Le réseau a été trouvé par le sang et non par le papier. Les deux pistes menaient au même endroit et personne ne s'y attendait." },
+sa_lieu:{ sec:'affaires', poids:2, dit:"Le lieu a été établi. Dans une affaire de vingt ans, établir le lieu vaut dix témoignages." },
+sa_quatre_table:{ sec:'trous', poids:2, dit:"qu'il y avait quatre personnes autour d'une table le soir de la rature, et qu'on connaît le nom de trois ;" },
+a2_reseau_vu:{ sec:'neuf', poids:2, dit:"Le réseau a été vu de l'intérieur. Deux cents personnes, aucun papier, et une méthode qu'on ne peut pas décrire sans la détruire." },
+pa_cachet_cadet:{ sec:'neuf', poids:3, dit:"Le cachet était celui d'un cadet. Une maison ne se raye pas de l'extérieur : elle se raye toujours de l'intérieur, et c'est ce que les chansons refusent de dire." },
+pa_famille:{ sec:'neuf', poids:3, dit:"C'était la famille. Ça l'est presque toujours, et une salle de province ne veut jamais l'entendre." },
+pa_soeur:{ sec:'neuf', poids:3, dit:"C'était sa sœur. Je le dis vite parce qu'il n'y a pas de bonne façon de le dire lentement." },
+pa_chastel:{ sec:'affaires', poids:2, dit:"Tout remontait à Chastel. Dans cette province, tout remonte à Chastel, et Chastel remonte à des gens qui sont morts." },
+pa_vasque_revu:{ sec:'affaires', poids:1, dit:"On a revu quelqu'un près de la vasque. Deux personnes m'ont donné deux noms différents et je n'en chante aucun." },
+
+/* ═══ LES DUELS ════════════════════════════════════════════════════════════ */
+
+du_tenu:{ sec:'affaires', poids:2, dit:"Il a tenu un duel dans les formes, avec témoins et procès-verbal. Dans quatre provinces, ça vaut acquittement." },
+du_gagne:{ sec:'affaires', poids:2, dit:"Il a gagné. Un duel gagné dans les formes efface une accusation et en crée une autre, plus lente." },
+du_perdu:{ sec:'affaires', poids:2, dit:"Il a perdu. On perd, dans ces provinces ; les chansons l'oublient et les cicatrices non." },
+du_refuse:{ sec:'affaires', poids:2, dit:"Il a refusé le duel. Un refus se paie en réputation et se rembourse en années de vie." },
+du_meurtre:{ sec:'affaires', poids:3, dit:"Ça a été porté comme meurtre. Ce mot-là, une fois écrit dans un registre de province, ne s'efface pas par un autre duel." },
+a2_meurtrier:{ sec:'affaires', poids:3, dit:"Une province l'a tenu pour meurtrier pendant six ans. La chose s'est arrangée par un papier et non par la vérité." },
+a2_gifle_publique:{ sec:'affaires', poids:2, dit:"Il a été giflé en public. Dans ces provinces, une gifle publique ne se lave que d'une manière et tout le monde connaît laquelle." },
+a2_pistolet_public:{ sec:'affaires', poids:3, dit:"Un pistolet a été tiré en public. Quatre maisons ont demandé qu'on interdise ces armes dans l'année et on ne les a pas interdites." },
+du_pistolet:{ sec:'affaires', poids:2, dit:"Au pistolet. C'est plus rapide, c'est moins sûr, et les vieilles maisons trouvent ça vulgaire." },
+du_epee:{ sec:'affaires', poids:1, dit:"À l'épée, dans les formes, avec deux témoins et un chirurgien payé d'avance par les deux camps." },
+du_dague:{ sec:'affaires', poids:2, dit:"À la dague. On n'y va à la dague que quand quelqu'un veut vraiment que ça se termine." },
+du_gauche:{ sec:'affaires', poids:1, dit:"De la main gauche. C'est un aveu d'infirmité et ça déstabilise un duelliste plus qu'une feinte." },
+du_recharge:{ sec:'affaires', poids:1, dit:"Il a rechargé. Recharger devant témoins, dans un duel au pistolet, est légal et à peu près inexcusable." },
+du_vides:{ sec:'affaires', poids:1, dit:"Les deux coups sont partis dans le vide. Ça arrive une fois sur trois et ça règle l'affaire aussi bien." },
+du_vivant:{ sec:'affaires', poids:2, dit:"Les deux sont repartis vivants. C'est le meilleur résultat d'un duel et personne ne le chante jamais." },
+du_cher:{ sec:'affaires', poids:1, dit:"Ça a coûté cher. Un duel coûte toujours plus que ce qu'il règle, et on le sait avant." },
+du_cout:{ sec:'affaires', poids:1, dit:"Il en est resté quelque chose. Il en reste toujours quelque chose ; c'est à ça qu'on reconnaît un duelliste vieux." },
+
+/* ═══ L'ACTE III ═══════════════════════════════════════════════════════════ */
+
+a3_lu_vu:{ sec:'guerres', poids:2, dit:"Lucius se couronnait dans six semaines. Trois maisons du nord avaient écrit ensemble, et Verneuil n'avait pas écrit du tout." },
+a3_lu_su:{ sec:'guerres', poids:2, dit:"Il a su ce qui se préparait à Astrah avant les maisons d'Astrah. C'est ce que vaut un réseau, et personne ne le facture." },
+a3_lu_route_prise:{ sec:'guerres', poids:2, dit:"Verneuil tenait le pont de Sarce en règle, avec les papiers, depuis neuf jours. C'est ainsi qu'on prend une route sans faire la guerre." },
+a3_lucius_tenu:{ sec:'guerres', poids:3, dit:"La route d'Astrah a été tenue. Une couronne prise n'est une couronne qu'au bout de trente ans, et celle-là a eu ses trente ans." },
+a3_route_tenue:{ sec:'guerres', poids:2, dit:"La route a été tenue. C'est le genre de résultat qui ne fait pas de chanson et qui décide des couronnes." },
+a3_route_perdue:{ sec:'guerres', poids:2, dit:"La route a été perdue. Six semaines plus tard, quelqu'un s'est couronné devant onze personnes au lieu de quarante et une." },
+a3_ch_ravieres:{ sec:'trous', poids:3, dit:"qu'à Ravières un mur est tombé vers l'extérieur, qu'une fille de onze ans nommée Guillemette était derrière, et qu'un bûcher monté n'a pas été allumé ;" },
+a3_charles_tenu:{ sec:'guerres', poids:3, dit:"Ravières a tenu. Trois provinces ont fini par écrire une formule pour ce qui s'y est passé, et elle porte le nom du village." },
+a3_ch_emmenee:{ sec:'neuf', poids:3, dit:"Guillemette est partie avec les vingt hommes. Elle avait onze ans. Elle a été inscrite, et être inscrite est ce qui l'a sauvée." },
+a3_ch_force:{ sec:'neuf', poids:3, dit:"On l'a prise de force. Le village a regardé, il n'a rien dit, et il en parle encore quarante ans après à voix basse." },
+a3_ravieres_raconte:{ sec:'guerres', poids:2, dit:"Ravières a été racontée devant quatre conseils. Un principe, un conseil s'assied dessus ; un village qui demande un papier, il ne sait pas quoi en faire." },
+a3_montdraken_ferme:{ sec:'neuf', poids:2, dit:"Mont-Draken a fermé. Cette maison ne rouvre pas, et sa commission a été donnée à quelqu'un qui promettait d'aller plus vite." },
+a3_fl_saulaie:{ sec:'guerres', poids:2, dit:"Le pont de Saulaie, trois arches, et onze hameaux humains sur la rive sud que les états elfiques ne comptaient pas." },
+a3_fleuve_tenu:{ sec:'guerres', poids:3, dit:"La ligne du fleuve a tenu une saison de plus. Une saison de ligne de fleuve, c'est trois mois de récoltes pour onze hameaux." },
+a3_fl_propre:{ sec:'guerres', poids:2, dit:"Ça s'est fait proprement, ce qui, sur un pont, veut dire que les deux camps ont pu écrire la même chose dans leurs rapports." },
+a3_fl_partiel:{ sec:'guerres', poids:2, dit:"Une partie seulement est passée. Le rapport porte *sans perte*, ce qui est exact dans la seule colonne où quelqu'un comptait." },
+a3_kd_su:{ sec:'guerres', poids:2, dit:"On a su ce qu'il y avait derrière la onzième. Trois personnes au monde le savaient et deux étaient naines." },
+a3_kd_plan:{ sec:'guerres', poids:2, dit:"Il y avait un plan pour la onzième porte. Les Nains font des plans sur six cents ans et celui-là avait quatre cents ans." },
+a3_onzieme_atteinte:{ sec:'guerres', poids:3, dit:"Le seuil de la onzième a été dégagé. La porte était intacte : les Peaux-Vertes n'avaient jamais essayé, et personne ne sait pourquoi." },
+a3_onzieme_perdue:{ sec:'guerres', poids:3, dit:"On n'a pas atteint le seuil. La onzième porte est restée fermée, ce qui était, tout compte fait, ce que les Nains voulaient." },
+a3_porte_rescellee:{ sec:'guerres', poids:3, dit:"La porte a été rescellée le soir même, de l'intérieur. Cela suppose que quelqu'un est resté, et le rôle de garde porte onze noms." },
+a3_kardurak_tenu:{ sec:'guerres', poids:3, dit:"Kar-Durak a tenu. Chez eux, tenir se dit *un délai* et non *une victoire*, et le délai était de vingt ans." },
+a3_seuil_tenu:{ sec:'guerres', poids:2, dit:"Le seuil a été tenu. À onze cents pieds sous terre, tenir un seuil est la seule chose qu'on puisse faire et la plus difficile." },
+a3_seuil_perdu:{ sec:'guerres', poids:2, dit:"Le seuil a été perdu. On est remonté par les galeries hautes, dans l'ordre, ce qui est déjà beaucoup." },
+a3_kh_su:{ sec:'guerres', poids:2, dit:"On a su ce qui se jouait au désert. Cinq feux, et un cinquième que le grand chef ne pouvait pas défier lui-même." },
+a3_kh_sarad:{ sec:'guerres', poids:3, dit:"Cinq feux au puits de Sarad. Le cinquième était tenu par Ashrem, et un grand chef ne peut pas défier lui-même celui qui le conteste." },
+a3_kh_unifie:{ sec:'guerres', poids:3, dit:"Douze tribus sous un serment que personne n'a rompu de son vivant. Un homme du nord était dans le cercle de neuf pas quand ça s'est joué." },
+a3_kh_sorti:{ sec:'guerres', poids:3, dit:"Il est sorti du cercle de neuf pas. Chez eux, sortir du cercle n'est pas fuir : c'est refuser de conclure, et deux tribus l'ont suivi pour ça." },
+a3_kh_echoue:{ sec:'guerres', poids:2, dit:"Le cercle a été perdu. Le désert est resté ce qu'il était, ce qui n'est pas rien : il l'avait été mille ans." },
+a3_kh_refuse:{ sec:'guerres', poids:2, dit:"Il a refusé le cercle. Les Khesh respectent un refus donné en face et ne le mentionnent plus jamais." },
+a3_khesh_tenu:{ sec:'guerres', poids:3, dit:"Le désert a été tenu, ou décidé, selon celui qui raconte. Les deux mots sont justes et ce n'est pas la même histoire." },
+a3_ho_colonne:{ sec:'guerres', poids:3, dit:"Six mille descendaient sans rien piller, et les mères étaient devant. Une harde ne met les mères devant que lorsqu'elle recule." },
+a3_horde_comprise:{ sec:'trous', poids:3, dit:"qu'une harde de six mille ne descendait pas pour attaquer, qu'un seul homme dans quatre provinces l'a compris, et qu'il l'a compris à la place des mères dans la colonne ;" },
+a3_ho_passee:{ sec:'guerres', poids:3, dit:"La harde est passée. Onze hameaux ont été évacués et repeuplés, ce qui n'était jamais arrivé sur cette marche." },
+a3_horde_tenu:{ sec:'guerres', poids:3, dit:"Trois-Chênes a tenu. Ce qui a été tenu ce jour-là n'était pas une position : c'était l'idée qu'une harde puisse passer sans qu'on la détruise." },
+a3_chastel_averti:{ sec:'guerres', poids:2, dit:"Chastel a été averti. Une province avertie fait ce qu'elle fait toujours : elle écrit, elle temporise, et elle arrive après." },
+a3_chastel_venu:{ sec:'karlsberg', poids:2, dit:"Chastel est venu à Karlsberg. Une province ne se déplace que pour deux raisons et aucune des deux n'est bonne pour la maison visitée." },
+a3_registre_couronne:{ sec:'guerres', poids:3, dit:"Le registre est passé sous une couronne. C'est infiniment plus solide qu'un grenier et personne ne l'aurait parié." },
+a3_couronne_temoins:{ sec:'guerres', poids:3, dit:"Quarante et une personnes ont vu la couronne se poser. Dix-neuf ans de contestation : c'est le meilleur résultat obtenu depuis la chute de l'ancien empire." },
+a3_couronne_seule:{ sec:'guerres', poids:2, dit:"Onze personnes. Il savait que ce serait onze et il l'a fait quand même, et c'est peut-être la seule chose admirable qu'on lui accorde." },
+a3_raconte:{ sec:'trous', poids:2, dit:"qu'un théâtre s'est déroulé sans lui et qu'on le lui a raconté, et qu'il a écouté jusqu'au bout sans interrompre ;" },
+a3_chroniqueur:{ sec:'trous', poids:2, dit:"qu'un homme a pris des notes pendant tout ça, dans un cahier, et que le cahier a disparu ;" },
+in_charles_vu:{ sec:'neuf', poids:3, dit:"Quatre-vingt-quatorze inscrits, soixante et onze vivants, aucun brûlé. Il manquait une ligne à cette page et il est venu la chercher lui-même." },
+in_ch_demande:{ sec:'neuf', poids:3, dit:"Il a demandé. Charles de Mont-Draken a passé trente ans à ne rien demander à personne et il a demandé une fois." },
+in_ch_registre:{ sec:'neuf', poids:3, dit:"Le registre a été montré. Six cents noms, tenus de la même main pendant trente ans, et pas une rature." },
+in_ch_note:{ sec:'neuf', poids:2, dit:"Il a noté quelque chose et il a refermé le registre. Personne n'a jamais lu cette ligne-là." },
+in_sault_vu:{ sec:'neuf', poids:3, dit:"Soixante-neuf noms, dix-neuf croix, et une page blanche depuis neuf ans. Il est venu la remplir et il n'a pas pu." },
+in_sa_blanche:{ sec:'neuf', poids:3, dit:"« Je peux vivre avec une page blanche. Pas avec une fausse. » Il a refermé le carnet et il est parti à pied." },
+in_fait_sault:{ sec:'neuf', poids:2, dit:"Guillaume de Sault a eu sa réponse. Ce n'était pas celle qu'il voulait et il l'a écrite exactement telle qu'elle était." },
+in_sorgue_vu:{ sec:'neuf', poids:3, dit:"Renaud Sorgue est venu seul à Karlsberg. Soixante et un ans, une hanche morte, et une phrase à finir." },
+in_so_quarante_huit:{ sec:'neuf', poids:2, dit:"Quarante-huit duels judiciaires à la fin. Il n'en a jamais gagné un seul qui comptait pour lui." },
+in_so_parti:{ sec:'neuf', poids:3, dit:"Il est reparti sans faire le signe. Quarante et un duels, et un seul qui l'occupait encore." },
+in_so_battu:{ sec:'neuf', poids:2, dit:"Il a été battu une seconde fois, à soixante et un ans, par le même homme. Il est reparti à pied et il n'a plus jamais été employé." },
+in_so_marche:{ sec:'neuf', poids:2, dit:"Ils ont marché ensemble un moment. Deux hommes qui se sont battus deux fois n'ont jamais rien à se dire et marchent très bien ensemble." },
+in_so_refuse:{ sec:'neuf', poids:2, dit:"Le rond a été refusé. Sorgue a hoché la tête ; c'était, chez lui, l'équivalent d'un long discours." },
+in_ys_confirme:{ sec:'karlsberg', poids:3, dit:"Elle a confirmé le relèvement par écrit, devant le commissariat aux titres, en quatre lignes. Aucun juriste de province n'a jamais su comment nommer ça." },
+in_ys_silence:{ sec:'neuf', poids:3, dit:"Elle n'a rien confirmé. Le relèvement a été contesté pendant trois générations, comme le sont tous les relèvements, et il a tenu quand même." },
+
+/* ═══ LES BATAILLES DE L'ACTE II ═══════════════════════════════════════════ */
+
+bat_route_ouverte:{ sec:'guerres', poids:2, dit:"La route a été rouverte à la pointe. Une route rouverte vaut deux traités et coûte moins cher que l'un des deux." },
+bat_route_perdue:{ sec:'guerres', poids:2, dit:"La route est restée fermée. Une vallée dont la route est fermée met onze ans à s'en remettre et n'y arrive jamais tout à fait." },
+bat_marche_tenue:{ sec:'guerres', poids:2, dit:"La marche a été tenue. Personne ne chante les marches tenues : on ne chante que celles qu'on a perdues et reprises." },
+bat_marche_perdue:{ sec:'guerres', poids:2, dit:"La marche a été perdue. On y met des bornes tous les vingt ans et on les retrouve ailleurs." },
+bat_kardurak_tenue:{ sec:'guerres', poids:3, dit:"On a tenu sous Kar-Durak, aux côtés des Nains, ce qu'aucune compagnie humaine n'avait fait depuis quatre-vingts ans." },
+bat_kardurak_perdue:{ sec:'guerres', poids:2, dit:"On a cédé sous Kar-Durak. Les Nains n'en ont jamais fait reproche et ils ont noté le nombre." },
+
+};
+
+/* ══ CE QUE ÇA DONNE ═══════════════════════════════════════════════════════ */
+
+/* Les lignes d'une section que la partie a réellement produites, triées par
+ * poids puis par ordre du registre. `n` limite : un barde ne récite pas
+ * tout, il garde ce qui a marché en salle. */
+function retenues(section, n){
+  const ordre = Object.keys(CONSEQUENCES);
+  const l = ordre
+    .filter(f => CONSEQUENCES[f].sec === section && a(f))
+    .sort((x, y) => (CONSEQUENCES[y].poids - CONSEQUENCES[x].poids)
+                 || (ordre.indexOf(x) - ordre.indexOf(y)))
+    .map(f => CONSEQUENCES[f].dit);
+  return n ? l.slice(0, n) : l;
+}
+
+/* Combien la partie en a produit en tout, toutes sections confondues. Sert
+ * au barde à savoir s'il a de quoi chanter, et aux épreuves à vérifier que
+ * ce fichier n'est pas mort. */
+function retenuesTotales(){
+  return Object.keys(CONSEQUENCES).filter(f => a(f)).length;
 }
 
 </script>
@@ -25383,7 +26338,11 @@ DYN.a3_ceux_qui_viennent = () => {
 
   const i = intendant();
   const texte = [
-    `Quelqu'un tient les comptes de Karlsberg, et ce quelqu'un a ${enLettres(i.age)} ans. ${i.nom}, de ${i.de} — ${i.note}.`,
+    /* « maître Ferrand » s'écrit en minuscule partout ailleurs, où il suit
+     * toujours un mot ; ici il ouvre la phrase. Les autres intendants ont
+     * déjà une capitale et la reprendre ne coûte rien. */
+    `Quelqu'un tient les comptes de Karlsberg, et ce quelqu'un a ${enLettres(i.age)} ans. ${
+      i.nom.replace(/^./, c => c.toUpperCase())}, de ${i.de} — ${i.note}.`,
     "On pose devant vous une liste qu'il a fallu quatre mois pour établir, et on la pose sans commentaire parce qu'il n'y en a pas à faire.",
   ];
 
@@ -25406,6 +26365,25 @@ DYN.a3_ceux_qui_viennent = () => {
 
   if(epargnes.length)
     texte.push(`§ Ne figurent pas sur cette liste, et c'est ce qu'on a acheté : ${epargnes.join(' · ')}.`);
+
+  /* L'autre moitié de la même question, et celle que l'intendant n'a pas
+   * eu à établir : ces gens-là ont écrit d'eux-mêmes. */
+  const avec = soutiensDeclares();
+  if(avec.length){
+    texte.push("§ Et il y a la seconde feuille, que l'intendant pose après la première sans rien dire, parce qu'il n'a pas eu à l'établir : ces gens-là ont écrit d'eux-mêmes.");
+    for(const s of avec){
+      texte.push(`**${s.nom}** — *${s.ou}.*\n\n${s.pourquoi()}`);
+      texte.push(`^${s.dit}`);
+    }
+    texte.push({ sobre:"@« Je n'ai rien demandé à personne. »",
+      intense:"@« Je n'ai rien demandé à personne. »\n\n^« Non, messire. C'est bien pour ça qu'ils viennent. »",
+      extreme:"@« Je n'ai rien demandé à personne. »\n\n^« Non, messire. Aucun de ces noms n'a reçu de lettre de cette maison, et je le sais parce que c'est moi qui tiens les lettres de cette maison.\n\nUne maison qui appelle ses alliés obtient ceux qui lui doivent quelque chose, et elle les obtient au prix du marché. Ce qui est posé sur cette feuille n'a pas de prix de marché parce que personne n'a demandé le prix. »" });
+  } else {
+    texte.push("§ Il n'y a pas de seconde feuille.");
+    texte.push({ sobre:"Personne ne monte avec vous.",
+      intense:"Personne ne monte avec vous. Ce n'est pas un jugement sur ce qui a été fait en neuf ans : c'est une constatation sur ce qui en est resté quelque part, chez quelqu'un, sous une forme qui se rappelle toute seule.",
+      extreme:"Personne ne monte avec vous.\n\nCe n'est pas un jugement sur ce qui a été fait en neuf ans — on a fait beaucoup, et l'or de cette maison le prouve ligne par ligne. C'est une constatation sur ce qu'il en est resté chez quelqu'un d'autre, sous une forme qui se rappelle toute seule au bout de neuf ans, sans qu'on ait à écrire.\n\nCe genre de chose ne se constitue pas quand on en a besoin. On s'en aperçoit le matin où on en aurait eu besoin." });
+  }
 
   texte.push("@« C'est tout ? »");
   texte.push({ sobre:`^« C'est tout ce que j'ai pu établir. Ce n'est pas la même chose. »`,
@@ -25491,8 +26469,14 @@ DYN.a3_convergence = () => {
  * siège, et aucune ne produit un siège arbitraire. */
 DYN.a3_siege = () => {
   const p = palierKarlsberg();
-  const contre = forcesContre(6);
+  /* Ce qui n'arrive pas en face compte autant que ce qui arrive à côté de
+   * vous. Un réseau qui ferme quatre relais et un greffier qui égare une
+   * attestation ne se voient pas sur un front : ils se voient dans le
+   * nombre de compagnies qui remontent la vallée. */
+  const ec = ecartes();
+  const contre = forcesContre(Math.max(3, 6 - ec.combien));
   const noms = [...new Set(contre.map(u => u.de))];
+  const avec = forcesAvec(5);
 
   /* Faute d'ennemi nommé, ce qui monte est ce qui monte toujours vers une
    * vallée sans maître : des gens qui ont faim et personne pour les tenir. */
@@ -25526,11 +26510,43 @@ DYN.a3_siege = () => {
       texte:"La courtine cède avant la nuit. Ce qui reste de la maison sort par le chemin creux, en emportant ce qu'on peut porter, et Karlsberg redevient ce qu'elle était il y a neuf ans : un endroit que trois provinces cesseront de nommer." },
   };
 
-  const garnison = ETAT.armee && ETAT.armee.length
-    ? null
-    : [{ type:'lanciers' }, { type:'archers', effectifPct:0.8 },
+  /* La garnison, c'est ce que la vallée lève — plus ce que neuf ans ont
+   * produit ailleurs et qui monte de soi-même. Une armée constituée reçoit
+   * les mêmes renforts : ils ne remplacent personne, ils s'ajoutent. */
+  const leve = [{ type:'lanciers' }, { type:'archers', effectifPct:0.8 },
        { type:'frondeurs' }, ...(a('a2_bannieres') ? [{ type:'parias' }] : []),
        ...(a('a2_caleb_quarante') ? [{ type:'veterans', effectifPct:0.8 }] : [])];
+  const garnison = (ETAT.armee && ETAT.armee.length)
+    /* On repasse par des gabarits pour pouvoir y ajouter les renforts — et
+     * on reporte l'effectif réel, parce qu'une compagnie qui a saigné dans
+     * les théâtres reste saignée sous la courtine. */
+    ? (avec.length
+        ? [...ETAT.armee.filter(u => u.effectif > 0)
+             .map(u => ({ type:u.type, effectifPct:u.effectif / u.effectifMax })), ...avec]
+        : null)
+    : [...leve, ...avec];
+
+  /* Sainte-Ombre recoud. Ce qui est perdu reste perdu — on ne rend pas une
+   * épaule — mais deux chirurgiens dans une cour, la veille, font la
+   * différence entre porter une chose et la traîner. */
+  /* La scène est `dyn` : elle se recompose à chaque `aller()`, donc on ne
+   * recoud qu'une fois et on garde la liste, sinon la seconde entrée ne
+   * trouverait plus rien à panser et le texte disparaîtrait. */
+  const A = A3();
+  if(soinsDisponibles() && !A.recousu){
+    A.recousu = [];
+    for(const b of (ETAT.blessures || [])){
+      if(b.saignement || !b.traitement){
+        b.saignement = 0;
+        b.traitement = "recousue à Sainte-Ombre, la veille";
+        b.gravite = Math.max(1, (b.gravite || 2) - 1);
+        b.douleur = Math.max(1, (b.douleur || 2) - 1);
+        A.recousu.push(b.zone);
+      }
+    }
+    ETAT.ressources.sang = Math.max(ETAT.ressources.sang, 85);
+  }
+  const recousu = A.recousu || [];
 
   SCENES.a3_siege = {
     dyn:true,
@@ -25539,9 +26555,21 @@ DYN.a3_siege = () => {
     texte:[
       champ.intro,
       DIT_PALIER[p],
-      garnison
-        ? "Vous n'avez pas d'armée. Vous avez ce que la vallée peut lever, ce qui n'est pas la même chose et ce qui a le mérite d'exister."
-        : `Vous avez un rôle : ${ETAT.armee.map(u => `${u.nom} (${u.effectif})`).join(' · ')}.`,
+      (ETAT.armee && ETAT.armee.length)
+        ? `Vous avez un rôle : ${ETAT.armee.filter(u => u.effectif > 0).map(u => `${u.nom} (${u.effectif})`).join(' · ')}.`
+        : "Vous n'avez pas d'armée. Vous avez ce que la vallée peut lever, ce qui n'est pas la même chose et ce qui a le mérite d'exister.",
+      ...(avec.length ? [
+        `§ Et ce qui a monté tout seul : ${[...new Set(avec.map(u => u.de))].join(' · ')}.`,
+        { sobre:"Aucun n'a reçu de lettre de cette maison.",
+          intense:"Aucun n'a reçu de lettre de cette maison. Ils sont arrivés entre avant-hier et ce matin, par quatre routes différentes, et deux d'entre eux ne savaient pas que les autres venaient.",
+          extreme:"Aucun n'a reçu de lettre de cette maison.\n\nIls sont arrivés entre avant-hier et ce matin, par quatre routes différentes, et deux d'entre eux ignoraient jusqu'à hier soir que les autres venaient. Ils ne se connaissent pas. Ils n'ont rien en commun sinon une seule chose, et cette chose n'est écrite sur aucun acte : à un moment donné, dans une affaire qui ne les regardait pas tous, quelqu'un a fait ce qu'il avait dit qu'il ferait.\n\nÇa ne se constitue pas. Ça se constate." },
+      ] : []),
+      ...(ec.combien ? [
+        `§ Et ${ec.combien === 1 ? "une compagnie n'est jamais arrivée" : "deux compagnies ne sont jamais arrivées"} dans la vallée. ${ec.par.map(x => x.nom).join(' · ')} — on sait pourquoi, et cela ne figurera nulle part.`,
+      ] : []),
+      ...(recousu.length ? [
+        `§ On vous a recousu hier soir, dans la cour, sur une table qu'on avait montée sans demander où : ${recousu.join(' · ')}. Ce n'est pas rendu. C'est porté au lieu d'être traîné, et sur une courtine c'est toute la différence.`,
+      ] : []),
       { sobre:"§ On ne défend pas des pierres.",
         intense:"§ On ne défend pas des pierres. Personne n'a jamais défendu des pierres : les pierres ne s'en aperçoivent pas.",
         extreme:"§ On ne défend pas des pierres. Personne n'a jamais défendu des pierres et les pierres ne s'en sont jamais aperçues.\n\nCe qu'il y a derrière la courtine ce matin : trois cents personnes qui n'ont rien demandé, un intendant qui vient d'un hameau de onze feux, et le fait qu'un nom rayé il y a vingt-huit ans figure à nouveau dans le registre d'une province." },
@@ -27271,7 +28299,7 @@ in_so_signe:{
       intense:"Karlsberg tient trois jours contre quarante-huit hommes de Chastel, ce qui est beaucoup plus que quiconque n'aurait parié, et beaucoup moins que ce qu'il aurait fallu.\n\nSorgue commande. Il ne descend jamais de cheval et il ne fait aucune faute.",
       extreme:"Karlsberg tient trois jours contre quarante-huit hommes de Chastel.\n\nC'est considérablement plus que ce que quiconque aurait parié — quarante-huit hommes d'une maison de province prennent un fort en une journée — et considérablement moins que ce qu'il aurait fallu.\n\nRenaud Sorgue commande du dehors, à cheval, à quatre cents pas. Il ne descend pas une seule fois, il ne s'approche pas une seule fois, et il ne commet pas une seule faute en trois jours.\n\nIl n'est jamais entré dans un rond avec vous. C'est la seule chose qu'il ait obtenue de cette affaire et il n'en voulait aucune autre." },
   ],
-  effets:{ flags:['in_sorgue_fait','in_fait_sorgue','a3_chastel_venu','a3_tombee'],
+  effets:{ flags:['in_fait_sorgue','a3_chastel_venu','a3_tombee'],
            cout:{ moral:14 },
            marque:"Vous lui avez dit de faire le signe. Quarante-huit hommes, et trois jours.",
            court:"Le signe" },
@@ -27290,7 +28318,7 @@ in_so_non:{
       extreme:"À vingt pas, il arrête son cheval. Il ne se retourne pas.\n\n« Vous auriez gagné, messire. »\n\nUn temps.\n\n« Je le dis parce que c'est vrai, parce que je sais reconnaître ce genre de chose mieux que quiconque dans quatre provinces, et parce que je n'aurai aucune autre occasion de le dire à personne.\n\nJ'avais quatre-vingt-dix secondes dans les jambes. Peut-être cent. C'est le calcul que j'ai fait pendant quatre jours de route et je l'ai refait chaque soir en espérant m'être trompé. »\n\nIl repart au pas.\n\n« Ne le dites à personne. Ça ne servirait qu'à moi. »" },
     "§ Il fait quatre jours de route dans l'autre sens. Chastel le remplace dans l'année.",
   ],
-  effets:{ flags:['in_sorgue_fait','in_fait_sorgue','in_so_refuse'],
+  effets:{ flags:['in_fait_sorgue','in_so_refuse'],
            faire:() => { ETAT.renom = Math.max(0, ETAT.renom - 3); },
            exploit:{ eclat:2, temoins:'quelques', quoi:"vous avez refusé le rond à un homme de cinquante-six ans" },
            marque:"Vous avez refusé le rond. « Vous auriez gagné. Ne le dites à personne. »",
@@ -27354,7 +28382,7 @@ in_so_attente:{
       intense:"Au troisième temps, il ne remonte pas la garde. Il baisse la lame, à hauteur de cuisse, et il reste comme ça au milieu du rond devant trois cents personnes.\n\n« Voilà », dit-il. « C'était ça, la phrase. »",
       extreme:"Au troisième temps, il ne remonte pas la garde.\n\nIl baisse la lame à hauteur de cuisse, il reste debout au milieu du rond, et il ne dit rien pendant un temps que personne dans cette cour n'ose interrompre.\n\n« Voilà », dit-il enfin. « C'était ça, la phrase. »\n\n@« Vous saviez. »\n\n« Depuis le premier soir. » Il regarde la craie. « Un homme de quarante-sept ans et un homme de vingt-quatre : je vous ai dit ça il y a neuf ans en croyant que c'était une menace. C'en était une, à l'époque.\n\nJ'ai eu neuf ans pour comprendre que c'était une date. »" },
   ],
-  effets:{ flags:['in_sorgue_fait','in_fait_sorgue','in_so_fini','in_so_epargne'],
+  effets:{ flags:['in_fait_sorgue','in_so_fini','in_so_epargne'],
            cout:{ endurance:24 },
            meleeMaj:{ eux:0, position:"debout dans le rond", note:"Il a baissé la lame lui-même" },
            exploit:{ eclat:10, temoins:'foule',
@@ -27376,7 +28404,7 @@ in_so_entree:{
       intense:"Vous le mettez au sol de l'épaule. Il tombe correctement — il tombera correctement toute sa vie — et il ne se relève pas seul, et personne dans la cour ne bouge pour l'aider parce que personne n'ose.",
       extreme:"Vous le mettez au sol de l'épaule, sans élégance, avec tout le poids.\n\nIl tombe correctement. Il tombera correctement jusqu'à sa dernière heure, c'est la chose qu'on lui a apprise en premier et ce sera la dernière à partir.\n\nEt il ne se relève pas seul.\n\nTrois cents personnes regardent un homme de cinquante-six ans essayer de se remettre debout sur des pavés, et pas une ne bouge — pas par cruauté : parce que personne n'ose lui faire ça.\n\nVous lui tendez la main. Il la prend, ce qui est de très loin la chose la plus dure qu'il ait faite de la journée." },
   ],
-  effets:{ flags:['in_sorgue_fait','in_fait_sorgue','in_so_fini','in_so_battu'],
+  effets:{ flags:['in_fait_sorgue','in_so_fini','in_so_battu'],
            cout:{ endurance:18 },
            meleeMaj:{ eux:0, position:"debout, la main tendue", note:"Il l'a prise" },
            exploit:{ eclat:8, temoins:'foule', quoi:"vous avez battu Renaud Sorgue en trois secondes" },
@@ -27397,7 +28425,7 @@ in_so_rien:{
       extreme:"^« Vous me faites marcher. »\n\nIl baisse la lame complètement.\n\n« Il y a neuf ans, dans une salle de Cendrepont, entre le deuxième et le troisième temps, j'ai dit à un homme de vingt-quatre ans qu'il ne m'avait pas encore fait marcher et que c'était très exactement la seule chose qui lui restait à essayer. »\n\n@« Vous vous en souvenez. »\n\n« Je me souviens de tout, messire. De tout, dans l'ordre, avec le temps qu'il faisait. C'est la partie de ce métier dont personne ne parle jamais et c'est celle qui coûte le plus cher. »\n\nIl regarde le rond qu'il vient de tracer sur vos pavés.\n\n« Quarante et un duels. Je peux vous les réciter. Il n'y en a pas un seul dont j'aie envie. »" },
     "§ Il sort du rond de lui-même. Les deux pieds, franchement, sans que personne ait à le compter.",
   ],
-  effets:{ flags:['in_sorgue_fait','in_fait_sorgue','in_so_fini','in_so_marche'],
+  effets:{ flags:['in_fait_sorgue','in_so_fini','in_so_marche'],
            exploit:{ eclat:9, temoins:'foule',
                      quoi:"vous avez fait marcher Renaud Sorgue sans lever la lame une seule fois" },
            marque:"Vous ne l'avez pas touché une fois. Il est sorti du rond de lui-même.",
@@ -27414,7 +28442,7 @@ in_so_cout:{
       extreme:"La pointe entre sous les côtes flottantes, à droite, sur trois pouces exactement, et ressort par le même trajet.\n\nC'est mesuré, c'est propre, c'est placé à un demi-pouce de l'endroit où ça vous tuerait, et ça n'y est pas.\n\nUn homme qui a gagné quarante et un duels judiciaires n'a pas passé quarante ans à tuer des gens : il a passé quarante ans à **finir** des duels, ce qui n'est pas le même métier et ce qui demande infiniment plus de main." },
     "Vous le finissez quand même. Ça prend onze secondes de plus qu'il n'en avait, et onze secondes est précisément ce qui vous sépare.",
   ],
-  effets:{ flags:['in_sorgue_fait','in_fait_sorgue','in_so_fini','in_so_battu'],
+  effets:{ flags:['in_fait_sorgue','in_so_fini','in_so_battu'],
            cout:{ endurance:28, vitalite:20, sang:14 },
            meleeMaj:{ eux:0, position:"debout, ouvert au flanc", note:"Onze secondes de plus qu'il n'en avait" },
            faire:() => blesser({ id:'in_so_cotes', zone:"sous les côtes, à droite", type:"perforation nette",
@@ -27436,7 +28464,7 @@ in_so_ko:{
     "La pointe se pose sous votre mâchoire et n'y entre pas. Trois cents personnes de votre maison regardent.",
     "« Cédez », dit-il. Et plus bas, pour vous seul : « Ne les faites pas regarder ça. »",
   ],
-  effets:{ flags:['in_sorgue_fait','in_fait_sorgue','in_so_fini','in_so_perdu'],
+  effets:{ flags:['in_fait_sorgue','in_so_fini','in_so_perdu'],
            cout:{ endurance:30, vitalite:22, sang:12, moral:10 },
            meleeMaj:{ eux:0, position:"à genoux sur vos propres pavés", note:"Quarante-deux" },
            faire:() => { ETAT.renom = Math.max(0, ETAT.renom - 10); },
@@ -27539,7 +28567,7 @@ in_ch_inscrit:{
       extreme:"« Pour vous ? Rien du tout aujourd'hui. »\n\nIl sèche l'encre.\n\n« Vous êtes inscrit. Ça veut dire qu'un magistrat de province peut vous convoquer, ce qui est désagréable, et que personne ne peut vous prendre à quatre heures du matin sans passer devant lui, ce qui l'est nettement moins. C'est exactement ce que ça donne et je ne vous vendrai pas autre chose.\n\nCe que ça change n'est pas pour vous. »\n\nIl referme le volume.\n\n« Il y a dans la marche, en ce moment, entre quarante et soixante enfants qui font tomber des murs sans le vouloir et dont les villages décident tout seuls. Vous savez ce que décide un village.\n\nÀ partir d'aujourd'hui, quand j'irai devant le conseil, je n'aurai plus quatre-vingt-quatorze noms dont personne n'a entendu parler. J'en aurai quatre-vingt-quinze, et le quatre-vingt-quinzième a tenu un siège devant trois provinces.\n\nC'est pour ça que je le demande depuis sept ans. » " },
     "§ Il repart le matin même avec ses vingt hommes. C'est son dernier hiver de commission et il le passera à porter un volume relié devant quatre conseils.",
   ],
-  effets:{ flags:['in_charles_fait','in_fait_charles','in_ch_inscrit','a2_registre_onde'],
+  effets:{ flags:['in_fait_charles','in_ch_inscrit','a2_registre_onde'],
            faire:() => { ETAT.suspicion = 100;
                          if(typeof retenir === 'function') retenir('charles', "il s'est inscrit de lui-même, le quatre-vingt-quinzième"); },
            exploit:{ eclat:6, temoins:'province',
@@ -27562,7 +28590,7 @@ in_ch_non:{
       extreme:"^« Je ne redemanderai pas », dit-il sur le seuil, sans se retourner complètement.\n\n« Ce n'est pas une menace et je vous demande de ne pas l'entendre comme ça. C'est mon dernier hiver de commission. On m'a accordé quatre ans en Ventôse, il y en a eu sept parce que personne ne voulait la place, et j'ai soixante-deux ans.\n\nIl y aura quelqu'un après moi. Je ne sais pas qui et je n'ai aucun moyen de le choisir. »\n\nUn temps.\n\n« Ce que je sais, c'est que le prochain n'aura pas mon registre. Il aura ce que le conseil lui donnera, et le conseil donne toujours à quelqu'un qui promet d'aller plus vite. »\n\nIl remet son manteau.\n\n« Bonne route, messire. Restez à l'ouest de la Route Grise. »" },
     "§ Il a dit exactement ça il y a neuf ans, dans une salle de relais, en partant. C'est la seule chose qu'il ait répétée de toute sa vie.",
   ],
-  effets:{ flags:['in_charles_fait','in_fait_charles','in_ch_refuse'],
+  effets:{ flags:['in_fait_charles','in_ch_refuse'],
            cout:{ moral:6 },
            faire:() => { if(typeof retenir === 'function') retenir('charles', "il a dit non une seconde fois, et c'était mon dernier hiver"); },
            marque:"Vous avez refusé une seconde fois. C'était son dernier hiver de commission.",
@@ -27591,7 +28619,7 @@ in_ch_registre:{
     "@« C'est tout ? »",
     "« C'est tout. Le reste est de la comptabilité et vous en avez un qui sait compter. »",
   ],
-  effets:{ flags:['in_charles_fait','in_fait_charles','in_ch_registre','a2_registre_onde'],
+  effets:{ flags:['in_fait_charles','in_ch_registre','a2_registre_onde'],
            faire:() => { if(typeof retenir === 'function') retenir('charles', "il m'a demandé le registre et je le lui ai donné"); },
            exploit:{ eclat:12, temoins:'province',
                      quoi:"Charles de Mont-Draken vous a confié son registre, ce qu'il n'a fait de personne en trente ans" },
@@ -27611,7 +28639,7 @@ in_ch_registre_cout:{
     "§ Il a raison. Il a toujours raison, c'est toute la difficulté de sa vie, et il la traîne depuis trente ans.",
     "« Cela dit », ajoute-t-il en se levant, « vous êtes le premier à l'avoir demandé. Je le note. »",
   ],
-  effets:{ flags:['in_charles_fait','in_fait_charles','in_ch_demande'],
+  effets:{ flags:['in_fait_charles','in_ch_demande'],
            faire:() => { if(typeof retenir === 'function') retenir('charles', "il a demandé le registre, ce que personne n'a jamais fait"); },
            exploit:{ eclat:3, temoins:'un', quoi:"vous êtes le premier à lui avoir demandé le registre" },
            marque:"Il a refusé le registre. « Vous êtes le premier à l'avoir demandé. Je le note. »",
@@ -27628,7 +28656,7 @@ in_ch_registre_ko:{
       extreme:"Il vous regarde longtemps, et il n'y a pas une once de colère là-dedans. C'est un homme qui reclasse quelque chose, et le voir faire ça est nettement pire.\n\n« Quatre-vingt-quatorze noms », dit-il enfin. « Avec la date, le lieu, et ce que chacun a fait devant combien de témoins.\n\nVous venez de me demander quatre-vingt-quatorze personnes, messire. Pas un volume. »\n\nIl le remet sous son bras.\n\n« Je ne sais pas pourquoi vous le vouliez. Je ne vous ferai pas l'injure de supposer le pire, parce que je vous ai vu tenir un siège pour trois cents feux qui ne vous avaient rien demandé.\n\nMais je vais l'écrire, et dans onze ans quelqu'un le lira, et je ne pourrai plus expliquer ce que j'en pensais. »" },
     "§ Il l'écrit. Là, devant vous, avant de se lever.",
   ],
-  effets:{ flags:['in_charles_fait','in_fait_charles','in_ch_note','a2_charles_froid'],
+  effets:{ flags:['in_fait_charles','in_ch_note','a2_charles_froid'],
            cout:{ moral:8 },
            faire:() => { if(typeof retenir === 'function') retenir('charles', "il m'a demandé quatre-vingt-quatorze personnes"); },
            marque:"Vous lui avez demandé le registre. Il a écrit ce que ça disait de vous, devant vous.",
@@ -27700,7 +28728,7 @@ in_sa_rond:{
       extreme:"^« Je ne suis pas venu pour ça. Vous le savez parfaitement, et vous venez de me le proposer pour m'éviter d'avoir à le dire à voix haute.\n\nC'est courtois. C'est très probablement la chose la plus courtoise qu'on m'ait faite en vingt ans de carnet, et je préfère quand même le dire. »\n\nIl remet le carnet dans sa poche intérieure.\n\n« Un rond de neuf pas entre un homme de quarante ans et un homme de trente-trois ans qui a tenu un siège il y a trois semaines ne renseigne sur rien du tout. Ça ferait trois lignes fausses.\n\nJ'ai soixante-neuf pages. Je peux vivre avec une blanche. Je ne peux pas vivre avec une fausse. »" },
     "§ Il repart le lendemain. La page reste blanche et le carnet repart avec elle.",
   ],
-  effets:{ flags:['in_sault_fait','in_fait_sault','in_sa_blanche'],
+  effets:{ flags:['in_fait_sault','in_sa_blanche'],
            marque:"Il a refusé le rond. « Je peux vivre avec une page blanche. Pas avec une fausse. »",
            court:"Une page blanche" },
   suite:'a3_champions', libelleSuite:"Après" },
@@ -27718,7 +28746,7 @@ in_sa_ecrire:{
       extreme:"^« *Karlsberg, la vingt-neuvième année après la Purge.*\n\n*Épée bâtarde, bonne main, a appris où regarder — ce que quinze sur soixante-neuf n'apprennent jamais.*\n\n*N'est pas entré dans le rond, et n'avait aucune raison d'y entrer. Trois cents feux au pied du mur, un intendant qui tient les comptes, une chaussée rouverte sans contrat.*\n\n*C'est la seule ligne de ce carnet qui compte autre chose que des hommes seuls. Je ne sais pas quoi en faire et je l'écris quand même, parce qu'un registre qui n'écrit que ce qu'il sait mesurer ment par omission pendant vingt ans.* »\n\nIl referme le carnet.\n\n« C'est quatre lignes. Je n'en avais jamais écrit quatre. »" },
     "§ Il repart au matin, et il ne repassera plus, et ce n'est pas une menace ni une promesse : c'est un homme qui a fini une page.",
   ],
-  effets:{ flags:['in_sault_fait','in_fait_sault','in_sa_ecrit'],
+  effets:{ flags:['in_fait_sault','in_sa_ecrit'],
            exploit:{ eclat:4, temoins:'un',
                      quoi:"la seule page de son carnet qui compte autre chose que des hommes seuls" },
            marque:"« C'est la seule ligne de ce carnet qui compte autre chose que des hommes seuls. »",
@@ -27741,7 +28769,7 @@ in_sa_rester:{
       extreme:"@« Il y a une place ici. »\n\nIl attend, parce qu'il sait qu'il y a une suite.\n\n@« Pas une charge et pas une solde — vous refuseriez les deux et vous auriez raison. Une place. Quelqu'un qui écrit ce qui s'est réellement passé dans cette vallée, tous les mois, sans rien arranger, et qui a le droit écrit de me contredire au bas de la page. »\n\n« Vous êtes en train de m'engager. »\n\n@« Je suis en train de vous demander où ira votre carnet le jour où vous mourrez. »\n\nSilence complet.\n\n« Dans un grenier », dit-il enfin. « Comme tout le reste. C'est la seule chose de ma vie à laquelle je n'ai jamais trouvé de réponse et j'y pense tous les hivers depuis mes quarante ans. »" },
     "Il reste. Ça prend trois jours et il ne dit jamais oui : il descend simplement de la tour un matin avec le carnet et il demande où sont les archives.",
   ],
-  effets:{ flags:['in_sault_fait','in_fait_sault','in_sa_reste','a3_chroniqueur'],
+  effets:{ flags:['in_fait_sault','in_sa_reste','a3_chroniqueur'],
            exploit:{ eclat:5, temoins:'quelques',
                      quoi:"vous avez donné un grenier à un homme qui n'en avait pas" },
            marque:"Guillaume de Sault écrit désormais les chroniques de Karlsberg. Il a le droit de vous contredire au bas de la page.",
@@ -27777,7 +28805,7 @@ in_ysabel:{
       intense:"Vous la lisez vous-même.\n\n^« Je sais faire les deux, messire. On ne m'a simplement jamais demandé de faire l'autre. »",
       extreme:"Vous la lisez vous-même, à voix basse, et deux fois.\n\n^« Je sais faire les deux, messire. On ne m'a simplement jamais demandé de faire l'autre.\n\nVous avez refermé la porte du parloir et vous êtes parti sans me dire ce que vous vouliez. J'ai mis cinq ans à décider que ce n'était pas parce que vous n'aviez rien à me demander. »" },
   ],
-  effets:{ flags:['in_ysabel_fait','in_fait_ysabel','in_ys_confirme','a2_titre_inattaquable'],
+  effets:{ flags:['in_fait_ysabel','in_ys_confirme','a2_titre_inattaquable'],
            exploit:{ eclat:8, temoins:'province',
                      quoi:"le relèvement de Karlsberg est devenu inattaquable" },
            marque:"Ysabel a confirmé le relèvement. Le titre est inattaquable. « Je sais faire les deux. »",
@@ -27940,6 +28968,7 @@ function chroniqueKarlsberg(){
   if(a('a2_bannieres'))
     v.push(fragment("La bannière noire au loup blanc a été relevée publiquement.",
       "Volume cent-quarante-trois, section des titres relevés. C'est la première maison rayée à l'avoir été en quatre-vingts ans, et deux provinces ont demandé qu'on vérifie l'acte trois fois."));
+  v.push(...retenues('karlsberg', 5));
   if(a('in_ys_lettre') || a('a3_tenu'))
     v.push(fragment("Le relèvement n'a jamais été contesté.",
       "Il l'aurait été — un relèvement l'est toujours, pendant trois générations — si la dernière du sang par ordre de naissance ne l'avait pas confirmé par écrit devant le commissariat aux titres. Elle l'a fait en quatre lignes."));
@@ -27965,8 +28994,14 @@ function chroniqueYohan(){
       "Il y a des rumeurs de relais, il y a deux dépositions qui se contredisent, et il y a un greffe qui a refusé de trancher. C'est probablement ce qu'il voulait."));
 
   if(blessures)
-    v.push(fragment(`Il portait ${blessures === 1 ? "une chose" : enLettres(blessures) + " choses"} qui ne s'en sont jamais allées.`,
-      `${(ETAT.blessures || []).map(b => b.zone).join(' · ')}. Aucune ne figure dans les chansons, qui préfèrent les hommes entiers.`));
+    v.push(fragment(blessures === 1
+      ? "Il portait une chose qui ne s'en est jamais allée."
+      : `Il portait ${enLettres(blessures)} choses qui ne s'en sont jamais allées.`,
+      /* Les zones sont écrites en minuscule dans le journal, où elles suivent
+       * toujours un mot ; ici elles ouvrent la phrase. */
+      `${(ETAT.blessures || []).map(b => b.zone).join(' · ').replace(/^./, c => c.toUpperCase())}. ${
+        blessures === 1 ? "Elle ne figure dans aucune chanson : les chansons préfèrent les hommes entiers."
+                        : "Aucune ne figure dans les chansons, qui préfèrent les hommes entiers."}`));
 
   if(ETAT.renom >= 70)
     v.push(fragment("Sa réputation a dépassé ce qu'il avait fait, ce qui arrive à tout le monde et ne s'arrête jamais.",
@@ -27989,6 +29024,7 @@ function chroniqueMaison(){
   if(a('a2_liaison'))
     v.push(fragment("Il y a des enfants dont la chronique ne porte pas le nom.",
       "Le Prix ancestral a produit ce qu'il produit depuis quatre cents ans : des branches. Les maisons concernées les ont inscrites sous leur propre nom, ce qui est la coutume, et c'est ainsi que le sang des Parias circule sans jamais figurer nulle part."));
+  v.push(...retenues('maison', 5));
   return v;
 }
 
@@ -28065,6 +29101,7 @@ function chroniqueLesNeuf(){
   else if(a('in_ys_morte') || a('a2_ysabel_morte'))
     v.push(fragment("Ysabel de Karlsberg est morte à Sainte-Ombre.",
       "Onze hospices de route ont perdu leur comptable dans l'année. Trois ont fermé. La fondation a mis quatre ans à retrouver quelqu'un capable de tenir trois colonnes."));
+  v.push(...retenues('neuf', 7));
   return v;
 }
 
@@ -28116,6 +29153,7 @@ function chroniqueGuerres(){
   v.push(fragment(`${ho.nom} :`, `*${ho.dit}.* ${
     ho.n >= 4 ? "Elle n'a jamais été battue : elle a fini par n'avoir plus rien devant elle, ce qui n'est pas la même chose et ce que les chroniques de l'époque ont toutes confondu."
     : "Elle a profité de tout et n'a rien conclu. C'est la façon dont les hardes fonctionnent et personne dans quatre provinces n'a voulu l'apprendre."}`));
+  v.push(...retenues('guerres', 7));
   return v;
 }
 
@@ -28161,6 +29199,23 @@ function chroniquePeuples(){
   return v;
 }
 
+/* ── DES AFFAIRES DE CE TEMPS ─────────────────────────────────────────────
+ * Neuf ans de contrats de province. Un barde n'en garde que ce qui a marché
+ * en salle, et ce qui a marché en salle dépend entièrement de ce que la
+ * partie a produit : deux parties différentes ne lui laissent pas le même
+ * matériel, et la chanson n'a pas la même longueur. */
+function chroniqueAffaires(){
+  const l = retenues('affaires', 8);
+  if(!l.length) return [];
+  return [
+    "§ **Des affaires de ce temps.**",
+    { sobre:"Avant tout ça, il a pris des contrats comme tout le monde.",
+      intense:"Avant tout ça, il a pris des contrats comme n'importe quel homme d'épée sans maison : au tableau, à la semaine, pour ce qu'on payait. C'est la partie de sa vie qui a duré le plus longtemps et c'est celle dont on chante le moins.",
+      extreme:"Avant tout ça, il a pris des contrats comme n'importe quel homme d'épée sans maison : au tableau, à la semaine, pour ce qu'on payait, dans des bailliages qui ne savaient pas son nom et ne cherchaient pas à le savoir.\n\nC'est la partie de sa vie qui a duré le plus longtemps — de très loin — et c'est celle dont on chante le moins, parce qu'une salle veut des sièges et des couronnes.\n\nJe la donne quand même. Une maison ne se relève pas dans une salle du trône : elle se relève dans des affaires de province que personne n'a envie d'entendre." },
+    ...l,
+  ];
+}
+
 /* ── CE QUE LA CHRONIQUE NE DIT PAS ───────────────────────────────────── */
 function chroniqueTrous(){
   const t = [];
@@ -28180,6 +29235,10 @@ function chroniqueTrous(){
     t.push("qu'un garçon de douze ans a nourri une meute pendant six semaines pour sauver le troupeau de son grand-père, et qu'il a tenu les comptes d'une maison neuf ans plus tard ;");
   if(a('a3_fl_casse') && !a('a3_fl_passes'))
     t.push("que le mot *perte*, dans un rapport d'état, ne désigne que ce qui figurait déjà quelque part ;");
+  /* Et tout ce que neuf ans d'affaires ont produit et qu'aucun greffe n'a
+   * eu de colonne pour porter. Six au plus : au-delà ce n'est plus une
+   * énumération, c'est un inventaire, et un inventaire n'émeut personne. */
+  t.push(...retenues('trous', 6));
 
   if(!t.length)
     return ["§ Il y a une chose que je n'ai pas. De cette vallée-là, personne ne m'a jamais rien rapporté — et ce n'est pas de la négligence : là-bas, personne n'a jamais pensé que ça se chantait."];
@@ -28262,6 +29321,8 @@ DYN.a3_chronique = () => {
 
     "§ **Des guerres de ce temps.**",
     ...chroniqueGuerres(),
+
+    ...chroniqueAffaires(),
 
     "§ **Des peuples.**",
     ...chroniquePeuples(),
@@ -28557,6 +29618,37 @@ const ESSAI_RICHE = {
     /* des gens qu'on a contrariés : sans ça, le siège n'a pas de visage */
     'as_sorgue_vivant', 'as_sorgue_cede', 'ch_du_revoir',
     'wy_gassien_vivant', 'wy_gassien_confondu',
+    /* Ce qui décide de qui monte **avec** vous, et de ce que le barde aura
+     * à chanter. Une partie riche n'est pas une partie qui a beaucoup
+     * d'or : c'est une partie qui a laissé des traces chez des gens. */
+    'ar_signal', 'ar_ouvert', 'ar_trente_quatre', 'ar_tenu', 'ar_onde', 'ar_or_seul',
+    'va_sait_quatre_vingts', 'va_trois', 'va_greffe', 'va_tenanciers',
+    'va_marais_sauve', 'va_bertran_reste', 'va_or_seul',
+    'ro_sait_anciens', 'ro_sait_beaufrere', 'ro_baudoin_avoue',
+    'ro_arret', 'ro_laisse', 'ro_aldren_vivant', 'ro_or_seul',
+    'ha_sait_pas_rancon', 'ha_sait_elle_paie', 'ha_sait_lettres',
+    'ha_discret', 'ha_lettres_mouillees', 'ha_ramenee', 'ha_refus_comp',
+    'wy_sait_onze', 'wy_soupcon_couvee', 'wy_heloise_franche',
+    'wy_heloise_lucide', 'wy_heloise_dette', 'wy_discret',
+    'ch_lu', 'ch_temoins', 'ch_colin', 'ch_co_lie', 'ch_co_reste',
+    'ch_hameau_sorti', 'ch_re_vue', 'ch_re_su', 'ch_re_neuf_vivants',
+    'ch_sault_vu', 'ch_liste_lue', 'ch_du_craie_gagne', 'ch_du_rendue',
+    'tr_pont', 'tr_adelie', 'tr_essai_adelie', 'tr_reconnu', 'tr_harn_vivant', 'tr_passe',
+    'assise', 'as_sait_regles', 'as_gagne', 'as_loys_parle', 'as_nom_nu',
+    'kar_arrive', 'kar_crypte', 'kar_quatre_corps', 'kar_chevaliere',
+    'a2_karlsberg_eau', 'a2_karlsberg_habitable', 'a2_bourg', 'a2_asile_declare',
+    'al_rencontree', 'al_silence', 'al_gamin_vivant', 'aly_appat_su', 'aly_appat_tu',
+    'el_jardin', 'el_silence_jardin', 'el_longevite', 'el_rien_du',
+    'lu_offre', 'lu_franc', 'ls_pourquoi', 'cb_termes',
+    'ca_droit_su', 'ca_droit_garde',
+    'a2_montdraken_certain', 'a2_commission', 'cd_inscrit', 'cd_onze',
+    'fi_parloir_su', 'fi_pourquoi', 'fi_preuve', 'fi_avoue', 'fi_hospices', 'fi_assis',
+    'pa_cachet_cadet', 'pa_famille', 'pa_soeur',
+    'kd_vu', 'kd_dette', 'kd_tenu', 'an_gue_su', 'an_gue_tenu', 'an_parias',
+    'kh_puits', 'kh_trois_jours', 'kh_franc',
+    'px_su_le_chiffre', 'px_alix_lucide', 'a2_prix_paye', 'a2_liaison_verneuil',
+    'ma_termes', 'ma_installee',
+    'enf_ne', 'onde_enferme', 'a2_incorruptible',
   ],
   crises:{ elfes:3, astrah:3, khesh:2, kardurak:3, hordes:2 },
   ouvrages:9,

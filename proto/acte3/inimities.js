@@ -59,7 +59,7 @@ gassien:{
   ou:"partout où passe du sel",
   poids:2,
   hostile:() => a('wy_gassien_vivant') && (a('wy_gassien_confondu') || a('wy_gassien_donne')
-             || a('as_gassien_marche')),
+             || a('wy_gassien_ennemi') || a('as_gassien_marche')),
   grief:() => a('wy_gassien_donne')
     ? "Vous l'avez livré au prévôt et il n'a pas été pendu, ce qui est la pire des deux issues : un contrebandier qu'on relâche a perdu ses trois chefs et gardé sa mémoire."
     : "Vous l'avez confondu et vous l'avez laissé partir. Il vous a serré la main à la barrière et il a dit *bonne chasse* sincèrement, et il ne l'a jamais oublié.",
@@ -176,7 +176,8 @@ ysabel:{
 function ennemisDeclares(){
   return Object.entries(INIMITIES)
     .filter(([, x]) => { try { return x.hostile(); } catch(e){ return false; } })
-    .sort((a, b) => b[1].poids - a[1].poids)
+    /* Pas de paramètre nommé `a` : `a()` est la lecture de drapeau globale. */
+    .sort(([, x], [, y]) => y.poids - x.poids)
     .map(([id, x]) => ({ id, ...x }));
 }
 

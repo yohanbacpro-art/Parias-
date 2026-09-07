@@ -27,6 +27,15 @@ const src = {};
 for(const f of fichiers) src[f] = fs.readFileSync(path.join(RACINE, f), 'utf8');
 const tout = Object.values(src).join('\n');
 
+/* Le français est plein d'apostrophes, et un commentaire à l'intérieur d'un
+ * tableau `flags:[…]` en apporte autant qu'il a d'élisions. Sans ça, l'outil
+ * inventait des drapeaux à partir de morceaux de prose. On scanne donc une
+ * copie sans blocs de commentaire. */
+const sansNotes = s => s.replace(/\/\*[\s\S]*?\*\//g, ' ');
+const srcNu = {};
+for(const [f, s] of Object.entries(src)) srcNu[f] = sansNotes(s);
+const toutNu = Object.values(srcNu).join('\n');
+
 /* ── Les drapeaux ─────────────────────────────────────────────────────────
  * On les pose de quatre façons : `flags:[...]`, `flag:'x'`, `ETAT.flags.add`,
  * et les identifiants d'ouvrage, qui sont posés par le chantier. */
@@ -36,11 +45,11 @@ const poses = new Set();
  * déclarait « lus sans être posés » alors qu'ils l'étaient deux lignes plus
  * haut. On accepte donc un petit bout d'expression avant le crochet, et une
  * seconde branche après. */
-for(const m of tout.matchAll(/flags:\s*[^[\n]{0,60}?\[([^\]]*)\](?:\s*:\s*\[([^\]]*)\])?/g))
+for(const m of toutNu.matchAll(/flags:\s*[^[\n]{0,60}?\[([^\]]*)\](?:\s*:\s*\[([^\]]*)\])?/g))
   for(const groupe of [m[1], m[2]])
     if(groupe) for(const q of groupe.matchAll(/'([^']+)'/g)) poses.add(q[1]);
-for(const m of tout.matchAll(/\bflag:\s*'([^']+)'/g)) poses.add(m[1]);
-for(const m of tout.matchAll(/ETAT\.flags\.add\(\s*'([^']+)'/g)) poses.add(m[1]);
+for(const m of toutNu.matchAll(/\bflag:\s*'([^']+)'/g)) poses.add(m[1]);
+for(const m of toutNu.matchAll(/ETAT\.flags\.add\(\s*'([^']+)'/g)) poses.add(m[1]);
 /* Les composés : `'fait_' + o.id`, `'acte_' + id + …`, `'crise_' + id + …` */
 const composes = [/^fait_/, /^acte_/, /^crise_/, /^echo_/, /^palier_/, /^ch_/, /^a2_palier_/];
 
@@ -57,6 +66,17 @@ for(const m of tout.matchAll(/flags:\s*\[([^\]]*)\][^}]*manque:/g))
 /* Les sources du chantier aussi. */
 for(const m of tout.matchAll(/\{\s*flag:'([^']+)',\s*res:/g))
   if(!lus.has(m[1])) lus.set(m[1], new Set(['sources du chantier']));
+/* Les trois lecteurs en masse de l'Acte III lisent leurs drapeaux à
+ * l'exécution, par `a(f)` sur une variable : statiquement, ça ne se voit
+ * pas. `consequences.js` porte un drapeau par clé de registre ; `renforts.js`
+ * et `inimities.js` les lisent dans des `vient()`/`hostile()` déjà couverts
+ * par la règle générale. On déclare donc les clés du registre. */
+{
+  const c = src['proto/acte3/consequences.js'] || '';
+  const corps = c.slice(c.indexOf('const CONSEQUENCES'), c.indexOf('function retenues'));
+  for(const m of corps.matchAll(/^([a-z][a-z0-9_]*):\{\s*sec:/gm))
+    if(!lus.has(m[1])) lus.set(m[1], new Set(['la chanson du barde']));
+}
 
 let defauts = 0;
 const dire = (titre, lignes) => {
@@ -87,6 +107,18 @@ const jamaisLus = [...poses]
  * enfle sans que rien ne la consomme — on l'imprime donc, sans échouer. */
 console.log(`  — ${jamaisLus.length} conséquence(s) « a2_ » en mémoire, encore lues par personne`);
 if(jamaisLus.length) console.log(`         ${jamaisLus.join(' · ')}`);
+
+/* 2 bis · la mesure d'ensemble. Un drapeau posé qu'aucun consommateur ne
+ * relit est une décision qui n'a pas eu lieu. On imprime la proportion sans
+ * échouer dessus : c'est un baromètre d'écriture, pas une règle de code. */
+{
+  const tousMorts = [...poses]
+    .filter(f => !lus.has(f))
+    .filter(f => !composes.some(r => r.test(f)));
+  const vivants = poses.size - tousMorts.length;
+  console.log(`  — ${vivants}/${poses.size} drapeaux relus quelque part `
+    + `(${Math.round(100 * vivants / poses.size)} %) · ${tousMorts.length} encore muets`);
+}
 
 /* 3 · les offres : leur cible doit exister, et leur identifiant être unique. */
 const scenesDef = new Set();
