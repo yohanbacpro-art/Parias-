@@ -51,7 +51,8 @@ for(const m of toutNu.matchAll(/flags:\s*[^[\n]{0,60}?\[([^\]]*)\](?:\s*:\s*\[([
 for(const m of toutNu.matchAll(/\bflag:\s*'([^']+)'/g)) poses.add(m[1]);
 for(const m of toutNu.matchAll(/ETAT\.flags\.add\(\s*'([^']+)'/g)) poses.add(m[1]);
 /* Les composés : `'fait_' + o.id`, `'acte_' + id + …`, `'crise_' + id + …` */
-const composes = [/^fait_/, /^acte_/, /^crise_/, /^echo_/, /^palier_/, /^ch_/, /^a2_palier_/];
+const composes = [/^fait_/, /^acte_/, /^crise_/, /^echo_/, /^palier_/, /^ch_/, /^a2_palier_/,
+                  /^muri_/];   /* posé et relu par `murir()`, sur un nom composé */
 
 const lus = new Map();
 for(const [f, s] of Object.entries(src))

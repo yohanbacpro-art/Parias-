@@ -66,12 +66,38 @@ const GENS = {
   jaufre:     { nom:"Jaufré",                 role:"capitaine des preneurs · payé d'avance", lettre:"J" },
 };
 
-/* ── Yohan, valeurs canoniques V7 ───────────────────────────────────────── */
+/* ── Yohan, la feuille de départ ─────────────────────────────────────────
+ *
+ * La fiche canonique V7 donne des valeurs d'homme d'épée compétent. Elles
+ * décrivaient bien un survivant des routes ; elles décrivaient mal *le plus
+ * fort des Parias*, qui est ce que Yohan est censé être. On monte donc d'un
+ * cran l'ensemble — et de deux l'Onde, parce que c'est elle, et non l'épée,
+ * qui décide de qui est le plus fort *des Parias* : à 4, la maîtrise de son
+ * propre sang était sa quatrième compétence, derrière la lutte.
+ *
+ * Ce qu'on ne fait pas : dépasser dix. La fiche pose « une échelle humaine
+ * de 1 à 10 » et rien n'y monte au-dessus, paliers d'actes compris. Un
+ * premier jet avait porté les épées à onze, ce qui rendait littéralement
+ * impossible de rater un coup d'épée — une statistique n'est intéressante
+ * que tant qu'elle laisse une courbe.
+ *
+ * Ce qui ne change pas, parce que la fiche y insiste et que rien ne l'a
+ * démenti : « Il n'est jamais invulnérable. » Une feuille plus haute déplace
+ * la médiane des jets, elle ne supprime ni les blessures, ni le coût des
+ * ressources, ni les lances en formation, ni le dragon.
+ *
+ * QUATRE COMPÉTENCES MANQUAIENT. `esquive`, `lettres`, `pistage` et `survie`
+ * sont appelées quinze fois par des tests du jeu et n'ont jamais figuré ici :
+ * `ETAT.comp[t.comp] || 0` les rendait donc à **zéro**, et Yohan passait ces
+ * quinze épreuves-là avec la compétence d'un homme qui n'a jamais lu, jamais
+ * suivi une trace et jamais dormi dehors. Elles sont posées. */
 function neuf(){
-  ETAT.carac = { force:7, agilite:7, endurance:8, perception:6, intellect:5, volonte:8, presence:6 };
-  ETAT.comp  = { epees:7, armes_lourdes:4, hast:4, dagues:5, tir:3, jet:5, lutte:6, bouclier:5,
-                 equitation:5, anatomie:4, bestiaire:3, alchimie:2, furtivite:5, tactique:4,
-                 commandement:2, onde:4 };
+  ETAT.carac = { force:8, agilite:8, endurance:9, perception:7, intellect:6, volonte:9, presence:7 };
+  ETAT.comp  = { epees:8, armes_lourdes:5, hast:5, dagues:6, tir:5, jet:6, lutte:7, bouclier:6,
+                 equitation:6, anatomie:5, bestiaire:4, alchimie:3, furtivite:6, tactique:5,
+                 commandement:4, onde:6,
+                 /* Le survivant des routes : ce que quinze tests lui demandaient déjà. */
+                 esquive:6, survie:6, pistage:5, lettres:5 };
   ETAT.ressources = { vitalite:100, endurance:100, concentration:80, sang:100, moral:85 };
   ETAT.or = 40; ETAT.renom = 6; ETAT.suspicion = 4;
   ETAT.flags = new Set(); ETAT.blessures = []; ETAT.faits = []; ETAT.portes = [];
@@ -83,6 +109,46 @@ function neuf(){
    * calendrier et des relations de la précédente. */
   ETAT.acte2 = null; ETAT.liens = null; ETAT.melee = null;
   ETAT.pistolets = 2;
+}
+
+/* ── Ce que vingt-neuf ans font d'un homme ────────────────────────────────
+ *
+ * Jusqu'ici, rien ne faisait jamais monter Yohan. Il ouvrait l'Acte III —
+ * vingt-neuf ans, un siège, quatre théâtres — avec exactement la feuille du
+ * premier matin à Cendrepont. La fiche canonique dit pourtant le contraire,
+ * et elle le dit par acte :
+ *
+ *   Acte I    « domine les combattants ordinaires isolés, affronte avec
+ *               risque les vétérans » ;
+ *   Acte II   « il peut vaincre des champions, survivre à des groupes et
+ *               employer l'Onde avec finesse » ;
+ *   Acte III  « il devient une puissance de champ de bataille ».
+ *
+ * D'où ces deux paliers. Ils ne récompensent pas les victoires — la fiche
+ * est explicite : « La progression ne distribue pas un point à chaque
+ * victoire. » Ils marquent le temps passé, les blessures comprises et les
+ * maîtres croisés, c'est-à-dire ce que les deux bascules d'acte racontent
+ * de toute façon.
+ *
+ * `murir` est idempotent : un drapeau garde chaque palier. Une scène `dyn`
+ * qui se recompose, un rechargement, un retour en arrière ne le passent pas
+ * deux fois. */
+const PALIERS = {
+  2:{ carac:{ perception:1, presence:1 },
+      comp:{ epees:1, onde:1, tactique:1, commandement:1, anatomie:1, lettres:1 } },
+  3:{ carac:{ force:1, endurance:1, volonte:1 },
+      comp:{ epees:1, onde:1, lutte:1, tactique:1, commandement:1, bestiaire:1 } },
+};
+
+function murir(n){
+  const marque = 'muri_' + n;
+  if(ETAT.flags.has(marque)) return false;
+  const p = PALIERS[n];
+  if(!p) return false;
+  for(const [k, v] of Object.entries(p.carac)) ETAT.carac[k] = (ETAT.carac[k] || 0) + v;
+  for(const [k, v] of Object.entries(p.comp))  ETAT.comp[k]  = (ETAT.comp[k]  || 0) + v;
+  ETAT.flags.add(marque);
+  return true;
 }
 
 /* ── Les six affaires de l'Acte I ──────────────────────────────────────────

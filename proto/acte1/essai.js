@@ -88,8 +88,12 @@ const ESSAI_PAUVRE = {
 };
 
 function monterEssai(p){
-  neuf();   /* la feuille canonique de Yohan, comme une partie neuve */
-  Object.assign(ETAT.comp, { esquive:6, lettres:5, pistage:5, survie:5 });
+  neuf();   /* la feuille de Yohan, comme une partie neuve */
+  /* Une partie qui entre à l'Acte III y entre avec l'homme de l'Acte III :
+   * les deux paliers ont été franchis en jouant, on les franchit ici aussi.
+   * Sans ça, la porte de service donnerait un Yohan de vingt-quatre ans à
+   * qui l'on demande de tenir un siège. */
+  murir(2); murir(3);
   ETAT.renom = p.renom;
   ETAT.suspicion = p.suspicion;
   ETAT.or = p.or;

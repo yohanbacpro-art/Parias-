@@ -198,6 +198,10 @@ DYN.a3_bascule = () => {
         extreme:"§ Rien de nouveau n'arrive cet hiver-là, et c'est très exactement ce qui le rend impossible à tenir. Tout ce qui arrive existait déjà — depuis trois ans, depuis neuf, depuis vingt-neuf. La seule chose qui change, c'est que ça arrive le même hiver." },
     ],
     effets:{ flags:['a3_ouvert'],
+             /* Le second palier. La fiche canonique : « Acte III — il devient
+              * une puissance de champ de bataille. » Ce n'est pas une faveur,
+              * c'est cinq ans de plus et quatre théâtres qui l'attendent. */
+             faire:() => murir(3),
              marque:`Cinq ans ont passé, neuf depuis Cendrepont. Karlsberg est ${p === 'ruines' ? "toujours en ruines" : "un " + p}.`,
              court:"Cinq ans" },
     suite:'a3_ceux_qui_viennent', libelleSuite:"Qui vient",

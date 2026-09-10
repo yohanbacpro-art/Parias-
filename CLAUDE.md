@@ -165,6 +165,7 @@ Audit au 24 août. Ce qui est là, ce qui manque, sans complaisance.
 | PNJ majeurs qui agissent seuls | **fait** | `pnj.js` — 9 acteurs, objectifs, mémoire nominative, 32 actes |
 | Crises régionales en étapes | **fait** | `crises.js` — 5 crises, 25 étapes nommées, poussées par l'état du monde |
 | Fin lisant l'état réel du monde | **fait** | `epilogue.js`, 116 verdicts, 8 legs |
+| Yohan grandit d'un acte à l'autre | **fait** | `murir()` dans `monde.js` — deux paliers, aux deux bascules |
 | Interface dark fantasy non-tableur | **fait** | un seul écran de jeu, le lieu |
 
 **La tranche verticale demandée existe et tourne.** `tools/smoke-tranche.js` en

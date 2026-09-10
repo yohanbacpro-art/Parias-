@@ -39,7 +39,10 @@ a2_ouverture:{
     "Le col rouvre à la Saint-Marc. Vous avez un cheval, une épée, deux pistolets, quarante ans devant vous si personne ne s'en mêle, et une seule chose à faire de ces quarante ans.",
     "§ C'est ce matin-là qu'elle arrive.",
   ],
-  effets:{ flags:['acte2'], faire:() => { A2(); ETAT.acte2.lieu = 'cendrepont'; },
+  effets:{ flags:['acte2'],
+           /* Le premier palier : ce que l'Acte I lui a appris, et qu'aucune
+            * victoire prise isolément ne lui aurait donné. */
+           faire:() => { A2(); ETAT.acte2.lieu = 'cendrepont'; murir(2); },
            marque:"L'Acte II commence : quelqu'un, dans votre propre maison, a demandé qu'on la raye.",
            court:"La question" },
   suite:'al_mauvaise', libelleSuite:"Elle arrive" },
