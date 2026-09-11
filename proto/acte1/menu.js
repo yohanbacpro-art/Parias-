@@ -51,9 +51,23 @@ const SUSPICION_DIT = s =>
   : s >= 45 ? "On enquête. Deux maisons ont demandé des relevés."
   : "Personne ne sait encore ce que vous êtes.";
 
-function rendreMenu(){
+/* `rendreMenu(true)` rend le seuil en mode confirmation : les deux boutons
+ * ordinaires laissent la place à la question et à ses deux réponses.
+ *
+ * Pourquoi pas `confirm()`, qui était là avant : la page publiée tourne dans
+ * un cadre bac à sable sans `allow-modals`. Le navigateur y ignore purement
+ * et simplement l'appel — « Ignored call to 'confirm()' » — et rend `undefined`.
+ * `if(!confirm(…)) return;` sortait donc toujours, et « Nouvelle partie » ne
+ * faisait rien dès qu'une sauvegarde existait, c'est-à-dire exactement dans le
+ * cas où le bouton sert.
+ *
+ * Le remplacement ne coûte rien et vaut mieux de toute façon : un dialogue gris
+ * du navigateur au milieu d'un seuil de jeu sombre était une couture visible. */
+function rendreMenu(confirmeNeuf){
   const s = apercuSauvegarde();
   const el = document.getElementById('scene');
+  /* Sans partie en cours, il n'y a rien à confirmer. */
+  const demande = confirmeNeuf && !!s;
 
   el.innerHTML = `
     <div class="seuil">
@@ -77,6 +91,21 @@ function rendreMenu(){
         <p class="recit">Aucune partie enregistrée. Ce qui se décidera ici ne se reprendra pas.</p>
       </div>`}
 
+      ${demande ? `
+      <p class="etiquette" style="margin-top:2.6rem">Ce qui sera effacé</p>
+      <p class="recit">La partie de l'acte ${s.acte} ci-dessus, en entier. Une seule
+        sauvegarde existe : rien n'est gardé en double, et rien ne se récupère.</p>
+      <div class="choix">
+        <button data-m="neuf-oui" data-risque="définitif" class="definitif">
+          <span class="ch-t">Effacer et recommencer</span>
+          <span class="ch-risque">définitif</span>
+          <span class="ch-detail">le prologue, et plus rien de ce qui précède</span>
+        </button>
+        <button data-m="annuler">
+          <span class="ch-t">Garder la partie en cours</span>
+          <span class="ch-detail">on revient au seuil · rien n'est touché</span>
+        </button>
+      </div>` : `
       <div class="choix">
         ${s ? `<button data-m="reprendre">
           <span class="ch-t">Reprendre</span>
@@ -87,7 +116,7 @@ function rendreMenu(){
           ${s ? '<span class="ch-risque">définitif</span>' : ''}
           <span class="ch-detail">${s ? "efface la partie en cours · rien ne se récupère" : "commencer par le prologue"}</span>
         </button>
-      </div>
+      </div>`}
 
       <div class="seuil-gore">
         <p class="etiquette">Crudité du récit</p>
@@ -107,10 +136,12 @@ function rendreMenu(){
     aller(ETAT.scene);
   });
 
-  el.querySelector('[data-m="neuf"]').addEventListener('click', () => {
-    if(s && !confirm("Recommencer efface la partie en cours. Rien ne se récupère.")) return;
-    nouvelle();
+  /* Sans partie en cours, on part directement ; sinon on demande une fois. */
+  el.querySelector('[data-m="neuf"]')?.addEventListener('click', () => {
+    if(s) rendreMenu(true); else nouvelle();
   });
+  el.querySelector('[data-m="neuf-oui"]')?.addEventListener('click', () => nouvelle());
+  el.querySelector('[data-m="annuler"]')?.addEventListener('click', () => rendreMenu(false));
 
   el.querySelectorAll('#seuilGore button').forEach(b =>
     b.addEventListener('click', () => {
@@ -118,6 +149,11 @@ function rendreMenu(){
       el.querySelectorAll('#seuilGore button').forEach(x =>
         x.setAttribute('aria-pressed', String(x.dataset.g === ETAT.gore)));
     }));
+
+  /* En mode confirmation, le clavier doit tomber sur la question et non
+   * repartir du haut de la page : c'est le seul endroit du seuil où l'on
+   * demande quelque chose au joueur. */
+  if(demande) el.querySelector('[data-m="neuf-oui"]')?.focus();
 
   window.scrollTo({ top:0, behavior:'instant' });
 }
