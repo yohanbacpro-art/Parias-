@@ -262,6 +262,46 @@ function voixDe(t, dernier){
  * narrateur qui s'invite au milieu d'un échange, pas l'échange qui s'arrête. */
 const coupeVoix = () => null;
 
+/* ── La peinture du texte ─────────────────────────────────────────────────
+ * Extraite d'`aller()`, qui l'avait en ligne. Elle en sort pour une raison
+ * précise : `tools/audit-voix-fausse.js` doit pouvoir demander au jeu qui
+ * parle, scène par scène, sans déclencher les effets ni la navigation. Une
+ * copie de cette boucle dans l'outil dériverait au premier correctif — et
+ * c'est exactement ce qu'on cherche à débusquer ici. */
+function peindreTexte(texte){
+  let voixCourante = null;
+  return (texte || []).map(texteDe).filter(Boolean).map(t => {
+    if(t.startsWith('§')) return `<p class="souffle">${md(t.slice(1))}</p>`;
+    /* Un paragraphe peut porter ses propres sauts : on les respecte d'abord,
+     * puis on découpe ce qui reste trop long. Une tirade coupée en trois
+     * reste une tirade : le découpage garde la voix de son premier morceau,
+     * sinon la suite d'une réplique s'afficherait comme du récit. */
+    let n = 0, citation = 0;
+    return t.split(/\n\n+/).filter(Boolean).map(seg => {
+      /* Un guillemet ouvrant que rien ne referme laisse la parole ouverte :
+       * le paragraphe suivant du même bloc est la suite de la même tirade,
+       * même s'il ne rouvre pas les guillemets. C'est le cas normal d'un
+       * personnage qui parle trois paragraphes d'affilée. */
+      const suite = citation > 0;
+      const parle = suite || estReplique(seg);
+      if(!parle) voixCourante = coupeVoix();
+      else if(!suite) voixCourante = voixDe(seg, voixCourante);
+      const voix = voixCourante;
+      citation = Math.max(0, citation
+        + (seg.match(/«/g) || []).length - (seg.match(/»/g) || []).length);
+      return decouper(seg).filter(Boolean).map(b => {
+        const cls = ['recit'];
+        if(parle){
+          cls.push('dit', voix === 'yohan' ? 'moi' : 'lui');
+          b = b.replace(/^\s*[@^]/, '');
+        }
+        if(n++ > 0) cls.push('suite-p');
+        return `<p class="${cls.join(' ')}">${md(b)}</p>`;
+      }).join('');
+    }).join('');
+  }).join('');
+}
+
 /* ── Les effets d'une scène ou d'un choix ──────────────────────────────── */
 function appliquer(e){
   if(!e) return [];
@@ -343,37 +383,7 @@ function aller(id){
   if(perte) tags.push(`<span class="mal">−${perte} sang</span>`);
   if(tags.length) h += `<div class="effets">${tags.join('')}</div>`;
 
-  let voixCourante = null;
-  h += (s.texte || []).map(texteDe).filter(Boolean).map(t => {
-    if(t.startsWith('§')) return `<p class="souffle">${md(t.slice(1))}</p>`;
-    /* Un paragraphe peut porter ses propres sauts : on les respecte d'abord,
-     * puis on découpe ce qui reste trop long. Une tirade coupée en trois
-     * reste une tirade : le découpage garde la voix de son premier morceau,
-     * sinon la suite d'une réplique s'afficherait comme du récit. */
-    let n = 0, citation = 0;
-    return t.split(/\n\n+/).filter(Boolean).map(seg => {
-      /* Un guillemet ouvrant que rien ne referme laisse la parole ouverte :
-       * le paragraphe suivant du même bloc est la suite de la même tirade,
-       * même s'il ne rouvre pas les guillemets. C'est le cas normal d'un
-       * personnage qui parle trois paragraphes d'affilée. */
-      const suite = citation > 0;
-      const parle = suite || estReplique(seg);
-      if(!parle) voixCourante = coupeVoix();
-      else if(!suite) voixCourante = voixDe(seg, voixCourante);
-      const voix = voixCourante;
-      citation = Math.max(0, citation
-        + (seg.match(/«/g) || []).length - (seg.match(/»/g) || []).length);
-      return decouper(seg).filter(Boolean).map(b => {
-        const cls = ['recit'];
-        if(parle){
-          cls.push('dit', voix === 'yohan' ? 'moi' : 'lui');
-          b = b.replace(/^\s*[@^]/, '');
-        }
-        if(n++ > 0) cls.push('suite-p');
-        return `<p class="${cls.join(' ')}">${md(b)}</p>`;
-      }).join('');
-    }).join('');
-  }).join('');
+  h += peindreTexte(s.texte);
 
   if(s.issue) h += blocIssue(s);
 

@@ -73,6 +73,8 @@ const dit = (ok, quoi, note) => {
       /* Les chasses et le duel ne se référencent nulle part : c'est la file
        * de l'entre-saisons qui va les chercher quand le monde est prêt. */
       .concat(RENCONTRES)
+      /* Les trois nuits de la coutume non plus : même file, même raison. */
+      .concat(typeof COUTUME_ENTREES !== 'undefined' ? COUTUME_ENTREES : [])
       /* L'Acte III se compose : le siège n'a pas de champ écrit et ses
        * scènes se rappellent entre elles par des aiguillages. */
       .concat(['a3_bascule', 'a3_ceux_qui_viennent', 'a3_convergence',

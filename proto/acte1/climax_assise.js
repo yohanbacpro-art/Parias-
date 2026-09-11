@@ -1832,9 +1832,9 @@ as_fin_yohan:{
   lieu:"Cendrepont · la nuit",
   titre:"Un prénom",
   texte:[
-    "« Yohan. »",
-    "« Yohan de quoi, messire ? »",
-    "« Yohan. »",
+    "@« Yohan. »",
+    "^« Yohan de quoi, messire ? »",
+    "@« Yohan. »",
     { sobre:"Le greffier écrit. Vasque ne dit rien.",
       intense:"Le greffier écrit *Yohan, homme d'armes, sans maison* et il ne lève pas les yeux. Vasque ne dit rien du tout — il n'a pas à dire quelque chose : un rôle enregistre ce qu'on déclare, et personne n'est tenu de déclarer une maison qu'il n'a pas.",
       extreme:"Le greffier écrit *Yohan, homme d'armes, sans maison*, et il ne lève pas les yeux. Vasque ne dit rien : un rôle enregistre ce qu'on déclare et nul n'est tenu de déclarer une maison qu'il n'a pas. Mais il remet ses lunettes pour lire ce que le greffier vient d'écrire, ce qu'il n'a fait pour aucune autre ligne de la soirée." },

@@ -72,6 +72,16 @@ function rendreSouffle(n){
 function prochaineDeLEntreSaison(){
   const A = ETAT.acte;
 
+  /* a zéro) Ce qui avait été remis à *après*.
+   *
+   * Trois femmes de l'Acte I fixent les termes de la coutume et disent le
+   * même mot : après. C'est ici, l'après — l'affaire est close, on est
+   * redescendu, on est revenu. Ça passe avant tout le reste parce qu'une
+   * dette de parole qui attend une saison de plus n'est plus la même dette.
+   * Voir `coutume.js`. */
+  const nuit = (typeof nuitDue === 'function') && nuitDue();
+  if(nuit) return nuit;
+
   /* a) Ce qu'on n'a pas pris, et qui n'a pas encore fait signe. */
   if(A.saison >= 2){
     const echo = AFFAIRES.find(x =>

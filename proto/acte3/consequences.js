@@ -135,6 +135,24 @@ wy_a_bu:{ sec:'affaires', poids:1, dit:"Il a bu, à Cendrepont, avec des gens qu
 wy_discret:{ sec:'maison', poids:2, dit:"Il n'a rien demandé à Valombre avant de dire oui. Il a fait ça trois fois dans sa vie et c'est chaque fois cette maison-là qui s'en est souvenue." },
 wy_borne_emportee:{ sec:'karlsberg', poids:3, dit:"La dernière borne qui disait ce que Karlsberg possédait a été emportée par une wyverne. Un domaine sans borne est un domaine qui se plaide, et il s'est plaidé pendant vingt ans." },
 
+/* ═══ CE QUI AVAIT ÉTÉ REMIS À APRÈS ═══════════════════════════════════════
+ * Les trois nuits de l'Acte I. Ce que le barde en garde n'est jamais la nuit
+ * — il n'en sait rien et personne ne la lui a racontée — mais ce que chacune
+ * des trois a mis dans la main de Yohan au matin. */
+
+ro_ermengarde_estime:{ sec:'affaires', poids:2, dit:"Ermengarde de Rochebrune a tenu cette maison trente ans après son père, et elle n'a jamais parlé de lui à personne — sauf une nuit, dans un cellier, à quelqu'un qui repartait le lendemain." },
+ro_sait_quatorze:{ sec:'trous', poids:3, dit:"que sur les quatorze hommes qui ont regardé, trois vivaient encore dans la maison, y dînaient, et que l'un des trois avait appris à monter à cheval à la fille du seigneur ;" },
+ro_planchette:{ sec:'affaires', poids:3, dit:"Trois noms au charbon sur une planchette de fermage retournée. C'est le seul document qui ait jamais existé sur cette affaire, il n'a pas de valeur devant un juge, et il a été gardé quarante ans." },
+ar_maelys_estime:{ sec:'neuf', poids:2, dit:"Maëlys d'Arquenay est partie en Floréal comme prévu et a tenu les comptes de la maison où on l'avait envoyée. Elle en tenait autre chose au bout de six ans, ce qui est la suite ordinaire et que personne n'avait prévu." },
+ar_nuit_demande:{ sec:'trous', poids:3, dit:"qu'on a demandé une fois à une femme de vingt ans ce qu'elle voulait, elle, et qu'elle a mis un long moment à répondre parce que personne ne le lui avait jamais demandé ;" },
+ar_quatorze_nommes:{ sec:'trous', poids:3, dit:"que les quatorze sans nom du fond du puits trois ont eu des noms, qu'il a fallu onze jours, trois mineurs et une bouteille par mineur pour les obtenir, et que c'est une fille de vingt ans qui les a écrits ;" },
+va_iselle_estime:{ sec:'affaires', poids:2, dit:"Iselle de Vauclair est partie en Messidor avec une malle, une dot et quatre ans de colonnes. On la retrouve onze ans plus tard à la tête des écritures d'une compagnie de roulage, ce qui est exactement ce qu'elle avait annoncé." },
+va_nuit_offert_sortie:{ sec:'affaires', poids:2, dit:"On lui a proposé de faire semblant. Elle a répondu qu'elle ne mettrait pas un mensonge dans sa malle, et que ce qu'il y avait dedans, elle le savait ligne par ligne." },
+va_nuit_calcul:{ sec:'affaires', poids:2, dit:"Quatre mois de différence : la malle seule, ou la malle, la dot et le droit de choisir où l'on s'arrête. Elle avait fait le calcul en Germinal et il était juste." },
+va_sait_dot:{ sec:'affaires', poids:2, dit:"Un acte de veuvage se révise chez un notaire qui est aussi celui du beau-frère. Ça s'était déjà fait dans cette maison, neuf ans plus tôt, pour la propre mère d'Aymar de Vauclair." },
+va_colonnes_vues:{ sec:'affaires', poids:2, dit:"Quatre ans de tourbe, déclarée et réelle, en deux colonnes qui ne se ressemblent pas. L'écart était régulier — c'est la signature d'une décision, jamais celle d'une négligence." },
+va_tonnages:{ sec:'affaires', poids:3, dit:"Les tonnages de Sombreval ont changé de mains un matin, sur une place de bourg, entre deux personnes qui se serraient la main comme des associés. Ce n'était pas un cadeau : c'était un transfert de compte, et celui qui l'a pris a porté ce que ça pesait." },
+
 /* ═══ ROCHEBRUNE, ET SER ALDREN ════════════════════════════════════════════ */
 
 ro_sait_anciens:{ sec:'affaires', poids:2, dit:"Sept des onze morts avaient plus de quarante ans. Il ne tuait pas au hasard : il tuait des anciens, et il fallait onze corps pour s'en apercevoir." },
