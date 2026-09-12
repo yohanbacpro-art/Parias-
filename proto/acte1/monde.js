@@ -330,6 +330,22 @@ function rendreHub(){
   const saisons = ["Fin d'hiver", "Printemps", "Été", "Automne"];
 
   SCENES.hub = {
+    /* `dyn:true` doit survivre à la réécriture.
+     *
+     * `hub` est déclarée `dyn:true` plus haut et `DYN.hub` rappelle cette
+     * fonction : c'est ce qui fait que le tableau se recompose à chaque
+     * visite. En écrasant la scène par un objet sans `dyn`, on détruisait
+     * l'aiguillage au premier rendu — et `SCENES.hub` devenait un
+     * instantané figé de la première saison.
+     *
+     * Ce que ça donnait, et ce qu'un joueur a trouvé tout de suite : on
+     * faisait la wyverne, on revenait au mur, et elle y était encore.
+     * Reprise, elle se rejouait en entier et poussait son identifiant une
+     * seconde fois dans `arcsFaits` — ce qui brûlait une saison au passage,
+     * en silence, puisque le compte des saisons restantes s'en déduit.
+     *
+     * La même ligne manquait à `bascule`, trente lignes plus bas. */
+    dyn:true,
     lieu:`Cendrepont · ${saisons[Math.min(A.saison, 3)]} · dix-neuvième année après la Purge`,
     titre: A.arcsFaits.length === 0 ? "Le tableau des mercenaires" : "Ce qui reste sur le tableau",
     texte:[
@@ -352,7 +368,13 @@ function rendreHub(){
       detail: `${x.lieu} · ${x.danger} · ${prime(x.or)} couronnes${x.prix ? " · la coutume est due" : ""}`,
       va: x.entree,
       effets:{ flags:['pris_' + x.id] },
-      avant: () => { A.arcsFaits.push(x.id); A.saison++; A.contrat = { id:x.id, or:prime(x.or) }; },
+      /* Une affaire se prend une fois. La garde ne sert plus à rien depuis
+       * que le tableau se recompose — elle reste parce qu'un compte de
+       * saisons faux ne se voit pas et ne se rattrape pas. */
+      avant: () => {
+        if(!A.arcsFaits.includes(x.id)){ A.arcsFaits.push(x.id); A.saison++; }
+        A.contrat = { id:x.id, or:prime(x.or) };
+      },
     })).concat(reste <= 0 ? [{
       t:"Ne rien prendre de plus. L'hiver revient.",
       detail:"Trois saisons brûlées · le tableau se referme",
@@ -370,6 +392,9 @@ function rendreBascule(){
   const rang = rangActuel();
 
   SCENES.bascule = {
+    /* Même raison qu'au tableau : sans `dyn:true`, la réécriture détruit
+     * l'aiguillage et le basculement sert à jamais sa première version. */
+    dyn:true,
     lieu:"Cendrepont · premières neiges · vingtième année après la Purge",
     titre:"Ce qui s'est passé pendant ce temps",
     texte:[

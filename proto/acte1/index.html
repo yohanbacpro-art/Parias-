@@ -60,6 +60,31 @@ header{
 #bChair{ color:var(--sang-clair); }
 #bChair:empty{ display:none; }
 
+/* L'état de la sauvegarde. Discret tant qu'elle tient — c'est de la
+ * plomberie — et lisible dès qu'elle ne tient plus. */
+#bSauve{
+  font-family:var(--mono); font-size:.62rem; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--cendre); cursor:help;
+}
+#bSauve:empty{ display:none; }
+#bSauve.perdue{ color:var(--sang-clair); border-bottom:1px dotted var(--sang); }
+
+/* Le code de partie : un pavé de texte qu'on sélectionne et qu'on colle. */
+#codePartie{
+  width:100%; margin-top:.6rem; height:5rem; resize:vertical;
+  font-family:var(--mono); font-size:.6rem; line-height:1.5;
+  color:var(--parchemin-bas); background:var(--encre);
+  border:1px solid var(--trait); padding:.5rem;
+}
+.boutons-partie{ display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.6rem; }
+.boutons-partie button{
+  font-family:var(--mono); font-size:.62rem; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--parchemin-bas); background:transparent;
+  border:1px solid var(--trait); padding:.5rem .8rem; cursor:pointer;
+}
+.boutons-partie button:hover{ color:var(--parchemin); border-color:var(--cendre); }
+#motPartie{ font-size:.85rem; font-style:italic; color:var(--cendre); margin:.5rem 0 0; }
+
 header button, #jFermer{
   font-family:var(--mono); font-size:.66rem; letter-spacing:.1em; text-transform:uppercase;
   color:var(--parchemin-bas); background:transparent;
@@ -353,6 +378,7 @@ img.visage{
   <span id="bRang">« Nous cherchons un Paria »</span>
   <span class="bandeau-droite">
     <span id="bChair"></span>
+    <span id="bSauve"></span>
     <span id="bOr">40 or</span>
     <button id="bJournal" aria-expanded="false" aria-controls="journal">Journal</button>
   </span>
@@ -373,7 +399,14 @@ img.visage{
   </div>
   <div id="journalCorps"></div>
   <h2>La partie</h2>
-  <p class="sous">Une seule sauvegarde. Elle se fait toute seule.</p>
+  <p class="sous" id="sousPartie">Une seule sauvegarde. Elle se fait toute seule.</p>
+  <div class="boutons-partie">
+    <button id="bCode">Voir le code de partie</button>
+    <button id="bColler">Reprendre un code</button>
+  </div>
+  <textarea id="codePartie" hidden spellcheck="false"
+            aria-label="Code de partie"></textarea>
+  <p id="motPartie"></p>
   <button id="bNeuf" style="font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sang-clair);background:transparent;border:1px solid #4A2028;padding:.5rem .8rem;cursor:pointer;">Menu</button>
 </aside>
 
