@@ -45,6 +45,39 @@ const sortie = [titre, desc, liens, style, '', corps, '', scripts, ''].join('\n'
 fs.mkdirSync(path.dirname(SORTIE), { recursive:true });
 fs.writeFileSync(SORTIE, sortie);
 
+/* ── La même chose, en page web complète ──────────────────────────────────
+ * `dist/acte1.html` est sans enveloppe parce que la publication en artefact
+ * en fournit une. Un serveur ordinaire, lui, n'en fournit aucune : ouvert
+ * tel quel, le fichier n'a ni doctype, ni langue, ni encodage déclaré.
+ *
+ * On écrit donc la même construction une seconde fois, habillée, dans
+ * `docs/`, d'où GitHub Pages sert le jeu à une adresse publique. Les deux
+ * sorties viennent du même assemblage : elles ne peuvent pas diverger. */
+const WEB = path.join(RACINE, 'docs/index.html');
+const page = `<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0A0908">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%90%BA%3C/text%3E%3C/svg%3E">
+${[titre, desc, liens, style].join('\n')}
+</head>
+<body>
+${corps}
+
+${scripts}
+</body>
+</html>
+`;
+fs.mkdirSync(path.dirname(WEB), { recursive:true });
+fs.writeFileSync(WEB, page);
+/* Sans ce fichier, Pages passe le site à Jekyll, qui ignore tout ce qui
+ * commence par un souligné et ajoute une étape de construction dont on n'a
+ * aucun besoin pour une page unique. */
+fs.writeFileSync(path.join(RACINE, 'docs/.nojekyll'), '');
+
 const ko = n => (n / 1024).toFixed(0) + ' Ko';
-console.log(`dist/acte1.html — ${ko(sortie.length)}`);
+console.log(`dist/acte1.html — ${ko(sortie.length)}   (artefact)`);
+console.log(`docs/index.html — ${ko(page.length)}   (web)`);
 for(const f of SCRIPTS) console.log(`   ${f.padEnd(26)} ${ko(lire(f).length)}`);
